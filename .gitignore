@@ -324,3 +324,4 @@ logs/**/*
 
 # vscode
 .project
+.classpath

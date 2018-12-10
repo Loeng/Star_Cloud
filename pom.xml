@@ -12,6 +12,7 @@
         <module>SCE-AuthenticationServer</module>
         <module>SCE-ConfigServer</module>
         <module>SCE-ServiceDiscovery</module>
+        <module>SCE-DataAccess</module>
     </modules>
 
     <properties>
