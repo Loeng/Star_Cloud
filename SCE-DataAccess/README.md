@@ -6,4 +6,6 @@
 
 ![原本的架构设计](../README-IMG/data-access-original-design.png)
 
-如上图所示，数据交互服务用于操作 NOSQL 中缓存
+如上图所示，数据交互服务用于操作 NOSQL 中以非结构化数据。但考虑到项目工期问题，现阶段暂时将其简化为：
+
+![简化设计](D:\Developer\projects\bonc\StarCloud\code\main\README-IMG\data-access-simplify.png)
