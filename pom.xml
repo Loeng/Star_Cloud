@@ -13,6 +13,12 @@
         <module>SCE-ConfigServer</module>
         <module>SCE-ServiceDiscovery</module>
         <module>SCE-DataAccess</module>
+        <module>SCE-SSO</module>
+        <module>SCE-WebPortal</module>
+        <module>SCE-Core</module>
+        <module>SCE-EducationMarcket</module>
+        <module>SCE-BusStation</module>
+        <module>SCE-Gateway</module>
     </modules>
 
     <properties>
