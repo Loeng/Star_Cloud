@@ -34,7 +34,7 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     @GetMapping( "/{userId}" )
     @ResponseBody
     public RestRecord getUserById( @PathVariable( "userId" ) String userId ) {
-        return new RestRecord( 0, userDao.getUserById( userId ) );
+        return new RestRecord( 0, userService.getUserById( userId ) );
     }
 
     /**
@@ -45,7 +45,7 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     @GetMapping( "" )
     @ResponseBody
     public RestRecord getAllUsersInfo() {
-        return new RestRecord( 0, userDao.getAll() );
+        return new RestRecord( 0, userService.getAll() );
     }
 
     /**
@@ -57,7 +57,7 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     @DeleteMapping( "/{userId}" )
     @ResponseBody
     public RestRecord deleteUserById( @PathVariable( "userId" ) String userId ) {
-        return new RestRecord( 0, userDao.deleteUserById( userId ) );
+        return new RestRecord( 0, userService.deleteUserById( userId ) );
     }
 
     /**
@@ -69,7 +69,7 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     @PutMapping( "" )
     @ResponseBody
     public RestRecord updateUserInfo( User user ) {
-        return new RestRecord( 0, userDao.updateUser( user ) );
+        return new RestRecord( 0, userService.updateUser( user ) );
     }
 
     /**
@@ -84,7 +84,7 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     public RestRecord updateUsername(
             @PathVariable( "userId" ) String userId,
             @RequestParam( "username" ) String username ) {
-        return RestRecord(0,userDao.updateUserName( userId, username ));
+        return RestRecord(0,userService.updateUserName( userId, username ));
     }
 
     /**
@@ -94,7 +94,7 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     @PostMapping( "" )
     @ResponseBody
     public RestRecord registerNewUser( User user ) {
-        return RestRecord( 0, userDao.createUser( user );)
+        return RestRecord( 0, userService.createUser( user );)
     }
 ```
 
