@@ -10,13 +10,20 @@
 
 ## 开发规约
 
+
+
 ### 变量命名
+
+0. 方法、变量名命名采用驼峰命名法。
+0. 常量采用全大写+‘_’的方式。
+0. 方法名必须使用'动词+操作对象'方式。
+0. 类命名全部采用大写，尽量避免使用中文。
 
 ### 服务间通信： 基于 Feign 的 Restful Web API
 
 Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理念的一种**编程风格**，Restful 只是一种编写 WebService 网络接口的一种方式，而不是某种规范。
 
-**Rest** 的核心在于，将所有在网络中提供的信息都当做一种“资源”，并通过不同的 HTTP method 来区分对资源的操作：
+**Rest 的核心在于，将所有在网络中提供的信息都当做一种“资源” ，并通过不同的 HTTP method 来区分对资源的操作**：
 
 - GET：读取（Read）
 - POST：新建（Create）
@@ -126,6 +133,8 @@ public class UserDataApiController {
 ### 使用 @Slf4j 注解引入 logger
 
 直接在类上添加 @Slf4j 注解，即可直接在代码中直接使用 log 打印日志：
+
+**需要在 idea 中安装 lombok 插件**
 
 ```java
 @Slf4j
