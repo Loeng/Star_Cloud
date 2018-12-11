@@ -24,7 +24,7 @@
     <properties>
         <spring-framework-version>2.1.1</spring-framework-version>
         <spring-boot-version>2.0.7.RELEASE</spring-boot-version>
-        <spring-cloud-denpendencies-version>Finchley.`SR2</spring-cloud-denpendencies-version>
+        <spring-cloud-denpendencies-version>Finchley.SR2</spring-cloud-denpendencies-version>
         <lombok-version>1.18.4</lombok-version>
         <jackson-databind-version>2.9.7</jackson-databind-version>
         <jackson-yaml-format-version>2.9.7</jackson-yaml-format-version>
