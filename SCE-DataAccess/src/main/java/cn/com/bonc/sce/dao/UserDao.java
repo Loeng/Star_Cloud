@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.model.User;
+
 /**
  * @author Leucippus
  * @version 0.1
@@ -7,4 +9,7 @@ package cn.com.bonc.sce.dao;
  */
 public class UserDao {
 
+    public User getUserById( String userId ) {
+        return null;
+    }
 }
