@@ -10,6 +10,8 @@
 
 ## 开发规约
 
+### 变量命名
+
 ### 服务间通信： 基于 Feign 的 Restful Web API
 
 Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理念的一种**编程风格**，Restful 只是一种编写 WebService 网络接口的一种方式，而不是某种规范。
@@ -25,6 +27,17 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
 比如，就处理用户数据为例:
 
 ```java
+@Slf4j
+@RequestMapping( "/users" )
+@RestController
+public class UserDataApiController {
+    private UserService userService;
+
+    @Autowired
+    public UserDataApiController( UserService userService ) {
+        this.UserService = userService;
+    }
+
     /**
      * 根据用户 id 获取用户数据
      *
@@ -84,7 +97,7 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     public RestRecord updateUsername(
             @PathVariable( "userId" ) String userId,
             @RequestParam( "username" ) String username ) {
-        return RestRecord(0,userService.updateUserName( userId, username ));
+        return new RestRecord(0,userService.updateUserName( userId, username ));
     }
 
     /**
@@ -94,28 +107,8 @@ Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理
     @PostMapping( "" )
     @ResponseBody
     public RestRecord registerNewUser( User user ) {
-        return RestRecord( 0, userService.createUser( user );)
+        return new RestRecord( 0, userService.createUser( user ) );
     }
-```
-
-### 统一 Rest API 返回值
-
-所有的 Rest API 固定返回 RestRecord 类：
-
-```java
-/**
- * 通用 Restful 返回值封装类
- *
- * @author Leucippus
- * @version 0.1
- * @since 2018/5/14 14:54
- */
-public class RestRecord implements Serializable {
-    private int code = 0;
-    private String msg;
-    private Object data;
-    private String exceptionStackTrace;
-    private Exception exception;
 }
 ```
 
@@ -129,3 +122,16 @@ public class RestRecord implements Serializable {
     - 接口异常，可为空
 - exceptionStackTrace
     - 如接口执行过程中抛出异常，则需为 RestRecord 注入 Exception，注入 Exception 过程中会自动注入 exceptionStackTrace，即错误的堆栈信息
+
+### 使用 @Slf4j 注解引入 logger
+
+直接在类上添加 @Slf4j 注解，即可直接在代码中直接使用 log 打印日志：
+
+```java
+@Slf4j
+public class TestLogger {
+    public static void main(String[] args) {
+        log.info("测试一下");
+    }
+}
+```
