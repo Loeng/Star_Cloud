@@ -1,4 +1,4 @@
-package cn.com.bonc.cmp.util;
+package cn.com.bonc.sce.tool;
 
 /**
  * created by 李啸峰 on 2018/5/14.

@@ -3,6 +3,7 @@ package cn.com.bonc.sce.api;
 import cn.com.bonc.sce.dao.UserDao;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,13 +12,14 @@ import org.springframework.web.bind.annotation.*;
  * @version 0.1
  * @since 2018/12/11 11:08
  */
+@Slf4j
 @RequestMapping( "/users" )
 @RestController
-public class UserDaoApiController {
+public class UserDataApiController {
     private UserDao userDao;
 
     @Autowired
-    public UserDaoApiController( UserDao userDao ) {
+    public UserDataApiController( UserDao userDao ) {
         this.userDao = userDao;
     }
 
@@ -80,7 +82,7 @@ public class UserDaoApiController {
     public RestRecord updateUsername(
             @PathVariable( "userId" ) String userId,
             @RequestParam( "username" ) String username ) {
-        return RestRecord(0,userDao.updateUserName( userId, username ));
+        return new RestRecord(0,userDao.updateUserName( userId, username ));
     }
 
     /**
@@ -90,6 +92,6 @@ public class UserDaoApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord registerNewUser( User user ) {
-        return RestRecord( 0, userDao.createUser( user );)
+        return new RestRecord( 0, userDao.createUser( user ) );
     }
 }

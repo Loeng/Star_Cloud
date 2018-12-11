@@ -12,5 +12,11 @@
     <artifactId>SCE-Core</artifactId>
     <version>0.0-Engaging</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
