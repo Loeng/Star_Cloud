@@ -6,20 +6,20 @@
 
 服务基于 Spirng-Cloud 技术栈。
 
-## Release notes
+## 1. Release notes
 
-## 开发规约
+## 2. 开发规约
 
 
 
-### 变量命名
+### 2.1 变量命名
 
 0. 方法、变量名命名采用驼峰命名法。
 0. 常量采用全大写+‘_’的方式。
 0. 方法名必须使用'动词+操作对象'方式。
 0. 类命名全部采用大写，尽量避免使用中文。
 
-### 服务间通信： 基于 Feign 的 Restful Web API
+### 2.2 服务间通信： 基于 Feign 的 Restful Web API
 
 Restful 本身属于 WebService 的一种，是一种还原 HTTP 协议设计理念的一种**编程风格**，Restful 只是一种编写 WebService 网络接口的一种方式，而不是某种规范。
 
@@ -130,7 +130,7 @@ public class UserDataApiController {
 - exceptionStackTrace
     - 如接口执行过程中抛出异常，则需为 RestRecord 注入 Exception，注入 Exception 过程中会自动注入 exceptionStackTrace，即错误的堆栈信息
 
-### 使用 @Slf4j 注解引入 logger
+### 2.3 使用 @Slf4j 注解引入 logger
 
 直接在类上添加 @Slf4j 注解，即可直接在代码中直接使用 log 打印日志：
 
@@ -144,3 +144,12 @@ public class TestLogger {
     }
 }
 ```
+
+### 2.4 日志消息，Rest API 返回值中的消息绑定
+
+所有需要通过 logger 打印、通过 RestController 返回的消息信息，需全部录入到 SCE-Core 项目下的
+
+- MessageConstants.java
+- PortalMessageConstants.java 
+
+前者包含服务内 logger 日志信息、服务间调用的信息，后者的消息编号则要与 Web 项目中的返回值封装 RestRecord.code 相匹配。

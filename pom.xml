@@ -33,6 +33,8 @@
         <hutool-version>4.3.0</hutool-version>
         <odbc-version></odbc-version>
         <hikari-connection-pool-version></hikari-connection-pool-version>
+        <maven-compiler-plugin-version>3.2</maven-compiler-plugin-version>
+        <java-version>1.8</java-version>
     </properties>
 
     <dependencyManagement>
@@ -78,17 +80,17 @@
                 </exclusions>
             </dependency>
             <!-- Oracle JDBC driver -->
-            <dependency>
-                <groupId>com.oracle</groupId>
-                <artifactId>ojdbc7</artifactId>
-                <version>${odbc-version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>com.oracle</groupId>-->
+                <!--<artifactId>ojdbc7</artifactId>-->
+                <!--<version>${odbc-version}</version>-->
+            <!--</dependency>-->
             <!-- HikariCP connection pool -->
-            <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP</artifactId>
-                <version>${hikari-connection-pool-version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>com.zaxxer</groupId>-->
+                <!--<artifactId>HikariCP</artifactId>-->
+                <!--<version>${hikari-connection-pool-version}</version>-->
+            <!--</dependency>-->
             <!-- yaml -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -117,6 +119,11 @@
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${swagger-version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger-version}</version>
+            </dependency>
             <!-- test -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -130,6 +137,18 @@
     <build>
         <pluginManagement>
 
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin-version}</version>
+                    <configuration>
+                        <source>${java-version}</source>
+                        <target>${java-version}</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
         </pluginManagement>
     </build>
 
@@ -179,5 +198,4 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
 </project>

@@ -1,4 +1,4 @@
-package cn.com.bonc.exception;
+package cn.com.bonc.sce.exception;
 
 import cn.com.bonc.sce.rest.RestRecord;
 import org.slf4j.Logger;
