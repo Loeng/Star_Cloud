@@ -10,12 +10,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
  * @author: tlz
- * @description:
+ * @description: 请求参数拼装，获取user_id
  * @create: 2018-12-13 20:23
- */
-
-/**
- *
  */
 @Component
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {

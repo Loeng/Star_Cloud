@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @program: medicine-hn
- * @description:
- * @author: hejiajun
+ * @author: tlz
+ * @description: 获取用户id注解
  * @create: 2018-09-10 17:23
  **/
 @Target(ElementType.PARAMETER)
