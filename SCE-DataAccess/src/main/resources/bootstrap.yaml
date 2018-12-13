@@ -1,0 +1,19 @@
+spring.profiles.active: dev
+
+---
+spring.profiles: dev
+spring:
+  application:
+    name: sce-data-access
+  cloud:
+    config:
+      uri: http://localhost:10099
+logging:
+  file: ./logs/dev_app.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework: INFO
+    guru.springframework.controllers: INFO
+    org.hibernate: INFO
