@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Repository
 @FeignClient( "sce-data-access" )
 public interface AccountSecurityDao {
-    public RestRecord getSecurityVaildInfo( String phone);
+    //public RestRecord getSecurityVaildInfo( String phone);
     /**
      * 获取所有advise数据
      *

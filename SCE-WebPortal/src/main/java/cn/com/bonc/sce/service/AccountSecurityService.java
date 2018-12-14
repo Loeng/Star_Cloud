@@ -27,7 +27,7 @@ public class AccountSecurityService {
      * @return 验证码
      */
     public RestRecord getSecurityVaildInfo( String phone ) {
-        RestRecord rr = accountSecurityDao.getSecurityVaildInfo( phone );
+        /*RestRecord rr = accountSecurityDao.getSecurityVaildInfo( phone );
         if ( rr.getCode() == 200 ) {
             //验证码
             String vaild = rr.getMsg();
@@ -35,8 +35,8 @@ public class AccountSecurityService {
             String vaild_ = getAccountEncryptionCode( phone, vaild );
             VaildSecurityUtils.addVaild( vaild_ );
             return rr;
-        }
-        return rr;
+        }*/
+        return null;
     }
 
     /**
