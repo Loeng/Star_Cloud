@@ -16,7 +16,7 @@ public interface ParentsOperationDao {
      * @param phone 手机号
      * @return 验证码
      */
-    public RestRecord getSecurityVaildInfo( String phone);
+    //public RestRecord getSecurityVaildInfo( String phone);
     /**
      * 添加家长信息
      *

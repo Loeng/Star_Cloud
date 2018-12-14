@@ -25,8 +25,8 @@ public class ParentsOperationService {
      * @return 验证码
      */
     public RestRecord getSecurityVaildInfo( String phone ) {
-        RestRecord rr = parentsOperationDao.getSecurityVaildInfo( phone );
-        return rr;
+        //RestRecord rr = parentsOperationDao.getSecurityVaildInfo( phone );
+        return null;
     }
 
     /**
