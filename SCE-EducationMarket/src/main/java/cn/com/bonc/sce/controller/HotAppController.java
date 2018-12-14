@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 应用推荐-热门应用接口
+ * atuhor jc_D
+ */
 @Slf4j
 @Api( value = "应用推荐-热门应用接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
@@ -31,8 +35,8 @@ public class HotAppController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @PostMapping( "/userId" )
-    public RestRecord addHotRecommendAppList( @RequestParam String appIdList,
+    @PostMapping( "/{userId}" )
+    public RestRecord addHotRecommendAppList( @RequestParam List< String > appIdList,
                                               @PathVariable( "userId" ) String userId ) {
         return new RestRecord( 0, null );
     }
@@ -71,8 +75,8 @@ public class HotAppController {
      */
     @ApiOperation( value = "删除热门应用", notes = "删除热门应用", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "head", required = true ),
-            @ApiImplicitParam( name = "appIdList", value = "appid用逗号分隔", paramType = "head", required = true, example = "1,2,3" )
+            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "header", required = true ),
+            @ApiImplicitParam( name = "appIdList", value = "appid用逗号分隔", paramType = "header", required = true, example = "1,2,3" )
 
     } )
     @ApiResponses( {
