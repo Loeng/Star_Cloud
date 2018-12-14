@@ -2,6 +2,8 @@ package cn.com.bonc.sce.rest;
 
 import cn.com.bonc.sce.tool.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
@@ -9,16 +11,20 @@ import java.io.Serializable;
  * 通用 Restful 返回值封装类
  *
  * @author Leucippus
- * @version 0.1
- * @since 2018/5/14 14:54
+ * @version 0.1 * @since 2018/5/14 14:54
  */
+@ApiModel
 public class RestRecord implements Serializable {
+    @ApiModelProperty( value = "code" , example = "0",notes = "状态码" , position = 1)
     private int code = 0;
+    @ApiModelProperty( value = "msg" , example = "登录成功",notes = "提示信息" ,position = 2)
     private String msg;
+    @ApiModelProperty( value = "data" , example = "{\"username\": \"RGM79\"}",notes = "数据", position = 3)
     private Object data;
+    @ApiModelProperty( value = "exceptionStackTrace" , example = "{\"username\": \"RGM79\"}",notes = "后台跑出错误数据的对堆栈信息")
     private String exceptionStackTrace;
     private Exception exception;
-
+    
     public void success() {
         this.code = 200;
     }

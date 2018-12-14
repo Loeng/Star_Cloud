@@ -32,4 +32,9 @@ public interface MessageConstants {
      * Spring 框架自身异常
      * 800 - 999
      */
+
+    /**
+     * 通用异常处理
+     */
+    String SCE_MSG_9999 = "服务器发生未捕获的异常，错误信息： {}";
 }

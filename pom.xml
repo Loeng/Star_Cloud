@@ -29,6 +29,8 @@
         <jackson-yaml-format-version>${jackson-databind-version}</jackson-yaml-format-version>
         <gson-version>2.8.5</gson-version>
         <swagger-version>2.9.2</swagger-version>
+        <swagger-ui-version>3.18.3</swagger-ui-version>
+        <spring-swagger-ui-version>2.7.0</spring-swagger-ui-version>
         <spring-data-jpa-version>${spring-boot-version}</spring-data-jpa-version>
         <hutool-version>4.3.0</hutool-version>
         <odbc-version></odbc-version>
@@ -122,7 +124,12 @@
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger-version}</version>
+                <version>${swagger-ui-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gizwits</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${spring-swagger-ui-version}</version>
             </dependency>
             <!-- test -->
             <dependency>
