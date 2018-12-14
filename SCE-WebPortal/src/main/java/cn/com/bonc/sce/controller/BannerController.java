@@ -13,6 +13,10 @@ import java.util.List;
 
 /**
  * banner接口
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
  */
 @Slf4j
 @RestController
@@ -35,7 +39,7 @@ public class BannerController {
 
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
@@ -54,7 +58,7 @@ public class BannerController {
             @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @DeleteMapping( "/{bannerId}" )
     @ResponseBody
@@ -73,7 +77,7 @@ public class BannerController {
             @ApiImplicitParam( name = "banner", value = "banner信息", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PutMapping
     @ResponseBody
@@ -94,7 +98,7 @@ public class BannerController {
             @ApiImplicitParam( name = "url", value = "待修改的url", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PatchMapping( "/{bannerId}" )
     @ResponseBody
@@ -113,7 +117,7 @@ public class BannerController {
             @ApiImplicitParam( name = "list", value = "bannerId顺序", paramType = "POST-Body", required = true, example = "xxx@bonc.com.cn", allowableValues = "0,1,2" ),
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PutMapping( "/updateBannerOrder" )
     @ResponseBody
@@ -132,7 +136,7 @@ public class BannerController {
             @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/{bannerId}" )
     @ResponseBody
@@ -147,7 +151,7 @@ public class BannerController {
      */
     @ApiOperation( value = "获取所有banner数据", notes = "获取所有banner数据", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping
     @ResponseBody

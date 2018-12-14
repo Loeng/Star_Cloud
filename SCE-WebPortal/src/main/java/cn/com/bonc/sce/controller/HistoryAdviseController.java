@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 历史消息通知接口
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
  */
 @Slf4j
 @RestController
@@ -32,7 +36,7 @@ public class HistoryAdviseController {
             @ApiImplicitParam( name = "historyHistoryAdvise", value = "advice信息", paramType = "body", required = true),
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
@@ -51,7 +55,7 @@ public class HistoryAdviseController {
             @ApiImplicitParam( name = "adviseId", value = "消息id", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @DeleteMapping( "/{historyHistoryAdviseId}" )
     @ResponseBody
@@ -70,7 +74,7 @@ public class HistoryAdviseController {
             @ApiImplicitParam( name = "historyHistoryAdvise", value = "historyHistoryAdvise信息", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PutMapping
     @ResponseBody
@@ -89,7 +93,7 @@ public class HistoryAdviseController {
             @ApiImplicitParam( name = "historyHistoryAdviseId", value = "消息id", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/{historyHistoryAdviseId}" )
     @ResponseBody
@@ -104,7 +108,7 @@ public class HistoryAdviseController {
      */
     @ApiOperation( value = "获取所有historyHistoryAdvise数据", notes = "获取所有historyHistoryAdvise数据", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping
     @ResponseBody

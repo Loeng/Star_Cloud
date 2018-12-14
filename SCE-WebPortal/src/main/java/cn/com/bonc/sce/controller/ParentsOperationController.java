@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 家长操作接口
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
  */
 @Slf4j
 @RestController
@@ -34,7 +38,7 @@ public class ParentsOperationController {
             @ApiImplicitParam( name = "phone", value = "手机号", paramType = "header", required = true),
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/{phone}" )
     @ResponseBody
@@ -58,7 +62,7 @@ public class ParentsOperationController {
             @ApiImplicitParam( name = "vaild", value = "验证码", paramType = "body", required = true),
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
