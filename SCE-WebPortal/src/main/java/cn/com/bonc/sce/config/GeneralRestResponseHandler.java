@@ -9,6 +9,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
@@ -19,8 +20,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @since 2018/12/14 1:16
  */
 @Slf4j
-//@ControllerAdvice
-public class GeneralRestResponseHandler implements ResponseBodyAdvice< Object > {
+@ControllerAdvice
+public class GeneralRestResponseHandler implements ResponseBodyAdvice {
 
     ObjectMapper jsonMapper = new ObjectMapper();
 

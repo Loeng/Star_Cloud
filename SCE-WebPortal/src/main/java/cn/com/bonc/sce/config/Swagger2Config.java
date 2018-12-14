@@ -45,7 +45,7 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("cn.com.bonc.sce.controller"))
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.none())
                 .build();
     }
 

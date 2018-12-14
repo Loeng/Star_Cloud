@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.model.AccountSecurity;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AccountSecurityService;
@@ -78,7 +77,7 @@ public class AccountSecurityController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @PostMapping
+    @PostMapping("")
     @ResponseBody
     public RestRecord updateAccount(AccountSecurity accountSecurity){
         return accountSecurityService.updateAccount(accountSecurity);
