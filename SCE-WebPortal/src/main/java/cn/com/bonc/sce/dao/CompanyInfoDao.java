@@ -14,9 +14,9 @@ public interface CompanyInfoDao {
     public List< CompanyInfo > selectAllCompanyList(
     );
 
-    @RequestMapping( value = "/Company/{companyName}", method = RequestMethod.GET )
+    @RequestMapping( value = "/Company/query", method = RequestMethod.GET )
     public List< CompanyInfo > selectCompanyListByName(
-            @PathVariable( value = "companyName" ) String companyName
+            @RequestParam( value = "companyName" ) String companyName
     );
 
     @RequestMapping( value = "/Company/{companyId}", method = RequestMethod.GET )

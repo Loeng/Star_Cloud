@@ -45,7 +45,7 @@ public class TeacherRecommendAppApiController {
      *
      * @param appIdList          用户选择的一组应用Id列表
      * @param teacherId          推荐应用的教师用户Id
-     * @param recommendPeroidMap 应用的推荐时间长度，每个应用可设置不同的推荐时间
+     * @param recommendPeroIdMap 应用的推荐时间长度，每个应用可设置不同的推荐时间
      * @return 是否成功添加
      */
     @PostMapping( "/list" )
@@ -53,27 +53,8 @@ public class TeacherRecommendAppApiController {
     public RestRecord addTeacherRecommendAppList(
             @RequestParam( "appId" ) List< String > appIdList,
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( "recommendPeroidMap" ) Map< String, Object > recommendPeroidMap ) {
-        return new RestRecord( 0, teacherRecommendDao.addTeacherRecommendAppList( appIdList, teacherId, recommendPeroidMap ) );
-    }
-
-
-    /**
-     * 教师推荐应用查询
-     * 1. 查询在时限内某教师推荐的应用信息
-     *
-     * @param teacherId  教师用户Id
-     * @param timePeroid 查询的时间范围（可为空）
-     * @return 返回查询结果
-     */
-    @GetMapping( "/{teacherId}" )
-    @ResponseBody
-    public RestRecord selectRecommendAppListByTeacherId(
-            @PathVariable( "teacherId" ) String teacherId,
-            @RequestParam( value = "timePeroid", required = false ) String timePeroid,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
-        return new RestRecord( 0, teacherRecommendDao.selectRecommendAppListByTeacherId( teacherId, timePeroid ) );
+            @RequestBody Map< String, Object > recommendPeroIdMap ) {
+        return new RestRecord( 0, teacherRecommendDao.addTeacherRecommendAppList( appIdList, teacherId, recommendPeroIdMap ) );
     }
 
 
@@ -86,13 +67,13 @@ public class TeacherRecommendAppApiController {
      * @param recommendPeroid 应用的推荐时间段
      * @return 返回是否更新成功
      */
-    @PatchMapping
+    @PatchMapping( "/{appId}" )
     @ResponseBody
-    public RestRecord updateTeacherRecommendApp(
-            @RequestParam( "appId" ) String appId,
+    public RestRecord updateTeacherRecommendAppInfo(
+            @PathVariable( "appId" ) String appId,
             @RequestParam( "teacherId" ) String teacherId,
             @RequestParam( "recommendPeroId" ) String recommendPeroid ) {
-        return new RestRecord( 0, teacherRecommendDao.updateRecommendAppInfo( teacherId, appId, recommendPeroid ) );
+        return new RestRecord( 0, teacherRecommendDao.updateTeacherRecommendAppInfo( teacherId, appId, recommendPeroid ) );
     }
 
     /**
@@ -126,4 +107,24 @@ public class TeacherRecommendAppApiController {
             @RequestParam( "teacherId" ) String teacherId ) {
         return new RestRecord( 0, teacherRecommendDao.deleteTeacherRecommendAppList( appIdList, teacherId ) );
     }
+
+    /**
+     * 教师推荐应用查询
+     * 1. 查询在时限内某教师推荐的应用信息
+     *
+     * @param teacherId  教师用户Id
+     * @param timePeroid 查询的时间范围（可为空）
+     * @return 返回查询结果
+     */
+    @GetMapping( "/{teacherId}" )
+    @ResponseBody
+    public RestRecord selectTeacherRecommendAppListByTeacherId(
+            @PathVariable( "teacherId" ) String teacherId,
+            @RequestParam( value = "timePeroid", required = false ) String timePeroid,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
+        return new RestRecord( 0, teacherRecommendDao.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid ) );
+    }
+
+
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Api( value = "教师推荐应用接口",tags = "教师推荐应用接口")
+@Api( value = "教师推荐应用接口", tags = "教师推荐应用接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping( "/TeacherRecommendApp" )
@@ -57,14 +57,14 @@ public class TeacherRecommendAppController {
      *
      * @param appIdList          用户选择的一组应用Id列表
      * @param teacherId          推荐应用的教师用户Id
-     * @param recommendPeroidMap 应用的推荐时间长度，每个应用可设置不同的推荐时间
+     * @param recommendPeroIdMap 应用的推荐时间长度，每个应用可设置不同的推荐时间
      * @return 是否成功添加
      */
     @ApiOperation( value = "将一组应用设置为教师推荐应用", notes = "将用户选择的应用设置为教师推荐应用，添加数据到教师推荐表中每个推荐应用有其对应的推荐时间", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "用户选择的一组应用Id列表", dataType = "list", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "appId", value = "用户选择的一组应用Id列表", dataType = "list", paramType = "query", required = true, example = "101,102,103" ),
             @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "recommendPeroId", value = "应用的推荐时间长度，每个应用可设置不同的推荐时间", paramType = "query", required = true )
+            @ApiImplicitParam( name = "recommendPeroIdMap", value = "应用的推荐时间长度，每个应用可设置不同的推荐时间", paramType = "body", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "###", response = RestRecord.class )
@@ -74,38 +74,9 @@ public class TeacherRecommendAppController {
     public RestRecord addTeacherRecommendAppList(
             @RequestParam( "appId" ) List< String > appIdList,
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( "recommendPeroidMap" ) Map< String, Object > recommendPeroidMap ) {
-        return new RestRecord( 0, teacherRecommendService.addTeacherRecommendAppList( appIdList, teacherId, recommendPeroidMap ) );
-    }
+            @RequestBody Map< String, Object > recommendPeroIdMap ) {
 
-
-    /**
-     * 教师推荐应用查询
-     * 1. 查询在时限内某教师推荐的应用信息
-     *
-     * @param teacherId  教师用户Id
-     * @param timePeroid 查询的时间范围（可为空）
-     * @return 返回查询结果
-     */
-    @ApiOperation( value = "教师推荐应用查询", notes = "查询在时限内某教师推荐的应用信息", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "timePeroid", value = "查询的时间范围", paramType = "query", required = false, defaultValue = "" ),
-            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = false, defaultValue = "1" ),
-            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
-    } )
-    @GetMapping( "/{teacherId}" )
-    @ResponseBody
-    public RestRecord selectTeacherRecommendAppListByTeacherId(
-            @PathVariable( "teacherId" ) String teacherId,
-            @RequestParam( value = "timePeroid", required = false ) String timePeroid,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
-
-        return new RestRecord( 0, teacherRecommendService.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid ) );
+        return new RestRecord( 0, teacherRecommendService.addTeacherRecommendAppList( appIdList, teacherId, recommendPeroIdMap ) );
     }
 
 
@@ -120,16 +91,16 @@ public class TeacherRecommendAppController {
      */
     @ApiOperation( value = "修改单个推荐应用的时长", notes = "修改教师推荐表中对应记录中的推荐时间", httpMethod = "PATCH" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true),
-            @ApiImplicitParam( name = "recommendPeroId", value = "应用的推荐时间段", paramType = "query",  required = true)
+            @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "recommendPeroId", value = "应用的推荐时间段", paramType = "query", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "###", response = RestRecord.class )
     } )
-    @PatchMapping("{appId}")
+    @PatchMapping( "{appId}" )
     @ResponseBody
-    public RestRecord updateTeacherRecommendApp(
+    public RestRecord updateTeacherRecommendAppInfo(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "teacherId" ) String teacherId,
             @RequestParam( "recommendPeroId" ) String recommendPeroid ) {
@@ -148,7 +119,7 @@ public class TeacherRecommendAppController {
     @ApiOperation( value = "删除单个教师推荐应用", notes = "将教师推荐表中对应记录删除标志位改为已删除", httpMethod = "DELETE" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true)
+            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "###", response = RestRecord.class )
@@ -171,8 +142,8 @@ public class TeacherRecommendAppController {
      */
     @ApiOperation( value = "删除一组教师推荐应用", notes = "将教师推荐表中对应记录删除标志位改为已删除", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用Id列表", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true)
+            @ApiImplicitParam( name = "appIdList", value = "应用Id列表", paramType = "query", required = true, example = "101,102,103" ),
+            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "###", response = RestRecord.class )
@@ -184,4 +155,34 @@ public class TeacherRecommendAppController {
             @RequestParam( "teacherId" ) String teacherId ) {
         return new RestRecord( 0, teacherRecommendService.deleteTeacherRecommendAppList( appIdList, teacherId ) );
     }
+
+    /**
+     * 教师推荐应用查询
+     * 1. 查询在时限内某教师推荐的应用信息
+     *
+     * @param teacherId  教师用户Id
+     * @param timePeroid 查询的时间范围（可为空）
+     * @return 返回查询结果
+     */
+    @ApiOperation( value = "教师推荐应用查询", notes = "查询在时限内某教师推荐的应用信息", httpMethod = "GET" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "timePeroid", value = "查询的时间范围", paramType = "query", required = false, defaultValue = "" ),
+            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = false, defaultValue = "1" ),
+            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+    } )
+    @GetMapping( "/{teacherId}" )
+    @ResponseBody
+    public RestRecord selectTeacherRecommendAppListByTeacherId(
+            @PathVariable( "teacherId" ) String teacherId,
+            @RequestParam( value = "timePeroid", required = false ) String timePeroid,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
+
+        return new RestRecord( 0, teacherRecommendService.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid ) );
+    }
+
 }

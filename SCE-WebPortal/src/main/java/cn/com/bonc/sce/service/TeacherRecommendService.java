@@ -29,12 +29,12 @@ public class TeacherRecommendService {
     }
 
     public boolean selectTeacherRecommendAppListByTeacherId( String teacherId, String timePeroid ) {
-        teacherRecommendDao.selectRecommendAppListByTeacherId( teacherId, timePeroid );
+        teacherRecommendDao.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid );
         return false;
     }
 
     public boolean updateTeacherRecommendAppInfo( String teacherId, String appId, String recommendPeroid ) {
-        teacherRecommendDao.updateRecommendAppInfo( teacherId, appId, recommendPeroid );
+        teacherRecommendDao.updateTeacherRecommendAppInfo( teacherId, appId, recommendPeroid );
         return false;
     }
 

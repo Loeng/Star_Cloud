@@ -32,22 +32,20 @@ public class CompanyInfoApiController {
         return new RestRecord( 0, companyInfoDao.selectAllCompanyList() );
     }
 
-
     /**
      * 根据输入名字模糊搜索厂商信息
      *
      * @param companyName 用户输入搜索厂商名
      * @return 返回查询结果
      */
-    @GetMapping( "/{companyName}" )
+    @GetMapping( "/query" )
     @ResponseBody
     public RestRecord selectCompanyListByName(
-            @PathVariable( value = "companyName" ) String companyName,
+            @RequestParam( value = "companyName" ) String companyName,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
         return new RestRecord( 0, companyInfoDao.selectCompanyListByName( companyName ) );
     }
-
 
     /**
      * 根据厂商ID查询厂商信息
@@ -72,7 +70,8 @@ public class CompanyInfoApiController {
      */
     @PutMapping
     @ResponseBody
-    public RestRecord addCompanyInfo( @RequestBody CompanyInfo companyInfo ) {
+    public RestRecord addCompanyInfo(
+            @RequestBody CompanyInfo companyInfo ) {
         return new RestRecord( 0, companyInfoDao.addCompanyInfo( companyInfo ) );
     }
 
@@ -85,8 +84,9 @@ public class CompanyInfoApiController {
      */
     @PatchMapping( "/{companyId}" )
     @ResponseBody
-    public RestRecord updateCompanyInfo( @PathVariable( "companyId" ) String companyId,
-                                         @RequestBody CompanyInfo companyInfo ) {
+    public RestRecord updateCompanyInfo(
+            @PathVariable( "companyId" ) String companyId,
+            @RequestBody CompanyInfo companyInfo ) {
         return new RestRecord( 0, companyInfoDao.updateCompanyInfo( companyId, companyInfo ) );
     }
 
@@ -99,7 +99,8 @@ public class CompanyInfoApiController {
      */
     @DeleteMapping( "/{companyId}" )
     @ResponseBody
-    public RestRecord deleteCompanyInfo( @PathVariable( "companyId" ) String companyId ) {
+    public RestRecord deleteCompanyInfo(
+            @PathVariable( "companyId" ) String companyId ) {
         return new RestRecord( 0, companyInfoDao.deleteCompanyInfo( companyId ) );
     }
 }
