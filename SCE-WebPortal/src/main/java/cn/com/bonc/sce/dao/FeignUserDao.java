@@ -23,5 +23,4 @@ public interface FeignUserDao {
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public User getUserById( @PathVariable("userId") String userId );
     
-    
 }

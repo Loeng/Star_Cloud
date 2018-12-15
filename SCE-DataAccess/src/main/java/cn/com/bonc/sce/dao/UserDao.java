@@ -16,7 +16,7 @@ import java.util.List;
 public class UserDao {
 
     public User getUserById( String userId ) {
-        return null;
+        return new User( 0, "RGM79" );
     }
 
     public boolean deleteUserById( String userId ) {

@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 @FeignClient( "sce-data-access" )
 public interface MarketAppDao {
 
-
 }

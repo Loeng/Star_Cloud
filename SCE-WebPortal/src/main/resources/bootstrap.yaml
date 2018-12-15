@@ -20,4 +20,4 @@ logging:
     guru.springframework.controllers: INFO
     org.hibernate: INFO
 server:
-  port: 10010
+  port: 10102

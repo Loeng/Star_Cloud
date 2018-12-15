@@ -14,6 +14,8 @@ logging:
     console: "%d %-5level %logger : %msg%n"
     file: "%d %-5level [%thread] %logger : %msg%n"
   level:
-    org.springframework: INFO
-    guru.springframework.controllers: INFO
+    org.springframework: TRACE
+    guru.springframework.controllers: TRACE
     org.hibernate: INFO
+server:
+  port: 10101

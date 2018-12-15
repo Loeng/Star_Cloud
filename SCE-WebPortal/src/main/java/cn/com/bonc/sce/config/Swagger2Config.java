@@ -9,6 +9,7 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -45,7 +46,7 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("cn.com.bonc.sce.controller"))
-                .paths(PathSelectors.none())
+                .paths(PathSelectors.any())
                 .build();
     }
 
@@ -54,6 +55,7 @@ public class Swagger2Config {
                 .title("SCE-WebPortal-API 在线文档")
                 .description("福建教育云平台-门户网站后端接口文档")
                 .termsOfServiceUrl("http://www.baidu.com")
+                .contact( new Contact( "leucippus", "www.还没买.com.cn", "tangchenkai@bonc.com.cn" ) )
                 .version("1.0")
                 .build();
     }
