@@ -1,8 +1,10 @@
+spring:
+  profiles: dev
+server:
+  port: 10101
 eureka:
   instance:
     hostname: localhost
-# service-discovery
-eureka:
   client:
-    serviceUrl:
-      defaultZone: http://localhost:10100/eureka/
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:10100/eureka/
