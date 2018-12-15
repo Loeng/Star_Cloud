@@ -25,7 +25,7 @@ public class ChannelController {
      */
     @ApiOperation( value = "频道查询接口", notes = "频道查询接口", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "pChannelId", value = "频道id", paramType = "header", required = true ),
+            @ApiImplicitParam( name = "pChannelId", value = "频道id", paramType = "query", required = true ),
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
@@ -45,7 +45,7 @@ public class ChannelController {
      */
     @ApiOperation( value = "添加频道", notes = "添加频道", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "channel", value = "频道信息", paramType = "body", required = true ),
+            @ApiImplicitParam( name = "channel", value = "频道信息", paramType = "path", required = true ),
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
@@ -66,7 +66,7 @@ public class ChannelController {
      */
     @ApiOperation( value = "修改频道", notes = "修改频道", httpMethod = "PUT" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "channel", value = "频道信息", paramType = "body", required = true ),
+            @ApiImplicitParam( name = "channel", value = "频道信息", paramType = "path", required = true ),
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
@@ -86,7 +86,7 @@ public class ChannelController {
      */
     @ApiOperation( value = "删除频道", notes = "删除频道", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "channelId", value = "频道id", paramType = "header", required = true ),
+            @ApiImplicitParam( name = "channelId", value = "频道id", paramType = "query", required = true ),
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )

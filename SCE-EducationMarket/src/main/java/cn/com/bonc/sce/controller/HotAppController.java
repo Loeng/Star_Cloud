@@ -28,8 +28,8 @@ public class HotAppController {
      */
     @ApiOperation( value = "添加热门应用", notes = "添加热门应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appIdList", value = "appid用逗号分隔", paramType = "body", required = true, example = "1,2,3" ),
-            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "body", required = true )
+            @ApiImplicitParam( name = "appIdList", value = "appid用逗号分隔", paramType = "path", required = true, example = "1,2,3" ),
+            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "path", required = true )
 
     } )
     @ApiResponses( {
@@ -51,8 +51,8 @@ public class HotAppController {
      */
     @ApiOperation( value = "查询所有热门应用", notes = "查询所有热门应用", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "page", value = "页面", paramType = "body", required = false ),
-            @ApiImplicitParam( name = "rows", value = "每页显示数量", paramType = "body", required = false )
+            @ApiImplicitParam( name = "page", value = "页面", paramType = "path", required = false ),
+            @ApiImplicitParam( name = "rows", value = "每页显示数量", paramType = "path", required = false )
 
     } )
     @ApiResponses( {
@@ -75,8 +75,8 @@ public class HotAppController {
      */
     @ApiOperation( value = "删除热门应用", notes = "删除热门应用", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "header", required = true ),
-            @ApiImplicitParam( name = "appIdList", value = "appid用逗号分隔", paramType = "header", required = true, example = "1,2,3" )
+            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "appIdList", value = "appid用逗号分隔", paramType = "query", required = true, example = "1,2,3" )
 
     } )
     @ApiResponses( {
