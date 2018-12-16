@@ -1,14 +1,21 @@
 package cn.com.bonc.sce.dao;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@Repository
-public class AppAuditingDao {
-    public boolean appVersionUpdateApprove( String appId, String userId ) {
-        return false;
-    }
+@FeignClient( "sce-data-access" )
+public interface AppAuditingDao {
+    @RequestMapping( value = "/AppVersion/approve/{appId}", method = RequestMethod.PATCH )
+    public boolean appVersionUpdateApprove(
+            @PathVariable( "appId" ) String appId,
+            @RequestParam( "userId" ) String userId );
 
-    public boolean appVersionUpdateReject( String appId, String userId, String rejectReason ) {
-        return false;
-    }
+    @RequestMapping( value = "/AppVersion/reject/{appId}", method = RequestMethod.PATCH )
+    public boolean appVersionUpdateReject(
+            @PathVariable( "appId" ) String appId,
+            @RequestParam( "userId" ) String userId,
+            @RequestParam( "rejectReason" ) String rejectReason );
 }

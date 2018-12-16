@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * 应用下载统计接口
  */
 @Slf4j
-@Api( value = "应用下载统计接口" )
+@Api( value = "应用下载统计接口" ,tags = "应用下载统计接口")
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping( "/count" )

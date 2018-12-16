@@ -10,22 +10,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Api( value = "应用版本更新、审核接口" )
+@Api( value = "应用版本更新、审核接口", tags = "应用版本更新/审核接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
+@RestController
 @RequestMapping( "/AppVersion" )
 public class AppVersionController {
     private AppVersionService appVersionService;
     private AppAuditingService appAuditingService;
+//    private AdviseService adviseService;
 
     @Autowired
-    public AppVersionController( AppVersionService appVersionService ) {
+    public AppVersionController( AppVersionService appVersionService,
+                                 AppAuditingService appAuditingService
+
+    ) {
         this.appVersionService = appVersionService;
+        this.appAuditingService = appAuditingService;
+//        this.adviseService = adviseService;
     }
 
-    @Autowired
-    public AppVersionController( AppAuditingService appAuditingService ) {
-        this.appAuditingService = appAuditingService;
-    }
 
     /**
      * 应用版本查询接口
@@ -41,7 +44,8 @@ public class AppVersionController {
     } )
     @GetMapping( "/{appId}" )
     @ResponseBody
-    public RestRecord selectAppHistoryVersionList( @PathVariable( "appId" ) String appId ) {
+    public RestRecord selectAppHistoryVersionList(
+            @PathVariable( "appId" ) String appId ) {
         // 通过应用ID查询该应用的历史版本信息列表
         return new RestRecord( 0, appVersionService.selectAppHistoryVersionList( appId ) );
     }
@@ -63,8 +67,9 @@ public class AppVersionController {
     } )
     @PatchMapping( "/{appId}" )
     @ResponseBody
-    public RestRecord updateAppHistoryVersionInfo( @PathVariable( "appId" ) String appId,
-                                                   @RequestBody AppVersionInfo appVersionInfo ) {
+    public RestRecord updateAppHistoryVersionInfo(
+            @PathVariable( "appId" ) String appId,
+            @RequestBody AppVersionInfo appVersionInfo ) {
         //通过应用ID修改该应用的版本信息
         return new RestRecord( 0, appVersionService.updateAppHistoryVersionInfo( appId, appVersionInfo ) );
     }
@@ -87,8 +92,9 @@ public class AppVersionController {
     } )
     @DeleteMapping( "/{appId}" )
     @ResponseBody
-    public RestRecord deleteAppHistoryVersionInfo( @PathVariable( "appId" ) String appId,
-                                                   @RequestBody AppVersionInfo appVersionInfo ) {
+    public RestRecord deleteAppHistoryVersionInfo(
+            @PathVariable( "appId" ) String appId,
+            @RequestBody AppVersionInfo appVersionInfo ) {
         return new RestRecord( 0, appVersionService.deleteAppHistoryVersionInfo( appId, appVersionInfo ) );
     }
 
@@ -106,7 +112,8 @@ public class AppVersionController {
     } )
     @DeleteMapping( "/all/{appId}" )
     @ResponseBody
-    public RestRecord deleteAppAllVersionInfoById( @PathVariable( "appId" ) String appId ) {
+    public RestRecord deleteAppAllVersionInfoById(
+            @PathVariable( "appId" ) String appId ) {
         return new RestRecord( 0, appVersionService.deleteAppAllVersionInfoById( appId ) );
     }
 
@@ -132,9 +139,10 @@ public class AppVersionController {
     } )
     @PostMapping( "apply/{appId}" )
     @ResponseBody
-    public RestRecord appVersionUpdateApply( @PathVariable( "appId" ) String appId,
-                                             @RequestParam( "userId" ) String userId,
-                                             @RequestBody AppVersionInfo appVersionInfo ) {
+    public RestRecord appVersionUpdateApply(
+            @PathVariable( "appId" ) String appId,
+            @RequestParam( "userId" ) String userId,
+            @RequestBody AppVersionInfo appVersionInfo ) {
         appVersionService.createVersionInfo( appId, appVersionInfo );
 //        messageService.createAppVersionUpdateApplyMessage( userId, appId );
         return null;
@@ -160,8 +168,9 @@ public class AppVersionController {
     } )
     @PatchMapping( "/approve/{appId}" )
     @ResponseBody
-    public RestRecord appVersionUpdateApprove( @PathVariable( "appId" ) String appId,
-                                               @RequestParam( "userId" ) String userId ) {
+    public RestRecord appVersionUpdateApprove(
+            @PathVariable( "appId" ) String appId,
+            @RequestParam( "userId" ) String userId ) {
         appAuditingService.appVersionUpdateApprove( appId, userId );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
         return null;
@@ -189,9 +198,10 @@ public class AppVersionController {
     } )
     @PatchMapping( "/reject/{appId}" )
     @ResponseBody
-    public RestRecord appVersionUpdateReject( @PathVariable( "appId" ) String appId,
-                                              @RequestParam( "userId" ) String userId,
-                                              @RequestParam( "rejectReason" ) String rejectReason ) {
+    public RestRecord appVersionUpdateReject(
+            @PathVariable( "appId" ) String appId,
+            @RequestParam( "userId" ) String userId,
+            @RequestParam( "rejectReason" ) String rejectReason ) {
         appAuditingService.appVersionUpdateReject( appId, userId, rejectReason );
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
         return null;

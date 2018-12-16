@@ -1,29 +1,29 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.AppVersionInfo;
-import org.springframework.stereotype.Repository;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Repository
-public class AppVersionDao {
-    public List< AppVersionInfo > selectAppHistoryVersionList( String appId ) {
-        return null;
-    }
+@FeignClient( "sce-data-access" )
+public interface AppVersionDao {
 
-    public boolean updateAppHistoryVersionInfo( String appId, AppVersionInfo appVersionInfo ) {
-        return false;
-    }
+    @RequestMapping( value = "/AppVersion/{appId}", method = RequestMethod.GET )
+    public List< AppVersionInfo > selectAppHistoryVersionList( @PathVariable( "appId" ) String appId );
 
-    public boolean deleteAppHistoryVersionInfo( String appId, AppVersionInfo appVersionInfo ) {
-        return false;
-    }
+    @RequestMapping( value = "/AppVersion/{appId}", method = RequestMethod.PATCH )
+    public boolean updateAppHistoryVersionInfo( @PathVariable( "appId" ) String appId,
+                                                @RequestBody AppVersionInfo appVersionInfo);
 
-    public boolean deleteAppAllVersionInfoById( String appId ) {
-        return false;
-    }
+    @RequestMapping( value = "/AppVersion/{appId}", method = RequestMethod.DELETE )
+    public boolean deleteAppHistoryVersionInfo( @PathVariable( "appId" ) String appId,
+                                                @RequestBody AppVersionInfo appVersionInfo );
 
-    public boolean createVersionInfo( String appId, AppVersionInfo appVersionInfo ) {
-        return false;
-    }
+    @RequestMapping( value = "/AppVersion/all/{appId}", method = RequestMethod.DELETE )
+    public boolean deleteAppAllVersionInfoById(  @PathVariable( "appId" ) String appId );
+
+    @RequestMapping( value = "/AppVersion/apply/{appId}", method = RequestMethod.POST )
+    public boolean createVersionInfo( @PathVariable( "appId" ) String appId,
+                                      @RequestBody AppVersionInfo appVersionInfo );
 }
