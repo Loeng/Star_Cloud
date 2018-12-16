@@ -85,6 +85,24 @@ public class BannerApiController {
         }
     }
 
+    /**
+     * 修改url
+     *
+     * @param bannerId   bannerId
+     * @param appId 待修改的appId
+     * @return 跟新是否成功
+     */
+    @PatchMapping( "/{bannerId}" )
+    @ResponseBody
+    public RestRecord updateBannerAppId(
+            @PathVariable( "bannerId" ) String bannerId,
+            @RequestParam( "appId" ) String appId ) {
+        try{
+            return new RestRecord(200,bannerDao.updateBannerAppId( bannerId, appId ));
+        }catch ( Exception e ){
+            return new RestRecord(500,"", e);
+        }
+    }
 
     /**
      * 修改轮播次序

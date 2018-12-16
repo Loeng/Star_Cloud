@@ -51,6 +51,16 @@ public interface BannerDao {
     public RestRecord updateBannerUrl( @PathVariable( "bannerId" ) String bannerId, @RequestParam( "url" ) String url );
 
     /**
+     * 修改url
+     *
+     * @param bannerId   bannerId
+     * @param appId 待修改的appId
+     * @return 跟新是否成功
+     */
+    @RequestMapping( value = "/banners/{bannerId}", method = RequestMethod.PATCH )
+    public RestRecord updateBannerAppId( @PathVariable( "bannerId" ) String bannerId, @RequestParam( "appId" ) String appId );
+
+    /**
      * 修改轮播次序
      *
      * @param list bannerId

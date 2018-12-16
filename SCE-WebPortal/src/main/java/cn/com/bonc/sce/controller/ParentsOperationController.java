@@ -44,7 +44,7 @@ public class ParentsOperationController {
     @ResponseBody
     public RestRecord getSecurityVaildInfo( HttpServletRequest request, @PathVariable( "phone" )String phone){
         RestRecord rr = parentsOperationService.getSecurityVaildInfo(phone);
-        request.getSession().setAttribute( "phoneVaild",rr.getMsg() );
+        request.getSession().setAttribute( "phoneValid",rr.getMsg() );
         rr.setMsg( null );
         return rr;
     }
@@ -53,23 +53,26 @@ public class ParentsOperationController {
      * 添加家长信息
      *
      * @param parentsInfo 家长信息
-     * @param vaild 验证码
+     * @param valid 验证码
      * @return 添加结果
      */
     @ApiOperation( value = "添加家长信息", notes = "添加家长信息", httpMethod = "POST" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "parentsInfo", value = "家长信息", paramType = "body", required = true),
-            @ApiImplicitParam( name = "vaild", value = "验证码", paramType = "body", required = true),
+            @ApiImplicitParam( name = "valid", value = "验证码", paramType = "body", required = true),
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertParentsInfo( HttpServletRequest request,ParentsInfo parentsInfo ,String vaild){
-        String sessionVaild = (String)request.getSession().getAttribute( "phoneVaild" );
-        if(sessionVaild.equals( vaild ))
-            return parentsOperationService.insertParentsInfo(parentsInfo);
+    public RestRecord insertParentsInfo( HttpServletRequest request,ParentsInfo parentsInfo ,String valid){
+        String sessionValid = (String)request.getSession().getAttribute( "phoneValid" );
+        if(sessionValid.equals( valid )) {
+            RestRecord rr = parentsOperationService.insertParentsInfo( parentsInfo );
+            if(rr.getCode()==200)request.getSession().removeAttribute( "phoneValid" );
+            return rr;
+        }
         return new RestRecord(200,"验证码不正确");
     }
 }

@@ -18,7 +18,7 @@ public class AccountSecurityApiController {
     /**
      * 修改账号信息
      *
-     * @param accountSecurity 安全码和账号信息
+     * @param accountSecurity 账号信息
      * @return 修改结果
      */
     @PostMapping( "" )

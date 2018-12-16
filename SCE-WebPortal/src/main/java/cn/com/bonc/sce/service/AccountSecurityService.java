@@ -23,11 +23,11 @@ public class AccountSecurityService {
     /**
      * 获取安全验证信息
      *
-     * @param phone 手机号
+     * @param userAccount 手机号
      * @return 验证码
      */
-    public RestRecord getSecurityVaildInfo( String phone ) {
-        /*RestRecord rr = accountSecurityDao.getSecurityVaildInfo( phone );
+    public RestRecord sendSecurityPhoneValid( String userAccount ) {
+        /*RestRecord rr = accountSecurityDao.getUserAccountPhone( userAccount );
         if ( rr.getCode() == 200 ) {
             //验证码
             String vaild = rr.getMsg();
@@ -46,16 +46,16 @@ public class AccountSecurityService {
      * @param vaild 验证码
      * @return 验证结果和安全码
      */
-    public RestRecord vaildInfo( String phone, String vaild ) {
-        String vaild_ = getAccountEncryptionCode( phone, vaild );
-        if ( VaildSecurityUtils.checkVaild( vaild_ ) ) {
-            VaildSecurityUtils.delVaild(vaild_);
+    public RestRecord validInfo( String phone, String valid ) {
+        String valid_ = getAccountEncryptionCode( phone, valid );
+        if ( VaildSecurityUtils.checkVaild( valid_ ) ) {
+            VaildSecurityUtils.delVaild(valid_);
             //创建安全码
             String randomStr = VaildSecurityUtils.randomStr();
             VaildSecurityUtils.addCode( getAccountEncryptionCode(phone,randomStr) );
             return new RestRecord( 200, "success", randomStr);
         }
-        return new RestRecord( 200, "error" );
+        return new RestRecord( 400, "error" );
     }
 
     /**

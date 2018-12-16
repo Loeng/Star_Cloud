@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @Api( value = "banner接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
-@RequestMapping( "/banner" )
+@RequestMapping( "/banners" )
 public class BannerController {
     @Autowired
     private BannerService bannerService;
@@ -104,6 +104,27 @@ public class BannerController {
     @ResponseBody
     public RestRecord updateBannerUrl( @PathVariable( "bannerId" )String bannerId,@RequestParam( "url" ) String url ) {
         return bannerService.updateBannerUrl( bannerId, url );
+    }
+
+    /**
+     * 修改应用id
+     *
+     * @param bannerId bannerId
+     * @param appId    appId
+     * @return 跟新是否成功
+     */
+    @ApiOperation( value = "修改appId", notes = "修改appId", httpMethod = "PATCH" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "header", required = true ),
+            @ApiImplicitParam( name = "appId", value = "appId", paramType = "body", required = true )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+    } )
+    @PatchMapping( "/{bannerId}" )
+    @ResponseBody
+    public RestRecord updateBannerAppId( @PathVariable( "bannerId" )String bannerId,@RequestParam( "appId" ) String appId ) {
+        return bannerService.updateBannerAppId( bannerId, appId );
     }
 
     /**

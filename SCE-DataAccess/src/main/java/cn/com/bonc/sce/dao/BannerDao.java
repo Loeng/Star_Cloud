@@ -24,6 +24,10 @@ public class BannerDao {
         return null;
     }
 
+    public Integer updateBannerAppId(String bannerId,String appId) {
+        return null;
+    }
+
     public Integer updateBannerOrder(List<String> list) {
         return null;
     }

@@ -61,6 +61,17 @@ public class BannerService {
     }
 
     /**
+     * 修改url
+     *
+     * @param bannerId   bannerId
+     * @param appId 待修改的url
+     * @return 跟新是否成功
+     */
+    public RestRecord updateBannerAppId(String bannerId,String appId){
+        return bannerDao.updateBannerAppId(bannerId,appId);
+    }
+
+    /**
      * 获取banner数据
      *
      * @param bannerId bannerId

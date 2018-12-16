@@ -2,6 +2,13 @@ package cn.com.bonc.sce.tool;
 
 import java.util.*;
 
+/**
+ * 安全验证相关
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
+ */
 public abstract class VaildSecurityUtils {
 
     //验证码信息存储，String为手机号和安全码的MD5加密

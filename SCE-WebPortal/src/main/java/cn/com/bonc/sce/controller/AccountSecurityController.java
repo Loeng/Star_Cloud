@@ -37,31 +37,31 @@ public class AccountSecurityController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/{phone}" )
+    @GetMapping( "/sendSecurityPhoneValid/{phone}" )
     @ResponseBody
-    public RestRecord getSecurityVaildInfo( @PathVariable( "phone" ) String phone){
-        return accountSecurityService.getSecurityVaildInfo(phone);
+    public RestRecord sendSecurityPhoneValid( @PathVariable( "phone" ) String phone){
+        return accountSecurityService.sendSecurityPhoneValid(phone);
     }
 
     /**
      * 验证安全信息
      *
      * @param phone 手机号
-     * @param vaild 验证码
+     * @param valid 验证码
      * @return 验证结果和安全码
      */
     @ApiOperation( value = "验证安全信息", notes = "验证安全信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "phone", value = "手机号", paramType = "header", required = true),
-            @ApiImplicitParam( name = "vaild", value = "验证码", paramType = "header", required = true)
+            @ApiImplicitParam( name = "valid", value = "验证码", paramType = "header", required = true)
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/{phone}/{vaild}" )
+    @GetMapping( "/{phone}/{valid}" )
     @ResponseBody
-    public RestRecord vaildInfo(@PathVariable( "phone" )String phone,@PathVariable( "vaild" )String vaild){
-        return accountSecurityService.vaildInfo(phone,vaild);
+    public RestRecord validInfo(@PathVariable( "phone" )String phone,@PathVariable( "valid" )String valid){
+        return accountSecurityService.validInfo(phone,valid);
     }
 
     /**
