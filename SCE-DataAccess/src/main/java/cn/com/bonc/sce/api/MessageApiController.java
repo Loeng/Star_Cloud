@@ -77,7 +77,7 @@ public class MessageApiController {
     public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) String announcementId ) {
         try {
             int totals = messageDao.deleteMessageById( announcementId );
-            totals += messageDao.deleteAnnouncementById( announcementId )
+            totals += messageDao.deleteAnnouncementById( announcementId );
             return new RestRecord( 200, totals );
         } catch ( Exception e ) {
             return new RestRecord( 500, "", e );
@@ -126,3 +126,4 @@ public class MessageApiController {
         }
     }
 }
+

@@ -42,7 +42,7 @@ public class GeneralRestResponseHandler implements ResponseBodyAdvice {
             }
             RestRecord restRecord = new RestRecord();
             if ( o instanceof Exception ) {
-                restRecord.setException( ( Exception ) o );
+//                restRecord.setException( ( Exception ) o );
             } else if ( o instanceof String ) {
                 restRecord.setData( o );
                 return restRecord.toString();

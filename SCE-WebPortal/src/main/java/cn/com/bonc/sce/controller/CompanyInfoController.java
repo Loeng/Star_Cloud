@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.model.CompanyInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CompanyInfoService;

@@ -73,7 +73,7 @@ public class BannerApiController {
      * @param url 待修改的url
      * @return 跟新是否成功
      */
-    @PatchMapping( "/{bannerId}" )
+    @PatchMapping( "/url/{bannerId}" )
     @ResponseBody
     public RestRecord updateBannerUrl(
             @PathVariable( "bannerId" ) String bannerId,
@@ -92,7 +92,7 @@ public class BannerApiController {
      * @param appId 待修改的appId
      * @return 跟新是否成功
      */
-    @PatchMapping( "/{bannerId}" )
+    @PatchMapping( "/appId/{bannerId}" )
     @ResponseBody
     public RestRecord updateBannerAppId(
             @PathVariable( "bannerId" ) String bannerId,
@@ -151,3 +151,4 @@ public class BannerApiController {
         }
     }
 }
+

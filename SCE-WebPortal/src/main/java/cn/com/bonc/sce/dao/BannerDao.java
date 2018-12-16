@@ -47,7 +47,7 @@ public interface BannerDao {
      * @param url 待修改的url
      * @return 跟新是否成功
      */
-    @RequestMapping( value = "/banners/{bannerId}", method = RequestMethod.PATCH )
+    @RequestMapping( value = "/banners/url/{bannerId}", method = RequestMethod.PATCH )
     public RestRecord updateBannerUrl( @PathVariable( "bannerId" ) String bannerId, @RequestParam( "url" ) String url );
 
     /**
@@ -57,7 +57,7 @@ public interface BannerDao {
      * @param appId 待修改的appId
      * @return 跟新是否成功
      */
-    @RequestMapping( value = "/banners/{bannerId}", method = RequestMethod.PATCH )
+    @RequestMapping( value = "/banners/appId/{bannerId}", method = RequestMethod.PATCH )
     public RestRecord updateBannerAppId( @PathVariable( "bannerId" ) String bannerId, @RequestParam( "appId" ) String appId );
 
     /**

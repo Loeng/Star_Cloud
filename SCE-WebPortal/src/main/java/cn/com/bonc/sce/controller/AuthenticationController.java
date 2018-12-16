@@ -39,16 +39,14 @@ public class AuthenticationController {
      */
     @ApiOperation( value = "用户登录接口", notes = "用戶名/邮箱/手机号登录都需要走此接口", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "authType", dataType = "String", value = "验证类型 : 0/用户名密码登录，1/手机号登录, 2/邮箱登录", paramType = "POST-Body", required = true, example = "xxx@bonc.com.cn", allowableValues = "0,1,2" ),
+            @ApiImplicitParam( name = "authType", dataType = "String", value = "验证类型 : 0/用户名密码登录，1/手机号登录, 2/邮箱登录", paramType = "Body", required = true, example = "xxx@bonc.com.cn", allowableValues = "0,1,2" ),
             @ApiImplicitParam( name = "userIdentifier", dataType = "Number", value = "用户身份识别信息，和 authType 必须匹配，如 authType 为 0 则改值必须是用户名", paramType = "POST-Body", required = true ),
             @ApiImplicitParam( name = "encryptedPassword", value = "加密后的用户登录密码", paramType = "POST-body", required = true )
     } )
     @ApiResponses( value = {
-//            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = {
-//                    @Example( value = {
-//                            @ExampleProperty( value = "", mediaType = "")
-//                    })
-//            } )
+            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = @Example( {
+                    @ExampleProperty( value = "sdfsdfsdfsdf", mediaType = "application/json" )
+            } ) )
     } )
     @PostMapping( produces = "application/json" )
     @ResponseBody

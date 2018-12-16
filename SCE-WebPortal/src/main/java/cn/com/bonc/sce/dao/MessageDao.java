@@ -67,3 +67,4 @@ public interface MessageDao {
     @RequestMapping( value = "/messages/{userId}", method = RequestMethod.GET )
     public RestRecord getMessageByUserId( @PathVariable( "userId" ) String userId );
 }
+
