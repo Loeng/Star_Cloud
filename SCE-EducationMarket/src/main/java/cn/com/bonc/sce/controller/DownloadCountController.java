@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CountService;
 import io.swagger.annotations.*;
@@ -33,7 +34,7 @@ public class DownloadCountController {
     @ApiOperation( value = "单个应用下载统计接口", notes = "统计指定应用的下载量", httpMethod = "GET" )
     @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "query", required = true )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/one")
     @ResponseBody
@@ -50,7 +51,7 @@ public class DownloadCountController {
     @ApiOperation( value = "应用类型下载统计接口", notes = "指定种类应用下载量统计接口", httpMethod = "GET" )
     @ApiImplicitParam( name = "appType", value = "应用类型", paramType = "query", required = true )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/type")
     @ResponseBody
@@ -69,7 +70,7 @@ public class DownloadCountController {
     @ApiOperation( value = "查询指定厂商的应用下载量", notes = "根据厂商Id查找对应的应用，统计下载量", httpMethod = "GET" )
     @ApiImplicitParam( name = "companyId", value = "应用类型", paramType = "query", required = true )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/company")
     @ResponseBody

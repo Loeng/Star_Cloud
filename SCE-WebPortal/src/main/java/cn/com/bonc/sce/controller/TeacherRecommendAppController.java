@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.TeacherRecommendService;
 import io.swagger.annotations.*;
@@ -40,7 +41,7 @@ public class TeacherRecommendAppController {
             @ApiImplicitParam( name = "recommendPeroId", value = "应用的推荐时间长度", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
@@ -67,7 +68,7 @@ public class TeacherRecommendAppController {
             @ApiImplicitParam( name = "recommendPeroIdMap", value = "应用的推荐时间长度，每个应用可设置不同的推荐时间", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping( "/list" )
     @ResponseBody
@@ -96,7 +97,7 @@ public class TeacherRecommendAppController {
             @ApiImplicitParam( name = "recommendPeroId", value = "应用的推荐时间段", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PatchMapping( "{appId}" )
     @ResponseBody
@@ -122,7 +123,7 @@ public class TeacherRecommendAppController {
             @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @DeleteMapping
     @ResponseBody
@@ -146,7 +147,7 @@ public class TeacherRecommendAppController {
             @ApiImplicitParam( name = "teacherId", value = "教师用户Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @DeleteMapping( "/list" )
     @ResponseBody
@@ -172,7 +173,7 @@ public class TeacherRecommendAppController {
             @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping( "/{teacherId}" )
     @ResponseBody

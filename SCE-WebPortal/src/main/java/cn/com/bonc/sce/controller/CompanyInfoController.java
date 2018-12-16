@@ -33,7 +33,7 @@ public class CompanyInfoController {
             @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
 
     @GetMapping
@@ -58,7 +58,7 @@ public class CompanyInfoController {
             @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping( "/query" )
     @ResponseBody
@@ -82,7 +82,7 @@ public class CompanyInfoController {
             @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping( "/{companyId}" )
     @ResponseBody
@@ -101,7 +101,7 @@ public class CompanyInfoController {
      */
     @ApiOperation( value = "添加单个厂商信息", notes = "新建厂商信息", httpMethod = "PUT" )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PutMapping( "" )
     @ResponseBody
@@ -120,7 +120,7 @@ public class CompanyInfoController {
     @ApiOperation( value = "修改对应厂商信息", notes = "新建厂商信息", httpMethod = "PATCH" )
     @ApiImplicitParam( name = "companyId", value = "所需更新的厂商ID", paramType = "path", required = true )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PatchMapping( "/{companyId}" )
     @ResponseBody
@@ -140,7 +140,7 @@ public class CompanyInfoController {
     @ApiOperation( value = "删除单个厂商信息", notes = "删除单个厂商信息", httpMethod = "DELETE" )
     @ApiImplicitParam( name = "companyId", value = "需删除信息的厂商ID", paramType = "path", required = true )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "###", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @DeleteMapping( "/{companyId}" )
     @ResponseBody
