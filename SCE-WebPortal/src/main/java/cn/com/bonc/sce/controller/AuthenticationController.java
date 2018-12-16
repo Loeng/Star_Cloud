@@ -44,11 +44,11 @@ public class AuthenticationController {
             @ApiImplicitParam( name = "encryptedPassword", value = "加密后的用户登录密码", paramType = "POST-body", required = true )
     } )
     @ApiResponses( value = {
-            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = {
-                    @Example( value = {
-                            @ExampleProperty( value = "", mediaType = "")
-                    })
-            } )
+//            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = {
+//                    @Example( value = {
+//                            @ExampleProperty( value = "", mediaType = "")
+//                    })
+//            } )
     } )
     @PostMapping( produces = "application/json" )
     @ResponseBody
