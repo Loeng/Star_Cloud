@@ -1,10 +1,8 @@
 spring:
-  profiles: dev
-server:
-  port: 10101
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:10100/eureka/
+                                                   profiles: dev
+                                                 server:
+                                                   port: 10102
+                                                 eureka:
+                                                   client:
+                                                     service-url:
+                                                       defaultZone: http://localhost:10100/eureka/

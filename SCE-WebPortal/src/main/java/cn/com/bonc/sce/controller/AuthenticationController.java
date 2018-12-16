@@ -2,6 +2,7 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AuthenticationService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,12 @@ import javax.validation.constraints.NotEmpty;
 @RestController
 public class AuthenticationController {
 
+    private AuthenticationService authenticationService;
+
+    public AuthenticationController( AuthenticationService authenticationService ) {
+        this.authenticationService = authenticationService;
+    }
+
     /**
      * 用户登录接口
      *
@@ -45,6 +52,6 @@ public class AuthenticationController {
             @RequestParam @Max( value = 3, message = PortalMessageConstants.SCE_PORTAL_MSG_101 ) @Min( value = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_101 ) Integer authType,
             @RequestParam @NotEmpty String userIdentifier,
             @RequestParam @NotEmpty String encryptedPassword ) {
-        return null;
+        return new RestRecord( 0, authenticationService.checkUserIdentityByEmail( userIdentifier, encryptedPassword ) );
     }
 }
