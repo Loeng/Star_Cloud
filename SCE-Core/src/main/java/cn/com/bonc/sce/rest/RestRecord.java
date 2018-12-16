@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.rest;
 
-import cn.com.bonc.sce.tool.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,23 +14,12 @@ import java.io.Serializable;
  */
 @ApiModel
 public class RestRecord implements Serializable {
-    @ApiModelProperty( value = "code" , example = "0",notes = "状态码" , position = 1)
+    @ApiModelProperty( value = "code", example = "0", notes = "状态码", position = 1 )
     private int code = 0;
-    @ApiModelProperty( value = "msg" , example = "登录成功",notes = "提示信息" ,position = 2)
+    @ApiModelProperty( value = "msg", example = "登录成功", notes = "提示信息", position = 2 )
     private String msg;
-    @ApiModelProperty( value = "data" , example = "{\"username\": \"RGM79\"}",notes = "数据", position = 3)
+    @ApiModelProperty( value = "data", example = "{\"username\": \"RGM79\"}", notes = "数据", position = 3 )
     private Object data;
-    @ApiModelProperty( value = "exceptionStackTrace" , example = "{\"username\": \"RGM79\"}",notes = "后台跑出错误数据的对堆栈信息")
-    private String exceptionStackTrace;
-    private Exception exception;
-    
-    public void success() {
-        this.code = 200;
-    }
-
-    public void error() {
-        this.code = 500;
-    }
 
     public String getMsg() {
         return msg;
@@ -49,19 +37,6 @@ public class RestRecord implements Serializable {
         this.data = data;
     }
 
-    public Exception getException() {
-        return exception;
-    }
-
-    public String getExceptionStackTrace() {
-        return exceptionStackTrace;
-    }
-
-    public void setException( Exception exception ) {
-        error();
-        this.exception = exception;
-        this.exceptionStackTrace = ExceptionUtil.getStackTrace( exception );
-    }
 
     public int getCode() {
         return code;
@@ -70,18 +45,16 @@ public class RestRecord implements Serializable {
     public RestRecord() {
     }
 
-    public RestRecord( String msg, Object data, Exception exception ) {
+    public RestRecord( String msg, Object data ) {
+        this.code = 200;
         this.msg = msg;
         this.data = data;
-        this.exception = exception;
     }
 
     public RestRecord( int code, String msg, Object data, Exception exception ) {
         this.code = code;
         this.msg = msg;
         this.data = data;
-        this.exception = exception;
-        this.exceptionStackTrace = ExceptionUtil.getStackTrace( exception );
     }
 
     public RestRecord( int code ) {
@@ -123,19 +96,11 @@ public class RestRecord implements Serializable {
     public RestRecord( int code, String msg, Exception exception ) {
         this.code = code;
         this.msg = msg;
-        this.exception = exception;
-        this.exceptionStackTrace = ExceptionUtil.getStackTrace( exception );
     }
 
     public RestRecord( boolean isSuccess, String msg, Exception exception ) {
         this.code = isSuccess ? 200 : 500;
         this.msg = msg;
-        this.exception = exception;
-        this.exceptionStackTrace = ExceptionUtil.getStackTrace( exception );
-    }
-
-    public boolean isSuccess() {
-        return code == 200;
     }
 
     @Override
@@ -147,6 +112,6 @@ public class RestRecord implements Serializable {
         Exception exception = new Exception();
 
         RestRecord restRecord = new RestRecord( 20, "", "", exception );
-        System.out.println(restRecord);
+        System.out.println( restRecord );
     }
 }
