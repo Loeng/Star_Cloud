@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.model.Banner;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.BannerService;
@@ -121,9 +120,9 @@ public class BannerController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @PatchMapping( "/{bannerId}" )
+    @PatchMapping( "/{bannerId}/{appId}" )
     @ResponseBody
-    public RestRecord updateBannerAppId( @PathVariable( "bannerId" )String bannerId,@RequestParam( "appId" ) String appId ) {
+    public RestRecord updateBannerAppId( @PathVariable( "bannerId" )String bannerId,@PathVariable( "appId" ) String appId ) {
         return bannerService.updateBannerAppId( bannerId, appId );
     }
 
