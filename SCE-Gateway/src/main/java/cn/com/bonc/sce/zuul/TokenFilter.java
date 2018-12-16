@@ -45,7 +45,7 @@ public class TokenFilter extends ZuulFilter {
         if (token == null) {
             requestContext.setSendZuulResponse(false);
             requestContext.setResponseStatusCode(401);
-            requestContext.setResponseBody("unauthrized");
+            requestContext.setResponseBody("unauthorized");
 
             return  null;
         }
