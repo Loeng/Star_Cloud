@@ -43,13 +43,17 @@ public class AuthenticationController {
             @ApiImplicitParam( name = "userIdentifier", dataType = "Number", value = "用户身份识别信息，和 authType 必须匹配，如 authType 为 0 则改值必须是用户名", paramType = "POST-Body", required = true ),
             @ApiImplicitParam( name = "encryptedPassword", value = "加密后的用户登录密码", paramType = "POST-body", required = true )
     } )
-    @ApiResponses( {
-            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class )
+    @ApiResponses( value = {
+            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = {
+                    @Example( value = {
+                            @ExampleProperty( value = "", mediaType = "")
+                    })
+            } )
     } )
     @PostMapping( produces = "application/json" )
     @ResponseBody
     public RestRecord userLogin(
-            @RequestParam @Max( value = 3, message = PortalMessageConstants.SCE_PORTAL_MSG_101 ) @Min( value = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_101 ) Integer authType,
+            @RequestParam @Max( value = 3, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) @Min( value = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) Integer authType,
             @RequestParam @NotEmpty String userIdentifier,
             @RequestParam @NotEmpty String encryptedPassword ) {
         return new RestRecord( 0, authenticationService.checkUserIdentityByEmail( userIdentifier, encryptedPassword ) );

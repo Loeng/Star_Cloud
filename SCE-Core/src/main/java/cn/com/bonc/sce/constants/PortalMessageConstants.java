@@ -16,9 +16,15 @@ public interface PortalMessageConstants {
 
     /**
      * 操作成功
-     * 200 - 300
+     * 200 - 299
      */
     String SCE_PORTAL_MSG_200 = "操作成功";
+
+    /**
+     * 操作失败相关
+     * 400 - 600
+     */
+    String SCE_PORTAL_MSG_401 = "用户没有权限执行此操作";
 
     /**
      * 通用错误信息
