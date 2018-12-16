@@ -12,6 +12,10 @@ public class MessageDao {
         return true;
     }
 
+    public Integer deleteAnnouncementById(String announcementId) {
+        return null;
+    }
+
     public Integer deleteMessageById(String messageId) {
         return null;
     }

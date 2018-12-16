@@ -41,6 +41,15 @@ public interface MessageDao {
     public RestRecord deleteMessageById( @PathVariable( "messageId" ) String messageId );
 
     /**
+     * 通过id删除公告
+     *
+     * @param announcementId  id
+     * @return 删除是否成功
+     */
+    @RequestMapping( value = "/messages/announcements/{announcementId}", method = RequestMethod.DELETE )
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) String announcementId );
+
+    /**
      * 修改message阅读状态
      *
      * @param messageId id

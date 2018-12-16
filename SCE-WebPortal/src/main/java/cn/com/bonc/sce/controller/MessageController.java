@@ -58,7 +58,7 @@ public class MessageController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @PostMapping
+    @PostMapping( "/announcements" )
     @ResponseBody
     public RestRecord insertAnnouncement( Message message ) {
         return messageService.insertAnnouncement( message );
@@ -81,6 +81,25 @@ public class MessageController {
     @ResponseBody
     public RestRecord deleteMessageById( @PathVariable( "messageId" )String messageId ) {
         return messageService.deleteMessageById( messageId );
+    }
+
+    /**
+     * 通过id删除公告
+     *
+     * @param announcementId id
+     * @return 删除是否成功
+     */
+    @ApiOperation( value = "通过id删除公告", notes = "通过id删除公告", httpMethod = "DELETE" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "announcementId", value = "公告id", paramType = "header", required = true )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+    } )
+    @DeleteMapping( "/announcements/{announcementId}" )
+    @ResponseBody
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" )String announcementId ) {
+        return messageService.deleteAnnouncementById( announcementId );
     }
 
     /**

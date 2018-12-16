@@ -58,6 +58,16 @@ public class MessageService {
     }
 
     /**
+     * 通过id删除message
+     *
+     * @param announcementId  id
+     * @return 删除是否成功
+     */
+    public RestRecord deleteAnnouncementById(String announcementId){
+        return messageDao.deleteAnnouncementById(announcementId);
+    }
+
+    /**
      * 获取message数据
      *
      * @param userId userId

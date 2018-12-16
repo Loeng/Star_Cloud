@@ -67,6 +67,24 @@ public class MessageApiController {
     }
 
     /**
+     * 通过id删除公告
+     *
+     * @param announcementId id
+     * @return 删除是否成功
+     */
+    @DeleteMapping( "/announcements/{announcementId}" )
+    @ResponseBody
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) String announcementId ) {
+        try {
+            int totals = messageDao.deleteMessageById( announcementId );
+            totals += messageDao.deleteAnnouncementById( announcementId )
+            return new RestRecord( 200, totals );
+        } catch ( Exception e ) {
+            return new RestRecord( 500, "", e );
+        }
+    }
+
+    /**
      * 修改message阅读状态
      *
      * @param messageId id
