@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public class AppListDao {
-    public List<App > getAppListInfo( Integer appClassId, String keyword) {
+    public List<App> getAppListInfo( Integer appClassId, String keyword) {
         return null;
     }
 }

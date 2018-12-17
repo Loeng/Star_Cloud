@@ -38,7 +38,7 @@ public class AppListController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping("/{classId}/{keyword}")
+    @GetMapping("/{appClassId}/{keyword}")
     @ResponseBody
     public RestRecord getAppListInfo( @PathVariable( "appClassId" )Integer appClassId,
                                           @PathVariable( "keyword" )String keyword) {
