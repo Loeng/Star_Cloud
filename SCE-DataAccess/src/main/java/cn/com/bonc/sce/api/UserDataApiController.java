@@ -32,7 +32,7 @@ public class UserDataApiController {
     @GetMapping( "/{userId}" )
     @ResponseBody
     public RestRecord getUserById( @PathVariable( "userId" ) String userId ) {
-        return new RestRecord( 0, userDao.getUserById( userId ) );
+        return new RestRecord( 200, "测试数据",userDao.getUserById( userId ));
     }
 
     /**

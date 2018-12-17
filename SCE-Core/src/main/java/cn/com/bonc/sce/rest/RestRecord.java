@@ -14,11 +14,11 @@ import java.io.Serializable;
  */
 @ApiModel
 public class RestRecord implements Serializable {
-    @ApiModelProperty( value = "code", example = "0", notes = "状态码", position = 1 )
+    @ApiModelProperty( example = "200", notes = "状态码", position = 1 )
     private int code = 0;
-    @ApiModelProperty( value = "msg", example = "登录成功", notes = "提示信息", position = 2 )
+    @ApiModelProperty( example = "操作成功", notes = "提示信息", position = 2 )
     private String msg;
-    @ApiModelProperty( value = "data", example = "{\"username\": \"RGM79\"}", notes = "数据", position = 3 )
+    @ApiModelProperty( example = "{\"username\": \"RGM79\"}", notes = "数据", position = 3 )
     private Object data;
 
     public String getMsg() {

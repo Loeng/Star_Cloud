@@ -19,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2018/12/12 11:28
  */
 @Slf4j
-@Api( value = "登录/授权接口" )
+@Api( value = "登录/授权接口" ,tags = "登录/授权接口")
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RequestMapping( "/authentication" )
 @RestController
@@ -39,21 +39,23 @@ public class AuthenticationController {
      */
     @ApiOperation( value = "用户登录接口", notes = "用戶名/邮箱/手机号登录都需要走此接口", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "authType", dataType = "String", value = "验证类型 : 0/用户名密码登录，1/手机号登录, 2/邮箱登录", paramType = "Body", required = true, example = "xxx@bonc.com.cn", allowableValues = "0,1,2" ),
-            @ApiImplicitParam( name = "userIdentifier", dataType = "Number", value = "用户身份识别信息，和 authType 必须匹配，如 authType 为 0 则改值必须是用户名", paramType = "POST-Body", required = true ),
-            @ApiImplicitParam( name = "encryptedPassword", value = "加密后的用户登录密码", paramType = "POST-body", required = true )
+            @ApiImplicitParam( name = "authType", dataType = "String", value = "验证类型 : 0/用户名密码登录，1/手机号登录, 2/邮箱登录", paramType = "query", required = true, example = "1", allowableValues = "0,1,2" ),
+            @ApiImplicitParam( name = "userIdentifier", dataType = "Number", value = "用户身份识别信息，和 authType 必须匹配，如 authType 为 0 则改值必须是用户名", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "encryptedPassword", value = "加密后的用户登录密码", paramType = "query", required = true )
     } )
-    @ApiResponses( value = {
+    /*@ApiResponses( value = {
             @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = @Example( {
-                    @ExampleProperty( value = "sdfsdfsdfsdf", mediaType = "application/json" )
+                    @ExampleProperty( value = "100", mediaType = "integer" ),
+                    @ExampleProperty( value = "go ahead", mediaType = "string" ),
+                    @ExampleProperty( value = "some data", mediaType = "object" ),
             } ) )
-    } )
+    } )*/
     @PostMapping( produces = "application/json" )
     @ResponseBody
     public RestRecord userLogin(
             @RequestParam @Max( value = 3, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) @Min( value = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) Integer authType,
             @RequestParam @NotEmpty String userIdentifier,
             @RequestParam @NotEmpty String encryptedPassword ) {
-        return new RestRecord( 0, authenticationService.checkUserIdentityByEmail( userIdentifier, encryptedPassword ) );
+        return authenticationService.checkUserIdentityByEmail( userIdentifier, encryptedPassword );
     }
 }
