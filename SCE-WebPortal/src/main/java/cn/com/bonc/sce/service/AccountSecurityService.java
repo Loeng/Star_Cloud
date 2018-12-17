@@ -43,7 +43,7 @@ public class AccountSecurityService {
      * 验证安全信息
      *
      * @param phone 手机号
-     * @param vaild 验证码
+     * @param valid 验证码
      * @return 验证结果和安全码
      */
     public RestRecord validInfo( String phone, String valid ) {
@@ -65,6 +65,8 @@ public class AccountSecurityService {
      * @return 修改结果
      */
     public RestRecord updateAccount( AccountSecurity accountSecurity ) {
+        //加密加工
+        accountSecurity.getPassword();
         String code = getAccountEncryptionCode(
                 accountSecurity.getPhone(), accountSecurity.getCode() );
         if ( VaildSecurityUtils.checkCode( code ) ) {

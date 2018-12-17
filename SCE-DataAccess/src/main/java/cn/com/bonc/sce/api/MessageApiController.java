@@ -58,7 +58,7 @@ public class MessageApiController {
      */
     @DeleteMapping( "/{messageId}" )
     @ResponseBody
-    public RestRecord deleteMessageById( @PathVariable( "messageId" ) String messageId ) {
+    public RestRecord deleteMessageById( @PathVariable( "messageId" ) Integer messageId ) {
         try {
             return new RestRecord( 200, messageDao.deleteMessageById( messageId ) );
         } catch ( Exception e ) {
@@ -74,7 +74,7 @@ public class MessageApiController {
      */
     @DeleteMapping( "/announcements/{announcementId}" )
     @ResponseBody
-    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) String announcementId ) {
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) Integer announcementId ) {
         try {
             int totals = messageDao.deleteMessageById( announcementId );
             totals += messageDao.deleteAnnouncementById( announcementId );
@@ -92,7 +92,7 @@ public class MessageApiController {
      */
     @PutMapping( "/updateMessageRead" )
     @ResponseBody
-    public RestRecord updateMessageReadStatusById( String messageId ) {
+    public RestRecord updateMessageReadStatusById( Integer messageId ) {
         try {
             return new RestRecord( 200, messageDao.updateMessageReadStatusById( messageId ) );
         } catch ( Exception e ) {

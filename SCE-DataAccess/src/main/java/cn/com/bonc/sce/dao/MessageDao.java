@@ -12,15 +12,15 @@ public class MessageDao {
         return true;
     }
 
-    public Integer deleteAnnouncementById(String announcementId) {
+    public Integer deleteAnnouncementById(Integer announcementId) {
         return null;
     }
 
-    public Integer deleteMessageById(String messageId) {
+    public Integer deleteMessageById(Integer messageId) {
         return null;
     }
 
-    public Integer updateMessageReadStatusById(String messageId) {
+    public Integer updateMessageReadStatusById(Integer messageId) {
         return null;
     }
 

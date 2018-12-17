@@ -38,7 +38,7 @@ public interface MessageDao {
      * @return 删除是否成功
      */
     @RequestMapping( value = "/messages/{messageId}", method = RequestMethod.DELETE )
-    public RestRecord deleteMessageById( @PathVariable( "messageId" ) String messageId );
+    public RestRecord deleteMessageById( @PathVariable( "messageId" ) Integer messageId );
 
     /**
      * 通过id删除公告
@@ -47,7 +47,7 @@ public interface MessageDao {
      * @return 删除是否成功
      */
     @RequestMapping( value = "/messages/announcements/{announcementId}", method = RequestMethod.DELETE )
-    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) String announcementId );
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) Integer announcementId );
 
     /**
      * 修改message阅读状态
@@ -56,7 +56,7 @@ public interface MessageDao {
      * @return 删除是否成功
      */
     @RequestMapping( value = "/messages/updateMessageRead", method = RequestMethod.PUT )
-    public RestRecord updateMessageReadStatusById( String messageId );
+    public RestRecord updateMessageReadStatusById( Integer messageId );
 
     /**
      * 获取message数据

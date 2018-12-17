@@ -5,9 +5,9 @@ public class Banner {
     private Integer order;
     private String url;
     private String appId;
-    private boolean isShown;
+    private Integer isShown;
     private String type;
-    private boolean isDelete;
+    private Integer isDelete;
 
     public String getId() {
         return id;
@@ -41,12 +41,12 @@ public class Banner {
         this.appId = appId;
     }
 
-    public boolean isShown() {
+    public Integer getIsShown() {
         return isShown;
     }
 
-    public void setShown( boolean shown ) {
-        isShown = shown;
+    public void setIsShown( Integer isShown ) {
+        this.isShown = isShown;
     }
 
     public String getType() {
@@ -57,11 +57,11 @@ public class Banner {
         this.type = type;
     }
 
-    public boolean isDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setDelete( boolean delete ) {
-        isDelete = delete;
+    public void setIsDelete( Integer isDelete ) {
+        this.isDelete = isDelete;
     }
 }

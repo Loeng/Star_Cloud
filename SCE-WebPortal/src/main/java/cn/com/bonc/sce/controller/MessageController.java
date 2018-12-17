@@ -79,7 +79,7 @@ public class MessageController {
     } )
     @DeleteMapping( "/{messageId}" )
     @ResponseBody
-    public RestRecord deleteMessageById( @PathVariable( "messageId" )String messageId ) {
+    public RestRecord deleteMessageById( @PathVariable( "messageId" )Integer messageId ) {
         return messageService.deleteMessageById( messageId );
     }
 
@@ -98,7 +98,7 @@ public class MessageController {
     } )
     @DeleteMapping( "/announcements/{announcementId}" )
     @ResponseBody
-    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" )String announcementId ) {
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" )Integer announcementId ) {
         return messageService.deleteAnnouncementById( announcementId );
     }
 
@@ -117,7 +117,7 @@ public class MessageController {
     } )
     @PutMapping( "/{messageId}" )
     @ResponseBody
-    public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" )String messageId ) {
+    public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" )Integer messageId ) {
         return messageService.updateMessageReadStatusById( messageId );
     }
 

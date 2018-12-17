@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.model.ParentsInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.ParentsOperationService;

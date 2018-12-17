@@ -17,6 +17,6 @@ public interface AccountSecurityDao {
      *
      * @return advise数据list
      */
-    @RequestMapping( value = "/updateAccount", method = RequestMethod.POST )
+    @RequestMapping( value = "/accountSecurity", method = RequestMethod.POST )
     public RestRecord updateAccount(AccountSecurity accountSecurity);
 }

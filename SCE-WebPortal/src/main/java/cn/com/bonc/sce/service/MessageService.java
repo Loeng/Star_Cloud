@@ -43,7 +43,7 @@ public class MessageService {
      * @param messageId id
      * @return 删除是否成功
      */
-    public RestRecord updateMessageReadStatusById(String messageId){
+    public RestRecord updateMessageReadStatusById(Integer messageId){
         return messageDao.updateMessageReadStatusById(messageId);
     }
 
@@ -53,7 +53,7 @@ public class MessageService {
      * @param messageId  id
      * @return 删除是否成功
      */
-    public RestRecord deleteMessageById(String messageId){
+    public RestRecord deleteMessageById(Integer messageId){
         return messageDao.deleteMessageById(messageId);
     }
 
@@ -63,7 +63,7 @@ public class MessageService {
      * @param announcementId  id
      * @return 删除是否成功
      */
-    public RestRecord deleteAnnouncementById(String announcementId){
+    public RestRecord deleteAnnouncementById(Integer announcementId){
         return messageDao.deleteAnnouncementById(announcementId);
     }
 

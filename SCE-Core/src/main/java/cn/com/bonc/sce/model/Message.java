@@ -10,8 +10,8 @@ public class Message {
     private String sourceAccount;
     private String status;
     private String createTime;
-    private boolean isDelete;
-    private boolean isRead;
+    private Integer isDelete;
+    private Integer isRead;
 
     public String getId() {
         return id;
@@ -85,19 +85,19 @@ public class Message {
         this.createTime = createTime;
     }
 
-    public boolean isDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setDelete( boolean delete ) {
-        isDelete = delete;
+    public void setIsDelete( Integer isDelete ) {
+        this.isDelete = isDelete;
     }
 
-    public boolean isRead() {
+    public Integer getIsRead() {
         return isRead;
     }
 
-    public void setRead( boolean read ) {
-        isRead = read;
+    public void setIsRead( Integer isRead ) {
+        this.isRead = isRead;
     }
 }
