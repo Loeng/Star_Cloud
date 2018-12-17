@@ -2,6 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.FeignUserDao;
 import cn.com.bonc.sce.model.User;
+import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class AuthenticationService {
         this.userDao = userDao;
     }
 
-    public User checkUserIdentityByEmail( String email, String password) {
+    public RestRecord checkUserIdentityByEmail( String email, String password) {
         return userDao.getUserById( "11" );
     }
 }
