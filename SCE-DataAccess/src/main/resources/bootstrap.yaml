@@ -8,6 +8,15 @@ spring:
   cloud:
     config:
       uri: http://localhost:10099
+  datasource:
+    url: jdbc:oracle:thin:@192.168.1.130:1521:assistantdb
+    username: STARCLOUDUSER
+    password: root123
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
 logging:
   file: ./logs/dev_app.log
   pattern:
@@ -16,6 +25,7 @@ logging:
   level:
     org.springframework: INFO
     guru.springframework.controllers: INFO
-    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
 server:
   port: 10101
