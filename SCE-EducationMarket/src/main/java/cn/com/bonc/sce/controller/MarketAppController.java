@@ -12,7 +12,7 @@ import java.util.List;
  * author jc_D
  */
 @Slf4j
-@Api( value = "应用管理接口" )
+@Api( value = "应用管理接口", tags = "应用管理接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping( "/marketApp" )

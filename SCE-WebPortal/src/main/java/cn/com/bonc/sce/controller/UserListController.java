@@ -13,25 +13,32 @@ import java.util.Map;
 
 /**
  * @author jc_D
- * @description 用户列表相关接口：全部、分角色、自定义查询
+ * @description 用户列表查询相关接口：全部、分角色、自定义查询
  * @date 2018/12/15
  **/
 @Slf4j
-@Api( value = "用户列表相关接口", tags = "用户列表相关接口" )
+@Api( value = "用户列表查询相关接口", tags = "用户列表查询相关接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping( "/userList" )
 public class UserListController {
     //全部用户
     @ApiOperation( value = "查询全部用户接口", notes = "查询全部用户接口", httpMethod = "GET" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = false, defaultValue = "1" ),
+            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
+    } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/all" )
     @ResponseBody
-    public String getAllUserInfo() {
+    public String getAllUserInfo( @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
+                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
         List< User > userList = new ArrayList<>();
-        userList.add( new User() );
+        userList.add( new User( 1, "张三" ) );
+        userList.add( new User( 2, "李四" ) );
+        userList.add( new User( 3, "王五" ) );
         String users = JSONUtil.parseArray( userList ).toString();
         return users;
     }
@@ -40,13 +47,17 @@ public class UserListController {
     @ApiOperation( value = "根据角色id查询用户", notes = "根据角色id查询用户", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "roleId", value = "角色ID", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = false, defaultValue = "1" ),
+            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/role/{roleId}" )
     @ResponseBody
-    public String getUserInfoByRole( @PathVariable String roleId ) {
+    public String getUserInfoByRole( @PathVariable String roleId,
+                                     @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
+                                     @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
         List< User > userList = new ArrayList<>();
         userList.add( new User() );
         String users = JSONUtil.parseArray( userList ).toString();
@@ -58,13 +69,17 @@ public class UserListController {
     @ApiOperation( value = "根据条件查询", notes = "根据条件查询", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "查询条件", value = "查询条件", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = false, defaultValue = "1" ),
+            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/condition" )
     @ResponseBody
-    public String getUserInfoByCondition( @RequestParam Map conditionMap ) {
+    public String getUserInfoByCondition( @RequestParam Map conditionMap,
+                                          @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
+                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
         List< User > userList = new ArrayList<>();
         userList.add( new User() );
         String users = JSONUtil.parseArray( userList ).toString();

@@ -12,7 +12,7 @@ import java.util.List;
  * atuhor jc_D
  */
 @Slf4j
-@Api( value = "应用推荐-热门应用接口" )
+@Api( value = "应用推荐-热门应用接口",tags = "应用推荐-热门应用接口")
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping( "/hotApp" )
@@ -45,22 +45,22 @@ public class HotAppController {
     /**
      * 查询所有热门应用
      *
-     * @param page 页码
-     * @param size 每页数量
+     * @param pageNum 页码
+     * @param pageSize 每页数量
      * @return
      */
     @ApiOperation( value = "查询所有热门应用", notes = "查询所有热门应用", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "page", value = "页面", paramType = "path", required = false ),
-            @ApiImplicitParam( name = "rows", value = "每页显示数量", paramType = "path", required = false )
+            @ApiImplicitParam( name = "pageNum", value = "页面", paramType = "path", required = false ),
+            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "path", required = false )
 
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping
-    public RestRecord selectHotRecommendAppList( @RequestParam( value = "page", defaultValue = "1", required = false ) int page,
-                                                 @RequestParam( value = "rows", defaultValue = "10", required = false ) int size ) {
+    public RestRecord selectHotRecommendAppList( @RequestParam( value = "pageNum", defaultValue = "1", required = false ) int pageNum,
+                                                 @RequestParam( value = "pageSize", defaultValue = "10", required = false ) int pageSize ) {
         // 查询应用表中热门推荐状态为true的应用
         return new RestRecord( 0, "查询应用表中热门推荐状态为true的应用" );
     }

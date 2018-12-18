@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@Api( value = "频道管理接口" )
+@Api( value = "频道管理接口", tags = "频道管理接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RequestMapping( "/channel" )
 public class ChannelController {
