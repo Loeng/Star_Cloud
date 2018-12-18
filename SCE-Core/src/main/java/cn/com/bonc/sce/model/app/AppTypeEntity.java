@@ -27,7 +27,7 @@ import java.util.Set;
 @Table( name = "sce_market_app_type" )
 public class AppTypeEntity implements Serializable {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue
     @Column( name = "APP_TYPE_ID" )
     private Long appTypeId;
     @ManyToMany(mappedBy = "appTypes")

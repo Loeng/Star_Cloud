@@ -26,7 +26,7 @@ import java.util.Set;
 @Table( name = "sce_market_app_info" )
 public class AppInfoEntity implements Serializable {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue
     @Column( name = "APP_ID" )
     private Long appId;
 

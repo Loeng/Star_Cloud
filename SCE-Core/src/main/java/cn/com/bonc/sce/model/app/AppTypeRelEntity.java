@@ -15,18 +15,18 @@ import java.io.Serializable;
  * 应用分类关系表（中间表）
  */
 @Data
-@Entity
-@Table( name = "sce_market_app_apptype_rel" )
+//@Entity
+//@Table( name = "sce_market_app_apptype_rel" )
 public class AppTypeRelEntity implements Serializable {
-    @Id
-    @GeneratedValue
-    @Column( name = "ID" )
+    //@Id
+    //@GeneratedValue
+    //@Column( name = "ID" )
     private Long id;
 
-    @Column( name = "APP_ID" )
+    //@Column( name = "APP_ID" )
     private Long productTypeId;
 
-    @Column( name = "APP_TYPE_ID" )
+    //@Column( name = "APP_TYPE_ID" )
     private Long productTypeName;
 
 
