@@ -13,10 +13,9 @@ spring:
     username: STARCLOUDUSER
     password: root123
     driver-class-name: oracle.jdbc.OracleDriver
-
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 logging:
   file: ./logs/dev_app.log
   pattern:
