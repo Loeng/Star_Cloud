@@ -23,14 +23,20 @@ public class ParentsOperationApiController {
      * 添加家长信息
      *
      * @param parentsInfo 家长信息
-     * @param vaild 验证码
      * @return 添加结果
      */
     @PostMapping( "" )
     @ResponseBody
-    public RestRecord insertParentsInfo( ParentsInfo parentsInfo ,String vaild){
+    public RestRecord insertParentsInfo( ParentsInfo parentsInfo ){
+        int total = 0;
+        total += parentsOperationDao.insertParentsAccountInfo( parentsInfo );
+        total += parentsOperationDao.insertParentsDataInfo( parentsInfo );
+        total += parentsOperationDao.insertParentsStudentRelInfo( parentsInfo );
         try{
-            return new RestRecord(200,parentsOperationDao.insertParentsInfo( parentsInfo,vaild ));
+            if(total>2)
+                return new RestRecord(200,total);
+            else
+                return new RestRecord(200,"error");
         }catch ( Exception e ){
             return new RestRecord(500,"", e);
         }

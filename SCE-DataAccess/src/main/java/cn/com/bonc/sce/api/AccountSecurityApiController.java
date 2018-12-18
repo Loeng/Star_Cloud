@@ -24,6 +24,10 @@ public class AccountSecurityApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord updateAccount(AccountSecurity accountSecurity){
-        return accountSecurityDao.updateAccount(accountSecurity);
+        try {
+            return new RestRecord( 200, accountSecurityDao.updateAccount(accountSecurity) );
+        } catch ( Exception e ) {
+            return new RestRecord( 500, "", e );
+        }
     }
 }

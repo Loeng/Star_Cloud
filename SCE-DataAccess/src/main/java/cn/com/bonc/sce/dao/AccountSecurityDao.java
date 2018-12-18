@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class AccountSecurityDao {
-    public RestRecord updateAccount( AccountSecurity accountSecurity ){
+    public Integer updateAccount( AccountSecurity accountSecurity ){
         return null;
     }
 }

@@ -5,6 +5,7 @@ import cn.com.bonc.sce.service.AppListService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -42,6 +43,8 @@ public class AppListController {
     @ResponseBody
     public RestRecord getAppListInfo( @PathVariable( "appClassId" )Integer appClassId,
                                           @PathVariable( "keyword" )String keyword) {
+        if(StringUtils.isEmpty( appClassId )||appClassId.equals( "undefined" ))appClassId=null;
+        if(StringUtils.isEmpty( keyword )||keyword.equals( "undefined" ))keyword=null;
         return appListService.getAppListInfo(appClassId,keyword);
     }
 }

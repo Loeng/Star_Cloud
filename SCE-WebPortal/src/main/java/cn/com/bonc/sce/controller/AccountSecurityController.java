@@ -6,6 +6,7 @@ import cn.com.bonc.sce.service.AccountSecurityService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -61,6 +62,8 @@ public class AccountSecurityController {
     @GetMapping( "/{phone}/{valid}" )
     @ResponseBody
     public RestRecord validInfo(@PathVariable( "phone" )String phone,@PathVariable( "valid" )String valid){
+        if( StringUtils.isEmpty( phone )||phone.equals( "undefined" )||
+                StringUtils.isEmpty( valid )||valid.equals( "undefined" ))return new RestRecord(500,"error");
         return accountSecurityService.validInfo(phone,valid);
     }
 
