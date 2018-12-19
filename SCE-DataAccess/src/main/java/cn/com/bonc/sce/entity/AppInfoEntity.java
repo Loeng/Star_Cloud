@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.model.app;
+package cn.com.bonc.sce.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,14 +23,14 @@ import java.util.Set;
 @Setter
 @Entity
 @Table( name = "sce_market_app_info" )
-public class AppInfoEntity implements Serializable {
+public class AppInfoEntity {
     @Id
     @GeneratedValue
     @Column( name = "APP_ID" )
     private Long appId;
 
     @ManyToMany
-    @JoinTable( name = "market_app_apptype_rel", joinColumns = @JoinColumn( name = "APP_ID" ),
+    @JoinTable( name = "sce_market_app_apptype_rel", joinColumns = @JoinColumn( name = "APP_ID" ),
             inverseJoinColumns = @JoinColumn( name = "APP_TYPE_ID" ) )
     private Set< AppTypeEntity > appTypes = new HashSet<>();
 

@@ -1,13 +1,11 @@
-package cn.com.bonc.sce.model.app;
+package cn.com.bonc.sce.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,13 +23,12 @@ import java.util.Set;
 @Setter
 @Entity
 @Table( name = "sce_market_app_type" )
-public class AppTypeEntity implements Serializable {
+public class AppTypeEntity {
     @Id
     @GeneratedValue
     @Column( name = "APP_TYPE_ID" )
     private Long appTypeId;
     @ManyToMany(mappedBy = "appTypes")
-    @JsonBackReference
     private Set< AppInfoEntity > appInfo = new HashSet<>();
 
     @Column( name = "APP_TYPE_NAME" )
