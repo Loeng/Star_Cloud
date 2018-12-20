@@ -1,18 +1,18 @@
 package cn.com.bonc.sce.service;
 
-import cn.com.bonc.sce.dao.MarketAppDao;
+import cn.com.bonc.sce.dao.AppManageDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class MarketAppService {
+public class AppManageService {
 
-    private MarketAppDao marketAppDao;
+    private AppManageDao marketAppDao;
 
     @Autowired
-    public MarketAppService( MarketAppDao marketAppDao ) {
+    public AppManageService( AppManageDao marketAppDao ) {
         this.marketAppDao = marketAppDao;
     }
 
