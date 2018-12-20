@@ -30,7 +30,7 @@ public class HotAppController {
      */
     @ApiOperation( value = "添加热门应用", notes = "添加热门应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appIdList", value = "apid数组", paramType = "path", required = true, example = "[1,2,3]" )
+            @ApiImplicitParam( name = "appIdList", value = "apid数组", paramType = "body", required = true, example = "[1,2,3]" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
