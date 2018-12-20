@@ -16,6 +16,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
 logging:
   file: ./logs/dev_app.log
   pattern:
