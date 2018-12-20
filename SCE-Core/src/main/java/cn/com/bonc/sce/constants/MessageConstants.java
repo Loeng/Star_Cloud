@@ -22,6 +22,10 @@ public interface MessageConstants {
      * 3. 数据库操作相关
      * 400 - 599
      */
+    String SCE_MSG_406 = "数据读取失败";
+    String SCE_MSG_407 = "数据修改失败";
+    String SCE_MSG_408 = "数据删除失败";
+    String SCE_MSG_409 = "数据添加失败";
 
     /**
      * 4. 网络异常

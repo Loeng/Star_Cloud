@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppListService;
 import io.swagger.annotations.*;
@@ -37,7 +39,8 @@ public class AppListController {
             @ApiImplicitParam( name = "keyword", value = "关键字", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping("/{appClassId}/{keyword}")
     @ResponseBody

@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.TeacherRecommendDao;
+import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,33 +19,23 @@ public class TeacherRecommendService {
         this.teacherRecommendDao = teacherRecommendDao;
     }
 
-    public boolean addTeacherRecommendApp( String appId, String teacherId, String recommendPeroid ) {
-        teacherRecommendDao.addTeacherRecommendApp(  appId,  teacherId,  recommendPeroid );
-        return false;
+
+    public RestRecord addTeacherRecommendApp( String teacherId, List< Map< String, Object > > recommendPeroIdMap ) {
+        return teacherRecommendDao.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
     }
 
-    public boolean addTeacherRecommendAppList( List< String > appIdList, String teacherId, Map< String, Object > recommendPeroidMap ) {
-        teacherRecommendDao.addTeacherRecommendAppList( appIdList, teacherId, recommendPeroidMap );
-        return false;
+    public RestRecord updateTeacherRecommendAppInfo( String teacherId, List< Map< String, Object > > recommendPeroIdMap ) {
+        teacherRecommendDao.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
+        return null;
     }
 
-    public boolean selectTeacherRecommendAppListByTeacherId( String teacherId, String timePeroid ) {
-        teacherRecommendDao.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid );
-        return false;
+    public RestRecord deleteTeacherRecommendApp( String appId, List< String > teacherId ) {
+        teacherRecommendDao.deleteTeacherRecommendApp( appId, teacherId );
+        return null;
     }
 
-    public boolean updateTeacherRecommendAppInfo( String teacherId, String appId, String recommendPeroid ) {
-        teacherRecommendDao.updateTeacherRecommendAppInfo( teacherId, appId, recommendPeroid );
-        return false;
-    }
-
-    public boolean deleteTeacherRecommendApp( String appId, String teacherId ) {
-        teacherRecommendDao.deleteTeacherRecommendApp(appId, teacherId);
-        return false;
-    }
-
-    public boolean deleteTeacherRecommendAppList( List<String> appIdList, String teacherId ) {
-        teacherRecommendDao.deleteTeacherRecommendAppList(appIdList, teacherId);
-        return false;
+    public RestRecord selectTeacherRecommendAppListByTeacherId( String teacherId, Map< String, Object > timePeroid, String pageNum, String pageSize ) {
+        teacherRecommendDao.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid, pageNum, pageSize );
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.model.Message;
+import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.model.message.Message;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.MessageService;
 import io.swagger.annotations.*;
@@ -35,7 +37,8 @@ public class MessageController {
             @ApiImplicitParam( name = "message", value = "advice信息", paramType = "body", required = true),
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
@@ -56,7 +59,8 @@ public class MessageController {
             @ApiImplicitParam( name = "message", value = "公告信息", paramType = "body", required = true),
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping( "/announcements" )
     @ResponseBody
@@ -75,7 +79,8 @@ public class MessageController {
             @ApiImplicitParam( name = "messageId", value = "消息id", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/{messageId}" )
     @ResponseBody
@@ -94,7 +99,8 @@ public class MessageController {
             @ApiImplicitParam( name = "announcementId", value = "公告id", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/announcements/{announcementId}" )
     @ResponseBody
@@ -113,7 +119,8 @@ public class MessageController {
             @ApiImplicitParam( name = "messageId", value = "消息id", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping( "/{messageId}" )
     @ResponseBody
@@ -132,7 +139,8 @@ public class MessageController {
             @ApiImplicitParam( name = "userId", value = "用户id", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping( "/{userId}" )
     @ResponseBody

@@ -1,154 +1,174 @@
-//package cn.com.bonc.sce.api;
-//
-//import cn.com.bonc.sce.dao.BannerDao;
-//import cn.com.bonc.sce.model.Banner;
-//import cn.com.bonc.sce.rest.RestRecord;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-//@RestController
-//@RequestMapping( "/banners" )
-//public class BannerApiController {
-//    private BannerDao bannerDao;
-//
-//    @Autowired
-//    public BannerApiController( BannerDao bannerDao ) {
-//        this.bannerDao = bannerDao;
-//    }
-//
-//    /**
-//     * 添加banner
-//     *
-//     * @param banner 信息
-//     * @return 是否添加成功
-//     */
-//    @PostMapping( "" )
-//    @ResponseBody
-//    public RestRecord insertBanner( Banner banner ) {
-//        try{
-//            return new RestRecord(bannerDao.insertBanner( banner ));
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//
-//    /**
-//     * 通过id删除banner
-//     *
-//     * @param bannerId  id
-//     * @return 删除是否成功
-//     */
-//    @DeleteMapping( "/{bannerId}" )
-//    @ResponseBody
-//    public RestRecord deleteBannerById( @PathVariable( "bannerId" ) String bannerId ) {
-//        try{
-//            return new RestRecord(200,bannerDao.deleteBannerById( bannerId ));
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//
-//    /**
-//     * 更新banner
-//     *
-//     * @param banner banner信息
-//     * @return banner
-//     */
-//    @PutMapping( "" )
-//    @ResponseBody
-//    public RestRecord updateBannerInfo( Banner banner ) {
-//        try{
-//            return new RestRecord(200,bannerDao.updateBannerInfo( banner ));
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//
-//    /**
-//     * 修改url
-//     *
-//     * @param bannerId   bannerId
-//     * @param url 待修改的url
-//     * @return 跟新是否成功
-//     */
-//    @PatchMapping( "/url/{bannerId}" )
-//    @ResponseBody
-//    public RestRecord updateBannerUrl(
-//            @PathVariable( "bannerId" ) String bannerId,
-//            @RequestParam( "url" ) String url ) {
-//        try{
-//            return new RestRecord(200,bannerDao.updateBannerUrl( bannerId, url ));
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//
-//    /**
-//     * 修改url
-//     *
-//     * @param bannerId   bannerId
-//     * @param appId 待修改的appId
-//     * @return 跟新是否成功
-//     */
-//    @PatchMapping( "/appId/{bannerId}" )
-//    @ResponseBody
-//    public RestRecord updateBannerAppId(
-//            @PathVariable( "bannerId" ) String bannerId,
-//            @RequestParam( "appId" ) String appId ) {
-//        try{
-//            return new RestRecord(200,bannerDao.updateBannerAppId( bannerId, appId ));
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//
-//    /**
-//     * 修改轮播次序
-//     *
-//     * @param list bannerId
-//     * @return 修改结果
-//     */
-//    @PutMapping( "/updateBannerOrder" )
-//    @ResponseBody
-//    public RestRecord updateBannerOrder(List<String> list) {
-//        try{
-//            return new RestRecord(200,bannerDao.updateBannerOrder( list ));
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//
-//    /**
-//     * 获取banner数据
-//     *
-//     * @param bannerId bannerId
-//     * @return banner数据
-//     */
-//    @GetMapping( "/123/{bannerId}" )
-//    @ResponseBody
-//    public RestRecord getBannerById( @PathVariable( "bannerId" ) String bannerId ) {
-//        try{
-//            return new RestRecord(200,bannerDao.getBannerById( bannerId));
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//
-//    /**
-//     * 获取所有banner数据
-//     *
-//     * @return banner数据list
-//     */
-//    @GetMapping( "/123" )
-//    @ResponseBody
-//    public RestRecord getAllBannersInfo() {
-//        try{
-//            return new RestRecord(200,bannerDao.getAllBannersInfo());
-//        }catch ( Exception e ){
-//            return new RestRecord(500,"", e);
-//        }
-//    }
-//}
-//
+package cn.com.bonc.sce.api;
+
+import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.dao.BannerDao;
+import cn.com.bonc.sce.model.banner.Banner;
+import cn.com.bonc.sce.rest.RestRecord;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * banner接口
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
+ */
+@Slf4j
+@RestController
+@RequestMapping( "/banners" )
+public class BannerApiController {
+    @Autowired
+    private BannerDao bannerDao;
+
+    /**
+     * 添加banner
+     *
+     * @param banner 信息
+     * @return 是否添加成功
+     */
+    @PostMapping( "" )
+    @ResponseBody
+    public RestRecord insertBanner( Banner banner ) {
+        try {
+            return new RestRecord( 200, bannerDao.save( banner ) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 409, MessageConstants.SCE_MSG_409, e );
+        }
+    }
+
+    /**
+     * 通过id删除banner
+     *
+     * @param bannerId id
+     * @return 删除是否成功
+     */
+    @DeleteMapping( "/{bannerId}" )
+    @ResponseBody
+    public RestRecord deleteBannerById( @PathVariable( "bannerId" ) Integer bannerId ) {
+        try {
+            return new RestRecord( 200, bannerDao.updateDeleteStatusById( bannerId ) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 408, MessageConstants.SCE_MSG_408, e );
+        }
+    }
+
+    /**
+     * 更新banner
+     *
+     * @param banner banner信息
+     * @return banner
+     */
+    @PutMapping( "" )
+    @ResponseBody
+    public RestRecord updateBannerInfo( Banner banner ) {
+        try {
+            return new RestRecord( 200, bannerDao.save( banner ) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+        }
+    }
+
+    /**
+     * 修改url
+     *
+     * @param bannerId bannerId
+     * @param url      待修改的url
+     * @return 跟新是否成功
+     */
+    @PatchMapping( "/url/{bannerId}" )
+    @ResponseBody
+    public RestRecord updateBannerUrl(
+            @PathVariable( "bannerId" ) Integer bannerId,
+            @RequestParam( "url" ) String url ) {
+        try {
+            return new RestRecord( 200, bannerDao.updateUrlById( bannerId, url ) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+        }
+    }
+
+    /**
+     * 修改appId
+     *
+     * @param bannerId bannerId
+     * @param appId    待修改的appId
+     * @return 跟新是否成功
+     */
+    @PatchMapping( "/appId/{bannerId}" )
+    @ResponseBody
+    public RestRecord updateBannerAppId(
+            @PathVariable( "bannerId" ) Integer bannerId,
+            @RequestParam( "appId" ) String appId ) {
+        try {
+            return new RestRecord( 200, bannerDao.updateAppIdById( bannerId, appId ) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+        }
+    }
+
+    /**
+     * 修改轮播次序
+     *
+     * @param list bannerId
+     * @return 修改结果
+     */
+    @PutMapping( "/bannerOrder" )
+    @ResponseBody
+    public RestRecord updateBannerOrder( @RequestParam( "list" ) List< Integer > list ) {
+        Integer total = 0;
+        Integer size = 0;
+        if ( list != null ) size = list.size();
+        try {
+            for ( int i = 0; i < size; i++ ) {
+                total += bannerDao.updateOrderById( list.get( i ), i+1 );
+            }
+            return new RestRecord( 200, total );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+        }
+    }
+
+    /**
+     * 获取banner数据
+     *
+     * @param bannerId bannerId
+     * @return banner数据
+     */
+    @GetMapping( "/{bannerId}" )
+    @ResponseBody
+    public RestRecord getBannerById( @PathVariable( "bannerId" ) Integer bannerId ) {
+        try {
+            return new RestRecord( 200, bannerDao.findByIdAndIsDelete( bannerId,0 ) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
+        }
+    }
+
+    /**
+     * 获取所有banner数据
+     *
+     * @return banner数据list
+     */
+    @GetMapping( "" )
+    @ResponseBody
+    public RestRecord getAllBannersInfo() {
+        try {
+            return new RestRecord( 200, bannerDao.findByIsDelete(0) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(),e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
+        }
+    }
+}
+

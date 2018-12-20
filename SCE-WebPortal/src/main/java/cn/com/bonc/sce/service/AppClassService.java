@@ -1,11 +1,18 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppClassDao;
-import cn.com.bonc.sce.model.AppClass;
+import cn.com.bonc.sce.model.appListAndClass.AppClass;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+/**
+ * 应用分类
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
+ */
 
 @Slf4j
 @Service
@@ -27,11 +34,11 @@ public class AppClassService {
     /**
      * 通过id删除应用分类
      *
-     * @param appClassId id
+     * @param classId id
      * @return 删除是否成功
      */
-    public RestRecord deleteAppClassById( Integer appClassId ) {
-        return appClassDao.deleteAppClassById( appClassId );
+    public RestRecord deleteAppClassById( Integer classId ) {
+        return appClassDao.deleteAppClassById( classId );
     }
 
     /**

@@ -1,12 +1,19 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.MessageDao;
-import cn.com.bonc.sce.model.Message;
+import cn.com.bonc.sce.model.message.Message;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * 消息通知
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
+ */
 @Slf4j
 @Service
 public class MessageService {

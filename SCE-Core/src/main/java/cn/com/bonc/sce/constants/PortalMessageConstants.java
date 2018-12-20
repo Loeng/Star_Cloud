@@ -26,6 +26,11 @@ public interface PortalMessageConstants {
      */
     String SCE_PORTAL_MSG_401 = "用户没有权限执行此操作";
 
+    String SCE_PORTAL_MSG_409 = "短信发送失败";
+    String SCE_PORTAL_MSG_410 = "验证码验证失败";
+    String SCE_PORTAL_MSG_411 = "手机短信验证失败";
+    String SCE_PORTAL_MSG_412 = "安全码验证失败";
+
     /**
      * 通用错误信息
      */
