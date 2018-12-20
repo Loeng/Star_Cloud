@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Data
 //@Entity
-//@Table( name = "STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL" )
+//@Table( name = "SCE_MARKET_APP_APPTYPE_REL",schema ="STARCLOUDMARKET" )
 public class AppTypeRelEntity implements Serializable {
     //@Id
     //@GeneratedValue

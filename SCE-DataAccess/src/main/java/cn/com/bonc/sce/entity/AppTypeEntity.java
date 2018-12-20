@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +23,13 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table( name = "STARCLOUDMARKET.SCE_MARKET_APP_TYPE" )
+@Table( name = "SCE_MARKET_APP_TYPE" ,schema ="STARCLOUDMARKET")
 public class AppTypeEntity {
     @Id
     @GeneratedValue
     @Column( name = "APP_TYPE_ID" )
     private String appTypeId;
+    @JsonIgnoreProperties(value = { "appTypes" })
     @ManyToMany(mappedBy = "appTypes")
     private Set< AppInfoEntity > appInfo = new HashSet<>();
 
