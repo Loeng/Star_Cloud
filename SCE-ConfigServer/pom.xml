@@ -5,12 +5,12 @@
     <parent>
         <artifactId>StarCloudEducation</artifactId>
         <groupId>cn.com.bonc</groupId>
-        <version>0.0-Engaging</version>
+        <version>0.0.1.DEV</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>SCE-ConfigServer</artifactId>
-    <version>0.0-Engaging</version>
+    <version>0.0.1.DEV</version>
 
     <dependencies>
         <dependency>
@@ -19,5 +19,23 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>cn.com.bonc.sce.ConfigServerApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

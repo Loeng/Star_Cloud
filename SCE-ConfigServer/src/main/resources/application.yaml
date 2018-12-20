@@ -13,9 +13,9 @@ server:
   servlet:
     context-path: /
 logging:
-  file: ./logs/dev_app.log
+#  file: ./logs/dev_app.log
   pattern:
-    console: "%d %-5level %logger : %msg%n"
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
     file: "%d %-5level [%thread] %logger : %msg%n"
   level:
     org.springframework.web: INFO

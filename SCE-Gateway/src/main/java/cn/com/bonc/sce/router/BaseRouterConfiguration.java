@@ -5,6 +5,7 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -18,7 +19,8 @@ import org.springframework.stereotype.Controller;
 public class BaseRouterConfiguration {
 
     @Bean
-    public RouteLocator myRoutes( RouteLocatorBuilder builder ) {
+    @Profile( value = "dev,test")
+    public RouteLocator defaultRoutes( RouteLocatorBuilder builder ) {
         return builder.routes()
                 .route( config -> config
                         .path( "/api-management$" )

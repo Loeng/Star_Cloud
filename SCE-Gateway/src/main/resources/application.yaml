@@ -12,7 +12,7 @@ spring:
 logging:
   file: ./logs/dev_app.log
   pattern:
-    console: "%d %-5level %logger : %msg%n"
+    console: "%highlight{[%d{DEFAULT}] %highlight{%-5level}{FATAL=Bright red, ERROR=Bright red, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan} %style{[%-25.25t]}{Yellow} %style{%-40c{1.}}{Cyan} : %m%n%ex}"
     file: "%d %-5level [%thread] %logger : %msg%n"
   level:
     org.springframework.web: INFO
