@@ -6,9 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * Created by YueHaibo on 2018/12/12.
+ */
 @Slf4j
 @Service
 public class TeacherRecommendService {
@@ -25,17 +28,17 @@ public class TeacherRecommendService {
     }
 
     public RestRecord updateTeacherRecommendAppInfo( String teacherId, List< Map< String, Object > > recommendPeroIdMap ) {
-        teacherRecommendDao.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
-        return null;
+        return teacherRecommendDao.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
+
     }
 
-    public RestRecord deleteTeacherRecommendApp( String appId, List< String > teacherId ) {
-        teacherRecommendDao.deleteTeacherRecommendApp( appId, teacherId );
-        return null;
+    public RestRecord deleteTeacherRecommendApp( String teacherId, ArrayList<String> appIdList ) {
+        return teacherRecommendDao.deleteTeacherRecommendApp( teacherId, appIdList );
+
     }
 
-    public RestRecord selectTeacherRecommendAppListByTeacherId( String teacherId, Map< String, Object > timePeroid, String pageNum, String pageSize ) {
-        teacherRecommendDao.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid, pageNum, pageSize );
-        return null;
+    public RestRecord selectTeacherRecommendAppList( String teacherId, Map< String, Object > timePeroid, String pageNum, String pageSize ) {
+        return teacherRecommendDao.selectTeacherRecommendAppList( teacherId, timePeroid, pageNum, pageSize );
+
     }
 }

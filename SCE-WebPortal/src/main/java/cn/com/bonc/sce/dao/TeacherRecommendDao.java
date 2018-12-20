@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Created by YueHaibo on 2018/12/12.
+ */
 @FeignClient( "sce-data-access" )
 public interface TeacherRecommendDao {
 
@@ -26,12 +30,11 @@ public interface TeacherRecommendDao {
 
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.DELETE )
     public RestRecord deleteTeacherRecommendApp(
-            @RequestParam( "appId" ) String appId,
-            @RequestParam( "teacherId" ) List< String > teacherId );
-
+            @RequestParam( "appId" ) String teacherId,
+            @RequestParam( "teacherId" ) ArrayList<String> appIdList );
 
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.GET )
-    public RestRecord selectTeacherRecommendAppListByTeacherId(
+    public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) String teacherId,
             @RequestParam( value = "timePeroid", required = false ) Map< String, Object > timePeroid,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,

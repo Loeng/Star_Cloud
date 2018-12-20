@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Created by YueHaibo on 2018/12/12.
+ */
 @Slf4j
 @RestController
 @RequestMapping( "/teacher-recommend-app" )
@@ -36,12 +39,18 @@ public class TeacherRecommendAppApiController {
     public RestRecord addTeacherRecommendApp(
             @RequestParam( "teacherId" ) String teacherId,
             @RequestBody List< Map< String, Object > > recommendPeroIdMap ) {
-        RestRecord restRecord = new RestRecord();
-        restRecord.setMsg( "#######占位，以后统一修改####### addTeacherRecommendApp" );
-        Map< String, Object > test = new HashMap<>();
-        test.put( "teacherId", teacherId );
-        restRecord.setData( test );
+//        RestRecord restRecord = new RestRecord();
+//        restRecord.setMsg( "#######占位，以后统一修改####### addTeacherRecommendApp" );
+//        Map< String, Object > test = new HashMap<>();
+//        test.put( "teacherId", teacherId );
+//        restRecord.setData( test );
 //        teacherRecommendRepository.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
+        RestRecord restRecord = new RestRecord();
+        Map< String, Object > resultMap = new HashMap<>();
+        restRecord.setMsg( "This is ApiController response message ! Method name addTeacherRecommendApp" );
+        resultMap.put( "Param1", teacherId );
+        resultMap.put( "Param2", recommendPeroIdMap );
+        restRecord.setData( resultMap );
         return restRecord;
     }
 
@@ -59,7 +68,13 @@ public class TeacherRecommendAppApiController {
             @RequestParam( "teacherId" ) String teacherId,
             @RequestBody List< Map< String, Object > > recommendPeroIdMap ) {
 //        teacherRecommendRepository.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
-        return new RestRecord( 0 );
+        RestRecord restRecord = new RestRecord();
+        Map< String, Object > resultMap = new HashMap<>();
+        restRecord.setMsg( "This is ApiController response message ! Method name updateTeacherRecommendAppInfo" );
+        resultMap.put( "Param1", teacherId );
+        resultMap.put( "Param2", recommendPeroIdMap );
+        restRecord.setData( resultMap );
+        return restRecord;
     }
 
 
@@ -73,11 +88,15 @@ public class TeacherRecommendAppApiController {
     @DeleteMapping
     @ResponseBody
     public RestRecord deleteTeacherRecommendApp(
-            @RequestParam String teacherId,
-            @RequestParam List< String > appIdList ) {
+            @RequestParam( "teacherId" ) String teacherId,
+            @RequestParam( value = "appIdList" ,required = false) List< String > appIdList ) {
 //        teacherRecommendRepository.deleteTeacherRecommendApp( teacherId, appIdList );
         RestRecord restRecord = new RestRecord();
-        restRecord.setData( appIdList );
+        Map< String, Object > resultMap = new HashMap<>();
+        restRecord.setMsg( "This is ApiController response message ! Method name deleteTeacherRecommendApp" );
+        resultMap.put( "Param1", teacherId );
+        resultMap.put( "Param2", appIdList );
+        restRecord.setData( resultMap );
         return restRecord;
     }
 
@@ -91,12 +110,20 @@ public class TeacherRecommendAppApiController {
      */
     @GetMapping
     @ResponseBody
-    public RestRecord selectTeacherRecommendAppListByTeacherId(
+    public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) String teacherId,
             @RequestParam( value = "timePeroid", required = false ) Map< String, Object > timePeroid,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
-//        teacherRecommendRepository.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid, pageNum, pageSize );
-        return new RestRecord();
+//        teacherRecommendRepository.selectTeacherRecommendAppList( teacherId, timePeroid, pageNum, pageSize );
+        RestRecord restRecord = new RestRecord();
+        Map< String, Object > resultMap = new HashMap<>();
+        restRecord.setMsg( "This is ApiController response message ! Method name selectTeacherRecommendAppList" );
+        resultMap.put( "Param1", teacherId );
+        resultMap.put( "Param2", timePeroid );
+        resultMap.put( "Param3", pageNum );
+        resultMap.put( "Param4", pageSize );
+        restRecord.setData( resultMap );
+        return restRecord;
     }
 }

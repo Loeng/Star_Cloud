@@ -8,10 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Created by YueHaibo on 2018/12/12.
+ */
 @Slf4j
 @Api( value = "教师推荐应用接口", tags = "教师推荐应用接口" )
 @ApiResponses( {
@@ -43,6 +46,7 @@ public class TeacherRecommendAppController {
             @RequestParam( "teacherId" ) @ApiParam( value = "教师用户Id", required = true ) String teacherId,
             @RequestBody @ApiParam( value = "应用于推荐时段\r[{\r\"appId\":\"String\",\r\"recommendStartTime\":\"2018-01-01\",\r\"recommendEndTime\":\"2018-02-02\"},{\r\"略\":\"略\"}]", allowMultiple = true, example = "{\"123\":\"123\"}" )
                     List< Map< String, Object > > recommendPeroIdMap ) {
+        /*
         RestRecord restRecord = new RestRecord();
         restRecord.setMsg( "#######占位，以后统一修改####### addTeacherRecommendApp" );
         Map< String, Object > test = new HashMap<>();
@@ -51,6 +55,8 @@ public class TeacherRecommendAppController {
         restRecord.setData( test );
         teacherRecommendService.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
         return restRecord;
+        */
+        return teacherRecommendService.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
     }
 
     /**
@@ -68,8 +74,7 @@ public class TeacherRecommendAppController {
             @RequestParam( "teacherId" ) @ApiParam( value = "教师用户Id", required = true ) String teacherId,
             @RequestBody @ApiParam( value = "应用于推荐时段\r[{\r\"appId\":\"String\",\r\"recommendStartTime\":\"2018-01-01\",\r\"recommendEndTime\":\"2018-02-02\"},{\r\"略\":\"略\"}]", allowMultiple = true, example = "{\"123\":\"123\"}" )
                     List< Map< String, Object > > recommendPeroIdMap ) {
-        teacherRecommendService.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
-        return new RestRecord( 0 );
+        return teacherRecommendService.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
     }
 
 
@@ -85,11 +90,16 @@ public class TeacherRecommendAppController {
     @ResponseBody
     public RestRecord deleteTeacherRecommendApp(
             @RequestParam @ApiParam( value = "教师Id", required = true ) String teacherId,
-            @RequestParam @ApiParam( value = "应用Id列表", allowMultiple = true ) List< String > appIdList ) {
-        teacherRecommendService.deleteTeacherRecommendApp( teacherId, appIdList );
+            @RequestParam @ApiParam( value = "应用Id列表" ) List< String > appIdList ) {
+        ArrayList<String> temp = new ArrayList<>(  );
+        for ( String temp1 : appIdList ){
+            temp.add( temp1 );
+        }
         RestRecord restRecord = new RestRecord();
         restRecord.setData( appIdList );
-        return restRecord;
+
+//        return restRecord;
+        return teacherRecommendService.deleteTeacherRecommendApp( teacherId, temp );
     }
 
     /**
@@ -103,13 +113,11 @@ public class TeacherRecommendAppController {
     @ApiOperation( value = "教师推荐应用查询", notes = "查询在时限内某教师推荐的应用信息", httpMethod = "GET" )
     @GetMapping
     @ResponseBody
-    public RestRecord selectTeacherRecommendAppListByTeacherId(
+    public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) @ApiParam( value = "教师Id", required = true ) String teacherId,
             @RequestParam( value = "timePeroid", required = false ) @ApiParam( value = "查询时间范围", allowMultiple = true ) Map< String, Object > timePeroid,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
-        teacherRecommendService.selectTeacherRecommendAppListByTeacherId( teacherId, timePeroid, pageNum, pageSize );
-        return new RestRecord();
+        return teacherRecommendService.selectTeacherRecommendAppList( teacherId, timePeroid, pageNum, pageSize );
     }
-
 }
