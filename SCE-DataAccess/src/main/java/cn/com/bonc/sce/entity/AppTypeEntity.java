@@ -22,12 +22,12 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table( name = "sce_market_app_type" )
+@Table( name = "STARCLOUDMARKET.SCE_MARKET_APP_TYPE" )
 public class AppTypeEntity {
     @Id
     @GeneratedValue
     @Column( name = "APP_TYPE_ID" )
-    private Long appTypeId;
+    private String appTypeId;
     @ManyToMany(mappedBy = "appTypes")
     private Set< AppInfoEntity > appInfo = new HashSet<>();
 

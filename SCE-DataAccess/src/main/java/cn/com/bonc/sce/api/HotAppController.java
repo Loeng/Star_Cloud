@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping( "/hotApp" )
+@RequestMapping( "/hot-app" )
 public class HotAppController {
     private HotAppDao hotAppDao;
 

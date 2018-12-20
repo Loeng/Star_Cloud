@@ -18,7 +18,7 @@ public interface HotAppDao {
      * @param userId
      * @return
      */
-    @RequestMapping( value = "/hotApp/{userId}", method = RequestMethod.POST )
+    @RequestMapping( value = "/hot-app/{userId}", method = RequestMethod.POST )
     RestRecord addHotRecommendAppList( @RequestBody List< String > appIdList,
                                        @PathVariable( "userId" ) String userId );
 
@@ -29,7 +29,7 @@ public interface HotAppDao {
      * @param pageSize 每页数量
      * @return
      */
-    @RequestMapping( value = "/hotApp/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/hot-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord selectHotRecommendAppList( @PathVariable( "pageNum" ) Integer pageNum,
                                           @PathVariable( "pageSize" ) Integer pageSize );
 }

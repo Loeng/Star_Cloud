@@ -17,7 +17,7 @@ import java.util.List;
 @Api( value = "应用推荐-热门应用接口", tags = "应用推荐-热门应用接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping( "/hotApp" )
+@RequestMapping( "/hot-app" )
 public class HotAppController {
     @Autowired
     private HotAppService hotAppService;

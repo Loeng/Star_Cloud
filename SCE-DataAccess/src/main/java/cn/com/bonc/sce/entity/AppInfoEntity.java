@@ -22,15 +22,15 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table( name = "sce_market_app_info" )
+@Table( name = "STARCLOUDMARKET.SCE_MARKET_APP_INFO" )
 public class AppInfoEntity {
     @Id
     @GeneratedValue
     @Column( name = "APP_ID" )
-    private Long appId;
+    private String appId;
 
     @ManyToMany
-    @JoinTable( name = "sce_market_app_apptype_rel", joinColumns = @JoinColumn( name = "APP_ID" ),
+    @JoinTable( name = "STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL", joinColumns = @JoinColumn( name = "APP_ID" ),
             inverseJoinColumns = @JoinColumn( name = "APP_TYPE_ID" ) )
     private Set< AppTypeEntity > appTypes = new HashSet<>();
 
