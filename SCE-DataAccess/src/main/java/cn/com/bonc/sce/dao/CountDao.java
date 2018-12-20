@@ -1,7 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.model.DownloadCount;
-import org.springframework.cloud.openfeign.FeignClient;
+import cn.com.bonc.sce.entity.DownloadCount;
 import org.springframework.stereotype.Repository;
 
 @Repository
