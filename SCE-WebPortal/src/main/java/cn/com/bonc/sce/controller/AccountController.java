@@ -1,8 +1,9 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.model.AccountSecurity;
+import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.model.Account.Account;
 import cn.com.bonc.sce.rest.RestRecord;
-import cn.com.bonc.sce.service.AccountSecurityService;
+import cn.com.bonc.sce.service.AccountService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "账号安全信息相关" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RequestMapping( "/accountSecurity" )
-public class AccountSecurityController {
+public class AccountController {
     @Autowired
-    private AccountSecurityService accountSecurityService;
+    private AccountService accountSecurityService;
 
     /**
      * 发送安全验证信息
@@ -36,7 +37,8 @@ public class AccountSecurityController {
             @ApiImplicitParam( name = "phone", value = "手机号", paramType = "header", required = true)
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = PortalMessageConstants.SCE_PORTAL_MSG_409, response = RestRecord.class )
     } )
     @GetMapping( "/sendSecurityPhoneValid/{phone}" )
     @ResponseBody
@@ -57,7 +59,8 @@ public class AccountSecurityController {
             @ApiImplicitParam( name = "valid", value = "验证码", paramType = "header", required = true)
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 411, message = PortalMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class )
     } )
     @GetMapping( "/{phone}/{valid}" )
     @ResponseBody
@@ -78,11 +81,12 @@ public class AccountSecurityController {
             @ApiImplicitParam( name = "accountSecurity", value = "安全码和账号信息", paramType = "body", required = true),
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 412, message = PortalMessageConstants.SCE_PORTAL_MSG_412, response = RestRecord.class )
     } )
     @PostMapping("")
     @ResponseBody
-    public RestRecord updateAccount(AccountSecurity accountSecurity){
+    public RestRecord updateAccount(Account accountSecurity){
         return accountSecurityService.updateAccount(accountSecurity);
     }
 }

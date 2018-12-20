@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.model.AppClass;
+import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.model.appListAndClass.AppClass;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppClassService;
 import io.swagger.annotations.*;
@@ -36,7 +38,8 @@ public class AppClassController {
             @ApiImplicitParam( name = "appClass", value = "应用分类信息", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
@@ -47,20 +50,21 @@ public class AppClassController {
     /**
      * 通过id删除应用分类
      *
-     * @param appClassId id
+     * @param classId id
      * @return 删除是否成功
      */
     @ApiOperation( value = "通过id删除应用分类", notes = "通过id删除应用分类", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appClassId", value = "appClassId", paramType = "header", required = true )
+            @ApiImplicitParam( name = "classId", value = "classId", paramType = "header", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
-    @DeleteMapping( "/{appClassId}" )
+    @DeleteMapping( "/{classId}" )
     @ResponseBody
-    public RestRecord deleteAppClassById( @PathVariable( "appClassId" )Integer appClassId ) {
-        return appClassService.deleteAppClassById( appClassId );
+    public RestRecord deleteAppClassById( @PathVariable( "classId" )Integer classId ) {
+        return appClassService.deleteAppClassById( classId );
     }
 
     /**
@@ -74,7 +78,8 @@ public class AppClassController {
             @ApiImplicitParam( name = "appClass", value = "应用分类信息", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping
     @ResponseBody
@@ -89,7 +94,8 @@ public class AppClassController {
      */
     @ApiOperation( value = "获取所有应用分类数据", notes = "获取所有应用分类数据", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping
     @ResponseBody

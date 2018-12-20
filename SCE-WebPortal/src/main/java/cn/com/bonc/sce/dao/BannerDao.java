@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.model.Banner;
+import cn.com.bonc.sce.model.banner.Banner;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * banner
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/14/12 12:00
+ */
 @FeignClient( "sce-data-access" )
 public interface BannerDao {
 
@@ -66,8 +73,8 @@ public interface BannerDao {
      * @param list bannerId
      * @return 修改结果
      */
-    @RequestMapping( value = "/banners/updateBannerOrder", method = RequestMethod.PUT )
-    public RestRecord updateBannerOrder( @RequestParam( "bannerList" ) List<String> list );
+    @RequestMapping( value = "/banners/bannerOrder", method = RequestMethod.PUT )
+    public RestRecord updateBannerOrder( @RequestParam( "list" ) List<String> list );
 
     /**
      * 获取banner数据
