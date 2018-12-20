@@ -1,7 +1,6 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.PortalMessageConstants;
-import cn.com.bonc.sce.model.AppVersionInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppAuditingService;
 import cn.com.bonc.sce.service.AppVersionService;
@@ -10,14 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Api( value = "应用版本更新、审核接口", tags = "应用版本更新/审核接口" )
-@ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
+@ApiResponses( {
+        @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
+        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+} )
 @RestController
-@RequestMapping( "/AppVersion" )
+@RequestMapping( "/app-version" )
 public class AppVersionController {
     private AppVersionService appVersionService;
     private AppAuditingService appAuditingService;
@@ -36,78 +37,66 @@ public class AppVersionController {
 
     /**
      * 应用版本查询接口
-     * 通过应用ID查询该应用的历史版本信息列表
+     * 1.通过应用Id查询应用所有的版本信息
+     * 2.通过应用Id和应用版本查询该版本的详细信息
+     * 请求样例
+     * http://localhost:10200/query
      *
      * @param appId 查询的应用Id
      * @return
      */
     @ApiOperation( value = "应用版本查询接口", notes = "通过应用ID查询该应用的历史版本信息列表", httpMethod = "GET" )
-    @ApiImplicitParam( name = "appId", value = "查询的应用Id", paramType = "path", required = true )
-    @ApiResponses( {
-            @ApiResponse( code = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "appId", value = "查询的应用Id", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "appVersion", value = "查询的应用版本若为空，则查询全部版本信息", paramType = "path", required = false )
     } )
-    @GetMapping( "/{appId}" )
+    @GetMapping( "/query" )
     @ResponseBody
     public RestRecord selectAppHistoryVersionList(
-            @PathVariable( "appId" ) String appId ) {
+            @RequestParam( "appId" ) String appId,
+            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion ) {
         // 通过应用ID查询该应用的历史版本信息列表
-        AppVersionInfo appVersionInfo1 = new AppVersionInfo();
-        AppVersionInfo appVersionInfo2 = new AppVersionInfo();
-        AppVersionInfo appVersionInfo3 = new AppVersionInfo();
-        List< Object > result = new ArrayList<>();
-        result.add( appVersionInfo1 );
-        result.add( appVersionInfo2 );
-        result.add( appVersionInfo3 );
-        RestRecord restRecord = new RestRecord( 0, result );
+        RestRecord restRecord = new RestRecord( 0 );
+        restRecord.setData( appVersionService.selectAppHistoryVersionList( appId, appVersion ) );
         return restRecord;
     }
 
     /**
      * 通过应用ID修改该应用的版本信息
      *
-     * @param appId          查询的应用Id
-     * @param appVersionInfo 版本应用信息详情
+     * @param appId            查询的应用Id
+     * @param marketAppVersion 版本应用信息详情
      * @return
      */
     @ApiOperation( value = "修改应用的版本信息", notes = "通过应用ID修改该应用的版本信息", httpMethod = "PATCH" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "appVersionInfo", value = "版本应用信息详情", paramType = "body", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
-    } )
-    @PatchMapping( "/{appId}" )
+    @PostMapping( "/{appId}" )
     @ResponseBody
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
-            @RequestBody AppVersionInfo appVersionInfo ) {
+            @RequestBody Map<String,String> marketAppVersion ) {
         //通过应用ID修改该应用的版本信息
-        return new RestRecord( 0, appVersionService.updateAppHistoryVersionInfo( appId, appVersionInfo ) );
+        return new RestRecord( 0, appVersionService.updateAppHistoryVersionInfo( appId, marketAppVersion ) );
     }
 
     /**
      * 删除指定的一条应用版本信息
      * 通过应用ID和版本信息删除该应用的部分版本信息(删除状态字段更改为已删除)
      *
-     * @param appId          应用Id
-     * @param appVersionInfo 版本应用信息详情
+     * @param appId            应用Id
+     * @param marketAppVersion 版本应用信息详情
      * @return
      */
     @ApiOperation( value = "删除指定的一条应用版本信息", notes = "通过应用ID和版本信息删除该应用的部分版本信息", httpMethod = "DELETE" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "appVersionInfo", value = "版本应用信息详情", paramType = "body", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+            @ApiImplicitParam( name = "marketAppVersion", value = "版本应用信息详情", paramType = "body", required = true )
     } )
     @DeleteMapping( "/{appId}" )
     @ResponseBody
     public RestRecord deleteAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
-            @RequestBody AppVersionInfo appVersionInfo ) {
-        return new RestRecord( 0, appVersionService.deleteAppHistoryVersionInfo( appId, appVersionInfo ) );
+            @RequestBody Map<String,String> marketAppVersion ) {
+        return new RestRecord( 0, appVersionService.deleteAppHistoryVersionInfo( appId, marketAppVersion ) );
     }
 
     /**
@@ -119,9 +108,6 @@ public class AppVersionController {
      */
     @ApiOperation( value = "删除指定的应用版本信息", notes = "通过应用ID删除该应用的全部版本信息", httpMethod = "DELETE" )
     @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
-    } )
     @DeleteMapping( "/all/{appId}" )
     @ResponseBody
     public RestRecord deleteAppAllVersionInfoById(
@@ -135,27 +121,24 @@ public class AppVersionController {
      * 2. 创建一条待办消息，创建人为申请人，接收人为系统管理员
      * todo 等待消息服务完成
      *
-     * @param appId          更新版本的应用Id
-     * @param userId         提交版本更新申请的用户Id
-     * @param appVersionInfo 版本更新详情
+     * @param appId            更新版本的应用Id
+     * @param userId           提交版本更新申请的用户Id
+     * @param marketAppVersion 版本更新详情
      * @return
      */
     @ApiOperation( value = "应用版本更新申请接口", notes = "添加一条版本更新申请", httpMethod = "POST" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
             @ApiImplicitParam( name = "userId", value = "用户Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "appVersionInfo", value = "版本更新详情", paramType = "body", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+            @ApiImplicitParam( name = "marketAppVersion", value = "版本更新详情", paramType = "body", required = true )
     } )
     @PostMapping( "apply/{appId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApply(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId,
-            @RequestBody AppVersionInfo appVersionInfo ) {
-        appVersionService.createVersionInfo( appId, appVersionInfo );
+            @RequestBody Map<String,String> marketAppVersion ) {
+        appVersionService.createVersionInfo( appId, marketAppVersion );
 //        messageService.createAppVersionUpdateApplyMessage( userId, appId );
         return null;
     }
@@ -174,9 +157,6 @@ public class AppVersionController {
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
             @ApiImplicitParam( name = "userId", value = "用户Id", paramType = "query", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PatchMapping( "/approve/{appId}" )
     @ResponseBody
@@ -204,9 +184,6 @@ public class AppVersionController {
             @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
             @ApiImplicitParam( name = "userId", value = "管理员用户Id", paramType = "query", required = true ),
             @ApiImplicitParam( name = "rejectReason", value = "驳回请求原因", paramType = "query", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PatchMapping( "/reject/{appId}" )
     @ResponseBody

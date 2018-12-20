@@ -1,12 +1,12 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.CompanyInfoDao;
-import cn.com.bonc.sce.model.CompanyInfo;
+import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -18,27 +18,33 @@ public class CompanyInfoService {
         this.companyInfoDao = companyInfoDao;
     }
 
-    public List< CompanyInfo > selectAllCompanyList() {
-        return companyInfoDao.selectAllCompanyList();
+    //    public RestRecord selectAllCompanyList() {
+//        return companyInfoDao.selectAllCompanyList();
+//    }
+//
+//    public RestRecord selectCompanyListByName( String companyName ) {
+//        return companyInfoDao.selectCompanyListByName( companyName );
+//    }
+//
+//    public RestRecord selectCompanyById( String companyId ) {
+//        return companyInfoDao.selectCompanyById( companyId );
+//    }
+
+    public RestRecord queryCompanyInfo( String companyId, String companyName, String pageNum, String pageSize ) {
+        return companyInfoDao.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
     }
 
-    public List< CompanyInfo > selectCompanyListByName( String companyName ) {
-        return companyInfoDao.selectCompanyListByName( companyName );
-    }
-
-    public CompanyInfo selectCompanyById( String companyId ) {
-        return companyInfoDao.selectCompanyById( companyId );
-    }
-
-    public boolean addCompanyInfo( CompanyInfo companyInfo ) {
+    public RestRecord addCompanyInfo( Map< String, Object > companyInfo ) {
         return companyInfoDao.addCompanyInfo( companyInfo );
     }
 
-    public boolean updateCompanyInfo( String companyId, CompanyInfo companyInfo ) {
+    public RestRecord updateCompanyInfo( String companyId, Map< String, Object > companyInfo ) {
         return companyInfoDao.updateCompanyInfo( companyId, companyInfo );
     }
 
-    public boolean deleteCompanyInfo( String companyId ) {
+    public RestRecord deleteCompanyInfo( String companyId ) {
         return companyInfoDao.deleteCompanyInfo( companyId );
     }
+
+
 }

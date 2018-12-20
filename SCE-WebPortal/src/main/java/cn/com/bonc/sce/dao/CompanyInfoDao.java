@@ -1,38 +1,35 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.model.CompanyInfo;
+import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @Repository
 @FeignClient( "sce-data-access" )
 public interface CompanyInfoDao {
-    @RequestMapping( value = "/Company", method = RequestMethod.GET )
-    public List< CompanyInfo > selectAllCompanyList(
+
+    @RequestMapping( value = "/company", method = RequestMethod.GET )
+    public RestRecord queryCompanyInfo(
+            @RequestParam( value = "companyId", required = false ) String companyId,
+            @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize
     );
 
-    @RequestMapping( value = "/Company/query", method = RequestMethod.GET )
-    public List< CompanyInfo > selectCompanyListByName(
-            @RequestParam( value = "companyName" ) String companyName
-    );
+    @RequestMapping( value = "/company", method = RequestMethod.PUT )
+    public RestRecord addCompanyInfo(
+            @RequestBody Map< String, Object > companyInfo );
 
-    @RequestMapping( value = "/Company/{companyId}", method = RequestMethod.GET )
-    public CompanyInfo selectCompanyById(
-            @PathVariable( "companyId" ) String companyId);
-
-    @RequestMapping( value = "/Company", method = RequestMethod.PUT )
-    public boolean addCompanyInfo(
-            @RequestBody CompanyInfo companyInfo );
-
-    @RequestMapping( value = "/Company/{companyId}", method = RequestMethod.PATCH )
-    public boolean updateCompanyInfo(
+    @RequestMapping( value = "/company/{companyId}", method = RequestMethod.PATCH )
+    public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,
-            @RequestBody CompanyInfo companyInfo );
+            @RequestBody Map< String, Object > companyInfo );
 
-    @RequestMapping( value = "/Company/{companyId}", method = RequestMethod.DELETE )
-    public boolean deleteCompanyInfo(
+    @RequestMapping( value = "/company/{companyId}", method = RequestMethod.DELETE )
+    public RestRecord deleteCompanyInfo(
             @PathVariable( "companyId" ) String companyId );
+
 }

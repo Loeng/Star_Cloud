@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * 应用下载统计接口
  */
 @Slf4j
-@Api( value = "应用下载统计接口" ,tags = "应用下载统计接口")
+@Api( value = "应用下载统计接口", tags = "应用下载统计接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping( "/count" )
@@ -36,10 +36,12 @@ public class DownloadCountController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/one")
+    @GetMapping( "/one" )
     @ResponseBody
     public RestRecord countSingleAppDownload( @RequestParam( "appId" ) String appId ) {
-        return new RestRecord( 0,countService.countSingleAppDownload( appId ));
+        RestRecord restRecord = new RestRecord();
+        restRecord.setData( countService.countSingleAppDownload( appId ) );
+        return restRecord;
     }
 
     /**
@@ -53,11 +55,11 @@ public class DownloadCountController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/type")
+    @GetMapping( "/type" )
     @ResponseBody
     public RestRecord countAppDownloadByType( @RequestParam( "appType" ) String appType ) {
         // 根据应用类型查找对应的应用，统计下载量
-        return new RestRecord( 0,countService.countAppDownloadByType( appType ));
+        return new RestRecord( 0, countService.countAppDownloadByType( appType ) );
     }
 
     /**
@@ -72,11 +74,11 @@ public class DownloadCountController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/company")
+    @GetMapping( "/company" )
     @ResponseBody
     public RestRecord countAppDownloadByCompany( @RequestParam( "companyId" ) String companyId ) {
         // 根据厂商名查找对应的应用，统计下载量
-        return new RestRecord( 0,countService.countAppDownloadByCompany( companyId ));
+        return new RestRecord( 0, countService.countAppDownloadByCompany( companyId ) );
     }
 
 }

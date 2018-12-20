@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.CountDao;
-import cn.com.bonc.sce.model.DownloadCount;
+import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,15 @@ public class CountService {
         this.countDao = countDao;
     }
 
-    public DownloadCount countSingleAppDownload( String appId ) {
+    public RestRecord countSingleAppDownload( String appId ) {
         return countDao.countSingleAppDownload( appId );
     }
 
-    public DownloadCount countAppDownloadByType( String appType ) {
+    public RestRecord countAppDownloadByType( String appType ) {
         return countDao.countAppDownloadByType( appType );
     }
 
-    public DownloadCount countAppDownloadByCompany( String companyId ) {
+    public RestRecord countAppDownloadByCompany( String companyId ) {
         return countDao.countAppDownloadByCompany( companyId );
     }
 }
