@@ -1,8 +1,12 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.TeacherRecommend;
+import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -10,37 +14,27 @@ import java.util.Map;
 @FeignClient( "sce-data-access" )
 public interface TeacherRecommendDao {
 
-    @RequestMapping( value = "/TeacherRecommendApp", method = RequestMethod.POST )
-    public boolean addTeacherRecommendApp(
-            @RequestParam( "appId" ) String appId,
+    @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.POST )
+    RestRecord addTeacherRecommendApp(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( "recommendPeroId" ) String recommendPeroid );
+            @RequestBody List< Map< String, Object > > recommendPeroIdMap );
 
-    @RequestMapping( value = "/TeacherRecommendApp/list", method = RequestMethod.POST )
-    public Integer addTeacherRecommendAppList(
-            @RequestParam( "appId" ) List< String > appIdList,
+    @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.PUT )
+    public RestRecord updateTeacherRecommendAppInfo(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestBody Map< String, Object > recommendPeroIdMap );
-
-    @RequestMapping( value = "/TeacherRecommendApp/{appId}", method = RequestMethod.PATCH )
-    public Integer updateTeacherRecommendAppInfo(
-            @PathVariable( "appId" ) String appId,
-            @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( "recommendPeroId" ) String recommendPeroid
+            @RequestBody List< Map< String, Object > > recommendPeroIdMap
     );
 
-    @RequestMapping( value = "/TeacherRecommendApp", method = RequestMethod.DELETE )
-    public Integer deleteTeacherRecommendApp(
+    @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.DELETE )
+    public RestRecord deleteTeacherRecommendApp(
             @RequestParam( "appId" ) String appId,
-            @RequestParam( "teacherId" ) String teacherId );
+            @RequestParam( "teacherId" ) List< String > teacherId );
 
-    @RequestMapping( value = "/TeacherRecommendApp/list", method = RequestMethod.DELETE )
-    public Integer deleteTeacherRecommendAppList(
-            @RequestParam( "appIdList" ) List< String > appIdList,
-            @RequestParam( "teacherId" ) String teacherId );
 
-    @RequestMapping( value = "/TeacherRecommendApp/{teacherId}", method = RequestMethod.POST )
-    public List< TeacherRecommend > selectTeacherRecommendAppListByTeacherId(
-            @PathVariable( "teacherId" ) String teacherId,
-            @RequestParam( value = "timePeroid", required = false ) String timePeroid );
+    @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.GET )
+    public RestRecord selectTeacherRecommendAppListByTeacherId(
+            @RequestParam( "teacherId" ) String teacherId,
+            @RequestParam( value = "timePeroid", required = false ) Map< String, Object > timePeroid,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize );
 }
