@@ -163,7 +163,6 @@ public class BannerApiController {
     @GetMapping( "" )
     @ResponseBody
     public RestRecord getAllBannersInfo() {
-        System.out.println( bannerDao.findByIsDelete(0) );
         try {
             return new RestRecord( 200, bannerDao.findByIsDelete(0) );
         } catch ( Exception e ) {
