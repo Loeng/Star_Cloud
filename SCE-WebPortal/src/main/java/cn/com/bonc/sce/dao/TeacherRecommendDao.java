@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by YueHaibo on 2018/12/12.
  */
-@FeignClient( "sce-data-access" )
+@FeignClient( value = "sce-data-access" )
 public interface TeacherRecommendDao {
 
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.POST )
@@ -30,13 +29,14 @@ public interface TeacherRecommendDao {
 
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.DELETE )
     public RestRecord deleteTeacherRecommendApp(
-            @RequestParam( "appId" ) String teacherId,
-            @RequestParam( "teacherId" ) ArrayList<String> appIdList );
+            @RequestParam( "teacherId" ) String teacherId,
+            @RequestParam( "appIdList" ) List< String > appIdList );
 
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.GET )
     public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( value = "timePeroid", required = false ) Map< String, Object > timePeroid,
+            @RequestParam( value = "startTime", required = false ) String startTime,
+            @RequestParam( value = "endTime", required = false ) String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize );
 }

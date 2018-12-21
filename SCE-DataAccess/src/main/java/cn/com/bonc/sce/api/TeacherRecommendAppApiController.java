@@ -89,7 +89,7 @@ public class TeacherRecommendAppApiController {
     @ResponseBody
     public RestRecord deleteTeacherRecommendApp(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( value = "appIdList" ,required = false) List< String > appIdList ) {
+            @RequestParam( value = "appIdList", required = true ) List< String > appIdList ) {
 //        teacherRecommendRepository.deleteTeacherRecommendApp( teacherId, appIdList );
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
@@ -112,7 +112,8 @@ public class TeacherRecommendAppApiController {
     @ResponseBody
     public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( value = "timePeroid", required = false ) Map< String, Object > timePeroid,
+            @RequestParam( value = "startTime", required = false ) String startTime,
+            @RequestParam( value = "endTime", required = false ) String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
 //        teacherRecommendRepository.selectTeacherRecommendAppList( teacherId, timePeroid, pageNum, pageSize );
@@ -120,9 +121,10 @@ public class TeacherRecommendAppApiController {
         Map< String, Object > resultMap = new HashMap<>();
         restRecord.setMsg( "This is ApiController response message ! Method name selectTeacherRecommendAppList" );
         resultMap.put( "Param1", teacherId );
-        resultMap.put( "Param2", timePeroid );
-        resultMap.put( "Param3", pageNum );
-        resultMap.put( "Param4", pageSize );
+        resultMap.put( "Param2", startTime );
+        resultMap.put( "Param3", endTime );
+        resultMap.put( "Param4", pageNum );
+        resultMap.put( "Param5", pageSize );
         restRecord.setData( resultMap );
         return restRecord;
     }

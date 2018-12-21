@@ -91,33 +91,37 @@ public class TeacherRecommendAppController {
     public RestRecord deleteTeacherRecommendApp(
             @RequestParam @ApiParam( value = "教师Id", required = true ) String teacherId,
             @RequestParam @ApiParam( value = "应用Id列表" ) List< String > appIdList ) {
-        ArrayList<String> temp = new ArrayList<>(  );
-        for ( String temp1 : appIdList ){
+        ArrayList< String > temp = new ArrayList<>();
+        for ( String temp1 : appIdList ) {
             temp.add( temp1 );
         }
         RestRecord restRecord = new RestRecord();
         restRecord.setData( appIdList );
-
+        System.out.println( appIdList );
 //        return restRecord;
-        return teacherRecommendService.deleteTeacherRecommendApp( teacherId, temp );
+        return teacherRecommendService.deleteTeacherRecommendApp( teacherId, appIdList );
     }
 
     /**
      * 教师推荐应用查询
-     * 1. 查询在时限内某教师推荐的应用信息
+     * * 1. 查询在时限内某教师推荐的应用信息
      *
-     * @param teacherId  教师用户Id
-     * @param timePeroid 查询的时间范围（可为空）
-     * @return 返回查询结果
+     * @param teacherId 教师Id
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @param pageNum   页码
+     * @param pageSize  每页数量
+     * @return
      */
     @ApiOperation( value = "教师推荐应用查询", notes = "查询在时限内某教师推荐的应用信息", httpMethod = "GET" )
     @GetMapping
     @ResponseBody
     public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) @ApiParam( value = "教师Id", required = true ) String teacherId,
-            @RequestParam( value = "timePeroid", required = false ) @ApiParam( value = "查询时间范围", allowMultiple = true ) Map< String, Object > timePeroid,
+            @RequestParam( value = "startTime", required = false ) @ApiParam( "开始时间" ) String startTime,
+            @RequestParam( value = "endTime", required = false ) @ApiParam( "结束时间" ) String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
-        return teacherRecommendService.selectTeacherRecommendAppList( teacherId, timePeroid, pageNum, pageSize );
+        return teacherRecommendService.selectTeacherRecommendAppList( teacherId, startTime, endTime, pageNum, pageSize );
     }
 }

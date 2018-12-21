@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 /**
  * Created by YueHaibo on 2018/12/12.
  */
@@ -32,13 +32,15 @@ public class TeacherRecommendService {
 
     }
 
-    public RestRecord deleteTeacherRecommendApp( String teacherId, ArrayList<String> appIdList ) {
+    public RestRecord deleteTeacherRecommendApp( String teacherId, List< String > appIdList ) {
         return teacherRecommendDao.deleteTeacherRecommendApp( teacherId, appIdList );
 
     }
 
-    public RestRecord selectTeacherRecommendAppList( String teacherId, Map< String, Object > timePeroid, String pageNum, String pageSize ) {
-        return teacherRecommendDao.selectTeacherRecommendAppList( teacherId, timePeroid, pageNum, pageSize );
+    public RestRecord selectTeacherRecommendAppList( String teacherId, String startTime, String endTime, String pageNum, String pageSize ) {
+        return teacherRecommendDao.selectTeacherRecommendAppList( teacherId, startTime, endTime, pageNum, pageSize );
 
     }
+
+
 }
