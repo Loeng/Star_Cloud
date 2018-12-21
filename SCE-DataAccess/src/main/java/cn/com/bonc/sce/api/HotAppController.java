@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 应用推荐-热门应用接口
+ * 应用推荐-热门应用接口api
  * author jc_D
  */
 @Slf4j

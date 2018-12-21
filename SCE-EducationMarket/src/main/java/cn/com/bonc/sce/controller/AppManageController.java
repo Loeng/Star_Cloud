@@ -1,8 +1,10 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppManageService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +21,13 @@ import java.util.Map;
 @RequestMapping( "/manage-app" )
 public class AppManageController {
 
+    private AppManageService appManageService;
+
+    @Autowired
+    public AppManageController( AppManageService appManageService ) {
+        this.appManageService = appManageService;
+    }
+
     /**
      * 新增应用
      *
@@ -31,12 +40,11 @@ public class AppManageController {
 
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
     public RestRecord addAppInfo( @RequestBody Map appInfo ) {
-
-        return new RestRecord( 0, null );
+        return appManageService.addAppInfo( appInfo );
     }
 
     /**
@@ -50,12 +58,12 @@ public class AppManageController {
             @ApiImplicitParam( name = "appIdList", value = "appId", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @DeleteMapping( "/{appIdList}" )
     public RestRecord deleteApps( @PathVariable( "appIdList" ) List< String > appIdList ) {
         //应用版本表  是否删除字段改为1
-        return new RestRecord( 0, null );
+        return appManageService.deleteApps( appIdList );
     }
 
     /**
@@ -68,7 +76,7 @@ public class AppManageController {
     @ApiOperation( value = "编辑应用", notes = "编辑应用", httpMethod = "PUT" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appId", value = "appid", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "updateInfo", value = "app修改的信息，json格式", paramType = "query", required = true )
+            @ApiImplicitParam( name = "updateInfo", value = "app修改的信息，json格式", paramType = "body", required = true )
 
     } )
     @ApiResponses( {
@@ -77,7 +85,7 @@ public class AppManageController {
     @PutMapping( "/{appId}" )
     public RestRecord updateAppInfo( @RequestBody Map updateInfo,
                                      @PathVariable String appId ) {
-        return new RestRecord( 0, null );
+        return updateAppInfo( updateInfo, appId );
     }
 
     /**
@@ -88,7 +96,9 @@ public class AppManageController {
      */
     @ApiOperation( value = "查询全部应用", notes = "查询全部应用", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "plantformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true )
+            @ApiImplicitParam( name = "plantformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "pageNum", value = "pageNum", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "pageSize", value = "pageSize", paramType = "query", required = true )
 
     } )
     @ApiResponses( {
@@ -96,10 +106,10 @@ public class AppManageController {
     } )
     @GetMapping( "/all-app/{plantformType}/{pageNum}/{pageSize}" )
     public RestRecord getAllAppList( @PathVariable String plantformType,
-                                     @PathVariable Integer PageNum,
-                                     @PathVariable Integer PageSize
+                                     @PathVariable Integer pageNum,
+                                     @PathVariable Integer pageSize
     ) {
-        return new RestRecord( 0, null );
+        return appManageService.getAllAppList( plantformType, pageNum, pageSize );
     }
 
     /**
@@ -117,10 +127,8 @@ public class AppManageController {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/all-app-type-list/{plantformType}" )
-    public RestRecord getAllAppTypeList( @PathVariable String plantformType,
-                                         @PathVariable Integer PageNum,
-                                         @PathVariable Integer PageSize ) {
-        return new RestRecord( 0, null );
+    public RestRecord getAllAppTypeList( @PathVariable String plantformType ) {
+        return new RestRecord( 0, "这个接口没有用，邪虫了" );
     }
 
 
@@ -150,9 +158,9 @@ public class AppManageController {
                                            @RequestParam( value = "orderType" ) String orderType,
                                            @RequestParam String plantformType,
                                            @RequestParam String sort,
-                                           @PathVariable Integer PageNum,
-                                           @PathVariable Integer PageSize ) {
-        return new RestRecord( 0, null );
+                                           @PathVariable Integer pageNum,
+                                           @PathVariable Integer pageSize ) {
+        return appManageService.selectAppListByType( appType, orderType, plantformType, sort, pageNum, pageSize );
     }
 
     /**
@@ -178,7 +186,7 @@ public class AppManageController {
                                            @RequestParam String plantformType,
                                            @PathVariable Integer pageNum,
                                            @PathVariable Integer pageSize ) {
-        return new RestRecord( 0, null );
+        return appManageService.selectAppListByName( appName, plantformType, pageNum, pageSize );
     }
 
     /**
@@ -207,7 +215,7 @@ public class AppManageController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/apps-by-name-type/{pageNum}/{pageSize}" )
+    @GetMapping( "/apps-by-name-type/{plantformType}/{pageNum}/{pageSize}" )
     public RestRecord selectAppListByNameAndType( @RequestParam String appName,
                                                   @RequestParam String appType,
                                                   @RequestParam String orderType,
@@ -215,7 +223,7 @@ public class AppManageController {
                                                   @RequestParam String plantformType,
                                                   @PathVariable Integer pageNum,
                                                   @PathVariable Integer pageSize ) {
-        return new RestRecord( 0, null );
+        return appManageService.selectAppListByNameAndType( appName, appType, orderType, sort, plantformType, pageNum, pageSize );
     }
 
     /**
@@ -230,11 +238,12 @@ public class AppManageController {
 
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/detail-by-id/{appId}" )
     public RestRecord selectAppById( @PathVariable String appId ) {
-        return new RestRecord( 0 );
+
+        return appManageService.selectAppById( appId );
     }
 
 }
