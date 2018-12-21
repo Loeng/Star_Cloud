@@ -9,22 +9,27 @@ import java.util.Map;
 @FeignClient( "sce-data-access" )
 public interface AppVersionDao {
 
-    @RequestMapping( value = "/app-version/query", method = RequestMethod.GET )
-    public RestRecord selectAppHistoryVersionList( @RequestParam( "appId" ) String appId,
-                                                   @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion );
+    @RequestMapping( value = "/app-version", method = RequestMethod.GET )
+    public RestRecord queryAppVersion(
+            @RequestParam( "appId" ) String appId,
+            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion );
 
     @RequestMapping( value = "/app-version/{appId}", method = RequestMethod.POST )
-    public RestRecord updateAppHistoryVersionInfo( @PathVariable( "appId" ) String appId,
-                                                   @RequestBody Map<String,String> marketAppVersion );
+    public RestRecord updateAppHistoryVersionInfo(
+            @PathVariable( "appId" ) String appId,
+            @RequestBody Map< String, String > marketAppVersion );
 
     @RequestMapping( value = "/app-version/{appId}", method = RequestMethod.DELETE )
-    public RestRecord deleteAppHistoryVersionInfo( @PathVariable( "appId" ) String appId,
-                                                   @RequestBody Map<String,String> marketAppVersion );
+    public RestRecord deleteAppHistoryVersionInfo(
+            @PathVariable( "appId" ) String appId,
+            @RequestBody Map< String, String > marketAppVersion );
 
     @RequestMapping( value = "/app-version/all/{appId}", method = RequestMethod.DELETE )
-    public RestRecord deleteAppAllVersionInfoById( @PathVariable( "appId" ) String appId );
+    public RestRecord deleteAppAllVersionInfoById(
+            @PathVariable( "appId" ) String appId );
 
     @RequestMapping( value = "/app-version/apply/{appId}", method = RequestMethod.POST )
-    public boolean createVersionInfo( @PathVariable( "appId" ) String appId,
-                                      @RequestBody Map<String,String> marketAppVersion );
+    public boolean createVersionInfo(
+            @PathVariable( "appId" ) String appId,
+            @RequestBody Map< String, String > marketAppVersion );
 }

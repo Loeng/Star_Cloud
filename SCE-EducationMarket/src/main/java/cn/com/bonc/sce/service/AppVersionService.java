@@ -18,8 +18,8 @@ public class AppVersionService {
         this.appVersionDao = appVersionDao;
     }
 
-    public RestRecord selectAppHistoryVersionList( String appId ,String appVersion) {
-        return appVersionDao.selectAppHistoryVersionList( appId ,appVersion);
+    public RestRecord queryAppVersion( String appId ,String appVersion) {
+        return appVersionDao.queryAppVersion( appId ,appVersion);
     }
 
     public RestRecord updateAppHistoryVersionInfo( String appId, Map<String,String> marketAppVersion ) {

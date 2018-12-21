@@ -15,7 +15,7 @@ import java.util.Map;
 @Api( value = "应用版本更新、审核接口", tags = "应用版本更新/审核接口" )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
-        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
 } )
 @RestController
 @RequestMapping( "/app-version" )
@@ -45,19 +45,15 @@ public class AppVersionController {
      * @param appId 查询的应用Id
      * @return
      */
-    @ApiOperation( value = "应用版本查询接口", notes = "通过应用ID查询该应用的历史版本信息列表", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "查询的应用Id", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "appVersion", value = "查询的应用版本若为空，则查询全部版本信息", paramType = "path", required = false )
-    } )
-    @GetMapping( "/query" )
+    @ApiOperation( position = 1,value = "应用版本查询接口", notes = "通过应用ID查询该应用的历史版本信息列表", httpMethod = "GET" )
+    @GetMapping
     @ResponseBody
-    public RestRecord selectAppHistoryVersionList(
-            @RequestParam( "appId" ) String appId,
-            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion ) {
+    public RestRecord queryAppVersion(
+            @RequestParam( "appId" ) @ApiParam( "应用Id" ) String appId,
+            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) @ApiParam( "应用版本" ) String appVersion ) {
         // 通过应用ID查询该应用的历史版本信息列表
         RestRecord restRecord = new RestRecord( 0 );
-        restRecord.setData( appVersionService.selectAppHistoryVersionList( appId, appVersion ) );
+        restRecord.setData( appVersionService.queryAppVersion( appId, appVersion ) );
         return restRecord;
     }
 
@@ -73,7 +69,7 @@ public class AppVersionController {
     @ResponseBody
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
-            @RequestBody Map<String,String> marketAppVersion ) {
+            @RequestBody Map< String, String > marketAppVersion ) {
         //通过应用ID修改该应用的版本信息
         return new RestRecord( 0, appVersionService.updateAppHistoryVersionInfo( appId, marketAppVersion ) );
     }
@@ -95,7 +91,7 @@ public class AppVersionController {
     @ResponseBody
     public RestRecord deleteAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
-            @RequestBody Map<String,String> marketAppVersion ) {
+            @RequestBody Map< String, String > marketAppVersion ) {
         return new RestRecord( 0, appVersionService.deleteAppHistoryVersionInfo( appId, marketAppVersion ) );
     }
 
@@ -137,7 +133,7 @@ public class AppVersionController {
     public RestRecord appVersionUpdateApply(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId,
-            @RequestBody Map<String,String> marketAppVersion ) {
+            @RequestBody Map< String, String > marketAppVersion ) {
         appVersionService.createVersionInfo( appId, marketAppVersion );
 //        messageService.createAppVersionUpdateApplyMessage( userId, appId );
         return null;

@@ -42,9 +42,9 @@ public class AppVersionApiController {
      * @param appId 查询的应用Id
      * @return
      */
-    @GetMapping( "/query" )
+    @GetMapping
     @ResponseBody
-    public RestRecord selectAppHistoryVersionList(
+    public RestRecord queryAppVersion(
             @RequestParam( "appId" ) String appId,
             @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion ) {
         // 通过应用ID查询该应用的历史版本信息列表

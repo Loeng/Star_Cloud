@@ -9,5 +9,5 @@ public class CountDao {
 
     public DownloadCount countAppDownloadByType( String appType ){ return null;}
 
-    public DownloadCount countAppDownloadByCompany( String companyId ){ return null;}
+    public DownloadCount countAppDownloadByCompanyId( String companyId ){ return null;}
 }

@@ -3,6 +3,7 @@ package cn.com.bonc.sce.controller;
 
 /**
  * Created by YueHaibo on 2018/12/12.
+ * @Author yuehaibo
  */
 
 import cn.com.bonc.sce.constants.PortalMessageConstants;
@@ -49,14 +50,14 @@ public class CompanyInfoController {
      * @param companyInfo 用户输入的厂商信息
      * @return 返回是否添加成功
      */
-    @ApiOperation( value = "添加单个厂商信息", notes = "新建厂商信息", httpMethod = "PUT" )
-    @PutMapping
+    @ApiOperation( value = "添加单个厂商信息", notes = "新建厂商信息", httpMethod = "POST" )
+    @PostMapping
     @ResponseBody
     public RestRecord addCompanyInfo(
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
                     Map< String, Object > companyInfo ) {
 
-        return new RestRecord( 0, companyInfoService.addCompanyInfo( companyInfo ) );
+        return companyInfoService.addCompanyInfo( companyInfo );
     }
 
     /**
@@ -66,15 +67,15 @@ public class CompanyInfoController {
      * @param companyInfo 用户输入的厂商信息
      * @return 返回是否更新成功
      */
-    @ApiOperation( value = "修改对应厂商信息", notes = "新建厂商信息", httpMethod = "POST" )
+    @ApiOperation( value = "修改对应厂商信息", notes = "修改对应厂商信息", httpMethod = "PUT" )
     @ApiImplicitParam( name = "companyId", value = "所需更新的厂商ID", paramType = "path", required = true )
-    @PostMapping( "/{companyId}" )
+    @PutMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
                     Map< String, Object > companyInfo ) {
-        return new RestRecord( 0, companyInfoService.updateCompanyInfo( companyId, companyInfo ) );
+        return companyInfoService.updateCompanyInfo( companyId, companyInfo );
     }
 
     /**
@@ -90,6 +91,6 @@ public class CompanyInfoController {
     @ResponseBody
     public RestRecord deleteCompanyInfo(
             @PathVariable( "companyId" ) String companyId ) {
-        return new RestRecord( 0, companyInfoService.deleteCompanyInfo( companyId ) );
+        return companyInfoService.deleteCompanyInfo( companyId );
     }
 }
