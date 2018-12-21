@@ -54,7 +54,7 @@ public interface NewsDao {
      * @param pageSize    分页每页条数
      * @return 分页后的新闻列表
      */
-    @RequestMapping( value = "/news/{auditingStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/news/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}", method = RequestMethod.GET )
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
                                    @PathVariable( "startDate" ) String startDate,
                                    @PathVariable( "endDate" ) String endDate,

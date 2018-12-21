@@ -82,7 +82,7 @@ public class BannerService {
      * @param bannerId bannerId
      * @return banner数据
      */
-    public RestRecord getBannerById(String bannerId){
+    public RestRecord getBannerById(Integer bannerId){
         return bannerDao.getBannerById(bannerId);
     }
 
@@ -92,7 +92,7 @@ public class BannerService {
      * @param list bannerId
      * @return 修改结果
      */
-    public RestRecord updateBannerOrder( List<String> list ) {
+    public RestRecord updateBannerOrder( List<Integer> list ) {
         return bannerDao.updateBannerOrder( list );
     }
 

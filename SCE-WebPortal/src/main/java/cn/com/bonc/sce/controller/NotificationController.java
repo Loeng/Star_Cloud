@@ -118,7 +118,7 @@ public class NotificationController {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/{type}/{auditingStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
+    @GetMapping( "/{type}/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
     @ResponseBody
     public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
                                            @PathVariable( "auditStatus" ) String auditStatus,

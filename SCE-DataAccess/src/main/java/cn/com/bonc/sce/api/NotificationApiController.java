@@ -34,7 +34,7 @@ public class NotificationApiController {
      */
     @PostMapping
     @ResponseBody
-    public RestRecord insertNotification( Notification notification ) {
+    public RestRecord insertNotification( @RequestBody Notification notification ) {
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {
@@ -73,7 +73,7 @@ public class NotificationApiController {
      */
     @PutMapping
     @ResponseBody
-    public RestRecord updateNotification( Notification notification ) {
+    public RestRecord updateNotification( @RequestBody Notification notification ) {
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {
@@ -93,7 +93,7 @@ public class NotificationApiController {
      * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
-    @GetMapping( "/{type}/{auditingStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
+    @GetMapping( "/{type}/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
     @ResponseBody
     public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
                                            @PathVariable( "auditStatus" ) String auditStatus,

@@ -34,7 +34,7 @@ public class NewsApiController {
      */
     @PostMapping
     @ResponseBody
-    public RestRecord insertNews( News news ) {
+    public RestRecord insertNews( @RequestBody News news ) {
         try {
             return new RestRecord( 200, newsDao.save( news ) );
         } catch ( Exception e ) {
@@ -74,7 +74,7 @@ public class NewsApiController {
      */
     @PutMapping
     @ResponseBody
-    public RestRecord updateNews( News news ) {
+    public RestRecord updateNews( @RequestBody News news ) {
         try {
             return new RestRecord( 200, newsDao.save( news ) );
         } catch ( Exception e ) {

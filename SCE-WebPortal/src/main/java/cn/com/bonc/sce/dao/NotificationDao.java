@@ -55,7 +55,7 @@ public interface NotificationDao {
      * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
-    @RequestMapping( value = "/notifications/{type}/{auditingStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/notifications/{type}/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}", method = RequestMethod.GET )
     public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
                                            @PathVariable( "auditStatus" ) String auditStatus,
                                            @PathVariable( "startDate" ) String startDate,

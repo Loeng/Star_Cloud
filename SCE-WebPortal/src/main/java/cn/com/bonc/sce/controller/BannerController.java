@@ -103,7 +103,7 @@ public class BannerController {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
-    @PatchMapping( "/url" )
+    @PutMapping( "/url" )
     @ResponseBody
     public RestRecord updateBannerUrl( Banner banner ) {
         return bannerService.updateBannerUrl( banner );
@@ -124,7 +124,7 @@ public class BannerController {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
-    @PatchMapping( "/appId" )
+    @PutMapping( "/appId" )
     @ResponseBody
     public RestRecord updateBannerAppId( Banner banner ) {
         return bannerService.updateBannerAppId( banner );
@@ -146,7 +146,7 @@ public class BannerController {
     } )
     @PutMapping( "/updateBannerOrder" )
     @ResponseBody
-    public RestRecord updateBannerOrder( List<String> list ) {
+    public RestRecord updateBannerOrder( @RequestParam( "list" ) List<Integer> list ) {
         return bannerService.updateBannerOrder( list );
     }
 
@@ -166,7 +166,7 @@ public class BannerController {
     } )
     @GetMapping( "/{bannerId}" )
     @ResponseBody
-    public RestRecord getBannerById( String bannerId ) {
+    public RestRecord getBannerById( @PathVariable( "bannerId" ) Integer bannerId ) {
         return bannerService.getBannerById( bannerId );
     }
 

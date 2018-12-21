@@ -40,7 +40,7 @@ public class MessageApiController {
      */
     @PostMapping( "" )
     @ResponseBody
-    public RestRecord insertMessage( Message message ) {
+    public RestRecord insertMessage( @RequestBody Message message ) {
         try {
             return new RestRecord( 200, messageDao.save( message ) );
         } catch ( Exception e ) {
@@ -57,7 +57,7 @@ public class MessageApiController {
      */
     @PostMapping( "/announcements" )
     @ResponseBody
-    public RestRecord insertAnnouncement( Message message ) {
+    public RestRecord insertAnnouncement( @RequestBody Message message ) {
         try {
             return new RestRecord( 200, messageDao.save( message ) );
         } catch ( Exception e ) {

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 账号安全信息相关
@@ -76,8 +77,13 @@ public class AccountService {
         Integer successCode = 200;
         //加密加工
         accountSecurity.getPassword();
-        String code = getAccountEncryptionCode(
-                accountSecurity.getPhone(), accountSecurity.getCode() );
+        String code;
+        if( StringUtils.isEmpty( accountSecurity.getPhone())||StringUtils.isEmpty( accountSecurity.getCode())) {
+            return new RestRecord( 412, PortalMessageConstants.SCE_PORTAL_MSG_412 );
+        }else{
+            code = getAccountEncryptionCode(
+                    accountSecurity.getPhone(), accountSecurity.getCode() );
+        }
         if ( VaildSecurityUtils.checkCode( code ) ) {
             VaildSecurityUtils.delCode( code );
             RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );

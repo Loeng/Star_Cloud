@@ -32,7 +32,7 @@ public class BannerApiController {
      */
     @PostMapping( "" )
     @ResponseBody
-    public RestRecord insertBanner( Banner banner ) {
+    public RestRecord insertBanner( @RequestBody Banner banner ) {
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {
@@ -66,7 +66,7 @@ public class BannerApiController {
      */
     @PutMapping( "" )
     @ResponseBody
-    public RestRecord updateBannerInfo( Banner banner ) {
+    public RestRecord updateBannerInfo( @RequestBody Banner banner ) {
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {
@@ -83,7 +83,7 @@ public class BannerApiController {
      */
     @PutMapping( "/url" )
     @ResponseBody
-    public RestRecord updateBannerUrl(Banner banner) {
+    public RestRecord updateBannerUrl(@RequestBody Banner banner) {
         try {
             return new RestRecord( 200, bannerDao.updateUrlById( banner.getId(), banner.getUrl() ) );
         } catch ( Exception e ) {
@@ -100,7 +100,7 @@ public class BannerApiController {
      */
     @PutMapping( "/appId" )
     @ResponseBody
-    public RestRecord updateBannerAppId(Banner banner) {
+    public RestRecord updateBannerAppId(@RequestBody Banner banner) {
         try {
             return new RestRecord( 200, bannerDao.updateAppIdById( banner.getId(), banner.getAppId() ) );
         } catch ( Exception e ) {

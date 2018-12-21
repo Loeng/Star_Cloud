@@ -121,8 +121,7 @@ public class NewsController {
                                    @PathVariable( "startDate" ) String startDate,
                                    @PathVariable( "endDate" ) String endDate,
                                    @PathVariable( "pageNum" ) Integer pageNum,
-                                   @PathVariable( "pageSize" ) Integer pageSize
-    ) {
+                                   @PathVariable( "pageSize" ) Integer pageSize) {
         return newsService.getNewsList( auditStatus, startDate, endDate, pageNum, pageSize );
     }
 
