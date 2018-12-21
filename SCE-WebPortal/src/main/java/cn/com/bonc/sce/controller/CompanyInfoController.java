@@ -53,6 +53,7 @@ public class CompanyInfoController {
      * @return 返回是否添加成功
      */
     @ApiOperation( value = "添加单个厂商信息", notes = "新建厂商信息", httpMethod = "PUT" )
+    @ApiResponse( code = 6666, message = "类型测试" )
     @PutMapping( "" )
     @ResponseBody
     public RestRecord addCompanyInfo(
@@ -69,9 +70,9 @@ public class CompanyInfoController {
      * @param companyInfo 用户输入的厂商信息
      * @return 返回是否更新成功
      */
-    @ApiOperation( value = "修改对应厂商信息", notes = "新建厂商信息", httpMethod = "PATCH" )
+    @ApiOperation( value = "修改对应厂商信息", notes = "新建厂商信息", httpMethod = "POST" )
     @ApiImplicitParam( name = "companyId", value = "所需更新的厂商ID", paramType = "path", required = true )
-    @PatchMapping( "/{companyId}" )
+    @PostMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,

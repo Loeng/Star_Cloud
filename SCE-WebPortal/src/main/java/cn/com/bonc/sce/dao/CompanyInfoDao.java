@@ -23,7 +23,7 @@ public interface CompanyInfoDao {
     public RestRecord addCompanyInfo(
             @RequestBody Map< String, Object > companyInfo );
 
-    @RequestMapping( value = "/company/{companyId}", method = RequestMethod.PATCH )
+    @RequestMapping( value = "/company/{companyId}", method = RequestMethod.POST )
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,
             @RequestBody Map< String, Object > companyInfo );
