@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 /**
- * Created by YueHaibo on 2018/12/12.
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
  */
 @Slf4j
 @Api( value = "教师推荐应用接口", tags = "教师推荐应用接口" )

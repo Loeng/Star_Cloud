@@ -17,5 +17,5 @@ public interface CountDao {
     public RestRecord countAppDownloadByType( @RequestParam( "appType" ) String appType  );
 
     @RequestMapping( value = "/count/company", method = RequestMethod.GET )
-    public RestRecord countAppDownloadByCompany( @RequestParam( "companyId" ) String companyId  );
+    public RestRecord countAppDownloadByCompanyId( @RequestParam( "companyId" ) String companyId  );
 }

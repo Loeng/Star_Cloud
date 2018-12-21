@@ -37,7 +37,7 @@ public class CompanyInfoApiController {
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
 
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        RestRecord restRecord = new RestRecord();
+        RestRecord restRecord = new RestRecord(200);
 //        restRecord.setData( companyInfoRepository.queryCompanyInfo( companyId, companyName, pageable ) );
         //虚假返回数据
         List< Map< String, Object > > resultList = new ArrayList<>();
@@ -70,11 +70,11 @@ public class CompanyInfoApiController {
      * @param companyInfo 用户输入的厂商信息
      * @return 返回是否添加成功
      */
-    @PutMapping
+    @PostMapping
     @ResponseBody
     public RestRecord addCompanyInfo(
             @RequestBody CompanyInfo companyInfo ) {
-        RestRecord restRecord = new RestRecord();
+        RestRecord restRecord = new RestRecord(200);
         Map< String, Object > resultMap = new HashMap<>();
         restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
         restRecord.setData( resultMap );
@@ -89,12 +89,12 @@ public class CompanyInfoApiController {
      * @param companyInfo 用户输入的厂商信息
      * @return 返回是否更新成功
      */
-    @PostMapping( "/{companyId}" )
+    @PutMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,
             @RequestBody CompanyInfo companyInfo ) {
-        RestRecord restRecord = new RestRecord();
+        RestRecord restRecord = new RestRecord(200);
         Map< String, Object > resultMap = new HashMap<>();
         restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
         restRecord.setData( resultMap );
@@ -113,7 +113,7 @@ public class CompanyInfoApiController {
     @ResponseBody
     public RestRecord deleteCompanyInfo(
             @PathVariable( "companyId" ) String companyId ) {
-        RestRecord restRecord = new RestRecord();
+        RestRecord restRecord = new RestRecord(200);
         Map< String, Object > resultMap = new HashMap<>();
         restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
         restRecord.setData( resultMap );

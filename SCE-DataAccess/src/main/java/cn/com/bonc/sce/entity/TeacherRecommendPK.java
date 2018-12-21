@@ -9,16 +9,16 @@ import java.util.Objects;
  * Created by YueHaibo on 2018/12/20.
  */
 public class TeacherRecommendPK implements Serializable {
-    private long appId;
+    private String appId;
     private String userId;
 
-    @Column( name = "APP_ID", nullable = false, precision = 0 )
+    @Column( name = "APP_ID", nullable = false, precision = 0, length = 20 )
     @Id
-    public long getAppId() {
+    public String getAppId() {
         return appId;
     }
 
-    public void setAppId( long appId ) {
+    public void setAppId( String appId ) {
         this.appId = appId;
     }
 

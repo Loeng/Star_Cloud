@@ -12,18 +12,20 @@ import java.util.Objects;
 @Table( name = "SCE_TEACHER_RECOMMEND_APP", schema = "STARCLOUDMARKET", catalog = "" )
 @IdClass( TeacherRecommendPK.class )
 public class TeacherRecommend implements Serializable {
-    private long appId;
+    private String appId;
     private String userId;
     private Time recommendTime;
     private Long isDelete;
+    private Time recommendStartTime;
+    private Time recommendEndTime;
 
     @Id
-    @Column( name = "APP_ID", nullable = false, precision = 0 )
-    public long getAppId() {
+    @Column( name = "APP_ID", nullable = false, precision = 0, length = 20 )
+    public String getAppId() {
         return appId;
     }
 
-    public void setAppId( long appId ) {
+    public void setAppId( String appId ) {
         this.appId = appId;
     }
 
@@ -72,5 +74,25 @@ public class TeacherRecommend implements Serializable {
     public int hashCode() {
 
         return Objects.hash( appId, userId, recommendTime, isDelete );
+    }
+
+    @Basic
+    @Column( name = "RECOMMEND_START_TIME", nullable = true )
+    public Time getRecommendStartTime() {
+        return recommendStartTime;
+    }
+
+    public void setRecommendStartTime( Time recommendStartTime ) {
+        this.recommendStartTime = recommendStartTime;
+    }
+
+    @Basic
+    @Column( name = "RECOMMEND_END_TIME", nullable = true )
+    public Time getRecommendEndTime() {
+        return recommendEndTime;
+    }
+
+    public void setRecommendEndTime( Time recommendEndTime ) {
+        this.recommendEndTime = recommendEndTime;
     }
 }

@@ -19,11 +19,11 @@ public interface CompanyInfoDao {
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize
     );
 
-    @RequestMapping( value = "/company", method = RequestMethod.PUT )
+    @RequestMapping( value = "/company", method = RequestMethod.POST )
     public RestRecord addCompanyInfo(
             @RequestBody Map< String, Object > companyInfo );
 
-    @RequestMapping( value = "/company/{companyId}", method = RequestMethod.POST )
+    @RequestMapping( value = "/company/{companyId}", method = RequestMethod.PUT )
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,
             @RequestBody Map< String, Object > companyInfo );
