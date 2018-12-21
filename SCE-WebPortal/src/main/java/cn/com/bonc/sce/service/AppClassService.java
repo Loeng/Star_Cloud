@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppClassDao;
-import cn.com.bonc.sce.model.appListAndClass.AppClass;
+import cn.com.bonc.sce.model.AppClass;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

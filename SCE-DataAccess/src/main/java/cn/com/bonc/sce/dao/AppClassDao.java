@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.model.appListAndClass.AppClass;
+import cn.com.bonc.sce.entity.AppClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +26,5 @@ public interface AppClassDao extends JpaRepository<AppClass, Integer> {
     @Query( "UPDATE AppClass a SET a.isDelete=1 WHERE a.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
-    List<AppClass> findByIsDelete(Integer isDelete);
+    List<AppClass> findByIsDelete( Integer isDelete);
 }

@@ -1,10 +1,7 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.model.appListAndClass.App;
-import cn.com.bonc.sce.model.appListAndClass.AppClass;
-import io.swagger.models.auth.In;
+import cn.com.bonc.sce.entity.App;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

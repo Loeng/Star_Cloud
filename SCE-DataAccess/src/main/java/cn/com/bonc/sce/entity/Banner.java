@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.model.banner;
+package cn.com.bonc.sce.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import javax.persistence.*;
  *
  * @author wzm
  * @version 0.1
- * @since 2018/14/12 12:00
+ * @since 2018/12/21 9:00
  */
 @NoArgsConstructor
 @AllArgsConstructor

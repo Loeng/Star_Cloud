@@ -1,48 +1,22 @@
-package cn.com.bonc.sce.model.message;
-
-import javax.persistence.*;
+package cn.com.bonc.sce.model;
 
 /**
  * 总消息
  *
  * @author wzm
  * @version 0.1
- * @since 2018/12/14 12:00
+ * @since 2018/12/21 9:00
  */
-@Entity
-@Table(name="SCE_COMMON_INFORMATION")
 public class Message {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_COMMON_INFORMATION")
-    @SequenceGenerator(name="SEQ_GEN_COMMON_INFORMATION",allocationSize=1,initialValue=1, sequenceName="SEQ_COMMON_INFORMATION")
-    @Column(name = "INFORMATION_ID")
     private Integer id;
-
-    @Column(name = "INFORMATION_CONTENT")
     private String content;
-
-    @Column(name = "INFORMATION_TYPE")
     private Integer type;
-
-    @Column(name = "INFORMATION_TOPIC_TYPE")
     private Integer topicType;
-
-    @Column(name = "TARGET_USER_ID")
     private String targetId;
-
-    @Column(name = "INITIATE_USER_ID")
     private String sourceId;
-
-    /*private String sourceAccount;*/
-
-    @Column(name = "INFORMATION_STATUS")
+    //private String sourceAccount;
     private String status;
-
-    @Column(name = "CREATE_TIME")
     private String createTime;
-
-    @Column(name = "IS_DELETE")
     private Integer isDelete;
 
     public Integer getId() {

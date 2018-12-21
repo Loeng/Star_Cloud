@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.BannerDao;
-import cn.com.bonc.sce.model.banner.Banner;
+import cn.com.bonc.sce.model.Banner;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

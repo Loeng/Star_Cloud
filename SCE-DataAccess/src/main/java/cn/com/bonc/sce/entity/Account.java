@@ -1,7 +1,14 @@
-package cn.com.bonc.sce.model.Account;
+package cn.com.bonc.sce.entity;
 
 import javax.persistence.*;
 
+/**
+ * 安全
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/12/21 9:00
+ */
 @Entity
 @Table(name="SCE_COMMON_USER_PASSWORD")
 public class Account {
