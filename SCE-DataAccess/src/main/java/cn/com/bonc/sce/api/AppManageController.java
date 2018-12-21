@@ -6,7 +6,6 @@ import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.rest.RestRecord;
-import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -79,8 +78,8 @@ public class AppManageController {
      * @return
      */
 
-    @GetMapping( "/all-app/{plantformType}/{pageNum}/{pageSize}" )
-    public RestRecord getAllAppList( @PathVariable String plantformType,
+    @GetMapping( "/all-app/{pageNum}/{pageSize}" )
+    public RestRecord getAllAppList( @RequestParam String plantformType,
                                      @PathVariable Integer pageNum,
                                      @PathVariable Integer pageSize
     ) {

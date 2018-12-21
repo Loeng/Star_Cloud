@@ -126,8 +126,8 @@ public class AppManageController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/all-app-type-list/{plantformType}" )
-    public RestRecord getAllAppTypeList( @PathVariable String plantformType ) {
+    @GetMapping( "/all-app-type-list" )
+    public RestRecord getAllAppTypeList( @RequestParam String plantformType ) {
         return new RestRecord( 0, "这个接口没有用，邪虫了" );
     }
 

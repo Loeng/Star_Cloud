@@ -38,7 +38,7 @@ public interface AppManageDao {
      */
 
     @RequestMapping( name = "/manage-app/all-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord getAllAppList( @RequestParam String plantformType,
+    RestRecord getAllAppList( @RequestParam( "plantformType" ) String plantformType,
                               @PathVariable( "pageNum" ) Integer pageNum,
                               @PathVariable( "pageSize" ) Integer pageSize
     );
@@ -49,8 +49,8 @@ public interface AppManageDao {
      * @param plantformType 平台类型（平台应用或软件应用）
      * @return
      */
-    @RequestMapping( name = "/manage-app/all-app-type-list/{plantformType}", method = RequestMethod.GET )
-    RestRecord getAllAppTypeList( @PathVariable( "plantformType" ) String plantformType );
+    @RequestMapping( name = "/manage-app/all-app-type-list", method = RequestMethod.GET )
+    RestRecord getAllAppTypeList( @RequestParam( "plantformType" ) String plantformType );
 
 
     /**
