@@ -78,10 +78,12 @@ public class MessageService {
      * 获取message数据
      *
      * @param userId userId
+     * @param pageNum 页码
+     * @param pageSize 每页条数
      * @return message数据
      */
-    public RestRecord getMessageByUserId(String userId){
-        return messageDao.getMessageByUserId(userId);
+    public RestRecord getMessageByUserId(String userId,Integer pageNum,Integer pageSize){
+        return messageDao.getMessageByUserId(userId,pageNum,pageSize);
     }
 }
 

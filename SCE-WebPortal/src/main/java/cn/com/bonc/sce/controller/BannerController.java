@@ -44,7 +44,7 @@ public class BannerController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertBanner( @RequestBody Banner banner ) {
+    public RestRecord insertBanner( Banner banner ) {
         return bannerService.insertBanner( banner );
     }
 

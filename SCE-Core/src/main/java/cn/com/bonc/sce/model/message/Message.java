@@ -7,7 +7,7 @@ import javax.persistence.*;
  *
  * @author wzm
  * @version 0.1
- * @since 2018/14/12 12:00
+ * @since 2018/12/14 12:00
  */
 @Entity
 @Table(name="SCE_COMMON_INFORMATION")

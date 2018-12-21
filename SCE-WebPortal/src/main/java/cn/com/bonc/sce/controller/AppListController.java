@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping( "/appList" )
 public class AppListController {
 
-
     @Autowired
     private AppListService appListService;
 
@@ -42,12 +41,17 @@ public class AppListController {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping("/{appClassId}/{keyword}")
+    @GetMapping( "/{appClassId}/{keyword}" )
     @ResponseBody
-    public RestRecord getAppListInfo( @PathVariable( "appClassId" )Integer appClassId,
-                                          @PathVariable( "keyword" )String keyword) {
-        if(StringUtils.isEmpty( appClassId )||appClassId.equals( "undefined" ))appClassId=null;
-        if(StringUtils.isEmpty( keyword )||keyword.equals( "undefined" ))keyword=null;
-        return appListService.getAppListInfo(appClassId,keyword);
+    public RestRecord getAppListInfo( @PathVariable( "appClassId" ) Integer appClassId,
+                                      @PathVariable( "keyword" ) String keyword ) {
+        String undefined = "undefined";
+        if ( StringUtils.isEmpty( appClassId ) || undefined.equals( appClassId ) ) {
+            appClassId = null;
+        }
+        if ( StringUtils.isEmpty( keyword ) || undefined.equals( keyword ) ) {
+            keyword = null;
+        }
+        return appListService.getAppListInfo( appClassId, keyword );
     }
 }

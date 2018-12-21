@@ -8,6 +8,9 @@ import cn.com.bonc.sce.model.message.UserMessage;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -121,14 +124,21 @@ public class MessageApiController {
      * 获取message数据
      *
      * @param userId userId
+     * @param pageNum 页码
+     * @param pageSize 每页条数
      * @return message数据
      */
-    @GetMapping( "/{userId}" )
+    @GetMapping( "/{userId}/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getMessageByUserId( @PathVariable( "userId" ) String userId ) {
+    public RestRecord getMessageByUserId( @PathVariable( "userId" ) String userId,
+                                          @PathVariable( "pageNum" ) Integer pageNum,
+                                          @PathVariable( "pageSize" ) Integer pageSize ) {
         try {
+            Pageable pageable = PageRequest.of( pageNum, pageSize );
             String time = messageDao.getNewestTimeByUserId( userId );
-            if( StringUtils.isEmpty( time))time="1970-1-1 00:00:00.000000";
+            if( StringUtils.isEmpty( time)){
+                time="1970-1-1 00:00:00.000000";
+            }
             List< Message > list = messageDao.findByTargetIdAndCreateTimeGreaterThanAndIsDelete( userId, time,0 );
             List< UserMessage > userMessageList = new ArrayList<>();
             if ( list.size() > 0 ) {
@@ -143,11 +153,11 @@ public class MessageApiController {
                 }
                 List<UserMessage> returns = userMessageDao.saveAll( userMessageList );
                 if ( returns.size() > 0 ) {
-                    return new RestRecord( 200, userMessageDao.findByUserIdAndIsDelete( userId,0 ) );
+                    return new RestRecord( 200, userMessageDao.findByUserIdAndIsDelete( userId,0,pageable ) );
                 }
                 return new RestRecord( 500, "error" );
             } else {
-                return new RestRecord( 200, userMessageDao.findByUserIdAndIsDelete( userId,0 ) );
+                return new RestRecord( 200, userMessageDao.findByUserIdAndIsDelete( userId,0,pageable ) );
             }
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );

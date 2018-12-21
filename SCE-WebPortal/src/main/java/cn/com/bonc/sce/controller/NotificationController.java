@@ -1,134 +1,153 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.model.message.Notification;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.NotificationService;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+/**
+ * 通知增删改相关接口
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/12/21 9:00
+ */
+@Slf4j
+@Api( value = "通知增删改相关接口" )
+@ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
+@RestController
+@RequestMapping( "/notifications" )
 public class NotificationController {
 
+    @Autowired
+    private NotificationService notificationService;
+
     /**
-     * 查询通知公告列表接口
+     * 新增通知公告
+     *
+     * @param notification 通知公告
+     * @return 添加通知公告是否成功
+     */
+    @ApiOperation( value = "新增通知公告接口", notes = "新增通知公告接口", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "title", dataType = "String", value = "通知公告标题", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "content", dataType = "String", value = "通知公告内容", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "picId", dataType = "Integer", value = "对应图片信息", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "type", dataType = "Integer", value = "通知公告类型, 1：通知 2：公告", paramType = "path", required = true, allowableValues = "1,2" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+    } )
+    @PostMapping
+    @ResponseBody
+    public RestRecord insertNotification( Notification notification ) {
+        return notificationService.insertNotification( notification );
+    }
+
+    /**
+     * 删除通知公告
+     *
+     * @param list 通知公告Id列表
+     * @return 删除通知公告是否成功
+     */
+    @ApiOperation( value = "删除通知公告接口", notes = "删除通知公告接口", httpMethod = "DELETE" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "list", dataType = "String", value = "通知公告Id列表", paramType = "path", required = true )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
+    } )
+    @DeleteMapping( "/{list}" )
+    @ResponseBody
+    public RestRecord deleteNotificationByIdList( @PathVariable( "list" ) String list ) {
+        return notificationService.deleteNotificationByIdList( list );
+    }
+
+    /**
+     * 更改通知公告
+     *
+     * @param notification 通知信息
+     * @return 更新通知公告是否成功
+     */
+    @ApiOperation( value = "更改通知公告接口", notes = "更改通知公告接口", httpMethod = "PATCH" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "notificationId", dataType = "Integer", value = "通知公告标题", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "title", dataType = "String", value = "通知公告标题", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "content", dataType = "String", value = "通知公告内容", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "picId", dataType = "Integer", value = "对应图片信息", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "type", dataType = "Integer", value = "通知公告类型, 1：通知 2：公告", paramType = "path", required = true, allowableValues = "1,2" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
+    } )
+    @PutMapping
+    @ResponseBody
+    public RestRecord updateNotification( Notification notification ) {
+        return notificationService.updateNotification( notification );
+    }
+
+    /**
+     * 查询通知公告列表
+     *
      * @param auditStatus 通知公告审核状态
-     * @param startDate 查询起始日期
-     * @param endDate 查询结束日期
-     * @param pageNum 分页页码
-     * @param pageSize 分页每页条数
-     * @param notificationType 通知公告类型
+     * @param startDate   查询起始日期
+     * @param endDate     查询结束日期
+     * @param pageNum     分页页码
+     * @param pageSize    分页每页条数
+     * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
     @ApiOperation( value = "查询通知公告列表接口", notes = "查询通知公告列表接口", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "auditStatus", dataType = "String", value = "审核状态", paramType = "path", required = false ) ,
-            @ApiImplicitParam( name = "startDate", dataType = "String", value = "查询起始日期", paramType = "path", required = false ) ,
-            @ApiImplicitParam( name = "endDate", dataType = "String", value = "查询结束日期", paramType = "path", required = false ) ,
-            @ApiImplicitParam( name = "pageNum", dataType = "Integer", value = "分页参数-页码", paramType = "path", required = true ) ,
-            @ApiImplicitParam( name = "pageSize", dataType = "Integer", value = "分页参数-每页条数", paramType = "path", required = true ) ,
-            @ApiImplicitParam( name = "notificationType", dataType = "String", value = "通知公告类型, 0:全部通知公告 1：通知 2：公告", paramType = "path", required = true, allowableValues = "0,1,2")
+            @ApiImplicitParam( name = "type", dataType = "Integer", value = "通知公告类型, 0:全部通知公告 1：通知 2：公告", paramType = "path", required = true, allowableValues = "0,1,2" ),
+            @ApiImplicitParam( name = "auditStatus", dataType = "String", value = "审核状态", paramType = "path", required = false ),
+            @ApiImplicitParam( name = "startDate", dataType = "String", value = "查询起始日期", paramType = "path", required = false ),
+            @ApiImplicitParam( name = "endDate", dataType = "String", value = "查询结束日期", paramType = "path", required = false ),
+            @ApiImplicitParam( name = "pageNum", dataType = "Integer", value = "分页参数-页码", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "pageSize", dataType = "Integer", value = "分页参数-每页条数", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping("/{pageNum}/{pageSize}/{auditingStatus}/{startDate}/{endDate}")
+    @GetMapping( "/{type}/{auditingStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getNotificationList ( @PathVariable( "pageNum" ) Integer pageNum,
-                                            @PathVariable( "pageSize" ) Integer pageSize,
-                                            @PathVariable( "auditStatus" ) String auditStatus,
-                                            @PathVariable( "startDate" ) String startDate,
-                                            @PathVariable( "endDate" ) String endDate,
-                                            @PathVariable( "notificationType" ) String notificationType) {
-        // 在common_column_content表中查询所有栏目id为通知公告的数据，返回其标题，图片，内容和时间信息
-        return null;
+    public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
+                                           @PathVariable( "auditStatus" ) String auditStatus,
+                                           @PathVariable( "startDate" ) String startDate,
+                                           @PathVariable( "endDate" ) String endDate,
+                                           @PathVariable( "pageNum" ) Integer pageNum,
+                                           @PathVariable( "pageSize" ) Integer pageSize ) {
+        return notificationService.getNotificationList( type, auditStatus, startDate, endDate, pageNum, pageSize );
     }
 
     /**
-     * 查询通知公告详情接口
+     * 查询通知公告详情
+     *
      * @param notificationId 通知公告id
      * @return 分页后的通知公告列表
      */
     @ApiOperation( value = "查询通知公告详情接口", notes = "查询通知公告详情接口", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "notificationId", dataType = "String", value = "通知公告id", paramType = "path", required = true )
+            @ApiImplicitParam( name = "notificationId", dataType = "Integer", value = "通知公告id", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
+            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping("/{notificationId}")
+    @GetMapping( "/{notificationId}" )
     @ResponseBody
-    public RestRecord getNotificationDetail ( @PathVariable( "notificationId" )  String notificationId ) {
-        // 在common_column_content表中查询对应id的通知公告数据，返回其标题，图片，内容详情和时间信息
-        return null;
-    }
-
-    /**
-     * 新增通知公告列表接口
-     * @param notificationTitle 通知公告标题
-     * @param notificationContent 通知公告内容
-     * @param picId 图片信息
-     * @param notificationType 通知公告类型
-     * @return 添加通知公告是否成功
-     */
-    @ApiOperation( value = "新增通知公告接口", notes = "新增通知公告接口", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "notificationTitle", dataType = "String", value = "通知公告标题", paramType = "query", required = true ) ,
-            @ApiImplicitParam( name = "notificationContent", dataType = "String", value = "通知公告内容", paramType = "query", required = true ) ,
-            @ApiImplicitParam( name = "picId", dataType = "String", value = "对应图片信息", paramType = "query", required = true ) ,
-            @ApiImplicitParam( name = "notificationType", dataType = "String", value = "通知公告类型, 1：通知 2：公告", paramType = "path", required = true, allowableValues = "1,2")
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
-    } )
-    @PostMapping
-    @ResponseBody
-    public RestRecord addNotification ( @RequestParam( "notificationTitle" ) String notificationTitle,
-                                        @RequestParam( "notificationContent" ) String notificationContent,
-                                        @RequestParam( "picId" ) String picId,
-                                        @RequestParam( "notificationType" ) String notificationType ) {
-        return null;
-    }
-
-    /**
-     * 更改通知公告列表接口
-     * @param notificationId 通知公告Id
-     * @param notificationTitle 通知公告标题
-     * @param notificationContent 通知公告内容
-     * @param picId 图片信息
-     * @return 更新通知公告是否成功
-     */
-    @ApiOperation( value = "更改通知公告接口", notes = "更改通知公告接口", httpMethod = "PATCH" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "notificationTitle", dataType = "String", value = "通知公告标题", paramType = "query", required = true ) ,
-            @ApiImplicitParam( name = "notificationContent", dataType = "String", value = "通知公告内容", paramType = "query", required = true ) ,
-            @ApiImplicitParam( name = "picId", dataType = "String", value = "对应图片信息", paramType = "query", required = true ) ,
-            @ApiImplicitParam( name = "notificationId", dataType = "String", value = "通知公告ID", paramType = "query", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
-    } )
-    @PatchMapping
-    @ResponseBody
-    public RestRecord updateNotificationDetail ( @RequestParam( "notificationTitle" ) String notificationTitle,
-                                                 @RequestParam( "notificationContent" ) String notificationContent,
-                                                 @RequestParam( "picId" ) String picId,
-                                                 @RequestParam( "notificationId" ) String notificationId ) {
-        return null;
-    }
-
-    /**
-     * 删除通知公告列表接口
-     * @param notificationIdList 通知公告Id列表
-     * @return 删除通知公告是否成功
-     */
-    @ApiOperation( value = "删除通知公告接口", notes = "删除通知公告接口", httpMethod = "DELETE" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "notificationIdList", dataType = "List", value = "通知公告Id列表", paramType = "path", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
-    } )
-    @DeleteMapping("/{notificationIdList}")
-    @ResponseBody
-    public RestRecord updateNotificationDetail ( @PathVariable( "notificationIdList" ) String notificationIdList ) {
-        return null;
+    public RestRecord getNotification( @PathVariable( "notificationId" ) Integer notificationId ) {
+        return notificationService.getNotification( notificationId );
     }
 }

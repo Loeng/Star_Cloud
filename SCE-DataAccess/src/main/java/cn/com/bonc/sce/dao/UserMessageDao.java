@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.message.UserMessage;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,5 +35,5 @@ public interface UserMessageDao extends JpaRepository<UserMessage, Integer> {
     @Query( "UPDATE UserMessage um SET um.isRead=1 WHERE um.id=?1" )
     Integer updateIsReadById( Integer id );
 
-    List<UserMessage> findByUserIdAndIsDelete(String userId,Integer isDelete);
+    Page<UserMessage> findByUserIdAndIsDelete( String userId, Integer isDelete, Pageable pageable);
 }

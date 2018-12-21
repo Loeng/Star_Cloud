@@ -68,9 +68,13 @@ public interface MessageDao {
      * 获取message数据
      *
      * @param userId userId
+     * @param pageNum 页码
+     * @param pageSize 每页条数
      * @return message数据
      */
-    @RequestMapping( value = "/messages/{userId}", method = RequestMethod.GET )
-    public RestRecord getMessageByUserId( @PathVariable( "userId" ) String userId );
+    @RequestMapping( value = "/messages/{userId}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    public RestRecord getMessageByUserId( @PathVariable( "userId" ) String userId,
+                                          @PathVariable( "pageNum" ) Integer pageNum,
+                                          @PathVariable( "pageSize" ) Integer pageSize );
 }
 

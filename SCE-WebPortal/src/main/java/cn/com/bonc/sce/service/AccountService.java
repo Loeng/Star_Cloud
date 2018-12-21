@@ -57,11 +57,11 @@ public class AccountService {
     public RestRecord validInfo( String phone, String valid ) {
         String valid_ = getAccountEncryptionCode( phone, valid );
         if ( VaildSecurityUtils.checkVaild( valid_ ) ) {
-            VaildSecurityUtils.delVaild(valid_);
+            VaildSecurityUtils.delVaild( valid_ );
             //创建安全码
             String randomStr = VaildSecurityUtils.randomStr();
-            VaildSecurityUtils.addCode( getAccountEncryptionCode(phone,randomStr) );
-            return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, randomStr);
+            VaildSecurityUtils.addCode( getAccountEncryptionCode( phone, randomStr ) );
+            return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, randomStr );
         }
         return new RestRecord( 411, PortalMessageConstants.SCE_PORTAL_MSG_411 );
     }
@@ -73,17 +73,21 @@ public class AccountService {
      * @return 修改结果
      */
     public RestRecord updateAccount( Account accountSecurity ) {
+        Integer successCode = 200;
         //加密加工
         accountSecurity.getPassword();
         String code = getAccountEncryptionCode(
                 accountSecurity.getPhone(), accountSecurity.getCode() );
         if ( VaildSecurityUtils.checkCode( code ) ) {
-            VaildSecurityUtils.delCode(code);
-            RestRecord rr = accountSecurityDao.updateAccount( accountSecurity.getPhone(),accountSecurity.getPassword() );
-            if(rr.getCode()==200)rr.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+            VaildSecurityUtils.delCode( code );
+            RestRecord rr = accountSecurityDao.updateAccount( accountSecurity.getPhone(), accountSecurity.getPassword() );
+            if ( rr.getCode() == successCode ) {
+                rr.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+            }
             return rr;
+        } else {
+            return new RestRecord( 412, PortalMessageConstants.SCE_PORTAL_MSG_412 );
         }
-        else return new RestRecord( 412, PortalMessageConstants.SCE_PORTAL_MSG_412 );
     }
 
     private String getAccountEncryptionCode( String str1, String str2 ) {

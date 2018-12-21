@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Api( value = "消息通知接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
-@RequestMapping( "/message" )
+@RequestMapping( "/messages" )
 public class MessageController {
     @Autowired
     private MessageService messageService;
@@ -132,20 +132,26 @@ public class MessageController {
      * 获取message数据
      *
      * @param userId userId
+     * @param pageNum 页码
+     * @param pageSize 每页条数
      * @return message数据
      */
     @ApiOperation( value = "获取message数据", notes = "获取message数据", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "header", required = true )
+            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "header", required = true ),
+            @ApiImplicitParam( name = "pageNum", dataType = "Integer", value = "分页参数-页码", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "pageSize", dataType = "Integer", value = "分页参数-每页条数", paramType = "path", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/{userId}" )
+    @GetMapping( "/{userId}/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getMessageByUserId( @PathVariable( "userId" )String userId ) {
-        return messageService.getMessageByUserId( userId );
+    public RestRecord getMessageByUserId( @PathVariable( "userId" )String userId,
+                                          @PathVariable( "pageNum" )Integer pageNum,
+                                          @PathVariable( "pageSize" )Integer pageSize ) {
+        return messageService.getMessageByUserId( userId,pageNum,pageSize );
     }
 }
 
