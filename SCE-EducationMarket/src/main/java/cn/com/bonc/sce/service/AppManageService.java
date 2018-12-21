@@ -116,7 +116,7 @@ public class AppManageService {
      * @return
      */
     public RestRecord selectAppListByNameAndType( String appName, String appType, String orderType, String sort, String plantformType, Integer pageNum, Integer pageSize ) {
-        return selectAppListByNameAndType( appName, appType, orderType, sort, plantformType, pageNum, pageSize );
+        return appManageDao.selectAppListByNameAndType( appName, appType, orderType, sort, plantformType, pageNum, pageSize );
     }
 
     /**

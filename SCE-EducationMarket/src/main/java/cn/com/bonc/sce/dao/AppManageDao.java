@@ -13,10 +13,10 @@ import java.util.Map;
 public interface AppManageDao {
 
 
-    @PostMapping
+    @RequestMapping( value = "/manage-app", method = RequestMethod.POST )
     RestRecord addAppInfo( @RequestBody Map appInfo );
 
-    @DeleteMapping( "/{appIdList}" )
+    @RequestMapping( value = "/manage-app/{appIdList}", method = RequestMethod.GET )
     RestRecord deleteApps( @PathVariable( "appIdList" ) List< String > appIdList );
 
     /**
@@ -26,9 +26,9 @@ public interface AppManageDao {
      * @param appId      所需更新的应用ID
      * @return
      */
-    @PutMapping( "/{appId}" )
+    @RequestMapping( value = "/manage-app/{appId}", method = RequestMethod.PUT )
     RestRecord updateAppInfo( @RequestBody Map updateInfo,
-                              @PathVariable String appId );
+                              @PathVariable( "appId" ) String appId );
 
     /**
      * 查询全部应用
@@ -37,8 +37,8 @@ public interface AppManageDao {
      * @return
      */
 
-    @GetMapping( "/all-app/{plantformType}/{pageNum}/{pageSize}" )
-    RestRecord getAllAppList( @PathVariable( "plantformType" ) String plantformType,
+    @RequestMapping( name = "/manage-app/all-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getAllAppList( @RequestParam String plantformType,
                               @PathVariable( "pageNum" ) Integer pageNum,
                               @PathVariable( "pageSize" ) Integer pageSize
     );
@@ -49,7 +49,7 @@ public interface AppManageDao {
      * @param plantformType 平台类型（平台应用或软件应用）
      * @return
      */
-    @GetMapping( "/all-app-type-list/{plantformType}" )
+    @RequestMapping( name = "/manage-app/all-app-type-list/{plantformType}", method = RequestMethod.GET )
     RestRecord getAllAppTypeList( @PathVariable( "plantformType" ) String plantformType );
 
 
@@ -58,38 +58,38 @@ public interface AppManageDao {
      *
      * @return
      */
-    @GetMapping( "/selectAppListByType/{pageNum}/{pageSize}" )
-    RestRecord selectAppListByType( @RequestParam( value = "appType", defaultValue = "all", required = false ) String appType,
-                                    @RequestParam( value = "orderType" ) String orderType,
-                                    @RequestParam String plantformType,
-                                    @RequestParam String sort,
+    @RequestMapping( value = "/manage-app/selectAppListByType/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord selectAppListByType( @RequestParam( "appType" ) String appType,
+                                    @RequestParam( "orderType" ) String orderType,
+                                    @RequestParam( "plantformType" ) String plantformType,
+                                    @RequestParam( "sort" ) String sort,
                                     @PathVariable( "pageNum" ) Integer pageNum,
                                     @PathVariable( "pageSize" ) Integer pageSize );
 
     /**
      * 根据输入名模糊查询应用
      */
-    @GetMapping( "/apps-by-ame/{pageNum}/{pageSize}" )
-    RestRecord selectAppListByName( @RequestParam String appName,
-                                    @RequestParam String plantformType,
+    @RequestMapping( value = "/manage-app/apps-by-ame/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord selectAppListByName( @RequestParam( "appName" ) String appName,
+                                    @RequestParam( "plantformType" ) String plantformType,
                                     @PathVariable( "pageNum" ) Integer pageNum,
                                     @PathVariable( "pageSize" ) Integer pageSize );
 
     /**
      * 根据输入名和选择类别查询应用
      */
-    @GetMapping( "/apps-by-name-type/{plantformType}/{pageNum}/{pageSize}" )
-    RestRecord selectAppListByNameAndType( @RequestParam String appName,
-                                           @RequestParam String appType,
-                                           @RequestParam String orderType,
-                                           @RequestParam String sort,
-                                           @RequestParam String plantformType,
-                                           @PathVariable Integer pageNum,
-                                           @PathVariable Integer pageSize );
+    @RequestMapping( value = "/manage-app/apps-by-name-type/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord selectAppListByNameAndType( @RequestParam( "appName" ) String appName,
+                                           @RequestParam( "appType" ) String appType,
+                                           @RequestParam( "orderType" ) String orderType,
+                                           @RequestParam( "sort" ) String sort,
+                                           @RequestParam( "plantformType" ) String plantformType,
+                                           @PathVariable( "pageNum" ) Integer pageNum,
+                                           @PathVariable( "pageSize" ) Integer pageSize );
 
     /**
      * 查询单个应用详情
      */
-    @GetMapping( "/detail-by-id/{appId}" )
-    RestRecord selectAppById( @PathVariable String appId );
+    @RequestMapping( value = "/manage-app/detail-by-id/{appId}", method = RequestMethod.GET )
+    RestRecord selectAppById( @PathVariable( "appId" ) String appId );
 }

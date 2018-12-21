@@ -85,7 +85,7 @@ public class AppManageController {
     @PutMapping( "/{appId}" )
     public RestRecord updateAppInfo( @RequestBody Map updateInfo,
                                      @PathVariable String appId ) {
-        return updateAppInfo( updateInfo, appId );
+        return appManageService.updateAppInfo( updateInfo, appId );
     }
 
     /**
@@ -104,8 +104,8 @@ public class AppManageController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/all-app/{plantformType}/{pageNum}/{pageSize}" )
-    public RestRecord getAllAppList( @PathVariable String plantformType,
+    @GetMapping( "/all-app/{pageNum}/{pageSize}" )
+    public RestRecord getAllAppList( @RequestParam String plantformType,
                                      @PathVariable Integer pageNum,
                                      @PathVariable Integer pageSize
     ) {
@@ -215,7 +215,7 @@ public class AppManageController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/apps-by-name-type/{plantformType}/{pageNum}/{pageSize}" )
+    @GetMapping( "/apps-by-name-type/{pageNum}/{pageSize}" )
     public RestRecord selectAppListByNameAndType( @RequestParam String appName,
                                                   @RequestParam String appType,
                                                   @RequestParam String orderType,
