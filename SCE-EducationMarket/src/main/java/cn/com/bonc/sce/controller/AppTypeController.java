@@ -67,7 +67,7 @@ public class AppTypeController {
      * @param appTypeName 更改后的应用类型名称
      * @return 更改应用类型名称是否成功
      */
-    @ApiOperation( value = "应用类型更改接口", notes = "更改应用类型名称", httpMethod = "PATCH" )
+    @ApiOperation( value = "应用类型更改接口", notes = "更改应用类型名称", httpMethod = "POST" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appTypeId", dataType = "String", value = "更改应用类型ID", paramType = "path", required = true ),
             @ApiImplicitParam( name = "appTypeName", dataType = "String", value = "更改应用类型名称", paramType = "query", required = true )
@@ -75,7 +75,7 @@ public class AppTypeController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
     } )
-    @PatchMapping("/{appTypeId}")
+    @PostMapping("/newTypeInfo")
     @ResponseBody
     public RestRecord updateAppTypeName ( @PathVariable( "appTypeId" ) String appTypeId,
                                           @RequestParam( "appTypeName" ) String appTypeName ) {
