@@ -40,10 +40,7 @@ public class CompanyInfoController {
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) @ApiParam( value = "厂商名称" ) String companyName,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
-        companyInfoService.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
-        RestRecord restRecord = new RestRecord();
-        restRecord.setData( companyInfoService.queryCompanyInfo( companyId, companyName, pageNum, pageSize ) );
-        return restRecord;
+        return companyInfoService.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
     }
 
     /**
@@ -53,8 +50,7 @@ public class CompanyInfoController {
      * @return 返回是否添加成功
      */
     @ApiOperation( value = "添加单个厂商信息", notes = "新建厂商信息", httpMethod = "PUT" )
-    @ApiResponse( code = 6666, message = "类型测试" )
-    @PutMapping( "" )
+    @PutMapping
     @ResponseBody
     public RestRecord addCompanyInfo(
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )

@@ -76,8 +76,7 @@ public class CompanyInfoApiController {
             @RequestBody CompanyInfo companyInfo ) {
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( "This is ApiController response message ! Method name addCompanyInfo" );
-        resultMap.put( "Param1", companyInfo );
+        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
         restRecord.setData( resultMap );
         return restRecord;
 //        return new RestRecord( 0, companyInfoRepository.addCompanyInfo( companyInfo ) );
@@ -97,9 +96,7 @@ public class CompanyInfoApiController {
             @RequestBody CompanyInfo companyInfo ) {
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( "This is ApiController response message ! Method name updateCompanyInfo" );
-        resultMap.put( "Param1", companyId );
-        resultMap.put( "Param2", companyInfo );
+        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
         restRecord.setData( resultMap );
         return restRecord;
 //        return new RestRecord( 0, companyInfoRepository.updateCompanyInfo( companyId, companyInfo ) );
@@ -118,8 +115,7 @@ public class CompanyInfoApiController {
             @PathVariable( "companyId" ) String companyId ) {
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( "This is ApiController response message ! Method name deleteCompanyInfo" );
-        resultMap.put( "Param1", companyId );
+        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
         restRecord.setData( resultMap );
         return restRecord;
 //        return new RestRecord( 0, companyInfoRepository.deleteCompanyInfo( companyId ) );
