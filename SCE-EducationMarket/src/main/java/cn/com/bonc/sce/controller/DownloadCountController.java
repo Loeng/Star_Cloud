@@ -35,9 +35,9 @@ public class DownloadCountController {
     @ResponseBody
     public RestRecord countSingleAppDownload(
             @RequestParam( "appId" ) @ApiParam( "应用Id" ) String appId ) {
-        RestRecord restRecord = new RestRecord();
-        restRecord.setData( countService.countSingleAppDownload( appId ) );
-        return restRecord;
+
+        return countService.countSingleAppDownload( appId );
+
     }
 
     /**
@@ -52,7 +52,7 @@ public class DownloadCountController {
     public RestRecord countAppDownloadByType(
             @RequestParam( "appType" ) @ApiParam( "应用类型" ) String appType ) {
         // 根据应用类型查找对应的应用，统计下载量
-        return new RestRecord( 0, countService.countAppDownloadByType( appType ) );
+        return countService.countAppDownloadByType( appType );
     }
 
     /**
@@ -68,7 +68,7 @@ public class DownloadCountController {
     public RestRecord countAppDownloadByCompanyId(
             @RequestParam( "companyId" ) @ApiParam( "厂商Id" ) String companyId ) {
         // 根据厂商名查找对应的应用，统计下载量
-        return new RestRecord( 0, countService.countAppDownloadByCompanyId( companyId ) );
+        return countService.countAppDownloadByCompanyId( companyId );
     }
 
 }

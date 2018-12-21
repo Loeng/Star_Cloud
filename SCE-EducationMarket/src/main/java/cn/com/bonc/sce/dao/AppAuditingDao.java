@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @FeignClient( "sce-data-access" )
 public interface AppAuditingDao {
-    @RequestMapping( value = "/AppVersion/approve/{appId}", method = RequestMethod.PATCH )
-    public boolean appVersionUpdateApprove(
+    @RequestMapping( value = "/app-version/approve/{appId}", method = RequestMethod.PUT )
+    public RestRecord appVersionUpdateApprove(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId );
 
-    @RequestMapping( value = "/AppVersion/reject/{appId}", method = RequestMethod.PATCH )
-    public boolean appVersionUpdateReject(
+    @RequestMapping( value = "/app-version/reject/{appId}", method = RequestMethod.PUT )
+    public RestRecord appVersionUpdateReject(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId,
             @RequestParam( "rejectReason" ) String rejectReason );

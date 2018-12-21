@@ -38,7 +38,7 @@ public interface AppManageDao {
      */
 
     @RequestMapping( name = "/manage-app/all-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord getAllAppList( @RequestParam String plantformType,
+    RestRecord getAllAppList( @RequestParam("plantformType") String plantformType,
                               @PathVariable( "pageNum" ) Integer pageNum,
                               @PathVariable( "pageSize" ) Integer pageSize
     );
