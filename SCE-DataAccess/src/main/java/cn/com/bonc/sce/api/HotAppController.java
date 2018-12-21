@@ -34,9 +34,12 @@ public class HotAppController {
     @PostMapping( "/{userId}" )
     public RestRecord addHotRecommendAppList( @RequestBody List< String > appIdList,
                                               @PathVariable( "userId" ) String userId ) {
-        List< String > appidList1 = hotAppRepository.getAllHotAppId();//从数据库获取所有热门应用id
-        hotAppRepository.updateHotApp( appidList1, 0L, userId );//将热门改为非热门
-        Integer i = hotAppRepository.updateHotApp( appIdList, 1L, userId );//将用户选择的应用改为热门
+        //从数据库获取所有热门应用id
+        List< String > appidList1 = hotAppRepository.getAllHotAppId();
+        //将热门改为非热门
+        hotAppRepository.updateHotApp( appidList1, 0L, userId );
+        //将用户选择的应用改为热门
+        Integer i = hotAppRepository.updateHotApp( appIdList, 1L, userId );
         return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
@@ -48,10 +51,10 @@ public class HotAppController {
      * @param pageSize 每页数量
      * @return
      */
-    @GetMapping( "/{pageNum}/{pageSize}" )
+    @GetMapping( "/{pageNum}/{pageSize}")
     public RestRecord selectHotRecommendAppList( @PathVariable Integer pageNum,
                                                  @PathVariable Integer pageSize ) {
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         Page< AppInfoEntity > appInfoList = hotAppRepository.findByIsHotRecommend( 1L, pageable );
         // 查询应用表中热门推荐状态为1的应用
         return new RestRecord( 200, appInfoList );

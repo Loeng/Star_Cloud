@@ -125,7 +125,7 @@ public class AppManageController {
 
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/all-app-type-list" )
     public RestRecord getAllAppTypeList( @RequestParam String plantformType ) {
@@ -143,7 +143,7 @@ public class AppManageController {
      */
     @ApiOperation( value = "查询指定类型应用信息", notes = "查询指定类型应用信息", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appType", value = "查询的应用类型（all,教学类,教辅类,管理类，其它...）", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "appType", value = "查询的应用类型id（0查全部）", paramType = "query", required = false ),
             @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query" ),
             @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query" ),
             @ApiImplicitParam( name = "plantformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true ),
@@ -155,9 +155,9 @@ public class AppManageController {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/selectAppListByType/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByType( @RequestParam( value = "appType", defaultValue = "all", required = false ) String appType,
-                                           @RequestParam( "orderType" ) String orderType,
-                                           @RequestParam("plantformType" ) String plantformType,
+    public RestRecord selectAppListByType( @RequestParam( value = "appType", defaultValue = "0", required = false ) String appType,
+                                           @RequestParam String orderType,
+                                           @RequestParam String plantformType,
                                            @RequestParam String sort,
                                            @PathVariable Integer pageNum,
                                            @PathVariable Integer pageSize ) {
@@ -182,7 +182,7 @@ public class AppManageController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/apps-by-ame/{pageNum}/{pageNum}" )
+    @GetMapping( "/apps-by-name/{pageNum}/{pageNum}" )
     public RestRecord selectAppListByName( @RequestParam String appName,
                                            @RequestParam String plantformType,
                                            @PathVariable Integer pageNum,

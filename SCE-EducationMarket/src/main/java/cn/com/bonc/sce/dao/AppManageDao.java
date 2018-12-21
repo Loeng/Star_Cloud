@@ -69,7 +69,7 @@ public interface AppManageDao {
     /**
      * 根据输入名模糊查询应用
      */
-    @RequestMapping( value = "/manage-app/apps-by-ame/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/apps-by-name/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord selectAppListByName( @RequestParam( "appName" ) String appName,
                                     @RequestParam( "plantformType" ) String plantformType,
                                     @PathVariable( "pageNum" ) Integer pageNum,
