@@ -16,8 +16,8 @@ public interface AppManageDao {
     @RequestMapping( value = "/manage-app", method = RequestMethod.POST )
     RestRecord addAppInfo( @RequestBody Map appInfo );
 
-    @RequestMapping( value = "/manage-app/{appIdList}", method = RequestMethod.GET )
-    RestRecord deleteApps( @PathVariable( "appIdList" ) List< String > appIdList );
+    @RequestMapping( value = "/manage-app", method = RequestMethod.DELETE )
+    RestRecord deleteApps( @RequestBody List< String > appIdList );
 
     /**
      * 编辑应用
@@ -37,7 +37,7 @@ public interface AppManageDao {
      * @return
      */
 
-    @RequestMapping( name = "/manage-app/all-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/all-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord getAllAppList( @RequestParam( "plantformType" ) String plantformType,
                               @PathVariable( "pageNum" ) Integer pageNum,
                               @PathVariable( "pageSize" ) Integer pageSize
@@ -49,7 +49,7 @@ public interface AppManageDao {
      * @param plantformType 平台类型（平台应用或软件应用）
      * @return
      */
-    @RequestMapping( name = "/manage-app/all-app-type-list", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/all-app-type-list", method = RequestMethod.GET )
     RestRecord getAllAppTypeList( @RequestParam( "plantformType" ) String plantformType );
 
 
@@ -69,7 +69,7 @@ public interface AppManageDao {
     /**
      * 根据输入名模糊查询应用
      */
-    @RequestMapping( value = "/manage-app/apps-by-ame/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/apps-by-name/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord selectAppListByName( @RequestParam( "appName" ) String appName,
                                     @RequestParam( "plantformType" ) String plantformType,
                                     @PathVariable( "pageNum" ) Integer pageNum,

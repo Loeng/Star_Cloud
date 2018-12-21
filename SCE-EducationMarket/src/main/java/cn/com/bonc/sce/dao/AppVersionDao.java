@@ -6,30 +6,41 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
+ */
 @FeignClient( "sce-data-access" )
 public interface AppVersionDao {
 
+    /**
+     * 查询应用版本
+     *
+     * @param appId      应用Id
+     * @param appVersion 应用版本，可空，可模糊查询
+     * @return
+     */
     @RequestMapping( value = "/app-version", method = RequestMethod.GET )
     public RestRecord queryAppVersion(
             @RequestParam( "appId" ) String appId,
-            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion );
+            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize );
 
-    @RequestMapping( value = "/app-version/{appId}", method = RequestMethod.POST )
+    @RequestMapping( value = "/app-version/{appId}", method = RequestMethod.PUT )
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
             @RequestBody Map< String, String > marketAppVersion );
 
-    @RequestMapping( value = "/app-version/{appId}", method = RequestMethod.DELETE )
+    @RequestMapping( value = "/app-version", method = RequestMethod.DELETE )
     public RestRecord deleteAppHistoryVersionInfo(
-            @PathVariable( "appId" ) String appId,
-            @RequestBody Map< String, String > marketAppVersion );
-
-    @RequestMapping( value = "/app-version/all/{appId}", method = RequestMethod.DELETE )
-    public RestRecord deleteAppAllVersionInfoById(
-            @PathVariable( "appId" ) String appId );
+            @RequestParam( "appId" ) String appId,
+            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion );
 
     @RequestMapping( value = "/app-version/apply/{appId}", method = RequestMethod.POST )
-    public boolean createVersionInfo(
+    public RestRecord createVersionInfo(
             @PathVariable( "appId" ) String appId,
-            @RequestBody Map< String, String > marketAppVersion );
+            @RequestParam( "userId" ) String userId,
+            @RequestBody Map< String, String > appVersionInfo );
 }

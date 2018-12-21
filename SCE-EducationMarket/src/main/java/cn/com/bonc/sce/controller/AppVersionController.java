@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
+ */
 @Slf4j
 @Api( value = "应用版本更新、审核接口", tags = "应用版本更新/审核接口" )
 @ApiResponses( {
@@ -22,13 +27,10 @@ import java.util.Map;
 public class AppVersionController {
     private AppVersionService appVersionService;
     private AppAuditingService appAuditingService;
-//    private AdviseService adviseService;
 
     @Autowired
     public AppVersionController( AppVersionService appVersionService,
-                                 AppAuditingService appAuditingService
-
-    ) {
+                                 AppAuditingService appAuditingService ) {
         this.appVersionService = appVersionService;
         this.appAuditingService = appAuditingService;
 //        this.adviseService = adviseService;
@@ -45,16 +47,16 @@ public class AppVersionController {
      * @param appId 查询的应用Id
      * @return
      */
-    @ApiOperation( position = 1,value = "应用版本查询接口", notes = "通过应用ID查询该应用的历史版本信息列表", httpMethod = "GET" )
+    @ApiOperation( position = 1, value = "应用版本查询接口", notes = "通过应用ID查询该应用的历史版本信息列表", httpMethod = "GET" )
     @GetMapping
     @ResponseBody
     public RestRecord queryAppVersion(
             @RequestParam( "appId" ) @ApiParam( "应用Id" ) String appId,
-            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) @ApiParam( "应用版本" ) String appVersion ) {
+            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) @ApiParam( "应用版本" ) String appVersion,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         // 通过应用ID查询该应用的历史版本信息列表
-        RestRecord restRecord = new RestRecord( 0 );
-        restRecord.setData( appVersionService.queryAppVersion( appId, appVersion ) );
-        return restRecord;
+        return appVersionService.queryAppVersion( appId, appVersion, pageNum, pageSize );
     }
 
     /**
@@ -64,51 +66,30 @@ public class AppVersionController {
      * @param marketAppVersion 版本应用信息详情
      * @return
      */
-    @ApiOperation( value = "修改应用的版本信息", notes = "通过应用ID修改该应用的版本信息", httpMethod = "PATCH" )
-    @PostMapping( "/{appId}" )
+    @ApiOperation( value = "修改应用的版本信息", notes = "通过应用ID修改该应用的版本信息", httpMethod = "PUT" )
+    @PutMapping( "/{appId}" )
     @ResponseBody
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
             @RequestBody Map< String, String > marketAppVersion ) {
         //通过应用ID修改该应用的版本信息
-        return new RestRecord( 0, appVersionService.updateAppHistoryVersionInfo( appId, marketAppVersion ) );
+        return appVersionService.updateAppHistoryVersionInfo( appId, marketAppVersion );
     }
 
     /**
-     * 删除指定的一条应用版本信息
-     * 通过应用ID和版本信息删除该应用的部分版本信息(删除状态字段更改为已删除)
+     * 删除应用版本
      *
-     * @param appId            应用Id
-     * @param marketAppVersion 版本应用信息详情
+     * @param appId      应用Id
+     * @param appVersion 应用版本，如果为空则删除全部
      * @return
      */
     @ApiOperation( value = "删除指定的一条应用版本信息", notes = "通过应用ID和版本信息删除该应用的部分版本信息", httpMethod = "DELETE" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "marketAppVersion", value = "版本应用信息详情", paramType = "body", required = true )
-    } )
-    @DeleteMapping( "/{appId}" )
+    @DeleteMapping
     @ResponseBody
     public RestRecord deleteAppHistoryVersionInfo(
-            @PathVariable( "appId" ) String appId,
-            @RequestBody Map< String, String > marketAppVersion ) {
-        return new RestRecord( 0, appVersionService.deleteAppHistoryVersionInfo( appId, marketAppVersion ) );
-    }
-
-    /**
-     * 删除指定的应用版本信息
-     * 通过应用ID删除该应用的全部版本信息(删除状态字段更改为已删除)
-     *
-     * @param appId 应用Id
-     * @return
-     */
-    @ApiOperation( value = "删除指定的应用版本信息", notes = "通过应用ID删除该应用的全部版本信息", httpMethod = "DELETE" )
-    @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true )
-    @DeleteMapping( "/all/{appId}" )
-    @ResponseBody
-    public RestRecord deleteAppAllVersionInfoById(
-            @PathVariable( "appId" ) String appId ) {
-        return new RestRecord( 0, appVersionService.deleteAppAllVersionInfoById( appId ) );
+            @RequestParam( "appId" ) String appId,
+            @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion ) {
+        return appVersionService.deleteAppHistoryVersionInfo( appId, appVersion );
     }
 
     /**
@@ -123,20 +104,15 @@ public class AppVersionController {
      * @return
      */
     @ApiOperation( value = "应用版本更新申请接口", notes = "添加一条版本更新申请", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "userId", value = "用户Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "marketAppVersion", value = "版本更新详情", paramType = "body", required = true )
-    } )
     @PostMapping( "apply/{appId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApply(
-            @PathVariable( "appId" ) String appId,
-            @RequestParam( "userId" ) String userId,
-            @RequestBody Map< String, String > marketAppVersion ) {
-        appVersionService.createVersionInfo( appId, marketAppVersion );
+            @PathVariable( "appId" ) @ApiParam( "应用Id" ) String appId,
+            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @RequestBody @ApiParam( "版本迭代信息" ) Map< String, String > marketAppVersion ) {
+        return appVersionService.createVersionInfo( appId, userId, marketAppVersion );
 //        messageService.createAppVersionUpdateApplyMessage( userId, appId );
-        return null;
+
     }
 
     /**
@@ -149,19 +125,18 @@ public class AppVersionController {
      * @param userId 管理员用户Id
      * @return
      */
-    @ApiOperation( value = "应用版本审批接口", notes = "将应用版本表中应用状态更新为通过审核", httpMethod = "PATCH" )
+    @ApiOperation( value = "应用版本审批接口", notes = "将应用版本表中应用状态更新为通过审核", httpMethod = "PUT" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
             @ApiImplicitParam( name = "userId", value = "用户Id", paramType = "query", required = true )
     } )
-    @PatchMapping( "/approve/{appId}" )
+    @PutMapping( "/approve/{appId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApprove(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId ) {
-        appAuditingService.appVersionUpdateApprove( appId, userId );
+        return appAuditingService.appVersionUpdateApprove( appId, userId );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
-        return null;
     }
 
     /**
@@ -175,20 +150,20 @@ public class AppVersionController {
      * @param rejectReason 驳回请求原因
      * @return
      */
-    @ApiOperation( value = "审批不通过接口", notes = "不通过审核，并更新不通过原因", httpMethod = "PATCH" )
+    @ApiOperation( value = "审批不通过接口", notes = "不通过审核，并更新不通过原因", httpMethod = "PUT" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
             @ApiImplicitParam( name = "userId", value = "管理员用户Id", paramType = "query", required = true ),
             @ApiImplicitParam( name = "rejectReason", value = "驳回请求原因", paramType = "query", required = true )
     } )
-    @PatchMapping( "/reject/{appId}" )
+    @PutMapping( "/reject/{appId}" )
     @ResponseBody
     public RestRecord appVersionUpdateReject(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId,
             @RequestParam( "rejectReason" ) String rejectReason ) {
-        appAuditingService.appVersionUpdateReject( appId, userId, rejectReason );
+        return appAuditingService.appVersionUpdateReject( appId, userId, rejectReason );
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
-        return null;
+
     }
 }

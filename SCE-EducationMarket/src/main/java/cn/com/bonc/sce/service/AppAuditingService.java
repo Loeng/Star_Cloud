@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppAuditingDao;
+import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,11 @@ public class AppAuditingService {
         this.appAuditingDao = appAuditingDao;
     }
 
-    public boolean appVersionUpdateApprove( String appId, String userId ) {
+    public RestRecord appVersionUpdateApprove( String appId, String userId ) {
         return appAuditingDao.appVersionUpdateApprove( appId, userId );
     }
 
-    public boolean appVersionUpdateReject( String appId, String userId, String rejectReason ) {
+    public RestRecord appVersionUpdateReject( String appId, String userId, String rejectReason ) {
         return appAuditingDao.appVersionUpdateReject( appId, userId, rejectReason );
     }
 }

@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
+ */
 @Slf4j
 @Service
 public class AppVersionService {
@@ -18,24 +23,21 @@ public class AppVersionService {
         this.appVersionDao = appVersionDao;
     }
 
-    public RestRecord queryAppVersion( String appId ,String appVersion) {
-        return appVersionDao.queryAppVersion( appId ,appVersion);
+    public RestRecord queryAppVersion( String appId, String appVersion, int pageNum, int pageSize ) {
+        return appVersionDao.queryAppVersion( appId, appVersion, pageNum, pageSize );
     }
 
-    public RestRecord updateAppHistoryVersionInfo( String appId, Map<String,String> marketAppVersion ) {
+    public RestRecord updateAppHistoryVersionInfo( String appId, Map< String, String > marketAppVersion ) {
         return appVersionDao.updateAppHistoryVersionInfo( appId, marketAppVersion );
     }
 
-    public RestRecord deleteAppHistoryVersionInfo( String appId, Map<String,String> marketAppVersion ) {
-        return appVersionDao.deleteAppHistoryVersionInfo( appId, marketAppVersion );
+    public RestRecord deleteAppHistoryVersionInfo( String appId, String appVersion ) {
+        return appVersionDao.deleteAppHistoryVersionInfo( appId, appVersion );
     }
 
-    public RestRecord deleteAppAllVersionInfoById( String appId ) {
-
-        return appVersionDao.deleteAppAllVersionInfoById( appId );
+    public RestRecord createVersionInfo( String appId, String userId, Map< String, String > marketAppVersion ) {
+        return appVersionDao.createVersionInfo( appId, userId, marketAppVersion );
     }
 
-    public boolean createVersionInfo( String appId, Map<String,String> marketAppVersion ) {
-        return appVersionDao.createVersionInfo( appId,  marketAppVersion );
-    }
+
 }

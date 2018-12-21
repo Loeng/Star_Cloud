@@ -50,8 +50,8 @@ public class AppManageController {
      * @param appIdList appId数组
      * @return
      */
-    @DeleteMapping( "/{appIdList}" )
-    public RestRecord deleteApps( @PathVariable( "appIdList" ) List< String > appIdList ) {
+    @DeleteMapping( "" )
+    public RestRecord deleteApps( @RequestBody List< String > appIdList ) {
         //暂时没时间写
         //应用版本表  是否删除字段改为1
         return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
@@ -83,7 +83,7 @@ public class AppManageController {
                                      @PathVariable Integer pageNum,
                                      @PathVariable Integer pageSize
     ) {
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         Page< AppInfoEntity > appInfoList = appInfoRepository.findByAppSource( plantformType, pageable );
         return new RestRecord( 200, appInfoList );
     }
@@ -117,7 +117,7 @@ public class AppManageController {
                                            @PathVariable Integer pageNum,
                                            @PathVariable Integer pageSize ) {
         //表和表关联，不知道怎么用关联表的字段去排序
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         Page< AppTypeEntity > appInfoList = appTypeRepository.findByAppTypeId( appType, pageable );
         return new RestRecord( 200, appInfoList );
     }
@@ -129,12 +129,12 @@ public class AppManageController {
      * @param plantformType 平台类型（平台应用或软件应用）
      * @return
      */
-    @GetMapping( "/apps-by-ame/{pageNum}/{pageNum}" )
+    @GetMapping( "/apps-by-name/{pageNum}/{pageSize}" )
     public RestRecord selectAppListByName( @RequestParam String appName,
                                            @RequestParam String plantformType,
                                            @PathVariable Integer pageNum,
                                            @PathVariable Integer pageSize ) {
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         Page< AppInfoEntity > info = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
         return new RestRecord( 200, info );
     }
@@ -160,7 +160,7 @@ public class AppManageController {
                                                   @PathVariable Integer pageNum,
                                                   @PathVariable Integer pageSize ) {
         //这个数据随便查的，要重写
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         Page< AppInfoEntity > info = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
         return new RestRecord( 200, info );
     }

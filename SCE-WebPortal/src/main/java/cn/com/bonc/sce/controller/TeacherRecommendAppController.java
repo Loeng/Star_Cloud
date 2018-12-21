@@ -121,8 +121,8 @@ public class TeacherRecommendAppController {
             @RequestParam( "teacherId" ) @ApiParam( value = "教师Id", required = true ) String teacherId,
             @RequestParam( value = "startTime", required = false ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false ) @ApiParam( "结束时间" ) String endTime,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         return teacherRecommendService.selectTeacherRecommendAppList( teacherId, startTime, endTime, pageNum, pageSize );
     }
 }
