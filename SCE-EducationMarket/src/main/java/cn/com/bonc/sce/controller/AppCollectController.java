@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "应用收藏相关操作接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping("/appCollect")
+@RequestMapping("/app-collect")
 public class AppCollectController {
 
     /**
@@ -32,7 +32,7 @@ public class AppCollectController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
     } )
-    @GetMapping("/{userId}")
+    @GetMapping("/list/{userId}")
     @ResponseBody
     public RestRecord getUserAppCollection ( @PathVariable( "userId" ) String userId ) {
         return null;

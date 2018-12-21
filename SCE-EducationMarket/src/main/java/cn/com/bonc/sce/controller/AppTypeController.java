@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "应用类型查询更改相关接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping("/appType")
+@RequestMapping("/app-type")
 public class AppTypeController {
     private AppTypeService appTypeService;
 

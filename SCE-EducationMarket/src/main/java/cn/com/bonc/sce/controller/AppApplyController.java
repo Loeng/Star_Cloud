@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 厂商应用上架审核申请
- *
  * @author BTW
  * @version 0.1
  * @since 2018/12/14 17:26
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "厂商应用上下架审核申请相关接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping("/appOnShelfApply")
+@RequestMapping("/app-on-shelf-apply")
 public class AppApplyController {
     private AppApplyService appApplyService;
 

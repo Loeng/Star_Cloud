@@ -52,7 +52,7 @@ public class HotAppController {
     public RestRecord selectHotRecommendAppList( @PathVariable Integer pageNum,
                                                  @PathVariable Integer pageSize ) {
         Pageable pageable = PageRequest.of( pageNum, pageSize );
-     Page< AppInfoEntity > appInfoList = hotAppRepository.findByIsHotRecommend( 1L, pageable );
+        Page< AppInfoEntity > appInfoList = hotAppRepository.findByIsHotRecommend( 1L, pageable );
         // 查询应用表中热门推荐状态为1的应用
         return new RestRecord( 200, appInfoList );
     }

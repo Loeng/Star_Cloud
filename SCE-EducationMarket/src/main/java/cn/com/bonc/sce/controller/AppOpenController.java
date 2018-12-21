@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 应用开通相关操作接口
- *
  * @author BTW
  * @version 0.1
  * @since 2018/12/18 17:13
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "应用开通相关操作接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping("/appOpen")
+@RequestMapping("/app-open")
 public class AppOpenController {
 
     /**

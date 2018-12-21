@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "应用下载相关操作接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping("/appDownload")
+@RequestMapping("/app-download")
 public class AppDownloadController {
 
     /**
