@@ -37,7 +37,7 @@ public class TeacherRecommendService {
 
     }
 
-    public RestRecord selectTeacherRecommendAppList( String teacherId, String startTime, String endTime, String pageNum, String pageSize ) {
+    public RestRecord selectTeacherRecommendAppList( String teacherId, String startTime, String endTime, int pageNum, int pageSize ) {
         return teacherRecommendDao.selectTeacherRecommendAppList( teacherId, startTime, endTime, pageNum, pageSize );
 
     }

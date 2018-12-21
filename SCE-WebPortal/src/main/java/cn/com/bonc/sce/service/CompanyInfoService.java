@@ -30,7 +30,7 @@ public class CompanyInfoService {
 //        return companyInfoDao.selectCompanyById( companyId );
 //    }
 
-    public RestRecord queryCompanyInfo( String companyId, String companyName, String pageNum, String pageSize ) {
+    public RestRecord queryCompanyInfo( String companyId, String companyName, int pageNum, int pageSize ) {
         return companyInfoDao.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
     }
 

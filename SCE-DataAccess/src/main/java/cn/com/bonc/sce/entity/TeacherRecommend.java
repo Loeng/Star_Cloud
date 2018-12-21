@@ -14,7 +14,7 @@ import java.util.Objects;
 public class TeacherRecommend implements Serializable {
     private String appId;
     private String userId;
-    private Time recommendTime;
+
     private Long isDelete;
     private Time recommendStartTime;
     private Time recommendEndTime;
@@ -39,15 +39,6 @@ public class TeacherRecommend implements Serializable {
         this.userId = userId;
     }
 
-    @Basic
-    @Column( name = "RECOMMEND_TIME", nullable = true )
-    public Time getRecommendTime() {
-        return recommendTime;
-    }
-
-    public void setRecommendTime( Time recommendTime ) {
-        this.recommendTime = recommendTime;
-    }
 
     @Basic
     @Column( name = "IS_DELETE", nullable = true, precision = 0 )
@@ -66,14 +57,13 @@ public class TeacherRecommend implements Serializable {
         TeacherRecommend that = ( TeacherRecommend ) o;
         return appId == that.appId &&
                 Objects.equals( userId, that.userId ) &&
-                Objects.equals( recommendTime, that.recommendTime ) &&
                 Objects.equals( isDelete, that.isDelete );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, userId, recommendTime, isDelete );
+        return Objects.hash( appId, userId, isDelete );
     }
 
     @Basic

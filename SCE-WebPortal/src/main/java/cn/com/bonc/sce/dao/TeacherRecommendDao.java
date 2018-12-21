@@ -37,6 +37,6 @@ public interface TeacherRecommendDao {
             @RequestParam( "teacherId" ) String teacherId,
             @RequestParam( value = "startTime", required = false ) String startTime,
             @RequestParam( value = "endTime", required = false ) String endTime,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize );
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize );
 }

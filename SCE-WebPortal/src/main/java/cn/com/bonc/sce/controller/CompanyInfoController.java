@@ -39,8 +39,8 @@ public class CompanyInfoController {
     public RestRecord queryCompanyInfo(
             @RequestParam( value = "companyId", required = false ) @ApiParam( value = "厂商Id" ) String companyId,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) @ApiParam( value = "厂商名称" ) String companyName,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         return companyInfoService.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
     }
 
@@ -68,7 +68,7 @@ public class CompanyInfoController {
      * @return 返回是否更新成功
      */
     @ApiOperation( value = "修改对应厂商信息", notes = "修改对应厂商信息", httpMethod = "PUT" )
-    @ApiImplicitParam( name = "companyId", value = "所需更新的厂商ID", paramType = "path", required = true )
+    @ApiImplicitParam( name = "companyId", value = "厂商ID", paramType = "path", required = true )
     @PutMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
@@ -86,7 +86,7 @@ public class CompanyInfoController {
      * @return 返回是否删除成功
      */
     @ApiOperation( value = "删除单个厂商信息", notes = "删除单个厂商信息", httpMethod = "DELETE" )
-    @ApiImplicitParam( name = "companyId", value = "需删除信息的厂商ID", paramType = "path", required = true )
+    @ApiImplicitParam( name = "companyId", value = "厂商ID", paramType = "path", required = true )
     @DeleteMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord deleteCompanyInfo(

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class TeacherRecommendAppApiController {
 //        teacherRecommendRepository.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg(PortalMessageConstants.SCE_PORTAL_MSG_200);
+        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
     }
@@ -69,7 +70,7 @@ public class TeacherRecommendAppApiController {
 //        teacherRecommendRepository.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
+        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
     }
@@ -90,13 +91,14 @@ public class TeacherRecommendAppApiController {
 //        teacherRecommendRepository.deleteTeacherRecommendApp( teacherId, appIdList );
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
+        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
     }
 
     /**
      * 查询教师推荐应用
+     *
      * @param teacherId
      * @param startTime
      * @param endTime
@@ -110,12 +112,25 @@ public class TeacherRecommendAppApiController {
             @RequestParam( "teacherId" ) String teacherId,
             @RequestParam( value = "startTime", required = false ) String startTime,
             @RequestParam( value = "endTime", required = false ) String endTime,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
 //        teacherRecommendRepository.selectTeacherRecommendAppList( teacherId, timePeroid, pageNum, pageSize );
-        RestRecord restRecord = new RestRecord();
-        Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
+        RestRecord restRecord = new RestRecord( 200 );
+        //虚假返回数据
+        List< Map< String, Object > > resultList = new ArrayList<>();
+        Map< String, Object > map1 = new HashMap<>( 16 );
+        map1.put( "appId", "12311" );
+        map1.put( "userId", "2231s" );
+        map1.put( "recommendStartTime", "2018-01-01" );
+        map1.put( "recommendEndTime", "2018-02-02" );
+        Map< String, Object > map2 = new HashMap<>( 16 );
+        map2.put( "略", "略" );
+        resultList.add( map1 );
+        resultList.add( map2 );
+        Map< String, Object > resultMap = new HashMap<>( 16 );
+        resultMap.put( "data", resultList );
+        resultMap.put( "totalCount", 32 );
+        resultMap.put( "totalPage", 4 );
         restRecord.setData( resultMap );
         return restRecord;
     }
