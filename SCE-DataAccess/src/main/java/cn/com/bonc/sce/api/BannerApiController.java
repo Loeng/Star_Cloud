@@ -78,17 +78,14 @@ public class BannerApiController {
     /**
      * 修改url
      *
-     * @param bannerId bannerId
-     * @param url      待修改的url
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    @PatchMapping( "/url/{bannerId}" )
+    @PutMapping( "/url" )
     @ResponseBody
-    public RestRecord updateBannerUrl(
-            @PathVariable( "bannerId" ) Integer bannerId,
-            @RequestParam( "url" ) String url ) {
+    public RestRecord updateBannerUrl(Banner banner) {
         try {
-            return new RestRecord( 200, bannerDao.updateUrlById( bannerId, url ) );
+            return new RestRecord( 200, bannerDao.updateUrlById( banner.getId(), banner.getUrl() ) );
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
@@ -98,17 +95,14 @@ public class BannerApiController {
     /**
      * 修改appId
      *
-     * @param bannerId bannerId
-     * @param appId    待修改的appId
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    @PatchMapping( "/appId/{bannerId}" )
+    @PutMapping( "/appId" )
     @ResponseBody
-    public RestRecord updateBannerAppId(
-            @PathVariable( "bannerId" ) Integer bannerId,
-            @RequestParam( "appId" ) String appId ) {
+    public RestRecord updateBannerAppId(Banner banner) {
         try {
-            return new RestRecord( 200, bannerDao.updateAppIdById( bannerId, appId ) );
+            return new RestRecord( 200, bannerDao.updateAppIdById( banner.getId(), banner.getAppId() ) );
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
@@ -126,7 +120,9 @@ public class BannerApiController {
     public RestRecord updateBannerOrder( @RequestParam( "list" ) List< Integer > list ) {
         Integer total = 0;
         Integer size = 0;
-        if ( list != null ) size = list.size();
+        if ( list != null ){
+            size = list.size();
+        }
         try {
             for ( int i = 0; i < size; i++ ) {
                 total += bannerDao.updateOrderById( list.get( i ), i+1 );

@@ -91,45 +91,43 @@ public class BannerController {
     /**
      * 修改url
      *
-     * @param bannerId bannerId
-     * @param url      待修改的url
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    @ApiOperation( value = "修改url", notes = "修改url", httpMethod = "PATCH" )
+    @ApiOperation( value = "修改url", notes = "修改url", httpMethod = "PUT" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "header", required = true ),
+            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "body", required = true ),
             @ApiImplicitParam( name = "url", value = "待修改的url", paramType = "body", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
-    @PatchMapping( "/{bannerId}" )
+    @PatchMapping( "/url" )
     @ResponseBody
-    public RestRecord updateBannerUrl( @PathVariable( "bannerId" )String bannerId,@RequestParam( "url" ) String url ) {
-        return bannerService.updateBannerUrl( bannerId, url );
+    public RestRecord updateBannerUrl( Banner banner ) {
+        return bannerService.updateBannerUrl( banner );
     }
 
     /**
      * 修改应用id
      *
-     * @param bannerId bannerId
-     * @param appId    appId
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    @ApiOperation( value = "修改appId", notes = "修改appId", httpMethod = "PATCH" )
+    @ApiOperation( value = "修改appId", notes = "修改appId", httpMethod = "PUT" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "header", required = true ),
+            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "body", required = true ),
             @ApiImplicitParam( name = "appId", value = "appId", paramType = "body", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
-    @PatchMapping( "/{bannerId}/{appId}" )
+    @PatchMapping( "/appId" )
     @ResponseBody
-    public RestRecord updateBannerAppId( @PathVariable( "bannerId" )String bannerId,@PathVariable( "appId" ) String appId ) {
-        return bannerService.updateBannerAppId( bannerId, appId );
+    public RestRecord updateBannerAppId( Banner banner ) {
+        return bannerService.updateBannerAppId( banner );
     }
 
     /**

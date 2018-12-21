@@ -50,22 +50,20 @@ public interface BannerDao {
     /**
      * 修改url
      *
-     * @param bannerId   bannerId
-     * @param url 待修改的url
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    @RequestMapping( value = "/banners/url/{bannerId}", method = RequestMethod.PATCH )
-    public RestRecord updateBannerUrl( @PathVariable( "bannerId" ) String bannerId, @RequestParam( "url" ) String url );
+    @RequestMapping( value = "/banners/url", method = RequestMethod.PUT )
+    public RestRecord updateBannerUrl( Banner banner );
 
     /**
      * 修改url
      *
-     * @param bannerId   bannerId
-     * @param appId 待修改的appId
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    @RequestMapping( value = "/banners/appId/{bannerId}", method = RequestMethod.PATCH )
-    public RestRecord updateBannerAppId( @PathVariable( "bannerId" ) String bannerId, @RequestParam( "appId" ) String appId );
+    @RequestMapping( value = "/banners/appId", method = RequestMethod.PUT )
+    public RestRecord updateBannerAppId( Banner banner );
 
     /**
      * 修改轮播次序
