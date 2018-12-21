@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.NotificationDao;
-import cn.com.bonc.sce.model.message.Notification;
+import cn.com.bonc.sce.model.Notification;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

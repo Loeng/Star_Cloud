@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.model.message;
+package cn.com.bonc.sce.entity;
 
 import javax.persistence.*;
 
@@ -7,7 +7,7 @@ import javax.persistence.*;
  *
  * @author wzm
  * @version 0.1
- * @since 2018/14/12 12:00
+ * @since 2018/12/21 9:00
  */
 @Entity
 @Table(name="SCE_COMMON_USER_INFO")

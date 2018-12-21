@@ -2,7 +2,7 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.AppClassDao;
-import cn.com.bonc.sce.model.appListAndClass.AppClass;
+import cn.com.bonc.sce.entity.AppClass;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

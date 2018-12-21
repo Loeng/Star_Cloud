@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.PortalMessageConstants;
-import cn.com.bonc.sce.model.Account.Account;
+import cn.com.bonc.sce.model.Account;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AccountService;
 import io.swagger.annotations.*;
@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RequestMapping( "/accountSecurity" )
 public class AccountController {
+
+    private static final String UNDEFINED = "undefined";
+
     @Autowired
     private AccountService accountSecurityService;
 
@@ -65,8 +68,10 @@ public class AccountController {
     @GetMapping( "/{phone}/{valid}" )
     @ResponseBody
     public RestRecord validInfo(@PathVariable( "phone" )String phone,@PathVariable( "valid" )String valid){
-        if( StringUtils.isEmpty( phone )||phone.equals( "undefined" )||
-                StringUtils.isEmpty( valid )||valid.equals( "undefined" ))return new RestRecord(500,"error");
+        if( StringUtils.isEmpty( phone )|| UNDEFINED.equals( phone ) ||
+                StringUtils.isEmpty( valid )|| UNDEFINED.equals( valid ) ){
+            return new RestRecord(500,"error");
+        }
         return accountSecurityService.validInfo(phone,valid);
     }
 

@@ -1,12 +1,11 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.model.Account;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 账号安全信息相关
@@ -21,10 +20,11 @@ public interface AccountDao {
     /*@RequestMapping( value = "/updateAccount/getUserAccountPhone/{userAccount}", method = RequestMethod.GET )
     public RestRecord getUserAccountPhone( String userAccount);*/
     /**
-     * 获取所有advise数据
+     * 修改account
      *
+     * @param account account
      * @return advise数据list
      */
-    @RequestMapping( value = "/accountSecurity/{phone}", method = RequestMethod.PATCH )
-    public RestRecord updateAccount( @PathVariable( "phone" ) String phone, @RequestParam( "password" ) String password);
+    @RequestMapping( value = "/accountSecurity", method = RequestMethod.PUT )
+    public RestRecord updateAccount( Account account);
 }

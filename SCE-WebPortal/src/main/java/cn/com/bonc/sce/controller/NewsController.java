@@ -2,8 +2,7 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.PortalMessageConstants;
-import cn.com.bonc.sce.model.User;
-import cn.com.bonc.sce.model.message.News;
+import cn.com.bonc.sce.model.News;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NewsService;
 import io.swagger.annotations.*;

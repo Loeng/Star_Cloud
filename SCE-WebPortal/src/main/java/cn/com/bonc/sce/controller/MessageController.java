@@ -2,7 +2,7 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.PortalMessageConstants;
-import cn.com.bonc.sce.model.message.Message;
+import cn.com.bonc.sce.model.Message;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.MessageService;
 import io.swagger.annotations.*;
@@ -43,8 +43,6 @@ public class MessageController {
     @PostMapping
     @ResponseBody
     public RestRecord insertMessage( Message message ) {
-        //权限不足
-        if(message.getType()==1)return new RestRecord(400,"error");
         return messageService.insertMessage( message );
     }
 

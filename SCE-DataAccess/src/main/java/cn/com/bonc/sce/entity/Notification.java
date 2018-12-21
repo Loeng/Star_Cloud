@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.model.message;
+package cn.com.bonc.sce.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 /**
- * 新闻
+ * 通知
  *
  * @author wzm
  * @version 0.1
@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name="SCE_COMMON_COLUMN_CONTENT")
-public class News {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE,generator="SEQ_GEN_COMMON_COLUMN_CONTENT")
@@ -31,8 +31,8 @@ public class News {
     @Column(name = "COLUMN_ID")
     private Integer columnId;
 
-    @Column(name = "CONENT_TYPE")
-    private Integer conentType;
+    @Column(name = "CONTENT_TYPE")
+    private Integer contentType;
 
     @Column(name = "CONTENT_TAG")
     private String contentTag;

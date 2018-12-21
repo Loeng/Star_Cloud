@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.model.banner.Banner;
+import cn.com.bonc.sce.model.Banner;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

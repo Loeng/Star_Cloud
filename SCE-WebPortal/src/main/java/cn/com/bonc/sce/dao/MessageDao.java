@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.model.message.Message;
+import cn.com.bonc.sce.model.Message;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;

@@ -2,15 +2,13 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.PortalMessageConstants;
-import cn.com.bonc.sce.model.message.Notification;
+import cn.com.bonc.sce.model.Notification;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NotificationService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 通知增删改相关接口

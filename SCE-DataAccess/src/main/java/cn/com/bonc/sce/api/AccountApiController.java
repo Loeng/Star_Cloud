@@ -2,6 +2,7 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.AccountDao;
+import cn.com.bonc.sce.entity.Account;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,14 @@ public class AccountApiController {
     /**
      * 修改账号信息
      *
-     * @param password 账号密码
-     * @param phone 手机号
+     * @param account account
      * @return 修改结果
      */
-    @PatchMapping( "/{phone}" )
+    @PutMapping( "" )
     @ResponseBody
-    public RestRecord updateAccount( @PathVariable( "phone" )String phone, @RequestParam( "password" ) String password) {
+    public RestRecord updateAccount( Account account) {
         try {
-            return new RestRecord( 200, accountSecurityDao.updateAccount( phone, password ) );
+            return new RestRecord( 200, accountSecurityDao.updateAccount( account.getPhone(), account.getPassword() ) );
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );

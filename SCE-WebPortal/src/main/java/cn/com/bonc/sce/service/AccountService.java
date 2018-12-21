@@ -2,7 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.constants.PortalMessageConstants;
 import cn.com.bonc.sce.dao.AccountDao;
-import cn.com.bonc.sce.model.Account.Account;
+import cn.com.bonc.sce.model.Account;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.VaildSecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -56,8 +56,8 @@ public class AccountService {
      */
     public RestRecord validInfo( String phone, String valid ) {
         String valid_ = getAccountEncryptionCode( phone, valid );
-        if ( VaildSecurityUtils.checkVaild( valid_ ) ) {
-            VaildSecurityUtils.delVaild( valid_ );
+        if ( VaildSecurityUtils.checkValid( valid_ ) ) {
+            VaildSecurityUtils.delValid( valid_ );
             //创建安全码
             String randomStr = VaildSecurityUtils.randomStr();
             VaildSecurityUtils.addCode( getAccountEncryptionCode( phone, randomStr ) );
@@ -80,7 +80,7 @@ public class AccountService {
                 accountSecurity.getPhone(), accountSecurity.getCode() );
         if ( VaildSecurityUtils.checkCode( code ) ) {
             VaildSecurityUtils.delCode( code );
-            RestRecord rr = accountSecurityDao.updateAccount( accountSecurity.getPhone(), accountSecurity.getPassword() );
+            RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );
             if ( rr.getCode() == successCode ) {
                 rr.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
             }
