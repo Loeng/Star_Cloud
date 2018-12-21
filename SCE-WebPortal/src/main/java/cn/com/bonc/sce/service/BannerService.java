@@ -59,23 +59,21 @@ public class BannerService {
     /**
      * 修改url
      *
-     * @param bannerId   bannerId
-     * @param url 待修改的url
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    public RestRecord updateBannerUrl(String bannerId,String url){
-        return bannerDao.updateBannerUrl(bannerId,url);
+    public RestRecord updateBannerUrl(Banner banner){
+        return bannerDao.updateBannerUrl(banner);
     }
 
     /**
      * 修改url
      *
-     * @param bannerId   bannerId
-     * @param appId 待修改的url
+     * @param banner banner信息
      * @return 跟新是否成功
      */
-    public RestRecord updateBannerAppId(String bannerId,String appId){
-        return bannerDao.updateBannerAppId(bannerId,appId);
+    public RestRecord updateBannerAppId(Banner banner){
+        return bannerDao.updateBannerAppId(banner);
     }
 
     /**

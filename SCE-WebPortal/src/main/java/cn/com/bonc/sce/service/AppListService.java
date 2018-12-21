@@ -26,17 +26,19 @@ public class AppListService {
      *
      * @return 应用分类数据list
      */
-    public RestRecord getAppListInfo( Integer appClassId,String keyword) {
-        if( !StringUtils.isEmpty( appClassId )){
-            if(!StringUtils.isEmpty( keyword ))
-                return appListDao.getAppListInfo(appClassId,keyword);
-            else
-                return appListDao.getAppListInfo(appClassId);
-        }else{
-            if(!StringUtils.isEmpty( keyword ))
-                return appListDao.getAppListInfo(keyword);
-            else
+    public RestRecord getAppListInfo( Integer appClassId, String keyword ) {
+        if ( !StringUtils.isEmpty( appClassId ) ) {
+            if ( !StringUtils.isEmpty( keyword ) ) {
+                return appListDao.getAppListInfo( appClassId, keyword );
+            } else {
+                return appListDao.getAppListInfo( appClassId );
+            }
+        } else {
+            if ( !StringUtils.isEmpty( keyword ) ) {
+                return appListDao.getAppListInfo( keyword );
+            } else {
                 return appListDao.getAppListInfo();
+            }
         }
     }
 }
