@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Notification;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NotificationService;
@@ -41,7 +41,7 @@ public class NotificationController {
             @ApiImplicitParam( name = "type", dataType = "Integer", value = "通知公告类型, 1：通知 2：公告", paramType = "path", required = true, allowableValues = "1,2" )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
@@ -61,7 +61,7 @@ public class NotificationController {
             @ApiImplicitParam( name = "list", dataType = "String", value = "通知公告Id列表", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/{list}" )
@@ -85,7 +85,7 @@ public class NotificationController {
             @ApiImplicitParam( name = "type", dataType = "Integer", value = "通知公告类型, 1：通知 2：公告", paramType = "path", required = true, allowableValues = "1,2" )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping
@@ -115,7 +115,7 @@ public class NotificationController {
             @ApiImplicitParam( name = "pageSize", dataType = "Integer", value = "分页参数-每页条数", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping( "/{type}/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
@@ -140,7 +140,7 @@ public class NotificationController {
             @ApiImplicitParam( name = "notificationId", dataType = "Integer", value = "通知公告id", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping( "/{notificationId}" )

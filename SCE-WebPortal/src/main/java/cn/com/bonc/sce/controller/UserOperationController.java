@@ -1,7 +1,6 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.MarketMessageConstants;
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserOperationService;
@@ -41,7 +40,7 @@ public class UserOperationController {
      */
     @ApiOperation( value = "单个用户添加接口", notes = "添加单个用户", httpMethod = "POST" )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
+            @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
     @PostMapping( "/user-info" )
     @ResponseBody
@@ -60,7 +59,7 @@ public class UserOperationController {
             @ApiImplicitParam( name = "userInfo", dataType = "String", value = "需更改的具体用户信息", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
+            @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
 
     @PutMapping( "/user-info" )
@@ -81,7 +80,7 @@ public class UserOperationController {
             @ApiImplicitParam( name = "userId", dataType = "String", value = "删除的用户ID", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
+            @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
     @DeleteMapping("/user-info/{userId}")
     @ResponseBody

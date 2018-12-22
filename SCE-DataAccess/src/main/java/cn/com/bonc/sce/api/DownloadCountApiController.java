@@ -1,14 +1,11 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.CountDao;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 应用下载统计接口
@@ -34,7 +31,7 @@ public class DownloadCountApiController {
     @GetMapping( "/one" )
     @ResponseBody
     public RestRecord countSingleAppDownload( @RequestParam( "appId" ) String appId ) {
-        return new RestRecord( 200,PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -47,7 +44,7 @@ public class DownloadCountApiController {
     @ResponseBody
     public RestRecord countAppDownloadByType( @RequestParam( "appType" ) String appType ) {
         // 根据应用类型查找对应的应用，统计下载量
-        return new RestRecord( 200,PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
 
     }
 
@@ -62,7 +59,7 @@ public class DownloadCountApiController {
     @ResponseBody
     public RestRecord countAppDownloadByCompanyId( @RequestParam( "companyId" ) String companyId ) {
         // 根据厂商名查找对应的应用，统计下载量
-        return new RestRecord( 200,PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
 }

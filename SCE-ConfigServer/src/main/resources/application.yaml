@@ -9,7 +9,7 @@ spring:
         native:
           search-locations: classpath:/config
 server:
-  port: 10099
+  port: 10100
   servlet:
     context-path: /
 logging:

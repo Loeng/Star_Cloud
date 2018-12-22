@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -42,7 +42,7 @@ public class AppTypeApiController {
         appTypeEntity.setAppTypeName( appTypeName );
         AppTypeEntity saveEntity = appTypeRepository.save( appTypeEntity );
         if ( StringUtils.equalsIgnoreCase( saveEntity.getAppTypeName(), appTypeName ) ) {
-            return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else {
             return new RestRecord( 500, MessageConstants.SCE_MSG_409);
         }
@@ -55,7 +55,7 @@ public class AppTypeApiController {
                                          @RequestParam( "appTypeName" ) String appTypeName ) {
         int count = appTypeRepository.updateAppTypeInfo( appTypeId, appTypeName );
         if ( count == 1 ) {
-            return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else {
             return new RestRecord( 200, MessageConstants.SCE_MSG_409 );
         }
@@ -66,7 +66,7 @@ public class AppTypeApiController {
     public RestRecord deleteAppTypeInfo( @PathVariable( "appTypeId" ) Integer appTypeId ) {
         int count = appTypeRepository.deleteAppTypeInfo( appTypeId );
         if ( count == 1 ) {
-            return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else {
             return new RestRecord( 200, MessageConstants.SCE_MSG_409 );
         }
