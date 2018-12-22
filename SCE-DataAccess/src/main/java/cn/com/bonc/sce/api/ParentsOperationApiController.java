@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.*;
 import cn.com.bonc.sce.entity.*;
 import cn.com.bonc.sce.model.ParentsInfo;
@@ -100,7 +100,7 @@ public class ParentsOperationApiController {
                     pi.setFamilyRole( parentsInfo.getRelationship());
                     pi.setIsDelete( 0 );
                     parentInfoDao.save( pi );
-                    return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200);
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200);
                 }
             }
         }catch ( Exception e ){
