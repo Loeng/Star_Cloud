@@ -7,3 +7,6 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:10100/eureka/
+ribbon:
+  eureka:
+    enabled: true

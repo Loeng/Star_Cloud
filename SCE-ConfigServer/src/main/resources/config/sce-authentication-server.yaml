@@ -1,6 +1,4 @@
-# portal
-spring:
-  profiles: dev
+# authentication server
 eureka:
   client:
     serviceUrl:

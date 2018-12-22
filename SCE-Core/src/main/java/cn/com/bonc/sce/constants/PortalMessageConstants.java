@@ -35,5 +35,5 @@ public interface PortalMessageConstants {
      * 通用错误信息
      */
     String SCE_PORTAL_MSG_500 = "服务器发生意外错误";
-    String SCE_PORTAL_MSG_500_DEV = "服务器发生意外错误,错误信息 {}";
+    String SCE_PORTAL_MSG_501 = "服务器发生意外错误,错误信息 {}";
 }

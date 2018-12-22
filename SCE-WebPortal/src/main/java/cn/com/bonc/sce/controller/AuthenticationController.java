@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AuthenticationService;
 import io.swagger.annotations.*;
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2018/12/12 11:28
  */
 @Slf4j
-@Api( value = "登录/授权接口" ,tags = "登录/授权接口")
+@Api( value = "登录/授权接口", tags = "登录/授权接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RequestMapping( "/authentication" )
 @RestController
@@ -57,5 +58,18 @@ public class AuthenticationController {
             @RequestParam @NotEmpty String userIdentifier,
             @RequestParam @NotEmpty String encryptedPassword ) {
         return authenticationService.checkUserIdentityByEmail( userIdentifier, encryptedPassword );
+    }
+
+    @PostMapping( value = "/test" ,consumes = "*/*;charset=UTF-8")
+    @ResponseBody
+    public RestRecord test( @RequestBody User user ) {
+        System.out.println( "success" );
+        return new RestRecord( 0, "success" );
+    }
+
+    @GetMapping( "test" )
+    @ResponseBody
+    public RestRecord test2() {
+        return new RestRecord( 200, "it works" );
     }
 }

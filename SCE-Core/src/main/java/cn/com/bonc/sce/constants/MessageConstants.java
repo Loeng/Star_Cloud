@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.constants;
 
 /**
+ * 服务间通信用 msg constants
  * @author Leucippus
  * @version 0.1
  * @since 2018/12/11 16:56

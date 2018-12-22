@@ -22,7 +22,7 @@ public class GeneralRestAPIExceptionHandler {
     @ResponseBody
     public RestRecord handle( Exception e ) {
 //        log.error( MessageConstants.SCE_MSG_9999, e );
-        return new RestRecord( 500, PortalMessageConstants.SCE_PORTAL_MSG_500_DEV, "", e );
+        return new RestRecord( 500, PortalMessageConstants.SCE_PORTAL_MSG_501, "", e );
     }
 
     @Profile( "prod" )

@@ -1,10 +1,9 @@
-# portal
 spring:
   profiles: dev
 eureka:
   client:
-    serviceUrl:
+    service-url:
       defaultZone: http://localhost:10100/eureka/
-ribbon:
-  eureka:
-    enabled: true
+---
+spring:
+  profiles: test

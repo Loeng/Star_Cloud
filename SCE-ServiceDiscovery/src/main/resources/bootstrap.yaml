@@ -8,14 +8,15 @@ spring:
       uri: http://localhost:10099
 ---
 spring.profiles: dev
+server:
+  port: 10100
 logging:
 #  file: ./logs/dev_app.log
   pattern:
-    console: "%highlight{[%d{DEFAULT}] %highlight{%-5level}{FATAL=Bright red, ERROR=Bright red, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan} %style{[%-25.25t]}{Yellow} %style{%-40c{1.}}{Cyan} : %m%n%ex}"
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
 #    file: "%d %-5level [%thread] %logger : %msg%n"
   level:
     org.springframework: INFO
     guru.springframework.controllers: INFO
     org.hibernate: INFO
-server:
-  port: 10100
+
