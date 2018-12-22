@@ -9,8 +9,17 @@ spring:
   profiles: dev
   cloud:
     config:
-      uri: http://localhost:10099
+      uri: http://localhost:10100
     gateway:
+      discovery:
+        locator:
+          enabled: true
+      globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: "docs.spring.io"
+              allowedMethods:
+               - GET
       default-filters:
       routes:
         - id: portal
@@ -18,12 +27,14 @@ spring:
           predicates:
             - Path=/portal/**
           filters:
-            - StripPrefix=0
-        - id: jiandan
-          uri: http://jandan.net/
+            - StripPrefix=1
+        - id: edu-market
+          uri: lb://SCE-EDUCATION-MARKET/
           predicates:
-            - Path=/jiandan
-        - id: test
+            - Path=/edu-market/**
+          filters:
+            - StripPrefix=1
+        - id: authentication-server
           uri: lb://SCE-AUTHENTICATION-SERVER/
           predicates:
             - Path=/authentication/**
@@ -39,5 +50,6 @@ logging:
   level:
     org.springframework.web: INFO
     guru.springframework.controllers: INFO
+    org.springframework.cloud.gateway: DEBUG
     org.hibernate: INFO
 

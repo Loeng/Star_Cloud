@@ -5,7 +5,7 @@ package cn.com.bonc.sce.constants;
  * @version 0.1
  * @since 2018/12/11 17:35
  */
-public interface PortalMessageConstants {
+public interface WebMessageConstants {
     String SCE_PORTAL_MSG_000 = MessageConstants.SCE_MSG_0000;
 
     /**

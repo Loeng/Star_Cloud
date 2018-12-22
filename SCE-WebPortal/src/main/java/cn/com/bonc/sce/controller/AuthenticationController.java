@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AuthenticationService;
@@ -45,7 +45,7 @@ public class AuthenticationController {
             @ApiImplicitParam( name = "encryptedPassword", value = "加密后的用户登录密码", paramType = "query", required = true )
     } )
     /*@ApiResponses( value = {
-            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = @Example( {
+            @ApiResponse( code = 100, message = WebMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = @Example( {
                     @ExampleProperty( value = "100", mediaType = "integer" ),
                     @ExampleProperty( value = "go ahead", mediaType = "string" ),
                     @ExampleProperty( value = "some data", mediaType = "object" ),
@@ -54,7 +54,7 @@ public class AuthenticationController {
     @PostMapping( produces = "application/json" )
     @ResponseBody
     public RestRecord userLogin(
-            @RequestParam @Max( value = 3, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) @Min( value = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) Integer authType,
+            @RequestParam @Max( value = 3, message = WebMessageConstants.SCE_PORTAL_MSG_100 ) @Min( value = 0, message = WebMessageConstants.SCE_PORTAL_MSG_100 ) Integer authType,
             @RequestParam @NotEmpty String userIdentifier,
             @RequestParam @NotEmpty String encryptedPassword ) {
         return authenticationService.checkUserIdentityByEmail( userIdentifier, encryptedPassword );

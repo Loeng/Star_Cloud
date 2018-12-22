@@ -39,6 +39,12 @@ public interface MessageConstants {
      */
 
     /**
+     * 登录异常相关
+     * 1000-1099
+     */
+    String SCE_MSG_1000 = "ip:{} 的用户尝试使用不支持的登录方式进行登录，使用登录方式: {}";
+
+    /**
      * 通用异常处理
      */
     String SCE_MSG_9999 = "服务器发生未捕获的异常，错误信息： {}";

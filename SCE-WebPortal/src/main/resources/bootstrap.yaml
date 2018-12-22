@@ -9,7 +9,7 @@ spring:
     name: sce-web-portal
   cloud:
     config:
-      uri: http://localhost:10099
+      uri: http://localhost:10100
 logging:
 #  file: ./logs/dev_app.log
   pattern:
@@ -20,4 +20,4 @@ logging:
     guru.springframework.controllers: INFO
     org.hibernate: INFO
 server:
-  port: 10102
+  port: 10300

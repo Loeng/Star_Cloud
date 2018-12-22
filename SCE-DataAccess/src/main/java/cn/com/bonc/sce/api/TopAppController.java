@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.repository.TopAppRepository;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -37,7 +37,7 @@ public class TopAppController {
         List< String > appIdList1 = topAppRepository.getAllTopAppId();
         topAppRepository.updateTopApp( appIdList1, 0L, userId );
         Integer i = topAppRepository.updateTopApp( appIdList, 1L, userId );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
 

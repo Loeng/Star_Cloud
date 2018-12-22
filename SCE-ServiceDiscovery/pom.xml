@@ -52,7 +52,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>cn.com.bonc.sce.PortalApplication</mainClass>
+                    <mainClass>cn.com.bonc.sce.ServiceDiscoveryApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

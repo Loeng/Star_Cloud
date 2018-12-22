@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.repository.AppInfoRepository;
@@ -40,8 +40,7 @@ public class AppManageController {
     @PostMapping
     public RestRecord addAppInfo( @RequestBody Map appInfo ) {
         //暂时没时间写
-
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -54,7 +53,7 @@ public class AppManageController {
     public RestRecord deleteApps( @RequestBody List< String > appIdList ) {
         //暂时没时间写
         //应用版本表  是否删除字段改为1
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -68,7 +67,7 @@ public class AppManageController {
     public RestRecord updateAppInfo( @RequestBody Map updateInfo,
                                      @PathVariable String appId ) {
         //暂时没时间写
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 0, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -125,7 +124,7 @@ public class AppManageController {
             dataList.add( iter.next() );
         }
         map.put( "data", dataList );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, map );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
 
     }
 
