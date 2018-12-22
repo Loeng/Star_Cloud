@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.ParentsInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.ParentsOperationService;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @Api( value = "家长操作接口", tags = "家长操作接口" )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
-        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
 } )
 @RequestMapping( "/parentsOperation" )
 public class ParentsOperationController {
@@ -43,8 +43,8 @@ public class ParentsOperationController {
      */
     @ApiOperation( value = "获取安全验证信息", notes = "获取安全验证信息", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-            @ApiResponse( code = 409, message = PortalMessageConstants.SCE_PORTAL_MSG_409, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = WebMessageConstants.SCE_PORTAL_MSG_409, response = RestRecord.class )
     } )
     @GetMapping( "/{phone}" )
     @ResponseBody
@@ -64,8 +64,8 @@ public class ParentsOperationController {
      */
     @ApiOperation( value = "添加家长信息", notes = "添加家长信息", httpMethod = "POST" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-            @ApiResponse( code = 411, message = PortalMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 411, message = WebMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
@@ -79,6 +79,6 @@ public class ParentsOperationController {
             }
             return rr;
         }
-        return new RestRecord(411,PortalMessageConstants.SCE_PORTAL_MSG_411);
+        return new RestRecord(411,WebMessageConstants.SCE_PORTAL_MSG_411);
     }
 }

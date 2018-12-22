@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "通知增删改相关接口", tags = "通知增删改相关接口" )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
-        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
 } )
 @RestController
 @RequestMapping( "/notifications" )

@@ -27,7 +27,7 @@ import java.io.IOException;
 @Api( value = "账号安全信息相关", tags = "账号安全信息相关" )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
-        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
 } )
 @RequestMapping( "/account-security" )
 public class AccountController {

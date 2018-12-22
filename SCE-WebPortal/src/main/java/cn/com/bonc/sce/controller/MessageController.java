@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Api( value = "消息通知接口", tags = "消息通知接口" )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
-        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
 } )
 @RequestMapping( "/messages" )
 public class MessageController {
@@ -43,6 +43,7 @@ public class MessageController {
     @PostMapping
     @ResponseBody
     public RestRecord insertMessage( @RequestBody @ApiParam( name = "message", value = "信息", required = true )Message message ) {
+        if(message.getContent().length()>200)return new RestRecord(409,MessageConstants.SCE_MSG_409);
         return messageService.insertMessage( message );
     }
 

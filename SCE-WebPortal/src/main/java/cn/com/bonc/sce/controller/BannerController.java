@@ -24,7 +24,7 @@ import java.util.List;
 @Api( value = "banner接口", tags = "banner接口"  )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
-        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
 } )
 @RequestMapping( "/banners" )
 public class BannerController {
