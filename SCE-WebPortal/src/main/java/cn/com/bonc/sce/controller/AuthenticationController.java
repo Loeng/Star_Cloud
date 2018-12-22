@@ -20,7 +20,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2018/12/12 11:28
  */
 @Slf4j
-@Api( value = "登录/授权接口", tags = "登录/授权接口" )
+@Api( value = "登录/授权接口", tags = "登录/授权接口", hidden = true )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RequestMapping( "/authentication" )
 @RestController
