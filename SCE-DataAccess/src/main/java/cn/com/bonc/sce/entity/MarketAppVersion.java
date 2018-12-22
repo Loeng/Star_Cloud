@@ -3,31 +3,44 @@ package cn.com.bonc.sce.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.sql.Time;
 import java.util.Objects;
 
 /**
- * Created by YueHaibo on 2018/12/16.
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
  */
 @Entity
-@Table( name = "SCE_MARKET_APP_VERSION", schema = "STARCLOUDMARKET", catalog = "" )
+@Table( name = "SCE_MARKET_APP_VERSION", schema = "STARCLOUDMARKET" )
 @IdClass( MarketAppVersionPK.class )
 public class MarketAppVersion implements Serializable {
     private String appId;
     private String appVersion;
     private String appStatus;
     private String appDownloadAddress;
-    private Timestamp createTime;
+    private Time createTime;
     private String versionInfo;
     private String versionSize;
     private String runningPlatform;
-    private int isDelete;
+    private Long isDelete;
     private String createUserId;
     private String updateUserId;
-    private Timestamp updateTime;
+    private Time updateTime;
+    private String newFeatures;
+    private String packageName;
+    private String authDetail;
+
+    @ManyToOne(  )
+    @JoinColumn(name = "APP_ID", referencedColumnName = "APP_ID")
+    private AppInfoEntity appInfoEntity;
+
+//    @OneToOne(cascade=CascadeType.ALL)//People是关系的维护端，当删除 people，会级联删除 address
+//    @JoinColumn(name = "address_id", referencedColumnName = "id")//people中的address_id字段参考address表中的id字段
+//    private Address address;
 
     @Id
-    @Column( name = "APP_ID" )
+    @Column( name = "APP_ID", nullable = false, length = 30 )
     public String getAppId() {
         return appId;
     }
@@ -37,7 +50,7 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Id
-    @Column( name = "APP_VERSION" )
+    @Column( name = "APP_VERSION", nullable = false, length = 30 )
     public String getAppVersion() {
         return appVersion;
     }
@@ -47,7 +60,7 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "APP_STATUS" )
+    @Column( name = "APP_STATUS", nullable = true, length = 30 )
     public String getAppStatus() {
         return appStatus;
     }
@@ -57,7 +70,7 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "APP_DOWNLOAD_ADDRESS" )
+    @Column( name = "APP_DOWNLOAD_ADDRESS", nullable = true, length = 50 )
     public String getAppDownloadAddress() {
         return appDownloadAddress;
     }
@@ -67,17 +80,17 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "CREATE_TIME" )
-    public Timestamp getCreateTime() {
+    @Column( name = "CREATE_TIME", nullable = true )
+    public Time getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime( Timestamp createTime ) {
+    public void setCreateTime( Time createTime ) {
         this.createTime = createTime;
     }
 
     @Basic
-    @Column( name = "VERSION_INFO" )
+    @Column( name = "VERSION_INFO", nullable = true, length = 200 )
     public String getVersionInfo() {
         return versionInfo;
     }
@@ -87,7 +100,7 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "VERSION_SIZE" )
+    @Column( name = "VERSION_SIZE", nullable = true, length = 20 )
     public String getVersionSize() {
         return versionSize;
     }
@@ -97,7 +110,7 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "RUNNING_PLATFORM" )
+    @Column( name = "RUNNING_PLATFORM", nullable = true, length = 30 )
     public String getRunningPlatform() {
         return runningPlatform;
     }
@@ -107,17 +120,17 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "IS_DELETE" )
-    public int getIsDelete() {
+    @Column( name = "IS_DELETE", nullable = true, precision = 0 )
+    public Long getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete( int isDelete ) {
+    public void setIsDelete( Long isDelete ) {
         this.isDelete = isDelete;
     }
 
     @Basic
-    @Column( name = "CREATE_USER_ID" )
+    @Column( name = "CREATE_USER_ID", nullable = true, length = 20 )
     public String getCreateUserId() {
         return createUserId;
     }
@@ -127,7 +140,7 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "UPDATE_USER_ID" )
+    @Column( name = "UPDATE_USER_ID", nullable = true, length = 20 )
     public String getUpdateUserId() {
         return updateUserId;
     }
@@ -137,21 +150,55 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "UPDATE_TIME" )
-    public Timestamp getUpdateTime() {
+    @Column( name = "UPDATE_TIME", nullable = true )
+    public Time getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime( Timestamp updateTime ) {
+    public void setUpdateTime( Time updateTime ) {
         this.updateTime = updateTime;
+    }
+
+    @Basic
+    @Column( name = "NEW_FEATURES", nullable = true, length = 50 )
+    public String getNewFeatures() {
+        return newFeatures;
+    }
+
+    public void setNewFeatures( String newFeatures ) {
+        this.newFeatures = newFeatures;
+    }
+
+    @Basic
+    @Column( name = "PACKAGE_NAME", nullable = true, length = 20 )
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName( String packageName ) {
+        this.packageName = packageName;
+    }
+
+    @Basic
+    @Column( name = "AUTH_DETAIL", nullable = true, length = 50 )
+    public String getAuthDetail() {
+        return authDetail;
+    }
+
+    public void setAuthDetail( String authDetail ) {
+        this.authDetail = authDetail;
     }
 
     @Override
     public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+        if ( this == o ) {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() ) {
+            return false;
+        }
         MarketAppVersion that = ( MarketAppVersion ) o;
-        return appId == that.appId &&
+        return Objects.equals( appId, that.appId ) &&
                 Objects.equals( appVersion, that.appVersion ) &&
                 Objects.equals( appStatus, that.appStatus ) &&
                 Objects.equals( appDownloadAddress, that.appDownloadAddress ) &&
@@ -162,12 +209,15 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( isDelete, that.isDelete ) &&
                 Objects.equals( createUserId, that.createUserId ) &&
                 Objects.equals( updateUserId, that.updateUserId ) &&
-                Objects.equals( updateTime, that.updateTime );
+                Objects.equals( updateTime, that.updateTime ) &&
+                Objects.equals( newFeatures, that.newFeatures ) &&
+                Objects.equals( packageName, that.packageName ) &&
+                Objects.equals( authDetail, that.authDetail );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail );
     }
 }
