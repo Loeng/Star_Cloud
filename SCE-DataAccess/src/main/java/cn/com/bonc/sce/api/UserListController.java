@@ -1,9 +1,14 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.repository.UserListData;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,19 +23,6 @@ import java.util.Map;
 @RequestMapping( "/user-list" )
 public class UserListController {
 
-    /**
-     * 全部用户
-     *
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @GetMapping( "/all/{pageNum}/{pageSize}" )
-    public RestRecord getAllUserInfo( @PathVariable( "pageNum" ) String pageNum,
-                                      @PathVariable( "pageSize" ) String pageSize ) {
-
-        return null;
-    }
 
     /**
      * 根据角色id查询用户信息
@@ -42,10 +34,34 @@ public class UserListController {
      */
     @GetMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
     public RestRecord getUserInfoByRole( @PathVariable String roleId,
-                                         @PathVariable( "pageNum" ) String pageNum,
-                                         @PathVariable( "pageSize" ) String pageSize ) {
-
-        return null;
+                                         @PathVariable( "pageNum" ) Integer pageNum,
+                                         @PathVariable( "pageSize" ) Integer pageSize ) {
+        int total = 10;
+        List info = new ArrayList();
+        switch ( roleId ) {
+            case "1":
+                info = UserListData.ziZhuCe( pageNum, pageSize, total );
+                break;
+            case "2":
+                info = UserListData.xueXiao( pageNum, pageSize, total );
+                break;
+            case "3":
+                info = UserListData.jiGou( pageNum, pageSize, total );
+                break;
+            case "4":
+                info = UserListData.changShang( pageNum, pageSize, total );
+                break;
+            case "5":
+                info = UserListData.daiLiShang( pageNum, pageSize, total );
+                break;
+            case "6":
+                info = UserListData.shengHeYongHu( pageNum, pageSize, total );
+                break;
+        }
+        Map map = new HashMap();
+        map.put( "total", total );
+        map.put( "data", info );
+        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, map );
     }
 
 
@@ -59,9 +75,13 @@ public class UserListController {
      */
     @GetMapping( "/condition/{pageNum}/{pageSize}" )
     public RestRecord getUserInfoByCondition( @RequestBody Map conditionMap,
-                                              @PathVariable( "pageNum" ) String pageNum,
-                                              @PathVariable( "pageSize" ) String pageSize ) {
-
-        return null;
+                                              @PathVariable( "pageNum" ) Integer pageNum,
+                                              @PathVariable( "pageSize" ) Integer pageSize ) {
+        int total = 10;
+        List info = UserListData.ziZhuCe( pageNum, pageSize, total );
+        Map map = new HashMap();
+        map.put( "total", total );
+        map.put( "data", info );
+        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, map );
     }
 }

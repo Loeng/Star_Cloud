@@ -24,27 +24,6 @@ public class UserListController {
     @Autowired
     private UserListService userListService;
 
-    /**
-     * 全部用户
-     *
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation( value = "查询全部用户接口", notes = "查询全部用户接口", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = true, defaultValue = "1" ),
-            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = true, defaultValue = "10" )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
-    } )
-    @GetMapping( "/all/{pageNum}/{pageSize}" )
-    public RestRecord getAllUserInfo( @PathVariable( "pageNum" ) String pageNum,
-                                      @PathVariable( "pageSize" ) String pageSize ) {
-
-        return userListService.getAllUserInfo( pageNum, pageSize );
-    }
 
     /**
      * 根据角色id查询用户信息
@@ -65,8 +44,8 @@ public class UserListController {
     } )
     @GetMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
     public RestRecord getUserInfoByRole( @PathVariable String roleId,
-                                         @PathVariable( "pageNum" ) String pageNum,
-                                         @PathVariable( "pageSize" ) String pageSize ) {
+                                         @PathVariable( "pageNum" ) Integer pageNum,
+                                         @PathVariable( "pageSize" ) Integer pageSize ) {
 
         return userListService.getUserInfoByRole( roleId, pageNum, pageSize );
     }
@@ -91,8 +70,8 @@ public class UserListController {
     } )
     @GetMapping( "/condition/{pageNum}/{pageSize}" )
     public RestRecord getUserInfoByCondition( @RequestBody Map conditionMap,
-                                              @PathVariable( "pageNum" ) String pageNum,
-                                              @PathVariable( "pageSize" ) String pageSize ) {
+                                              @PathVariable( "pageNum" ) Integer pageNum,
+                                              @PathVariable( "pageSize" ) Integer pageSize ) {
 
         return userListService.getUserInfoByCondition( conditionMap, pageNum, pageSize );
     }

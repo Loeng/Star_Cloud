@@ -24,17 +24,6 @@ public class UserListService {
         this.userListDao = userListDao;
     }
 
-    /**
-     * 查询全部用户信息
-     *
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    public RestRecord getAllUserInfo( @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) String pageNum,
-                                      @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) String pageSize ) {
-        return userListDao.getAllUserInfo( pageNum, pageSize );
-    }
 
     /**
      * 根据角色id查询用户信息
@@ -44,7 +33,7 @@ public class UserListService {
      * @param pageSize
      * @return
      */
-    public RestRecord getUserInfoByRole( String roleId, String pageNum, String pageSize ) {
+    public RestRecord getUserInfoByRole( String roleId, Integer pageNum, Integer pageSize ) {
         return userListDao.getUserInfoByRole( roleId, pageNum, pageSize );
     }
 
@@ -57,7 +46,7 @@ public class UserListService {
      * @param pageSize
      * @return
      */
-    public RestRecord getUserInfoByCondition( Map conditionMap, String pageNum, String pageSize ) {
+    public RestRecord getUserInfoByCondition( Map conditionMap, Integer pageNum, Integer pageSize ) {
         return userListDao.getUserInfoByCondition( conditionMap, pageNum, pageSize );
     }
 
