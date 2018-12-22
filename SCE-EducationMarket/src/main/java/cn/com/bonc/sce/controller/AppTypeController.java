@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 应用类型查询管理相关
- *
  * @author BTW
  * @version 0.1
  * @since 2018/12/14 14:26
@@ -30,7 +29,6 @@ public class AppTypeController {
 
     /**
      * 应用类型查询接口
-     *
      * @return 所用应用类型列表
      */
     @ApiOperation( value = "应用类型查询接口", notes = "查询所有应用类型名称", httpMethod = "GET" )
@@ -40,7 +38,7 @@ public class AppTypeController {
     @GetMapping
     @ResponseBody
     public RestRecord getAllAppTypeList () {
-        return null;
+        return appTypeService.getAllAppTypeList();
     }
 
     /**
@@ -58,7 +56,7 @@ public class AppTypeController {
     @PostMapping
     @ResponseBody
     public RestRecord addAppType ( @RequestParam( "appTypeName" ) String appTypeName ) {
-        return null;
+        return appTypeService.addAppTypeInfo( appTypeName );
     }
 
     /**
@@ -69,17 +67,17 @@ public class AppTypeController {
      */
     @ApiOperation( value = "应用类型更改接口", notes = "更改应用类型名称", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appTypeId", dataType = "String", value = "更改应用类型ID", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "appTypeId", dataType = "String", value = "更改应用类型ID", paramType = "query", required = true ),
             @ApiImplicitParam( name = "appTypeName", dataType = "String", value = "更改应用类型名称", paramType = "query", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
     } )
-    @PostMapping("/newTypeInfo")
+    @PostMapping("/new-type-info")
     @ResponseBody
-    public RestRecord updateAppTypeName ( @PathVariable( "appTypeId" ) String appTypeId,
+    public RestRecord updateAppTypeName ( @RequestParam( "appTypeId" ) String appTypeId,
                                           @RequestParam( "appTypeName" ) String appTypeName ) {
-        return null;
+        return appTypeService.updateAppTypeInfo( appTypeId, appTypeName );
     }
 
     /**
@@ -97,6 +95,6 @@ public class AppTypeController {
     @DeleteMapping("/{appTypeId}")
     @ResponseBody
     public RestRecord deleteAppTypeById ( @PathVariable( "appTypeId" ) String appTypeId ) {
-        return null;
+        return appTypeService.deleteAppTypeInfo( appTypeId );
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 应用推荐-热门应用接口
- * atuhor jc_D
+ * @author jc_D
  */
 @Slf4j
 @Api( value = "应用推荐-热门应用接口", tags = "应用推荐-热门应用接口" )
@@ -19,8 +19,13 @@ import java.util.List;
 @RestController
 @RequestMapping( "/hot-app" )
 public class HotAppController {
-    @Autowired
+
     private HotAppService hotAppService;
+
+    @Autowired
+    public HotAppController ( HotAppService hotAppService ) {
+        this.hotAppService = hotAppService;
+    }
 
     /**
      * 添加热门应用
@@ -30,7 +35,7 @@ public class HotAppController {
      */
     @ApiOperation( value = "添加热门应用", notes = "添加热门应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appIdList", value = "apid数组", paramType = "body", required = true, example = "{'appIdList':[1,2,3]}" )
+            @ApiImplicitParam( name = "appIdList", value = "apId数组", paramType = "body", required = true, example = "{'appIdList':[1,2,3]}" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
@@ -38,7 +43,7 @@ public class HotAppController {
     @PostMapping
     public RestRecord addHotRecommendAppList( @RequestBody List< String > appIdList ) {
 
-        String userId = "0110100";//userId从后端取
+        String userId = "0110100";
         return hotAppService.addHotRecommendAppList( appIdList, userId );
     }
 
@@ -62,7 +67,7 @@ public class HotAppController {
     @GetMapping( "/{pageNum}/{pageSize}" )
     public RestRecord selectHotRecommendAppList( @PathVariable Integer pageNum,
                                                  @PathVariable Integer pageSize ) {
-        // 查询应用表中热门推荐状态为1的应用
+        // 查询应用表中重点推荐状态为1的应用
         return hotAppService.selectHotRecommendAppList( pageNum, pageSize );
     }
 
