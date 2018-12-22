@@ -31,7 +31,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!--<mainClass>cn.com.bonc.sce.ConfigServerApplication</mainClass>-->
+                    <!--<mainClass>cn.com.bonc.sce.</mainClass>-->
                 </configuration>
                 <executions>
                     <execution>

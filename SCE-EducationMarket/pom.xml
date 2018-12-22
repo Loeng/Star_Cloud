@@ -52,7 +52,7 @@
         <dependency>
             <groupId>cn.com.bonc</groupId>
             <artifactId>SCE-Core</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!-- api generator -->
         <dependency>
@@ -75,7 +75,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>cn.com.bonc.sce.PortalApplication</mainClass>
+                    <mainClass>cn.com.bonc.sce.MarketApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
