@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppTypeService;
 import io.swagger.annotations.*;
@@ -32,7 +33,7 @@ public class AppTypeController {
      */
     @ApiOperation( value = "应用类型查询接口", notes = "查询所有应用类型名称", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping
     @ResponseBody
@@ -50,7 +51,7 @@ public class AppTypeController {
             @ApiImplicitParam( name = "appTypeName", dataType = "String", value = "新增应用类型名称", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
@@ -70,7 +71,7 @@ public class AppTypeController {
             @ApiImplicitParam( name = "appTypeName", dataType = "String", value = "更改应用类型名称", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping("/new-type-info")
     @ResponseBody
@@ -89,7 +90,7 @@ public class AppTypeController {
             @ApiImplicitParam( name = "appTypeId", dataType = "String", value = "删除的应用类型ID", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @DeleteMapping("/{appTypeId}")
     @ResponseBody

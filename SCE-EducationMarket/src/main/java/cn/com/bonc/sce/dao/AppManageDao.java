@@ -83,4 +83,16 @@ public interface AppManageDao {
      */
     @RequestMapping( value = "/manage-app/detail-by-id/{appId}", method = RequestMethod.GET )
     RestRecord selectAppById( @PathVariable( "appId" ) String appId );
+
+
+    /**
+     * 应用上下架
+     * @author tlz
+     * @param applyType
+     * @param appIdList
+     * @param userId
+     * @return  上下架是否成功
+     */
+    @RequestMapping( value = "/manage-app/app-on-shelf", method = RequestMethod.POST)
+    RestRecord applyAppOnShelf( @RequestParam("applyType")  Integer applyType, @RequestBody  List<String> appIdList,@RequestParam("userId") String userId );
 }
