@@ -79,8 +79,12 @@ public class DownloadCount {
 
     @Override
     public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+        if ( this == o ) {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() ) {
+            return false;
+        }
         DownloadCount that = ( DownloadCount ) o;
         return id == that.id &&
                 Objects.equals( appId, that.appId ) &&

@@ -33,10 +33,11 @@ public class ParentsOperationApiController {
         total += parentsOperationDao.insertParentsDataInfo( parentsInfo );
         total += parentsOperationDao.insertParentsStudentRelInfo( parentsInfo );
         try{
-            if(total>2)
+            if(total>2) {
                 return new RestRecord(200,total);
-            else
+            } else {
                 return new RestRecord(200,"error");
+            }
         }catch ( Exception e ){
             return new RestRecord(500,"", e);
         }

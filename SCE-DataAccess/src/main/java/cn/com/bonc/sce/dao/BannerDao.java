@@ -20,6 +20,7 @@ import java.util.List;
 @Transactional
 public interface BannerDao extends JpaRepository< Banner, Integer > {
 
+    @Override
     Banner save( Banner banner );
 
     @Modifying
