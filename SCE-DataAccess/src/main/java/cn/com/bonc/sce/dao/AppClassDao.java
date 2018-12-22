@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 @Transactional
 public interface AppClassDao extends JpaRepository<AppClass, Integer> {
-
+    @Override
     AppClass save( AppClass appClass );
 
     @Modifying

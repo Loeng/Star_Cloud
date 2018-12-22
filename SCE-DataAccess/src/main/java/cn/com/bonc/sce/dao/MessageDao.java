@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 @Transactional
 public interface MessageDao extends JpaRepository<Message, Integer> {
-
+    @Override
     Message save(Message message);
 
     @Modifying
