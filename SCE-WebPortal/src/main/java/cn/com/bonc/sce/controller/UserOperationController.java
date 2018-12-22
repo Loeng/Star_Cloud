@@ -22,7 +22,7 @@ import java.util.Map;
 @Api( value = "用户信息增删改相关接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping( "/userOperation" )
+@RequestMapping( "/user-info" )
 public class UserOperationController {
     private UserOperationService userOperationService;
 
@@ -41,7 +41,7 @@ public class UserOperationController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
-    @PostMapping( "/user-info" )
+    @PostMapping
     @ResponseBody
     public RestRecord addUserInfo( @RequestBody @ApiParam(example ="{'userId':1231,'userName':'loader','address':'成都市青羊区'...}" )  Map map ) {
         return userOperationService.addUserInfo( map );
@@ -61,7 +61,7 @@ public class UserOperationController {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
 
-    @PutMapping( "/user-info" )
+    @PutMapping
     @ResponseBody
     public RestRecord updateUserInfoById(
             @RequestBody @ApiParam(example ="{'userId':1231,'userName':'loader','address':'成都市青羊区'}" ) Map userInfo ) {
@@ -81,7 +81,7 @@ public class UserOperationController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
-    @DeleteMapping("/user-info/{userId}")
+    @DeleteMapping("/{userId}")
     @ResponseBody
     public RestRecord deleteUserInfoById( @PathVariable( "userId" ) String userId ) {
         // 1. 将用户表中状态改为已删除
@@ -103,7 +103,7 @@ public class UserOperationController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
-    @GetMapping("/user-info/{userId}")
+    @GetMapping("/{userId}")
     @ResponseBody
     public RestRecord selectUserInfoById( @PathVariable( "userId" ) String userId ) {
 
