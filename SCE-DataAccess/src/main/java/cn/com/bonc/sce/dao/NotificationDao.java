@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface NotificationDao extends JpaRepository< Notification, Integer > {
 
+    @Override
     Notification save( Notification banner );
 
     @Modifying

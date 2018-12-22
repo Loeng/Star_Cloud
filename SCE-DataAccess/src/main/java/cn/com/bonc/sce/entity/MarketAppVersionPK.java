@@ -34,8 +34,12 @@ public class MarketAppVersionPK implements Serializable {
 
     @Override
     public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+        if ( this == o ) {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() ) {
+            return false;
+        }
         MarketAppVersionPK that = ( MarketAppVersionPK ) o;
         return Objects.equals( appId, that.appId ) &&
                 Objects.equals( appVersion, that.appVersion );
