@@ -1,12 +1,16 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AppAuditingDao;
-import cn.com.bonc.sce.dao.MarketAppVersionRepository;
+import cn.com.bonc.sce.dao.AppVersionRepository;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +29,12 @@ import java.util.Map;
 @RequestMapping( "/app-version" )
 public class AppVersionApiController {
 
-    private MarketAppVersionRepository marketAppVersionRepository;
+    private AppVersionRepository appVersionRepository;
     private AppAuditingDao appAuditingDao;
 
     @Autowired
-    public AppVersionApiController( MarketAppVersionRepository marketAppVersionRepository, AppAuditingDao appAuditingDao ) {
-        this.marketAppVersionRepository = marketAppVersionRepository;
+    public AppVersionApiController( AppVersionRepository appVersionRepository, AppAuditingDao appAuditingDao ) {
+        this.appVersionRepository = appVersionRepository;
         this.appAuditingDao = appAuditingDao;
     }
 
@@ -50,9 +54,20 @@ public class AppVersionApiController {
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         // 通过应用ID查询该应用的历史版本信息列表
-        log.info( "查询应用版本信息，查询条件为appId:{}  appVersion:{}", appId, appVersion );
+//        log.info( "查询应用版本信息，查询条件为appId:{}  appVersion:{}", appId, appVersion );
 //        String queryAppVersion = appVersion;
-//        List< MarketAppVersion > result = marketAppVersionRepository.findAllByAppIdAndAppVersionContainingAndIsDelete( appId, queryAppVersion, 1 );
+//        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+////        Page< MarketAppVersion > appVersions = appVersionRepository.findAllByAppIdAndAppVersionContainingAndIsDelete( appId, queryAppVersion, pageable );
+//        List< Object[] > appVersions = appVersionRepository.findAllByIsDelete( 1L);
+//        return new RestRecord( 0,appVersions );
+////        Map< String, Object > result = new HashMap<>( 16 );
+////        result.put( "data", appVersions.getContent() );
+////        result.put( "totalPage", appVersions.getTotalPages() );
+////        result.put( "totalCount", appVersions.getTotalElements() );
+////        return new RestRecord( 200, result );
+
+
+        /* 假数据分界线 */
         RestRecord restRecord = new RestRecord( 200 );
         Map< String, Object > map = new HashMap<>( 16 );
         List< Map< String, Object > > data_detail = new ArrayList<>();
@@ -75,7 +90,7 @@ public class AppVersionApiController {
         map.put( "totalCount", 123 );
         map.put( "totalPage", 23 );
         restRecord.setData( map );
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
         return restRecord;
     }
 
@@ -95,7 +110,7 @@ public class AppVersionApiController {
         log.info( "更新应用版本信息  appId:{}  appVersionInfo:{}", appId, appVersionInfo );
         appVersionInfo.setAppId( appId );
 //        MarketAppVersion result = marketAppVersionRepository.saveAndFlush( appVersionInfo );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
 //        return new RestRecord( 0, result );
     }
 
@@ -119,7 +134,7 @@ public class AppVersionApiController {
 //        } else {
 //            return new RestRecord( 200, marketAppVersionRepository.deleteByAppId( appId ) );
 //        }
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -147,9 +162,9 @@ public class AppVersionApiController {
 //            restRecord.setMsg( "#########缺少迭代需要的版本号###########" );
 //            return restRecord;
 //        }
-//        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+//        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
 //        restRecord.setData( marketAppVersionRepository.saveAndFlush( appVersionInfo ) );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 //
 
@@ -171,7 +186,7 @@ public class AppVersionApiController {
 //        appAuditingDao.appVersionUpdateApprove( appId, userId );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
 //        return null;
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -194,21 +209,6 @@ public class AppVersionApiController {
 //        appAuditingDao.appVersionUpdateReject( appId, userId, rejectReason );
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
 //        return null;
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
-    }
-
-
-    /**
-     * http://localhost:10101/AppVersion/test
-     *
-     * @return
-     */
-    @GetMapping( "/test" )
-    @ResponseBody
-    public RestRecord test() {
-        List< MarketAppVersion > test = marketAppVersionRepository.findAllByIsDelete( 0 );
-        RestRecord restRecord = new RestRecord();
-        restRecord.setData( test );
-        return restRecord;
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 }

@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Banner;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.BannerService;
@@ -39,7 +39,7 @@ public class BannerController {
      */
     @ApiOperation( value = "添加banner", notes = "添加banner", httpMethod = "POST" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
@@ -56,7 +56,7 @@ public class BannerController {
      */
     @ApiOperation( value = "通过id删除banner", notes = "通过id删除banner", httpMethod = "DELETE" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/{bannerId}" )
@@ -73,7 +73,7 @@ public class BannerController {
      */
     @ApiOperation( value = "更新banner", notes = "更新banner", httpMethod = "PUT" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping
@@ -94,7 +94,7 @@ public class BannerController {
             @ApiImplicitParam( name = "url", value = "待修改的url", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping( "/url" )
@@ -115,7 +115,7 @@ public class BannerController {
             @ApiImplicitParam( name = "appId", value = "appId", paramType = "body", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping( "/appId" )
@@ -132,7 +132,7 @@ public class BannerController {
      */
     @ApiOperation( value = "修改轮播次序", notes = "修改轮播次序", httpMethod = "PUT" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping( "/update-banner-order" )
@@ -149,7 +149,7 @@ public class BannerController {
      */
     @ApiOperation( value = "获取banner数据", notes = "获取banner数据", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping( "/{bannerId}" )
@@ -165,7 +165,7 @@ public class BannerController {
      */
     @ApiOperation( value = "获取所有banner数据", notes = "获取所有banner数据", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping

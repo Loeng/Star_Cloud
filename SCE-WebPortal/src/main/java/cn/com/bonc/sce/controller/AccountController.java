@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Account;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AccountService;
@@ -45,8 +45,8 @@ public class AccountController {
      */
     @ApiOperation( value = "发送安全验证信息", notes = "账号发送安全验证", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-            @ApiResponse( code = 409, message = PortalMessageConstants.SCE_PORTAL_MSG_409, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = WebMessageConstants.SCE_PORTAL_MSG_409, response = RestRecord.class )
     } )
     @GetMapping( "/send-security-phone-valid/{phone}" )
     @ResponseBody
@@ -67,8 +67,8 @@ public class AccountController {
             @ApiImplicitParam( name = "valid", value = "验证码", paramType = "header", required = true)
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-            @ApiResponse( code = 411, message = PortalMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 411, message = WebMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class )
     } )
     @GetMapping( "/{phone}/{valid}" )
     @ResponseBody
@@ -89,8 +89,8 @@ public class AccountController {
      */
     @ApiOperation( value = "修改账号信息", notes = "修改账号信息", httpMethod = "POST" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-            @ApiResponse( code = 412, message = PortalMessageConstants.SCE_PORTAL_MSG_412, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 412, message = WebMessageConstants.SCE_PORTAL_MSG_412, response = RestRecord.class )
     } )
     @PostMapping("")
     @ResponseBody

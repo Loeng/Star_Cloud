@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.repository.HotAppRepository;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -40,7 +40,7 @@ public class HotAppController {
         hotAppRepository.updateHotApp( appidList1, 0L, userId );
         //将用户选择的应用改为热门
         Integer i = hotAppRepository.updateHotApp( appIdList, 1L, userId );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
 

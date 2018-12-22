@@ -1,0 +1,9 @@
+spring:
+  profiles: dev
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10103/eureka/
+---
+spring:
+  profiles: test

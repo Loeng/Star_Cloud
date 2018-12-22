@@ -1,0 +1,55 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: sce-service-gateway
+---
+# dev profiles
+spring:
+  profiles: dev
+  cloud:
+    config:
+      uri: http://localhost:10100
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: "docs.spring.io"
+              allowedMethods:
+               - GET
+      default-filters:
+      routes:
+        - id: portal
+          uri: lb://SCE-WEB-PORTAL/
+          predicates:
+            - Path=/portal/**
+          filters:
+            - StripPrefix=1
+        - id: edu-market
+          uri: lb://SCE-EDUCATION-MARKET/
+          predicates:
+            - Path=/edu-market/**
+          filters:
+            - StripPrefix=1
+        - id: authentication-server
+          uri: lb://SCE-AUTHENTICATION-SERVER/
+          predicates:
+            - Path=/authentication/**
+          filters:
+            - StripPrefix=1
+server:
+  port: 10101
+logging:
+#  file: ./logs/dev_app.log
+  pattern:
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: INFO
+    guru.springframework.controllers: INFO
+    org.springframework.cloud.gateway: DEBUG
+    org.hibernate: INFO
+

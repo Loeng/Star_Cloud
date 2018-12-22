@@ -5,17 +5,18 @@ spring:
     name: sce-discovery-service
   cloud:
     config:
-      uri: http://localhost:10099
+      uri: http://localhost:10100
 ---
 spring.profiles: dev
+server:
+  port: 10103
 logging:
 #  file: ./logs/dev_app.log
   pattern:
-    console: "%d %-5level %logger : %msg%n"
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
 #    file: "%d %-5level [%thread] %logger : %msg%n"
   level:
     org.springframework: INFO
     guru.springframework.controllers: INFO
     org.hibernate: INFO
-server:
-  port: 10100
+

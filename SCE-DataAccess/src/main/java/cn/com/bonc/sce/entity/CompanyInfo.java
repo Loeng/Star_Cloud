@@ -93,8 +93,12 @@ public class CompanyInfo {
 
     @Override
     public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+        if ( this == o ) {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() ) {
+            return false;
+        }
         CompanyInfo that = ( CompanyInfo ) o;
         return companyId == that.companyId &&
                 Objects.equals( companyName, that.companyName ) &&

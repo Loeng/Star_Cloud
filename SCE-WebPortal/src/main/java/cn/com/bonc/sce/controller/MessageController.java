@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Message;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.MessageService;
@@ -37,7 +37,7 @@ public class MessageController {
      */
     @ApiOperation( value = "添加message", notes = "添加message信息", httpMethod = "POST" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
@@ -54,7 +54,7 @@ public class MessageController {
      */
     @ApiOperation( value = "添加公告", notes = "添加公告信息", httpMethod = "POST" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping( "/announcements" )
@@ -71,7 +71,7 @@ public class MessageController {
      */
     @ApiOperation( value = "通过id删除message", notes = "通过id删除message", httpMethod = "DELETE" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/{messageId}" )
@@ -88,7 +88,7 @@ public class MessageController {
      */
     @ApiOperation( value = "通过id删除公告", notes = "通过id删除公告", httpMethod = "DELETE" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/announcements/{announcementId}" )
@@ -105,7 +105,7 @@ public class MessageController {
      */
     @ApiOperation( value = "修改message阅读状态", notes = "修改message阅读状态", httpMethod = "PUT" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping( "/{messageId}" )
@@ -124,7 +124,7 @@ public class MessageController {
      */
     @ApiOperation( value = "获取message数据", notes = "获取message数据", httpMethod = "GET" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping( "/{userId}" )

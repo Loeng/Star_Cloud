@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.CompanyInfoRepository;
 import cn.com.bonc.sce.entity.CompanyInfo;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -76,7 +76,7 @@ public class CompanyInfoApiController {
             @RequestBody CompanyInfo companyInfo ) {
         RestRecord restRecord = new RestRecord(200);
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
+        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
 //        return new RestRecord( 0, companyInfoRepository.addCompanyInfo( companyInfo ) );
@@ -96,7 +96,7 @@ public class CompanyInfoApiController {
             @RequestBody CompanyInfo companyInfo ) {
         RestRecord restRecord = new RestRecord(200);
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
+        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
 //        return new RestRecord( 0, companyInfoRepository.updateCompanyInfo( companyId, companyInfo ) );
@@ -115,7 +115,7 @@ public class CompanyInfoApiController {
             @PathVariable( "companyId" ) String companyId ) {
         RestRecord restRecord = new RestRecord(200);
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200);
+        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
 //        return new RestRecord( 0, companyInfoRepository.deleteCompanyInfo( companyId ) );

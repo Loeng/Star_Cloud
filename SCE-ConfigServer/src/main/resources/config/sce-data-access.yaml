@@ -1,8 +1,10 @@
-# service-discovery
+# data-access
+spring:
+  profiles: dev
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:10100/eureka/
+      defaultZone: http://localhost:10103/eureka/
 ribbon:
   eureka:
     enabled: true

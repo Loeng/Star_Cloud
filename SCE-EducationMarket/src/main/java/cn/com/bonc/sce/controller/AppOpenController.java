@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.MarketMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class AppOpenController {
             @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/{userId}")
     @ResponseBody
@@ -49,7 +49,7 @@ public class AppOpenController {
             @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
@@ -70,7 +70,7 @@ public class AppOpenController {
             @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = MarketMessageConstants.SCE_MARKET_MSG_100, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @DeleteMapping("/{userId}/{appId}")
     @ResponseBody

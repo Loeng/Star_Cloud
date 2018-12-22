@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppAuditingService;
 import cn.com.bonc.sce.service.AppVersionService;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Api( value = "应用版本更新、审核接口", tags = "应用版本更新/审核接口" )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
-        @ApiResponse( code = 200, message = PortalMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
 } )
 @RestController
 @RequestMapping( "/app-version" )
@@ -33,7 +33,7 @@ public class AppVersionController {
                                  AppAuditingService appAuditingService ) {
         this.appVersionService = appVersionService;
         this.appAuditingService = appAuditingService;
-//        this.adviseService = adviseService;
+
     }
 
 

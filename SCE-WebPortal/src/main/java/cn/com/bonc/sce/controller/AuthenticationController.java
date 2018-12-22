@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AuthenticationService;
 import io.swagger.annotations.*;
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2018/12/12 11:28
  */
 @Slf4j
-@Api( value = "登录/授权接口" ,tags = "登录/授权接口")
+@Api( value = "登录/授权接口", tags = "登录/授权接口", hidden = true )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RequestMapping( "/authentication" )
 @RestController
@@ -44,7 +45,7 @@ public class AuthenticationController {
             @ApiImplicitParam( name = "encryptedPassword", value = "加密后的用户登录密码", paramType = "query", required = true )
     } )
     /*@ApiResponses( value = {
-            @ApiResponse( code = 100, message = PortalMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = @Example( {
+            @ApiResponse( code = 100, message = WebMessageConstants.SCE_PORTAL_MSG_100, response = RestRecord.class, examples = @Example( {
                     @ExampleProperty( value = "100", mediaType = "integer" ),
                     @ExampleProperty( value = "go ahead", mediaType = "string" ),
                     @ExampleProperty( value = "some data", mediaType = "object" ),
@@ -53,9 +54,22 @@ public class AuthenticationController {
     @PostMapping( produces = "application/json" )
     @ResponseBody
     public RestRecord userLogin(
-            @RequestParam @Max( value = 3, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) @Min( value = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_100 ) Integer authType,
+            @RequestParam @Max( value = 3, message = WebMessageConstants.SCE_PORTAL_MSG_100 ) @Min( value = 0, message = WebMessageConstants.SCE_PORTAL_MSG_100 ) Integer authType,
             @RequestParam @NotEmpty String userIdentifier,
             @RequestParam @NotEmpty String encryptedPassword ) {
         return authenticationService.checkUserIdentityByEmail( userIdentifier, encryptedPassword );
+    }
+
+    @PostMapping( value = "/test" ,consumes = "*/*;charset=UTF-8")
+    @ResponseBody
+    public RestRecord test( @RequestBody User user ) {
+        System.out.println( "success" );
+        return new RestRecord( 0, "success" );
+    }
+
+    @GetMapping( "test" )
+    @ResponseBody
+    public RestRecord test2() {
+        return new RestRecord( 200, "it works" );
     }
 }

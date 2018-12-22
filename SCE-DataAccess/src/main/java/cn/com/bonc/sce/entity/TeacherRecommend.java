@@ -6,10 +6,13 @@ import java.sql.Time;
 import java.util.Objects;
 
 /**
- * Created by YueHaibo on 2018/12/12.
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
  */
+
 @Entity
-@Table( name = "SCE_TEACHER_RECOMMEND_APP", schema = "STARCLOUDMARKET", catalog = "" )
+@Table( name = "SCE_TEACHER_RECOMMEND_APP", schema = "STARCLOUDMARKET")
 @IdClass( TeacherRecommendPK.class )
 public class TeacherRecommend implements Serializable {
     private String appId;
@@ -50,22 +53,6 @@ public class TeacherRecommend implements Serializable {
         this.isDelete = isDelete;
     }
 
-    @Override
-    public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-        TeacherRecommend that = ( TeacherRecommend ) o;
-        return appId == that.appId &&
-                Objects.equals( userId, that.userId ) &&
-                Objects.equals( isDelete, that.isDelete );
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash( appId, userId, isDelete );
-    }
-
     @Basic
     @Column( name = "RECOMMEND_START_TIME", nullable = true )
     public Time getRecommendStartTime() {
@@ -85,4 +72,26 @@ public class TeacherRecommend implements Serializable {
     public void setRecommendEndTime( Time recommendEndTime ) {
         this.recommendEndTime = recommendEndTime;
     }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o ) {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() ) {
+            return false;
+        }
+        TeacherRecommend that = ( TeacherRecommend ) o;
+        return appId == that.appId &&
+                Objects.equals( userId, that.userId ) &&
+                Objects.equals( isDelete, that.isDelete );
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( appId, userId, isDelete );
+    }
+
+
 }

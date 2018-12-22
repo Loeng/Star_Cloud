@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.TeacherRecommendRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +49,7 @@ public class TeacherRecommendAppApiController {
 //        teacherRecommendRepository.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
     }
@@ -70,7 +70,7 @@ public class TeacherRecommendAppApiController {
 //        teacherRecommendRepository.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
     }
@@ -91,7 +91,7 @@ public class TeacherRecommendAppApiController {
 //        teacherRecommendRepository.deleteTeacherRecommendApp( teacherId, appIdList );
         RestRecord restRecord = new RestRecord();
         Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
         restRecord.setData( resultMap );
         return restRecord;
     }

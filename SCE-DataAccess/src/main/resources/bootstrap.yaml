@@ -7,7 +7,7 @@ spring:
     name: sce-data-access
   cloud:
     config:
-      uri: http://localhost:10099
+      uri: http://localhost:10100
   datasource:
     url: jdbc:oracle:thin:@192.168.1.130:1521:assistantdb
     username: STARCLOUDUSER
@@ -25,7 +25,7 @@ spring:
 logging:
   file: ./logs/dev_app.log
   pattern:
-    console: "%d %-5level %logger : %msg%n"
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
     file: "%d %-5level [%thread] %logger : %msg%n"
   level:
     org.springframework: INFO
@@ -33,4 +33,4 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql: TRACE
 server:
-  port: 10101
+  port: 10210
