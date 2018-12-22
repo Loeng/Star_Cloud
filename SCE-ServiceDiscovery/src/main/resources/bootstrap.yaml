@@ -5,11 +5,11 @@ spring:
     name: sce-discovery-service
   cloud:
     config:
-      uri: http://localhost:10099
+      uri: http://localhost:10100
 ---
 spring.profiles: dev
 server:
-  port: 10100
+  port: 10103
 logging:
 #  file: ./logs/dev_app.log
   pattern:
