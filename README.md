@@ -151,3 +151,7 @@ public class TestLogger {
 - PortalMessageConstants.java 
 
 前者包含服务内 logger 日志信息、服务间调用的信息，后者的消息编号则要与 Web 项目中的返回值封装 RestRecord.code 相匹配。
+
+### 2.5 项目默认端口号
+
+- 101xx 为系统基础服务 

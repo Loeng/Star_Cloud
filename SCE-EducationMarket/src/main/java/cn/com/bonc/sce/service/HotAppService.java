@@ -28,5 +28,4 @@ public class HotAppService {
         return hotAppDao.selectHotRecommendAppList( pageNum, pageSize );
     }
 
-
 }

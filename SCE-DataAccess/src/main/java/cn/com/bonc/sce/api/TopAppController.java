@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.repository.TopAppRepository;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * 应用推荐-重点推荐应用接口
- * author jc_D
+ * @author jc_D
  */
 @Slf4j
 @RestController
@@ -34,10 +34,10 @@ public class TopAppController {
     @PostMapping("/{userId}")
     public RestRecord addTopRecommendAppList( @RequestBody List< String > appIdList,
                                               @PathVariable( "userId" ) String userId ) {
-        List< String > appIdList1 = topAppRepository.getAllTopAppId();//从数据库获取所有热门应用id
-        topAppRepository.updateTopApp( appIdList1, 0L, userId );//将热门改为非热门
-        Integer i = topAppRepository.updateTopApp( appIdList, 1L, userId );//将用户选择的应用改为热门
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        List< String > appIdList1 = topAppRepository.getAllTopAppId();
+        topAppRepository.updateTopApp( appIdList1, 0L, userId );
+        Integer i = topAppRepository.updateTopApp( appIdList, 1L, userId );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
 

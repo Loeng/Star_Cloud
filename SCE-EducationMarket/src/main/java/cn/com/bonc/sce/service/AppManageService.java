@@ -69,15 +69,6 @@ public class AppManageService {
         return appManageDao.getAllAppList( plantformType, pageNum, pageSize );
     }
 
-    /**
-     * 查询应用分类信息
-     *
-     * @param plantformType 平台类型（平台应用或软件应用）
-     * @return
-     */
-    public RestRecord getAllAppTypeList( String plantformType ) {
-        return appManageDao.getAllAppTypeList( plantformType );
-    }
 
 
     /**

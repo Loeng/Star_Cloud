@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.service;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.model.Account;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -62,9 +62,9 @@ public class AccountService {
             //创建安全码
             String randomStr = VaildSecurityUtils.randomStr();
             VaildSecurityUtils.addCode( getAccountEncryptionCode( phone, randomStr ) );
-            return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, randomStr );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, randomStr );
         }
-        return new RestRecord( 411, PortalMessageConstants.SCE_PORTAL_MSG_411 );
+        return new RestRecord( 411, WebMessageConstants.SCE_PORTAL_MSG_411 );
     }
 
     /**
@@ -79,7 +79,7 @@ public class AccountService {
         accountSecurity.getPassword();
         String code;
         if( StringUtils.isEmpty( accountSecurity.getPhone())||StringUtils.isEmpty( accountSecurity.getCode())) {
-            return new RestRecord( 412, PortalMessageConstants.SCE_PORTAL_MSG_412 );
+            return new RestRecord( 412, WebMessageConstants.SCE_PORTAL_MSG_412 );
         }else{
             code = getAccountEncryptionCode(
                     accountSecurity.getPhone(), accountSecurity.getCode() );
@@ -88,11 +88,11 @@ public class AccountService {
             VaildSecurityUtils.delCode( code );
             RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );
             if ( rr.getCode() == successCode ) {
-                rr.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+                rr.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
             }
             return rr;
         } else {
-            return new RestRecord( 412, PortalMessageConstants.SCE_PORTAL_MSG_412 );
+            return new RestRecord( 412, WebMessageConstants.SCE_PORTAL_MSG_412 );
         }
     }
 

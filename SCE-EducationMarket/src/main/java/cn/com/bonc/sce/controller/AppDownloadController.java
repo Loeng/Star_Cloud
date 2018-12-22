@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.constants.MarketMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;

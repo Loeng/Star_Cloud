@@ -23,12 +23,12 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table( name = "SCE_MARKET_APP_TYPE" ,schema ="STARCLOUDMARKET")
+@Table( name = "SCE_MARKET_APP_TYPE" ,schema = "STARCLOUDMARKET" )
 public class AppTypeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column( name = "APP_TYPE_ID" )
-    private String appTypeId;
+    private Integer appTypeId;
     @JsonIgnoreProperties(value = { "appTypes" })
     @ManyToMany(mappedBy = "appTypes")
     private Set< AppInfoEntity > appInfo = new HashSet<>();
@@ -40,7 +40,7 @@ public class AppTypeEntity {
     private String remarks;
 
     @Column( name = "IS_DELETE" )
-    private Long isDelete;
+    private Long isDelete = 1L;
 
 //    @Override
 //    public String toString() {

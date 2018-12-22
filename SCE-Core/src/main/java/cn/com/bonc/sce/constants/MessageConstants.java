@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.constants;
 
 /**
+ * 服务间通信用 msg constants
  * @author Leucippus
  * @version 0.1
  * @since 2018/12/11 16:56
@@ -36,6 +37,12 @@ public interface MessageConstants {
      * Spring 框架自身异常
      * 800 - 999
      */
+
+    /**
+     * 登录异常相关
+     * 1000-1099
+     */
+    String SCE_MSG_1000 = "ip:{} 的用户尝试使用不支持的登录方式进行登录，使用登录方式: {}";
 
     /**
      * 通用异常处理
