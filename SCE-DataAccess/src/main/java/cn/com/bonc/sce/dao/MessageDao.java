@@ -20,7 +20,8 @@ import java.util.List;
 @Transactional
 public interface MessageDao extends JpaRepository<Message, Integer> {
 
-    Message save(Message message);
+    @Override
+    Message save( Message message);
 
     @Modifying
     @Query( "UPDATE Message m SET m.isDelete=1 WHERE m.id=?1" )

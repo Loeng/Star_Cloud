@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping( "/appList" )
 public class AppListController {
 
+
     @Autowired
     private AppListService appListService;
 

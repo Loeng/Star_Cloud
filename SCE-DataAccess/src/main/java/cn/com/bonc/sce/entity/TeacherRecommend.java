@@ -17,6 +17,7 @@ import java.util.Objects;
 public class TeacherRecommend implements Serializable {
     private String appId;
     private String userId;
+
     private Long isDelete;
     private Time recommendStartTime;
     private Time recommendEndTime;

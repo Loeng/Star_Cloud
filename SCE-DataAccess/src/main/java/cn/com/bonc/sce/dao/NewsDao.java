@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface NewsDao extends JpaRepository< News, Integer > {
 
+    @Override
     News save( News banner );
 
     @Modifying

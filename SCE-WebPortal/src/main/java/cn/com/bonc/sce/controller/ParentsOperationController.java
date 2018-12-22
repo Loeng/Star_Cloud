@@ -69,7 +69,9 @@ public class ParentsOperationController {
         String sessionValid = (String)request.getSession().getAttribute( "phoneValid" );
         if(sessionValid.equals( valid )) {
             RestRecord rr = parentsOperationService.insertParentsInfo( parentsInfo );
-            if(rr.getCode()==200)request.getSession().removeAttribute( "phoneValid" );
+            if(rr.getCode()==200) {
+                request.getSession().removeAttribute( "phoneValid" );
+            }
             return rr;
         }
         return new RestRecord(200,"验证码不正确");

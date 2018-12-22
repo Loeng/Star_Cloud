@@ -71,7 +71,7 @@ public class UserDataApiController {
     }
 
     /**
-     * patch 用作数据的局部跟新
+     * patch 用作数据的局部更新
      *
      * @param userId   用户id
      * @param username 需要修改的用户名称
