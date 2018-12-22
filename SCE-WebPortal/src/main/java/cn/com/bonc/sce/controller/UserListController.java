@@ -36,8 +36,8 @@ public class UserListController {
     @ApiOperation( value = "根据角色id查询用户", notes = "根据角色id查询用户", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "roleId", value = "角色ID", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = false, defaultValue = "1" ),
-            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = false, defaultValue = "10" )
+            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
@@ -60,16 +60,11 @@ public class UserListController {
      * @return
      */
     @ApiOperation( value = "根据条件查询", notes = "根据条件查询", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "查询条件", value = "查询条件", paramType = "body", required = true ),
-            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/condition/{pageNum}/{pageSize}" )
-    public RestRecord getUserInfoByCondition( @RequestBody Map conditionMap,
+    @PostMapping( "/condition/{pageNum}/{pageSize}" )
+    public RestRecord getUserInfoByCondition( @RequestBody( required = false ) Map conditionMap,
                                               @PathVariable( "pageNum" ) Integer pageNum,
                                               @PathVariable( "pageSize" ) Integer pageSize ) {
 
