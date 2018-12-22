@@ -2,7 +2,6 @@ package cn.com.bonc.sce.repository;
 
 
 import cn.com.bonc.sce.entity.AppInfoEntity;
-import cn.com.bonc.sce.entity.AppTypeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +18,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
 
     //根据输入名模糊查询应用
     Page< AppInfoEntity > findByAppNameLike( String appName, Pageable pageable );
+
+
+
 }

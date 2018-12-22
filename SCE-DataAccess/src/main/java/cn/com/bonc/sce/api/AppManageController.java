@@ -1,12 +1,14 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.dao.MarketAppVersionRepository;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,9 @@ public class AppManageController {
 
     @Autowired
     private AppTypeRepository appTypeRepository;
+
+    @Autowired
+    private MarketAppVersionRepository marketAppVersionRepository;
 
     /**
      * 新增应用
@@ -198,6 +203,22 @@ public class AppManageController {
     @GetMapping( "/detail-by-id/{appId}" )
     public RestRecord selectAppById( @PathVariable String appId ) {
         AppInfoEntity appInfo = appInfoRepository.findByAppId( appId );
+        return new RestRecord( 200, appInfo );
+    }
+
+    /**
+     * 应用上下架
+     * @param applyType
+     * @param appIdList
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/app-on-shelf" )
+    public RestRecord applyAppOnShelf( @RequestParam  Integer applyType, @RequestBody  List<String> appIdList,@RequestParam String userId  ) {
+
+        String appStatus  = applyType==1?"上架审核":"下架审核";
+
+        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( appStatus,appIdList,userId );
         return new RestRecord( 200, appInfo );
     }
 

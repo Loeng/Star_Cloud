@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2018/12/14 17:26
  */
 @Slf4j
-@Api( value = "厂商应用上下架审核申请相关接口" )
+@Api( value = "厂商应用上下架审核申请相关接口",tags = "厂商应用上下架审核申请相关接口")
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping("/app-on-shelf-apply")
@@ -50,7 +50,7 @@ public class AppApplyController {
     @PostMapping
     @ResponseBody
     public RestRecord applyAppOnShelf ( @RequestParam( "applyType" ) Integer applyType,
-                                        @RequestBody  List  appIdList,
+                                        @RequestBody  List<String>  appIdList,
                                         @RequestParam( "userId" ) String userId ) {
         // 1. 将所有选择的应用状态更新为待审核
         RestRecord restRecord =   appApplyService.applyAppOnShelf( applyType,appIdList,userId );

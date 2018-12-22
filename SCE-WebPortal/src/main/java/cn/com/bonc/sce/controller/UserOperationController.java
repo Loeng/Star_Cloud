@@ -6,7 +6,6 @@ import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserOperationService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -102,7 +101,7 @@ public class UserOperationController {
             @ApiImplicitParam( name = "userId", dataType = "String", value = "删除的用户ID", paramType = "path", required = true )
     } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = PortalMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
+            @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
     @GetMapping("/user-info/{userId}")
     @ResponseBody
