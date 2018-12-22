@@ -73,7 +73,7 @@ public class UserListController {
      * @param pageSize
      * @return
      */
-    @GetMapping( "/condition/{pageNum}/{pageSize}" )
+    @PostMapping( "/condition/{pageNum}/{pageSize}" )
     public RestRecord getUserInfoByCondition( @RequestBody Map conditionMap,
                                               @PathVariable( "pageNum" ) Integer pageNum,
                                               @PathVariable( "pageSize" ) Integer pageSize ) {

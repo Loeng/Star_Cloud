@@ -1,7 +1,6 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserOperationService;
 import io.swagger.annotations.*;

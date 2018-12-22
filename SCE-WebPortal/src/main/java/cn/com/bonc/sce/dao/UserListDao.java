@@ -26,7 +26,7 @@ public interface UserListDao {
     /**
      * 根据条件查询
      */
-    @RequestMapping( value = "/user-list/condition/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/user-list/condition/{pageNum}/{pageSize}", method = RequestMethod.POST )
     RestRecord getUserInfoByCondition( @RequestBody Map conditionMap,
                                        @PathVariable( "pageNum" ) Integer pageNum,
                                        @PathVariable( "pageSize" ) Integer pageSize );
