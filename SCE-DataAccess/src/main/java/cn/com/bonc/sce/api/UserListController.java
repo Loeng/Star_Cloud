@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.repository.UserListData;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +61,7 @@ public class UserListController {
         Map map = new HashMap();
         map.put( "total", total );
         map.put( "data", info );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, map );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
     }
 
 
@@ -82,6 +82,6 @@ public class UserListController {
         Map map = new HashMap();
         map.put( "total", total );
         map.put( "data", info );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200, map );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
     }
 }
