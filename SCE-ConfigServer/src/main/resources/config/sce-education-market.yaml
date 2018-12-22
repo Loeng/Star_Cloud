@@ -1,12 +1,10 @@
+# data-access
 spring:
   profiles: dev
-server:
-  port: 10200
-# service-discovery
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:10100/eureka/
+      defaultZone: http://localhost:10103/eureka/
 ribbon:
   eureka:
     enabled: true

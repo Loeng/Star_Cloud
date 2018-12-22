@@ -3,7 +3,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:10100/eureka/
+      defaultZone: http://localhost:10103/eureka/
 ---
 spring:
   profiles: test
