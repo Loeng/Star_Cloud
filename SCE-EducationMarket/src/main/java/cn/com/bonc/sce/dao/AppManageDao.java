@@ -43,15 +43,6 @@ public interface AppManageDao {
                               @PathVariable( "pageSize" ) Integer pageSize
     );
 
-    /**
-     * 查询应用分类信息
-     *
-     * @param plantformType 平台类型（平台应用或软件应用）
-     * @return
-     */
-    @RequestMapping( value = "/manage-app/all-app-type-list", method = RequestMethod.GET )
-    RestRecord getAllAppTypeList( @RequestParam( "plantformType" ) String plantformType );
-
 
     /**
      * 查询指定类型应用信息

@@ -88,18 +88,6 @@ public class AppManageController {
         return new RestRecord( 200, appInfoList );
     }
 
-    /**
-     * 查询应用分类信息
-     *
-     * @param plantformType 平台类型（平台应用或软件应用）
-     * @return
-     */
-    @GetMapping( "/all-app-type-list/{plantformType}" )
-    public RestRecord getAllAppTypeList( @PathVariable String plantformType ) {
-        //这个接口和某人写重了
-        return new RestRecord( 200, "这个接口和某人写重了" );
-    }
-
 
     /**
      * 查询指定类型应用信息

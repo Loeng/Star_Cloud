@@ -113,24 +113,6 @@ public class AppManageController {
         return appManageService.getAllAppList( plantformType, pageNum, pageSize );
     }
 
-    /**
-     * 查询应用分类信息
-     *
-     * @param plantformType 平台类型（平台应用或软件应用）
-     * @return
-     */
-    @ApiOperation( value = "查询应用分类信息(写重了，请忽略)", notes = "查询应用分类信息(写重了，请忽略)", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "plantformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true )
-
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
-    } )
-    @GetMapping( "/all-app-type-list" )
-    public RestRecord getAllAppTypeList( @RequestParam String plantformType ) {
-        return new RestRecord( 0, "这个接口没有用，邪虫了" );
-    }
 
 
     /**
