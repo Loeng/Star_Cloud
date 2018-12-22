@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.PortalMessageConstants;
+
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AppAuditingDao;
 import cn.com.bonc.sce.dao.AppVersionRepository;
 import cn.com.bonc.sce.entity.MarketAppVersion;
@@ -88,7 +89,7 @@ public class AppVersionApiController {
 //        map.put( "totalCount", 123 );
 //        map.put( "totalPage", 23 );
 //        restRecord.setData( map );
-//        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+//        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
 //        return restRecord;
     }
 
@@ -108,7 +109,7 @@ public class AppVersionApiController {
         log.info( "更新应用版本信息  appId:{}  appVersionInfo:{}", appId, appVersionInfo );
         appVersionInfo.setAppId( appId );
 //        MarketAppVersion result = marketAppVersionRepository.saveAndFlush( appVersionInfo );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
 //        return new RestRecord( 0, result );
     }
 
@@ -132,7 +133,7 @@ public class AppVersionApiController {
 //        } else {
 //            return new RestRecord( 200, marketAppVersionRepository.deleteByAppId( appId ) );
 //        }
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -160,9 +161,9 @@ public class AppVersionApiController {
 //            restRecord.setMsg( "#########缺少迭代需要的版本号###########" );
 //            return restRecord;
 //        }
-//        restRecord.setMsg( PortalMessageConstants.SCE_PORTAL_MSG_200 );
+//        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
 //        restRecord.setData( marketAppVersionRepository.saveAndFlush( appVersionInfo ) );
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 //
 
@@ -184,7 +185,7 @@ public class AppVersionApiController {
 //        appAuditingDao.appVersionUpdateApprove( appId, userId );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
 //        return null;
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -207,6 +208,6 @@ public class AppVersionApiController {
 //        appAuditingDao.appVersionUpdateReject( appId, userId, rejectReason );
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
 //        return null;
-        return new RestRecord( 200, PortalMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 }

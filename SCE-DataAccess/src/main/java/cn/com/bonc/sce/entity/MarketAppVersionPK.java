@@ -12,7 +12,7 @@ public class MarketAppVersionPK implements Serializable {
     private String appId;
     private String appVersion;
 
-    @Column( name = "APP_ID", nullable = false, precision = 0 )
+    @Column( name = "APP_ID", nullable = false, length = 30 )
     @Id
     public String getAppId() {
         return appId;
@@ -22,7 +22,7 @@ public class MarketAppVersionPK implements Serializable {
         this.appId = appId;
     }
 
-    @Column( name = "APP_VERSION", nullable = false, length = 10 )
+    @Column( name = "APP_VERSION", nullable = false, length = 30 )
     @Id
     public String getAppVersion() {
         return appVersion;
@@ -37,7 +37,7 @@ public class MarketAppVersionPK implements Serializable {
         if ( this == o ) return true;
         if ( o == null || getClass() != o.getClass() ) return false;
         MarketAppVersionPK that = ( MarketAppVersionPK ) o;
-        return appId == that.appId &&
+        return Objects.equals( appId, that.appId ) &&
                 Objects.equals( appVersion, that.appVersion );
     }
 
