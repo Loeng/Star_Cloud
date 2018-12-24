@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.filter;
+package cn.com.bonc.sce.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
