@@ -3,6 +3,7 @@ package cn.com.bonc.sce.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -12,15 +13,15 @@ import java.util.Objects;
  */
 
 @Entity
-@Table( name = "SCE_TEACHER_RECOMMEND_APP", schema = "STARCLOUDMARKET")
+@Table( name = "SCE_TEACHER_RECOMMEND_APP", schema = "STARCLOUDMARKET" )
 @IdClass( TeacherRecommendPK.class )
 public class TeacherRecommend implements Serializable {
     private String appId;
     private String userId;
 
     private Long isDelete;
-    private Time recommendStartTime;
-    private Time recommendEndTime;
+    private Date recommendStartTime;
+    private Date recommendEndTime;
 
     @Id
     @Column( name = "APP_ID", nullable = false, precision = 0, length = 20 )
@@ -55,21 +56,21 @@ public class TeacherRecommend implements Serializable {
 
     @Basic
     @Column( name = "RECOMMEND_START_TIME", nullable = true )
-    public Time getRecommendStartTime() {
+    public Date getRecommendStartTime() {
         return recommendStartTime;
     }
 
-    public void setRecommendStartTime( Time recommendStartTime ) {
+    public void setRecommendStartTime( Date recommendStartTime ) {
         this.recommendStartTime = recommendStartTime;
     }
 
     @Basic
     @Column( name = "RECOMMEND_END_TIME", nullable = true )
-    public Time getRecommendEndTime() {
+    public Date getRecommendEndTime() {
         return recommendEndTime;
     }
 
-    public void setRecommendEndTime( Time recommendEndTime ) {
+    public void setRecommendEndTime( Date recommendEndTime ) {
         this.recommendEndTime = recommendEndTime;
     }
 
@@ -84,13 +85,15 @@ public class TeacherRecommend implements Serializable {
         TeacherRecommend that = ( TeacherRecommend ) o;
         return appId == that.appId &&
                 Objects.equals( userId, that.userId ) &&
-                Objects.equals( isDelete, that.isDelete );
+                Objects.equals( isDelete, that.isDelete ) &&
+                Objects.equals( recommendStartTime, that.recommendStartTime ) &&
+                Objects.equals( recommendEndTime, that.recommendEndTime );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, userId, isDelete );
+        return Objects.hash( appId, userId, isDelete, recommendStartTime, recommendEndTime );
     }
 
 

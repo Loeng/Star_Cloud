@@ -20,6 +20,44 @@ import java.util.Map;
  * @since 2018/12/14 14:26
  */
 @Repository
-public interface TeacherRecommendRepository extends JpaRepository< TeacherRecommend, Long > {
+@Transactional(rollbackFor = Exception.class)
+public interface TeacherRecommendRepository extends JpaRepository< TeacherRecommend, Long >, JpaSpecificationExecutor< TeacherRecommend > {
 
+    /**
+     * 查询教师推荐应用列表
+     *
+     * @param userId    教师Id
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @param pageable  分页参数
+     * @return
+     */
+
+    @Query( nativeQuery = true, value = "SELECT\n" +
+            "TR.APP_ID,TR.RECOMMEND_START_TIME,TR.RECOMMEND_END_TIME,AI.APP_NAME " +
+            "FROM STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP  TR\n" +
+            "left join STARCLOUDMARKET.SCE_MARKET_APP_INFO AI ON TR.APP_ID=AI.APP_ID \n" +
+            "WHERE\n" +
+            "TR.user_id = :userId \n" +
+            "AND TR.RECOMMEND_START_TIME >= to_date ( :startTime , 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "AND TR.RECOMMEND_END_TIME <= to_date ( :endTime , 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "AND TR.IS_DELETE = 1 " )
+    Page< List< Map< String, Object > > > findAllByUserIdAndTime(
+            @Param( "userId" ) String userId,
+            @Param( "startTime" ) String startTime,
+            @Param( "endTime" ) String endTime,
+            Pageable pageable );
+
+    /**
+     * 删除教师推荐应用
+     *
+     * @param userId    用户Id(此处为教师Id)
+     * @param appIdList 应用Id列表
+     * @return 影响条数
+     */
+    @Modifying
+    @Query( "UPDATE TeacherRecommend SET IS_DELETE=0 WHERE USER_ID=:userId AND APP_ID in (:appIdList)" )
+    int deleteTeacherRecommendByAppIdList(
+            @Param( "userId" ) String userId,
+            @Param( "appIdList" ) List< String > appIdList );
 }
