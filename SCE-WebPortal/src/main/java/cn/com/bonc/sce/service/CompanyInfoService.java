@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.CompanyInfoDao;
+import cn.com.bonc.sce.model.CompanyInfoModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,11 @@ public class CompanyInfoService {
         return companyInfoDao.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
     }
 
-    public RestRecord addCompanyInfo( Map< String, Object > companyInfo ) {
+    public RestRecord addCompanyInfo( CompanyInfoModel companyInfo ) {
         return companyInfoDao.addCompanyInfo( companyInfo );
     }
 
-    public RestRecord updateCompanyInfo( String companyId, Map< String, Object > companyInfo ) {
+    public RestRecord updateCompanyInfo( String companyId, CompanyInfoModel companyInfo ) {
         return companyInfoDao.updateCompanyInfo( companyId, companyInfo );
     }
 

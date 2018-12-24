@@ -12,11 +12,11 @@ import java.util.List;
 @Repository
 public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long >, JpaSpecificationExecutor< CompanyInfo > {
 
-//    public List< CompanyInfo > queryCompanyInfo( String companyId, String companyName, Pageable pageable );
+//    public List< CompanyInfoModel > queryCompanyInfo( String companyId, String companyName, Pageable pageable );
 //
-//    public boolean addCompanyInfo( CompanyInfo companyInfo );
+//    public boolean addCompanyInfo( CompanyInfoModel companyInfo );
 //
-//    public boolean updateCompanyInfo( String companyId, CompanyInfo companyInfo );
+//    public boolean updateCompanyInfo( String companyId, CompanyInfoModel companyInfo );
 //
 //    public boolean deleteCompanyInfo( String companyId );
 }

@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.entity.MarketAppVersion;
+import cn.com.bonc.sce.model.AppVersionQueryModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -91,4 +92,10 @@ public interface AppVersionRepository extends
     @Query( nativeQuery = true, value = "select * from MarketAppVersion av join AppInfoEntity ai where av.appId=ai.appId and av.isDelete=:isDelete" )
     Page< MarketAppVersion > findAllByIsDelete(
             @Param( "isDelete" ) long isDelete, Pageable pageable );
+
+
+    @Query( value = "SELECT T1.APP_ID AS APP_ID,T2.APP_NAME AS APP_NAME,T1.APP_STATUS FROM SCE_MARKET_APP_VERSION T1 LEFT JOIN SCE_MARKET_APP_INFO T2 ON T1.APP_ID=T2.APP_ID ",
+            countQuery = "SELECT COUNT(*) FROM SCE_MARKET_APP_VERSION T1 LEFT JOIN SCE_MARKET_APP_INFO T2 ON T1.APP_ID=T2.APP_ID "
+            , nativeQuery = true )
+    Page< AppVersionQueryModel > findAppAndName( Pageable pageable );
 }
