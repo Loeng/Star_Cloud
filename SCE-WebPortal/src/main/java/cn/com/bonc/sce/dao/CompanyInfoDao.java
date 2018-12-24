@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.model.CompanyInfoModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
@@ -21,12 +22,12 @@ public interface CompanyInfoDao {
 
     @RequestMapping( value = "/company", method = RequestMethod.POST )
     public RestRecord addCompanyInfo(
-            @RequestBody Map< String, Object > companyInfo );
+            @RequestBody CompanyInfoModel companyInfo );
 
     @RequestMapping( value = "/company/{companyId}", method = RequestMethod.PUT )
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,
-            @RequestBody Map< String, Object > companyInfo );
+            @RequestBody CompanyInfoModel companyInfo );
 
     @RequestMapping( value = "/company/{companyId}", method = RequestMethod.DELETE )
     public RestRecord deleteCompanyInfo(

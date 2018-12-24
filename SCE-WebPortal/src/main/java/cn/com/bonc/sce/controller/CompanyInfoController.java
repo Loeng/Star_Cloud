@@ -7,6 +7,7 @@ package cn.com.bonc.sce.controller;
  */
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.CompanyInfoModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CompanyInfoService;
 import io.swagger.annotations.*;
@@ -55,7 +56,7 @@ public class CompanyInfoController {
     @ResponseBody
     public RestRecord addCompanyInfo(
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
-                    Map< String, Object > companyInfo ) {
+                    CompanyInfoModel companyInfo ) {
 
         return companyInfoService.addCompanyInfo( companyInfo );
     }
@@ -70,11 +71,11 @@ public class CompanyInfoController {
     @ApiOperation( value = "修改对应厂商信息", notes = "修改对应厂商信息", httpMethod = "PUT" )
     @ApiImplicitParam( name = "companyId", value = "厂商ID", paramType = "path", required = true )
     @PutMapping( "/{companyId}" )
-    @ResponseBody
+    @ResponseBody//@RequestBody @ApiParam(name="用户对象",value="传入json格式",required=true) User user
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) String companyId,
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
-                    Map< String, Object > companyInfo ) {
+                    CompanyInfoModel companyInfo ) {
         return companyInfoService.updateCompanyInfo( companyId, companyInfo );
     }
 
