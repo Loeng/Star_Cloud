@@ -1,11 +1,14 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.ParentsInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.ParentsOperationService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +22,16 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @RestController
-@Api( value = "家长操作接口" )
-@ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
+@Api( value = "家长操作接口", tags = "家长操作接口" )
+@ApiResponses( {
+        @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+} )
 @RequestMapping( "/parentsOperation" )
 public class ParentsOperationController {
+
+    private static final int SUCCESS = 200;
+
     @Autowired
     private ParentsOperationService parentsOperationService;
 
@@ -33,18 +42,16 @@ public class ParentsOperationController {
      * @return 验证码
      */
     @ApiOperation( value = "获取安全验证信息", notes = "获取安全验证信息", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "phone", value = "手机号", paramType = "header", required = true),
-    } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = WebMessageConstants.SCE_PORTAL_MSG_409, response = RestRecord.class )
     } )
     @GetMapping( "/{phone}" )
     @ResponseBody
-    public RestRecord getSecurityVaildInfo( HttpServletRequest request, @PathVariable( "phone" )String phone){
+    public RestRecord getSecurityValidInfo( HttpServletRequest request, @PathVariable( "phone" ) @ApiParam( name = "phone", value = "手机号", required = true ) String phone){
         RestRecord rr = parentsOperationService.getSecurityVaildInfo(phone);
-        request.getSession().setAttribute( "phoneValid",rr.getMsg() );
-        rr.setMsg( null );
+        /*request.getSession().setAttribute( "phoneValid",rr.getMsg() );
+        rr.setMsg( null );*/
         return rr;
     }
 
@@ -56,24 +63,22 @@ public class ParentsOperationController {
      * @return 添加结果
      */
     @ApiOperation( value = "添加家长信息", notes = "添加家长信息", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "parentsInfo", value = "家长信息", paramType = "body", required = true),
-            @ApiImplicitParam( name = "valid", value = "验证码", paramType = "body", required = true),
-    } )
     @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 411, message = WebMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertParentsInfo( HttpServletRequest request,ParentsInfo parentsInfo ,String valid){
+    public RestRecord insertParentsInfo( HttpServletRequest request,@RequestBody @ApiParam( name = "parentsInfo", value = "新闻信息", required = true )ParentsInfo parentsInfo ,String valid){
         String sessionValid = (String)request.getSession().getAttribute( "phoneValid" );
-        if(sessionValid.equals( valid )) {
+        if( !StringUtils.isEmpty(sessionValid)&&sessionValid.equals( valid )) {
             RestRecord rr = parentsOperationService.insertParentsInfo( parentsInfo );
-            if(rr.getCode()==200) {
+            if(rr.getCode()==SUCCESS){
                 request.getSession().removeAttribute( "phoneValid" );
             }
             return rr;
         }
-        return new RestRecord(200,"验证码不正确");
+        return new RestRecord(411,WebMessageConstants.SCE_PORTAL_MSG_411);
     }
 }

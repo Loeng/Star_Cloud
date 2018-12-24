@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@Api( value = "消息通知接口" )
-@ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
+@Api( value = "消息通知接口", tags = "消息通知接口" )
+@ApiResponses( {
+        @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+} )
 @RequestMapping( "/messages" )
 public class MessageController {
     @Autowired
@@ -33,16 +36,14 @@ public class MessageController {
      * @return 是否添加成功
      */
     @ApiOperation( value = "添加message", notes = "添加message信息", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "message", value = "advice信息", paramType = "body", required = true),
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertMessage( Message message ) {
+    public RestRecord insertMessage( @RequestBody @ApiParam( name = "message", value = "信息", required = true )Message message ) {
+        if(message.getContent().length()>200)return new RestRecord(409,MessageConstants.SCE_MSG_409);
         return messageService.insertMessage( message );
     }
 
@@ -53,16 +54,13 @@ public class MessageController {
      * @return 是否添加成功
      */
     @ApiOperation( value = "添加公告", notes = "添加公告信息", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "message", value = "公告信息", paramType = "body", required = true),
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping( "/announcements" )
     @ResponseBody
-    public RestRecord insertAnnouncement( Message message ) {
+    public RestRecord insertAnnouncement( @RequestBody @ApiParam( name = "message", value = "信息", required = true )Message message ) {
         return messageService.insertAnnouncement( message );
     }
 
@@ -73,16 +71,13 @@ public class MessageController {
      * @return 删除是否成功
      */
     @ApiOperation( value = "通过id删除message", notes = "通过id删除message", httpMethod = "DELETE" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "messageId", value = "消息id", paramType = "header", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/{messageId}" )
     @ResponseBody
-    public RestRecord deleteMessageById( @PathVariable( "messageId" )Integer messageId ) {
+    public RestRecord deleteMessageById( @PathVariable( "messageId" ) @ApiParam( name = "messageId", value = "信息id", required = true ) Integer messageId ) {
         return messageService.deleteMessageById( messageId );
     }
 
@@ -93,16 +88,13 @@ public class MessageController {
      * @return 删除是否成功
      */
     @ApiOperation( value = "通过id删除公告", notes = "通过id删除公告", httpMethod = "DELETE" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "announcementId", value = "公告id", paramType = "header", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/announcements/{announcementId}" )
     @ResponseBody
-    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" )Integer announcementId ) {
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) @ApiParam( name = "announcementId", value = "公告id", required = true )Integer announcementId ) {
         return messageService.deleteAnnouncementById( announcementId );
     }
 
@@ -113,16 +105,13 @@ public class MessageController {
      * @return 删除是否成功
      */
     @ApiOperation( value = "修改message阅读状态", notes = "修改message阅读状态", httpMethod = "PUT" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "messageId", value = "消息id", paramType = "body", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping( "/{messageId}" )
     @ResponseBody
-    public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" )Integer messageId ) {
+    public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" ) @ApiParam( name = "messageId", value = "信息id", required = true ) Integer messageId ) {
         return messageService.updateMessageReadStatusById( messageId );
     }
 
@@ -135,20 +124,15 @@ public class MessageController {
      * @return message数据
      */
     @ApiOperation( value = "获取message数据", notes = "获取message数据", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", value = "用户id", paramType = "header", required = true ),
-            @ApiImplicitParam( name = "pageNum", dataType = "Integer", value = "分页参数-页码", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "pageSize", dataType = "Integer", value = "分页参数-每页条数", paramType = "path", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/{userId}/{pageNum}/{pageSize}" )
+    @GetMapping( "/{userId}" )
     @ResponseBody
-    public RestRecord getMessageByUserId( @PathVariable( "userId" )String userId,
-                                          @PathVariable( "pageNum" )Integer pageNum,
-                                          @PathVariable( "pageSize" )Integer pageSize ) {
+    public RestRecord getMessageByUserId( @PathVariable( "userId" ) @ApiParam( name = "userId", value = "userId", required = true )String userId,
+                                          @RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
+                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
         return messageService.getMessageByUserId( userId,pageNum,pageSize );
     }
 }

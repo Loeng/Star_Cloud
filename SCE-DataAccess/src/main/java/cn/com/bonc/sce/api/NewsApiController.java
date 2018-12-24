@@ -11,6 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 新闻增删改
  *
@@ -102,7 +105,10 @@ public class NewsApiController {
                                    @PathVariable( "pageSize" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
-            Page< News > info = newsDao.findByIsDeleteAndContentStatusAndUpdateTimeBetween( 0,auditStatus,startDate,endDate, pageable );
+            Page< News > page = newsDao.findByIsDeleteAndContentStatusAndUpdateTimeBetween( 0,auditStatus,startDate,endDate, pageable );
+            Map<String,Object> info = new HashMap<>();
+            info.put( "total",page.getTotalElements() );
+            info.put( "info",page.getContent() );
             return new RestRecord( 200, info );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );

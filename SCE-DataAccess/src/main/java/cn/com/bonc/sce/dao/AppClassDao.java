@@ -17,9 +17,8 @@ import java.util.List;
  * @since 2018/17/12 12:00
  */
 @Repository
-@Transactional(rollbackFor = Exception.class)
+@Transactional
 public interface AppClassDao extends JpaRepository<AppClass, Integer> {
-
     @Override
     AppClass save( AppClass appClass );
 

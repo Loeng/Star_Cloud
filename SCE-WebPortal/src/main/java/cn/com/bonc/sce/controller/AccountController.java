@@ -7,8 +7,13 @@ import cn.com.bonc.sce.service.AccountService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * 账号安全信息相关
@@ -19,9 +24,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@Api( value = "账号安全信息相关" )
-@ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
-@RequestMapping( "/accountSecurity" )
+@Api( value = "账号安全信息相关", tags = "账号安全信息相关" )
+@ApiResponses( {
+        @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+} )
+@RequestMapping( "/account-security" )
 public class AccountController {
 
     private static final String UNDEFINED = "undefined";
@@ -36,16 +44,13 @@ public class AccountController {
      * @return 验证码
      */
     @ApiOperation( value = "发送安全验证信息", notes = "账号发送安全验证", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "phone", value = "手机号", paramType = "header", required = true)
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = WebMessageConstants.SCE_PORTAL_MSG_409, response = RestRecord.class )
     } )
-    @GetMapping( "/sendSecurityPhoneValid/{phone}" )
+    @GetMapping( "/send-security-phone-valid/{phone}" )
     @ResponseBody
-    public RestRecord sendSecurityPhoneValid( @PathVariable( "phone" ) String phone){
+    public RestRecord sendSecurityPhoneValid( @PathVariable( "phone" ) @ApiParam( name = "phone", value = "手机号" ,required = true) String phone){
         return accountSecurityService.sendSecurityPhoneValid(phone);
     }
 
@@ -67,7 +72,8 @@ public class AccountController {
     } )
     @GetMapping( "/{phone}/{valid}" )
     @ResponseBody
-    public RestRecord validInfo(@PathVariable( "phone" )String phone,@PathVariable( "valid" )String valid){
+    public RestRecord validInfo(@PathVariable( "phone" ) @ApiParam( name = "phone", value = "手机号" ,required = true) String phone,
+                                @PathVariable( "valid" ) @ApiParam( name = "valid", value = "验证码" ,required = true) String valid){
         if( StringUtils.isEmpty( phone )|| UNDEFINED.equals( phone ) ||
                 StringUtils.isEmpty( valid )|| UNDEFINED.equals( valid ) ){
             return new RestRecord(500,"error");
@@ -82,16 +88,13 @@ public class AccountController {
      * @return 修改结果
      */
     @ApiOperation( value = "修改账号信息", notes = "修改账号信息", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "accountSecurity", value = "安全码和账号信息", paramType = "body", required = true),
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 412, message = WebMessageConstants.SCE_PORTAL_MSG_412, response = RestRecord.class )
     } )
     @PostMapping("")
     @ResponseBody
-    public RestRecord updateAccount(Account accountSecurity){
+    public RestRecord updateAccount(@RequestBody @ApiParam( name = "accountSecurity", value = "安全码和手机号和修改信息", required = true ) Account accountSecurity){
         return accountSecurityService.updateAccount(accountSecurity);
     }
 }

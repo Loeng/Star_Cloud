@@ -8,13 +8,16 @@ import cn.com.bonc.sce.entity.UserMessage;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 消息
@@ -152,11 +155,19 @@ public class MessageApiController {
                 }
                 List<UserMessage> returns = userMessageDao.saveAll( userMessageList );
                 if ( returns.size() > 0 ) {
-                    return new RestRecord( 200, userMessageDao.findByUserIdAndIsDelete( userId,0,pageable ) );
+                    Map<String,Object> info = new HashMap<>();
+                    Page<UserMessage> page = userMessageDao.findByUserIdAndIsDelete( userId,0,pageable );
+                    info.put( "total",page.getTotalElements() );
+                    info.put( "info",page.getContent() );
+                    return new RestRecord( 200, info );
                 }
                 return new RestRecord( 500, "error" );
             } else {
-                return new RestRecord( 200, userMessageDao.findByUserIdAndIsDelete( userId,0,pageable ) );
+                Map<String,Object> info = new HashMap<>();
+                Page<UserMessage> page = userMessageDao.findByUserIdAndIsDelete( userId,0,pageable );
+                info.put( "total",page.getTotalElements() );
+                info.put( "info",page.getContent() );
+                return new RestRecord( 200, info );
             }
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );

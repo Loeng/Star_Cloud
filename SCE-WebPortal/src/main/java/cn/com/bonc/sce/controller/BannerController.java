@@ -21,8 +21,11 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api( value = "banner接口" )
-@ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
+@Api( value = "banner接口", tags = "banner接口"  )
+@ApiResponses( {
+        @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
+        @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+} )
 @RequestMapping( "/banners" )
 public class BannerController {
     @Autowired
@@ -35,16 +38,13 @@ public class BannerController {
      * @return 是否添加成功
      */
     @ApiOperation( value = "添加banner", notes = "添加banner", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "banner", value = "banner信息", paramType = "body", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertBanner( Banner banner ) {
+    public RestRecord insertBanner( @RequestBody @ApiParam( name = "banner", value = "banner信息", required = true ) Banner banner ) {
         return bannerService.insertBanner( banner );
     }
 
@@ -55,16 +55,13 @@ public class BannerController {
      * @return 删除是否成功
      */
     @ApiOperation( value = "通过id删除banner", notes = "通过id删除banner", httpMethod = "DELETE" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "header", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
     @DeleteMapping( "/{bannerId}" )
     @ResponseBody
-    public RestRecord deleteBannerById( @PathVariable( "bannerId" )String bannerId ) {
+    public RestRecord deleteBannerById( @PathVariable( "bannerId" ) @ApiParam( name = "bannerId", value = "bannerId", required = true ) String bannerId ) {
         return bannerService.deleteBannerById( bannerId );
     }
 
@@ -75,16 +72,13 @@ public class BannerController {
      * @return banner
      */
     @ApiOperation( value = "更新banner", notes = "更新banner", httpMethod = "PUT" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "banner", value = "banner信息", paramType = "body", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping
     @ResponseBody
-    public RestRecord updateBannerInfo( Banner banner ) {
+    public RestRecord updateBannerInfo( @RequestBody @ApiParam( name = "banner", value = "banner信息", required = true ) Banner banner ) {
         return bannerService.updateBannerInfo( banner );
     }
 
@@ -137,16 +131,13 @@ public class BannerController {
      * @return 修改结果
      */
     @ApiOperation( value = "修改轮播次序", notes = "修改轮播次序", httpMethod = "PUT" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "list", value = "bannerId顺序", paramType = "POST-Body", required = true, example = "xxx@bonc.com.cn", allowableValues = "0,1,2" ),
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
-    @PutMapping( "/updateBannerOrder" )
+    @PutMapping( "/update-banner-order" )
     @ResponseBody
-    public RestRecord updateBannerOrder( @RequestParam( "list" ) List<Integer> list ) {
+    public RestRecord updateBannerOrder( @RequestParam( "list" ) @ApiParam( name = "list", value = "次序列表", required = true ) List<Integer> list ) {
         return bannerService.updateBannerOrder( list );
     }
 
@@ -157,16 +148,13 @@ public class BannerController {
      * @return banner数据
      */
     @ApiOperation( value = "获取banner数据", notes = "获取banner数据", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "header", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
     @GetMapping( "/{bannerId}" )
     @ResponseBody
-    public RestRecord getBannerById( @PathVariable( "bannerId" ) Integer bannerId ) {
+    public RestRecord getBannerById( @PathVariable( "bannerId" ) @ApiParam( name = "bannerId", value = "bannerId", required = true ) Integer bannerId ) {
         return bannerService.getBannerById( bannerId );
     }
 

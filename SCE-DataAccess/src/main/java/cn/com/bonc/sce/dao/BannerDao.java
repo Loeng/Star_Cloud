@@ -19,7 +19,6 @@ import java.util.List;
 @Repository
 @Transactional
 public interface BannerDao extends JpaRepository< Banner, Integer > {
-
     @Override
     Banner save( Banner banner );
 
