@@ -71,7 +71,7 @@ public interface BannerDao {
      * @param list bannerId
      * @return 修改结果
      */
-    @RequestMapping( value = "/banners/bannerOrder", method = RequestMethod.PUT )
+    @RequestMapping( value = "/banners/banner-order", method = RequestMethod.PUT )
     public RestRecord updateBannerOrder( @RequestParam( "list" ) List<Integer> list );
 
     /**

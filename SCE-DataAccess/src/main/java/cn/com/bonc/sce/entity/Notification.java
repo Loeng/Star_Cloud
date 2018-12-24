@@ -4,8 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 通知
@@ -19,7 +23,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name="SCE_COMMON_COLUMN_CONTENT")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name="SCE_COMMON_COLUMN_CONTENT",schema = "STARCLOUDPORTAL")
 public class Notification {
 
     @Id
@@ -49,11 +54,13 @@ public class Notification {
     @Column(name = "REJECT_OPINION")
     private String rejectOpinion;
 
+    @CreatedDate
     @Column(name = "CREATE_TIME")
-    private String createTime;
+    private Date createTime;
 
+    @LastModifiedDate
     @Column(name = "UPDATE_TIME")
-    private String updateTime;
+    private Date updateTime;
 
     @Column(name = "CREATE_USER_ID")
     private String createUserId;

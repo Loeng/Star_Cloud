@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +27,10 @@ public interface MessageDao extends JpaRepository<Message, Integer> {
     @Query( "UPDATE Message m SET m.isDelete=1 WHERE m.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
-    @Query( value="SELECT CREATE_TIME FROM SCE_COMMON_USER_INFO WHERE USER_ID=?1 AND rownum<=1 ORDER BY CREATE_TIME DESC",nativeQuery=true )
-    String getNewestTimeByUserId( String userId );
+    @Query( value="SELECT CREATE_TIME FROM STARCLOUDPORTAL.SCE_COMMON_USER_INFO WHERE USER_ID=?1 AND rownum<=1 ORDER BY CREATE_TIME DESC",nativeQuery=true )
+    Date getNewestTimeByUserId( String userId );
 
-    List<Message> findByTargetIdAndCreateTimeGreaterThanAndIsDelete( String targetId, String createTime,Integer isDelete );
+    List<Message> findByTargetIdAndCreateTimeGreaterThanAndIsDelete( String targetId, Date createTime, Integer isDelete );
+
+    List<Message> findByTargetIdAndIsDelete( String targetId,Integer isDelete );
 }

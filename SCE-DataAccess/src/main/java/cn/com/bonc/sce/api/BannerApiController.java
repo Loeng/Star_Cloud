@@ -33,6 +33,7 @@ public class BannerApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord insertBanner( @RequestBody Banner banner ) {
+        banner.setIsDelete( 0 );
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {
@@ -67,6 +68,7 @@ public class BannerApiController {
     @PutMapping( "" )
     @ResponseBody
     public RestRecord updateBannerInfo( @RequestBody Banner banner ) {
+        banner.setIsDelete( 0 );
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {
@@ -115,7 +117,7 @@ public class BannerApiController {
      * @param list bannerId
      * @return 修改结果
      */
-    @PutMapping( "/bannerOrder" )
+    @PutMapping( "/banner-order" )
     @ResponseBody
     public RestRecord updateBannerOrder( @RequestParam( "list" ) List< Integer > list ) {
         Integer total = 0;

@@ -19,7 +19,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name="SCE_PORTAL_BANNER")
+@Table(name="SCE_PORTAL_BANNER",schema = "STARCLOUDPORTAL")
 public class Banner {
 
     @Id

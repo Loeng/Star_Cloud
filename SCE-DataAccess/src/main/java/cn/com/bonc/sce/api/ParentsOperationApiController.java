@@ -8,10 +8,7 @@ import cn.com.bonc.sce.model.ParentsInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +21,7 @@ import java.util.Map;
  * @since 2018/12/21 9:00
  */
 @RestController
-@RequestMapping( "/parentsOperation" )
+@RequestMapping( "/parents-operation" )
 public class ParentsOperationApiController {
 
     private static final String PASSWORD = "password";
@@ -49,7 +46,7 @@ public class ParentsOperationApiController {
      */
     @PostMapping( "" )
     @ResponseBody
-    public RestRecord insertParentsInfo( ParentsInfo parentsInfo ) {
+    public RestRecord insertParentsInfo( @RequestBody ParentsInfo parentsInfo ) {
         try {
             String account = parentsInfo.getStudentAccount();
             String password = parentsInfo.getStudentAccountPassword();
