@@ -35,15 +35,13 @@ public class UserListController {
      */
     @ApiOperation( value = "根据角色id查询用户", notes = "根据角色id查询用户", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "roleId", value = "角色ID", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "pageNum", value = "页码", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "query", required = true )
+            @ApiImplicitParam( name = "roleId", value = "角色ID", paramType = "path", required = true ),
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
-    public RestRecord getUserInfoByRole( @PathVariable String roleId,
+    public RestRecord getUserInfoByRole( @PathVariable("roleId") String roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
                                          @PathVariable( "pageSize" ) Integer pageSize ) {
 
@@ -59,7 +57,7 @@ public class UserListController {
      * @param pageSize
      * @return
      */
-    @ApiOperation( value = "根据条件查询", notes = "根据条件查询", httpMethod = "GET" )
+    @ApiOperation( value = "根据条件查询", notes = "根据条件查询", httpMethod = "POST" )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )

@@ -78,17 +78,17 @@ public class AppManageController {
     /**
      * 查询全部应用
      *
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
 
     @GetMapping( "/all-app/{pageNum}/{pageSize}" )
-    public RestRecord getAllAppList( @RequestParam String plantformType,
+    public RestRecord getAllAppList( @RequestParam String platformType,
                                      @PathVariable Integer pageNum,
                                      @PathVariable Integer pageSize
     ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppInfoEntity > appInfoList = appInfoRepository.findByAppSource( plantformType, pageable );
+        Page< AppInfoEntity > appInfoList = appInfoRepository.findByAppSource( platformType, pageable );
         Map map = new HashMap();
         List dataList = new ArrayList();
         int total = appInfoList.getTotalPages();
@@ -105,21 +105,26 @@ public class AppManageController {
     /**
      * 查询指定类型应用信息
      *
-     * @param appType       查询的应用类型id
-     * @param orderType     查询排序字段，可为多个字段
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param appType      查询的应用类型id
+     * @param orderType    查询排序字段，单个字段
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
-    @GetMapping( "/selectAppListByType/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByType( @RequestParam( value = "appType", defaultValue = "all", required = false ) String appType,
+    @GetMapping( "/app-by-type/{pageNum}/{pageSize}" )
+    public RestRecord selectAppListByType( @RequestParam( value = "appType" ) Integer appType,
                                            @RequestParam( value = "orderType" ) String orderType,
-                                           @RequestParam String plantformType,
-                                           @RequestParam String sort,
-                                           @PathVariable Integer pageNum,
-                                           @PathVariable Integer pageSize ) {
+                                           @RequestParam( value = "platformType" ) String platformType,
+                                           @RequestParam( value = "sort" ) String sort,
+                                           @PathVariable( value = "pageNum" ) Integer pageNum,
+                                           @PathVariable( value = "pageSize" ) Integer pageSize ) {
         //表和表关联，不知道怎么用关联表的字段去排序
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppTypeEntity > appInfoList = appTypeRepository.findByAppTypeId( appType, pageable );
+        Page< AppTypeEntity > appInfoList;
+        if ( 0 == appType ) {
+            appInfoList = appTypeRepository.findAll( pageable );
+        } else {
+            appInfoList = appTypeRepository.findByAppTypeId( appType, pageable );
+        }
         Map map = new HashMap();
         List dataList = new ArrayList();
         int total = appInfoList.getTotalPages();
@@ -136,13 +141,13 @@ public class AppManageController {
     /**
      * 根据输入名模糊查询应用
      *
-     * @param appName       查询的名字
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param appName      查询的名字
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
     @GetMapping( "/apps-by-name/{pageNum}/{pageSize}" )
     public RestRecord selectAppListByName( @RequestParam String appName,
-                                           @RequestParam String plantformType,
+                                           @RequestParam String platformType,
                                            @PathVariable Integer pageNum,
                                            @PathVariable Integer pageSize ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
@@ -166,7 +171,7 @@ public class AppManageController {
      * @param appType
      * @param orderType
      * @param sort
-     * @param plantformType
+     * @param platformType
      * @param pageNum
      * @param pageSize
      * @return
@@ -176,7 +181,7 @@ public class AppManageController {
                                                   @RequestParam String appType,
                                                   @RequestParam String orderType,
                                                   @RequestParam String sort,
-                                                  @RequestParam String plantformType,
+                                                  @RequestParam String platformType,
                                                   @PathVariable Integer pageNum,
                                                   @PathVariable Integer pageSize ) {
         //这个数据随便查的，要重写
@@ -208,17 +213,18 @@ public class AppManageController {
 
     /**
      * 应用上下架
+     *
      * @param applyType
      * @param appIdList
      * @param userId
      * @return
      */
     @PostMapping( "/app-on-shelf" )
-    public RestRecord applyAppOnShelf( @RequestParam  Integer applyType, @RequestBody  List<String> appIdList,@RequestParam String userId  ) {
+    public RestRecord applyAppOnShelf( @RequestParam Integer applyType, @RequestBody List< String > appIdList, @RequestParam String userId ) {
 
-        String appStatus  = applyType==1?"上架审核":"下架审核";
+        String appStatus = applyType == 1 ? "上架审核" : "下架审核";
 
-        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( appStatus,appIdList,userId );
+        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( appStatus, appIdList, userId );
         return new RestRecord( 200, appInfo );
     }
 

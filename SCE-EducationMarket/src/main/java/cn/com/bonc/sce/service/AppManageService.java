@@ -59,14 +59,14 @@ public class AppManageService {
     /**
      * 查询全部应用
      *
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
 
-    public RestRecord getAllAppList( String plantformType, Integer pageNum, Integer pageSize
+    public RestRecord getAllAppList( String platformType, Integer pageNum, Integer pageSize
     ) {
 
-        return appManageDao.getAllAppList( plantformType, pageNum, pageSize );
+        return appManageDao.getAllAppList( platformType, pageNum, pageSize );
     }
 
 
@@ -76,22 +76,22 @@ public class AppManageService {
      *
      * @param appType       查询的应用类型
      * @param orderType     查询排序字段，可为多个字段
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
-    public RestRecord selectAppListByType( String appType, String orderType, String plantformType, String sort, Integer pageNum, Integer pageSize ) {
-        return appManageDao.selectAppListByType( appType, orderType, plantformType, sort, pageNum, pageSize );
+    public RestRecord selectAppListByType( Integer appType, String orderType, String platformType, String sort, Integer pageNum, Integer pageSize ) {
+        return appManageDao.selectAppListByType( appType, orderType, platformType, sort, pageNum, pageSize );
     }
 
     /**
      * 根据输入名模糊查询应用
      *
      * @param appName       查询的名字
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
-    public RestRecord selectAppListByName( String appName, String plantformType, Integer pageNum, Integer pageSize ) {
-        return appManageDao.selectAppListByName( appName, plantformType, pageNum, pageSize );
+    public RestRecord selectAppListByName( String appName, String platformType, Integer pageNum, Integer pageSize ) {
+        return appManageDao.selectAppListByName( appName, platformType, pageNum, pageSize );
     }
 
     /**
@@ -101,13 +101,13 @@ public class AppManageService {
      * @param appType
      * @param orderType
      * @param sort
-     * @param plantformType
+     * @param platformType
      * @param pageNum
      * @param pageSize
      * @return
      */
-    public RestRecord selectAppListByNameAndType( String appName, String appType, String orderType, String sort, String plantformType, Integer pageNum, Integer pageSize ) {
-        return appManageDao.selectAppListByNameAndType( appName, appType, orderType, sort, plantformType, pageNum, pageSize );
+    public RestRecord selectAppListByNameAndType( String appName, String appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
+        return appManageDao.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
     }
 
     /**

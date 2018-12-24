@@ -11,7 +11,7 @@ import java.util.List;
 public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String > {
 
     //根据平台类型查询有哪些软件
-    Page< AppInfoEntity > findByAppSource( String plantformType, Pageable pageable );
+    Page< AppInfoEntity > findByAppSource( String platformType, Pageable pageable );
 
     //查应用详情
     AppInfoEntity findByAppId( String appId );

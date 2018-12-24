@@ -84,7 +84,7 @@ public class AppManageController {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @PutMapping( "/{appId}" )
-    public RestRecord updateAppInfo( @RequestBody  Map updateInfo,
+    public RestRecord updateAppInfo( @RequestBody Map updateInfo,
                                      @PathVariable String appId ) {
         return appManageService.updateAppInfo( updateInfo, appId );
     }
@@ -100,48 +100,47 @@ public class AppManageController {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/all-app/{pageNum}/{pageSize}" )
-    public RestRecord getAllAppList( @RequestParam @ApiParam(name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", required = true) String platformType,
+    public RestRecord getAllAppList( @RequestParam @ApiParam( name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", required = true ) String platformType,
                                      @PathVariable @ApiParam( name = "pageNum", value = "页数", required = true ) Integer pageNum,
-                                     @PathVariable @ApiParam( name = "pageSize", value = "页数大小", required = true )Integer pageSize
+                                     @PathVariable @ApiParam( name = "pageSize", value = "页数大小", required = true ) Integer pageSize
     ) {
         return appManageService.getAllAppList( platformType, pageNum, pageSize );
     }
 
 
-
     /**
-     * 查询指定类型应用信息
+     * 查询指定类型id应用信息
      *
-     * @param appType       查询的应用类型
-     * @param orderType     查询排序字段，可为多个字段
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param appType      查询的应用类型
+     * @param orderType    查询排序字段，可为多个字段
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
     @ApiOperation( value = "查询指定类型应用信息", notes = "查询指定类型应用信息", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appType", value = "查询的应用类型id（0查全部）", paramType = "query", required = false ),
-            @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query" ),
-            @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query" ),
-            @ApiImplicitParam( name = "plantformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appType", value = "查询的应用类型id（0查全部）", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true )
 
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/selectAppListByType/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByType( @RequestParam( value = "appType", defaultValue = "0", required = false ) String appType,
+    @GetMapping( "/app-by-type/{pageNum}/{pageSize}" )
+    public RestRecord selectAppListByType( @RequestParam Integer appType,
                                            @RequestParam String orderType,
-                                           @RequestParam String plantformType,
+                                           @RequestParam String platformType,
                                            @RequestParam String sort,
                                            @PathVariable Integer pageNum,
                                            @PathVariable Integer pageSize ) {
-        return appManageService.selectAppListByType( appType, orderType, plantformType, sort, pageNum, pageSize );
+        return appManageService.selectAppListByType( appType, orderType, platformType, sort, pageNum, pageSize );
     }
 
     /**
      * 根据输入名模糊查询应用
      *
-     * @param appName       查询的名字
+     * @param appName      查询的名字
      * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
@@ -153,7 +152,7 @@ public class AppManageController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/apps-by-name/{pageNum}/{pageNum}" )
+    @GetMapping( "/apps-by-name/{pageNum}/{pageSize}" )
     public RestRecord selectAppListByName( @RequestParam String appName,
                                            @RequestParam String platformType,
                                            @PathVariable Integer pageNum,

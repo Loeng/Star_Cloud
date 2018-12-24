@@ -33,12 +33,12 @@ public interface AppManageDao {
     /**
      * 查询全部应用
      *
-     * @param plantformType 平台类型（平台应用或软件应用）
+     * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
 
     @RequestMapping( value = "/manage-app/all-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord getAllAppList( @RequestParam( "plantformType" ) String plantformType,
+    RestRecord getAllAppList( @RequestParam( "platformType" ) String platformType,
                               @PathVariable( "pageNum" ) Integer pageNum,
                               @PathVariable( "pageSize" ) Integer pageSize
     );
@@ -49,10 +49,10 @@ public interface AppManageDao {
      *
      * @return
      */
-    @RequestMapping( value = "/manage-app/selectAppListByType/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord selectAppListByType( @RequestParam( "appType" ) String appType,
+    @RequestMapping( value = "/manage-app/app-by-type/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord selectAppListByType( @RequestParam( "appType" ) Integer appType,
                                     @RequestParam( "orderType" ) String orderType,
-                                    @RequestParam( "plantformType" ) String plantformType,
+                                    @RequestParam( "platformType" ) String platformType,
                                     @RequestParam( "sort" ) String sort,
                                     @PathVariable( "pageNum" ) Integer pageNum,
                                     @PathVariable( "pageSize" ) Integer pageSize );
@@ -62,7 +62,7 @@ public interface AppManageDao {
      */
     @RequestMapping( value = "/manage-app/apps-by-name/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord selectAppListByName( @RequestParam( "appName" ) String appName,
-                                    @RequestParam( "plantformType" ) String plantformType,
+                                    @RequestParam( "platformType" ) String platformType,
                                     @PathVariable( "pageNum" ) Integer pageNum,
                                     @PathVariable( "pageSize" ) Integer pageSize );
 
@@ -74,7 +74,7 @@ public interface AppManageDao {
                                            @RequestParam( "appType" ) String appType,
                                            @RequestParam( "orderType" ) String orderType,
                                            @RequestParam( "sort" ) String sort,
-                                           @RequestParam( "plantformType" ) String plantformType,
+                                           @RequestParam( "platformType" ) String platformType,
                                            @PathVariable( "pageNum" ) Integer pageNum,
                                            @PathVariable( "pageSize" ) Integer pageSize );
 
@@ -87,12 +87,13 @@ public interface AppManageDao {
 
     /**
      * 应用上下架
-     * @author tlz
+     *
      * @param applyType
      * @param appIdList
      * @param userId
-     * @return  上下架是否成功
+     * @return 上下架是否成功
+     * @author tlz
      */
-    @RequestMapping( value = "/manage-app/app-on-shelf", method = RequestMethod.POST)
-    RestRecord applyAppOnShelf( @RequestParam("applyType")  Integer applyType, @RequestBody  List<String> appIdList,@RequestParam("userId") String userId );
+    @RequestMapping( value = "/manage-app/app-on-shelf", method = RequestMethod.POST )
+    RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId );
 }
