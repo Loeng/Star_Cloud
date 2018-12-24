@@ -36,8 +36,8 @@ public class News {
     @Column(name = "COLUMN_ID")
     private Integer columnId;
 
-    @Column(name = "CONENT_TYPE")
-    private Integer conentType;
+    @Column(name = "CONTENT_TYPE")
+    private Integer contentType;
 
     @Column(name = "CONTENT_TAG")
     private String contentTag;

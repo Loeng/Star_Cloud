@@ -50,8 +50,8 @@ public class ParentsOperationController {
     @ResponseBody
     public RestRecord getSecurityValidInfo( HttpServletRequest request, @PathVariable( "phone" ) @ApiParam( name = "phone", value = "手机号", required = true ) String phone){
         RestRecord rr = parentsOperationService.getSecurityVaildInfo(phone);
-        /*request.getSession().setAttribute( "phoneValid",rr.getMsg() );
-        rr.setMsg( null );*/
+        request.getSession().setAttribute( "phoneValid",rr.getMsg() );
+        rr.setMsg( null );
         return rr;
     }
 

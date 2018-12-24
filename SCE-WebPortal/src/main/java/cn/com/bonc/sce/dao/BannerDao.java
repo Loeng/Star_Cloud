@@ -77,11 +77,11 @@ public interface BannerDao {
     /**
      * 获取banner数据
      *
-     * @param bannerId bannerId
+     * @param bannerType bannerType
      * @return banner数据
      */
-    @RequestMapping( value = "/banners/{bannerId}", method = RequestMethod.GET )
-    public RestRecord getBannerById( @PathVariable( "bannerId" ) Integer bannerId );
+    @RequestMapping( value = "/banners/{bannerType}", method = RequestMethod.GET )
+    public RestRecord getBannerById( @PathVariable( "bannerType" ) Integer bannerType );
 
     /**
      * 获取所有banner数据
