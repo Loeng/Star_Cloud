@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.model;
 
+import java.util.Date;
+
 /**
  * 总消息
  *
@@ -16,8 +18,19 @@ public class Message {
     private String sourceId;
     //private String sourceAccount;
     private String status;
-    private String createTime;
-    private Integer isDelete;
+
+    public Message() {
+    }
+
+    public Message( Integer id, String content, Integer type, Integer topicType, String targetId, String sourceId, String status ) {
+        this.id = id;
+        this.content = content;
+        this.type = type;
+        this.topicType = topicType;
+        this.targetId = targetId;
+        this.sourceId = sourceId;
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;
@@ -73,37 +86,5 @@ public class Message {
 
     public void setStatus( String status ) {
         this.status = status;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime( String createTime ) {
-        this.createTime = createTime;
-    }
-
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete( Integer isDelete ) {
-        this.isDelete = isDelete;
-    }
-
-    public Message() {
-
-    }
-
-    public Message( String content, Integer type, Integer topicType, String targetId, String sourceId, String status, String createTime, Integer isDelete ) {
-
-        this.content = content;
-        this.type = type;
-        this.topicType = topicType;
-        this.targetId = targetId;
-        this.sourceId = sourceId;
-        this.status = status;
-        this.createTime = createTime;
-        this.isDelete = isDelete;
     }
 }

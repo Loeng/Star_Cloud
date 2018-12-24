@@ -21,7 +21,7 @@ import java.util.Map;
  * @since 2018/12/21 9:00
  */
 @RestController
-@RequestMapping( "/parentsOperation" )
+@RequestMapping( "/parents-operation" )
 public class ParentsOperationApiController {
 
     private static final String PASSWORD = "password";

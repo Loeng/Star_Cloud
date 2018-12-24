@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name="SCE_COMMON_INFORMATION")
+@Table(name="SCE_COMMON_INFORMATION",schema = "STARCLOUDPORTAL")
 public class Message {
 
     @Id

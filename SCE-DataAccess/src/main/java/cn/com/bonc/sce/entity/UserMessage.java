@@ -11,7 +11,7 @@ import java.util.Date;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table(name="SCE_COMMON_USER_INFO")
+@Table(name="SCE_COMMON_USER_INFO",schema = "STARCLOUDPORTAL")
 public class UserMessage {
 
     @Id
@@ -36,7 +36,7 @@ public class UserMessage {
     private Integer isDelete;
 
     @ManyToOne
-    @JoinColumn(name="ID", referencedColumnName="INFORMATION_ID", insertable=false, updatable=false)
+    @JoinColumn(name="INFO_ID", referencedColumnName="INFORMATION_ID", insertable=false, updatable=false)
     private Message message;
 
     public Integer getId() {

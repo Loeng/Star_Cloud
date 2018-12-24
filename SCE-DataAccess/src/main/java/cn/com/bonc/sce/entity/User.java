@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table( name = "SCE_COMMON_USER" )
+@Table( name = "SCE_COMMON_USER",schema = "STARCLOUDPORTAL" )
 public class User {
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_COMMON_USER" )

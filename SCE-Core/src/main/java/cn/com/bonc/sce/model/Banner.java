@@ -14,7 +14,6 @@ public class Banner {
     private String appId;
     private Integer isShown;
     private String type;
-    private Integer isDelete;
 
     public Integer getId() {
         return id;
@@ -64,26 +63,16 @@ public class Banner {
         this.type = type;
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete( Integer isDelete ) {
-        this.isDelete = isDelete;
-    }
-
     public Banner() {
 
     }
 
-    public Banner( Integer id, Integer order, String url, String appId, Integer isShown, String type, Integer isDelete ) {
-
+    public Banner( Integer id, Integer order, String url, String appId, Integer isShown, String type) {
         this.id = id;
         this.order = order;
         this.url = url;
         this.appId = appId;
         this.isShown = isShown;
         this.type = type;
-        this.isDelete = isDelete;
     }
 }

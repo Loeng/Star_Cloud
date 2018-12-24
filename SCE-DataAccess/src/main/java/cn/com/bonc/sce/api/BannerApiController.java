@@ -117,7 +117,7 @@ public class BannerApiController {
      * @param list bannerId
      * @return 修改结果
      */
-    @PutMapping( "/bannerOrder" )
+    @PutMapping( "/banner-order" )
     @ResponseBody
     public RestRecord updateBannerOrder( @RequestParam( "list" ) List< Integer > list ) {
         Integer total = 0;

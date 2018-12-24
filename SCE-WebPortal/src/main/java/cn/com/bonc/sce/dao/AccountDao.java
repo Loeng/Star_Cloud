@@ -25,6 +25,6 @@ public interface AccountDao {
      * @param account account
      * @return advise数据list
      */
-    @RequestMapping( value = "/accountSecurity", method = RequestMethod.PUT )
+    @RequestMapping( value = "/account-security", method = RequestMethod.PUT )
     public RestRecord updateAccount( Account account);
 }

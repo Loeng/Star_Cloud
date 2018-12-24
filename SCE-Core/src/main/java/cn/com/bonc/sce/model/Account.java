@@ -15,8 +15,6 @@ public class Account {
 
     private String password;
 
-    private Integer isDelete;
-
     private String phone;
 
     private String code;
@@ -45,13 +43,6 @@ public class Account {
         this.password = password;
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete( Integer isDelete ) {
-        this.isDelete = isDelete;
-    }
 
     public String getPhone() {
         return phone;
@@ -73,11 +64,9 @@ public class Account {
 
     }
 
-    public Account( String userId, String password, Integer isDelete, String phone, String code ) {
-
+    public Account( String userId, String password, String phone, String code ) {
         this.userId = userId;
         this.password = password;
-        this.isDelete = isDelete;
         this.phone = phone;
         this.code = code;
     }

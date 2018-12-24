@@ -16,12 +16,9 @@ public class Notification {
     private String content;
     private String contentStatus;
     private String rejectOpinion;
-    private String createTime;
-    private String updateTime;
     private String createUserId;
     private String updateUserId;
     private String remarks;
-    private Integer isDelete;
 
     public Integer getId() {
         return id;
@@ -87,22 +84,6 @@ public class Notification {
         this.rejectOpinion = rejectOpinion;
     }
 
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime( String createTime ) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime( String updateTime ) {
-        this.updateTime = updateTime;
-    }
-
     public String getCreateUserId() {
         return createUserId;
     }
@@ -127,19 +108,11 @@ public class Notification {
         this.remarks = remarks;
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete( Integer isDelete ) {
-        this.isDelete = isDelete;
-    }
-
     public Notification() {
 
     }
 
-    public Notification( Integer id, Integer columnId, Integer contentType, String contentTag, String contentTitle, String content, String contentStatus, String rejectOpinion, String createTime, String updateTime, String createUserId, String updateUserId, String remarks, Integer isDelete ) {
+    public Notification( Integer id, Integer columnId, Integer contentType, String contentTag, String contentTitle, String content, String contentStatus, String rejectOpinion, String createUserId, String updateUserId, String remarks ) {
 
         this.id = id;
         this.columnId = columnId;
@@ -149,11 +122,8 @@ public class Notification {
         this.content = content;
         this.contentStatus = contentStatus;
         this.rejectOpinion = rejectOpinion;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
         this.createUserId = createUserId;
         this.updateUserId = updateUserId;
         this.remarks = remarks;
-        this.isDelete = isDelete;
     }
 }

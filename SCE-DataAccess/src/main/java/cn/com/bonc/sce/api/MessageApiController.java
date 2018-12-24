@@ -14,10 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 消息
@@ -117,7 +115,7 @@ public class MessageApiController {
      * @param messageId id
      * @return 删除是否成功
      */
-    @PutMapping( "/updateMessageRead/{messageId}" )
+    @PutMapping( "/update-message-read/{messageId}" )
     @ResponseBody
     public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" )Integer messageId ) {
         try {
@@ -143,10 +141,9 @@ public class MessageApiController {
                                           @PathVariable( "pageSize" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
-            String time = messageDao.getNewestTimeByUserId( userId );
+            Date time = messageDao.getNewestTimeByUserId( userId );
             List< Message > list;
-            if( StringUtils.isEmpty( time)){
-                time="1970-1-1 00:00:00.000000";
+            if( !StringUtils.isEmpty( time)){
                 list = messageDao.findByTargetIdAndCreateTimeGreaterThanAndIsDelete( userId, time,0 );
             }else{
                 list = messageDao.findByTargetIdAndIsDelete( userId,0 );
@@ -157,7 +154,8 @@ public class MessageApiController {
                     UserMessage um = new UserMessage();
                     um.setIsRead( 0 );
                     um.setUserId( userId );
-                    um.setCreateTime( m.getCreateTime() );
+                    Date createTime = m.getCreateTime();
+                    um.setCreateTime( new Date( createTime.getTime() ) );
                     um.setIsDelete( 0 );
                     um.setMessageId( m.getId() );
                     userMessageList.add( um );

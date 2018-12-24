@@ -10,7 +10,7 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table( name = "SCE_COMMON_USER_ROLE_REL" )
+@Table( name = "SCE_COMMON_USER_ROLE_REL",schema = "STARCLOUDPORTAL" )
 public class RoleRel {
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_COMMON_USER_ROLE_REL" )
