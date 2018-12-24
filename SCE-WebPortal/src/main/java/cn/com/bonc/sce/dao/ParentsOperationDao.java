@@ -23,6 +23,6 @@ public interface ParentsOperationDao {
      * @param parentsInfo 家长信息
      * @return 是否添加成功
      */
-    @RequestMapping( value = "/insertParentsInfo", method = RequestMethod.POST )
+    @RequestMapping( value = "/parentsOperation", method = RequestMethod.POST )
     public RestRecord insertParentsInfo( ParentsInfo parentsInfo );
 }

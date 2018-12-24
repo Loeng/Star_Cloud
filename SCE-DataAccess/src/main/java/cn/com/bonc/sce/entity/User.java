@@ -1,6 +1,10 @@
 package cn.com.bonc.sce.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 用户表
@@ -10,6 +14,7 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table( name = "SCE_COMMON_USER" )
 public class User {
     @Id
@@ -35,8 +40,9 @@ public class User {
     private String phoneNumber;
     @Column( name = "ADDRESS" )
     private String address;
+    @CreatedDate
     @Column( name = "CREATE_TIME" )
-    private String createTime;
+    private Date createTime;
     @Column( name = "LOGIN_TIME" )
     private String loginTime;
     @Column( name = "LAST_LOGIN_TIME" )
@@ -132,11 +138,11 @@ public class User {
         this.address = address;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime( String createTime ) {
+    public void setCreateTime( Date createTime ) {
         this.createTime = createTime;
     }
 
@@ -200,7 +206,7 @@ public class User {
 
     }
 
-    public User( String userAccount, String userName, String gender, Integer userType, String mailAddress, String certificateType, String certificateNumber, String phoneNumber, String address, String createTime, String loginTime, String lastLoginTime, Long logintimes, String organizationId, Integer loginPermissionStatus, String remarks, Integer isDelete ) {
+    public User( String userAccount, String userName, String gender, Integer userType, String mailAddress, String certificateType, String certificateNumber, String phoneNumber, String address, Date createTime, String loginTime, String lastLoginTime, Long logintimes, String organizationId, Integer loginPermissionStatus, String remarks, Integer isDelete ) {
 
         this.userAccount = userAccount;
         this.userName = userName;

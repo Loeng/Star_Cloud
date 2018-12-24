@@ -38,6 +38,7 @@ public class NotificationApiController {
     @PostMapping
     @ResponseBody
     public RestRecord insertNotification( @RequestBody Notification notification ) {
+        notification.setIsDelete( 0 );
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {
@@ -77,6 +78,7 @@ public class NotificationApiController {
     @PutMapping
     @ResponseBody
     public RestRecord updateNotification( @RequestBody Notification notification ) {
+        notification.setIsDelete( 0 );
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {

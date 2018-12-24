@@ -33,6 +33,7 @@ public class BannerApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord insertBanner( @RequestBody Banner banner ) {
+        banner.setIsDelete( 0 );
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {
@@ -67,6 +68,7 @@ public class BannerApiController {
     @PutMapping( "" )
     @ResponseBody
     public RestRecord updateBannerInfo( @RequestBody Banner banner ) {
+        banner.setIsDelete( 0 );
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {

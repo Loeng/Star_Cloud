@@ -30,4 +30,6 @@ public interface MessageDao extends JpaRepository<Message, Integer> {
     String getNewestTimeByUserId( String userId );
 
     List<Message> findByTargetIdAndCreateTimeGreaterThanAndIsDelete( String targetId, String createTime,Integer isDelete );
+
+    List<Message> findByTargetIdAndIsDelete( String targetId,Integer isDelete );
 }

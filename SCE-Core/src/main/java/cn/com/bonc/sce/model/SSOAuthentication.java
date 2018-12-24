@@ -14,7 +14,7 @@ import lombok.*;
 @ApiModel
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
+
 public class SSOAuthentication {
     @ApiModelProperty( name = "验证类型 : 0/用户名密码登录，1/手机号登录, 2/邮箱登录", example = "0", required = true )
     private char authType;
