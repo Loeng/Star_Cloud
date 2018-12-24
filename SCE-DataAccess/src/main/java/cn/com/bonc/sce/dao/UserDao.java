@@ -19,6 +19,8 @@ public class UserDao {
         return new User( 0, "RGM79","11111" );
     }
 
+//    public User getUserByEmail (String email);
+
     public boolean deleteUserById( String userId ) {
         return false;
     }

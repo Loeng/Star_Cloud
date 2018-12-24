@@ -21,7 +21,7 @@ public class User {
     @ApiModelProperty( value = "username", name = "用户名", example = "RGM79" )
     private String username;
     private String phoneNumber;
-//    private String phoneNumber;
+    private String secret;
 
 
     public User( int userId, String username ) {
