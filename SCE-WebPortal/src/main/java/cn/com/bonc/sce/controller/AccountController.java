@@ -76,7 +76,8 @@ public class AccountController {
                                 @PathVariable( "valid" ) @ApiParam( name = "valid", value = "验证码" ,required = true) String valid){
         if( StringUtils.isEmpty( phone )|| UNDEFINED.equals( phone ) ||
                 StringUtils.isEmpty( valid )|| UNDEFINED.equals( valid ) ){
-            return new RestRecord(500,"error");
+            return new RestRecord(200,"error");
+            //return new RestRecord(500,"error");
         }
         return accountSecurityService.validInfo(phone,valid);
     }

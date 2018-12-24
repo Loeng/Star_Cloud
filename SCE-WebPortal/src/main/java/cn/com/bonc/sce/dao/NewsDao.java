@@ -54,12 +54,12 @@ public interface NewsDao {
      * @param pageSize    分页每页条数
      * @return 分页后的新闻列表
      */
-    @RequestMapping( value = "/news/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/news/list/{auditStatus}", method = RequestMethod.GET )
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
-                                   @PathVariable( "startDate" ) String startDate,
-                                   @PathVariable( "endDate" ) String endDate,
-                                   @PathVariable( "pageNum" ) Integer pageNum,
-                                   @PathVariable( "pageSize" ) Integer pageSize);
+                                   @RequestParam( "startDate" ) String startDate,
+                                   @RequestParam( "endDate" ) String endDate,
+                                   @RequestParam( "pageNum" ) Integer pageNum,
+                                   @RequestParam( "pageSize" ) Integer pageSize);
 
     /**
      * 查询新闻详情接口

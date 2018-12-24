@@ -139,14 +139,14 @@ public class BannerApiController {
     /**
      * 获取banner数据
      *
-     * @param bannerId bannerId
+     * @param bannerType bannerType
      * @return banner数据
      */
-    @GetMapping( "/{bannerId}" )
+    @GetMapping( "/{bannerType}" )
     @ResponseBody
-    public RestRecord getBannerById( @PathVariable( "bannerId" ) Integer bannerId ) {
+    public RestRecord getBannerById( @PathVariable( "bannerType" ) Integer bannerType ) {
         try {
-            return new RestRecord( 200, bannerDao.findByIdAndIsDelete( bannerId,0 ) );
+            return new RestRecord( 200, bannerDao.findByTypeAndIsDelete( bannerType,0 ) );
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

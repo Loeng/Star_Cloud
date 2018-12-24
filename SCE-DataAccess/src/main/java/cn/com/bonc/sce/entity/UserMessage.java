@@ -36,7 +36,7 @@ public class UserMessage {
     private Integer isDelete;
 
     @ManyToOne
-    @JoinColumn(name="INFO_ID", referencedColumnName="INFORMATION_ID", insertable=false, updatable=false)
+    @JoinColumn(name="ID", referencedColumnName="INFORMATION_ID", insertable=false, updatable=false)
     private Message message;
 
     public Integer getId() {

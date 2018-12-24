@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * 新闻
  *
@@ -28,9 +30,13 @@ public interface NewsDao extends JpaRepository< News, Integer > {
 
     News findByIdAndIsDelete( Integer newsId, Integer isDelete );
 
+    Page< News > findByIsDeleteAndContentStatus( Integer isDelete,
+                                                 String contentStatus,
+                                                 Pageable pageable);
+
     Page< News > findByIsDeleteAndContentStatusAndUpdateTimeBetween( Integer isDelete,
                                                                      String contentStatus,
-                                                                     String createTimeFrom,
-                                                                     String createTimeTo,
+                                                                     Date createTimeFrom,
+                                                                     Date createTimeTo,
                                                                      Pageable pageable);
 }
