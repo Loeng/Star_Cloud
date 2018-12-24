@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +36,8 @@ public class TeacherRecommendAppController {
     /**
      * 添加教师推荐应用
      *
-     * @param teacherId          教师Id
-     * @param recommendPeroIdMap 应用Id和应用于推荐时段
+     * @param teacherId       教师Id
+     * @param recommendPerMap 应用Id和应用于推荐时段
      * @return 是否添加成功
      */
     @ApiOperation( value = "新增教师热门应用", notes = "新增教师热门应用，可新增多个", httpMethod = "POST" )
@@ -46,27 +45,17 @@ public class TeacherRecommendAppController {
     @ResponseBody
     public RestRecord addTeacherRecommendApp(
             @RequestParam( "teacherId" ) @ApiParam( value = "教师用户Id", required = true ) String teacherId,
-            @RequestBody @ApiParam( value = "应用于推荐时段\r[{\r\"appId\":\"String\",\r\"recommendStartTime\":\"2018-01-01\",\r\"recommendEndTime\":\"2018-02-02\"},{\r\"略\":\"略\"}]", allowMultiple = true, example = "{\"123\":\"123\"}" )
-                    List< Map< String, Object > > recommendPeroIdMap ) {
-        /*
-        RestRecord restRecord = new RestRecord();
-        restRecord.setMsg( "#######占位，以后统一修改####### addTeacherRecommendApp" );
-        Map< String, Object > test = new HashMap<>();
-        test.put( "teacherId", teacherId );
-        test.put( "requestData", recommendPeroIdMap );
-        restRecord.setData( test );
-        teacherRecommendService.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
-        return restRecord;
-        */
-        return teacherRecommendService.addTeacherRecommendApp( teacherId, recommendPeroIdMap );
+            @RequestBody @ApiParam( value = "应用于推荐时段\r[{\r\"appId\":\"String\",\r\"recommendStartTime\":1545636712000,\r\"recommendEndTime\":1545636712000},{\r\"略\"}]", allowMultiple = true, example = "{\"123\":\"123\"}" )
+                    List< Map< String, Object > > recommendPerMap ) {
+        return teacherRecommendService.addTeacherRecommendApp( teacherId, recommendPerMap );
     }
 
     /**
      * 教师修改单个推荐应用的时长
      * * 1. 修改教师推荐表中对应记录中的推荐时间
      *
-     * @param teacherId          教师用户Id
-     * @param recommendPeroIdMap 应用Id和应用于推荐时段
+     * @param teacherId       教师用户Id
+     * @param recommendPerMap 应用Id和应用于推荐时段
      * @return
      */
     @ApiOperation( value = "修改推荐应用的时长", notes = "修改推荐市场，可修改多个", httpMethod = "PUT" )
@@ -74,9 +63,9 @@ public class TeacherRecommendAppController {
     @ResponseBody
     public RestRecord updateTeacherRecommendAppInfo(
             @RequestParam( "teacherId" ) @ApiParam( value = "教师用户Id", required = true ) String teacherId,
-            @RequestBody @ApiParam( value = "应用于推荐时段\r[{\r\"appId\":\"String\",\r\"recommendStartTime\":\"2018-01-01\",\r\"recommendEndTime\":\"2018-02-02\"},{\r\"略\":\"略\"}]", allowMultiple = true, example = "{\"123\":\"123\"}" )
-                    List< Map< String, Object > > recommendPeroIdMap ) {
-        return teacherRecommendService.updateTeacherRecommendAppInfo( teacherId, recommendPeroIdMap );
+            @RequestBody @ApiParam( value = "应用于推荐时段\r[{\r\"appId\":\"String\",\r\"recommendStartTime\":\"1545636712000\",\r\"recommendEndTime\":\"1545636712000\"},{\r\"略\":\"略\"}]" )
+                    List< Map< String, Object > > recommendPerMap ) {
+        return teacherRecommendService.updateTeacherRecommendAppInfo( teacherId, recommendPerMap );
     }
 
 
@@ -93,14 +82,6 @@ public class TeacherRecommendAppController {
     public RestRecord deleteTeacherRecommendApp(
             @RequestParam @ApiParam( value = "教师Id", required = true ) String teacherId,
             @RequestParam @ApiParam( value = "应用Id列表" ) List< String > appIdList ) {
-        ArrayList< String > temp = new ArrayList<>();
-        for ( String temp1 : appIdList ) {
-            temp.add( temp1 );
-        }
-        RestRecord restRecord = new RestRecord();
-        restRecord.setData( appIdList );
-        System.out.println( appIdList );
-//        return restRecord;
         return teacherRecommendService.deleteTeacherRecommendApp( teacherId, appIdList );
     }
 
@@ -126,4 +107,6 @@ public class TeacherRecommendAppController {
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         return teacherRecommendService.selectTeacherRecommendAppList( teacherId, startTime, endTime, pageNum, pageSize );
     }
+
+
 }
