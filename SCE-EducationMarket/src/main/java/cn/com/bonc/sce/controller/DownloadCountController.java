@@ -66,7 +66,7 @@ public class DownloadCountController {
     @GetMapping( "/company" )
     @ResponseBody
     public RestRecord countAppDownloadByCompanyId(
-            @RequestParam( "companyId" ) @ApiParam( "厂商Id" ) String companyId ) {
+            @RequestParam( "companyId" ) @ApiParam( "厂商Id" ) Long companyId ) {
         // 根据厂商名查找对应的应用，统计下载量
         return countService.countAppDownloadByCompanyId( companyId );
     }

@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.dao;
+package cn.com.bonc.sce.repository;
 
 import cn.com.bonc.sce.entity.TeacherRecommend;
 import org.springframework.data.jpa.repository.JpaRepository;

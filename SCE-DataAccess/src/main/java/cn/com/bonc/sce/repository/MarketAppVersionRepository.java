@@ -1,6 +1,5 @@
-package cn.com.bonc.sce.dao;
+package cn.com.bonc.sce.repository;
 
-import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -13,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional(rollbackFor = Exception.class)
+@Transactional( rollbackFor = Exception.class )
 public interface MarketAppVersionRepository extends
         JpaRepository< MarketAppVersion, Long >, JpaSpecificationExecutor< MarketAppVersion > {
     /**
@@ -60,13 +59,14 @@ public interface MarketAppVersionRepository extends
 
     /**
      * app上下架
+     *
      * @param applyType
      * @param appIdList
      * @param userId
      * @return
      */
     @Modifying
-    @Query(value = "UPDATE MarketAppVersion  SET appStatus= :applyType,updateUserId= :userId  where  appId in (:appIdList)")
-    int applyAppOnShelfByUserId( @Param("applyType") String applyType,@Param("appIdList" ) List< String > appIdList,@Param( "userId" ) String userId );
+    @Query( value = "UPDATE MarketAppVersion  SET appStatus= :applyType,updateUserId= :userId  where  appId in (:appIdList)" )
+    int applyAppOnShelfByUserId( @Param( "applyType" ) String applyType, @Param( "appIdList" ) List< String > appIdList, @Param( "userId" ) String userId );
 
 }

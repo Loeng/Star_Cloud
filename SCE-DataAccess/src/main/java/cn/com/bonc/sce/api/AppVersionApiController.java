@@ -3,20 +3,16 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AppAuditingDao;
-import cn.com.bonc.sce.dao.AppVersionRepository;
+import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.SQLQuery;
-import org.hibernate.query.Query;
-import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

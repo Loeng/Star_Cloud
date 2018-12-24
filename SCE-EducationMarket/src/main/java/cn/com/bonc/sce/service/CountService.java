@@ -24,7 +24,7 @@ public class CountService {
         return countDao.countAppDownloadByType( appType );
     }
 
-    public RestRecord countAppDownloadByCompanyId( String companyId ) {
+    public RestRecord countAppDownloadByCompanyId( Long companyId ) {
         return countDao.countAppDownloadByCompanyId( companyId );
     }
 }

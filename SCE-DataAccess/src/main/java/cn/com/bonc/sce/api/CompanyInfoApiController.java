@@ -1,8 +1,8 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.dao.CompanyInfoRepository;
 import cn.com.bonc.sce.entity.CompanyInfo;
+import cn.com.bonc.sce.repository.CompanyInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping( "/company" )
+
 public class CompanyInfoApiController {
 
     private CompanyInfoRepository companyInfoRepository;
@@ -31,13 +33,13 @@ public class CompanyInfoApiController {
     @GetMapping
     @ResponseBody
     public RestRecord queryCompanyInfo(
-            @RequestParam( value = "companyId", required = false ) String companyId,
+            @RequestParam( value = "companyId", required = false ) Long companyId,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
 
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        RestRecord restRecord = new RestRecord(200);
+        RestRecord restRecord = new RestRecord( 200 );
 //        restRecord.setData( companyInfoRepository.queryCompanyInfo( companyId, companyName, pageable ) );
         //虚假返回数据
         List< Map< String, Object > > resultList = new ArrayList<>();
@@ -63,6 +65,26 @@ public class CompanyInfoApiController {
         return restRecord;
     }
 
+    /**
+     * 查询单个厂商详细信息
+     *
+     * @param companyId 厂商Id
+     * @return
+     */
+    @GetMapping( "/one/{companyId}" )
+    @ResponseBody
+    public RestRecord queryOneCompanyInfo(
+            @PathVariable( value = "companyId" ) Long companyId ) {
+        log.trace( "query one companyInfo ,companyId is :{}", companyId );
+        try {
+            RestRecord restRecord = new RestRecord( 200 );
+            restRecord.setData( companyInfoRepository.findById( companyId ) );
+            restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
+            return restRecord;
+        } catch ( Exception e ) {
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+    }
 
     /**
      * 添加单个厂商信息
@@ -74,12 +96,16 @@ public class CompanyInfoApiController {
     @ResponseBody
     public RestRecord addCompanyInfo(
             @RequestBody CompanyInfo companyInfo ) {
-        RestRecord restRecord = new RestRecord(200);
-        Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
-        restRecord.setData( resultMap );
-        return restRecord;
-//        return new RestRecord( 0, companyInfoRepository.addCompanyInfo( companyInfo ) );
+        companyInfo.setIsDelete( 1L );
+        log.trace( "add company :{}", companyInfo );
+        try {
+            companyInfoRepository.save( companyInfo );
+            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+            restRecord.setData( companyInfo );
+            return restRecord;
+        } catch ( Exception e ) {
+            return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_423 );
+        }
     }
 
     /**
@@ -92,13 +118,18 @@ public class CompanyInfoApiController {
     @PutMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
-            @PathVariable( "companyId" ) String companyId,
+            @PathVariable( "companyId" ) Long companyId,
             @RequestBody CompanyInfo companyInfo ) {
-        RestRecord restRecord = new RestRecord(200);
-        Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
-        restRecord.setData( resultMap );
-        return restRecord;
+        log.trace( "Update companyInfo,companyId is : {} ,companyInfo is {}", companyId, companyInfo );
+        try {
+            companyInfo.setCompanyId( companyId );
+            companyInfo.setIsDelete( 1L );
+            companyInfoRepository.save( companyInfo );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } catch ( Exception e ) {
+            log.error( WebMessageConstants.SCE_PORTAL_MSG_501, e );
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
 //        return new RestRecord( 0, companyInfoRepository.updateCompanyInfo( companyId, companyInfo ) );
     }
 
@@ -111,13 +142,15 @@ public class CompanyInfoApiController {
      */
     @DeleteMapping( "/{companyId}" )
     @ResponseBody
+    @Transactional
     public RestRecord deleteCompanyInfo(
-            @PathVariable( "companyId" ) String companyId ) {
-        RestRecord restRecord = new RestRecord(200);
-        Map< String, Object > resultMap = new HashMap<>();
-        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
-        restRecord.setData( resultMap );
-        return restRecord;
-//        return new RestRecord( 0, companyInfoRepository.deleteCompanyInfo( companyId ) );
+            @PathVariable( "companyId" ) Long companyId ) {
+        try {
+            companyInfoRepository.deleteCompanyByCompanyId( companyId );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } catch ( Exception e ) {
+            log.error( "{}", e );
+            return new RestRecord( 422, WebMessageConstants.SCE_PORTAL_MSG_422 );
+        }
     }
 }

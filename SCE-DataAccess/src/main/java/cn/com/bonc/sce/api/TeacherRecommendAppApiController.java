@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.dao.TeacherRecommendRepository;
+import cn.com.bonc.sce.repository.TeacherRecommendRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

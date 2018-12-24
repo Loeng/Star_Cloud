@@ -20,7 +20,7 @@ public class CompanyInfoModel {
     private String companyAddress;
 
     @ApiModelProperty( name = "厂商税号" )
-    private String compantTaxNum;
+    private String companyTaxNum;
 
     @ApiModelProperty( name = "备注" )
     private String remarks;
@@ -52,12 +52,12 @@ public class CompanyInfoModel {
         this.companyAddress = companyAddress;
     }
 
-    public String getCompantTaxNum() {
-        return compantTaxNum;
+    public String getCompanyTaxNum() {
+        return companyTaxNum;
     }
 
-    public void setCompantTaxNum( String compantTaxNum ) {
-        this.compantTaxNum = compantTaxNum;
+    public void setCompanyTaxNum( String companyTaxNum ) {
+        this.companyTaxNum = companyTaxNum;
     }
 
     public String getRemarks() {

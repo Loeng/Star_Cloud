@@ -31,6 +31,11 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_411 = "手机短信验证失败";
     String SCE_PORTAL_MSG_412 = "安全码验证失败";
 
+    String SCE_PORTAL_MSG_420 = "数据读取失败";
+    String SCE_PORTAL_MSG_421 = "数据修改失败";
+    String SCE_PORTAL_MSG_422 = "数据删除失败";
+    String SCE_PORTAL_MSG_423 = "数据添加失败";
+
     /**
      * 通用错误信息
      */

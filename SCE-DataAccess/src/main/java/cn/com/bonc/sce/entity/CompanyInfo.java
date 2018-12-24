@@ -2,6 +2,7 @@ package cn.com.bonc.sce.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,10 +12,12 @@ import java.util.Objects;
  */
 @ApiModel
 @Entity
+@Data
 @Table( name = "SCE_MARKET_COMPANY", schema = "STARCLOUDMARKET", catalog = "" )
 public class CompanyInfo {
+
     @ApiModelProperty( name = "厂商ID" )
-    private long companyId;
+    private Long companyId;
 
     @ApiModelProperty( name = "厂商名称" )
     private String companyName;
@@ -23,7 +26,7 @@ public class CompanyInfo {
     private String companyAddress;
 
     @ApiModelProperty( name = "厂商税号" )
-    private String compantTaxNum;
+    private String companyTaxNum;
 
     @ApiModelProperty( name = "备注" )
     private String remarks;
@@ -32,12 +35,13 @@ public class CompanyInfo {
     private Long isDelete;
 
     @Id
+    @GeneratedValue
     @Column( name = "COMPANY_ID", nullable = false, precision = 0 )
-    public long getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId( long companyId ) {
+    public void setCompanyId( Long companyId ) {
         this.companyId = companyId;
     }
 
@@ -63,12 +67,12 @@ public class CompanyInfo {
 
     @Basic
     @Column( name = "COMPANT_TAX_NUM", nullable = true, length = 20 )
-    public String getCompantTaxNum() {
-        return compantTaxNum;
+    public String getCompanyTaxNum() {
+        return companyTaxNum;
     }
 
-    public void setCompantTaxNum( String compantTaxNum ) {
-        this.compantTaxNum = compantTaxNum;
+    public void setCompanyTaxNum( String companyTaxNum ) {
+        this.companyTaxNum = companyTaxNum;
     }
 
     @Basic
@@ -103,7 +107,7 @@ public class CompanyInfo {
         return companyId == that.companyId &&
                 Objects.equals( companyName, that.companyName ) &&
                 Objects.equals( companyAddress, that.companyAddress ) &&
-                Objects.equals( compantTaxNum, that.compantTaxNum ) &&
+                Objects.equals( companyTaxNum, that.companyTaxNum ) &&
                 Objects.equals( remarks, that.remarks ) &&
                 Objects.equals( isDelete, that.isDelete );
     }
@@ -111,6 +115,6 @@ public class CompanyInfo {
     @Override
     public int hashCode() {
 
-        return Objects.hash( companyId, companyName, companyAddress, compantTaxNum, remarks, isDelete );
+        return Objects.hash( companyId, companyName, companyAddress, companyTaxNum, remarks, isDelete );
     }
 }

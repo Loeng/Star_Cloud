@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.dao;
+package cn.com.bonc.sce.repository;
 
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.model.AppVersionQueryModel;

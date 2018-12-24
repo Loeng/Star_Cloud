@@ -6,19 +6,21 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @Repository
 @FeignClient( "sce-data-access" )
 public interface CompanyInfoDao {
 
     @RequestMapping( value = "/company", method = RequestMethod.GET )
     public RestRecord queryCompanyInfo(
-            @RequestParam( value = "companyId", required = false ) String companyId,
+            @RequestParam( value = "companyId", required = false ) Long companyId,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize
     );
+
+    @RequestMapping( value = "/company/one/{companyId}" )
+    RestRecord queryOneCompanyInfo(
+            @PathVariable( "companyId" ) Long companyId );
 
     @RequestMapping( value = "/company", method = RequestMethod.POST )
     public RestRecord addCompanyInfo(
@@ -26,11 +28,12 @@ public interface CompanyInfoDao {
 
     @RequestMapping( value = "/company/{companyId}", method = RequestMethod.PUT )
     public RestRecord updateCompanyInfo(
-            @PathVariable( "companyId" ) String companyId,
+            @PathVariable( "companyId" ) Long companyId,
             @RequestBody CompanyInfoModel companyInfo );
 
     @RequestMapping( value = "/company/{companyId}", method = RequestMethod.DELETE )
     public RestRecord deleteCompanyInfo(
-            @PathVariable( "companyId" ) String companyId );
+            @PathVariable( "companyId" ) Long companyId );
+
 
 }

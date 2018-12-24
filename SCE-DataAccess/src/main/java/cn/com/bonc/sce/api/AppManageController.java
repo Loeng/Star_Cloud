@@ -1,14 +1,13 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.dao.MarketAppVersionRepository;
+import cn.com.bonc.sce.repository.MarketAppVersionRepository;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
