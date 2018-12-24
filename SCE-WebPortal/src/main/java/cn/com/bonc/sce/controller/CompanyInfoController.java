@@ -70,7 +70,6 @@ public class CompanyInfoController {
     public RestRecord addCompanyInfo(
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
                     CompanyInfoModel companyInfo ) {
-
         return companyInfoService.addCompanyInfo( companyInfo );
     }
 
@@ -84,7 +83,7 @@ public class CompanyInfoController {
     @ApiOperation( value = "修改对应厂商信息", notes = "修改对应厂商信息", httpMethod = "PUT" )
     @ApiImplicitParam( name = "companyId", value = "厂商ID", paramType = "path", required = true )
     @PutMapping( "/{companyId}" )
-    @ResponseBody//@RequestBody @ApiParam(name="用户对象",value="传入json格式",required=true) User user
+    @ResponseBody
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) Long companyId,
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
