@@ -4,6 +4,7 @@ import cn.com.bonc.sce.dao.AppDownloadDao;
 import cn.com.bonc.sce.dao.AppManageDao;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Date: 2018/12/25 15:44
  * @Description:
  */
+@Service
 public class AppDownloadService {
 
     private AppDownloadDao appDownloadDao;
