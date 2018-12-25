@@ -3,20 +3,15 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AppAuditingDao;
-import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.entity.MarketAppVersion;
+import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author yuehaibo
@@ -106,11 +101,16 @@ public class AppVersionApiController {
             @PathVariable( "appId" ) String appId,
             @RequestBody MarketAppVersion appVersionInfo ) {
         //通过应用ID修改该应用的版本信息
-        log.info( "更新应用版本信息  appId:{}  appVersionInfo:{}", appId, appVersionInfo );
-        appVersionInfo.setAppId( appId );
-//        MarketAppVersion result = marketAppVersionRepository.saveAndFlush( appVersionInfo );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
-//        return new RestRecord( 0, result );
+        log.trace( "更新应用版本信息  appId:{}  appVersionInfo:{}", appId, appVersionInfo );
+        try {
+            appVersionInfo.setAppId( appId );
+            appVersionInfo.setIsDelete( 1L );
+            appVersionRepository.save( appVersionInfo );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } catch ( Exception e ) {
+            log.error( "Update appVersion fail {}", e );
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
     }
 
 
@@ -128,12 +128,19 @@ public class AppVersionApiController {
             @RequestParam( "appId" ) String appId,
             @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion ) {
         //判断是删除指定版本还是删除应用的所有版本
-//        if ( queryInfo.get( "appVersion" ) == null ) {
-//            return new RestRecord( 200, marketAppVersionRepository.deleteByAppIdAndAppVersion( appId, queryInfo.get( "appVersion" ) ) );
-//        } else {
-//            return new RestRecord( 200, marketAppVersionRepository.deleteByAppId( appId ) );
-//        }
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        try {
+            RestRecord restRecord = new RestRecord( 200 );
+            restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
+            if ( "".equals( appVersion ) ) {
+                restRecord.setData( appVersionRepository.deleteByAppIdAndAppVersion( appId, appVersion ) );
+            } else {
+                restRecord.setData( appVersionRepository.deleteByAppId( appId ) );
+            }
+            return restRecord;
+        } catch ( Exception e ) {
+            log.error( "delete AppVersion fail {}", e );
+            return new RestRecord( 422, WebMessageConstants.SCE_PORTAL_MSG_422 );
+        }
     }
 
     /**
@@ -153,25 +160,27 @@ public class AppVersionApiController {
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId,
             @RequestBody MarketAppVersion appVersionInfo ) {
-
-//        marketAppVersionRepository.createVersionInfo( appId, appVersionInfo );
-//        messageService.createAppVersionUpdateApplyMessage( userId, appId );
-//        RestRecord restRecord = new RestRecord();
-//        if ( appVersionInfo.getAppVersion() == null ) {
-//            restRecord.setMsg( "#########缺少迭代需要的版本号###########" );
-//            return restRecord;
-//        }
-//        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
-//        restRecord.setData( marketAppVersionRepository.saveAndFlush( appVersionInfo ) );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        log.trace( "apply appVersion appId is {} , userId us {} , detail is {}", appId, userId, appVersionInfo );
+        try {
+            appVersionInfo.setIsDelete( 1L );
+            appVersionInfo.setCreateTime( new Date() );
+            appVersionInfo.setCreateUserId( userId );
+            appVersionInfo.setAppId( appId );
+            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+            restRecord.setData( appVersionRepository.save( appVersionInfo ) );
+            return restRecord;
+        } catch ( Exception e ) {
+            log.error( "apply appVersion fail {}", e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
+        }
     }
-//
+
 
     /**
      * 应用版本审批接口
      * 1	将应用版本表中应用状态更新为通过审核
      * 2	创建一条消息，通知对应厂商用户
-     * //     * todo 添加消息通知
+     * * todo 添加消息通知
      *
      * @param appId  提交版本更新申请的应用Id
      * @param userId 管理员用户Id
@@ -209,14 +218,5 @@ public class AppVersionApiController {
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
 //        return null;
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
-    }
-
-    @GetMapping( "/test" )
-    @ResponseBody
-    public RestRecord test() {
-
-
-        Pageable pageable = PageRequest.of( 0, 3 );
-        return new RestRecord( 0, appVersionRepository.findAppAndName( pageable ) );
     }
 }

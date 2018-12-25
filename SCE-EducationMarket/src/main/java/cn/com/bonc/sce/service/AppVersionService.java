@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppVersionDao;
+import cn.com.bonc.sce.model.AppVersionModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class AppVersionService {
         return appVersionDao.queryAppVersion( appId, appVersion, pageNum, pageSize );
     }
 
-    public RestRecord updateAppHistoryVersionInfo( String appId, Map< String, String > marketAppVersion ) {
+    public RestRecord updateAppHistoryVersionInfo( String appId, AppVersionModel marketAppVersion ) {
         return appVersionDao.updateAppHistoryVersionInfo( appId, marketAppVersion );
     }
 
@@ -35,7 +36,7 @@ public class AppVersionService {
         return appVersionDao.deleteAppHistoryVersionInfo( appId, appVersion );
     }
 
-    public RestRecord createVersionInfo( String appId, String userId, Map< String, String > marketAppVersion ) {
+    public RestRecord createVersionInfo( String appId, String userId, AppVersionModel marketAppVersion ) {
         return appVersionDao.createVersionInfo( appId, userId, marketAppVersion );
     }
 

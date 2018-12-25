@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.AppVersionModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppAuditingService;
 import cn.com.bonc.sce.service.AppVersionService;
@@ -8,8 +9,6 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * @author yuehaibo
@@ -71,7 +70,7 @@ public class AppVersionController {
     @ResponseBody
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
-            @RequestBody Map< String, String > marketAppVersion ) {
+            @RequestBody @ApiParam( "应用版本信息对象" ) AppVersionModel marketAppVersion ) {
         //通过应用ID修改该应用的版本信息
         return appVersionService.updateAppHistoryVersionInfo( appId, marketAppVersion );
     }
@@ -109,7 +108,7 @@ public class AppVersionController {
     public RestRecord appVersionUpdateApply(
             @PathVariable( "appId" ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
-            @RequestBody @ApiParam( "版本迭代信息" ) Map< String, String > marketAppVersion ) {
+            @RequestBody @ApiParam( "应用版本信息对象" ) AppVersionModel marketAppVersion ) {
         return appVersionService.createVersionInfo( appId, userId, marketAppVersion );
 //        messageService.createAppVersionUpdateApplyMessage( userId, appId );
 
