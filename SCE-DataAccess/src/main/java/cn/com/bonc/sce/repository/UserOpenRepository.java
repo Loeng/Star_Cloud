@@ -1,8 +1,6 @@
 package cn.com.bonc.sce.repository;
 
-import cn.com.bonc.sce.entity.DownloadCount;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import cn.com.bonc.sce.entity.AppOpenEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +11,8 @@ import java.util.Map;
 /**
  * Created by yinming on 2018/12/25.
  */
-public interface UserOpenRepository extends JpaRepository< DownloadCount, String > {
+public interface UserOpenRepository extends JpaRepository< AppOpenEntity, String > {
+
     /**
      * 获取指定用户开通app列表
      * @param userId
@@ -24,4 +23,13 @@ public interface UserOpenRepository extends JpaRepository< DownloadCount, String
             "WHERE T1.IS_DELETE = 1 and T1.USER_ID = :userId" ,
             nativeQuery = true )
     List< Map< String,Object > >  getUserOpenList (@Param( value = "userId" ) String userId);
+
+    /**
+     * 添加开通应用信息
+     * @param s
+     * @param <S>
+     * @return
+     */
+    @Override
+    < S extends AppOpenEntity > S save( S s );
 }

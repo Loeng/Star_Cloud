@@ -2,8 +2,10 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppCollectionService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,6 +21,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/app-collect")
 public class AppCollectController {
+    private AppCollectionService appCollectionService;
+
+    @Autowired
+    public AppCollectController( AppCollectionService appCollectionService ) {
+        this.appCollectionService = appCollectionService;
+    }
 
     /**
      * 用户收藏应用查询接口
@@ -56,7 +64,7 @@ public class AppCollectController {
     @ResponseBody
     public RestRecord addUserAppCollection ( @RequestParam( "userId" ) String userId,
                                              @RequestParam( "appId" ) String appId ) {
-        return null;
+        return appCollectionService.addUserAppCollectionInfo( userId, appId );
     }
 
     /**

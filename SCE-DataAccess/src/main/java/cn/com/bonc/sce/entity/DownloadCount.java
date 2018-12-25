@@ -11,13 +11,14 @@ import java.util.Objects;
 @Table( name = "SCE_MARKER_APP_DOWNLOAD", schema = "STARCLOUDMARKET", catalog = "" )
 public class DownloadCount {
     private long id;
-    private Long appId;
+    private String appId;
     private Time downloadTime;
     private String userId;
     private String downloadUserIp;
     private Long isDelete = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column( name = "ID", nullable = false, precision = 0 )
     public long getId() {
         return id;
@@ -29,11 +30,11 @@ public class DownloadCount {
 
     @Basic
     @Column( name = "APP_ID", nullable = true, precision = 0 )
-    public Long getAppId() {
+    public String getAppId() {
         return appId;
     }
 
-    public void setAppId( Long appId ) {
+    public void setAppId( String appId ) {
         this.appId = appId;
     }
 
