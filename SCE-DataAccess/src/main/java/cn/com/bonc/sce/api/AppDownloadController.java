@@ -1,10 +1,18 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.repository.UserDownloadRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 应用下载相关操作接口
@@ -20,39 +28,29 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/app-download")
 public class AppDownloadController {
 
+    private UserDownloadRepository userDownloadRepository;
+
+    @Autowired
+    public AppDownloadController ( UserDownloadRepository userDownloadRepository ) {
+        this.userDownloadRepository = userDownloadRepository;
+    }
+
 
     /**
      * 用户应用下载历史查询接口
      * @param userId 查询的用户Id
+     * @param pageSize 分页条数
+     * @param pageNumber 页数
      * @return 用户下载应用历史记录
      */
-    @GetMapping("/{userId}")
-    @ResponseBody
-    public RestRecord getUserAppDownloadList ( @PathVariable( "userId" ) String userId ) {
-
-        return null;
-
-    }
-
-    /**
-     * 用户下载应用接口
-     * @param userId 用户Id
-     * @param appId  下载的应用Id
-     * @return 开通应用是否成功
-     */
-    @ApiOperation( value = "用户下载应用接口", notes = "用户下载选中的应用", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true )
-    } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
-    } )
     @PostMapping
     @ResponseBody
-    public RestRecord addUserAppOpen ( @RequestParam( "userId" ) String userId,
-                                       @RequestParam( "appId" ) String appId ) {
-        return null;
+    public RestRecord getUserAppDownloadList ( @RequestParam( "userId" ) String userId,
+                                               @RequestParam( "pageSize" ) Integer pageSize,
+                                               @RequestParam( "pageNumber" ) Integer pageNumber) {
+        Pageable pageable = PageRequest.of( pageNumber-1, pageSize );
+        Page< List< Map< String,Object> > > listPage = userDownloadRepository.getUserDownloadList( userId, pageable );
+        return new RestRecord( 200, listPage );
     }
 
 }

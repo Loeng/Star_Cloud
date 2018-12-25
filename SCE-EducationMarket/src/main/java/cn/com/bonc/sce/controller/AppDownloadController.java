@@ -22,9 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/app-download")
 public class AppDownloadController {
-
-
-
     AppDownloadService appDownloadService;
 
     @Autowired
@@ -40,16 +37,20 @@ public class AppDownloadController {
      */
     @ApiOperation( value = "我的应用(用户应用下载历史查询接口)", notes = "根据用户id查询应用下载历史（列表）", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true )
+            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "pageSize", dataType = "Integer", value = "分页条数", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "pageNumber", dataType = "Integer", value = "页数", paramType = "path", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}/{pageSize}/{pageNumber}")
     @ResponseBody
-    public RestRecord getUserAppDownloadList ( @PathVariable( "userId" ) String userId ) {
+    public RestRecord getUserAppDownloadList ( @PathVariable( "userId" ) String userId,
+                                               @PathVariable( "pageSize" ) Integer pageSize,
+                                               @PathVariable( "pageNumber" ) Integer pageNumber ) {
 
-        return  appDownloadService.getUserAppDownloadList(userId);
+        return  appDownloadService.getUserAppDownloadList( userId, pageSize, pageNumber );
 
     }
 

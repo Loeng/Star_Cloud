@@ -15,7 +15,7 @@ public class DownloadCount {
     private Time downloadTime;
     private String userId;
     private String downloadUserIp;
-    private Long isDelete;
+    private Long isDelete = 1L;
 
     @Id
     @Column( name = "ID", nullable = false, precision = 0 )
