@@ -83,23 +83,19 @@ public class AppManageController {
      * @return
      */
 
-    @GetMapping( "/all-app/{pageNum}/{pageSize}" )
-    public RestRecord getAllAppList( @RequestParam String platformType,
-                                     @PathVariable Integer pageNum,
-                                     @PathVariable Integer pageSize
+    @GetMapping( "/all-app" )
+    public RestRecord getAllAppList( @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                     @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                     @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppInfoEntity > appInfoList = appInfoRepository.findByAppSource( platformType, pageable );
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = appInfoList.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppInfoEntity > iter = appInfoList.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, map );
+        Page< AppInfoEntity > page = appInfoRepository.findByAppSource( platformType, pageable );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+
     }
 
 
@@ -111,31 +107,26 @@ public class AppManageController {
      * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
-    @GetMapping( "/app-by-type/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByType( @RequestParam( value = "appType" ) Integer appType,
-                                           @RequestParam( value = "orderType" ) String orderType,
-                                           @RequestParam( value = "platformType" ) String platformType,
-                                           @RequestParam( value = "sort" ) String sort,
-                                           @PathVariable( value = "pageNum" ) Integer pageNum,
-                                           @PathVariable( value = "pageSize" ) Integer pageSize ) {
+    @GetMapping( "/app-by-type" )
+    public RestRecord selectAppListByType( @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                           @RequestParam( value = "orderType", required = false, defaultValue = "download" ) String orderType,
+                                           @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                           @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //表和表关联，不知道怎么用关联表的字段去排序
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppTypeEntity > appInfoList;
+        Page< AppTypeEntity > page;
         if ( 0 == appType ) {
-            appInfoList = appTypeRepository.findAll( pageable );
+            page = appTypeRepository.findAll( pageable );
         } else {
-            appInfoList = appTypeRepository.findByAppTypeId( appType, pageable );
+            page = appTypeRepository.findByAppTypeId( appType, pageable );
         }
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = appInfoList.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppTypeEntity > iter = appInfoList.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
 
     }
 
@@ -146,23 +137,18 @@ public class AppManageController {
      * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
-    @GetMapping( "/apps-by-name/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByName( @RequestParam String appName,
-                                           @RequestParam String platformType,
-                                           @PathVariable Integer pageNum,
-                                           @PathVariable Integer pageSize ) {
+    @GetMapping( "/apps-by-name" )
+    public RestRecord selectAppListByName( @RequestParam( value = "appName", required = false ) String appName,
+                                           @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppInfoEntity > info = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = info.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppInfoEntity > iter = info.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, map );
+        Page< AppInfoEntity > page = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
     /**
@@ -178,26 +164,21 @@ public class AppManageController {
      * @return
      */
     @GetMapping( "/apps-by-name-type" )
-    public RestRecord selectAppListByNameAndType( @RequestParam String appName,
-                                                  @RequestParam String appType,
+    public RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
+                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                                   @RequestParam String orderType,
-                                                  @RequestParam String sort,
-                                                  @RequestParam String platformType,
-                                                  @RequestParam Integer pageNum,
-                                                  @RequestParam Integer pageSize ) {
+                                                  @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                                  @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //这个数据随便查的，要重写
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppInfoEntity > info = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = info.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppInfoEntity > iter = info.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, map );
+        Page< AppInfoEntity > page = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
     /**
@@ -259,36 +240,28 @@ public class AppManageController {
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     ) {
-        //没有关键词
-        Page< List< Map< String, Object > > > info;
-        Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
-        if ( StringUtils.isEmpty( keyword ) ) {
-            //查全部类型
-            if ( typeId == null || "0".equals( typeId ) ) {
-                info = appInfoRepository.getInfo( pageable );
-            } else {
-                //根据类型id查
-                info = appInfoRepository.getInfoById( typeId, pageable );
-            }
-        } else {
-            //根据关键词查全部类型
-            if ( typeId == null || "0".equals( typeId ) ) {
-                info = appInfoRepository.getInfoByKeyword( keyword, pageable );
-            } else {
-                info = appInfoRepository.getInfoByTypeIdAndKeyword( typeId, keyword, pageable );
-            }
-        }
+        try {
+            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+            Page< List< Map< String, Object > > > page;
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
 
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = info.getTotalPages();
-        map.put( "total", total );
-        Iterator< List< Map< String, Object > > > iter = info.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
+            //分类id为空
+            if ( StringUtils.isEmpty( typeId ) || typeId == 0 ) {
+                page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
+            } else {
+                //分类id不为空
+                page = appInfoRepository.getInfoByTypeIdAndKeyword( auditStatus, typeId, keyword, pageable );
+            }
+            Map< String, Object > temp = new HashMap<>( 16 );
+            temp.put( "data", page.getContent() );
+            temp.put( "totalPage", page.getTotalPages() );
+            temp.put( "totalCount", page.getTotalElements() );
+            restRecord.setData( temp );
+            return restRecord;
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
-        map.put( "data", dataList );
-        return new RestRecord( 200, map );
     }
 
 }
