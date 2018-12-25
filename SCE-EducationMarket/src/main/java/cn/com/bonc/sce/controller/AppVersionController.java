@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author yuehaibo
  * @version 0.1
@@ -70,9 +73,10 @@ public class AppVersionController {
     @ResponseBody
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
+            @RequestParam( "appVersion" ) String appVersion,
             @RequestBody @ApiParam( "应用版本信息对象" ) AppVersionModel marketAppVersion ) {
         //通过应用ID修改该应用的版本信息
-        return appVersionService.updateAppHistoryVersionInfo( appId, marketAppVersion );
+        return appVersionService.updateAppHistoryVersionInfo( appId, appVersion, marketAppVersion );
     }
 
     /**
@@ -125,16 +129,12 @@ public class AppVersionController {
      * @return
      */
     @ApiOperation( value = "应用版本审批接口", notes = "将应用版本表中应用状态更新为通过审核", httpMethod = "PUT" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "userId", value = "用户Id", paramType = "query", required = true )
-    } )
-    @PutMapping( "/approve/{appId}" )
+    @PutMapping( "/approve/{userId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApprove(
-            @PathVariable( "appId" ) String appId,
-            @RequestParam( "userId" ) String userId ) {
-        return appAuditingService.appVersionUpdateApprove( appId, userId );
+            @PathVariable( "userId" ) String userId,
+            @RequestBody @ApiParam( "需通过审核的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList ) {
+        return appAuditingService.appVersionUpdateApprove( userId, approveList );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
     }
 
@@ -144,24 +144,19 @@ public class AppVersionController {
      * 2 创建一条消息，通知对应厂商用户
      * todo 等待消息服务完成
      *
-     * @param appId        提交版本更新申请的应用Id
+     * @param userId       管理员用户Id
      * @param userId       管理员用户Id
      * @param rejectReason 驳回请求原因
      * @return
      */
     @ApiOperation( value = "审批不通过接口", notes = "不通过审核，并更新不通过原因", httpMethod = "PUT" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用Id", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "userId", value = "管理员用户Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "rejectReason", value = "驳回请求原因", paramType = "query", required = true )
-    } )
-    @PutMapping( "/reject/{appId}" )
+    @PutMapping( "/reject/{userId}" )
     @ResponseBody
     public RestRecord appVersionUpdateReject(
-            @PathVariable( "appId" ) String appId,
-            @RequestParam( "userId" ) String userId,
+            @PathVariable( "userId" ) String userId,
+            @RequestBody @ApiParam( "需通过审核的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList,
             @RequestParam( "rejectReason" ) String rejectReason ) {
-        return appAuditingService.appVersionUpdateReject( appId, userId, rejectReason );
+        return appAuditingService.appVersionUpdateReject( userId, approveList, rejectReason );
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
 
     }

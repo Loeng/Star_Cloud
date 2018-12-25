@@ -5,6 +5,10 @@ import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author yuehaibo
  * @version 0.1
@@ -20,11 +24,11 @@ public class AppAuditingService {
         this.appAuditingDao = appAuditingDao;
     }
 
-    public RestRecord appVersionUpdateApprove( String appId, String userId ) {
-        return appAuditingDao.appVersionUpdateApprove( appId, userId );
+    public RestRecord appVersionUpdateApprove( String userId, List< Map<String,String> > approveList ) {
+        return appAuditingDao.appVersionUpdateApprove( userId, approveList );
     }
 
-    public RestRecord appVersionUpdateReject( String appId, String userId, String rejectReason ) {
-        return appAuditingDao.appVersionUpdateReject( appId, userId, rejectReason );
+    public RestRecord appVersionUpdateReject( String userId, List< Map<String,String> > approveList, String rejectReason ) {
+        return appAuditingDao.appVersionUpdateReject( userId, approveList, rejectReason );
     }
 }

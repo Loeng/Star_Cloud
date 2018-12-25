@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 /**
  * @author yuehaibo
  * @version 0.1
@@ -28,8 +26,8 @@ public class AppVersionService {
         return appVersionDao.queryAppVersion( appId, appVersion, pageNum, pageSize );
     }
 
-    public RestRecord updateAppHistoryVersionInfo( String appId, AppVersionModel marketAppVersion ) {
-        return appVersionDao.updateAppHistoryVersionInfo( appId, marketAppVersion );
+    public RestRecord updateAppHistoryVersionInfo( String appId, String appVersion, AppVersionModel marketAppVersion ) {
+        return appVersionDao.updateAppHistoryVersionInfo( appId, appVersion, marketAppVersion );
     }
 
     public RestRecord deleteAppHistoryVersionInfo( String appId, String appVersion ) {

@@ -2,7 +2,7 @@ package cn.com.bonc.sce.api;
 
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.dao.AppAuditingDao;
+import cn.com.bonc.sce.dao.AppAuditingRepository;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -23,13 +23,15 @@ import java.util.*;
 @RequestMapping( "/app-version" )
 public class AppVersionApiController {
 
+
     private AppVersionRepository appVersionRepository;
-    private AppAuditingDao appAuditingDao;
+    private AppAuditingRepository appAuditingRepository;
+
 
     @Autowired
-    public AppVersionApiController( AppVersionRepository appVersionRepository, AppAuditingDao appAuditingDao ) {
+    public AppVersionApiController( AppVersionRepository appVersionRepository, AppAuditingRepository appAuditingRepository ) {
         this.appVersionRepository = appVersionRepository;
-        this.appAuditingDao = appAuditingDao;
+        this.appAuditingRepository = appAuditingRepository;
     }
 
     /**
@@ -99,12 +101,15 @@ public class AppVersionApiController {
     @ResponseBody
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
+            @RequestParam( "appVersion" ) String appVersion,
             @RequestBody MarketAppVersion appVersionInfo ) {
         //通过应用ID修改该应用的版本信息
         log.trace( "更新应用版本信息  appId:{}  appVersionInfo:{}", appId, appVersionInfo );
         try {
             appVersionInfo.setAppId( appId );
+            appVersionInfo.setAppVersion( appVersion );
             appVersionInfo.setIsDelete( 1L );
+            appVersionInfo.setUpdateTime( new Date() );
             appVersionRepository.save( appVersionInfo );
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } catch ( Exception e ) {
@@ -112,7 +117,6 @@ public class AppVersionApiController {
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
     }
-
 
     /**
      * 删除应用版本
@@ -132,9 +136,9 @@ public class AppVersionApiController {
             RestRecord restRecord = new RestRecord( 200 );
             restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
             if ( "".equals( appVersion ) ) {
-                restRecord.setData( appVersionRepository.deleteByAppIdAndAppVersion( appId, appVersion ) );
-            } else {
                 restRecord.setData( appVersionRepository.deleteByAppId( appId ) );
+            } else {
+                restRecord.setData( appVersionRepository.deleteByAppIdAndAppVersion( appId, appVersion ) );
             }
             return restRecord;
         } catch ( Exception e ) {
@@ -147,7 +151,7 @@ public class AppVersionApiController {
      * 应用版本更新申请接口
      * 1. 在应用版本信息表中插入一条新的版本信息, 并将状态设置为待审核
      * 2. 创建一条待办消息，创建人为申请人，接收人为系统管理员
-     * //     * todo 添加消息通知
+     * //
      *
      * @param appId          更新版本的应用Id
      * @param userId         提交版本更新申请的用户Id
@@ -168,6 +172,7 @@ public class AppVersionApiController {
             appVersionInfo.setAppId( appId );
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             restRecord.setData( appVersionRepository.save( appVersionInfo ) );
+            //todo 添加消息通知,通知管理员进行审核
             return restRecord;
         } catch ( Exception e ) {
             log.error( "apply appVersion fail {}", e );
@@ -175,48 +180,60 @@ public class AppVersionApiController {
         }
     }
 
-
     /**
      * 应用版本审批接口
      * 1	将应用版本表中应用状态更新为通过审核
      * 2	创建一条消息，通知对应厂商用户
-     * * todo 添加消息通知
      *
-     * @param appId  提交版本更新申请的应用Id
-     * @param userId 管理员用户Id
+     * @param userId      管理员用户Id
+     * @param approveList 需要审核通过的应用版本和应用Id列表
      * @return
      */
-    @PutMapping( "/approve/{appId}" )
+    @PutMapping( "/approve/{userId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApprove(
-            @PathVariable( "appId" ) String appId,
-            @RequestParam( "userId" ) String userId ) {
-//        appAuditingDao.appVersionUpdateApprove( appId, userId );
-//        messageService.createAppVersionUpdateApproveMessage( appId, userId );
-//        return null;
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+            @PathVariable( "userId" ) String userId,
+            @RequestBody List< Map< String, String > > approveList ) {
+        log.trace( "Approve {} AppVersion By {}", approveList.size(), userId );
+        try {
+            for ( Map< String, String > approve : approveList ) {
+                appAuditingRepository.appVersionApprove( approve.get( "appId" ), approve.get( "appVersion" ), userId );
+            }
+            //todo 这里需要添加 通知到相关用户
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } catch ( Exception e ) {
+            log.error( "Approve fail {}", e );
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+
     }
 
     /**
      * 审批不通过接口
      * 1 将应用版本表中应用状态更新为不通过审核，并更新不通过原因
      * 2 创建一条消息，通知对应厂商用户
-     * todo 添加消息通知
      *
-     * @param appId        提交版本更新申请的应用Id
-     * @param userId       管理员用户Id
+     * @param userId       提交版本更新申请的应用Id
+     * @param approveList  需要审核通过的应用版本和应用Id列表
      * @param rejectReason 驳回请求原因
      * @return
      */
-    @PutMapping( "/reject/{appId}" )
+    @PutMapping( "/reject/{userId}" )
     @ResponseBody
     public RestRecord appVersionUpdateReject(
-            @PathVariable( "appId" ) String appId,
-            @RequestParam( "userId" ) String userId,
+            @PathVariable( "userId" ) String userId,
+            @RequestBody List< Map< String, String > > approveList,
             @RequestParam( "rejectReason" ) String rejectReason ) {
-//        appAuditingDao.appVersionUpdateReject( appId, userId, rejectReason );
-//        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
-//        return null;
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        log.trace( "Reject {} AppVersion By {}", approveList.size(), userId );
+        try {
+            for ( Map< String, String > approve : approveList ) {
+                appAuditingRepository.appVersionReject( approve.get( "appId" ), approve.get( "appVersion" ), userId );
+            }
+            //todo 这里需要添加 通知到相关用户
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } catch ( Exception e ) {
+            log.error( "Reject fail {}", e );
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
     }
 }

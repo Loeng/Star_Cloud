@@ -38,8 +38,9 @@ public interface AppVersionRepository extends
      * @return 影响条数
      */
     @Modifying
-    @Query( "UPDATE MarketAppVersion SET IS_DELETE=1 WHERE APP_ID=:appId and APP_VERSION=:appVersion" )
-    int deleteByAppIdAndAppVersion( @Param( "appId" ) String appId, @Param( "appVersion" ) String appVersion );
+    @Query( "UPDATE MarketAppVersion SET IS_DELETE=0 WHERE APP_ID=:appId and APP_VERSION=:appVersion" )
+    int deleteByAppIdAndAppVersion( @Param( "appId" ) String appId,
+                                    @Param( "appVersion" ) String appVersion );
 
     /**
      * 通过AppId删除指定应用的所有版本信息
@@ -48,7 +49,7 @@ public interface AppVersionRepository extends
      * @return 影响条数
      */
     @Modifying
-    @Query( "UPDATE MarketAppVersion SET IS_DELETE=1 WHERE APP_ID=:appId" )
+    @Query( "UPDATE MarketAppVersion SET IS_DELETE=0 WHERE APP_ID=:appId" )
     int deleteByAppId( @Param( "appId" ) String appId );
 
 

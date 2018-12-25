@@ -5,8 +5,6 @@ import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 /**
  * @author yuehaibo
  * @version 0.1
@@ -32,6 +30,7 @@ public interface AppVersionDao {
     @RequestMapping( value = "/app-version/{appId}", method = RequestMethod.PUT )
     public RestRecord updateAppHistoryVersionInfo(
             @PathVariable( "appId" ) String appId,
+            @RequestParam( "appVersion" ) String appVersion,
             @RequestBody AppVersionModel marketAppVersion );
 
     @RequestMapping( value = "/app-version", method = RequestMethod.DELETE )
