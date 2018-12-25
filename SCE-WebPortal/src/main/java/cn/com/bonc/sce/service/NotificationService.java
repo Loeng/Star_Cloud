@@ -4,6 +4,7 @@ import cn.com.bonc.sce.dao.NotificationDao;
 import cn.com.bonc.sce.model.Notification;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,9 @@ public class NotificationService {
      * @return 分页后的通知公告列表
      */
     public RestRecord getNotificationList( Integer type,String auditStatus,String startDate,String endDate,Integer pageNum,Integer pageSize ) {
+        if( StringUtils.isEmpty(startDate)){
+            return notificationDao.getNotificationList( type, auditStatus,  pageNum, pageSize );
+        }
         return notificationDao.getNotificationList( type, auditStatus, startDate, endDate, pageNum, pageSize );
     }
 

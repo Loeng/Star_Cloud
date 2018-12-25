@@ -103,10 +103,10 @@ public class NewsApiController {
     @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
-                                   @RequestParam( "startDate" ) String startDate,
-                                   @RequestParam( "endDate" ) String endDate,
-                                   @RequestParam( "pageNum" ) Integer pageNum,
-                                   @RequestParam( "pageSize" ) Integer pageSize ) {
+                                   @RequestParam( value = "startDate",required=false ) String startDate,
+                                   @RequestParam( value = "endDate",required=false ) String endDate,
+                                   @RequestParam( value = "pageNum",required = false,defaultValue = "0") Integer pageNum,
+                                   @RequestParam( value = "pageSize",required = false,defaultValue = "10" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
             Page< News > page;

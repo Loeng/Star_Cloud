@@ -39,14 +39,15 @@ public class AccountService {
      * @return 验证码
      */
     public RestRecord sendSecurityPhoneValid( String phone ) {
+        String valid;
         try {
-            String valid = VaildSecurityUtils.randomStr();
+            valid = VaildSecurityUtils.randomStr();
             VaildSecurityUtils.addValid(getAccountEncryptionCode(phone,valid));
             SendMessage.postMsgToPhone(valid,phone);
         } catch ( UnsupportedEncodingException e ) {
             return new RestRecord(409,WebMessageConstants.SCE_PORTAL_MSG_409);
         }
-        return new RestRecord(200);
+        return new RestRecord(200,valid);
     }
 
     /**
@@ -75,7 +76,7 @@ public class AccountService {
      * @return 修改结果
      */
     public RestRecord updateAccount( Account accountSecurity ) {
-        /*Integer successCode = 200;
+        Integer successCode = 200;
         //加密加工
         //accountSecurity.getPassword();
         String code;
@@ -86,15 +87,15 @@ public class AccountService {
                     accountSecurity.getPhone(), accountSecurity.getCode() );
         }
         if ( VaildSecurityUtils.checkCode( code ) ) {
-            VaildSecurityUtils.delCode( code );*/
+            VaildSecurityUtils.delCode( code );
             RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );
-            /*if ( rr.getCode() == successCode ) {
+            if ( rr.getCode() == successCode ) {
                 rr.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
-            }*/
+            }
             return rr;
-        /*} else {
+        } else {
             return new RestRecord( 412, WebMessageConstants.SCE_PORTAL_MSG_412 );
-        }*/
+        }
     }
 
     private String getAccountEncryptionCode( String str1, String str2 ) {
