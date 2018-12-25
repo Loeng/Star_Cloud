@@ -144,7 +144,7 @@ public class CryptoUtil {
         String publicKey = rsa.getPublicKeyBase64();
         String privateKey = rsa.getPrivateKeyBase64();
 
-        System.out.println( privateKey.length() + publicKey.length() );
+        System.out.println( privateKey + publicKey);
 
 //        System.out.println(generateKeyPair( SignatureAlgorithm.ES256.name() ));
     }

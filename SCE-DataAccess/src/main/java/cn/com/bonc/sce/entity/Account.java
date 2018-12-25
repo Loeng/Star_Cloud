@@ -87,7 +87,6 @@ public class Account {
     }
 
     public Account( String userId, String password, Integer isDelete, String phone, String code ) {
-
         this.userId = userId;
         this.password = password;
         this.isDelete = isDelete;

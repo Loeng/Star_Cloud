@@ -1,7 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.entity.Notification;
-import cn.com.bonc.sce.entity.User;
+import cn.com.bonc.sce.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

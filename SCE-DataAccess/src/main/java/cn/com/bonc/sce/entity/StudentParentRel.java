@@ -11,7 +11,7 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table( name = "SCE_INFO_STUDENT_PAREBNT_REL",schema = "STARCLOUDPORTAL" )
+@Table( name = "SCE_INFO_STUDENT_PAREBNT_REL", schema = "STARCLOUDPORTAL" )
 public class StudentParentRel {
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_INFO_STUDENT_PAREBNT_REL" )

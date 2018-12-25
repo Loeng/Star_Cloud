@@ -103,8 +103,8 @@ public class TeacherRecommendAppController {
             @RequestParam( "teacherId" ) @ApiParam( value = "教师Id", required = true ) String teacherId,
             @RequestParam( value = "startTime", defaultValue = "1970-01-01 00:00:00" ) @ApiParam( value = "开始时间", example = "2012-06-18 00:00:00" ) String startTime,
             @RequestParam( value = "endTime", defaultValue = "2099-01-01 00:00:00" ) @ApiParam( value = "结束时间", example = "2019-06-18 23:59:59" ) String endTime,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         System.out.println( startTime );
         System.out.println( endTime );
         return teacherRecommendService.selectTeacherRecommendAppList( teacherId, startTime, endTime, pageNum, pageSize );

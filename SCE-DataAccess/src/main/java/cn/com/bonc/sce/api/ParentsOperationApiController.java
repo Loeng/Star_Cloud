@@ -4,6 +4,7 @@ import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.*;
 import cn.com.bonc.sce.entity.*;
+import cn.com.bonc.sce.entity.user.User;
 import cn.com.bonc.sce.model.ParentsInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.apache.commons.lang.StringUtils;
