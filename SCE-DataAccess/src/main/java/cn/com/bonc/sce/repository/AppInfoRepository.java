@@ -26,14 +26,6 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     @Query( nativeQuery = true, value = "SELECT ID ,AUDIT_STATUS FROM STARCLOUDMARKET.SCE_AUDIT_STATUS_DIC ORDER BY ID ASC" )
     List< Map< String, Object > > getAllAuditStatus();
 
-    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  WHERE APP_STATUS =:auditStatus AND  APP_TYPE_ID=:typeId " )
-    Page< List< Map< String, Object > > > getInfoById( @Param( value = "auditStatus" ) String auditStatus,
-                                                       @Param( value = "typeId" ) Integer typeId,
-                                                       Pageable pageable );
-
-    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\" WHERE APP_STATUS =:auditStatus" )
-    Page< List< Map< String, Object > > > getInfo( @Param( value = "auditStatus" ) String auditStatus,
-                                                   Pageable pageable );
 
     @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A WHERE  A.APP_STATUS =:auditStatus AND A.APP_NAME  LIKE  CONCAT('%',CONCAT(:keyword,'%'))" )
     Page< List< Map< String, Object > > > getInfoByKeyword( @Param( value = "auditStatus" ) String auditStatus,

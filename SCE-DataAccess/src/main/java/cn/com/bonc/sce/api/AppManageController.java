@@ -240,33 +240,28 @@ public class AppManageController {
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     ) {
+        try {
+            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+            Page< List< Map< String, Object > > > page;
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
 
-        Page< List< Map< String, Object > > > page;
-        Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
-        //没有关键词
-        if ( StringUtils.isEmpty( keyword ) ) {
-            //查全部类型
-            if ( typeId == null || typeId == 0 ) {
-                page = appInfoRepository.getInfo( auditStatus, pageable );
-            } else {
-                //根据类型id查
-                page = appInfoRepository.getInfoById( auditStatus, typeId, pageable );
-            }
-        } else {
-            //根据关键词查全部类型
+            //分类id为空
             if ( StringUtils.isEmpty( typeId ) || typeId == 0 ) {
                 page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
             } else {
-                //根据关键词还有分类id
+                //分类id不为空
                 page = appInfoRepository.getInfoByTypeIdAndKeyword( auditStatus, typeId, keyword, pageable );
             }
+            Map< String, Object > temp = new HashMap<>( 16 );
+            temp.put( "data", page.getContent() );
+            temp.put( "totalPage", page.getTotalPages() );
+            temp.put( "totalCount", page.getTotalElements() );
+            restRecord.setData( temp );
+            return restRecord;
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
-
-        Map< String, Object > temp = new HashMap<>( 16 );
-        temp.put( "data", page.getContent() );
-        temp.put( "totalPage", page.getTotalPages() );
-        temp.put( "totalCount", page.getTotalElements() );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
 }
