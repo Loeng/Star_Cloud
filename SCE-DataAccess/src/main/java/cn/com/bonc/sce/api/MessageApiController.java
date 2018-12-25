@@ -14,10 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 消息
@@ -44,6 +42,9 @@ public class MessageApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord insertMessage( @RequestBody Message message ) {
+        message.setType( 1 );
+        message.setStatus( "0" );
+        message.setIsDelete( 0 );
         try {
             return new RestRecord( 200, messageDao.save( message ) );
         } catch ( Exception e ) {
@@ -61,6 +62,9 @@ public class MessageApiController {
     @PostMapping( "/announcements" )
     @ResponseBody
     public RestRecord insertAnnouncement( @RequestBody Message message ) {
+        message.setType( 0 );
+        message.setStatus( "0" );
+        message.setIsDelete( 0 );
         try {
             return new RestRecord( 200, messageDao.save( message ) );
         } catch ( Exception e ) {
@@ -111,7 +115,7 @@ public class MessageApiController {
      * @param messageId id
      * @return 删除是否成功
      */
-    @PatchMapping( "/updateMessageRead/{messageId}" )
+    @PutMapping( "/update-message-read/{messageId}" )
     @ResponseBody
     public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" )Integer messageId ) {
         try {
@@ -137,38 +141,41 @@ public class MessageApiController {
                                           @PathVariable( "pageSize" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
-            String time = messageDao.getNewestTimeByUserId( userId );
-            if( StringUtils.isEmpty( time)){
-                time="1970-1-1 00:00:00.000000";
+            Date time = messageDao.getNewestTimeByUserId( userId );
+            System.out.println( time );
+            System.out.println( time.getTime() );
+            System.out.println( new Date(time.getTime()) );
+            List< Message > list;
+            if( !StringUtils.isEmpty( time)){
+                list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time,0 );
+            }else{
+                list = messageDao.findByTargetIdAndIsDelete( userId,0 );
             }
-            List< Message > list = messageDao.findByTargetIdAndCreateTimeGreaterThanAndIsDelete( userId, time,0 );
             List< UserMessage > userMessageList = new ArrayList<>();
             if ( list.size() > 0 ) {
                 for ( Message m : list ) {
                     UserMessage um = new UserMessage();
                     um.setIsRead( 0 );
                     um.setUserId( userId );
-                    um.setCreateTime( m.getCreateTime() );
+                    Date createTime = m.getCreateTime();
+                    um.setCreateTime( new Date( createTime.getTime() ) );
                     um.setIsDelete( 0 );
                     um.setMessageId( m.getId() );
                     userMessageList.add( um );
+                    if(userMessageList.size()>=1000){
+                        userMessageDao.saveAll( userMessageList );
+                        userMessageList.clear();
+                    }
                 }
-                List<UserMessage> returns = userMessageDao.saveAll( userMessageList );
-                if ( returns.size() > 0 ) {
-                    Map<String,Object> info = new HashMap<>();
-                    Page<UserMessage> page = userMessageDao.findByUserIdAndIsDelete( userId,0,pageable );
-                    info.put( "total",page.getTotalElements() );
-                    info.put( "info",page.getContent() );
-                    return new RestRecord( 200, info );
+                if(userMessageList.size()>0){
+                    userMessageDao.saveAll( userMessageList );
                 }
-                return new RestRecord( 500, "error" );
-            } else {
-                Map<String,Object> info = new HashMap<>();
-                Page<UserMessage> page = userMessageDao.findByUserIdAndIsDelete( userId,0,pageable );
-                info.put( "total",page.getTotalElements() );
-                info.put( "info",page.getContent() );
-                return new RestRecord( 200, info );
             }
+            Map<String,Object> info = new HashMap<>();
+            Page<UserMessage> page = userMessageDao.findByUserIdAndIsDelete( userId,0,pageable );
+            info.put( "total",page.getTotalElements() );
+            info.put( "info",page.getContent() );
+            return new RestRecord( 200, info );
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

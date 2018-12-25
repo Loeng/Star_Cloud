@@ -79,11 +79,11 @@ public class BannerService {
     /**
      * 获取banner数据
      *
-     * @param bannerId bannerId
+     * @param bannerType bannerType
      * @return banner数据
      */
-    public RestRecord getBannerById(Integer bannerId){
-        return bannerDao.getBannerById(bannerId);
+    public RestRecord getBannerById(Integer bannerType){
+        return bannerDao.getBannerById(bannerType);
     }
 
     /**

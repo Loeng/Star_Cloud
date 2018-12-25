@@ -4,8 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * app应用
@@ -19,6 +23,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="SCE_MARKET_APP_INFO")
 public class App {
 
@@ -49,14 +54,16 @@ public class App {
     @Column(name = "CREATE_USER_ID")
     private String createUserId;
 
+    @CreatedDate
     @Column(name = "CREATE_TIME")
-    private String createTime;
+    private Date createTime;
 
     @Column(name = "UPDATE_USER_ID")
     private String updateUserId;
 
+    @LastModifiedDate
     @Column(name = "UPDATE_TIME")
-    private String updateTime;
+    private Date updateTime;
 
     @Column(name = "APP_COPYRIGHT")
     private String appCopyright;

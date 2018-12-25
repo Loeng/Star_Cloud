@@ -2,6 +2,7 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.NotificationDao;
+import cn.com.bonc.sce.entity.News;
 import cn.com.bonc.sce.entity.Notification;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +42,7 @@ public class NotificationApiController {
     @PostMapping
     @ResponseBody
     public RestRecord insertNotification( @RequestBody Notification notification ) {
+        notification.setIsDelete( 0 );
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {
@@ -77,6 +82,7 @@ public class NotificationApiController {
     @PutMapping
     @ResponseBody
     public RestRecord updateNotification( @RequestBody Notification notification ) {
+        notification.setIsDelete( 0 );
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {
@@ -96,17 +102,22 @@ public class NotificationApiController {
      * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
-    @GetMapping( "/{type}/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
+    @GetMapping( "/list/{type}/{auditStatus}" )
     @ResponseBody
     public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
                                            @PathVariable( "auditStatus" ) String auditStatus,
-                                           @PathVariable( "startDate" ) String startDate,
-                                           @PathVariable( "endDate" ) String endDate,
-                                           @PathVariable( "pageNum" ) Integer pageNum,
-                                           @PathVariable( "pageSize" ) Integer pageSize ) {
+                                           @RequestParam( "startDate" ) String startDate,
+                                           @RequestParam( "endDate" ) String endDate,
+                                           @RequestParam( "pageNum" ) Integer pageNum,
+                                           @RequestParam( "pageSize" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
-            Page< Notification > page = notificationDao.findByIsDeleteAndContentTypeAndContentStatusAndUpdateTimeBetween( 0,type,auditStatus,startDate,endDate, pageable );
+            Page< Notification > page;
+            if( StringUtils.isEmpty( startDate )){
+                page = notificationDao.findByIsDeleteAndContentStatus( 0, auditStatus, pageable );
+            }else {
+                page = notificationDao.findByIsDeleteAndContentTypeAndContentStatusAndUpdateTimeBetween( 0,type,auditStatus,new Date( Long.parseLong( startDate ) ),new Date( Long.parseLong( endDate ) ), pageable );
+            }
             Map<String,Object> info = new HashMap<>();
             info.put( "total",page.getTotalElements() );
             info.put( "info",page.getContent() );

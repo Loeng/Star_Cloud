@@ -10,7 +10,7 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table( name = "SCE_COMMON_USER_PASSWORD" )
+@Table( name = "SCE_COMMON_USER_PASSWORD",schema = "STARCLOUDPORTAL" )
 public class UserPassword {
 
     @Id

@@ -1,4 +1,4 @@
-package cn.com.bonc.sce.authentication;
+package cn.com.bonc.sce.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

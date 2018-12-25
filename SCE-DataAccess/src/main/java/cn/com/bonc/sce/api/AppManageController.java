@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.dao.MarketAppVersionRepository;
+import cn.com.bonc.sce.repository.MarketAppVersionRepository;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.repository.AppInfoRepository;

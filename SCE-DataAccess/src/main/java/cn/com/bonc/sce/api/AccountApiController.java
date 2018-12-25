@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping( "/accountSecurity" )
+@RequestMapping( "/account-security" )
 public class AccountApiController {
     @Autowired
     private AccountDao accountSecurityDao;

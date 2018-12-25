@@ -71,17 +71,17 @@ public interface BannerDao {
      * @param list bannerId
      * @return 修改结果
      */
-    @RequestMapping( value = "/banners/bannerOrder", method = RequestMethod.PUT )
+    @RequestMapping( value = "/banners/banner-order", method = RequestMethod.PUT )
     public RestRecord updateBannerOrder( @RequestParam( "list" ) List<Integer> list );
 
     /**
      * 获取banner数据
      *
-     * @param bannerId bannerId
+     * @param bannerType bannerType
      * @return banner数据
      */
-    @RequestMapping( value = "/banners/{bannerId}", method = RequestMethod.GET )
-    public RestRecord getBannerById( @PathVariable( "bannerId" ) Integer bannerId );
+    @RequestMapping( value = "/banners/{bannerType}", method = RequestMethod.GET )
+    public RestRecord getBannerById( @PathVariable( "bannerType" ) Integer bannerType );
 
     /**
      * 获取所有banner数据

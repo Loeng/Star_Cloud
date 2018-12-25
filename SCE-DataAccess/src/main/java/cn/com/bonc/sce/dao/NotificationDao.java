@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * 新闻
  *
@@ -28,10 +30,14 @@ public interface NotificationDao extends JpaRepository< Notification, Integer > 
 
     Notification findByIdAndIsDelete( Integer newsId, Integer isDelete );
 
+    Page< Notification > findByIsDeleteAndContentStatus( Integer isDelete,
+                                                 String contentStatus,
+                                                 Pageable pageable);
+
     Page< Notification > findByIsDeleteAndContentTypeAndContentStatusAndUpdateTimeBetween( Integer isDelete,
                                                                                            Integer contentType,
                                                                                            String contentStatus,
-                                                                                           String createTimeFrom,
-                                                                                           String createTimeTo,
+                                                                                           Date createTimeFrom,
+                                                                                           Date createTimeTo,
                                                                                            Pageable pageable);
 }

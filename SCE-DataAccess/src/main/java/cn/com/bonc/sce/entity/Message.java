@@ -1,6 +1,10 @@
 package cn.com.bonc.sce.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 总消息
@@ -10,7 +14,8 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table(name="SCE_COMMON_INFORMATION")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name="SCE_COMMON_INFORMATION",schema = "STARCLOUDPORTAL")
 public class Message {
 
     @Id
@@ -39,8 +44,9 @@ public class Message {
     @Column(name = "INFORMATION_STATUS")
     private String status;
 
+    @CreatedDate
     @Column(name = "CREATE_TIME")
-    private String createTime;
+    private Date createTime;
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
@@ -101,11 +107,11 @@ public class Message {
         this.status = status;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime( String createTime ) {
+    public void setCreateTime( Date createTime ) {
         this.createTime = createTime;
     }
 
@@ -121,7 +127,7 @@ public class Message {
 
     }
 
-    public Message( String content, Integer type, Integer topicType, String targetId, String sourceId, String status, String createTime, Integer isDelete ) {
+    public Message( String content, Integer type, Integer topicType, String targetId, String sourceId, String status, Date createTime, Integer isDelete ) {
 
         this.content = content;
         this.type = type;

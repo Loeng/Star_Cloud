@@ -43,6 +43,7 @@ public interface MessageConstants {
      * 1000-1099
      */
     String SCE_MSG_1000 = "ip:{} 的用户尝试使用不支持的登录方式进行登录，使用登录方式: {}";
+    String SCE_MSG_1001 = "用户: {} 在 ip: {} 尝试进行登录";
 
     /**
      * 通用异常处理

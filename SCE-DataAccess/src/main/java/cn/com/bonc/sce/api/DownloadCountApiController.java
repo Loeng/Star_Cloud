@@ -57,7 +57,7 @@ public class DownloadCountApiController {
      */
     @GetMapping( "/company" )
     @ResponseBody
-    public RestRecord countAppDownloadByCompanyId( @RequestParam( "companyId" ) String companyId ) {
+    public RestRecord countAppDownloadByCompanyId( @RequestParam( "companyId" ) Long companyId ) {
         // 根据厂商名查找对应的应用，统计下载量
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }

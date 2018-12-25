@@ -3,12 +3,11 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AppAuditingDao;
-import cn.com.bonc.sce.dao.AppVersionRepository;
+import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -210,5 +209,14 @@ public class AppVersionApiController {
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
 //        return null;
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    @GetMapping( "/test" )
+    @ResponseBody
+    public RestRecord test() {
+
+
+        Pageable pageable = PageRequest.of( 0, 3 );
+        return new RestRecord( 0, appVersionRepository.findAppAndName( pageable ) );
     }
 }

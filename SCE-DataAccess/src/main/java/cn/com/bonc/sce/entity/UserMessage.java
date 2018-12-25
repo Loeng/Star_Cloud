@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 用户消息
@@ -10,7 +11,7 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table(name="SCE_COMMON_USER_INFO")
+@Table(name="SCE_COMMON_USER_INFO",schema = "STARCLOUDPORTAL")
 public class UserMessage {
 
     @Id
@@ -29,7 +30,7 @@ public class UserMessage {
     private Integer messageId;
 
     @Column(name = "CREATE_TIME")
-    private String createTime;
+    private Date createTime;
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
@@ -70,11 +71,11 @@ public class UserMessage {
         this.messageId = messageId;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime( String createTime ) {
+    public void setCreateTime( Date createTime ) {
         this.createTime = createTime;
     }
 
@@ -98,7 +99,7 @@ public class UserMessage {
 
     }
 
-    public UserMessage( Integer isRead, String userId, Integer messageId, String createTime, Integer isDelete, Message message ) {
+    public UserMessage( Integer isRead, String userId, Integer messageId, Date createTime, Integer isDelete, Message message ) {
         this.isRead = isRead;
         this.userId = userId;
         this.messageId = messageId;

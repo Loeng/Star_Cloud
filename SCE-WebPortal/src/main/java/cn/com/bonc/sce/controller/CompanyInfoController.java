@@ -3,18 +3,18 @@ package cn.com.bonc.sce.controller;
 
 /**
  * Created by YueHaibo on 2018/12/12.
+ *
  * @Author yuehaibo
  */
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.CompanyInfoModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CompanyInfoService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @Slf4j
 @Api( value = "厂商信息接口", tags = "厂商信息接口" )
@@ -33,15 +33,29 @@ public class CompanyInfoController {
         this.companyInfoService = companyInfoService;
     }
 
-    @ApiOperation( value = "查询厂商信息", notes = "通过厂商Id可以精确查询，通过厂商名称可以模糊查询", httpMethod = "GET" )
+    @ApiOperation( value = "查询厂商信息列表", notes = "通过厂商Id可以精确查询，通过厂商名称可以模糊查询", httpMethod = "GET" )
     @GetMapping
     @ResponseBody
     public RestRecord queryCompanyInfo(
-            @RequestParam( value = "companyId", required = false ) @ApiParam( value = "厂商Id" ) String companyId,
+            @RequestParam( value = "companyId", required = false ) @ApiParam( value = "厂商Id" ) Long companyId,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) @ApiParam( value = "厂商名称" ) String companyName,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         return companyInfoService.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
+    }
+
+    /**
+     * 查询单个厂商详细信息
+     *
+     * @param companyId 厂商Id
+     * @return
+     */
+    @ApiOperation( value = "查询单个厂商详细信息", notes = "单个厂商的详细信息", httpMethod = "GET" )
+    @GetMapping( "/one/{companyId}" )
+    @ResponseBody
+    public RestRecord queryOneCompanyInfo(
+            @PathVariable( value = "companyId" ) @ApiParam( value = "厂商Id" ) Long companyId ) {
+        return companyInfoService.queryOneCompanyInfo( companyId );
     }
 
     /**
@@ -55,8 +69,7 @@ public class CompanyInfoController {
     @ResponseBody
     public RestRecord addCompanyInfo(
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
-                    Map< String, Object > companyInfo ) {
-
+                    CompanyInfoModel companyInfo ) {
         return companyInfoService.addCompanyInfo( companyInfo );
     }
 
@@ -72,9 +85,9 @@ public class CompanyInfoController {
     @PutMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
-            @PathVariable( "companyId" ) String companyId,
+            @PathVariable( "companyId" ) Long companyId,
             @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
-                    Map< String, Object > companyInfo ) {
+                    CompanyInfoModel companyInfo ) {
         return companyInfoService.updateCompanyInfo( companyId, companyInfo );
     }
 
@@ -90,7 +103,7 @@ public class CompanyInfoController {
     @DeleteMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord deleteCompanyInfo(
-            @PathVariable( "companyId" ) String companyId ) {
+            @PathVariable( "companyId" ) Long companyId ) {
         return companyInfoService.deleteCompanyInfo( companyId );
     }
 }

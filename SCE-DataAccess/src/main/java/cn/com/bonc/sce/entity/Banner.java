@@ -19,7 +19,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name="SCE_PORTAL_BANNER")
+@Table(name="SCE_PORTAL_BANNER",schema = "STARCLOUDPORTAL")
 public class Banner {
 
     @Id
@@ -41,7 +41,7 @@ public class Banner {
     private Integer isShown;
 
     @Column(name = "BANNER_TYPE_ID")
-    private String type;
+    private Integer type;
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;

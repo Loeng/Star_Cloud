@@ -55,13 +55,13 @@ public interface NotificationDao {
      * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
-    @RequestMapping( value = "/notifications/{type}/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/notifications/list/{type}/{auditStatus}", method = RequestMethod.GET )
     public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
                                            @PathVariable( "auditStatus" ) String auditStatus,
-                                           @PathVariable( "startDate" ) String startDate,
-                                           @PathVariable( "endDate" ) String endDate,
-                                           @PathVariable( "pageNum" ) Integer pageNum,
-                                           @PathVariable( "pageSize" ) Integer pageSize );
+                                           @RequestParam( "startDate" ) String startDate,
+                                           @RequestParam( "endDate" ) String endDate,
+                                           @RequestParam( "pageNum" ) Integer pageNum,
+                                           @RequestParam( "pageSize" ) Integer pageSize );
 
     /**
      * 查询通知公告详情

@@ -17,9 +17,10 @@ spring:
       globalcors:
           corsConfigurations:
             '[/**]':
-              allowedOrigins: "docs.spring.io"
-              allowedMethods:
-               - GET
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+              allowCredentials: true
       default-filters:
       routes:
         - id: portal
