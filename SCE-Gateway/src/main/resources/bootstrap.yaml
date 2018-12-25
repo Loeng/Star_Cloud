@@ -41,6 +41,12 @@ spring:
             - Path=/authentication/**
           filters:
             - StripPrefix=1
+        - id: data-access
+          uri: lb://SCE-DATA-ACCESS/
+          predicates:
+            - Path=/data-access/**
+          filters:
+            - StripPrefix=1
 server:
   port: 10101
 logging:

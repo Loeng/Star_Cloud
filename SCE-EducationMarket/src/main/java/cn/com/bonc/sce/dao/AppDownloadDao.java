@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient( "sce-data-access" )
 public interface AppDownloadDao {
 
-
     /**
      * 获取用户下载列表
      * @param userId
      * @return
      */
-    @RequestMapping( value = "/app-download/{appId}", method = RequestMethod.PUT )
+    @RequestMapping( value = "/app-download", method = RequestMethod.POST )
     RestRecord getUserAppDownloadList(
-            @RequestParam( "userId" ) String userId);
+            @RequestParam( "userId" ) String userId,
+            @RequestParam( "pageSize" ) Integer pageSize,
+            @RequestParam( "pageNumber" ) Integer pageNumber );
 
 
 }

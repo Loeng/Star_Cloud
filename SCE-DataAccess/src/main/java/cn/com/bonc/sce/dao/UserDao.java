@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ import java.util.List;
 public class UserDao {
 
     public User getUserById( String userId ) {
-        return new User( 0, "RGM79","11111","321321" );
+        return new User( "s000", "RGM79", "11111", new Secret(), "1" );
     }
 
 //    public User getUserByEmail (String email);

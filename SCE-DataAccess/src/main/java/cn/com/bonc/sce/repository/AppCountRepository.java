@@ -23,4 +23,6 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
             countQuery = "SELECT COUNT(*) FROM (SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKER_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID)" ,
             nativeQuery = true )
     Page <List< Map< String,Object > >> getAppDownloadRankingList ( Pageable pageable );
+
+
 }

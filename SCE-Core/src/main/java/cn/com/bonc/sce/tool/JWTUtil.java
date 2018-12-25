@@ -1,15 +1,14 @@
 package cn.com.bonc.sce.tool;
 
 import cn.com.bonc.sce.constants.DateConstants;
-import cn.hutool.crypto.asymmetric.RSA;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.security.InvalidKeyException;
-import java.security.Key;
+import java.security.*;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -21,32 +20,41 @@ import java.util.UUID;
  * @version 0.1
  * @since 2018/12/22 20:36
  */
-@Component()
+@Slf4j
+@Component
 @Scope( value = "singleton" )
 public class JWTUtil {
 
     /**
-     * 根据默认
+     * 为默认
      *
-     * @param header
-     * @param claims
-     * @param secret
-     * @return
+     * @param header JWT header
+     * @param claims JWT body
+     * @param secret 私钥，必须以 Base64 encode
+     *
+     * @return 加密过后的 JWT ticket
      */
-    public String generateKeyWithSecret( Map< String, Object > header, Map< String, Object > claims, Key secret ) {
+    public static String generateTicketWithSecret( Map< String, Object > header, Map< String, Object > claims, Key secret ) {
         return defaultBuilder()
                 .setHeader( header )
                 .setClaims( claims )
-                .signWith( secret )
+                .signWith( secret, SignatureAlgorithm.HS256 )
                 .compact();
     }
 
-    public String generateKeyWithSecret( byte[] secret ) {
-        return defaultBuilder().signWith( SignatureAlgorithm.RS512, secret ).compact();
+    public static String generateTicketWithSecret( Map< String, Object > claims, Key secret ) {
+        return defaultBuilder()
+                .setClaims( claims )
+                .signWith( secret, SignatureAlgorithm.HS256 )
+                .compact();
+    }
+
+    public static String generateTicketWithSecret( Key secret ) {
+        return defaultBuilder().signWith( secret ).compact();
     }
 
     @SuppressWarnings( "unchecked" )
-    public JwtBuilder defaultBuilder() {
+    public static JwtBuilder defaultBuilder() {
         Map defaultHeader = Jwts.header()
                 .setType( "JWT" );
 
@@ -63,16 +71,22 @@ public class JWTUtil {
                 .setId( UUID.randomUUID().toString() );
     }
 
-    public static void main( String[] args ) throws InvalidKeyException {
-        RSA rsa = new RSA();
-        String key = rsa.getPrivateKeyBase64();
-        System.out.println( key );
+    public static void main( String[] args ) throws InvalidKeyException, NoSuchAlgorithmException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance( "RSA" );
+        keyPairGenerator.initialize( 2048 );
+
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        CryptoUtil cryptoUtil = new CryptoUtil();
+        KeyPair keyPair2 = cryptoUtil.generateKeyPair();
+
+        String ticket = JWTUtil.generateTicketWithSecret( keyPair2.getPrivate() );
 
 
-        JWTUtil jwtUtil = new JWTUtil();
-        String token = null;
-        token = jwtUtil.generateKeyWithSecret( key.getBytes() );
-        System.out.println( token );
+        String claims = ticket.split( "\\." )[ 1 ];
+        String target = cn.hutool.core.codec.Base64.decodeStr( claims );
+        System.out.println( target );
+
 
     }
 
