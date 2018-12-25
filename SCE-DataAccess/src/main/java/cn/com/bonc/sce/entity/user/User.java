@@ -34,8 +34,8 @@ public class User {
     @SequenceGenerator( name = "SEQ_GEN_COMMON_USER", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_COMMON_USER" )
     @Column( name = "USER_ID" )
     private String userId;
-    @Column( name = "USER_ACCOUNT" )
-    private String userAccount;
+    @Column( name = "LOGIN_NAME" )
+    private String loginName;
     @Column( name = "USER_NAME" )
     private String userName;
     @Column( name = "GENDER" )
