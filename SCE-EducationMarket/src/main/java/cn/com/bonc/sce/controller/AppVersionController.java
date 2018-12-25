@@ -124,8 +124,8 @@ public class AppVersionController {
      * 2	创建一条消息，通知对应厂商用户
      * todo 等待消息服务完成
      *
-     * @param appId  提交版本更新申请的应用Id
-     * @param userId 管理员用户Id
+     * @param userId      用户Id
+     * @param approveList 提交审核的APP列表
      * @return
      */
     @ApiOperation( value = "应用版本审批接口", notes = "将应用版本表中应用状态更新为通过审核", httpMethod = "PUT" )

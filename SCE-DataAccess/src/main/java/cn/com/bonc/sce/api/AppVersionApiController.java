@@ -8,10 +8,16 @@ import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author yuehaibo
@@ -50,44 +56,22 @@ public class AppVersionApiController {
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         // 通过应用ID查询该应用的历史版本信息列表
-//        log.info( "查询应用版本信息，查询条件为appId:{}  appVersion:{}", appId, appVersion );
-//        String queryAppVersion = appVersion;
-//        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-////        Page< MarketAppVersion > appVersions = appVersionRepository.findAllByAppIdAndAppVersionContainingAndIsDelete( appId, queryAppVersion, pageable );
-//        List< Object[] > appVersions = appVersionRepository.findAllByIsDelete( 1L);
-//        return new RestRecord( 0,appVersions );
-////        Map< String, Object > result = new HashMap<>( 16 );
-////        result.put( "data", appVersions.getContent() );
-////        result.put( "totalPage", appVersions.getTotalPages() );
-////        result.put( "totalCount", appVersions.getTotalElements() );
-////        return new RestRecord( 200, result );
+        log.trace( "Query AppVersion By appId:{} , appVersion:{}", appId, appVersion );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+        try {
+            Page< List< Map< String, Object > > > temp = appVersionRepository.queryAppVersionInfo( appId, appVersion, pageable );
+            Map< String, Object > result = new HashMap<>( 16 );
+            result.put( "data", temp.getContent() );
+            result.put( "totalPage", temp.getTotalPages() );
+            result.put( "totalCount", temp.getTotalElements() );
+            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+            restRecord.setData( result );
+            return restRecord;
+        } catch ( Exception e ) {
+            log.error( "Query AppVersion Fail {}", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
 
-
-        /* 假数据分界线 */
-        RestRecord restRecord = new RestRecord( 200 );
-        Map< String, Object > map = new HashMap<>( 16 );
-        List< Map< String, Object > > data_detail = new ArrayList<>();
-        Map< String, Object > map1 = new HashMap<>( 16 );
-        map1.put( "appName", "皇室战争" );
-        map1.put( "appType", "手机游戏" );
-        map1.put( "companyName", "暴雪" );
-        map1.put( "runningPlatform", "IOS" );
-        map1.put( "currentVersion", "v2.1" );
-        map1.put( "updateVersion", "v2.4" );
-        map1.put( "createTime", "2018-08-08" );
-        map1.put( "newFeatures", "这里是newFeatures" );
-        map1.put( "packageName", "这里是packageName" );
-        map1.put( "authDetail", "这里是authDetail" );
-        data_detail.add( map1 );
-        Map< String, Object > map2 = new HashMap<>( 16 );
-        map2.put( "略", "略" );
-        data_detail.add( map2 );
-        map.put( "data", data_detail );
-        map.put( "totalCount", 123 );
-        map.put( "totalPage", 23 );
-        restRecord.setData( map );
-        restRecord.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
-        return restRecord;
     }
 
     /**

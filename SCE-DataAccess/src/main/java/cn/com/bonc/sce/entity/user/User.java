@@ -1,0 +1,81 @@
+package cn.com.bonc.sce.entity.user;
+
+import cn.com.bonc.sce.entity.Account;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.util.Date;
+
+/**
+ * 用户表
+ *
+ * @author wzm
+ * @version 2.0
+ * @update 修改字段命名，将错写的字段名称改为驼峰式，去掉 getter setter
+ * @updateFrom 2018/12/25 21:49
+ * @updateAuthor leucippus
+ * @since 2018/12/21 9:00
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@EntityListeners( AuditingEntityListener.class )
+@Table( name = "SCE_COMMON_USER", schema = "STARCLOUDPORTAL" )
+public class User {
+    @Id
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_COMMON_USER" )
+    @SequenceGenerator( name = "SEQ_GEN_COMMON_USER", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_COMMON_USER" )
+    @Column( name = "USER_ID" )
+    private String userId;
+    @Column( name = "LOGIN_NAME" )
+    private String loginName;
+    @Column( name = "USER_NAME" )
+    private String userName;
+    @Column( name = "GENDER" )
+    private String gender;
+    @Column( name = "USER_TYPE" )
+    private Integer userType;
+    @Column( name = "MAIL_ADDRESS" )
+    private String mailAddress;
+    @Column( name = "CERTIFICATE_TYPE" )
+    private String certificateType;
+    @Column( name = "CERTIFICATE_NUMBER" )
+    private String certificateNumber;
+    @Column( name = "PHONE_NUMBER" )
+    private String phoneNumber;
+    @Column( name = "ADDRESS" )
+    private String address;
+    @CreatedDate
+    @Column( name = "CREATE_TIME" )
+    private Date createTime;
+    @Column( name = "LOGIN_TIME" )
+    private String loginTime;
+    @Column( name = "LAST_LOGIN_TIME" )
+    private String lastLoginTime;
+    @Column( name = "LOGINTIMES" )
+    private Long loginTimes;
+    @Column( name = "ORGANIZATION_ID" )
+    private String organizationId;
+    @Column( name = "LOGIN_PERMISSION_STATUS" )
+    private Integer loginPermissionStatus;
+    @Column( name = "REMARKS" )
+    private String remarks;
+    @Column( name = "IS_DELETE" )
+    private Integer isDelete;
+    @OneToOne( targetEntity = Account.class, fetch = FetchType.EAGER, cascade = CascadeType.DETACH )
+    @JoinColumn( name = "USER_ID", referencedColumnName = "ID", nullable = false )
+    private String password;
+    @Column( name = "SECRET", length = 1064 )
+    private String secret;
+
+    public void setPassword( Account accouont ) {
+        this.password = accouont.getPassword();
+    }
+}
