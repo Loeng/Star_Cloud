@@ -27,4 +27,8 @@ public class CountService {
     public RestRecord countAppDownloadByCompanyId( Long companyId ) {
         return countDao.countAppDownloadByCompanyId( companyId );
     }
+
+    public RestRecord getAppDownloadRanking ( Integer pageSize, Integer pageNum ) {
+        return countDao.getAppDownloadRanking( pageSize, pageNum );
+    }
 }

@@ -18,4 +18,14 @@ public interface CountDao {
 
     @RequestMapping( value = "/count/company", method = RequestMethod.GET )
     public RestRecord countAppDownloadByCompanyId( @RequestParam( "companyId" ) Long companyId  );
+
+    /**
+     * 查询全部应用下载量排名
+     * @param pageSize
+     * @param pageNum
+     * @return
+     */
+    @RequestMapping( value = "/count/download-ranking", method = RequestMethod.GET )
+    public RestRecord getAppDownloadRanking( @RequestParam( "pageSize" ) Integer pageSize,
+                                             @RequestParam( "pageNum" ) Integer pageNum );
 }
