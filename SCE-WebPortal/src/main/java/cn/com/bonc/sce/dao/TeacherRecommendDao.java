@@ -19,12 +19,12 @@ public interface TeacherRecommendDao {
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.POST )
     RestRecord addTeacherRecommendApp(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestBody List< Map< String, Object > > recommendPeroIdMap );
+            @RequestBody List< Map< String, Object > > recommendPerMap );
 
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.PUT )
     public RestRecord updateTeacherRecommendAppInfo(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestBody List< Map< String, Object > > recommendPeroIdMap
+            @RequestBody List< Map< String, Object > > recommendPerMap
     );
 
     @RequestMapping( value = "/teacher-recommend-app", method = RequestMethod.DELETE )

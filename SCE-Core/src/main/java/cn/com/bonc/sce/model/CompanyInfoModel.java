@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @Date: 2018/12/24 9:49
  * @Version 1.0
  */
-@ApiModel(value = "Company",description = "厂商对象")
+@ApiModel( value = "Company", description = "厂商对象" )
 public class CompanyInfoModel {
     @ApiModelProperty( name = "厂商ID" )
     private long companyId;
