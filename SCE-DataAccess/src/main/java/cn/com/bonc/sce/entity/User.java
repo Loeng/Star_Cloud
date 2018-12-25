@@ -12,10 +12,11 @@ import java.util.Date;
  * @author wzm
  * @version 0.1
  * @since 2018/12/21 9:00
+ * @update
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table( name = "SCE_COMMON_USER",schema = "STARCLOUDPORTAL" )
+@EntityListeners( AuditingEntityListener.class )
+@Table( name = "SCE_COMMON_USER", schema = "STARCLOUDPORTAL" )
 public class User {
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_COMMON_USER" )
