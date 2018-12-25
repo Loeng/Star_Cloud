@@ -70,12 +70,11 @@ public class AppManageService {
     }
 
 
-
     /**
      * 查询指定类型应用信息
      *
-     * @param appType       查询的应用类型
-     * @param orderType     查询排序字段，可为多个字段
+     * @param appType      查询的应用类型
+     * @param orderType    查询排序字段，可为多个字段
      * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
@@ -86,7 +85,7 @@ public class AppManageService {
     /**
      * 根据输入名模糊查询应用
      *
-     * @param appName       查询的名字
+     * @param appName      查询的名字
      * @param platformType 平台类型（平台应用或软件应用）
      * @return
      */
@@ -108,6 +107,7 @@ public class AppManageService {
      */
     public RestRecord selectAppListByNameAndType( String appName, String appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
         return appManageDao.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
+
     }
 
     /**
@@ -120,4 +120,11 @@ public class AppManageService {
         return appManageDao.selectAppById( appId );
     }
 
+    public RestRecord getAllAuditStatus() {
+        return appManageDao.getAllAuditStatus();
+    }
+
+    public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize ) {
+        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword,downloadCount,pageNum, pageSize );
+    }
 }

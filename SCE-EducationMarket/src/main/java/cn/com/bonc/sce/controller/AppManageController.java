@@ -118,7 +118,7 @@ public class AppManageController {
      */
     @ApiOperation( value = "查询指定类型应用信息", notes = "查询指定类型应用信息", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appType", value = "查询的应用类型id（0查全部）", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "appType", value = "查询的应用类型id（0查全部）", paramType = "query", required = false ),
             @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = true ),
             @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = true ),
             @ApiImplicitParam( name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true )
@@ -174,24 +174,24 @@ public class AppManageController {
      */
     @ApiOperation( value = "根据输入名和选择类别查询应用", notes = "根据输入名和选择类别查询应用", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appName", value = "appName", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "appType", value = "应用分类id(不传查全部)", paramType = "query", required = false ),
-            @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query" ),
-            @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query" ),
-            @ApiImplicitParam( name = "platformType", value = "应用类型(pt|rj)", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appName", value = "appName", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "appType", value = "应用分类id(传0查全部)", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "platformType", value = "应用类型(pt|rj)", paramType = "query", required = false )
 
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/apps-by-name-type/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByNameAndType( @RequestParam String appName,
-                                                  @RequestParam String appType,
+    @GetMapping( "/apps-by-name-type" )
+    public RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
+                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) String appType,
                                                   @RequestParam String orderType,
-                                                  @RequestParam String sort,
-                                                  @RequestParam String platformType,
-                                                  @PathVariable Integer pageNum,
-                                                  @PathVariable Integer pageSize ) {
+                                                  @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                                  @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
+                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         return appManageService.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
     }
 
@@ -203,7 +203,7 @@ public class AppManageController {
      */
     @ApiOperation( value = "查询单个应用详情", notes = "查询单个应用详情", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "appId", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appId", value = "appId", paramType = "path", required = true )
 
     } )
     @ApiResponses( {
@@ -215,4 +215,37 @@ public class AppManageController {
         return appManageService.selectAppById( appId );
     }
 
+    /**
+     * 查询[应用审核状态码表]中相关信息
+     *
+     * @return
+     */
+    //@ApiOperation( value = "查询[应用审核状态码表]中相关信息", notes = "查询[应用审核状态码表]中相关信息", httpMethod = "GET" )
+    @GetMapping( "all-audit-status" )
+    public RestRecord getAllAuditStatus() {
+        return appManageService.getAllAuditStatus();
+    }
+
+    /**
+     * 通过审核状态查询app列表
+     *
+     * @param auditStatus
+     * @param typeId
+     * @param keyword
+     * @return
+     */
+    @ApiOperation( value = "通过审核状态查询app列表", notes = "应用管理页面，通过审核状态查询app列表1，审核2，迭代审核3，未通过审核，4上架， 5下架", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/list-by-audit-status" )
+    public RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) @ApiParam( "1，审核2，迭代审核3，未通过审核，4上架， 5下架" ) String auditStatus,
+                                               @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
+                                               @RequestParam( value = "keyword", required = false ) String keyword,
+                                               @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                               @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+    ) {
+        return appManageService.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize );
+    }
 }

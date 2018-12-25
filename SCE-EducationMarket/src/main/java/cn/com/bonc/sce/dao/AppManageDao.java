@@ -69,14 +69,14 @@ public interface AppManageDao {
     /**
      * 根据输入名和选择类别查询应用
      */
-    @RequestMapping( value = "/manage-app/apps-by-name-type/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/apps-by-name-type", method = RequestMethod.GET )
     RestRecord selectAppListByNameAndType( @RequestParam( "appName" ) String appName,
                                            @RequestParam( "appType" ) String appType,
                                            @RequestParam( "orderType" ) String orderType,
                                            @RequestParam( "sort" ) String sort,
                                            @RequestParam( "platformType" ) String platformType,
-                                           @PathVariable( "pageNum" ) Integer pageNum,
-                                           @PathVariable( "pageSize" ) Integer pageSize );
+                                           @RequestParam( "pageNum" ) Integer pageNum,
+                                           @RequestParam( "pageSize" ) Integer pageSize );
 
     /**
      * 查询单个应用详情
@@ -96,4 +96,31 @@ public interface AppManageDao {
      */
     @RequestMapping( value = "/manage-app/app-on-shelf", method = RequestMethod.POST )
     RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId );
+
+    /**
+     * 查询[应用审核状态码表]中相关信息
+     *
+     * @return
+     */
+    @RequestMapping( value = "/manage-app/all-audit-status", method = RequestMethod.GET )
+    RestRecord getAllAuditStatus();
+
+    /**
+     * 通过审核状态查询app列表
+     *
+     * @param auditStatus
+     * @param typeId
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping( value = "/manage-app/list-by-audit-status", method = RequestMethod.GET )
+    public RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) String auditStatus,
+                                               @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
+                                               @RequestParam( value = "keyword", required = false ) String keyword,
+                                               @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                               @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+    );
 }

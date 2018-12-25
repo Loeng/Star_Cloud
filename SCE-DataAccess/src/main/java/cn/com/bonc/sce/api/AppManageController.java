@@ -8,11 +8,12 @@ import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -176,14 +177,14 @@ public class AppManageController {
      * @param pageSize
      * @return
      */
-    @GetMapping( "/apps-by-name-type/{pageNum}/{pageSize}" )
+    @GetMapping( "/apps-by-name-type" )
     public RestRecord selectAppListByNameAndType( @RequestParam String appName,
                                                   @RequestParam String appType,
                                                   @RequestParam String orderType,
                                                   @RequestParam String sort,
                                                   @RequestParam String platformType,
-                                                  @PathVariable Integer pageNum,
-                                                  @PathVariable Integer pageSize ) {
+                                                  @RequestParam Integer pageNum,
+                                                  @RequestParam Integer pageSize ) {
         //这个数据随便查的，要重写
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         Page< AppInfoEntity > info = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
@@ -212,6 +213,18 @@ public class AppManageController {
     }
 
     /**
+     * 查询[应用审核状态码表]中相关信息
+     *
+     * @return
+     */
+    @GetMapping( "all-audit-status" )
+    public RestRecord getAllVersionStatus() {
+        List< Map< String, Object > > data = appInfoRepository.getAllAuditStatus();
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, data );
+    }
+
+
+    /**
      * 应用上下架
      *
      * @param applyType
@@ -226,6 +239,56 @@ public class AppManageController {
 
         int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( appStatus, appIdList, userId );
         return new RestRecord( 200, appInfo );
+    }
+
+    /**
+     * 通过审核状态查询app列表
+     *
+     * @param auditStatus
+     * @param typeId
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping( value = "/list-by-audit-status", method = RequestMethod.GET )
+    public RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) String auditStatus,
+                                               @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
+                                               @RequestParam( value = "keyword", required = false ) String keyword,
+                                               @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                               @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+    ) {
+        //没有关键词
+        Page< List< Map< String, Object > > > info;
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
+        if ( StringUtils.isEmpty( keyword ) ) {
+            //查全部类型
+            if ( typeId == null || "0".equals( typeId ) ) {
+                info = appInfoRepository.getInfo( pageable );
+            } else {
+                //根据类型id查
+                info = appInfoRepository.getInfoById( typeId, pageable );
+            }
+        } else {
+            //根据关键词查全部类型
+            if ( typeId == null || "0".equals( typeId ) ) {
+                info = appInfoRepository.getInfoByKeyword( keyword, pageable );
+            } else {
+                info = appInfoRepository.getInfoByTypeIdAndKeyword( typeId, keyword, pageable );
+            }
+        }
+
+        Map map = new HashMap();
+        List dataList = new ArrayList();
+        int total = info.getTotalPages();
+        map.put( "total", total );
+        Iterator< List< Map< String, Object > > > iter = info.iterator();
+        while ( iter.hasNext() ) {
+            dataList.add( iter.next() );
+        }
+        map.put( "data", dataList );
+        return new RestRecord( 200, map );
     }
 
 }
