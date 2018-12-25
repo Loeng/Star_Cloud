@@ -6,12 +6,12 @@ import cn.com.bonc.sce.repository.CompanyInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,32 +37,28 @@ public class CompanyInfoApiController {
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
-
+        log.trace( "Query CompanyInfo List Conditions is {}" );
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        RestRecord restRecord = new RestRecord( 200 );
-//        restRecord.setData( companyInfoRepository.queryCompanyInfo( companyId, companyName, pageable ) );
-        //虚假返回数据
-        List< Map< String, Object > > resultList = new ArrayList<>();
-        Map< String, Object > map1 = new HashMap<>();
-        map1.put( "companyName", "公司名称1" );
-        map1.put( "userId", "cs_001" );
-        map1.put( "loginPermissionStatus", 1 );
-        map1.put( "downloadCount", 256 );
-        map1.put( "companyStatus", 1 );
-        Map< String, Object > map2 = new HashMap<>();
-        map2.put( "companyName", "公司名称2" );
-        map2.put( "userId", "cs_001" );
-        map2.put( "loginPermissionStatus", 1 );
-        map2.put( "downloadCount", 365 );
-        map2.put( "companyStatus", 1 );
-        resultList.add( map1 );
-        resultList.add( map2 );
-        Map< String, Object > resultMap = new HashMap<>();
-        resultMap.put( "data", resultList );
-        resultMap.put( "totalCount", 32 );
-        resultMap.put( "totalPage", 4 );
-        restRecord.setData( resultMap );
-        return restRecord;
+        try {
+            RestRecord restRecord = new RestRecord( 200 );
+            Map< String, Object > result = new HashMap<>( 16 );
+            Page< List< Map< String, Object > > > page;
+
+            if ( companyId == null ) {
+                page = companyInfoRepository.findCompanyInfoByCompanyName( companyName, pageable );
+            } else {
+                page = companyInfoRepository.findCompanyInfoByCompanyId( companyId, pageable );
+            }
+            result.put( "data", page.getContent() );
+            result.put( "totalCount", page.getTotalElements() );
+            result.put( "totalPage", page.getTotalPages() );
+            restRecord.setData( result );
+            return restRecord;
+        } catch ( Exception e ) {
+            log.error( "Query CompanyInfo fail {}", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+
     }
 
     /**
