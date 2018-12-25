@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.api;
 
 
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 
@@ -42,7 +43,7 @@ public class UserOperationController {
     @ResponseBody
     public RestRecord addUserInfo(
             @RequestBody Map< String, Object > userInfo ) {
-        return new RestRecord( 200, "操作成功!" );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,"" );
     }
 
     /**
@@ -55,7 +56,7 @@ public class UserOperationController {
     @ResponseBody
     public RestRecord updateTeacherRecommendAppInfo(
             @RequestBody  Map   userInfo ) {
-        return new RestRecord( 200, "修改成功！", "" );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, "" );
     }
 
     /**
@@ -69,7 +70,7 @@ public class UserOperationController {
     public RestRecord deleteUserInfo(
             @RequestParam( "userId" ) String userId ) {
 
-        return new RestRecord( 200, "删除成功！", "" );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, "" );
     }
 
     /**
@@ -94,7 +95,7 @@ public class UserOperationController {
         map.put( "certificateType", "2" );
         map.put( "certificateNumber", "XR5441161X" );
         map.put( "address", "成都市青羊区青年路" );
-        return new RestRecord( 200, "操作成功！", map );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
     }
 
 }
