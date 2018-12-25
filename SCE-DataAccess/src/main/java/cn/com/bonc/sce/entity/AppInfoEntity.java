@@ -42,14 +42,11 @@ public class AppInfoEntity {
     @Column( name = "COMPANY_ID" )
     private Long companyId;
 
-    @Column( name = "APP_PHONE_PIC" )
-    private String appPhonePic;
-
-    @Column( name = "APP_PC_PIC" )
-    private String appPcPic;
+    @Column( name = "APP_ICON" )
+    private String appIcon;
 
     @Column( name = "IS_DELETE" )
-    private String isDelete;
+    private Integer isDelete = 1;
 
     @Column( name = "CATEGORY_ID" )
     private Long categoryId;

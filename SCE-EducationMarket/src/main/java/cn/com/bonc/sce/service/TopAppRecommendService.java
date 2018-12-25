@@ -16,7 +16,7 @@ public class TopAppRecommendService {
 
     @Autowired
     public TopAppRecommendService( TopAppRecommendDao topAppRecommendDao ) {
-        this.topAppDao = topAppDao;
+        this.topAppDao = topAppRecommendDao;
     }
 
     public RestRecord addTopRecommendAppList( List< String > appIdList, String userId ) {
