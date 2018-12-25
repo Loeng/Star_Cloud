@@ -2,6 +2,7 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppCollectService;
 import cn.com.bonc.sce.service.AppCollectionService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +22,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/app-collect")
 public class AppCollectController {
-    private AppCollectionService appCollectionService;
+
 
     @Autowired
-    public AppCollectController( AppCollectionService appCollectionService ) {
-        this.appCollectionService = appCollectionService;
-    }
-
+    AppCollectService appCollectService;
     /**
      * 用户收藏应用查询接口
      * @param userId 查询的用户Id
@@ -35,15 +33,15 @@ public class AppCollectController {
      */
     @ApiOperation( value = "用户收藏应用查询接口", notes = "根据用户id查询收藏应用信息", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true )
+            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/list/{userId}")
+    @GetMapping("/list")
     @ResponseBody
-    public RestRecord getUserAppCollection ( @PathVariable( "userId" ) String userId ) {
-        return null;
+    public RestRecord getUserAppCollection ( @RequestParam( "userId" ) String userId ) {
+        return appCollectService.getUserAppCollect(userId);
     }
 
     /**
