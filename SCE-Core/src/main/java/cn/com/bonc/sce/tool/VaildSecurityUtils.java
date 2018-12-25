@@ -65,7 +65,7 @@ public abstract class VaildSecurityUtils {
     }
 
     public static void addCode( String str ) {
-        validCacheMap.put( str, System.currentTimeMillis() );
+        codeCacheMap.put( str, System.currentTimeMillis() );
     }
 
     public static void addPhoneMinTime( String str ) {
@@ -77,7 +77,7 @@ public abstract class VaildSecurityUtils {
     }
 
     public static void delCode( String str ) {
-        validCacheMap.remove( str );
+        codeCacheMap.remove( str );
     }
 
     public static void delPhoneMinTime( String str ) {
@@ -106,8 +106,9 @@ public abstract class VaildSecurityUtils {
      */
     public static boolean checkCode( String str ) {
         Long time = codeCacheMap.get( str );
-        if ( time != null && System.currentTimeMillis() - time < THIRTY_MINUTE )
+        if ( time != null && System.currentTimeMillis() - time < THIRTY_MINUTE ) {
             return true;
+        }
         return false;
     }
 

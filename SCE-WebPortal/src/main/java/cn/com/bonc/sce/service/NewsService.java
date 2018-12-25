@@ -4,6 +4,7 @@ import cn.com.bonc.sce.dao.NewsDao;
 import cn.com.bonc.sce.model.News;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,9 @@ public class NewsService {
      * @return 分页后的新闻列表
      */
     public RestRecord getNewsList( String auditStatus,String startDate,String endDate,Integer pageNum,Integer pageSize) {
+        if( StringUtils.isEmpty(startDate)){
+            return newsDao.getNewsList( auditStatus,  pageNum, pageSize );
+        }
         return newsDao.getNewsList( auditStatus, startDate, endDate, pageNum, pageSize );
     }
 

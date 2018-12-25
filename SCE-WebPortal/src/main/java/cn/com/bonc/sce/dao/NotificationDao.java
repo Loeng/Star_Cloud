@@ -63,6 +63,12 @@ public interface NotificationDao {
                                            @RequestParam( "pageNum" ) Integer pageNum,
                                            @RequestParam( "pageSize" ) Integer pageSize );
 
+    @RequestMapping( value = "/notifications/list/{type}/{auditStatus}", method = RequestMethod.GET )
+    public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
+                                           @PathVariable( "auditStatus" ) String auditStatus,
+                                           @RequestParam( "pageNum" ) Integer pageNum,
+                                           @RequestParam( "pageSize" ) Integer pageSize );
+
     /**
      * 查询通知公告详情
      *
