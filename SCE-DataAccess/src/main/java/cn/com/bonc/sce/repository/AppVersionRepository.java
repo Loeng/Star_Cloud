@@ -11,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author yuehaibo
  * @version 0.1
@@ -20,15 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional( rollbackFor = Exception.class )
 public interface AppVersionRepository extends
         JpaRepository< MarketAppVersion, Long >, JpaSpecificationExecutor< MarketAppVersion > {
-    /**
-     * @param appId      应用Id
-     * @param appVersion 应用版本
-     * @param isDelete   是否删除
-     * @param pageable   分页参数
-     * @return
-     */
-    Page< MarketAppVersion > findAllByAppIdAndAppVersionContainingAndIsDelete(
-            String appId, String appVersion, long isDelete, Pageable pageable );
+
+    @Query( nativeQuery = true,
+            value = "SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_ID=:appId AND APP_VERSION LIKE CONCAT('%',CONCAT(:appVersion,'%')) AND IS_DELETE=1" )
+    Page< List< Map< String, Object > > > queryAppVersionInfo( @Param( "appId" ) String appId,
+                                                               @Param( "appVersion" ) String appVersion,
+                                                               Pageable pageable );
 
     /**
      * 通过AppId和AppVersion删除指定的版本信息
