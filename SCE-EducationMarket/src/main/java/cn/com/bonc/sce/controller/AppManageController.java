@@ -186,7 +186,7 @@ public class AppManageController {
     } )
     @GetMapping( "/apps-by-name-type" )
     public RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
-                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) String appType,
+                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                                   @RequestParam String orderType,
                                                   @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                                   @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,

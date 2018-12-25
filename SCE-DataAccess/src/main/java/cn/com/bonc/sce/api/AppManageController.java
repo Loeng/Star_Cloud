@@ -89,17 +89,13 @@ public class AppManageController {
                                      @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppInfoEntity > appInfoList = appInfoRepository.findByAppSource( platformType, pageable );
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = appInfoList.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppInfoEntity > iter = appInfoList.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, map );
+        Page< AppInfoEntity > page = appInfoRepository.findByAppSource( platformType, pageable );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+
     }
 
 
@@ -120,22 +116,17 @@ public class AppManageController {
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //表和表关联，不知道怎么用关联表的字段去排序
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppTypeEntity > appInfoList;
+        Page< AppTypeEntity > page;
         if ( 0 == appType ) {
-            appInfoList = appTypeRepository.findAll( pageable );
+            page = appTypeRepository.findAll( pageable );
         } else {
-            appInfoList = appTypeRepository.findByAppTypeId( appType, pageable );
+            page = appTypeRepository.findByAppTypeId( appType, pageable );
         }
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = appInfoList.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppTypeEntity > iter = appInfoList.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
 
     }
 
@@ -152,17 +143,12 @@ public class AppManageController {
                                            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppInfoEntity > info = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = info.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppInfoEntity > iter = info.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, map );
+        Page< AppInfoEntity > page = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
     /**
@@ -179,7 +165,7 @@ public class AppManageController {
      */
     @GetMapping( "/apps-by-name-type" )
     public RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
-                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) String appType,
+                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                                   @RequestParam String orderType,
                                                   @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                                   @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
@@ -187,17 +173,12 @@ public class AppManageController {
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //这个数据随便查的，要重写
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< AppInfoEntity > info = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
-        Map map = new HashMap();
-        List dataList = new ArrayList();
-        int total = info.getTotalPages();
-        map.put( "total", total );
-        Iterator< AppInfoEntity > iter = info.iterator();
-        while ( iter.hasNext() ) {
-            dataList.add( iter.next() );
-        }
-        map.put( "data", dataList );
-        return new RestRecord( 200, map );
+        Page< AppInfoEntity > page = appInfoRepository.findByAppNameLike( "%" + appName + "%", pageable );
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
     /**
@@ -285,7 +266,7 @@ public class AppManageController {
         temp.put( "data", page.getContent() );
         temp.put( "totalPage", page.getTotalPages() );
         temp.put( "totalCount", page.getTotalElements() );
-        return new RestRecord( 200, temp );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
 }

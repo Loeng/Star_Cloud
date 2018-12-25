@@ -72,7 +72,7 @@ public interface AppManageDao {
      */
     @RequestMapping( value = "/manage-app/apps-by-name-type", method = RequestMethod.GET )
     RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
-                                           @RequestParam( value = "appType", required = false, defaultValue = "0" ) String appType,
+                                           @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                            @RequestParam(value ="orderType" ) String orderType,
                                            @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                            @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
