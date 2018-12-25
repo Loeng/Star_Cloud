@@ -99,10 +99,10 @@ public class AppManageController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/all-app/{pageNum}/{pageSize}" )
-    public RestRecord getAllAppList( @RequestParam @ApiParam( name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", required = true ) String platformType,
-                                     @PathVariable @ApiParam( name = "pageNum", value = "页数", required = true ) Integer pageNum,
-                                     @PathVariable @ApiParam( name = "pageSize", value = "页数大小", required = true ) Integer pageSize
+    @GetMapping( "/all-app" )
+    public RestRecord getAllAppList( @RequestParam( value = "platformType", required = false, defaultValue = "0" ) @ApiParam( name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", required = false ) String platformType,
+                                     @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) @ApiParam( name = "pageNum", value = "页数", required = false ) Integer pageNum,
+                                     @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) @ApiParam( name = "pageSize", value = "页数大小", required = false ) Integer pageSize
     ) {
         return appManageService.getAllAppList( platformType, pageNum, pageSize );
     }
@@ -119,21 +119,21 @@ public class AppManageController {
     @ApiOperation( value = "查询指定类型应用信息", notes = "查询指定类型应用信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "appType", value = "查询的应用类型id（0查全部）", paramType = "query", required = false ),
-            @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = true )
+            @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "platformType", value = "应用类型(平台应用pt|软件应用rj)", paramType = "query", required = false )
 
     } )
     @ApiResponses( {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/app-by-type/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByType( @RequestParam Integer appType,
-                                           @RequestParam String orderType,
-                                           @RequestParam String platformType,
-                                           @RequestParam String sort,
-                                           @PathVariable Integer pageNum,
-                                           @PathVariable Integer pageSize ) {
+    @GetMapping( "/app-by-type" )
+    public RestRecord selectAppListByType( @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                           @RequestParam( value = "orderType", required = false, defaultValue = "download" ) String orderType,
+                                           @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                           @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         return appManageService.selectAppListByType( appType, orderType, platformType, sort, pageNum, pageSize );
     }
 
@@ -146,17 +146,17 @@ public class AppManageController {
      */
     @ApiOperation( value = "根据输入名模糊查询应用", notes = "根据输入名模糊查询应用", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appName", value = "appName", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "platformType", value = "应用类型(平台应用|软件应用)", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appName", value = "appName", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "platformType", value = "应用类型（pt|rj)", paramType = "query", required = false )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "/apps-by-name/{pageNum}/{pageSize}" )
-    public RestRecord selectAppListByName( @RequestParam String appName,
-                                           @RequestParam String platformType,
-                                           @PathVariable Integer pageNum,
-                                           @PathVariable Integer pageSize ) {
+    @GetMapping( "/apps-by-name" )
+    public RestRecord selectAppListByName( @RequestParam( value = "appName", required = false ) String appName,
+                                           @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         return appManageService.selectAppListByName( appName, platformType, pageNum, pageSize );
     }
 
@@ -178,7 +178,7 @@ public class AppManageController {
             @ApiImplicitParam( name = "appType", value = "应用分类id(传0查全部)", paramType = "query", required = false ),
             @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = true ),
             @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = false ),
-            @ApiImplicitParam( name = "platformType", value = "应用类型(pt|rj)", paramType = "query", required = false )
+            @ApiImplicitParam( name = "platformType", value = "平台类型(pt|rj)", paramType = "query", required = false )
 
     } )
     @ApiResponses( {
@@ -189,7 +189,7 @@ public class AppManageController {
                                                   @RequestParam( value = "appType", required = false, defaultValue = "0" ) String appType,
                                                   @RequestParam String orderType,
                                                   @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
-                                                  @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
+                                                  @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
                                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         return appManageService.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
@@ -240,9 +240,9 @@ public class AppManageController {
     } )
     @GetMapping( "/list-by-audit-status" )
     public RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) @ApiParam( "1，审核2，迭代审核3，未通过审核，4上架， 5下架" ) String auditStatus,
-                                               @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
-                                               @RequestParam( value = "keyword", required = false ) String keyword,
-                                               @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                               @RequestParam( value = "typeId", required = false, defaultValue = "0" ) @ApiParam( "app分类id" ) Integer typeId,
+                                               @RequestParam( value = "keyword", required = false ) @ApiParam( "搜索关键词" ) String keyword,
+                                               @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) @ApiParam( "下载量排序（asc|desc）" ) String downloadCount,
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     ) {

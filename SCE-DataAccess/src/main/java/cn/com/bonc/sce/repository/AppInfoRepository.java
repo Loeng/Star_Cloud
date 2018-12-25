@@ -26,15 +26,23 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     @Query( nativeQuery = true, value = "SELECT ID ,AUDIT_STATUS FROM STARCLOUDMARKET.SCE_AUDIT_STATUS_DIC ORDER BY ID ASC" )
     List< Map< String, Object > > getAllAuditStatus();
 
-    @Query( nativeQuery = true, value = "select * from STARCLOUDMARKET.\"app_manage_info\" where  APP_TYPE_ID=:typeId " )
-    Page< List< Map< String, Object > > > getInfoById( @Param( value = "typeId" ) Integer typeId, Pageable pageable );
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\" WHERE APP_STATUS =:auditStatus AND  APP_TYPE_ID=:typeId " )
+    Page< List< Map< String, Object > > > getInfoById( @Param( value = "auditStatus" ) String auditStatus,
+                                                       @Param( value = "typeId" ) Integer typeId,
+                                                       Pageable pageable );
 
-    @Query( nativeQuery = true, value = "select * from STARCLOUDMARKET.\"app_manage_info\" " )
-    Page< List< Map< String, Object > > > getInfo( Pageable pageable );
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\" WHERE APP_STATUS =:auditStatus" )
+    Page< List< Map< String, Object > > > getInfo( @Param( value = "auditStatus" ) String auditStatus,
+                                                   Pageable pageable );
 
-    @Query( nativeQuery = true, value = "select * from STARCLOUDMARKET.\"app_manage_info\"  where APP_NAME LIKE '%:keyword%'" )
-    Page< List< Map< String, Object > > > getInfoByKeyword( String keyword, Pageable pageable );
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  WHERE  APP_STATUS =:auditStatus AND APP_NAME  LIKE '%:keyword%'" )
+    Page< List< Map< String, Object > > > getInfoByKeyword( @Param( value = "auditStatus" ) String auditStatus,
+                                                            @Param( value = "keyword" ) String keyword,
+                                                            Pageable pageable );
 
-    @Query( nativeQuery = true, value = "select * from STARCLOUDMARKET.\"app_manage_info\"  where APP_TYPE_ID=:typeId and APP_NAME LIKE '%:keyword%'" )
-    Page< List< Map< String, Object > > > getInfoByTypeIdAndKeyword( Integer typeId, String keyword, Pageable pageable );
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  WHERE APP_TYPE_ID=:typeId AND APP_STATUS =:auditStatus AND APP_NAME LIKE '%:keyword%'" )
+    Page< List< Map< String, Object > > > getInfoByTypeIdAndKeyword( @Param( value = "auditStatus" ) String auditStatus,
+                                                                     @Param( value = "typeId" ) Integer typeId,
+                                                                     @Param( value = "keyword" ) String keyword,
+                                                                     Pageable pageable );
 }

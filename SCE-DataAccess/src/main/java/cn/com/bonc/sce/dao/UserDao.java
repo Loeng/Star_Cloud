@@ -16,7 +16,7 @@ import java.util.List;
 public class UserDao {
 
     public User getUserById( String userId ) {
-        return new User( 0, "RGM79","11111" );
+        return new User( 0, "RGM79","11111","" );
     }
 
 //    public User getUserByEmail (String email);
