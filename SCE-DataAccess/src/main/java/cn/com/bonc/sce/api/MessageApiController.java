@@ -142,9 +142,12 @@ public class MessageApiController {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
             Date time = messageDao.getNewestTimeByUserId( userId );
+            System.out.println( time );
+            System.out.println( time.getTime() );
+            System.out.println( new Date(time.getTime()) );
             List< Message > list;
             if( !StringUtils.isEmpty( time)){
-                list = messageDao.findByTargetIdAndCreateTimeGreaterThanAndIsDelete( userId, time,0 );
+                list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time,0 );
             }else{
                 list = messageDao.findByTargetIdAndIsDelete( userId,0 );
             }

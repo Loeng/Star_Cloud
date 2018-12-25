@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,16 +100,21 @@ public class NewsApiController {
      * @param pageSize    分页每页条数
      * @return 分页后的新闻列表
      */
-    @GetMapping( "/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
+    @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
-                                   @PathVariable( "startDate" ) String startDate,
-                                   @PathVariable( "endDate" ) String endDate,
-                                   @PathVariable( "pageNum" ) Integer pageNum,
-                                   @PathVariable( "pageSize" ) Integer pageSize ) {
+                                   @RequestParam( "startDate" ) String startDate,
+                                   @RequestParam( "endDate" ) String endDate,
+                                   @RequestParam( "pageNum" ) Integer pageNum,
+                                   @RequestParam( "pageSize" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
-            Page< News > page = newsDao.findByIsDeleteAndContentStatusAndUpdateTimeBetween( 0,auditStatus,startDate,endDate, pageable );
+            Page< News > page;
+            if(StringUtils.isEmpty( startDate )){
+                page = newsDao.findByIsDeleteAndContentStatus( 0, auditStatus, pageable );
+            }else {
+                page = newsDao.findByIsDeleteAndContentStatusAndUpdateTimeBetween( 0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+            }
             Map<String,Object> info = new HashMap<>();
             info.put( "total",page.getTotalElements() );
             info.put( "info",page.getContent() );

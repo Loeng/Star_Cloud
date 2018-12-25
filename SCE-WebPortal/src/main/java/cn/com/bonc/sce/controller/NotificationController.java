@@ -97,13 +97,13 @@ public class NotificationController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/{type}/{auditStatus}/{startDate}/{endDate}/{pageNum}/{pageSize}" )
+    @GetMapping( "/list/{type}/{auditStatus}" )
     @ResponseBody
     public RestRecord getNotificationList( @PathVariable( "type" ) @ApiParam( name = "type", value = "类型") Integer type,
                                            @PathVariable( "auditStatus" ) @ApiParam( name = "auditStatus", value = "状态") String auditStatus,
-                                           @PathVariable( "startDate" ) @ApiParam( name = "startDate", value = "开始时间") String startDate,
-                                           @PathVariable( "endDate" ) @ApiParam( name = "endDate", value = "结束时间") String endDate,
-                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
+                                           @RequestParam( value = "startDate", required = false ) @ApiParam( name = "startDate", value = "开始时间") String startDate,
+                                           @RequestParam( value = "endDate", required = false ) @ApiParam( name = "endDate", value = "结束时间") String endDate,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "0"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
         return notificationService.getNotificationList( type, auditStatus, startDate, endDate, pageNum, pageSize );
     }

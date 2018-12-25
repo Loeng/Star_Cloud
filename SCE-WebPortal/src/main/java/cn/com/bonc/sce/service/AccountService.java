@@ -4,12 +4,15 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.model.Account;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.SendMessage;
 import cn.com.bonc.sce.tool.VaildSecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * 账号安全信息相关
@@ -32,20 +35,18 @@ public class AccountService {
     /**
      * 获取安全验证信息
      *
-     * @param userAccount 手机号
+     * @param phone 手机号
      * @return 验证码
      */
-    public RestRecord sendSecurityPhoneValid( String userAccount ) {
-        /*RestRecord rr = accountSecurityDao.getUserAccountPhone( userAccount );
-        if ( rr.getCode() == 200 ) {
-            //验证码
-            String vaild = rr.getMsg();
-            //加密后的验证码
-            String vaild_ = getAccountEncryptionCode( phone, vaild );
-            VaildSecurityUtils.addVaild( vaild_ );
-            return rr;
-        }*/
-        return null;
+    public RestRecord sendSecurityPhoneValid( String phone ) {
+        try {
+            String valid = VaildSecurityUtils.randomStr();
+            VaildSecurityUtils.addValid(getAccountEncryptionCode(phone,valid));
+            SendMessage.postMsgToPhone(valid,phone);
+        } catch ( UnsupportedEncodingException e ) {
+            return new RestRecord(409,WebMessageConstants.SCE_PORTAL_MSG_409);
+        }
+        return new RestRecord(200);
     }
 
     /**
@@ -74,9 +75,9 @@ public class AccountService {
      * @return 修改结果
      */
     public RestRecord updateAccount( Account accountSecurity ) {
-        Integer successCode = 200;
+        /*Integer successCode = 200;
         //加密加工
-        accountSecurity.getPassword();
+        //accountSecurity.getPassword();
         String code;
         if( StringUtils.isEmpty( accountSecurity.getPhone())||StringUtils.isEmpty( accountSecurity.getCode())) {
             return new RestRecord( 412, WebMessageConstants.SCE_PORTAL_MSG_412 );
@@ -85,15 +86,15 @@ public class AccountService {
                     accountSecurity.getPhone(), accountSecurity.getCode() );
         }
         if ( VaildSecurityUtils.checkCode( code ) ) {
-            VaildSecurityUtils.delCode( code );
+            VaildSecurityUtils.delCode( code );*/
             RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );
-            if ( rr.getCode() == successCode ) {
+            /*if ( rr.getCode() == successCode ) {
                 rr.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
-            }
+            }*/
             return rr;
-        } else {
+        /*} else {
             return new RestRecord( 412, WebMessageConstants.SCE_PORTAL_MSG_412 );
-        }
+        }*/
     }
 
     private String getAccountEncryptionCode( String str1, String str2 ) {

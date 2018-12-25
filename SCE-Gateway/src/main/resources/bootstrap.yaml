@@ -19,6 +19,7 @@ spring:
             '[/**]':
               allowedOrigins: "*"
               allowedMethods: "*"
+              allowedHeaders: "*"
               allowCredentials: true
       default-filters:
       routes:

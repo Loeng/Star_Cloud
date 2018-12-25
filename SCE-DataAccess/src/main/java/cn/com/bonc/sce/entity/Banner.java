@@ -41,7 +41,7 @@ public class Banner {
     private Integer isShown;
 
     @Column(name = "BANNER_TYPE_ID")
-    private String type;
+    private Integer type;
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;

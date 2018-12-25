@@ -144,7 +144,7 @@ public class BannerController {
     /**
      * 获取banner数据
      *
-     * @param bannerId bannerId
+     * @param bannerType bannerType
      * @return banner数据
      */
     @ApiOperation( value = "获取banner数据", notes = "获取banner数据", httpMethod = "GET" )
@@ -152,10 +152,10 @@ public class BannerController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/{bannerId}" )
+    @GetMapping( "/{bannerType}" )
     @ResponseBody
-    public RestRecord getBannerById( @PathVariable( "bannerId" ) @ApiParam( name = "bannerId", value = "bannerId", required = true ) Integer bannerId ) {
-        return bannerService.getBannerById( bannerId );
+    public RestRecord getBannerById( @PathVariable( "bannerType" ) @ApiParam( name = "bannerType", value = "bannerType", required = true ) Integer bannerType) {
+        return bannerService.getBannerById( bannerType);
     }
 
     /**
