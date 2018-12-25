@@ -21,3 +21,13 @@ logging:
     org.hibernate: INFO
 server:
   port: 10300
+
+fileUpload:
+  image: E:\starUpload\img
+  soft: E:\starUpload\soft
+  document: E:\starUpload\document
+  mapping:
+    image: \star\img
+    soft: \star\soft
+    document: \star\document
+
