@@ -16,19 +16,19 @@ public class CountService {
         this.countDao = countDao;
     }
 
-    public RestRecord countSingleAppDownload( String appId ) {
+    public RestRecord countSingleAppDownload( String appId, Integer pageNum, Integer pageSize ) {
         return countDao.countSingleAppDownload( appId );
     }
 
-    public RestRecord countAppDownloadByType( String appType ) {
+    public RestRecord countAppDownloadByType( String appType, Integer pageNum, Integer pageSize ) {
         return countDao.countAppDownloadByType( appType );
     }
 
-    public RestRecord countAppDownloadByCompanyId( Long companyId ) {
+    public RestRecord countAppDownloadByCompanyId( Long companyId, Integer pageNum, Integer pageSize ) {
         return countDao.countAppDownloadByCompanyId( companyId );
     }
 
-    public RestRecord getAppDownloadRanking ( Integer pageSize, Integer pageNum ) {
+    public RestRecord getAppDownloadRanking( Integer pageSize, Integer pageNum ) {
         return countDao.getAppDownloadRanking( pageSize, pageNum );
     }
 }
