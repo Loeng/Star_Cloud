@@ -35,12 +35,12 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     Page< List< Map< String, Object > > > getInfo( @Param( value = "auditStatus" ) String auditStatus,
                                                    Pageable pageable );
 
-    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A WHERE  A.APP_STATUS =:auditStatus AND A.APP_NAME  LIKE '%:keyword%'" )
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A WHERE  A.APP_STATUS =:auditStatus AND A.APP_NAME  LIKE  CONCAT('%',CONCAT(:keyword,'%'))" )
     Page< List< Map< String, Object > > > getInfoByKeyword( @Param( value = "auditStatus" ) String auditStatus,
                                                             @Param( value = "keyword" ) String keyword,
                                                             Pageable pageable );
 
-    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A  WHERE A.APP_TYPE_ID=:typeId AND A.APP_STATUS =:auditStatus AND A.APP_NAME LIKE '%:keyword%'" )
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A  WHERE A.APP_TYPE_ID=:typeId AND A.APP_STATUS =:auditStatus AND A.APP_NAME LIKE CONCAT('%',CONCAT(:keyword,'%'))" )
     Page< List< Map< String, Object > > > getInfoByTypeIdAndKeyword( @Param( value = "auditStatus" ) String auditStatus,
                                                                      @Param( value = "typeId" ) Integer typeId,
                                                                      @Param( value = "keyword" ) String keyword,
