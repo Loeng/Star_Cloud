@@ -41,7 +41,7 @@ public class UserListController {
             @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
-    public RestRecord getUserInfoByRole( @PathVariable("roleId") String roleId,
+    public RestRecord getUserInfoByRole( @PathVariable( "roleId" ) String roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
                                          @PathVariable( "pageSize" ) Integer pageSize ) {
 

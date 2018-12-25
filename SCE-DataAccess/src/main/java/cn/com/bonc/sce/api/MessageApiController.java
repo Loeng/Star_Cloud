@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -141,10 +142,7 @@ public class MessageApiController {
                                           @PathVariable( "pageSize" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
-            Date time = messageDao.getNewestTimeByUserId( userId );
-            System.out.println( time );
-            System.out.println( time.getTime() );
-            System.out.println( new Date(time.getTime()) );
+            Timestamp time = messageDao.getNewestTimeByUserId( userId );
             List< Message > list;
             if( !StringUtils.isEmpty( time)){
                 list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time,0 );
@@ -157,8 +155,8 @@ public class MessageApiController {
                     UserMessage um = new UserMessage();
                     um.setIsRead( 0 );
                     um.setUserId( userId );
-                    Date createTime = m.getCreateTime();
-                    um.setCreateTime( new Date( createTime.getTime() ) );
+                    Timestamp createTime = m.getCreateTime();
+                    um.setCreateTime( new Timestamp( createTime.getTime() ) );
                     um.setIsDelete( 0 );
                     um.setMessageId( m.getId() );
                     userMessageList.add( um );

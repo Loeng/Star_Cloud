@@ -20,6 +20,8 @@ public interface WebMessageConstants {
      */
     String SCE_PORTAL_MSG_200 = "操作成功";
 
+    String SCE_PORTAL_MSG_240 = "文件上传成功";
+
     /**
      * 操作失败相关
      * 400 - 600
@@ -35,6 +37,10 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_421 = "数据修改失败";
     String SCE_PORTAL_MSG_422 = "数据删除失败";
     String SCE_PORTAL_MSG_423 = "数据添加失败";
+
+    String SCE_PORTAL_MSG_450 = "上传文件为空";
+    String SCE_PORTAL_MSG_451 = "上传文件失败";
+    String SCE_PORTAL_MSG_452 = "上传文件类型异常";
 
     /**
      * 通用错误信息

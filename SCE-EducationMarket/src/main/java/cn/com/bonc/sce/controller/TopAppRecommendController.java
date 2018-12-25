@@ -20,8 +20,13 @@ import java.util.List;
 @RestController
 @RequestMapping( "/top-app" )
 public class TopAppRecommendController {
-    @Autowired
+
     private TopAppRecommendService topAppRecommendService;
+
+    @Autowired
+    public TopAppRecommendController ( TopAppRecommendService topAppRecommendService ) {
+        this.topAppRecommendService = topAppRecommendService;
+    }
 
     /**
      * 添加重点推荐应用

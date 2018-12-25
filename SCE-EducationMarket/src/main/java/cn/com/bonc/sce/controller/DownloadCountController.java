@@ -71,4 +71,19 @@ public class DownloadCountController {
         return countService.countAppDownloadByCompanyId( companyId );
     }
 
+    /**
+     * 查询应用下载量排行列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation( value = "查询应用下载量排行列表", notes = "查询全部应用应用下载量排行", httpMethod = "GET" )
+    @GetMapping( "/download-ranking/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getAppDownloadRanking( @PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                             @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum ) {
+        // 根据厂商名查找对应的应用，统计下载量
+        return countService.getAppDownloadRanking( pageSize, pageNum );
+    }
+
 }

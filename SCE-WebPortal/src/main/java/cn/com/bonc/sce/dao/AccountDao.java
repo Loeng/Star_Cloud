@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Repository
 @FeignClient( "sce-data-access" )
 public interface AccountDao {
-    /*@RequestMapping( value = "/updateAccount/getUserAccountPhone/{userAccount}", method = RequestMethod.GET )
-    public RestRecord getUserAccountPhone( String userAccount);*/
     /**
      * 修改account
      *

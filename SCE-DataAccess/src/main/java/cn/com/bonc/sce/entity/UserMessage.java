@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -30,13 +31,13 @@ public class UserMessage {
     private Integer messageId;
 
     @Column(name = "CREATE_TIME")
-    private Date createTime;
+    private Timestamp createTime;
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
 
     @ManyToOne
-    @JoinColumn(name="ID", referencedColumnName="INFORMATION_ID", insertable=false, updatable=false)
+    @JoinColumn(name="INFO_ID", referencedColumnName="INFORMATION_ID", insertable=false, updatable=false)
     private Message message;
 
     public Integer getId() {
@@ -71,11 +72,11 @@ public class UserMessage {
         this.messageId = messageId;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime( Date createTime ) {
+    public void setCreateTime( Timestamp createTime ) {
         this.createTime = createTime;
     }
 
@@ -99,7 +100,7 @@ public class UserMessage {
 
     }
 
-    public UserMessage( Integer isRead, String userId, Integer messageId, Date createTime, Integer isDelete, Message message ) {
+    public UserMessage( Integer isRead, String userId, Integer messageId, Timestamp createTime, Integer isDelete, Message message ) {
         this.isRead = isRead;
         this.userId = userId;
         this.messageId = messageId;

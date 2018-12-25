@@ -4,6 +4,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -46,7 +47,7 @@ public class Message {
 
     @CreatedDate
     @Column(name = "CREATE_TIME")
-    private Date createTime;
+    private Timestamp createTime;
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
@@ -107,11 +108,11 @@ public class Message {
         this.status = status;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime( Date createTime ) {
+    public void setCreateTime( Timestamp createTime ) {
         this.createTime = createTime;
     }
 
@@ -127,7 +128,7 @@ public class Message {
 
     }
 
-    public Message( String content, Integer type, Integer topicType, String targetId, String sourceId, String status, Date createTime, Integer isDelete ) {
+    public Message( String content, Integer type, Integer topicType, String targetId, String sourceId, String status, Timestamp createTime, Integer isDelete ) {
 
         this.content = content;
         this.type = type;

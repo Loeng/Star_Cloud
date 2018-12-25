@@ -51,11 +51,10 @@ public class TopAppController {
     @GetMapping( "/{pageNum}/{pageSize}" )
     public RestRecord selectTopRecommendAppList( @PathVariable Integer pageNum,
                                                  @PathVariable Integer pageSize ) {
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Pageable pageable = PageRequest.of( pageNum-1, pageSize );
         Page< AppInfoEntity > appInfoList = topAppRepository.findByIsTopRecommend( 1L, pageable );
         // 查询应用表中热门推荐状态为1的应用
         return new RestRecord( 200, appInfoList );
     }
-
 
 }

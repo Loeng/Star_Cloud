@@ -61,6 +61,11 @@ public interface NewsDao {
                                    @RequestParam( "pageNum" ) Integer pageNum,
                                    @RequestParam( "pageSize" ) Integer pageSize);
 
+    @RequestMapping( value = "/news/list/{auditStatus}", method = RequestMethod.GET )
+    public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
+                                   @RequestParam( "pageNum" ) Integer pageNum,
+                                   @RequestParam( "pageSize" ) Integer pageSize);
+
     /**
      * 查询新闻详情接口
      *
