@@ -126,8 +126,8 @@ public class TeacherRecommendAppApiController {
     @ResponseBody
     public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( value = "startTime", required = false ) String startTime,
-            @RequestParam( value = "endTime", required = false ) String endTime,
+            @RequestParam( value = "startTime", required = false , defaultValue = "1970-01-01 00:00:00" ) String startTime,
+            @RequestParam( value = "endTime", required = false , defaultValue = "2099-01-01 00:00:00") String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         log.trace( "query teacherCommend conditions is teacherId:{} startTime:{} endTime:{} pageNum:{} pageSize:{} ", teacherId, startTime, endTime, pageNum, pageSize );
