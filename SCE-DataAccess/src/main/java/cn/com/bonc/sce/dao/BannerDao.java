@@ -38,7 +38,7 @@ public interface BannerDao extends JpaRepository< Banner, Integer > {
     @Query( "UPDATE Banner b SET b.order=?2 WHERE b.id=?1" )
     Integer updateOrderById( Integer id, Integer order );
 
-    Banner findByTypeAndIsDelete( Integer type,Integer isDelete );
+    List< Banner > findByTypeAndIsDelete( Integer type,Integer isDelete );
 
     Banner findByTypeAndIdAndIsDelete( Integer type,Integer bannerId,Integer isDelete );
 

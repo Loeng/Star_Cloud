@@ -62,10 +62,6 @@ public class AccountController {
      * @return 验证结果和安全码
      */
     @ApiOperation( value = "验证安全信息", notes = "验证安全信息", httpMethod = "GET" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "phone", value = "手机号", paramType = "header", required = true),
-            @ApiImplicitParam( name = "valid", value = "验证码", paramType = "header", required = true)
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 411, message = WebMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class )
@@ -76,8 +72,7 @@ public class AccountController {
                                 @PathVariable( "valid" ) @ApiParam( name = "valid", value = "验证码" ,required = true) String valid){
         if( StringUtils.isEmpty( phone )|| UNDEFINED.equals( phone ) ||
                 StringUtils.isEmpty( valid )|| UNDEFINED.equals( valid ) ){
-            return new RestRecord(200,"error");
-            //return new RestRecord(500,"error");
+            return new RestRecord(500,"error");
         }
         return accountSecurityService.validInfo(phone,valid);
     }
