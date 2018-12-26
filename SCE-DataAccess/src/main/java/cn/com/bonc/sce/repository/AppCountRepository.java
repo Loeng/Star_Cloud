@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -16,13 +17,28 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
 
     /**
      * 查询全部应用下载量
+     *
      * @param pageable
      * @return
      */
-    @Query( value = "SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKER_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID ORDER BY DOWNLOAD DESC" ,
-            countQuery = "SELECT COUNT(*) FROM (SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKER_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID)" ,
+    @Query( value = "SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKER_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID ORDER BY DOWNLOAD DESC",
+            countQuery = "SELECT COUNT(*) FROM (SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKER_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID)",
             nativeQuery = true )
-    Page <List< Map< String,Object > >> getAppDownloadRankingList ( Pageable pageable );
+    Page< List< Map< String, Object > > > getAppDownloadRankingList( Pageable pageable );
 
 
+    /**
+     * 通过应用Id查询下载下载量
+     *
+     * @param appId 应用Id
+     * @return
+     */
+    @Query( value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE APP_ID=:appId", nativeQuery = true )
+    Page< List< Map< String, Object > > > getDownloadCountByAppId( @Param( "appId" ) String appId, Pageable pageable );
+
+    @Query( value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE COMPANY_ID=:companyId", nativeQuery = true )
+    Page< List< Map< String, Object > > > getDownloadCountByCompanyId( @Param( "companyId" ) Long companyId, Pageable pageable );
+
+    @Query( value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE APP_TYPE_NAME=:type", nativeQuery = true )
+    Page< List< Map< String, Object > > > getDownloadCountByType( @Param( "type" ) String type, Pageable pageable );
 }

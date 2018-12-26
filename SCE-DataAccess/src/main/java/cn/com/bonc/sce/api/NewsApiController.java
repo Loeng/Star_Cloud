@@ -1,20 +1,12 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.NewsDao;
 import cn.com.bonc.sce.entity.News;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 新闻增删改
@@ -29,7 +21,7 @@ import java.util.Map;
 public class NewsApiController {
 
     @Autowired
-    private NewsDao newsDao;
+    private NewsService newsService;
 
     /**
      * 新增教育新闻
@@ -40,9 +32,8 @@ public class NewsApiController {
     @PostMapping
     @ResponseBody
     public RestRecord insertNews( @RequestBody News news ) {
-        news.setIsDelete( 0 );
         try {
-            return new RestRecord( 200, newsDao.save( news ) );
+            return newsService.insertNews( news );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 409, MessageConstants.SCE_MSG_409, e );
@@ -59,12 +50,7 @@ public class NewsApiController {
     @ResponseBody
     public RestRecord deleteNewsByIdList( @PathVariable( "list" ) String list ) {
         try {
-            String[] idArr = list.split( "," );
-            int total = 0;
-            for(String idStr:idArr){
-                total+=newsDao.updateDeleteStatusById( Integer.parseInt( idStr ));
-            }
-            return new RestRecord( 200, total );
+            return newsService.deleteNewsByIdList( list );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 408, MessageConstants.SCE_MSG_408, e );
@@ -81,9 +67,8 @@ public class NewsApiController {
     @PutMapping
     @ResponseBody
     public RestRecord updateNews( @RequestBody News news ) {
-        news.setIsDelete( 0 );
         try {
-            return new RestRecord( 200, newsDao.save( news ) );
+            return newsService.updateNews( news );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
@@ -94,6 +79,7 @@ public class NewsApiController {
      * 查询新闻列表接口
      *
      * @param auditStatus 新闻审核状态
+     * @param content     内容
      * @param startDate   查询起始日期
      * @param endDate     查询结束日期
      * @param pageNum     分页页码
@@ -103,22 +89,13 @@ public class NewsApiController {
     @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
-                                   @RequestParam( value = "startDate",required=false ) String startDate,
-                                   @RequestParam( value = "endDate",required=false ) String endDate,
-                                   @RequestParam( value = "pageNum",required = false,defaultValue = "0") Integer pageNum,
-                                   @RequestParam( value = "pageSize",required = false,defaultValue = "10" ) Integer pageSize ) {
+                                   @RequestParam( value = "content", required = false ) String content,
+                                   @RequestParam( value = "startDate", required = false ) String startDate,
+                                   @RequestParam( value = "endDate", required = false ) String endDate,
+                                   @RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
+                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
-            Pageable pageable = PageRequest.of( pageNum, pageSize );
-            Page< News > page;
-            if(StringUtils.isEmpty( startDate )){
-                page = newsDao.findByIsDeleteAndContentStatus( 0, auditStatus, pageable );
-            }else {
-                page = newsDao.findByIsDeleteAndContentStatusAndUpdateTimeBetween( 0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
-            }
-            Map<String,Object> info = new HashMap<>();
-            info.put( "total",page.getTotalElements() );
-            info.put( "info",page.getContent() );
-            return new RestRecord( 200, info );
+            return newsService.getNewsList( auditStatus, content, startDate, endDate, pageNum, pageSize );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
@@ -135,7 +112,7 @@ public class NewsApiController {
     @ResponseBody
     public RestRecord getNews( @PathVariable( "newsId" ) Integer newsId ) {
         try {
-            return new RestRecord( 200, newsDao.findByIdAndIsDelete( newsId, 0 ) );
+            return newsService.getNews( newsId );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

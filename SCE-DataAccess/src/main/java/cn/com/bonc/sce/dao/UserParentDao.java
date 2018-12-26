@@ -4,7 +4,6 @@ import cn.com.bonc.sce.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,14 +16,13 @@ import java.util.Map;
  * @since 2018/12/21 9:00
  */
 @Repository
-@Transactional
 public interface UserParentDao extends JpaRepository< User, Integer > {
 
     @Override
     User save( User user );
 
-    @Query( value = "SELECT CU.USER_ID AS userId,CU.USER_ACCOUNT AS userAccount,CUP.PASSWORD AS password FROM STARCLOUDPORTAL.COMMON_USER AS CU\n" +
-            "LEFT JOIN STARCLOUDPORTAL.COMMON_USER_PASSWORD AS CUP ON CU.USER_ID=CUP.USER_ID\n" +
-            "WHERE CU.USER_ACCOUNT=?1 AND CU.IS_DELETE=0",nativeQuery=true )
+    @Query( value = "SELECT CU.USER_ID userId,CU.USER_ACCOUNT userAccount,CUP.PASSWORD password FROM STARCLOUDPORTAL.SCE_COMMON_USER CU\n" +
+            "LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD CUP ON CU.USER_ID=CUP.USER_ID\n" +
+            "WHERE CU.USER_ACCOUNT=?1 AND CU.IS_DELETE=1",nativeQuery=true )
     List<Map<String,String>> selectUserInfo(String userAccount);
 }

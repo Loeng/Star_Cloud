@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,13 +16,12 @@ import java.util.List;
  * @since 2018/14/12 12:00
  */
 @Repository
-@Transactional
 public interface BannerDao extends JpaRepository< Banner, Integer > {
     @Override
     Banner save( Banner banner );
 
     @Modifying
-    @Query( "UPDATE Banner b SET b.isDelete=1 WHERE b.id=?1" )
+    @Query( "UPDATE Banner b SET b.isDelete=0 WHERE b.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
     @Modifying

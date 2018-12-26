@@ -30,8 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping( "/parentsOperation" )
 public class ParentsOperationController {
 
-    private static final int SUCCESS = 200;
-
     @Autowired
     private ParentsOperationService parentsOperationService;
 
@@ -49,17 +47,13 @@ public class ParentsOperationController {
     @GetMapping( "/{phone}" )
     @ResponseBody
     public RestRecord getSecurityValidInfo( HttpServletRequest request, @PathVariable( "phone" ) @ApiParam( name = "phone", value = "手机号", required = true ) String phone){
-        RestRecord rr = parentsOperationService.getSecurityVaildInfo(phone);
-        request.getSession().setAttribute( "phoneValid",rr.getMsg() );
-        rr.setMsg( null );
-        return rr;
+        return parentsOperationService.sendSecurityPhoneValid(phone);
     }
 
     /**
      * 添加家长信息
      *
      * @param parentsInfo 家长信息
-     * @param valid 验证码
      * @return 添加结果
      */
     @ApiOperation( value = "添加家长信息", notes = "添加家长信息", httpMethod = "POST" )
@@ -70,15 +64,7 @@ public class ParentsOperationController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertParentsInfo( HttpServletRequest request,@RequestBody @ApiParam( name = "parentsInfo", value = "新闻信息", required = true )ParentsInfo parentsInfo ,String valid){
-        String sessionValid = (String)request.getSession().getAttribute( "phoneValid" );
-        if( !StringUtils.isEmpty(sessionValid)&&sessionValid.equals( valid )) {
-            RestRecord rr = parentsOperationService.insertParentsInfo( parentsInfo );
-            if(rr.getCode()==SUCCESS){
-                request.getSession().removeAttribute( "phoneValid" );
-            }
-            return rr;
-        }
-        return new RestRecord(411,WebMessageConstants.SCE_PORTAL_MSG_411);
+    public RestRecord insertParentsInfo( HttpServletRequest request,@RequestBody @ApiParam( name = "parentsInfo", value = "新闻信息", required = true )ParentsInfo parentsInfo){
+        return parentsOperationService.insertParentsInfo( parentsInfo );
     }
 }

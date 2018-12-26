@@ -1,9 +1,9 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.AppClassDao;
 import cn.com.bonc.sce.entity.AppClass;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppClassService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +19,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping( "/appClass" )
 public class AppClassApiController {
-    private AppClassDao appClassDao;
 
     @Autowired
-    public AppClassApiController( AppClassDao appClassDao ) {
-        this.appClassDao = appClassDao;
-    }
+    private AppClassService appClassService;
 
     /**
      * 添加应用分类
@@ -35,11 +32,11 @@ public class AppClassApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord insertAppClass( AppClass appClass ) {
-        try{
-            return new RestRecord(200,appClassDao.save( appClass ));
+        try {
+            return appClassService.insertAppClass( appClass );
         }catch ( Exception e ){
             log.error( e.getMessage(),e );
-            return new RestRecord(409,MessageConstants.SCE_MSG_409, e);
+            return new RestRecord(409, MessageConstants.SCE_MSG_409, e);
         }
     }
 
@@ -53,8 +50,7 @@ public class AppClassApiController {
     @ResponseBody
     public RestRecord deleteAppClassById( @PathVariable( "classId" ) Integer classId ) {
         try{
-            appClassDao.updateDeleteStatusById( classId );
-            return new RestRecord(200);
+            return appClassService.deleteAppClassById( classId );
         }catch ( Exception e ){
             log.error( e.getMessage(),e );
             return new RestRecord(408,MessageConstants.SCE_MSG_408, e);
@@ -71,7 +67,7 @@ public class AppClassApiController {
     @ResponseBody
     public RestRecord updateAppClassInfo( AppClass appClass ) {
         try{
-            return new RestRecord(200,appClassDao.save( appClass ));
+            return appClassService.updateAppClassInfo( appClass );
         }catch ( Exception e ){
             log.error( e.getMessage(),e );
             return new RestRecord(407, MessageConstants.SCE_MSG_407, e);
@@ -87,7 +83,7 @@ public class AppClassApiController {
     @ResponseBody
     public RestRecord getAllAppClassInfo() {
         try{
-            return new RestRecord(200,appClassDao.findByIsDelete(0));
+            return appClassService.getAllAppClassInfo();
         }catch ( Exception e ){
             log.error( e.getMessage(),e );
             return new RestRecord(406,MessageConstants.SCE_MSG_406, e);

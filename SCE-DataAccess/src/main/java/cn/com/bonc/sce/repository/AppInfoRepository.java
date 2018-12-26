@@ -13,6 +13,9 @@ import java.util.Map;
 
 public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String > {
 
+    @Override
+    < S extends AppInfoEntity > S saveAndFlush( S s );
+
     //根据平台类型查询有哪些软件
     Page< AppInfoEntity > findByAppSource( String platformType, Pageable pageable );
 
