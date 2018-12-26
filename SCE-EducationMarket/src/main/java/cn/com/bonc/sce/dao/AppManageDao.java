@@ -16,8 +16,15 @@ public interface AppManageDao {
     @RequestMapping( value = "/manage-app", method = RequestMethod.POST )
     RestRecord addAppInfo( @RequestBody Map appInfo );
 
-    @RequestMapping( value = "/manage-app", method = RequestMethod.DELETE )
-    RestRecord deleteApps( @RequestBody List< String > appIdList );
+    /**
+     * 删除应用信息
+     * @param appIdList
+     * @param uid
+     * @return
+     */
+    @RequestMapping( value = "/manage-app/{uid}", method = RequestMethod.DELETE )
+    RestRecord deleteApps( @RequestBody List< String > appIdList,
+                           @PathVariable("uid") String uid);
 
     /**
      * 编辑应用
@@ -70,7 +77,7 @@ public interface AppManageDao {
     /**
      * 根据输入名和选择类别查询应用
      */
-    @RequestMapping( value = "/manage-app/apps-by-name-type", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/condition", method = RequestMethod.GET )
     RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
                                            @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                            @RequestParam(value ="orderType" ) String orderType,
@@ -117,7 +124,7 @@ public interface AppManageDao {
      * @return
      */
     @RequestMapping( value = "/manage-app/list-by-audit-status", method = RequestMethod.GET )
-    public RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) String auditStatus,
+     RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) String auditStatus,
                                                @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
                                                @RequestParam( value = "keyword", required = false ) String keyword,
                                                @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,

@@ -63,8 +63,8 @@ public class AppManageController {
     } )
     @DeleteMapping
     public RestRecord deleteApps( @RequestBody List< String > appIdList ) {
-        //应用版本表  是否删除字段改为1
-        return appManageService.deleteApps( appIdList );
+        String uid = "0110100";
+        return appManageService.deleteApps( appIdList, uid );
     }
 
     /**
@@ -192,6 +192,8 @@ public class AppManageController {
                                                   @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
                                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+
+
         return appManageService.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
     }
 
