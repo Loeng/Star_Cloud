@@ -4,7 +4,6 @@ import cn.com.bonc.sce.entity.StudentParentRel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 学生家长对应
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2018/12/21 9:00
  */
 @Repository
-@Transactional
 public interface StudentParentRelDao extends JpaRepository< StudentParentRel, Integer > {
     @Override
     StudentParentRel save( StudentParentRel user );

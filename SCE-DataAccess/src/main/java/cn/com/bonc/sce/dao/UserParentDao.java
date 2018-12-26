@@ -4,7 +4,6 @@ import cn.com.bonc.sce.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,6 @@ import java.util.Map;
  * @since 2018/12/21 9:00
  */
 @Repository
-@Transactional
 public interface UserParentDao extends JpaRepository< User, Integer > {
 
     @Override

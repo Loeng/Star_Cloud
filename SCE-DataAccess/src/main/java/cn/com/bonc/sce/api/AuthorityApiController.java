@@ -1,8 +1,8 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.AuthorityDao;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AuthorityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping( "/authoritys" )
 public class AuthorityApiController {
     @Autowired
-    private AuthorityDao authorityDao;
+    private AuthorityService authorityService;
 
     /**
      * 获取机构
@@ -33,7 +33,7 @@ public class AuthorityApiController {
     @ResponseBody
     public RestRecord getAll() {
         try {
-            return new RestRecord( 200, authorityDao.findByIsDelete(0) );
+            return authorityService.getAll();
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

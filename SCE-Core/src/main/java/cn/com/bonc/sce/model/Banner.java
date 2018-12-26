@@ -13,7 +13,7 @@ public class Banner {
     private String url;
     private String appId;
     private Integer isShown;
-    private String type;
+    private Integer type;
 
     public Integer getId() {
         return id;
@@ -55,11 +55,11 @@ public class Banner {
         this.isShown = isShown;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType( String type ) {
+    public void setType( Integer type ) {
         this.type = type;
     }
 
@@ -67,7 +67,8 @@ public class Banner {
 
     }
 
-    public Banner( Integer id, Integer order, String url, String appId, Integer isShown, String type) {
+    public Banner( Integer id, Integer order, String url, String appId, Integer isShown, Integer type ) {
+
         this.id = id;
         this.order = order;
         this.url = url;

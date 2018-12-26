@@ -89,10 +89,6 @@ public class BannerController {
      * @return 跟新是否成功
      */
     @ApiOperation( value = "修改url", notes = "修改url", httpMethod = "PUT" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "body", required = true ),
-            @ApiImplicitParam( name = "url", value = "待修改的url", paramType = "body", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
@@ -110,10 +106,6 @@ public class BannerController {
      * @return 跟新是否成功
      */
     @ApiOperation( value = "修改appId", notes = "修改appId", httpMethod = "PUT" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "bannerId", value = "bannerId", paramType = "body", required = true ),
-            @ApiImplicitParam( name = "appId", value = "appId", paramType = "body", required = true )
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
