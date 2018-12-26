@@ -1,9 +1,9 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.entity.Account;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping( "/account-security" )
 public class AccountApiController {
     @Autowired
-    private AccountDao accountSecurityDao;
+    private AccountService accountService;
 
     /**
      * 修改账号信息
@@ -32,9 +32,8 @@ public class AccountApiController {
     @ResponseBody
     public RestRecord updateAccount( Account account) {
         try {
-            return new RestRecord( 200, accountSecurityDao.updateAccount( account.getPhone(), account.getPassword() ) );
-        } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            return accountService.updateAccount( account.getPhone(), account.getPassword() );
+        }catch ( Exception e ){
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
     }

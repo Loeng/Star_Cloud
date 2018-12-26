@@ -1,23 +1,12 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.NotificationDao;
-import cn.com.bonc.sce.entity.News;
 import cn.com.bonc.sce.entity.Notification;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 通知增删改
@@ -32,7 +21,7 @@ import java.util.Map;
 public class NotificationApiController {
 
     @Autowired
-    private NotificationDao notificationDao;
+    private NotificationService notificationService;
 
     /**
      * 新增通知公告
@@ -43,10 +32,8 @@ public class NotificationApiController {
     @PostMapping
     @ResponseBody
     public RestRecord insertNotification( @RequestBody Notification notification ) {
-        notification.setColumnId( 0 );
-        notification.setIsDelete( 1 );
         try {
-            return new RestRecord( 200, notificationDao.save( notification ) );
+            return notificationService.insertNotification( notification );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 409, MessageConstants.SCE_MSG_409, e );
@@ -63,12 +50,7 @@ public class NotificationApiController {
     @ResponseBody
     public RestRecord deleteNotificationByIdList( @PathVariable( "list" ) String list ) {
         try {
-            String[] idArr = list.split( "," );
-            int total = 0;
-            for(String idStr:idArr){
-                total+=notificationDao.updateDeleteStatusById( Integer.parseInt( idStr ));
-            }
-            return new RestRecord( 200, total );
+            return notificationService.deleteNotificationByIdList( list );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 408, MessageConstants.SCE_MSG_408, e );
@@ -84,9 +66,8 @@ public class NotificationApiController {
     @PutMapping
     @ResponseBody
     public RestRecord updateNotification( @RequestBody Notification notification ) {
-        notification.setIsDelete( 1 );
         try {
-            return new RestRecord( 200, notificationDao.save( notification ) );
+            return notificationService.updateNotification( notification );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
@@ -107,46 +88,15 @@ public class NotificationApiController {
      */
     @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
-    public RestRecord getNotificationList( @RequestParam( value = "type" ,required=false) Integer type,
-                                           @RequestParam( value = "content" ,required=false) String content,
+    public RestRecord getNotificationList( @RequestParam( value = "type", required = false ) Integer type,
+                                           @RequestParam( value = "content", required = false ) String content,
                                            @PathVariable( "auditStatus" ) String auditStatus,
-                                           @RequestParam( value = "startDate" ,required=false) String startDate,
-                                           @RequestParam( value = "endDate",required=false ) String endDate,
-                                           @RequestParam( value = "pageNum",required = false,defaultValue = "0"  ) Integer pageNum,
-                                           @RequestParam( value = "pageSize",required = false,defaultValue = "10"  ) Integer pageSize ) {
+                                           @RequestParam( value = "startDate", required = false ) String startDate,
+                                           @RequestParam( value = "endDate", required = false ) String endDate,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
-            Pageable pageable = PageRequest.of( pageNum, pageSize );
-            Page< Notification > page;
-            if(StringUtils.isEmpty( content)){
-                content = "%%";
-            }else{
-                content = "%"+content+"%";
-            }
-            if(StringUtils.isEmpty(type)) {
-                if ( StringUtils.isEmpty( startDate ) ) {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1,content, 0, auditStatus, pageable );
-                } else {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1, content,0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
-                }
-            }else{
-                if ( StringUtils.isEmpty( startDate ) ) {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatus( 1, content,0, type, auditStatus, pageable );
-                } else {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatusAndUpdateTimeBetween( 1, content,0, type, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
-                }
-            }
-            List< Notification > list = page.getContent();
-            for(Notification notification : list){
-                if(notification.getUser()==null){
-                    continue;
-                }
-                notification.setUserName( notification.getUser().getUserName());
-                notification.setUser( null );
-            }
-            Map<String,Object> info = new HashMap<>();
-            info.put( "total",page.getTotalElements() );
-            info.put( "info",list );
-            return new RestRecord( 200, info );
+            return notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, pageNum, pageSize );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
@@ -162,13 +112,8 @@ public class NotificationApiController {
     @GetMapping( "/{notificationId}" )
     @ResponseBody
     public RestRecord getNotification( @PathVariable( "notificationId" ) Integer notificationId ) {
-        Notification notification = notificationDao.findByIdAndIsDelete( notificationId, 1 );
-        if(notification.getUser()!=null){
-            notification.setUserName( notification.getUser().getUserName());
-            notification.setUser( null );
-        }
         try {
-            return new RestRecord( 200, notification );
+            return notificationService.getNotification( notificationId );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

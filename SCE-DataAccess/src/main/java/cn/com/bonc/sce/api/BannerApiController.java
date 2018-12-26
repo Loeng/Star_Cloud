@@ -1,9 +1,9 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.BannerDao;
 import cn.com.bonc.sce.entity.Banner;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.BannerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping( "/banners" )
 public class BannerApiController {
     @Autowired
-    private BannerDao bannerDao;
+    private BannerService bannerService;
 
     /**
      * 添加banner
@@ -33,11 +33,10 @@ public class BannerApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord insertBanner( @RequestBody Banner banner ) {
-        banner.setIsDelete( 1 );
         try {
-            return new RestRecord( 200, bannerDao.save( banner ) );
+            return bannerService.insertBanner( banner );
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 409, MessageConstants.SCE_MSG_409, e );
         }
     }
@@ -52,9 +51,9 @@ public class BannerApiController {
     @ResponseBody
     public RestRecord deleteBannerById( @PathVariable( "bannerId" ) Integer bannerId ) {
         try {
-            return new RestRecord( 200, bannerDao.updateDeleteStatusById( bannerId ) );
+            return bannerService.deleteBannerById( bannerId );
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 408, MessageConstants.SCE_MSG_408, e );
         }
     }
@@ -68,11 +67,10 @@ public class BannerApiController {
     @PutMapping( "" )
     @ResponseBody
     public RestRecord updateBannerInfo( @RequestBody Banner banner ) {
-        banner.setIsDelete( 0 );
         try {
-            return new RestRecord( 200, bannerDao.save( banner ) );
+            return bannerService.updateBannerInfo( banner );
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
     }
@@ -85,11 +83,11 @@ public class BannerApiController {
      */
     @PutMapping( "/url" )
     @ResponseBody
-    public RestRecord updateBannerUrl(@RequestBody Banner banner) {
+    public RestRecord updateBannerUrl( @RequestBody Banner banner ) {
         try {
-            return new RestRecord( 200, bannerDao.updateUrlById( banner.getId(), banner.getUrl() ) );
+            return bannerService.updateBannerUrl( banner );
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
     }
@@ -102,11 +100,11 @@ public class BannerApiController {
      */
     @PutMapping( "/appId" )
     @ResponseBody
-    public RestRecord updateBannerAppId(@RequestBody Banner banner) {
+    public RestRecord updateBannerAppId( @RequestBody Banner banner ) {
         try {
-            return new RestRecord( 200, bannerDao.updateAppIdById( banner.getId(), banner.getAppId() ) );
+            return bannerService.updateBannerAppId( banner );
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
     }
@@ -120,18 +118,10 @@ public class BannerApiController {
     @PutMapping( "/banner-order" )
     @ResponseBody
     public RestRecord updateBannerOrder( @RequestParam( "list" ) List< Integer > list ) {
-        Integer total = 0;
-        Integer size = 0;
-        if ( list != null ){
-            size = list.size();
-        }
         try {
-            for ( int i = 0; i < size; i++ ) {
-                total += bannerDao.updateOrderById( list.get( i ), i+1 );
-            }
-            return new RestRecord( 200, total );
+            return bannerService.updateBannerOrder( list );
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
     }
@@ -146,17 +136,9 @@ public class BannerApiController {
     @ResponseBody
     public RestRecord getBannerById( @PathVariable( "bannerType" ) Integer bannerType ) {
         try {
-            List< Banner > list = bannerDao.findByTypeAndIsDelete( bannerType,1 );
-            for(Banner banner : list){
-                if(banner.getPic()==null){
-                    continue;
-                }
-                banner.setPicUrl( banner.getPic().getFileMappingPath());
-                banner.setPic( null );
-            }
-            return new RestRecord( 200, list );
+            return bannerService.getBannerById( bannerType );
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
@@ -170,17 +152,9 @@ public class BannerApiController {
     @ResponseBody
     public RestRecord getAllBannersInfo() {
         try {
-            List< Banner > list = bannerDao.findByIsDelete( 1 );
-            for(Banner banner : list){
-                if(banner.getPic()==null){
-                    continue;
-                }
-                banner.setPicUrl( banner.getPic().getFileMappingPath());
-                banner.setPic( null );
-            }
-            return new RestRecord( 200, list );
+            return bannerService.getAllBannersInfo();
         } catch ( Exception e ) {
-            log.error( e.getMessage(),e );
+            log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }

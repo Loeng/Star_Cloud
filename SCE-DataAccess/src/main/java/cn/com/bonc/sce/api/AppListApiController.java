@@ -1,8 +1,8 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.AppListDao;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping( "/appList" )
 public class AppListApiController {
-    private AppListDao appListDao;
 
     @Autowired
-    public AppListApiController( AppListDao appListDao ) {
-        this.appListDao = appListDao;
-    }
+    private AppListService appListService;
 
     /**
      * 获取所有应用分类数据
@@ -33,11 +30,11 @@ public class AppListApiController {
     @GetMapping( "" )
     @ResponseBody
     public RestRecord getAppListInfo() {
-        try{
-            return new RestRecord(200,appListDao.findByIsDelete(0));
-        }catch ( Exception e ){
-            log.error( e.getMessage(),e );
-            return new RestRecord(406, MessageConstants.SCE_MSG_406, e);
+        try {
+            return appListService.getAppListInfo();
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
 
@@ -49,12 +46,12 @@ public class AppListApiController {
      */
     @GetMapping( "/classId/{classId}" )
     @ResponseBody
-    public RestRecord getAppListInfo(@PathVariable( value="classId")Integer classId) {
-        try{
-            return new RestRecord(200,appListDao.findByCategoryIdAndIsDelete(classId,0));
-        }catch ( Exception e ){
-            log.error( e.getMessage(),e );
-            return new RestRecord(406,MessageConstants.SCE_MSG_406, e);
+    public RestRecord getAppListInfo( @PathVariable( value = "classId" ) Integer classId ) {
+        try {
+            return appListService.getAppListInfo( classId );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
 
@@ -65,12 +62,12 @@ public class AppListApiController {
      */
     @GetMapping( "/keyword/{keyword}" )
     @ResponseBody
-    public RestRecord getAppListInfo(@PathVariable( value="keyword")String keyword) {
-        try{
-                return new RestRecord(200,appListDao.findByAppNameLikeAndIsDelete("%"+keyword+"%",0));
-        }catch ( Exception e ){
-            log.error( e.getMessage(),e );
-            return new RestRecord(406,MessageConstants.SCE_MSG_406, e);
+    public RestRecord getAppListInfo( @PathVariable( value = "keyword" ) String keyword ) {
+        try {
+            return appListService.getAppListInfo( keyword );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
 
@@ -81,13 +78,13 @@ public class AppListApiController {
      */
     @GetMapping( "/{classId}/{keyword}" )
     @ResponseBody
-    public RestRecord getAppListInfo(@PathVariable( value="classId")Integer classId,
-                                     @PathVariable( value="keyword")String keyword) {
-        try{
-            return new RestRecord(200,appListDao.findByCategoryIdAndAppNameLikeAndIsDelete(classId,"%"+keyword+"%",0));
-        }catch ( Exception e ){
-            log.error( e.getMessage(),e );
-            return new RestRecord(406,MessageConstants.SCE_MSG_406, e);
+    public RestRecord getAppListInfo( @PathVariable( value = "classId" ) Integer classId,
+                                      @PathVariable( value = "keyword" ) String keyword ) {
+        try {
+            return appListService.getAppListInfo( classId, keyword );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
 }

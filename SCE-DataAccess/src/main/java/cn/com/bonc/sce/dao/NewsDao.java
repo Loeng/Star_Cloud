@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -19,7 +18,6 @@ import java.util.Date;
  * @since 2018/12/21 9:00
  */
 @Repository
-@Transactional
 public interface NewsDao extends JpaRepository< News, Integer > {
     @Override
     News save( News banner );

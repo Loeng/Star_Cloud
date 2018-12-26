@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 用户消息
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2018/14/12 12:00
  */
 @Repository
-@Transactional
 public interface UserMessageDao extends JpaRepository<UserMessage, Integer> {
 
     @Modifying

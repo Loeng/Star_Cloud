@@ -1,9 +1,11 @@
-package cn.com.bonc.sce.api;
+package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.dao.SchoolDao;
 import cn.com.bonc.sce.rest.RestRecord;
-import cn.com.bonc.sce.service.SchoolService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,20 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2018/12/25 8:00
  */
 @Slf4j
-@RestController
-@RequestMapping( "/schools" )
-public class SchoolApiController {
+@Service
+public class SchoolService {
     @Autowired
-    private SchoolService schoolService;
+    private SchoolDao schoolDao;
 
     /**
      * 获取学校
      *
      * @return 获取学校
      */
-    @GetMapping( "" )
-    @ResponseBody
     public RestRecord getAll() {
-        return schoolService.getAll();
+        try {
+            return new RestRecord( 200, schoolDao.findByIsDelete(1) );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
+        }
     }
 }
