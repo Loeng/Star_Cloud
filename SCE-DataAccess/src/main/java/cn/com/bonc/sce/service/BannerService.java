@@ -31,6 +31,7 @@ public class BannerService {
      * @return 是否添加成功
      */
     public RestRecord insertBanner( Banner banner ) {
+        banner.setId( null );
         banner.setIsDelete( 1 );
         return new RestRecord( 200, bannerDao.save( banner ) );
     }

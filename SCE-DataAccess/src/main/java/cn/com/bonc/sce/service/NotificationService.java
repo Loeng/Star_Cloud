@@ -40,6 +40,7 @@ public class NotificationService {
      * @return 添加通知公告是否成功
      */
     public RestRecord insertNotification( Notification notification ) {
+        notification.setId( null );
         notification.setColumnId( 0 );
         notification.setIsDelete( 1 );
         return new RestRecord( 200, notificationDao.save( notification ) );
@@ -111,6 +112,11 @@ public class NotificationService {
             }
             notification.setUserName( notification.getUser().getUserName() );
             notification.setUser( null );
+            if ( notification.getPic() == null ) {
+                continue;
+            }
+            notification.setPicUrl( notification.getPic().getFileMappingPath() );
+            notification.setPic( null );
         }
         Map< String, Object > info = new HashMap<>();
         info.put( "total", page.getTotalElements() );
