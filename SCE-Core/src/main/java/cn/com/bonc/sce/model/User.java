@@ -39,19 +39,20 @@ public class User {
     private String remarks;
     private Integer isDelete;
     private Account account;
-    private Secret secret;
+    private String securet;
+    private Secret secrete2;
     private String password;
 
 
 //    private UserExtraInfo userExtraInfo;
 
 
-    public void setSecret( String secret ) {
-        this.secret = new Secret( secret );
+    public void setSecrete2( String secrete2 ) {
+        this.secrete2 = new Secret( secrete2 );
     }
 
     public void generateSecret( ) {
-        this.secret = new Secret();
+        this.secrete2 = new Secret();
     }
 
     public User( String userId, String loginName, String password ) {

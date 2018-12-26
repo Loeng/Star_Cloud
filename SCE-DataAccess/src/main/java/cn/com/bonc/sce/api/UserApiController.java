@@ -49,6 +49,5 @@ public class UserApiController {
         } else {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
-
     }
 }

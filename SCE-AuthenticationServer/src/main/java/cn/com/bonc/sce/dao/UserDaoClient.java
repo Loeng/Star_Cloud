@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Map;
-
 /**
  * @author Leucippus
  * @version 0.1
@@ -25,7 +23,8 @@ public interface UserDaoClient {
      * @return 用户的详细数据
      */
     @RequestMapping( value = "/users/{userId}", method = RequestMethod.GET )
-    public Map< String, Object > getUserById( @PathVariable( "userId" ) String userId );
+//    public Map< String, Object > getUserById( @PathVariable( "userId" ) String userId );
+    public User getUserById( @PathVariable( "userId" ) String userId );
 
     /**
      * 根据用户的 登录id 获取用户信息

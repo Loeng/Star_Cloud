@@ -23,8 +23,8 @@ public class LoginService {
         // TODO 传入真实的 ruleCode
         claims.put( "ruleCode", "parents" );
 
-//        return JWTUtil.generateKeyWithSecret( claims, authenticatedUser.getSecret().getKeyPair().getPrivate() );
-        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecret().getPrivateKey() );
+//        return JWTUtil.generateKeyWithSecret( claims, authenticatedUser.getSecrete2().getKeyPair().getPrivate() );
+        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecrete2().getPrivateKey() );
     }
 
 //    public static void main( String[] args ) {

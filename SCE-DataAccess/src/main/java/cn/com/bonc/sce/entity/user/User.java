@@ -74,7 +74,7 @@ public class User {
     private Integer isDelete;
     @OneToOne( fetch = FetchType.EAGER, mappedBy = "user" )
     @JsonIgnoreProperties( value = { "hibernateLazyInitializer", "handler" } )
-    @JsonIdentityInfo( generator = ObjectIdGenerators.UUIDGenerator.class, property = "@serializeId" )
+    @JsonIdentityInfo( generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id" )
     private Account account;
     @Column( name = "SECRET", length = 1064 )
     private String secret;

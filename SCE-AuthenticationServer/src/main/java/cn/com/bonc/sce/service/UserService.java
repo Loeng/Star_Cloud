@@ -56,9 +56,14 @@ public class UserService {
         return user;
     }
 
-    public User getUserByUserId( String userId ) {
-        Map< String, Object > userInfo = userDao.getUserById( userId );
+    // TODO 解决 JSON 序列化的问题
+//    public User getUserByUserId( String userId ) {
+//        Map< String, Object > userInfo = userDao.getUserById( userId );
+//
+//        return new User( String.valueOf( userInfo.get( "userId" ) ), String.valueOf( userInfo.get( "loginName" ) ), String.valueOf( userInfo.get( "password" ) ) );
+//    }
 
-        return new User( String.valueOf( userInfo.get( "userId" ) ), String.valueOf( userInfo.get( "loginName" ) ), String.valueOf( userInfo.get( "password" ) ) );
+    public User getUserByUserId( String userId ) {
+        return userDao.getUserById( userId );
     }
 }
