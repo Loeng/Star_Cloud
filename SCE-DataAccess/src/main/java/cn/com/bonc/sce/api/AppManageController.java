@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.CollectionUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -253,7 +254,31 @@ public class AppManageController {
     @GetMapping( "/detail-by-id/{appId}" )
     public RestRecord selectAppById( @PathVariable String appId ) {
         AppInfoEntity appInfo = appInfoRepository.findByAppId( appId );
-        return new RestRecord( 200, appInfo );
+        String type = appInfo.getAppSource(); // type可用于分辨应用类型  平台应用/软件应用
+        Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "CREATE_TIME");
+        Page<Map<String,Object>>  appDetailInfo = appInfoRepository.findAppDetailById(appId,pageable);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,appDetailInfo.getContent());
+    }
+
+    /**
+     * DESC: 检测用户是否开通了该APP
+     * @Auther mkl
+     * @param appId 应用ID
+     * @return Map
+     */
+    @GetMapping("/detail/open/{appId}")
+    public RestRecord isOpenApp(@PathVariable String appId){
+        String userId = "T666666";
+        Map<String, Object> openInfo = appInfoRepository.findAppOpenInfo(appId, userId);
+        Map<String,Object> map = new HashMap<>();
+        if (null == openInfo || CollectionUtils.isEmpty(openInfo)){
+             map.put("OPEN",false);
+             log.info("用户[{}]未开通应用[{}]",userId,appId);
+        }else {
+             map.put("OPEN",true);
+            log.info("用户[{}]已开通应用[{}]",userId,appId);
+        }
+           return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,map);
     }
 
     /**
