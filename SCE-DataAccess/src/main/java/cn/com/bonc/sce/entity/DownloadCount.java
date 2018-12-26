@@ -8,7 +8,7 @@ import java.util.Objects;
  * Created by YueHaibo on 2018/12/12.
  */
 @Entity
-@Table( name = "SCE_MARKER_APP_DOWNLOAD", schema = "STARCLOUDMARKET", catalog = "" )
+@Table( name = "SCE_MARKET_APP_DOWNLOAD", schema = "STARCLOUDMARKET", catalog = "" )
 public class DownloadCount {
     private long id;
     private Long appId;
