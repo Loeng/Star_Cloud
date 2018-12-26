@@ -1,12 +1,13 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.repository.MarketAppVersionRepository;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
+import cn.com.bonc.sce.repository.MarketAppVersionRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 应用管理api
@@ -45,8 +49,9 @@ public class AppManageController {
      */
     @PostMapping
     public RestRecord addAppInfo( @RequestBody Map appInfo ) {
-        //暂时没时间写
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
+        final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
     }
 
     /**
@@ -55,25 +60,34 @@ public class AppManageController {
      * @param appIdList appId数组
      * @return
      */
-    @DeleteMapping( "" )
+    @DeleteMapping( "" ) //TODO 是啥意思?
     public RestRecord deleteApps( @RequestBody List< String > appIdList ) {
-        //暂时没时间写
         //应用版本表  是否删除字段改为1
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        List< AppInfoEntity > appInfoEntities = new ArrayList<>( appIdList.size() );
+        appIdList.forEach( id -> {
+            final AppInfoEntity appInfoEntity = new AppInfoEntity();
+            appInfoEntity.setAppId( id );
+            appInfoEntity.setIsDelete( 0 );
+            appInfoEntities.add( appInfoEntity );
+        } );
+        final List< AppInfoEntity > results = appInfoRepository.saveAll( appInfoEntities );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, results );
     }
 
     /**
      * 编辑应用
      *
-     * @param updateInfo 应用需更新的字段与更新的值，json字符串
+     * @param updateAppInfo 应用需更新的字段与更新的值，json字符串
      * @param appId      所需更新的应用ID
      * @return
      */
     @PutMapping( "/{appId}" )
-    public RestRecord updateAppInfo( @RequestBody Map updateInfo,
+    public RestRecord updateAppInfo( @RequestBody Map updateAppInfo,
                                      @PathVariable String appId ) {
-        //暂时没时间写
-        return new RestRecord( 0, WebMessageConstants.SCE_PORTAL_MSG_200 );
+
+        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( updateAppInfo ), AppInfoEntity.class );
+        final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
+        return new RestRecord( 0, WebMessageConstants.SCE_PORTAL_MSG_200, result );
     }
 
     /**
