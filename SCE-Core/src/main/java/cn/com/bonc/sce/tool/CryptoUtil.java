@@ -26,13 +26,13 @@ public class CryptoUtil {
 
     public static final CryptoUtil RSA_CRYPTO_UTIL_INSTANCE = new CryptoUtil();
 
-    private static KeyPairGenerator keyPairGenerator;
+    private  KeyPairGenerator keyPairGenerator;
 
     public CryptoUtil() {
-        KeyPairGenerator keyPairGenerator = null;
+        this.keyPairGenerator = null;
         try {
-            keyPairGenerator = KeyPairGenerator.getInstance( "RSA" );
-            keyPairGenerator.initialize( 2048 );
+            this.keyPairGenerator = KeyPairGenerator.getInstance( "RSA" );
+            this.keyPairGenerator.initialize( 2048 );
         } catch ( NoSuchAlgorithmException e ) {
             log.error( "不支持的加密算法", e );
         }
@@ -140,11 +140,10 @@ public class CryptoUtil {
     }
 
     public static void main( String[] args ) {
-        RSA rsa = new RSA();
-        String publicKey = rsa.getPublicKeyBase64();
-        String privateKey = rsa.getPrivateKeyBase64();
+        KeyPair keyPair = CryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.generateKeyPair();
+        RSA rsa = new RSA( keyPair.getPrivate(), keyPair.getPublic() );
 
-        System.out.println( privateKey + publicKey);
+        System.out.println( ( rsa.getPrivateKeyBase64() + rsa.getPublicKeyBase64() ) );
 
 //        System.out.println(generateKeyPair( SignatureAlgorithm.ES256.name() ));
     }

@@ -2,13 +2,11 @@ package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
-@Repository
 @FeignClient( "sce-data-access" )
 public interface AppManageDao {
 

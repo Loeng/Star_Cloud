@@ -13,11 +13,13 @@ public interface MessageConstants {
      */
     String SCE_MSG_0000 = "服务 {} 启动, ip: {}, port: []";
 
+    String SCE_MSG_0200 = "操作成功";
+
     /**
      * 2. 文件操作相关
-     * 200 - 399
+     * 201 - 399
      */
-    String SCE_MSG_0200 = "读取文件： {}";
+    String SCE_MSG_0201 = "读取文件： {}";
 
     /**
      * 3. 数据库操作相关
@@ -44,6 +46,7 @@ public interface MessageConstants {
      */
     String SCE_MSG_1000 = "ip:{} 的用户尝试使用不支持的登录方式进行登录，使用登录方式: {}";
     String SCE_MSG_1001 = "用户: {} 在 ip: {} 尝试进行登录";
+    String SCE_MSG_1010 = "找不到用户 userId: {}";
 
     /**
      * 通用异常处理

@@ -14,6 +14,7 @@ public interface WebMessageConstants {
      */
     String SCE_PORTAL_MSG_100 = "不支持的登录类型";
     String SCE_PORTAL_MSG_101 = "找不到用户";
+    String SCE_PORTAL_MSG_102 = "密码错误";
 
     /**
      * 操作成功
