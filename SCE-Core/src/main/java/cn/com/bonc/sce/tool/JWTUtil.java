@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.tool;
 
 import cn.com.bonc.sce.constants.DateConstants;
+import cn.hutool.core.codec.Base64;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
@@ -70,8 +71,12 @@ public class JWTUtil {
                 .setId( UUID.randomUUID().toString() );
     }
 
+    public static String readJWTClaim( String claim ) {
+        return Base64.decodeStr( claim );
+    }
+
     public static void main( String[] args ) throws InvalidKeyException, NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance( "RSA" );
+        /*KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance( "RSA" );
         keyPairGenerator.initialize( 2048 );
 
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
@@ -84,7 +89,9 @@ public class JWTUtil {
 
         String claims = ticket.split( "\\." )[ 1 ];
         String target = cn.hutool.core.codec.Base64.decodeStr( claims );
-        System.out.println( target );
+        System.out.println( target );*/
+
+        System.out.println( readJWTClaim( "eyJleHAiOjE1NDU4Mzk0MDUsInN1YiI6ImxvZ2luIiwibmJmIjoxNTQ1ODM5MzQ1LCJpYXQiOjE1NDU4MzkzNDUsImp0aSI6IjRjYWYyMGRlLTEzZDEtNDkxMy1hYzhkLTk5NjAyZjZlYzY4YSIsInJ1bGVDb2RlIjoicGFyZW50cyIsImxvZ2luSWQiOiJSR003OSIsInVzZXJUeXBlIjowLCJ1c2VySWQiOiIwIn0" ) );
     }
 
 }

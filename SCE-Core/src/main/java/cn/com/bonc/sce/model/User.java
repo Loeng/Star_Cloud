@@ -39,31 +39,40 @@ public class User {
     private String remarks;
     private Integer isDelete;
     private Account account;
-    private String securet;
-    private Secret secrete2;
-    private String password;
+    private String secret;
+    private Secret secretKeyPair;
 
-
-//    private UserExtraInfo userExtraInfo;
-
-
-    public void setSecrete2( String secrete2 ) {
-        this.secrete2 = new Secret( secrete2 );
+    public void generateUserSecret() {
+        this.secretKeyPair = new Secret();
+        this.secret = this.secretKeyPair.getSecretPair();
     }
 
-    public void generateSecret( ) {
-        this.secrete2 = new Secret();
+    public Secret getSecretKeyPair() {
+        if ( this.secret != null ) {
+            this.secretKeyPair = new Secret( secret );
+        }
+        return this.secretKeyPair;
     }
 
-    public User( String userId, String loginName, String password ) {
-        this.userId = userId;
-        this.loginName = loginName;
-        this.password = password;
+    public String getPassword() {
+        return account.getPassword();
     }
 
-    public User( String password, int userType ) {
-        this.password = password;
-        this.userType = userType;
+    public void setPassword( String newPassword ) {
+        account.setPassword( newPassword );
+    }
+
+    public void setSecretKeyPair( String secretKeyPair ) {
+        if ( secretKeyPair != null ) {
+            this.secretKeyPair = new Secret( secretKeyPair );
+            this.secret = this.getSecretKeyPair().getSecretPair();
+        } else {
+            this.secretKeyPair = null;
+        }
+    }
+
+    public void generateSecret() {
+        this.secretKeyPair = new Secret();
     }
 }
 

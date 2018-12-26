@@ -15,6 +15,11 @@ import java.util.Map;
 @Service
 public class LoginService {
 
+    /**
+     * 根据用户私钥生成 ticket
+     * @param authenticatedUser 登录用户
+     * @return 字符串形式的 jwt ticket
+     */
     public String generateTicket( User authenticatedUser ) {
         Map< String, Object > claims = new HashMap<>( 2 );
         claims.put( "userId", authenticatedUser.getUserId() );
@@ -23,15 +28,6 @@ public class LoginService {
         // TODO 传入真实的 ruleCode
         claims.put( "ruleCode", "parents" );
 
-//        return JWTUtil.generateKeyWithSecret( claims, authenticatedUser.getSecrete2().getKeyPair().getPrivate() );
-        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecrete2().getPrivateKey() );
+        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey() );
     }
-
-//    public static void main( String[] args ) {
-//        UserService userService = new UserService( null );
-////        User user = userService.checkLoginByLoginName( "", "" );
-//        LoginService loginService = new LoginService();
-////        String ticket = loginService.generateTicket( user );
-//        System.out.println( ticket );
-//    }
 }
