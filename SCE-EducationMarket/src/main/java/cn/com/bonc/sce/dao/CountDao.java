@@ -35,4 +35,7 @@ public interface CountDao {
     @RequestMapping( value = "/count/download-ranking", method = RequestMethod.GET )
     public RestRecord getAppDownloadRanking( @RequestParam( "pageSize" ) Integer pageSize,
                                              @RequestParam( "pageNum" ) Integer pageNum );
+
+    @RequestMapping( value = "/count/download-change", method = RequestMethod.GET )
+    RestRecord getDownloadChange( @RequestParam( "userId" ) String userId );
 }

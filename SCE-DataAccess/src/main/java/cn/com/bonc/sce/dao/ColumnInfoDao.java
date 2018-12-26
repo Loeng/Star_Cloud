@@ -26,5 +26,5 @@ public interface ColumnInfoDao extends JpaRepository< ColumnInfo, Integer > {
     @Query( "UPDATE ColumnInfo c SET c.isDelete=0 WHERE c.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
-    List< ColumnInfo > findByIsDelete(Integer isDelete);
+    List< ColumnInfo > findByIsDelete( Integer isDelete );
 }

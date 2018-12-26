@@ -1,11 +1,12 @@
 package cn.com.bonc.sce.model;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Date;
 
 /**
  * @author Leucippus
@@ -19,23 +20,51 @@ import lombok.Setter;
 @AllArgsConstructor
 //@RequiredArgsConstructor
 public class User {
-    @ApiModelProperty( value = "userId", name = "用户 id", example = "12345" )
     private String userId;
-    @ApiModelProperty( value = "username", name = "用户名", example = "RGM79" )
-    private String username;
+    private String loginName;
+    private String userName;
+    private String gender;
+    private Integer userType;
+    private String mailAddress;
+    private String certificateType;
+    private String certificateNumber;
     private String phoneNumber;
-    private Secret secret;
-    private String userType;
+    private String address;
+    private Date createTime;
+    private String loginTime;
+    private String lastLoginTime;
+    private Long loginTimes;
+    private String organizationId;
+    private Integer loginPermissionStatus;
+    private String remarks;
+    private Integer isDelete;
+    private Account account;
+    private String securet;
+    private Secret secrete2;
+    private String password;
 
 
-    public User( String userId, String username, String userType ) {
+//    private UserExtraInfo userExtraInfo;
+
+
+    public void setSecrete2( String secrete2 ) {
+        this.secrete2 = new Secret( secrete2 );
+    }
+
+    public void generateSecret( ) {
+        this.secrete2 = new Secret();
+    }
+
+    public User( String userId, String loginName, String password ) {
         this.userId = userId;
-        this.username = username;
-        this.secret = new Secret();
+        this.loginName = loginName;
+        this.password = password;
+    }
+
+    public User( String password, int userType ) {
+        this.password = password;
         this.userType = userType;
     }
-
-    public void setSecret( String secret ) {
-        this.secret = new Secret( secret );
-    }
 }
+
+

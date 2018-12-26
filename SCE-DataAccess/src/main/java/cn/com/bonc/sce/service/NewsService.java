@@ -41,6 +41,7 @@ public class NewsService {
     public RestRecord insertNews( News news ) {
         news.setId( null );
         news.setColumnId( 1 );
+        news.setContentStatus("1");
         news.setIsDelete( 1 );
         return new RestRecord( 200, newsDao.save( news ) );
     }
@@ -84,6 +85,7 @@ public class NewsService {
      * @return 分页后的新闻列表
      */
     public RestRecord getNewsList( String auditStatus, String content, String startDate, String endDate, Integer pageNum, Integer pageSize ) {
+        pageNum--;
         Pageable pageable = PageRequest.of( pageNum, pageSize );
         Page< News > page;
         if ( StringUtils.isEmpty( content ) ) {

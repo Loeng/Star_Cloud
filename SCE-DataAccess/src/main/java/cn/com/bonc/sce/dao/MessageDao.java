@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 public interface MessageDao extends JpaRepository<Message, Integer> {
     @Override
-    Message save(Message message);
+    Message save( Message message );
 
     @Modifying
     @Query( "UPDATE Message m SET m.isDelete=0 WHERE m.id=?1" )
@@ -30,5 +30,5 @@ public interface MessageDao extends JpaRepository<Message, Integer> {
 
     List<Message> findByTargetIdAndCreateTimeAfterAndIsDelete( String targetId, Timestamp createTime, Integer isDelete );
 
-    List<Message> findByTargetIdAndIsDelete( String targetId,Integer isDelete );
+    List<Message> findByTargetIdAndIsDelete( String targetId, Integer isDelete );
 }

@@ -61,13 +61,13 @@ public interface NewsDao {
                                    @RequestParam( "startDate" ) String startDate,
                                    @RequestParam( "endDate" ) String endDate,
                                    @RequestParam( "pageNum" ) Integer pageNum,
-                                   @RequestParam( "pageSize" ) Integer pageSize);
+                                   @RequestParam( "pageSize" ) Integer pageSize );
 
     @RequestMapping( value = "/news/list/{auditStatus}", method = RequestMethod.GET )
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
                                    @RequestParam( "content" ) String content,
                                    @RequestParam( "pageNum" ) Integer pageNum,
-                                   @RequestParam( "pageSize" ) Integer pageSize);
+                                   @RequestParam( "pageSize" ) Integer pageSize );
 
     /**
      * 查询新闻详情接口

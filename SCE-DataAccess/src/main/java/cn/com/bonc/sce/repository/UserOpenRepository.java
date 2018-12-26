@@ -18,8 +18,8 @@ public interface UserOpenRepository extends JpaRepository< AppOpenEntity, String
      * @param userId
      * @return
      */
-    @Query( value = "select T1.OPEN_TIME OPEN_TIME,T2.APP_NAME APP_NAME,T2.COMPANY_ID COMPANY_ID,T2.APP_NOTES APP_NOTES,T2.APP_PHONE_PIC APP_PHONE_PIC from\n" +
-            "STARCLOUDMARKET.SCE_MARKET_APP_OPEN T1 left join STARCLOUDMARKET.SCE_MARKET_APP_INFO T2 on T1.APP_ID = T2.APP_ID\n" +
+    @Query( value = "select T1.OPEN_TIME OPEN_TIME,T2.APP_NAME APP_NAME,T1.APP_ID APP_ID,T2.APP_NOTES APP_NOTES,T2.APP_LINK APP_LINK,null APP_ICON from\n" +
+            "  STARCLOUDMARKET.SCE_MARKET_APP_OPEN T1 left join STARCLOUDMARKET.SCE_MARKET_APP_INFO T2 on T1.APP_ID = T2.APP_ID\n" +
             "WHERE T1.IS_DELETE = 1 and T1.USER_ID = :userId" ,
             nativeQuery = true )
     List< Map< String,Object > >  getUserOpenList (@Param( value = "userId" ) String userId);

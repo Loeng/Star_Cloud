@@ -72,7 +72,7 @@ public interface BannerDao {
      * @return 修改结果
      */
     @RequestMapping( value = "/banners/banner-order", method = RequestMethod.PUT )
-    public RestRecord updateBannerOrder( @RequestParam( "list" ) List<Integer> list );
+    public RestRecord updateBannerOrder( @RequestParam( "list" ) List< Integer > list );
 
     /**
      * 获取banner数据

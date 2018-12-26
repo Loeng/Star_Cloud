@@ -26,5 +26,5 @@ public interface ChannelInfoDao extends JpaRepository< ChannelInfo, Integer > {
     @Query( "UPDATE ChannelInfo c SET c.isDelete=0 WHERE c.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
-    List<ChannelInfo> findByIsDelete(Integer isDelete);
+    List<ChannelInfo> findByIsDelete( Integer isDelete );
 }

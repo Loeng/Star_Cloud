@@ -30,5 +30,5 @@ public interface UserMessageDao extends JpaRepository<UserMessage, Integer> {
     @Query( "UPDATE UserMessage um SET um.isRead=1 WHERE um.id=?1" )
     Integer updateIsReadById( Integer id );
 
-    Page<UserMessage> findByUserIdAndIsDelete( String userId, Integer isDelete, Pageable pageable);
+    Page<UserMessage> findByUserIdAndIsDelete( String userId, Integer isDelete, Pageable pageable );
 }

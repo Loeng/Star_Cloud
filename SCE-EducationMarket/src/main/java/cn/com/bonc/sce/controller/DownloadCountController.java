@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 应用下载统计接口
+ *
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
  */
 @Slf4j
 @Api( value = "应用下载统计接口", tags = "应用下载统计接口" )
@@ -93,4 +97,11 @@ public class DownloadCountController {
         return countService.getAppDownloadRanking( pageSize, pageNum );
     }
 
+    @ApiOperation( value = "查询软件下载量变化", notes = "厂商通过用户Id查询到所属公司数据", httpMethod = "GET" )
+    @GetMapping( "/download-change" )
+    @ResponseBody
+    public RestRecord getDownloadChange( @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId ) {
+        /*记录一个*/
+        return countService.getDownloadChange( userId );
+    }
 }

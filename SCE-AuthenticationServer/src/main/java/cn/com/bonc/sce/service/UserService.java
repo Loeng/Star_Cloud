@@ -1,14 +1,16 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.UserDaoClient;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.Map;
 
 /**
  * 用户相关服务
+ *
  * @author Leucippus
  * @version 0.1
  * @since 2018/12/22 17:57
@@ -26,11 +28,12 @@ public class UserService {
     /**
      * 根据用户的 登录id 获取用户信息
      *
-     * @param loginId 登录id
+     * @param loginName 登录id
+     *
      * @return 用户数据
      */
-    public User getUserByLoginId( String loginId ) {
-        return userDao.getUserByLoginId( loginId );
+    public User getUserByLoginName( String loginName ) {
+        return userDao.getUserByLoginName( loginName );
     }
 
     /**
@@ -44,13 +47,23 @@ public class UserService {
 
     /**
      * 通过 loginId 和 密码 获取用户数据，获取不到返回 null
-     *
-     * @param identifier
-     * @param password
-     *
-     * @return
      */
-    public User checkLoginByLoginId( String identifier, String password ) {
-        return new User( UUID.randomUUID().toString(), "xs-195122-01", "1" );
+    public User checkLoginByLoginName( String loginName ) {
+        // TODO 和 DataAccess 连接起来
+//       return userDao.getUserByLoginName( loginName );
+        User user = new User( "bonc1234", 5 );
+        user.generateSecret();
+        return user;
+    }
+
+    // TODO 解决 JSON 序列化的问题
+//    public User getUserByUserId( String userId ) {
+//        Map< String, Object > userInfo = userDao.getUserById( userId );
+//
+//        return new User( String.valueOf( userInfo.get( "userId" ) ), String.valueOf( userInfo.get( "loginName" ) ), String.valueOf( userInfo.get( "password" ) ) );
+//    }
+
+    public User getUserByUserId( String userId ) {
+        return userDao.getUserById( userId );
     }
 }

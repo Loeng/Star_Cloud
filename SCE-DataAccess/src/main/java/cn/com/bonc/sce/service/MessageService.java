@@ -105,6 +105,7 @@ public class MessageService {
      * @return message数据
      */
     public RestRecord getMessageByUserId( String userId, Integer pageNum, Integer pageSize ) {
+        pageNum--;
         Pageable pageable = PageRequest.of( pageNum, pageSize );
         Timestamp time = messageDao.getNewestTimeByUserId( userId );
         List< Message > list;

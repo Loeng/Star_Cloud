@@ -34,7 +34,7 @@ public interface AppClassDao {
      * @return 删除是否成功
      */
     @RequestMapping( value = "/appClass/{classId}", method = RequestMethod.DELETE )
-    public RestRecord deleteAppClassById( @PathVariable( "classId" )Integer classId );
+    public RestRecord deleteAppClassById( @PathVariable( "classId" ) Integer classId );
 
     /**
      * 更新应用分类

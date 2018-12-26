@@ -16,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.CollectionUtils;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +39,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
+@Transactional( rollbackFor = Exception.class )
 @RequestMapping( "/manage-app" )
 public class AppManageController {
 
@@ -74,13 +77,15 @@ public class AppManageController {
      * @param appIdList appId数组
      * @return
      */
-    @DeleteMapping( "" ) //TODO 是啥意思?
-    public RestRecord deleteApps( @RequestBody List< String > appIdList ) {
+    @DeleteMapping( "/{uid}" ) //TODO 是啥意思?
+    public RestRecord deleteApps( @RequestBody List< String > appIdList,
+                                  @PathVariable( "uid" ) String uid ) {
         //应用版本表  是否删除字段改为1
         List< AppInfoEntity > appInfoEntities = new ArrayList<>( appIdList.size() );
         appIdList.forEach( id -> {
             final AppInfoEntity appInfoEntity = new AppInfoEntity();
             appInfoEntity.setAppId( id );
+            appInfoEntity.setUpdateUserId( uid );
             appInfoEntity.setIsDelete( 0 );
             appInfoEntities.add( appInfoEntity );
         } );
@@ -92,7 +97,7 @@ public class AppManageController {
      * 编辑应用
      *
      * @param updateAppInfo 应用需更新的字段与更新的值，json字符串
-     * @param appId      所需更新的应用ID
+     * @param appId         所需更新的应用ID
      * @return
      */
     @PutMapping( "/{appId}" )
@@ -210,8 +215,8 @@ public class AppManageController {
     	}else if(orderType.equals("time")){
     		orderType="updateTime";
     	}
-        Sort sort_p =Sort.by(Sort.Direction.fromString(sort), orderType); 
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort_p); 
+        Sort sort_p =Sort.by(Sort.Direction.fromString(sort), orderType);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort_p);
 
         @SuppressWarnings("serial")
 		Specification<AppManageFunView> spec = new Specification< AppManageFunView >() {
@@ -249,7 +254,31 @@ public class AppManageController {
     @GetMapping( "/detail-by-id/{appId}" )
     public RestRecord selectAppById( @PathVariable String appId ) {
         AppInfoEntity appInfo = appInfoRepository.findByAppId( appId );
-        return new RestRecord( 200, appInfo );
+        String type = appInfo.getAppSource(); // type可用于分辨应用类型  平台应用/软件应用
+        Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "CREATE_TIME");
+        Page<Map<String,Object>>  appDetailInfo = appInfoRepository.findAppDetailById(appId,pageable);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,appDetailInfo.getContent());
+    }
+
+    /**
+     * DESC: 检测用户是否开通了该APP
+     * @Auther mkl
+     * @param appId 应用ID
+     * @return Map
+     */
+    @GetMapping("/detail/open/{appId}")
+    public RestRecord isOpenApp(@PathVariable String appId){
+        String userId = "T666666";
+        Map<String, Object> openInfo = appInfoRepository.findAppOpenInfo(appId, userId);
+        Map<String,Object> map = new HashMap<>();
+        if (null == openInfo || CollectionUtils.isEmpty(openInfo)){
+             map.put("OPEN",false);
+             log.info("用户[{}]未开通应用[{}]",userId,appId);
+        }else {
+             map.put("OPEN",true);
+            log.info("用户[{}]已开通应用[{}]",userId,appId);
+        }
+           return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,map);
     }
 
     /**

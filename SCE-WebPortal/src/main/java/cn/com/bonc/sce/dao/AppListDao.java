@@ -23,27 +23,27 @@ public interface AppListDao {
      * @return 应用分类数据list
      */
     @RequestMapping( value = "/appList/{classId}/{keyword}", method = RequestMethod.GET )
-    public RestRecord getAppListInfo( @PathVariable( "classId" )Integer classId,
-                                          @PathVariable( "keyword" )String keyword);
+    public RestRecord getAppListInfo( @PathVariable( "classId" ) Integer classId,
+                                      @PathVariable( "keyword" ) String keyword );
     /**
      * 获取所有应用分类数据
      *
      * @return 应用分类数据list
      */
     @RequestMapping( value = "/appList/classId/{classId}", method = RequestMethod.GET )
-    public RestRecord getAppListInfo( @PathVariable( "classId" )Integer classId);
+    public RestRecord getAppListInfo( @PathVariable( "classId" ) Integer classId );
     /**
      * 获取所有应用分类数据
      *
      * @return 应用分类数据list
      */
     @RequestMapping( value = "/appList/keyword/{keyword}", method = RequestMethod.GET )
-    public RestRecord getAppListInfo( @PathVariable( "keyword" )String keyword);
+    public RestRecord getAppListInfo( @PathVariable( "keyword" ) String keyword );
     /**
      * 获取所有应用分类数据
      *
      * @return 应用分类数据list
      */
     @RequestMapping( value = "/appList", method = RequestMethod.GET )
-    public RestRecord getAppListInfo( );
+    public RestRecord getAppListInfo();
 }

@@ -62,7 +62,7 @@ public interface MessageDao {
      * @return 删除是否成功
      */
     @RequestMapping( value = "/messages/update-message-read/{messageId}", method = RequestMethod.PUT )
-    public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" )Integer messageId );
+    public RestRecord updateMessageReadStatusById( @PathVariable( "messageId" ) Integer messageId );
 
     /**
      * 获取message数据

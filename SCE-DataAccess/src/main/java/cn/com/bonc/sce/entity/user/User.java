@@ -1,6 +1,9 @@
 package cn.com.bonc.sce.entity.user;
 
 import cn.com.bonc.sce.entity.Account;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,13 +72,11 @@ public class User {
     private String remarks;
     @Column( name = "IS_DELETE" )
     private Integer isDelete;
-    @OneToOne( targetEntity = Account.class, fetch = FetchType.EAGER, cascade = CascadeType.DETACH )
-    @JoinColumn( name = "USER_ID", referencedColumnName = "ID", nullable = false )
-    private String password;
+    @OneToOne( fetch = FetchType.EAGER, mappedBy = "user" )
+    @JsonIgnoreProperties( value = { "hibernateLazyInitializer", "handler" } )
+    @JsonIdentityInfo( generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id" )
+    private Account account;
     @Column( name = "SECRET", length = 1064 )
     private String secret;
-
-    public void setPassword( Account accouont ) {
-        this.password = accouont.getPassword();
-    }
+//    private UserExtraInfo userExtraInfo;
 }

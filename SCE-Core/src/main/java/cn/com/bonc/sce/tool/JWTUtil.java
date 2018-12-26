@@ -3,7 +3,6 @@ package cn.com.bonc.sce.tool;
 import cn.com.bonc.sce.constants.DateConstants;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -37,15 +36,15 @@ public class JWTUtil {
     public static String generateTicketWithSecret( Map< String, Object > header, Map< String, Object > claims, Key secret ) {
         return defaultBuilder()
                 .setHeader( header )
-                .setClaims( claims )
-                .signWith( secret, SignatureAlgorithm.HS256 )
+                .addClaims( claims )
+                .signWith( secret )
                 .compact();
     }
 
     public static String generateTicketWithSecret( Map< String, Object > claims, Key secret ) {
         return defaultBuilder()
-                .setClaims( claims )
-                .signWith( secret, SignatureAlgorithm.HS256 )
+                .addClaims( claims )
+                .signWith( secret )
                 .compact();
     }
 
@@ -78,7 +77,7 @@ public class JWTUtil {
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
         CryptoUtil cryptoUtil = new CryptoUtil();
-        KeyPair keyPair2 = cryptoUtil.generateKeyPair();
+        KeyPair keyPair2 = cryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.generateKeyPair();
 
         String ticket = JWTUtil.generateTicketWithSecret( keyPair2.getPrivate() );
 
@@ -86,8 +85,6 @@ public class JWTUtil {
         String claims = ticket.split( "\\." )[ 1 ];
         String target = cn.hutool.core.codec.Base64.decodeStr( claims );
         System.out.println( target );
-
-
     }
 
 }

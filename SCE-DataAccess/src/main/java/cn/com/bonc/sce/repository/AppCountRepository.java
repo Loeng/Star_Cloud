@@ -41,4 +41,21 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
 
     @Query( value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE APP_TYPE_NAME=:type", nativeQuery = true )
     Page< List< Map< String, Object > > > getDownloadCountByType( @Param( "type" ) String type, Pageable pageable );
+
+    @Query( value = "SELECT to_char ( t.DOWNLOAD_TIME, 'YYYY-MM' ) AS MONTH, \tsum( 1 ) AS \"COUNT\" \n" +
+            "FROM \"STARCLOUDMARKET\".\"DOWNLOAD_CHANGE_VIEW\" t  WHERE \n" +
+            "\tCOMPANY_ID=:companyId \n" +
+            "\tand t.DOWNLOAD_TIME >= to_date ( :startTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "\tAND t.DOWNLOAD_TIME <= to_date ( :endTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "GROUP BY  to_char ( t.DOWNLOAD_TIME, 'YYYY-MM' ) \n" +
+            "ORDER BY MONTH" ,nativeQuery = true)
+    List< Map< String, Object > > getDownloadChange( @Param( "companyId" ) Long companyId,
+                                                     @Param( "startTime" ) String startTime,
+                                                     @Param( "endTime" ) String endTime );
+
+
+    @Query( value = "SELECT SIC.USER_ID, SIC.COMPANY_ID, SMC.COMPANY_NAME, SMC.COMPANY_ADDRESS\n" +
+            "FROM \"STARCLOUDPORTAL\".\"SCE_INFO_COMPANY\" SIC LEFT JOIN \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC ON SIC.COMPANY_ID=SMC.COMPANY_ID\n" +
+            "WHERE USER_ID =:userId", nativeQuery = true )
+    Map< String, Object > getCompanyInfo( @Param( "userId" ) String userId );
 }
