@@ -33,7 +33,7 @@ public class BannerApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord insertBanner( @RequestBody Banner banner ) {
-        banner.setIsDelete( 0 );
+        banner.setIsDelete( 1 );
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {
@@ -146,7 +146,15 @@ public class BannerApiController {
     @ResponseBody
     public RestRecord getBannerById( @PathVariable( "bannerType" ) Integer bannerType ) {
         try {
-            return new RestRecord( 200, bannerDao.findByTypeAndIsDelete( bannerType,0 ) );
+            List< Banner > list = bannerDao.findByTypeAndIsDelete( bannerType,1 );
+            for(Banner banner : list){
+                if(banner.getPic()==null){
+                    continue;
+                }
+                banner.setPicUrl( banner.getPic().getFileMappingPath());
+                banner.setPic( null );
+            }
+            return new RestRecord( 200, list );
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
@@ -162,7 +170,15 @@ public class BannerApiController {
     @ResponseBody
     public RestRecord getAllBannersInfo() {
         try {
-            return new RestRecord( 200, bannerDao.findByIsDelete(0) );
+            List< Banner > list = bannerDao.findByIsDelete( 1 );
+            for(Banner banner : list){
+                if(banner.getPic()==null){
+                    continue;
+                }
+                banner.setPicUrl( banner.getPic().getFileMappingPath());
+                banner.setPic( null );
+            }
+            return new RestRecord( 200, list );
         } catch ( Exception e ) {
             log.error( e.getMessage(),e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

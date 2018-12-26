@@ -23,7 +23,7 @@ public interface BannerDao extends JpaRepository< Banner, Integer > {
     Banner save( Banner banner );
 
     @Modifying
-    @Query( "UPDATE Banner b SET b.isDelete=1 WHERE b.id=?1" )
+    @Query( "UPDATE Banner b SET b.isDelete=0 WHERE b.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
     @Modifying

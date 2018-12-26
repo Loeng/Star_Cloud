@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 
@@ -14,8 +16,8 @@ import javax.persistence.*;
 @Table( name = "SCE_INFO_PARENT",schema = "STARCLOUDPORTAL" )
 public class ParentInfo {
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_INFO_PARENT" )
-    @SequenceGenerator( name = "SEQ_GEN_INFO_PARENT", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_INFO_PARENT" )
+    @GeneratedValue( generator = "SEQ_GEN_INFO_PARENT" )
+    @GenericGenerator( name = "SEQ_GEN_INFO_PARENT" , strategy ="uuid" )
     @Column( name = "USER_ID" )
     private String userId;
     @Column( name = "FAMILY_ROLE" )

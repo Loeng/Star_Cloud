@@ -25,7 +25,7 @@ public interface MessageDao extends JpaRepository<Message, Integer> {
     Message save(Message message);
 
     @Modifying
-    @Query( "UPDATE Message m SET m.isDelete=1 WHERE m.id=?1" )
+    @Query( "UPDATE Message m SET m.isDelete=0 WHERE m.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
     @Query( value="SELECT CREATE_TIME FROM STARCLOUDPORTAL.SCE_COMMON_USER_INFO WHERE USER_ID=?1 AND rownum<=1 ORDER BY CREATE_TIME DESC",nativeQuery=true )

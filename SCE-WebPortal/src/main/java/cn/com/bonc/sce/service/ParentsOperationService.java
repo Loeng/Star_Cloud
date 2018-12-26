@@ -30,13 +30,15 @@ public class ParentsOperationService {
      * @param phone 手机号
      * @return 验证码
      */
-    public RestRecord getSecurityVaildInfo( String phone ) {
+    public RestRecord sendSecurityPhoneValid( String phone ) {
         String valid;
         try {
             valid = VaildSecurityUtils.randomStr();
+            System.out.println( valid );
+            VaildSecurityUtils.addValid(getAccountEncryptionCode(phone,valid));
             SendMessage.postMsgToPhone(valid,phone);
         } catch ( UnsupportedEncodingException e ) {
-            return new RestRecord(409, WebMessageConstants.SCE_PORTAL_MSG_409);
+            return new RestRecord(409,WebMessageConstants.SCE_PORTAL_MSG_409);
         }
         return new RestRecord(200,valid);
     }
@@ -48,6 +50,16 @@ public class ParentsOperationService {
      * @return 添加结果
      */
     public RestRecord insertParentsInfo( ParentsInfo parentsInfo ){
+        String mainParentValid = getAccountEncryptionCode( parentsInfo.getMainParentPhone(), parentsInfo.getMainParentPhoneValid() );
+        String parentValid = getAccountEncryptionCode( parentsInfo.getParentPhone(), parentsInfo.getParentPhoneValid() );
+        if ( !VaildSecurityUtils.checkValid( mainParentValid ) ){
+            return new RestRecord( 413, WebMessageConstants.SCE_PORTAL_MSG_413 );
+        }
+        if ( !VaildSecurityUtils.checkValid( parentValid ) ){
+            return new RestRecord( 411, WebMessageConstants.SCE_PORTAL_MSG_411 );
+        }
+        VaildSecurityUtils.delValid( mainParentValid );
+        VaildSecurityUtils.delValid( parentValid );
         return parentsOperationDao.insertParentsInfo(parentsInfo);
     }
 

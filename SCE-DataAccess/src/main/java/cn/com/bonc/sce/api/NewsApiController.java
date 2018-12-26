@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +41,8 @@ public class NewsApiController {
     @PostMapping
     @ResponseBody
     public RestRecord insertNews( @RequestBody News news ) {
-        news.setIsDelete( 0 );
+        news.setColumnId( 1 );
+        news.setIsDelete( 1 );
         try {
             return new RestRecord( 200, newsDao.save( news ) );
         } catch ( Exception e ) {
@@ -81,7 +83,7 @@ public class NewsApiController {
     @PutMapping
     @ResponseBody
     public RestRecord updateNews( @RequestBody News news ) {
-        news.setIsDelete( 0 );
+        news.setIsDelete( 1 );
         try {
             return new RestRecord( 200, newsDao.save( news ) );
         } catch ( Exception e ) {
@@ -94,6 +96,7 @@ public class NewsApiController {
      * 查询新闻列表接口
      *
      * @param auditStatus 新闻审核状态
+     * @param content     内容
      * @param startDate   查询起始日期
      * @param endDate     查询结束日期
      * @param pageNum     分页页码
@@ -103,6 +106,7 @@ public class NewsApiController {
     @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
+                                   @RequestParam( value = "content" ,required=false) String content,
                                    @RequestParam( value = "startDate",required=false ) String startDate,
                                    @RequestParam( value = "endDate",required=false ) String endDate,
                                    @RequestParam( value = "pageNum",required = false,defaultValue = "0") Integer pageNum,
@@ -110,14 +114,27 @@ public class NewsApiController {
         try {
             Pageable pageable = PageRequest.of( pageNum, pageSize );
             Page< News > page;
+            if(StringUtils.isEmpty( content)){
+                content = "%%";
+            }else{
+                content = "%"+content+"%";
+            }
             if(StringUtils.isEmpty( startDate )){
-                page = newsDao.findByIsDeleteAndContentStatus( 0, auditStatus, pageable );
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1,content,1, auditStatus, pageable );
             }else {
-                page = newsDao.findByIsDeleteAndContentStatusAndUpdateTimeBetween( 0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1,content,1, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+            }
+            List< News > list = page.getContent();
+            for(News news : list){
+                if(news.getUser()==null){
+                    continue;
+                }
+                news.setUserName( news.getUser().getUserName());
+                news.setUser( null );
             }
             Map<String,Object> info = new HashMap<>();
             info.put( "total",page.getTotalElements() );
-            info.put( "info",page.getContent() );
+            info.put( "info",list );
             return new RestRecord( 200, info );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
@@ -134,8 +151,13 @@ public class NewsApiController {
     @GetMapping( "/{newsId}" )
     @ResponseBody
     public RestRecord getNews( @PathVariable( "newsId" ) Integer newsId ) {
+        News news = newsDao.findByIdAndIsDelete( newsId, 1 );
+        if(news.getUser()!=null){
+            news.setUserName( news.getUser().getUserName());
+            news.setUser( null );
+        }
         try {
-            return new RestRecord( 200, newsDao.findByIdAndIsDelete( newsId, 0 ) );
+            return new RestRecord( 200, news );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

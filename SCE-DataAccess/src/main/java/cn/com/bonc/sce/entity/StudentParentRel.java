@@ -11,7 +11,7 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table( name = "SCE_INFO_STUDENT_PAREBNT_REL", schema = "STARCLOUDPORTAL" )
+@Table( name = "SCE_INFO_STUDENT_PARENT_REL",schema = "STARCLOUDPORTAL" )
 public class StudentParentRel {
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_INFO_STUDENT_PAREBNT_REL" )
@@ -22,6 +22,8 @@ public class StudentParentRel {
     private String parentUserId;
     @Column( name = "STUDENT_USER_ID" )
     private String studentUserId;
+    @Column( name = "IS_MAIN" )
+    private Integer isMain;
 
     public Integer getId() {
         return id;
@@ -47,13 +49,15 @@ public class StudentParentRel {
         this.studentUserId = studentUserId;
     }
 
-    public StudentParentRel() {
-
+    public Integer getIsMain() {
+        return isMain;
     }
 
-    public StudentParentRel( String parentUserId, String studentUserId ) {
+    public void setIsMain( Integer isMain ) {
+        this.isMain = isMain;
+    }
 
-        this.parentUserId = parentUserId;
-        this.studentUserId = studentUserId;
+    public StudentParentRel() {
+
     }
 }

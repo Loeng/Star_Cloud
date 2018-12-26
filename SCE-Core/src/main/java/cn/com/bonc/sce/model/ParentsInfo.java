@@ -4,13 +4,19 @@ public class ParentsInfo {
     private String account;
     private String password;
     private String parentName;
+    private String parentPhone;
+    /**
+     * 验证使用
+     */
+    private String parentPhoneValid;
     private String parentNum;
     private String relationship;
-    private String studentName;
-    private String studentNum;
     private String studentAccount;
-    private String studentAccountPassword;
-    private String phone;
+    private String mainParentPhone;
+    /**
+     * 验证使用
+     */
+    private String mainParentPhoneValid;
 
     public String getAccount() {
         return account;
@@ -36,6 +42,22 @@ public class ParentsInfo {
         this.parentName = parentName;
     }
 
+    public String getParentPhone() {
+        return parentPhone;
+    }
+
+    public void setParentPhone( String parentPhone ) {
+        this.parentPhone = parentPhone;
+    }
+
+    public String getParentPhoneValid() {
+        return parentPhoneValid;
+    }
+
+    public void setParentPhoneValid( String parentPhoneValid ) {
+        this.parentPhoneValid = parentPhoneValid;
+    }
+
     public String getParentNum() {
         return parentNum;
     }
@@ -52,22 +74,6 @@ public class ParentsInfo {
         this.relationship = relationship;
     }
 
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName( String studentName ) {
-        this.studentName = studentName;
-    }
-
-    public String getStudentNum() {
-        return studentNum;
-    }
-
-    public void setStudentNum( String studentNum ) {
-        this.studentNum = studentNum;
-    }
-
     public String getStudentAccount() {
         return studentAccount;
     }
@@ -76,20 +82,38 @@ public class ParentsInfo {
         this.studentAccount = studentAccount;
     }
 
-    public String getStudentAccountPassword() {
-        return studentAccountPassword;
+    public String getMainParentPhone() {
+        return mainParentPhone;
     }
 
-    public void setStudentAccountPassword( String studentAccountPassword ) {
-        this.studentAccountPassword = studentAccountPassword;
+    public void setMainParentPhone( String mainParentPhone ) {
+        this.mainParentPhone = mainParentPhone;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getMainParentPhoneValid() {
+        return mainParentPhoneValid;
     }
 
-    public void setPhone( String phone ) {
-        this.phone = phone;
+    public void setMainParentPhoneValid( String mainParentPhoneValid ) {
+        this.mainParentPhoneValid = mainParentPhoneValid;
+    }
+
+    public ParentsInfo() {
+
+    }
+
+    public ParentsInfo( String account, String password, String parentName, String parentPhone, String parentPhoneValid, String parentNum, String relationship, String studentAccount, String mainParentPhone, String mainParentPhoneValid ) {
+
+        this.account = account;
+        this.password = password;
+        this.parentName = parentName;
+        this.parentPhone = parentPhone;
+        this.parentPhoneValid = parentPhoneValid;
+        this.parentNum = parentNum;
+        this.relationship = relationship;
+        this.studentAccount = studentAccount;
+        this.mainParentPhone = mainParentPhone;
+        this.mainParentPhoneValid = mainParentPhoneValid;
     }
 }
 

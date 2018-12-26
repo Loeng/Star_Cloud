@@ -1,9 +1,12 @@
 package cn.com.bonc.sce.entity;
 
+import cn.com.bonc.sce.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -73,4 +76,12 @@ public class News {
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
+
+    @ManyToOne
+    @JoinColumn(name="CREATE_USER_ID", referencedColumnName="USER_ID", insertable=false, updatable=false)
+    @NotFound(action= NotFoundAction.IGNORE)
+    private User user;
+
+    @Transient
+    private String userName;
 }

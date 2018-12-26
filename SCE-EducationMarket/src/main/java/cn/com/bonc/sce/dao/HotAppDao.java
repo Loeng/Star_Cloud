@@ -7,7 +7,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 应用推荐-热门应用接口api
+ * @author jc_D
+ *
+ * @version 2.0
+ * @update 修改字段命名，将错写的字段名称改为驼峰式，去掉 getter setter
+ * @updateFrom 2018/12/26 11:20
+ * @updateAuthor wzm
+ */
 @FeignClient( "sce-data-access" )
 public interface HotAppDao {
 
@@ -32,4 +40,12 @@ public interface HotAppDao {
     @RequestMapping( value = "/hot-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord selectHotRecommendAppList( @PathVariable( "pageNum" ) Integer pageNum,
                                           @PathVariable( "pageSize" ) Integer pageSize );
+
+    /**
+     * 查询所有热门应用列表
+     *
+     * @return
+     */
+    @RequestMapping( value = "/hot-app", method = RequestMethod.GET )
+    RestRecord selectHotAppList();
 }

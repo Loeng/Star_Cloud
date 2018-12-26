@@ -56,17 +56,18 @@ public class NewsService {
      * 查询新闻列表接口
      *
      * @param auditStatus 新闻审核状态
+     * @param content     内容
      * @param startDate   查询起始日期
      * @param endDate     查询结束日期
      * @param pageNum     分页页码
      * @param pageSize    分页每页条数
      * @return 分页后的新闻列表
      */
-    public RestRecord getNewsList( String auditStatus,String startDate,String endDate,Integer pageNum,Integer pageSize) {
+    public RestRecord getNewsList( String auditStatus,String content,String startDate,String endDate,Integer pageNum,Integer pageSize) {
         if( StringUtils.isEmpty(startDate)){
-            return newsDao.getNewsList( auditStatus,  pageNum, pageSize );
+            return newsDao.getNewsList( auditStatus, content, pageNum, pageSize );
         }
-        return newsDao.getNewsList( auditStatus, startDate, endDate, pageNum, pageSize );
+        return newsDao.getNewsList( auditStatus,content, startDate, endDate, pageNum, pageSize );
     }
 
     /**

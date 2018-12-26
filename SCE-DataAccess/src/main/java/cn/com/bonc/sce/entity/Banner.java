@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 /**
  * banner
@@ -45,4 +46,15 @@ public class Banner {
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
+
+    @Column(name = "UPDATE_TIME")
+    private Date updateTime;
+
+    @ManyToOne
+    @JoinColumn(name="IMAGE_URL", referencedColumnName="RESOURCE_ID", insertable=false, updatable=false)
+    private Pic pic;
+
+    @Transient
+    private String picUrl;
+
 }

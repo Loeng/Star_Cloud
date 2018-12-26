@@ -19,6 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AccountDao extends JpaRepository<Account, Integer> {
 
     @Modifying
-    @Query( value="UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD SET PASSWORD=?2 WHERE USER_ID IN (SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE PHONE_NUMBER = ?1 AND IS_DELETE <> 1) AND IS_DELETE <> 1",nativeQuery=true)
+    @Query( value="UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD SET PASSWORD=?2 WHERE USER_ID IN (SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE PHONE_NUMBER = ?1 AND IS_DELETE <> 0) AND IS_DELETE <> 0",nativeQuery=true)
     public Integer updateAccount( String phone , String password );
 }
