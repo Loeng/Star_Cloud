@@ -46,10 +46,13 @@ public class UserListController {
         Page page = null;
         switch ( roleId ) {
             case 1:
+                page = selfRegistration(pageNum,pageSize,condition);//自注冊
                 break;
             case 2:
+                page = organization(pageNum,pageSize,condition);//机构
                 break;
             case 3:
+                page = manufacturer(pageNum,pageSize,condition);
                 break;
             case 4:
                 break;
@@ -139,6 +142,94 @@ public class UserListController {
         log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
         return info;
     }
+    /**
+     *@Author : lyy
+     *@Desc :查询自注册信息
+     *@Date : 15:01 2018/12/26
+     */
+    public Page<Map<String,Object>> selfRegistration(int pageNum, int pageSize, Map<String,Object> condition) {
+        Page info;
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        String name = "str";
+        String account = "str";
+        if(condition!=null){
+            if(StringUtils.isNotBlank(condition.get("name").toString())){
+                name = condition.get("name").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("account").toString())){
+                account = condition.get("account").toString();
+            }
+        }
+        info = userInfoRepository.findSelfRegALLByNameOrCount(name,account,pageable);
+        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        return info;
+    }
 
+
+    /**
+     *@Author : lyy
+     *@Desc : 查询机构信息
+     *@Date : 15:04 2018/12/26
+     */
+    public Page<Map<String,Object>>  organization(int pageNum, int pageSize, Map<String,Object> condition) {
+        Page info =null;
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        String loginName = "str";
+        String organizationName = "str";
+        int status =0;
+        if(condition!=null){
+            if(StringUtils.isNotBlank(condition.get("loginName").toString())){
+                loginName = condition.get("loginName").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("organizationName").toString())){
+                organizationName = condition.get("organizationName").toString();
+            }
+            if (condition.get("status").hashCode()==0 || condition.get("status").hashCode()==1){
+                status = condition.get("status").hashCode();
+            }
+            //模糊查询
+            info = userInfoRepository.findByOrganizationLike(loginName,organizationName,status,pageable);
+            log.info("模糊查询");
+        }else{
+            info = userInfoRepository.findOrganizationAll(pageable);
+            log.info("全查");
+        }
+        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+
+        return info;
+    }
+
+    /**
+     *@Author : lyy
+     *@Desc：查询厂商信息 :
+     *@Date : 15:22 2018/12/26
+     */
+    public Page<Map<String,Object>>  manufacturer(int pageNum, int pageSize, Map<String,Object> condition) {
+        Page info = null;
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "USER_ID" );
+        String ManufacturerName = "森海科技";
+        String loginName = "str";
+        int status = 1;
+        System.out.println("dayin="+condition.toString());
+        if(condition!=null){
+            if(StringUtils.isNotBlank(condition.get("loginName").toString())){
+                loginName = condition.get("loginName").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("ManufacturerName").toString())){
+                ManufacturerName = condition.get("ManufacturerName").toString();
+            }
+            if (condition.get("status").hashCode()==0 || condition.get("status").hashCode()==1){
+                status = condition.get("status").hashCode();
+            }
+            //模糊查询
+            info = userInfoRepository.findByManufacturerLike(loginName,ManufacturerName,status,pageable);
+            log.info("模糊查询");
+        }else{
+            info = userInfoRepository.findManufacturerAll(pageable);
+            log.info("全查");
+        }
+        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        return info;
+    }
 
 }
