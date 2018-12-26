@@ -39,6 +39,7 @@ public class NewsService {
      * @return 添加新闻是否成功
      */
     public RestRecord insertNews( News news ) {
+        news.setId( null );
         news.setColumnId( 1 );
         news.setIsDelete( 1 );
         return new RestRecord( 200, newsDao.save( news ) );
@@ -102,6 +103,11 @@ public class NewsService {
             }
             news.setUserName( news.getUser().getUserName() );
             news.setUser( null );
+            if ( news.getPic() == null ) {
+                continue;
+            }
+            news.setPicUrl( news.getPic().getFileMappingPath() );
+            news.setPic( null );
         }
         Map< String, Object > info = new HashMap<>();
         info.put( "total", page.getTotalElements() );
