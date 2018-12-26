@@ -38,7 +38,7 @@ public class DownloadCountController {
             @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
             @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
 
-        return countService.countSingleAppDownload( appId,pageNum,pageSize );
+        return countService.countSingleAppDownload( appId, pageNum, pageSize );
 
     }
 
@@ -56,7 +56,7 @@ public class DownloadCountController {
             @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
             @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
         // 根据应用类型查找对应的应用，统计下载量
-        return countService.countAppDownloadByType( appType,pageNum,pageSize );
+        return countService.countAppDownloadByType( appType, pageNum, pageSize );
     }
 
     /**
@@ -74,11 +74,12 @@ public class DownloadCountController {
             @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
             @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
         // 根据厂商名查找对应的应用，统计下载量
-        return countService.countAppDownloadByCompanyId( companyId,pageNum,pageSize );
+        return countService.countAppDownloadByCompanyId( companyId, pageNum, pageSize );
     }
 
     /**
      * 查询应用下载量排行列表
+     *
      * @param pageNum
      * @param pageSize
      * @return
