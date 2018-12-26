@@ -10,8 +10,9 @@ import java.util.Objects;
  * @Date: 2018/12/22 14:49
  * @Description:
  */
-@Entity
-@Table( name = "SCE_COMMON_USER", schema = "STARCLOUDPORTAL", catalog = "" )
+//@Entity
+//@Table( name = "SCE_COMMON_USER", schema = "STARCLOUDPORTAL", catalog = "" )
+@Deprecated
 public class SceCommonUserEntity {
     private String userId;
     private String userAccount;

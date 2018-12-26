@@ -37,10 +37,11 @@ public interface AppManageDao {
      * @return
      */
 
-    @RequestMapping( value = "/manage-app/all-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord getAllAppList( @RequestParam( "platformType" ) String platformType,
-                              @PathVariable( "pageNum" ) Integer pageNum,
-                              @PathVariable( "pageSize" ) Integer pageSize
+    @RequestMapping( value = "/manage-app/all-app", method = RequestMethod.GET )
+    RestRecord getAllAppList( @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                              @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                              @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+
     );
 
 
@@ -49,18 +50,18 @@ public interface AppManageDao {
      *
      * @return
      */
-    @RequestMapping( value = "/manage-app/app-by-type/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord selectAppListByType( @RequestParam( "appType" ) Integer appType,
-                                    @RequestParam( "orderType" ) String orderType,
-                                    @RequestParam( "platformType" ) String platformType,
-                                    @RequestParam( "sort" ) String sort,
-                                    @PathVariable( "pageNum" ) Integer pageNum,
-                                    @PathVariable( "pageSize" ) Integer pageSize );
+    @RequestMapping( value = "/manage-app/app-by-type", method = RequestMethod.GET )
+    RestRecord selectAppListByType( @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                    @RequestParam( value = "orderType", required = false, defaultValue = "download" ) String orderType,
+                                    @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                    @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                    @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                    @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
 
     /**
      * 根据输入名模糊查询应用
      */
-    @RequestMapping( value = "/manage-app/apps-by-name/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/apps-by-name", method = RequestMethod.GET )
     RestRecord selectAppListByName( @RequestParam( "appName" ) String appName,
                                     @RequestParam( "platformType" ) String platformType,
                                     @PathVariable( "pageNum" ) Integer pageNum,
@@ -70,13 +71,13 @@ public interface AppManageDao {
      * 根据输入名和选择类别查询应用
      */
     @RequestMapping( value = "/manage-app/apps-by-name-type", method = RequestMethod.GET )
-    RestRecord selectAppListByNameAndType( @RequestParam( "appName" ) String appName,
-                                           @RequestParam( "appType" ) String appType,
-                                           @RequestParam( "orderType" ) String orderType,
-                                           @RequestParam( "sort" ) String sort,
-                                           @RequestParam( "platformType" ) String platformType,
-                                           @RequestParam( "pageNum" ) Integer pageNum,
-                                           @RequestParam( "pageSize" ) Integer pageSize );
+    RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
+                                           @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                           @RequestParam(value ="orderType" ) String orderType,
+                                           @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                           @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
 
     /**
      * 查询单个应用详情

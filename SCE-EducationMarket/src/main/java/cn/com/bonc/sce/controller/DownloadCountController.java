@@ -34,9 +34,11 @@ public class DownloadCountController {
     @GetMapping( "/one" )
     @ResponseBody
     public RestRecord countSingleAppDownload(
-            @RequestParam( "appId" ) @ApiParam( "应用Id" ) String appId ) {
+            @RequestParam( "appId" ) @ApiParam( "应用Id" ) String appId,
+            @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
 
-        return countService.countSingleAppDownload( appId );
+        return countService.countSingleAppDownload( appId,pageNum,pageSize );
 
     }
 
@@ -50,9 +52,11 @@ public class DownloadCountController {
     @GetMapping( "/type" )
     @ResponseBody
     public RestRecord countAppDownloadByType(
-            @RequestParam( "appType" ) @ApiParam( "应用类型" ) String appType ) {
+            @RequestParam( "appType" ) @ApiParam( "应用类型" ) String appType,
+            @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
         // 根据应用类型查找对应的应用，统计下载量
-        return countService.countAppDownloadByType( appType );
+        return countService.countAppDownloadByType( appType,pageNum,pageSize );
     }
 
     /**
@@ -66,9 +70,26 @@ public class DownloadCountController {
     @GetMapping( "/company" )
     @ResponseBody
     public RestRecord countAppDownloadByCompanyId(
-            @RequestParam( "companyId" ) @ApiParam( "厂商Id" ) Long companyId ) {
+            @RequestParam( "companyId" ) @ApiParam( "厂商Id" ) Long companyId,
+            @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
         // 根据厂商名查找对应的应用，统计下载量
-        return countService.countAppDownloadByCompanyId( companyId );
+        return countService.countAppDownloadByCompanyId( companyId,pageNum,pageSize );
+    }
+
+    /**
+     * 查询应用下载量排行列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation( value = "查询应用下载量排行列表", notes = "查询全部应用应用下载量排行", httpMethod = "GET" )
+    @GetMapping( "/download-ranking/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getAppDownloadRanking( @PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                             @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum ) {
+        // 根据厂商名查找对应的应用，统计下载量
+        return countService.getAppDownloadRanking( pageSize, pageNum );
     }
 
 }

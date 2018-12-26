@@ -4,6 +4,7 @@ package cn.com.bonc.sce.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -19,25 +20,39 @@ public class MarketAppVersion implements Serializable {
     private String appVersion;
     private String appStatus;
     private String appDownloadAddress;
-    private Time createTime;
+    private Date createTime;
     private String versionInfo;
     private String versionSize;
     private String runningPlatform;
     private Long isDelete;
     private String createUserId;
     private String updateUserId;
-    private Time updateTime;
+    private Date updateTime;
     private String newFeatures;
     private String packageName;
     private String authDetail;
+    private String appPhonePic;
+    private String appPcPic;
 
-    @ManyToOne(  )
-    @JoinColumn(name = "APP_ID", referencedColumnName = "APP_ID")
-    private AppInfoEntity appInfoEntity;
+    @Basic
+    @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
+    public String getAppPhonePic() {
+        return appPhonePic;
+    }
 
-//    @OneToOne(cascade=CascadeType.ALL)//People是关系的维护端，当删除 people，会级联删除 address
-//    @JoinColumn(name = "address_id", referencedColumnName = "id")//people中的address_id字段参考address表中的id字段
-//    private Address address;
+    public void setAppPhonePic( String appPhonePic ) {
+        this.appPhonePic = appPhonePic;
+    }
+
+    @Basic
+    @Column( name = "APP_PC_PIC", nullable = true )
+    public String getAppPcPic() {
+        return appPcPic;
+    }
+
+    public void setAppPcPic( String appPcPic ) {
+        this.appPcPic = appPcPic;
+    }
 
     @Id
     @Column( name = "APP_ID", nullable = false, length = 30 )
@@ -81,11 +96,11 @@ public class MarketAppVersion implements Serializable {
 
     @Basic
     @Column( name = "CREATE_TIME", nullable = true )
-    public Time getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime( Time createTime ) {
+    public void setCreateTime( Date createTime ) {
         this.createTime = createTime;
     }
 
@@ -151,11 +166,11 @@ public class MarketAppVersion implements Serializable {
 
     @Basic
     @Column( name = "UPDATE_TIME", nullable = true )
-    public Time getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime( Time updateTime ) {
+    public void setUpdateTime( Date updateTime ) {
         this.updateTime = updateTime;
     }
 

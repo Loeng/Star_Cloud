@@ -105,9 +105,8 @@ public class AppManageService {
      * @param pageSize
      * @return
      */
-    public RestRecord selectAppListByNameAndType( String appName, String appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
+    public RestRecord selectAppListByNameAndType( String appName, Integer appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
         return appManageDao.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
-
     }
 
     /**

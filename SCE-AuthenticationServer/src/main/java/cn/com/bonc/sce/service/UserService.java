@@ -5,6 +5,8 @@ import cn.com.bonc.sce.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * 用户相关服务
  * @author Leucippus
@@ -29,5 +31,26 @@ public class UserService {
      */
     public User getUserByLoginId( String loginId ) {
         return userDao.getUserByLoginId( loginId );
+    }
+
+    /**
+     * 根据用户数据生成 ticket
+     *
+     * @return
+     */
+    public String generateLoginTicket() {
+        return null;
+    }
+
+    /**
+     * 通过 loginId 和 密码 获取用户数据，获取不到返回 null
+     *
+     * @param identifier
+     * @param password
+     *
+     * @return
+     */
+    public User checkLoginByLoginId( String identifier, String password ) {
+        return new User( UUID.randomUUID().toString(), "xs-195122-01", "1" );
     }
 }

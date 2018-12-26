@@ -2,8 +2,10 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppOpenService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,6 +21,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/app-open")
 public class AppOpenController {
 
+    AppOpenService appOpenService;
+
+    @Autowired
+    public AppOpenController( AppOpenService appOpenService ) {
+        this.appOpenService= appOpenService;
+    }
     /**
      * 用户开通应用查询接口
      * @param userId 查询的用户Id
@@ -34,7 +42,7 @@ public class AppOpenController {
     @GetMapping("/{userId}")
     @ResponseBody
     public RestRecord getUserAppOpenList ( @PathVariable( "userId" ) String userId ) {
-        return null;
+        return appOpenService.getUserAppOpenList( userId);
     }
 
     /**

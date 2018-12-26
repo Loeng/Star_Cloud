@@ -39,8 +39,8 @@ public class CompanyInfoController {
     public RestRecord queryCompanyInfo(
             @RequestParam( value = "companyId", required = false ) @ApiParam( value = "厂商Id" ) Long companyId,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) @ApiParam( value = "厂商名称" ) String companyName,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         return companyInfoService.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
     }
 

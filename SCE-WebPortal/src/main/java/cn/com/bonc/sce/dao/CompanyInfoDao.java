@@ -14,8 +14,8 @@ public interface CompanyInfoDao {
     public RestRecord queryCompanyInfo(
             @RequestParam( value = "companyId", required = false ) Long companyId,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
-            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
-            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     );
 
     @RequestMapping( value = "/company/one/{companyId}" )
