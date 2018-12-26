@@ -33,7 +33,7 @@ public class BannerApiController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord insertBanner( @RequestBody Banner banner ) {
-        banner.setIsDelete( 0 );
+        banner.setIsDelete( 1 );
         try {
             return new RestRecord( 200, bannerDao.save( banner ) );
         } catch ( Exception e ) {
@@ -146,7 +146,7 @@ public class BannerApiController {
     @ResponseBody
     public RestRecord getBannerById( @PathVariable( "bannerType" ) Integer bannerType ) {
         try {
-            List< Banner > list = bannerDao.findByTypeAndIsDelete( bannerType,0 );
+            List< Banner > list = bannerDao.findByTypeAndIsDelete( bannerType,1 );
             for(Banner banner : list){
                 if(banner.getPic()==null){
                     continue;
@@ -170,8 +170,11 @@ public class BannerApiController {
     @ResponseBody
     public RestRecord getAllBannersInfo() {
         try {
-            List< Banner > list = bannerDao.findByIsDelete( 0 );
+            List< Banner > list = bannerDao.findByIsDelete( 1 );
             for(Banner banner : list){
+                if(banner.getPic()==null){
+                    continue;
+                }
                 banner.setPicUrl( banner.getPic().getFileMappingPath());
                 banner.setPic( null );
             }

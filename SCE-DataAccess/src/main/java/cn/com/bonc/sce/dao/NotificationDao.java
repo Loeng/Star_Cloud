@@ -25,7 +25,7 @@ public interface NotificationDao extends JpaRepository< Notification, Integer > 
     Notification save( Notification banner );
 
     @Modifying
-    @Query( "UPDATE Notification n SET n.isDelete=1 WHERE n.id=?1" )
+    @Query( "UPDATE Notification n SET n.isDelete=0 WHERE n.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
     Notification findByIdAndIsDelete( Integer newsId, Integer isDelete );

@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.entity;
 
+import cn.com.bonc.sce.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

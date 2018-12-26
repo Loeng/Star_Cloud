@@ -12,6 +12,11 @@ import java.util.List;
 /**
  * 应用推荐-热门应用接口
  * @author jc_D
+ *
+ * @version 2.0
+ * @update 修改字段命名，将错写的字段名称改为驼峰式，去掉 getter setter
+ * @updateFrom 2018/12/26 11:20
+ * @updateAuthor wzm
  */
 @Slf4j
 @Api( value = "应用推荐-热门应用接口", tags = "应用推荐-热门应用接口" )

@@ -44,7 +44,7 @@ public class NotificationApiController {
     @ResponseBody
     public RestRecord insertNotification( @RequestBody Notification notification ) {
         notification.setColumnId( 0 );
-        notification.setIsDelete( 0 );
+        notification.setIsDelete( 1 );
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {
@@ -84,7 +84,7 @@ public class NotificationApiController {
     @PutMapping
     @ResponseBody
     public RestRecord updateNotification( @RequestBody Notification notification ) {
-        notification.setIsDelete( 0 );
+        notification.setIsDelete( 1 );
         try {
             return new RestRecord( 200, notificationDao.save( notification ) );
         } catch ( Exception e ) {
@@ -124,15 +124,15 @@ public class NotificationApiController {
             }
             if(StringUtils.isEmpty(type)) {
                 if ( StringUtils.isEmpty( startDate ) ) {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 0,content, 0, auditStatus, pageable );
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1,content, 0, auditStatus, pageable );
                 } else {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 0, content,0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1, content,0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
                 }
             }else{
                 if ( StringUtils.isEmpty( startDate ) ) {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatus( 0, content,0, type, auditStatus, pageable );
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatus( 1, content,0, type, auditStatus, pageable );
                 } else {
-                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatusAndUpdateTimeBetween( 0, content,0, type, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatusAndUpdateTimeBetween( 1, content,0, type, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
                 }
             }
             List< Notification > list = page.getContent();
@@ -162,7 +162,7 @@ public class NotificationApiController {
     @GetMapping( "/{notificationId}" )
     @ResponseBody
     public RestRecord getNotification( @PathVariable( "notificationId" ) Integer notificationId ) {
-        Notification notification = notificationDao.findByIdAndIsDelete( notificationId, 0 );
+        Notification notification = notificationDao.findByIdAndIsDelete( notificationId, 1 );
         if(notification.getUser()!=null){
             notification.setUserName( notification.getUser().getUserName());
             notification.setUser( null );

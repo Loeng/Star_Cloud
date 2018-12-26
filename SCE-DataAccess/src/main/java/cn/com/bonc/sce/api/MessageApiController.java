@@ -45,7 +45,7 @@ public class MessageApiController {
     public RestRecord insertMessage( @RequestBody Message message ) {
         message.setType( 1 );
         message.setStatus( "0" );
-        message.setIsDelete( 0 );
+        message.setIsDelete( 1 );
         try {
             return new RestRecord( 200, messageDao.save( message ) );
         } catch ( Exception e ) {
@@ -65,7 +65,7 @@ public class MessageApiController {
     public RestRecord insertAnnouncement( @RequestBody Message message ) {
         message.setType( 0 );
         message.setStatus( "0" );
-        message.setIsDelete( 0 );
+        message.setIsDelete( 1 );
         try {
             return new RestRecord( 200, messageDao.save( message ) );
         } catch ( Exception e ) {
@@ -145,9 +145,9 @@ public class MessageApiController {
             Timestamp time = messageDao.getNewestTimeByUserId( userId );
             List< Message > list;
             if( !StringUtils.isEmpty( time)){
-                list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time,0 );
+                list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time,1 );
             }else{
-                list = messageDao.findByTargetIdAndIsDelete( userId,0 );
+                list = messageDao.findByTargetIdAndIsDelete( userId,1 );
             }
             List< UserMessage > userMessageList = new ArrayList<>();
             if ( list.size() > 0 ) {
@@ -170,7 +170,7 @@ public class MessageApiController {
                 }
             }
             Map<String,Object> info = new HashMap<>();
-            Page<UserMessage> page = userMessageDao.findByUserIdAndIsDelete( userId,0,pageable );
+            Page<UserMessage> page = userMessageDao.findByUserIdAndIsDelete( userId,1,pageable );
             info.put( "total",page.getTotalElements() );
             info.put( "info",page.getContent() );
             return new RestRecord( 200, info );

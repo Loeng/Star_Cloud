@@ -13,6 +13,14 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用户表
+ *
+ * @version 2.0
+ * @update 添加列表查询
+ * @updateFrom 2018/12/26 11:20
+ * @updateAuthor wzm
+ */
 public interface HotAppRepository extends JpaRepository< AppInfoEntity, String > {
     //查询热门推荐相关信息
     Page< AppInfoEntity > findByIsHotRecommend( Long isHot, Pageable pageable );

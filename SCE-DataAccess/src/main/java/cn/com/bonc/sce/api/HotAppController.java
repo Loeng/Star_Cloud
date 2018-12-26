@@ -15,7 +15,12 @@ import java.util.List;
 
 /**
  * 应用推荐-热门应用接口api
- * author jc_D
+ * @author jc_D
+ *
+ * @version 2.0
+ * @update 添加列表查询
+ * @updateFrom 2018/12/26 11:20
+ * @updateAuthor wzm
  */
 @Slf4j
 @RestController

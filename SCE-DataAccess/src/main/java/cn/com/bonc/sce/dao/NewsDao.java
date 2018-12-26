@@ -25,7 +25,7 @@ public interface NewsDao extends JpaRepository< News, Integer > {
     News save( News banner );
 
     @Modifying
-    @Query( "UPDATE News n SET n.isDelete=1 WHERE n.id=?1" )
+    @Query( "UPDATE News n SET n.isDelete=0 WHERE n.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
     News findByIdAndIsDelete( Integer newsId, Integer isDelete );

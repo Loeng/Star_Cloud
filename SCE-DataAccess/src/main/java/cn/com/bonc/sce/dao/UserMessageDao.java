@@ -21,11 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserMessageDao extends JpaRepository<UserMessage, Integer> {
 
     @Modifying
-    @Query( "UPDATE UserMessage um SET um.isDelete=1 WHERE um.id=?1" )
+    @Query( "UPDATE UserMessage um SET um.isDelete=0 WHERE um.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
     @Modifying
-    @Query( "UPDATE UserMessage um SET um.isDelete=1 WHERE um.messageId=?1" )
+    @Query( "UPDATE UserMessage um SET um.isDelete=0 WHERE um.messageId=?1" )
     Integer updateDeleteStatusByMessageId( Integer messageId );
 
     @Modifying

@@ -42,7 +42,7 @@ public class NewsApiController {
     @ResponseBody
     public RestRecord insertNews( @RequestBody News news ) {
         news.setColumnId( 1 );
-        news.setIsDelete( 0 );
+        news.setIsDelete( 1 );
         try {
             return new RestRecord( 200, newsDao.save( news ) );
         } catch ( Exception e ) {
@@ -83,7 +83,7 @@ public class NewsApiController {
     @PutMapping
     @ResponseBody
     public RestRecord updateNews( @RequestBody News news ) {
-        news.setIsDelete( 0 );
+        news.setIsDelete( 1 );
         try {
             return new RestRecord( 200, newsDao.save( news ) );
         } catch ( Exception e ) {
@@ -120,9 +120,9 @@ public class NewsApiController {
                 content = "%"+content+"%";
             }
             if(StringUtils.isEmpty( startDate )){
-                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 0,content,1, auditStatus, pageable );
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1,content,1, auditStatus, pageable );
             }else {
-                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 0,content,1, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1,content,1, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
             }
             List< News > list = page.getContent();
             for(News news : list){
@@ -151,7 +151,7 @@ public class NewsApiController {
     @GetMapping( "/{newsId}" )
     @ResponseBody
     public RestRecord getNews( @PathVariable( "newsId" ) Integer newsId ) {
-        News news = newsDao.findByIdAndIsDelete( newsId, 0 );
+        News news = newsDao.findByIdAndIsDelete( newsId, 1 );
         if(news.getUser()!=null){
             news.setUserName( news.getUser().getUserName());
             news.setUser( null );

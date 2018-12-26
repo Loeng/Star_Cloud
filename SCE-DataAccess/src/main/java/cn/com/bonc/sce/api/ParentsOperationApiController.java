@@ -62,11 +62,11 @@ public class ParentsOperationApiController {
                 String studentId = map.get( USER_ID );
                 //存储用户表
                 User u = new User();
-                u.setUserAccount( parentsInfo.getAccount() );
+                u.setLoginName( parentsInfo.getAccount() );
                 u.setPhoneNumber( parentsInfo.getParentPhone() );
                 u.setUserName( parentsInfo.getParentName() );
                 u.setCertificateNumber( parentsInfo.getParentNum() );
-                u.setIsDelete( 0 );
+                u.setIsDelete( 1 );
                 User user = userParentDao.save( u );
                 String parentId = user.getUserId();
 
@@ -74,7 +74,7 @@ public class ParentsOperationApiController {
                 UserPassword up = new UserPassword();
                 up.setUserId( parentId );
                 up.setPassword( parentsInfo.getPassword() );
-                up.setIsDelete( 0 );
+                up.setIsDelete( 1 );
                 userPasswordDao.save( up );
 
                 //存储角色表
@@ -98,7 +98,7 @@ public class ParentsOperationApiController {
                 ParentInfo pi = new ParentInfo();
                 pi.setUserId( parentId );
                 pi.setFamilyRole( parentsInfo.getRelationship() );
-                pi.setIsDelete( 0 );
+                pi.setIsDelete( 1 );
                 parentInfoDao.save( pi );
                 return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             }

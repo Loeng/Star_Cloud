@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.entity.User;
+import cn.com.bonc.sce.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,6 +25,6 @@ public interface UserParentDao extends JpaRepository< User, Integer > {
 
     @Query( value = "SELECT CU.USER_ID userId,CU.USER_ACCOUNT userAccount,CUP.PASSWORD password FROM STARCLOUDPORTAL.SCE_COMMON_USER CU\n" +
             "LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD CUP ON CU.USER_ID=CUP.USER_ID\n" +
-            "WHERE CU.USER_ACCOUNT=?1 AND CU.IS_DELETE=0",nativeQuery=true )
+            "WHERE CU.USER_ACCOUNT=?1 AND CU.IS_DELETE=1",nativeQuery=true )
     List<Map<String,String>> selectUserInfo(String userAccount);
 }
