@@ -41,4 +41,8 @@ public class HotAppService {
         return hotAppDao.selectHotAppList();
     }
 
+    public RestRecord addHotRecommendApp( String userId, String appId ) {
+        return hotAppDao.addHotRecommendApp( userId, appId );
+    }
+
 }

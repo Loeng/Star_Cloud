@@ -61,7 +61,7 @@ public class AppCollectController {
     @ResponseBody
     public RestRecord addUserAppCollection ( @RequestParam( "userId" ) String userId,
                                              @RequestParam( "appId" ) String appId ) {
-        return null;
+        return appCollectService.addUserAppCollectionInfo( userId, appId );
     }
 
     /**

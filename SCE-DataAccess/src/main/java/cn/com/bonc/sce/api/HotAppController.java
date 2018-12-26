@@ -74,4 +74,43 @@ public class HotAppController {
     public RestRecord selectHotAppList() {
         return new RestRecord( 200, hotAppRepository.selectHotAppList() );
     }
+
+    /**
+     * 添加热门应用
+     *
+     * @param appId
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/new-one" )
+    public RestRecord addHotRecommendAppList( @RequestParam( "appId" ) String appId,
+                                              @RequestParam( "userId" ) String userId ) {
+        Integer i = hotAppRepository.addHotApp( appId, 1L, userId );
+        if ( i >= 0 ) {
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } else {
+            return new RestRecord( 500,WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+
+    }
+
+    /**
+     * 取消热门应用
+     *
+     * @param appId
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/sub-one" )
+    public RestRecord cancelHotRecommendAppList( @RequestParam( "appId" ) String appId,
+                                              @RequestParam( "userId" ) String userId ) {
+        Integer i = hotAppRepository.addHotApp( appId, 0L, userId );
+        if ( i >= 0 ) {
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } else {
+            return new RestRecord( 500,WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+
+    }
+
 }

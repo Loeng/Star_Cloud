@@ -26,4 +26,8 @@ public class AppCollectService {
     public RestRecord getUserAppCollect(String userId) {
         return appCollectDao.getUserAppCollect( userId);
     }
+
+    public RestRecord addUserAppCollectionInfo( String userId, String appId ) {
+        return appCollectDao.addUserAppOpenInfo( userId, appId );
+    }
 }
