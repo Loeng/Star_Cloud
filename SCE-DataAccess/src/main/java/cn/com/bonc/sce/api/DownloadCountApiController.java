@@ -136,4 +136,35 @@ public class DownloadCountApiController {
         return new RestRecord( 200, downloadRankingList );
     }
 
+    /**
+     * 查询软件下载量变化
+     * http://localhost:10210/count/download-change?userId=123
+     *
+     * @return
+     */
+    @GetMapping( "/download-change" )
+    @ResponseBody
+    public RestRecord getDownloadChange(
+            @RequestParam( "userId" ) String userId,
+            @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
+            @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime ) {
+        log.trace( "Query downloadChange userId is :{}", userId );
+        try {
+            Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
+            if ( companyInfo.get( "COMPANY_ID" ) == null ) {
+                return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
+            } else {
+                List< Map< String, Object > > downloadInfo = appCountRepository.getDownloadChange( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), startTime, endTime );
+                RestRecord restRecord = new RestRecord( 200 );
+                restRecord.setData( downloadInfo );
+                return restRecord;
+            }
+        } catch ( Exception e ) {
+            log.error( "Query DownloadChange fail {}", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+
+    }
+
+
 }

@@ -5,20 +5,22 @@ import java.sql.Time;
 import java.util.Objects;
 
 /**
- * Created by YueHaibo on 2018/12/12.
+ * @Author: yhb
+ * @Date: 2018/12/26 15:02
+ * @Version 1.0
  */
 @Entity
 @Table( name = "SCE_MARKET_APP_DOWNLOAD", schema = "STARCLOUDMARKET", catalog = "" )
 public class DownloadCount {
     private long id;
-    private Long appId;
+    private String appId;
     private Time downloadTime;
     private String userId;
     private String downloadUserIp;
-    private Long isDelete = 1L;
+    private Long isDelete;
 
     @Id
-    @Column( name = "ID", nullable = false, precision = 0 )
+    @Column( name = "ID" )
     public long getId() {
         return id;
     }
@@ -28,17 +30,17 @@ public class DownloadCount {
     }
 
     @Basic
-    @Column( name = "APP_ID", nullable = true, precision = 0 )
-    public Long getAppId() {
+    @Column( name = "APP_ID" )
+    public String getAppId() {
         return appId;
     }
 
-    public void setAppId( Long appId ) {
+    public void setAppId( String appId ) {
         this.appId = appId;
     }
 
     @Basic
-    @Column( name = "DOWNLOAD_TIME", nullable = true )
+    @Column( name = "DOWNLOAD_TIME" )
     public Time getDownloadTime() {
         return downloadTime;
     }
@@ -48,7 +50,7 @@ public class DownloadCount {
     }
 
     @Basic
-    @Column( name = "USER_ID", nullable = true, length = 20 )
+    @Column( name = "USER_ID" )
     public String getUserId() {
         return userId;
     }
@@ -58,7 +60,7 @@ public class DownloadCount {
     }
 
     @Basic
-    @Column( name = "DOWNLOAD_USER_IP", nullable = true, length = 10 )
+    @Column( name = "DOWNLOAD_USER_IP" )
     public String getDownloadUserIp() {
         return downloadUserIp;
     }
@@ -68,7 +70,7 @@ public class DownloadCount {
     }
 
     @Basic
-    @Column( name = "IS_DELETE", nullable = true, precision = 0 )
+    @Column( name = "IS_DELETE" )
     public Long getIsDelete() {
         return isDelete;
     }
@@ -79,12 +81,8 @@ public class DownloadCount {
 
     @Override
     public boolean equals( Object o ) {
-        if ( this == o ) {
-            return true;
-        }
-        if ( o == null || getClass() != o.getClass() ) {
-            return false;
-        }
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
         DownloadCount that = ( DownloadCount ) o;
         return id == that.id &&
                 Objects.equals( appId, that.appId ) &&
@@ -96,7 +94,6 @@ public class DownloadCount {
 
     @Override
     public int hashCode() {
-
         return Objects.hash( id, appId, downloadTime, userId, downloadUserIp, isDelete );
     }
 }

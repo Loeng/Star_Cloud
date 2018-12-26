@@ -31,4 +31,8 @@ public class CountService {
     public RestRecord getAppDownloadRanking( Integer pageSize, Integer pageNum ) {
         return countDao.getAppDownloadRanking( pageSize, pageNum );
     }
+
+    public RestRecord getDownloadChange(String userId) {
+        return countDao.getDownloadChange(userId);
+    }
 }
