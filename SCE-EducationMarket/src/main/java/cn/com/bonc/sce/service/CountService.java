@@ -17,15 +17,15 @@ public class CountService {
     }
 
     public RestRecord countSingleAppDownload( String appId, Integer pageNum, Integer pageSize ) {
-        return countDao.countSingleAppDownload( appId );
+        return countDao.countSingleAppDownload( appId, pageNum, pageSize );
     }
 
     public RestRecord countAppDownloadByType( String appType, Integer pageNum, Integer pageSize ) {
-        return countDao.countAppDownloadByType( appType );
+        return countDao.countAppDownloadByType( appType, pageNum, pageSize );
     }
 
     public RestRecord countAppDownloadByCompanyId( Long companyId, Integer pageNum, Integer pageSize ) {
-        return countDao.countAppDownloadByCompanyId( companyId );
+        return countDao.countAppDownloadByCompanyId( companyId, pageNum, pageSize );
     }
 
     public RestRecord getAppDownloadRanking( Integer pageSize, Integer pageNum ) {
