@@ -16,4 +16,14 @@ public interface AppCollectDao {
 
     @RequestMapping( value = "/app-collect/list", method = RequestMethod.GET )
     RestRecord getUserAppCollect(@RequestParam("userId") String userId);
+
+    /**
+     * 添加用户收藏应用信息
+     * @param userId
+     * @param appId
+     * @return
+     */
+    @RequestMapping ( value = "/app-collect/info", method = RequestMethod.POST )
+    RestRecord addUserAppOpenInfo( @RequestParam( "userId" ) String userId,
+                                   @RequestParam( "appId" ) String appId );
 }

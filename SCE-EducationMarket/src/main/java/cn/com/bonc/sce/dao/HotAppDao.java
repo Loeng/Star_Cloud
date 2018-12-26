@@ -48,4 +48,17 @@ public interface HotAppDao {
      */
     @RequestMapping( value = "/hot-app", method = RequestMethod.GET )
     RestRecord selectHotAppList();
+
+
+    /**
+     * 添加热门应用
+     *
+     * @param appId app的id
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/hot-app/new-one", method = RequestMethod.POST )
+    RestRecord addHotRecommendApp( @RequestParam( "userId" ) String userId,
+                                   @RequestParam( "appId" ) String appId );
+
 }

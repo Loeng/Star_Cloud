@@ -22,21 +22,35 @@ import java.util.Map;
  * @updateAuthor wzm
  */
 public interface HotAppRepository extends JpaRepository< AppInfoEntity, String > {
-    //查询热门推荐相关信息
+
+    /**
+     * 查询热门推荐相关信息
+     * @param isHot
+     * @param pageable
+     * @return
+     */
     Page< AppInfoEntity > findByIsHotRecommend( Long isHot, Pageable pageable );
 
-    //查询所有热门应用的appId
+    /**
+     * 查询所有热门应用的appId
+     * @return
+     */
     @Query( value = "SELECT APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_HOT_RECOMMEND =1", nativeQuery = true )
     List< String > getAllHotAppId();
 
-    //更改热门应用状态
-    @Transactional
+    /**
+     * 更改热门应用状态
+     */
+    @Transactional( rollbackOn = Exception.class )
     @Modifying
     @Query( value = "UPDATE AppInfoEntity SET IS_HOT_RECOMMEND = :state,UPDATE_TIME=sysdate,UPDATE_USER_ID = :uid WHERE APP_ID IN :appidList", nativeQuery = false )
     int updateHotApp( @Param( value = "appidList" ) List< String > ids,
                       @Param( value = "state" ) Long state,
                       @Param( value = "uid" ) String uid );
 
+    /**
+     * @return
+     */
     @Query( value = "SELECT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,\n" +
             "CASE WHEN A.APP_ID IS NULL THEN '0' ELSE '1' END IS_OPEN,\n" +
             "CASE WHEN C.APP_ID IS NULL THEN '0' ELSE '1' END IS_DOWNLOAD,\n" +
@@ -47,4 +61,35 @@ public interface HotAppRepository extends JpaRepository< AppInfoEntity, String >
             "LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.IS_DELETE=1\n" +
             "WHERE MAIN.IS_HOT_RECOMMEND = 1", nativeQuery = true )
     List< Map<String,String> > selectHotAppList();
+
+    /**
+     * 查询所有热门应用的appId
+     * @param appId
+     * @param state
+     * @param userId
+     * @return
+     */
+    @Transactional(rollbackOn = Exception.class)
+    @Modifying( clearAutomatically = true )
+    @Query( value = "UPDATE AppInfoEntity SET IS_HOT_RECOMMEND = :state,UPDATE_TIME=sysdate,UPDATE_USER_ID = :userId WHERE APP_ID = :appId ", nativeQuery = false )
+    int addHotApp( @Param( value = "appId" ) String appId,
+                   @Param( value = "state" ) Long state,
+                   @Param( value = "userId") String userId );
+
+    /**
+     * find via id
+     * @param id
+     * @return
+     */
+    @Override
+    AppInfoEntity getOne( String id );
+
+    /**
+     * save info
+     * @param s
+     * @param <S>
+     * @return
+     */
+    @Override
+    < S extends AppInfoEntity > S save( S s );
 }
