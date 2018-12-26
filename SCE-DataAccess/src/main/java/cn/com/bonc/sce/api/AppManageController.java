@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
+@Transactional( rollbackFor = Exception.class )
 @RequestMapping( "/manage-app" )
 public class AppManageController {
 
@@ -74,13 +76,15 @@ public class AppManageController {
      * @param appIdList appId数组
      * @return
      */
-    @DeleteMapping( "" ) //TODO 是啥意思?
-    public RestRecord deleteApps( @RequestBody List< String > appIdList ) {
+    @DeleteMapping( "/{uid}" ) //TODO 是啥意思?
+    public RestRecord deleteApps( @RequestBody List< String > appIdList,
+                                  @PathVariable( "uid" ) String uid ) {
         //应用版本表  是否删除字段改为1
         List< AppInfoEntity > appInfoEntities = new ArrayList<>( appIdList.size() );
         appIdList.forEach( id -> {
             final AppInfoEntity appInfoEntity = new AppInfoEntity();
             appInfoEntity.setAppId( id );
+            appInfoEntity.setUpdateUserId( uid );
             appInfoEntity.setIsDelete( 0 );
             appInfoEntities.add( appInfoEntity );
         } );
@@ -92,7 +96,7 @@ public class AppManageController {
      * 编辑应用
      *
      * @param updateAppInfo 应用需更新的字段与更新的值，json字符串
-     * @param appId      所需更新的应用ID
+     * @param appId         所需更新的应用ID
      * @return
      */
     @PutMapping( "/{appId}" )
@@ -210,8 +214,8 @@ public class AppManageController {
     	}else if(orderType.equals("time")){
     		orderType="updateTime";
     	}
-        Sort sort_p =Sort.by(Sort.Direction.fromString(sort), orderType); 
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort_p); 
+        Sort sort_p =Sort.by(Sort.Direction.fromString(sort), orderType);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort_p);
 
         @SuppressWarnings("serial")
 		Specification<AppManageFunView> spec = new Specification< AppManageFunView >() {
@@ -321,6 +325,56 @@ public class AppManageController {
             log.error( e.getMessage(), e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
+    }
+
+    /**
+     * 应用列表首页
+     * 条件查询
+     *
+     * @param appName
+     * @param appType
+     * @param orderType
+     * @param sort
+     * @param platformType
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping( "/condition" )
+    public RestRecord getAppListInfoByCondition( @RequestParam( value = "appName", required = false ) String appName,
+                                                 @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                                 @RequestParam String orderType,
+                                                 @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                                 @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
+                                                 @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                                 @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+
+        Page< List< Map< String, Object > > > page;
+        if ( "pt".equalsIgnoreCase( platformType ) ) {
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+            //平台应用 没有分类
+            page = appInfoRepository.getPlatformlist( pageable );
+
+        } else {
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT" );
+            //软件应用
+            if ( appType == 0 ) {
+                //查全部 不分类  //查视图  STARCLOUDMARKET."APP_CONDITION_INFO_VIEW"
+                page = appInfoRepository.getSoftware( pageable );
+
+            } else {
+                //根据appType 去 类型关联表查询 appid  数组
+                List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
+                page = appInfoRepository.getAppListInfoByIds( appIdList, pageable );
+            }
+
+        }
+
+        Map< String, Object > temp = new HashMap<>( 16 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
 }

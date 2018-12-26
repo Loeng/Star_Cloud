@@ -41,8 +41,8 @@ public class AppManageService {
      * @param appIdList appId数组
      * @return
      */
-    public RestRecord deleteApps( List< String > appIdList ) {
-        return appManageDao.deleteApps( appIdList );
+    public RestRecord deleteApps( List< String > appIdList, String uid ) {
+        return appManageDao.deleteApps( appIdList, uid );
     }
 
     /**
@@ -124,6 +124,6 @@ public class AppManageService {
     }
 
     public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize ) {
-        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword,downloadCount,pageNum, pageSize );
+        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize );
     }
 }

@@ -34,7 +34,6 @@ public class ParentsOperationService {
         String valid;
         try {
             valid = VaildSecurityUtils.randomStr();
-            System.out.println( valid );
             VaildSecurityUtils.addValid(getAccountEncryptionCode(phone,valid));
             SendMessage.postMsgToPhone(valid,phone);
         } catch ( UnsupportedEncodingException e ) {

@@ -63,7 +63,7 @@ public class AuthenticationController {
         if ( authentication.getAuthType() == AUTH_TYPE_0 ) {
             log.info( MessageConstants.SCE_MSG_1001, authentication.getIdentifier(), request.getRemoteAddr() );
 
-            authenticatedUser = userService.checkLoginByLoginId( authentication.getIdentifier(), authentication.getPassword() );
+            authenticatedUser = userService.checkLoginByLoginName( authentication.getIdentifier() );
 
         } else if ( authentication.getAuthType() == AUTH_TYPE_1 ) {
             unSupportedAuthType = true;
@@ -85,8 +85,12 @@ public class AuthenticationController {
         if ( authenticatedUser == null ) {
             return new RestRecord( 101, WebMessageConstants.SCE_PORTAL_MSG_101 );
         } else {
+            if ( !authentication.getPassword().equals( authenticatedUser.getPassword() ) ) {
+                return new RestRecord( 102, WebMessageConstants.SCE_PORTAL_MSG_102 );
+            }
+
             data = new HashMap<>( 2 );
-            String ticket = loginService.generateAccessToken( authenticatedUser );
+            String ticket = loginService.generateTicket( authenticatedUser );
             data.put( "ticket", ticket );
         }
 

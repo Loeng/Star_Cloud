@@ -1,5 +1,12 @@
 package cn.com.bonc.sce.model;
 
+/**
+ * 安全
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/12/21 9:00
+ */
 public class ParentsInfo {
     private String account;
     private String password;

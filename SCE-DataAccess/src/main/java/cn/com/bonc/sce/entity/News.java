@@ -84,4 +84,11 @@ public class News {
 
     @Transient
     private String userName;
+
+    @ManyToOne
+    @JoinColumn(name="PIC_ID", referencedColumnName="RESOURCE_ID", insertable=false, updatable=false)
+    private Pic pic;
+
+    @Transient
+    private String picUrl;
 }
