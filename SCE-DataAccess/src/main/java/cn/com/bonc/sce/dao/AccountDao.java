@@ -16,9 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountDao extends JpaRepository<Account, Integer> {
 
-    public Account getAccountByUserIdAndPassword( String userId, String password );
-
     @Modifying
     @Query( value="UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD SET PASSWORD=?2 WHERE USER_ID IN (SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE PHONE_NUMBER = ?1 AND IS_DELETE <> 0) AND IS_DELETE <> 0",nativeQuery=true)
-    public Integer updateAccount( String phone , String password );
+    public Integer updateAccount( String phone, String password );
 }

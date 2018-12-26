@@ -24,5 +24,5 @@ public interface AppClassDao extends JpaRepository<AppClass, Integer> {
     @Query( "UPDATE AppClass a SET a.isDelete=1 WHERE a.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
-    List<AppClass> findByIsDelete( Integer isDelete);
+    List<AppClass> findByIsDelete( Integer isDelete );
 }

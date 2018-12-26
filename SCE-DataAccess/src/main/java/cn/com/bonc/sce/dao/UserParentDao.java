@@ -24,5 +24,5 @@ public interface UserParentDao extends JpaRepository< User, Integer > {
     @Query( value = "SELECT CU.USER_ID userId,CU.USER_ACCOUNT userAccount,CUP.PASSWORD password FROM STARCLOUDPORTAL.SCE_COMMON_USER CU\n" +
             "LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD CUP ON CU.USER_ID=CUP.USER_ID\n" +
             "WHERE CU.USER_ACCOUNT=?1 AND CU.IS_DELETE=1",nativeQuery=true )
-    List<Map<String,String>> selectUserInfo(String userAccount);
+    List<Map<String,String>> selectUserInfo( String userAccount );
 }

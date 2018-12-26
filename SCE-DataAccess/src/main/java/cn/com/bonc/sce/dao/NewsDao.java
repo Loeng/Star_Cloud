@@ -29,16 +29,16 @@ public interface NewsDao extends JpaRepository< News, Integer > {
     News findByIdAndIsDelete( Integer newsId, Integer isDelete );
 
     Page< News > findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( Integer isDelete,
-                                                            String content,
-                                                            Integer columnId,
-                                                            String contentStatus,
-                                                            Pageable pageable);
+                                                                          String content,
+                                                                          Integer columnId,
+                                                                          String contentStatus,
+                                                                          Pageable pageable );
 
     Page< News > findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( Integer isDelete,
                                                                                               String content,
-                                                                                Integer columnId,
-                                                                                String contentStatus,
-                                                                                Date createTimeFrom,
-                                                                                Date createTimeTo,
-                                                                                Pageable pageable);
+                                                                                              Integer columnId,
+                                                                                              String contentStatus,
+                                                                                              Date createTimeFrom,
+                                                                                              Date createTimeTo,
+                                                                                              Pageable pageable );
 }

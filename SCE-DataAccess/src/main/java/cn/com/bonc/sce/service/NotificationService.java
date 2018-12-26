@@ -42,6 +42,7 @@ public class NotificationService {
     public RestRecord insertNotification( Notification notification ) {
         notification.setId( null );
         notification.setColumnId( 0 );
+        notification.setContentStatus("1");
         notification.setIsDelete( 1 );
         return new RestRecord( 200, notificationDao.save( notification ) );
     }
@@ -85,6 +86,7 @@ public class NotificationService {
      * @return 分页后的通知公告列表
      */
     public RestRecord getNotificationList( Integer type, String content, String auditStatus, String startDate, String endDate, Integer pageNum, Integer pageSize ) {
+        pageNum--;
         Pageable pageable = PageRequest.of( pageNum, pageSize );
         Page< Notification > page;
         if ( StringUtils.isEmpty( content ) ) {

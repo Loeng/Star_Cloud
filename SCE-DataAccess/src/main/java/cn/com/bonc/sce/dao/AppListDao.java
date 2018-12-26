@@ -15,11 +15,11 @@ import java.util.List;
  */
 @Repository
 public interface AppListDao extends JpaRepository<App, Integer> {
-    List<App> findByIsDelete( Integer isDelete);
+    List<App> findByIsDelete( Integer isDelete );
 
-    List<App> findByCategoryIdAndIsDelete( Integer appClassId,Integer isDelete);
+    List<App> findByCategoryIdAndIsDelete( Integer appClassId, Integer isDelete );
 
-    List<App> findByAppNameLikeAndIsDelete( String appName,Integer isDelete);
+    List<App> findByAppNameLikeAndIsDelete( String appName, Integer isDelete );
 
-    List<App> findByCategoryIdAndAppNameLikeAndIsDelete(Integer appClassId, String appName,Integer isDelete);
+    List<App> findByCategoryIdAndAppNameLikeAndIsDelete( Integer appClassId, String appName, Integer isDelete );
 }
