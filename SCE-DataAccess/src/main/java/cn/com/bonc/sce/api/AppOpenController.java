@@ -42,7 +42,7 @@ public class AppOpenController {
     @ResponseBody
     public RestRecord getUserAppOpenList ( @RequestParam( "userId" ) String userId) {
         List< Map< String,Object> > listPage = userOpenRepository.getUserOpenList( userId);
-        return new RestRecord( 200, listPage );
+        return  new RestRecord( 200, listPage );
     }
 
 }
