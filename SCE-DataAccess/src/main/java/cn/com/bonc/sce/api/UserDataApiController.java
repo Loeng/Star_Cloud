@@ -29,11 +29,11 @@ public class UserDataApiController {
      * @param userId 用户 id
      * @return 用户数据
      */
-    @GetMapping( "/{userId}" )
+    /*@GetMapping( "/{userId}" )
     @ResponseBody
     public RestRecord getUserById( @PathVariable( "userId" ) String userId ) {
         return new RestRecord( 200, "测试数据",userDao.getUserById( userId ));
-    }
+    }*/
 
     /**
      * 获取所有用户的数据

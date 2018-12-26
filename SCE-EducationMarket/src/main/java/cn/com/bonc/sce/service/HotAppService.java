@@ -28,4 +28,8 @@ public class HotAppService {
         return hotAppDao.selectHotRecommendAppList( pageNum, pageSize );
     }
 
+    public RestRecord selectHotAppList( ) {
+        return hotAppDao.selectHotAppList();
+    }
+
 }

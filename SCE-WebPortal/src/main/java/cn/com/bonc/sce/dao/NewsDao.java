@@ -48,6 +48,7 @@ public interface NewsDao {
      * 查询新闻列表接口
      *
      * @param auditStatus 新闻审核状态
+     * @param content     内容
      * @param startDate   查询起始日期
      * @param endDate     查询结束日期
      * @param pageNum     分页页码
@@ -56,6 +57,7 @@ public interface NewsDao {
      */
     @RequestMapping( value = "/news/list/{auditStatus}", method = RequestMethod.GET )
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
+                                   @RequestParam( "content" ) String content,
                                    @RequestParam( "startDate" ) String startDate,
                                    @RequestParam( "endDate" ) String endDate,
                                    @RequestParam( "pageNum" ) Integer pageNum,
@@ -63,6 +65,7 @@ public interface NewsDao {
 
     @RequestMapping( value = "/news/list/{auditStatus}", method = RequestMethod.GET )
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) String auditStatus,
+                                   @RequestParam( "content" ) String content,
                                    @RequestParam( "pageNum" ) Integer pageNum,
                                    @RequestParam( "pageSize" ) Integer pageSize);
 

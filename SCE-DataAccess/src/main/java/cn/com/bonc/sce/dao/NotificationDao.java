@@ -30,14 +30,33 @@ public interface NotificationDao extends JpaRepository< Notification, Integer > 
 
     Notification findByIdAndIsDelete( Integer newsId, Integer isDelete );
 
-    Page< Notification > findByIsDeleteAndContentStatus( Integer isDelete,
-                                                 String contentStatus,
-                                                 Pageable pageable);
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( Integer isDelete,
+                                                                                  String content,
+                                                                    Integer columnId,
+                                                                    String contentStatus,
+                                                                    Pageable pageable);
 
-    Page< Notification > findByIsDeleteAndContentTypeAndContentStatusAndUpdateTimeBetween( Integer isDelete,
-                                                                                           Integer contentType,
-                                                                                           String contentStatus,
-                                                                                           Date createTimeFrom,
-                                                                                           Date createTimeTo,
-                                                                                           Pageable pageable);
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( Integer isDelete,
+                                                                                        String content,
+                                                                                        Integer columnId,
+                                                                                        String contentStatus,
+                                                                                        Date createTimeFrom,
+                                                                                        Date createTimeTo,
+                                                                                        Pageable pageable);
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatus( Integer isDelete,
+                                                                                                String content,
+                                                                                  Integer columnId,
+                                                                                  Integer type,
+                                                                                  String contentStatus,
+                                                                                  Pageable pageable);
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatusAndUpdateTimeBetween( Integer isDelete,
+                                                                                                                    String content,
+                                                                                                      Integer columnId,
+                                                                                                      Integer contentType,
+                                                                                                      String contentStatus,
+                                                                                                      Date createTimeFrom,
+                                                                                                      Date createTimeTo,
+                                                                                                      Pageable pageable);
 }

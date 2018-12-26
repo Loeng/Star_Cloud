@@ -85,6 +85,7 @@ public class NotificationController {
      * 查询通知公告列表
      *
      * @param auditStatus 通知公告审核状态
+     * @param content     内容
      * @param startDate   查询起始日期
      * @param endDate     查询结束日期
      * @param pageNum     分页页码
@@ -97,15 +98,16 @@ public class NotificationController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/list/{type}/{auditStatus}" )
+    @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
-    public RestRecord getNotificationList( @PathVariable( "type" ) @ApiParam( name = "type", value = "类型") Integer type,
+    public RestRecord getNotificationList( @RequestParam( value = "type", required = false ) @ApiParam( name = "type", value = "类型") Integer type,
+                                           @RequestParam( value = "content", required = false ) @ApiParam( name = "content", value = "内容") String content,
                                            @PathVariable( "auditStatus" ) @ApiParam( name = "auditStatus", value = "状态") String auditStatus,
                                            @RequestParam( value = "startDate", required = false ) @ApiParam( name = "startDate", value = "开始时间") String startDate,
                                            @RequestParam( value = "endDate", required = false ) @ApiParam( name = "endDate", value = "结束时间") String endDate,
                                            @RequestParam( value = "pageNum", required = false, defaultValue = "0"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
-        return notificationService.getNotificationList( type, auditStatus, startDate, endDate, pageNum, pageSize );
+        return notificationService.getNotificationList( type, content,auditStatus, startDate, endDate, pageNum, pageSize );
     }
 
     /**

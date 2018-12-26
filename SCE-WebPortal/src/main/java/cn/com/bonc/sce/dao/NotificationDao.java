@@ -55,17 +55,33 @@ public interface NotificationDao {
      * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
-    @RequestMapping( value = "/notifications/list/{type}/{auditStatus}", method = RequestMethod.GET )
-    public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
+    @RequestMapping( value = "/notifications/list/{auditStatus}", method = RequestMethod.GET )
+    public RestRecord getNotificationList( @RequestParam( "type" ) Integer type,
+                                           @RequestParam( "content" ) String content,
                                            @PathVariable( "auditStatus" ) String auditStatus,
                                            @RequestParam( "startDate" ) String startDate,
                                            @RequestParam( "endDate" ) String endDate,
                                            @RequestParam( "pageNum" ) Integer pageNum,
                                            @RequestParam( "pageSize" ) Integer pageSize );
 
-    @RequestMapping( value = "/notifications/list/{type}/{auditStatus}", method = RequestMethod.GET )
-    public RestRecord getNotificationList( @PathVariable( "type" ) Integer type,
+    @RequestMapping( value = "/notifications/list/{auditStatus}", method = RequestMethod.GET )
+    public RestRecord getNotificationList( @RequestParam( "type" ) Integer type,
+                                           @RequestParam( "content" ) String content,
                                            @PathVariable( "auditStatus" ) String auditStatus,
+                                           @RequestParam( "pageNum" ) Integer pageNum,
+                                           @RequestParam( "pageSize" ) Integer pageSize );
+
+    @RequestMapping( value = "/notifications/list/{auditStatus}", method = RequestMethod.GET )
+    public RestRecord getNotificationList( @PathVariable( "auditStatus" ) String auditStatus,
+                                           @RequestParam( "content" ) String content,
+                                           @RequestParam( "startDate" ) String startDate,
+                                           @RequestParam( "endDate" ) String endDate,
+                                           @RequestParam( "pageNum" ) Integer pageNum,
+                                           @RequestParam( "pageSize" ) Integer pageSize );
+
+    @RequestMapping( value = "/notifications/list/{auditStatus}", method = RequestMethod.GET )
+    public RestRecord getNotificationList( @PathVariable( "auditStatus" ) String auditStatus,
+                                           @RequestParam( "content" ) String content,
                                            @RequestParam( "pageNum" ) Integer pageNum,
                                            @RequestParam( "pageSize" ) Integer pageSize );
 

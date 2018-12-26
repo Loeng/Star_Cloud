@@ -32,4 +32,12 @@ public interface HotAppDao {
     @RequestMapping( value = "/hot-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord selectHotRecommendAppList( @PathVariable( "pageNum" ) Integer pageNum,
                                           @PathVariable( "pageSize" ) Integer pageSize );
+
+    /**
+     * 查询所有热门应用列表
+     *
+     * @return
+     */
+    @RequestMapping( value = "/hot-app", method = RequestMethod.GET )
+    RestRecord selectHotAppList();
 }

@@ -86,6 +86,7 @@ public class NewsController {
      * 查询新闻列表接口
      *
      * @param auditStatus 新闻审核状态
+     * @param content     内容
      * @param startDate   查询起始日期
      * @param endDate     查询结束日期
      * @param pageNum     分页页码
@@ -100,11 +101,12 @@ public class NewsController {
     @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
     public RestRecord getNewsList( @PathVariable( "auditStatus" ) @ApiParam( name = "auditStatus", value = "状态") String auditStatus,
+                                   @RequestParam( value = "content", required = false ) @ApiParam( name = "content", value = "内容") String content,
                                    @RequestParam( value = "startDate", required = false ) @ApiParam( name = "startDate", value = "开始时间") String startDate,
                                    @RequestParam( value = "endDate", required = false ) @ApiParam( name = "endDate", value = "结束时间") String endDate,
                                    @RequestParam( value = "pageNum", required = false, defaultValue = "0"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
                                    @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
-        return newsService.getNewsList( auditStatus, startDate, endDate, pageNum, pageSize );
+        return newsService.getNewsList( auditStatus,content, startDate, endDate, pageNum, pageSize );
     }
 
     /**

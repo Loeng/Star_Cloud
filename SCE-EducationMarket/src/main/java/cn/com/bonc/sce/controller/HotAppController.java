@@ -71,4 +71,18 @@ public class HotAppController {
         return hotAppService.selectHotRecommendAppList( pageNum, pageSize );
     }
 
+    /**
+     * 查询所有热门应用列表
+     *
+     * @return
+     */
+    @ApiOperation( value = "查询所有热门应用列表", notes = "查询所有热门应用列表", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "" )
+    public RestRecord selectHotAppList() {
+        // 查询应用表中重点推荐状态为1的应用
+        return hotAppService.selectHotAppList();
+    }
 }

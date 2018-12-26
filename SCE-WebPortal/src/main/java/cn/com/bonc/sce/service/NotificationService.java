@@ -56,6 +56,7 @@ public class NotificationService {
      * 查询通知公告列表
      *
      * @param auditStatus 通知公告审核状态
+     * @param content     内容
      * @param startDate   查询起始日期
      * @param endDate     查询结束日期
      * @param pageNum     分页页码
@@ -63,11 +64,18 @@ public class NotificationService {
      * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
-    public RestRecord getNotificationList( Integer type,String auditStatus,String startDate,String endDate,Integer pageNum,Integer pageSize ) {
-        if( StringUtils.isEmpty(startDate)){
-            return notificationDao.getNotificationList( type, auditStatus,  pageNum, pageSize );
+    public RestRecord getNotificationList( Integer type,String content,String auditStatus,String startDate,String endDate,Integer pageNum,Integer pageSize ) {
+        if(type==null) {
+            if ( StringUtils.isEmpty( startDate ) ) {
+                return notificationDao.getNotificationList( auditStatus,content, pageNum, pageSize );
+            }
+            return notificationDao.getNotificationList( auditStatus,content, startDate, endDate, pageNum, pageSize );
+        }else{
+            if ( StringUtils.isEmpty( startDate ) ) {
+                return notificationDao.getNotificationList( type,content, auditStatus, pageNum, pageSize );
+            }
+            return notificationDao.getNotificationList( type,content, auditStatus, startDate, endDate, pageNum, pageSize );
         }
-        return notificationDao.getNotificationList( type, auditStatus, startDate, endDate, pageNum, pageSize );
     }
 
     /**

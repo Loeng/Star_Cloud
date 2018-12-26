@@ -60,5 +60,13 @@ public class HotAppController {
         return new RestRecord( 200, appInfoList );
     }
 
-
+    /**
+     * 查询所有热门应用列表
+     *
+     * @return
+     */
+    @GetMapping( "" )
+    public RestRecord selectHotAppList() {
+        return new RestRecord( 200, hotAppRepository.selectHotAppList() );
+    }
 }
