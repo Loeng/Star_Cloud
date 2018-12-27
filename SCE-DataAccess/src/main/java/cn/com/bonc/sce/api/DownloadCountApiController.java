@@ -61,7 +61,7 @@ public class DownloadCountApiController {
             return restRecord;
         } catch ( Exception e ) {
             log.error( "Query AppDownload fail {}", e );
-            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
     }
 
@@ -91,7 +91,7 @@ public class DownloadCountApiController {
             return restRecord;
         } catch ( Exception e ) {
             log.error( "Query AppDownload fail {}", e );
-            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
     }
 
@@ -122,7 +122,7 @@ public class DownloadCountApiController {
             return restRecord;
         } catch ( Exception e ) {
             log.error( "Query AppDownload fail {}", e );
-            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
     }
 
@@ -152,6 +152,7 @@ public class DownloadCountApiController {
     @ResponseBody
     public RestRecord getDownloadChange(
             @RequestParam( "userId" ) String userId,
+            @RequestParam( value = "appId", required = false ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime ) {
         log.trace( "Query downloadChange userId is :{}", userId );
@@ -160,19 +161,21 @@ public class DownloadCountApiController {
             if ( companyInfo.get( "COMPANY_ID" ) == null ) {
                 return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
             } else {
-                List< Map< String, Object > > downloadInfo = appCountRepository.getDownloadChange( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), startTime, endTime );
-                RestRecord restRecord = new RestRecord( 200 );
-                restRecord.setData( downloadInfo );
-                return restRecord;
+                if ( appId == null ) {
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appCountRepository.getDownloadChange( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), startTime, endTime ) );
+                } else {
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appCountRepository.getDownloadChangeAndApp( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), appId, startTime, endTime ) );
+                }
             }
         } catch ( Exception e ) {
             log.error( "Query DownloadChange fail {}", e );
-            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
 
     }
 
     /**
+     * 查询当月厂商所有应用类型下载数量
      * http://localhost:10210/count/download-type?userId=123
      *
      * @param userId 用户Id
@@ -199,7 +202,7 @@ public class DownloadCountApiController {
             }
         } catch ( Exception e ) {
             log.error( "Query DownloadChange fail {}", e );
-            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
     }
 
@@ -236,6 +239,7 @@ public class DownloadCountApiController {
     @ResponseBody
     public RestRecord getCollectionChange(
             @RequestParam( "userId" ) String userId,
+            @RequestParam( value = "appId", required = false ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime ) {
         log.trace( "Query CollectionChange userId is :{}", userId );
@@ -244,13 +248,31 @@ public class DownloadCountApiController {
             if ( companyInfo.get( "COMPANY_ID" ) == null ) {
                 return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
             } else {
-                List< Map< String, Object > > downloadInfo = appCountRepository.getCollectionChange( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), startTime, endTime );
-                RestRecord restRecord = new RestRecord( 200 );
-                restRecord.setData( downloadInfo );
-                return restRecord;
+                if ( appId == null ) {
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appCountRepository.getCollectionChange( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), startTime, endTime ) );
+                } else {
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appCountRepository.getCollectionChangeAndApp( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), appId, startTime, endTime ) );
+                }
             }
         } catch ( Exception e ) {
             log.error( "Query CollectionChange fail {}", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+
+    }
+
+    @GetMapping( "/company-app" )
+    @ResponseBody
+    public RestRecord getCompanyAppList( @RequestParam( "userId" ) String userId ) {
+        log.trace( "Query CompanyAppList userId is :{}", userId );
+        try {
+            Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
+            if ( companyInfo.get( "COMPANY_ID" ) == null ) {
+                return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
+            }
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appCountRepository.getCompanyAppList( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ) ) );
+        } catch ( Exception e ) {
+            log.error( "Query CompanyAppList fail {}", e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
         }
 

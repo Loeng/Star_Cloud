@@ -37,8 +37,8 @@ public class CountService {
         return countDao.getAppDownloadRanking( pageSize, pageNum );
     }
 
-    public RestRecord getDownloadChange( String userId, String startTime, String endTime ) {
-        return countDao.getDownloadChange( userId, startTime, endTime );
+    public RestRecord getDownloadChange( String userId, String appId, String startTime, String endTime ) {
+        return countDao.getDownloadChange( userId, appId, startTime, endTime );
     }
 
     public RestRecord getDownloadByType( String userId, String time ) {
@@ -49,7 +49,11 @@ public class CountService {
         return countDao.getAppTypePrecent( userId );
     }
 
-    public RestRecord getCollectionChange( String userId, String startTime, String endTime ) {
-        return countDao.getCollectionChange( userId, startTime, endTime );
+    public RestRecord getCollectionChange( String userId, String appId, String startTime, String endTime ) {
+        return countDao.getCollectionChange( userId, appId, startTime, endTime );
+    }
+
+    public RestRecord getCompanyAppList( String userId ) {
+        return countDao.getCompanyAppList( userId );
     }
 }

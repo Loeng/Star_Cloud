@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -66,7 +65,7 @@ public class AppVersionApiController {
             return restRecord;
         } catch ( Exception e ) {
             log.error( "Query AppVersion Fail {}", e );
-            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
 
     }
@@ -131,7 +130,6 @@ public class AppVersionApiController {
      * 应用版本更新申请接口
      * 1. 在应用版本信息表中插入一条新的版本信息, 并将状态设置为待审核
      * 2. 创建一条待办消息，创建人为申请人，接收人为系统管理员
-     * //
      *
      * @param appId          更新版本的应用Id
      * @param userId         提交版本更新申请的用户Id
