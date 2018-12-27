@@ -3,6 +3,7 @@ package cn.com.bonc.sce.service;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.FileUploadDao;
 import cn.com.bonc.sce.model.ExcelToUser;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.FileUploadUtil;
 import cn.com.bonc.sce.tool.IDUtil;
@@ -46,9 +47,7 @@ public class FileUploadService {
     private FileUploadDao fileUploadDao;
 
 
-    public static final String STUDENT_PRE = "4";
 
-    public static final String TEACHER_PRE = "3";
 
     @Autowired
     public FileUploadService( FileUploadDao fileUploadDao ) {
@@ -103,21 +102,7 @@ public class FileUploadService {
 
     public RestRecord uploadUserInfo( List< ExcelToUser > list, String userType ) {
 
-        String pre = "";
-
-        if ( TEACHER_PRE.equals( userType ) ) {
-            pre =  "js_";
-        } else if ( STUDENT_PRE.equals( userType ) ) {
-            pre =  "xs_";
-        }
-
-        for ( ExcelToUser excelToUser : list ) {
-            excelToUser.setUserType(userType );
-            excelToUser.setCertificateType( "1" );
-            excelToUser.setLoginName(IDUtil.createID(pre));
-        }
-
-        return fileUploadDao.uploadUserInfo( list );
+        return fileUploadDao.uploadUserInfo( list , userType );
 
     }
     public RestRecord uploadMultipartAll ( MultipartFile[] multipartFileAll, String fileType ) {

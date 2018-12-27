@@ -33,7 +33,7 @@ public class UserListController {
      * @param pageSize
      * @return
      */
-    @ApiOperation( value = "根据角色id查询用户", notes = "根据角色id查询用户", httpMethod = "GET" )
+    @ApiOperation( value = "根据角色id和搜索条件查询用户", notes = "根据角色id和搜索条件查询用户", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "roleId", value = "角色ID", paramType = "path", required = true ),
     } )
@@ -43,9 +43,9 @@ public class UserListController {
     @GetMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
     public RestRecord getUserInfoByRole( @PathVariable( "roleId" ) String roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
-                                         @PathVariable( "pageSize" ) Integer pageSize ) {
-
-        return userListService.getUserInfoByRole( roleId, pageNum, pageSize );
+                                         @PathVariable( "pageSize" ) Integer pageSize,
+                                         @RequestBody(required = false) Map<String,Object> condition) {
+        return userListService.getUserInfoByRole( roleId, pageNum, pageSize,condition );
     }
 
 

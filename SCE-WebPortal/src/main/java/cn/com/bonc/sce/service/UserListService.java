@@ -33,8 +33,8 @@ public class UserListService {
      * @param pageSize
      * @return
      */
-    public RestRecord getUserInfoByRole( String roleId, Integer pageNum, Integer pageSize ) {
-        return userListDao.getUserInfoByRole( roleId, pageNum, pageSize );
+    public RestRecord getUserInfoByRole( String roleId, Integer pageNum, Integer pageSize,Map<String,Object> condition ) {
+        return userListDao.getUserInfoByRole( roleId, pageNum, pageSize,condition );
     }
 
 
