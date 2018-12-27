@@ -131,7 +131,7 @@ public class MessageController {
     @GetMapping( "/{userId}" )
     @ResponseBody
     public RestRecord getMessageByUserId( @PathVariable( "userId" ) @ApiParam( name = "userId", value = "userId", required = true )String userId,
-                                          @RequestParam( value = "pageNum", required = false, defaultValue = "0"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
+                                          @RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
         return messageService.getMessageByUserId( userId,pageNum,pageSize );
     }
