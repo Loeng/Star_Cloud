@@ -39,6 +39,19 @@ public class Secret {
         return rsa.getPrivateKeyBase64() + rsa.getPublicKeyBase64();
     }
 
+    /**
+     * 自动生成一个由私钥/公钥组成的字符串，格式如下:
+     * <bold>^[privateKey][publicKey]&</bold> 私钥长 1624 个字符，公钥长 382 个字符，组成共计 2016 个字符的 secret
+     * 此方法只能生成基于 2048bits-RSA 加密算法生成的 RSA 公私钥，如需定制加密算法，请自建 CryptoUtil 并设置相应算法的 keyPairGenerator
+     * @return a secret buries secrets
+     */
+    public static String generateSecret() {
+        KeyPair keyPair = CryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.generateKeyPair();
+
+        RSA rsa = new RSA( keyPair.getPrivate(), keyPair.getPublic() );
+        return rsa.getPrivateKeyBase64() + rsa.getPublicKeyBase64();
+    }
+
     public PrivateKey getPrivateKey() {
         return keyPair.getPrivate();
     }

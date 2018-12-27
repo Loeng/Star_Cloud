@@ -68,10 +68,6 @@ public class User {
             this.secretKeyPair = null;
         }
     }
-
-    public void generateSecret() {
-        this.secretKeyPair = new Secret();
-    }
 }
 
 

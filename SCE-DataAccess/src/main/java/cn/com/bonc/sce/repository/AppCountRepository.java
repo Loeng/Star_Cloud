@@ -100,7 +100,7 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     List< Map< String, Object > > getDownloadByType( @Param( "companyId" ) Long companyId,
                                                      @Param( "time" ) String time );
 
-    @Query(value = "SELECT\n" +
+    @Query( value = "SELECT\n" +
             "\t MAT.APP_TYPE_NAME,COUNT(MAT.APP_TYPE_NAME) AS APP_TYPE_COUNT\n" +
             "FROM\n" +
             "\t STARCLOUDMARKET.SCE_MARKET_APP_INFO MAI \n" +
@@ -109,12 +109,21 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
             "\t LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE MAT ON MAAR.APP_TYPE_ID = MAT.APP_TYPE_ID \n" +
             "\t WHERE SMC.COMPANY_ID=?1\n" +
             "\t GROUP BY\n" +
-            "\t MAT.APP_TYPE_NAME\n" ,nativeQuery = true)
-    List<Map<String,Object>> getAppTypePrecent (@Param( "companyId") String companyId);
+            "\t MAT.APP_TYPE_NAME\n", nativeQuery = true )
+    List< Map< String, Object > > getAppTypePrecent( @Param( "companyId" ) String companyId );
 
 
-    @Query(value = "\tSELECT  COUNT(COMPANY_ID) AS APP_COUNT  FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO \n" +
-            "\tWHERE COMPANY_ID = ?1 GROUP BY COMPANY_ID ",nativeQuery = true)
-    Map<String,Object>  getAppCountByCompanyId(@Param("companyId") String companyId);
+    @Query( value = "\tSELECT  COUNT(COMPANY_ID) AS APP_COUNT  FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO \n" +
+            "\tWHERE COMPANY_ID = ?1 GROUP BY COMPANY_ID ", nativeQuery = true )
+    Map< String, Object > getAppCountByCompanyId( @Param( "companyId" ) String companyId );
 
+
+    @Query( value = "SELECT to_char ( t.COLLECT_TIME, 'YYYY-MM' ) AS \"MONTH\", sum( 1 ) AS \"COUNT\" \n" +
+            "FROM \"STARCLOUDMARKET\".\"COLLECTION_CHANGE_VIEW\" t  WHERE COMPANY_ID = :companyId \n" +
+            "\tAND t.COLLECT_TIME >= to_date ( :startTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "\tAND t.COLLECT_TIME <= to_date ( :endTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "GROUP BY to_char ( t.COLLECT_TIME, 'YYYY-MM' )  ORDER BY \"MONTH\"", nativeQuery = true )
+    List< Map< String, Object > > getCollectionChange( @Param( "companyId" ) Long companyId,
+                                                       @Param( "startTime" ) String startTime,
+                                                       @Param( "endTime" ) String endTime );
 }

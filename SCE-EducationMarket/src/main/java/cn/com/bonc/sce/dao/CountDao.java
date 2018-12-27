@@ -42,4 +42,12 @@ public interface CountDao {
     @RequestMapping( value = "/count/download-type" )
     RestRecord getDownloadByType( @RequestParam( "userId" ) String userId,
                                   @RequestParam( value = "startTime", required = false, defaultValue = "2018-12" ) String time );
+
+    @RequestMapping( value = "/count/app-type-percent", method = RequestMethod.GET )
+    RestRecord getAppTypePrecent( @RequestParam( "userId" ) String userId );
+
+    @RequestMapping( value = "/count/collection-change", method = RequestMethod.GET )
+    RestRecord getCollectionChange( @RequestParam( "userId" ) String userId,
+                                    @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
+                                    @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime );
 }

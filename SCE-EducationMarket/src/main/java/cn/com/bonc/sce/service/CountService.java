@@ -44,4 +44,12 @@ public class CountService {
     public RestRecord getDownloadByType( String userId, String time ) {
         return countDao.getDownloadByType( userId, time );
     }
+
+    public RestRecord getAppTypePrecent( String userId ) {
+        return countDao.getAppTypePrecent( userId );
+    }
+
+    public RestRecord getCollectionChange( String userId, String startTime, String endTime ) {
+        return countDao.getCollectionChange( userId, startTime, endTime );
+    }
 }

@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,18 +12,20 @@ import java.util.Map;
 public interface AppManageDao {
 
 
-    @RequestMapping( value = "/manage-app", method = RequestMethod.POST )
-    RestRecord addAppInfo( @RequestBody Map appInfo );
+    @RequestMapping( value = "/manage-app/{uid}", method = RequestMethod.POST )
+    RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
+                           @PathVariable( "uid" ) String dui );
 
     /**
      * 删除应用信息
+     *
      * @param appIdList
      * @param uid
      * @return
      */
     @RequestMapping( value = "/manage-app/{uid}", method = RequestMethod.DELETE )
     RestRecord deleteApps( @RequestBody List< String > appIdList,
-                           @PathVariable("uid") String uid);
+                           @PathVariable( "uid" ) String uid );
 
     /**
      * 编辑应用
@@ -78,22 +81,23 @@ public interface AppManageDao {
     @RequestMapping( value = "/manage-app/apps-by-name-type", method = RequestMethod.GET )
     RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
                                            @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
-                                           @RequestParam(value ="orderType" ) String orderType,
+                                           @RequestParam( value = "orderType" ) String orderType,
                                            @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                            @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
                                            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
+
     /**
      * 前台全部应用页面展示
      */
     @RequestMapping( value = "/manage-app/condition", method = RequestMethod.GET )
     RestRecord getAppListInfoByCondition( @RequestParam( value = "appName", required = false ) String appName,
-                                           @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
-                                           @RequestParam(value ="orderType" ) String orderType,
-                                           @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
-                                           @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
-                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
+                                          @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                          @RequestParam( value = "orderType" ) String orderType,
+                                          @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                          @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
+                                          @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
 
     /**
      * 查询单个应用详情
@@ -133,12 +137,12 @@ public interface AppManageDao {
      * @return
      */
     @RequestMapping( value = "/manage-app/list-by-audit-status", method = RequestMethod.GET )
-     RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) String auditStatus,
-                                               @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
-                                               @RequestParam( value = "keyword", required = false ) String keyword,
-                                               @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
-                                               @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+    RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) String auditStatus,
+                                        @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
+                                        @RequestParam( value = "keyword", required = false ) String keyword,
+                                        @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                        @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                        @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     );
 
 

@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.tool;
 
+import cn.com.bonc.sce.model.Secret;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
