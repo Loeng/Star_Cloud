@@ -7,6 +7,7 @@ public class ChannelInfo {
     private String status;
     private String remarks;
     private Integer isDelete;
+    private String picUrl;
 
     public Integer getId() {
         return id;
@@ -56,10 +57,19 @@ public class ChannelInfo {
         this.isDelete = isDelete;
     }
 
-    public ChannelInfo() {
+    public String getPicUrl() {
+        return picUrl;
     }
 
-    public ChannelInfo( Integer id, Integer pid, String name, String status, String remarks, Integer isDelete ) {
+    public void setPicUrl( String picUrl ) {
+        this.picUrl = picUrl;
+    }
+
+    public ChannelInfo() {
+
+    }
+
+    public ChannelInfo( Integer id, Integer pid, String name, String status, String remarks, Integer isDelete, String picUrl ) {
 
         this.id = id;
         this.pid = pid;
@@ -67,5 +77,6 @@ public class ChannelInfo {
         this.status = status;
         this.remarks = remarks;
         this.isDelete = isDelete;
+        this.picUrl = picUrl;
     }
 }
