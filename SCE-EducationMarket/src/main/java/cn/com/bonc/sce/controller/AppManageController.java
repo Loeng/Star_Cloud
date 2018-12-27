@@ -250,4 +250,37 @@ public class AppManageController {
     ) {
         return appManageService.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize );
     }
+
+
+    /**
+     * app统计总量
+     *
+     * @return
+     */
+    @ApiOperation( value = "应用统计总量",tags = "应用统总量" ,notes = "应用统计总量", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/count-app" )
+    public RestRecord getAppCountInfo()
+    {
+        return appManageService.getAppCountInfo(  );
+    }
+
+
+    /**
+     * app分类信息统计
+     *
+     * @return
+     */
+    @ApiOperation( value = "应用统计详情",tags = "应用统计详情" ,notes = "应用统计详情", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/app-info" )
+    public RestRecord getAppInfo()
+    {
+        return appManageService.getAppInfo();
+    }
+
 }

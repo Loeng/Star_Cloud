@@ -74,4 +74,12 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     @Query(value = "SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN WHERE APP_ID = ?1 AND USER_ID = ?2",nativeQuery = true)
     Map<String,Object> findAppOpenInfo (String appId,String userId);
 
+
+
+    @Query( nativeQuery = true, value = "SELECT count(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO  A  " )
+    int getAppCountInfo();
+
+    @Query( nativeQuery = true, value = "SELECT  COUNT(a.APP_TYPE_ID) as num,b.APP_TYPE_NAME FROM  STARCLOUDMARKET.TEST_MARKET_APP_APPTYPE_REL a INNER  JOIN (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE   WHERE IS_DELETE='1') b\n" +
+            "ON  a.APP_TYPE_ID = b.APP_TYPE_ID  GROUP BY  b.APP_TYPE_NAME,a.APP_TYPE_ID " )
+    List<Map> getAppInfo();
 }
