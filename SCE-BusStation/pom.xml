@@ -5,12 +5,12 @@
     <parent>
         <artifactId>StarCloudEducation</artifactId>
         <groupId>cn.com.bonc</groupId>
-        <version>0.0.1.DEV</version>
+        <version>0.0-Engaging</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>SCE-BusStation</artifactId>
-    <version>0.0.1.DEV</version>
+    <version>0.0-Engaging</version>
 
     <dependencies>
         <!--<dependency>-->
@@ -25,13 +25,13 @@
         </dependency>
     </dependencies>
 
-    <build>
+    <!--<build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!--<mainClass>cn.com.bonc.sce.</mainClass>-->
+                    &lt;!&ndash;<mainClass>cn.com.bonc.sce.</mainClass>&ndash;&gt;
                 </configuration>
                 <executions>
                     <execution>
@@ -42,6 +42,6 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
 </project>

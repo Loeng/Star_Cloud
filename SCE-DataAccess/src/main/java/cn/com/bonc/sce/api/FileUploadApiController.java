@@ -5,6 +5,7 @@ import cn.com.bonc.sce.entity.FileResourceEntity;
 import cn.com.bonc.sce.model.ExcelToUser;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +59,11 @@ public class FileUploadApiController {
         //batchExportUser.save( list );
 
         for ( ExcelToUser excelToUser:list ) {
-         //   fileResourceRepository.savaAllUserInfo( excelToUser );
+            fileResourceRepository.savaAllUserInfo(UUID.getUUID(), excelToUser.getUserName(), excelToUser.getGender(),
+                    excelToUser.getLoginName(), excelToUser.getUserType(), excelToUser.getMailAddress()
+                    , excelToUser.getCertificateType(), excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber()
+                    ,excelToUser.getAddress()
+                );
         }
         return  new RestRecord( 0,"上传成功");
 

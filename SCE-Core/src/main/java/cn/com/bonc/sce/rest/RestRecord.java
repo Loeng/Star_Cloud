@@ -93,6 +93,7 @@ public class RestRecord implements Serializable {
         this.data = data;
     }
 
+
     public RestRecord( int code, String msg, Exception exception ) {
         this.code = code;
         this.msg = msg;

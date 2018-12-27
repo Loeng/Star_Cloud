@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 @Controller
 @SpringBootConfiguration
 public class BaseRouterConfiguration {
-
     @Bean
     @Profile( value = "dev,test")
     public RouteLocator defaultRoutes( RouteLocatorBuilder builder ) {

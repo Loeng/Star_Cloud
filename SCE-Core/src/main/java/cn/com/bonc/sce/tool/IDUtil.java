@@ -12,11 +12,11 @@ public class IDUtil {
 
     private final static long w = 100000000;
 
-    public static String createID(StringBuilder pre) {
+    public static String createID(String pre) {
         long r;
         synchronized (lock) {
             r = (long) ((Math.random() + 1) * w);
         }
-        return   pre.append( String.valueOf(r).substring(1) ).toString();
+        return  pre + String.valueOf(r).substring(1);
     }
 }

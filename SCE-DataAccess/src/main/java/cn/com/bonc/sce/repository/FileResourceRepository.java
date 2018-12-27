@@ -37,14 +37,13 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @return
      */
     @Modifying
-    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
-            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ADDRESS ) VALUE " +
-            "(:userName,:gender,:loginName,:userType,:mailAddress,:certificateType,:certificateNumber,:phoneNumber,:address)  " )
-    int savaAllUserInfo( @Param( "userName" ) String userName,@Param( "gender" ) String gender
-    , @Param( "certificateNumber" ) String certificateNumber,@Param( "phoneNumber" ) String phoneNumber
-            , @Param( "address" ) String address,@Param( "mailAddress" ) String mailAddress
-            , @Param( "loginName" ) String loginName,@Param( "userType" ) String userType
-            , @Param( "certificateType" ) String certificateType);
+    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ADDRESS ) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)  " )
+    int savaAllUserInfo( String id,String userName, String gender ,String loginName
+                        ,String userType,String mailAddress,String certificateType
+                        , String certificateNumber,String phoneNumber,String address
+                      );
 
     /**
      *@Desc: 根据id查询文件存储地址

@@ -103,12 +103,12 @@ public class FileUploadService {
 
     public RestRecord uploadUserInfo( List< ExcelToUser > list, String userType ) {
 
-        StringBuilder pre = new StringBuilder();
+        String pre = "";
 
         if ( TEACHER_PRE.equals( userType ) ) {
-            pre = pre.append( "js_" );
+            pre =  "js_";
         } else if ( STUDENT_PRE.equals( userType ) ) {
-            pre = pre.append( "xs_" );
+            pre =  "xs_";
         }
 
         for ( ExcelToUser excelToUser : list ) {
