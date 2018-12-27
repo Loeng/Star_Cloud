@@ -14,13 +14,13 @@ public class AppTypeRelEntity implements Serializable {
     //@Id
     //@GeneratedValue
     //@Column( name = "ID" )
-    private String id;
+    private Long id;
 
     //@Column( name = "APP_ID" )
-    private Long productTypeId;
+    private String appId;
 
     //@Column( name = "APP_TYPE_ID" )
-    private Long productTypeName;
+    private Long appTypeId;
 
 
 }

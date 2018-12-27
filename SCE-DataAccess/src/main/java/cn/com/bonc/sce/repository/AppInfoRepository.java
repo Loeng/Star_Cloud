@@ -50,9 +50,40 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                                                                      @Param( value = "keyword" ) String keyword,
                                                                      Pageable pageable );
 
-    //查询平台应用图标，名字，id
-    @Query( nativeQuery = true, value = "SELECT a.APP_ID,a.APP_NAME,a.APP_ICON,a.APP_NOTES FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO a WHERE a.APP_SOURCE = 'pt'" )
-    Page< List< Map< String, Object > > > getPlatformlist( Pageable pageable );
+    //查询平台应用图标，名字，id,平台连接  是否开通
+    @Query( nativeQuery = true, value = "SELECT\n" +
+            "\ta.APP_ID,\n" +
+            "\ta.APP_NAME,\n" +
+            "\ta.APP_ICON,\n" +
+            "\ta.APP_NOTES,\n" +
+            "\ta.APP_LINK,\n" +
+            "\ta.APP_SOURCE,\n" +
+            "CASE WHEN o.USER_ID = :userId  THEN '1' ELSE '0' END IS_OPEN \n" +
+            "FROM\n" +
+            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO a \n" +
+            "\tLEFT  JOIN\n" +
+            "\tSTARCLOUDMARKET.SCE_MARKET_APP_OPEN o  ON\n" +
+            "\ta.APP_ID = o.APP_ID  AND o.IS_DELETE = 1\n" +
+            "\tWHERE a.APP_SOURCE = 'pt'" )
+    Page< List< Map< String, Object > > > getPlatformlist( @Param( "userId" ) String userId, Pageable pageable );
+
+
+    //分类 查询平台应用图标，名字，id,平台连接  是否开通
+    @Query( nativeQuery = true, value = "SELECT\n" +
+            "\ta.APP_ID,\n" +
+            "\ta.APP_NAME,\n" +
+            "\ta.APP_ICON,\n" +
+            "\ta.APP_NOTES,\n" +
+            "\ta.APP_LINK,\n" +
+            "\ta.APP_SOURCE,\n" +
+            "CASE WHEN o.USER_ID = :userId  THEN '1' ELSE '0' END IS_OPEN \n" +
+            "FROM\n" +
+            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO a \n" +
+            "\tLEFT  JOIN\n" +
+            "\tSTARCLOUDMARKET.SCE_MARKET_APP_OPEN o  ON\n" +
+            "\ta.APP_ID = o.APP_ID  AND o.IS_DELETE = 1\n" +
+            "\tWHERE a.APP_SOURCE = 'pt' AND a.APP_ID IN (:appIdList)" )
+    Page< List< Map< String, Object > > > getPlatformlistByIds( @Param( "userId" ) String userId, @Param( "appIdList" ) List< Object > appIdList, Pageable pageable );
 
     //根据类型id 查询 appid 列表
     @Query( nativeQuery = true, value = "SELECT APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL WHERE APP_TYPE_ID= :appTypeId" )
@@ -68,12 +99,11 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     Page< List< Map< String, Object > > > getSoftware( Pageable pageable );
 
 
-    @Query(value = "SELECT * FROM STARCLOUDMARKET.V_APP_DETAIL_INFO WHERE APP_ID = ?1 ", nativeQuery = true)
-    Page<Map<String,Object>>  findAppDetailById(String appId,Pageable pageable);
+    @Query( value = "SELECT * FROM STARCLOUDMARKET.V_APP_DETAIL_INFO WHERE APP_ID = ?1 ", nativeQuery = true )
+    Page< Map< String, Object > > findAppDetailById( String appId, Pageable pageable );
 
-    @Query(value = "SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN WHERE APP_ID = ?1 AND USER_ID = ?2",nativeQuery = true)
-    Map<String,Object> findAppOpenInfo (String appId,String userId);
-
+    @Query( value = "SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN WHERE APP_ID = ?1 AND USER_ID = ?2", nativeQuery = true )
+    Map< String, Object > findAppOpenInfo( String appId, String userId );
 
 
     @Query( nativeQuery = true, value = "SELECT count(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO  A  " )
@@ -81,5 +111,5 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
 
     @Query( nativeQuery = true, value = "SELECT  COUNT(a.APP_TYPE_ID) as num,b.APP_TYPE_NAME FROM  STARCLOUDMARKET.TEST_MARKET_APP_APPTYPE_REL a INNER  JOIN (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE   WHERE IS_DELETE='1') b\n" +
             "ON  a.APP_TYPE_ID = b.APP_TYPE_ID  GROUP BY  b.APP_TYPE_NAME,a.APP_TYPE_ID " )
-    List<Map> getAppInfo();
+    List< Map > getAppInfo();
 }

@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppManageDao;
+import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class AppManageService {
      * @param appInfo 应用信息， value为json格式
      * @return
      */
-    public RestRecord addAppInfo( Map appInfo ) {
-        return appManageDao.addAppInfo( appInfo );
+    public RestRecord addAppInfo( AppAddModel appInfo,String uid ) {
+        return appManageDao.addAppInfo( appInfo ,uid);
     }
 
     /**

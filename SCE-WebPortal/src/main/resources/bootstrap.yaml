@@ -27,7 +27,7 @@ fileUpload:
   soft:  soft
   document: document
   mapping:
-    image:  img
-    soft:  soft
-    document: document
+    image:  192.168.1.31:4400/img
+    soft:  192.168.1.31:4400/soft
+    document: 192.168.1.31:4400/document
 

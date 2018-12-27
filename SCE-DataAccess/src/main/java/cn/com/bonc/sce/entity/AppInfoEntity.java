@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 应用分类表
+ * 应用信息表
  *
  * @author jc_D
  * @description
