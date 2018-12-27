@@ -33,7 +33,7 @@ public class Banner {
     private Integer order;
 
     @Column(name = "IMAGE_URL")
-    private String url;
+    private Integer url;
 
     @Column(name = "APP_ID")
     private String appId;

@@ -10,7 +10,7 @@ package cn.com.bonc.sce.model;
 public class Banner {
     private Integer id;
     private Integer order;
-    private String url;
+    private Integer url;
     private String appId;
     private Integer isShown;
     private Integer type;
@@ -31,11 +31,11 @@ public class Banner {
         this.order = order;
     }
 
-    public String getUrl() {
+    public Integer getUrl() {
         return url;
     }
 
-    public void setUrl( String url ) {
+    public void setUrl( Integer url ) {
         this.url = url;
     }
 
@@ -67,7 +67,7 @@ public class Banner {
 
     }
 
-    public Banner( Integer id, Integer order, String url, String appId, Integer isShown, Integer type ) {
+    public Banner( Integer id, Integer order, Integer url, String appId, Integer isShown, Integer type ) {
 
         this.id = id;
         this.order = order;
