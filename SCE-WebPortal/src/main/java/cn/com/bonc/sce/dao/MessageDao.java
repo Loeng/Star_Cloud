@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 消息通知
@@ -40,7 +41,7 @@ public interface MessageDao {
     /**
      * 通过id删除message
      *
-     * @param messageId  id
+     * @param messageId id
      * @return 删除是否成功
      */
     @RequestMapping( value = "/messages/{messageId}", method = RequestMethod.DELETE )
@@ -49,7 +50,7 @@ public interface MessageDao {
     /**
      * 通过id删除公告
      *
-     * @param announcementId  id
+     * @param announcementId id
      * @return 删除是否成功
      */
     @RequestMapping( value = "/messages/announcements/{announcementId}", method = RequestMethod.DELETE )
@@ -67,13 +68,15 @@ public interface MessageDao {
     /**
      * 获取message数据
      *
-     * @param userId userId
-     * @param pageNum 页码
+     * @param userId   userId
+     * @param id       id
+     * @param pageNum  页码
      * @param pageSize 每页条数
      * @return message数据
      */
     @RequestMapping( value = "/messages/{userId}/{pageNum}/{pageSize}", method = RequestMethod.GET )
     public RestRecord getMessageByUserId( @PathVariable( "userId" ) String userId,
+                                          @RequestParam( "id" ) Integer id,
                                           @PathVariable( "pageNum" ) Integer pageNum,
                                           @PathVariable( "pageSize" ) Integer pageSize );
 }

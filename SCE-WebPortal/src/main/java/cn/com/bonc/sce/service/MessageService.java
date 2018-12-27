@@ -30,8 +30,8 @@ public class MessageService {
      * @param message 用户信息
      * @return 是否添加成功
      */
-    public RestRecord insertMessage(Message message){
-        return messageDao.insertMessage(message);
+    public RestRecord insertMessage( Message message ) {
+        return messageDao.insertMessage( message );
     }
 
     /**
@@ -40,8 +40,8 @@ public class MessageService {
      * @param message 公告信息
      * @return 是否添加成功
      */
-    public RestRecord insertAnnouncement(Message message){
-        return messageDao.insertAnnouncement(message);
+    public RestRecord insertAnnouncement( Message message ) {
+        return messageDao.insertAnnouncement( message );
     }
 
     /**
@@ -50,40 +50,41 @@ public class MessageService {
      * @param messageId id
      * @return 删除是否成功
      */
-    public RestRecord updateMessageReadStatusById(Integer messageId){
-        return messageDao.updateMessageReadStatusById(messageId);
+    public RestRecord updateMessageReadStatusById( Integer messageId ) {
+        return messageDao.updateMessageReadStatusById( messageId );
     }
 
     /**
      * 通过id删除message
      *
-     * @param messageId  id
+     * @param messageId id
      * @return 删除是否成功
      */
-    public RestRecord deleteMessageById(Integer messageId){
-        return messageDao.deleteMessageById(messageId);
+    public RestRecord deleteMessageById( Integer messageId ) {
+        return messageDao.deleteMessageById( messageId );
     }
 
     /**
      * 通过id删除message
      *
-     * @param announcementId  id
+     * @param announcementId id
      * @return 删除是否成功
      */
-    public RestRecord deleteAnnouncementById(Integer announcementId){
-        return messageDao.deleteAnnouncementById(announcementId);
+    public RestRecord deleteAnnouncementById( Integer announcementId ) {
+        return messageDao.deleteAnnouncementById( announcementId );
     }
 
     /**
      * 获取message数据
      *
-     * @param userId userId
-     * @param pageNum 页码
+     * @param userId   userId
+     * @param id       id
+     * @param pageNum  页码
      * @param pageSize 每页条数
      * @return message数据
      */
-    public RestRecord getMessageByUserId(String userId,Integer pageNum,Integer pageSize){
-        return messageDao.getMessageByUserId(userId,pageNum,pageSize);
+    public RestRecord getMessageByUserId( String userId, Integer id, Integer pageNum, Integer pageSize ) {
+        return messageDao.getMessageByUserId( userId, id, pageNum, pageSize );
     }
 }
 

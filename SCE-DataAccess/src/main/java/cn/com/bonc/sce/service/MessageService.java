@@ -105,46 +105,51 @@ public class MessageService {
      * 获取message数据
      *
      * @param userId   userId
+     * @param id       id
      * @param pageNum  页码
      * @param pageSize 每页条数
      * @return message数据
      */
-    public RestRecord getMessageByUserId( String userId, Integer pageNum, Integer pageSize ) {
-        pageNum--;
-        Sort sort =Sort.by(Sort.Direction.fromString(DESC), SORT_STR);
-        Pageable pageable = PageRequest.of( pageNum, pageSize, sort );
-        Timestamp time = messageDao.getNewestTimeByUserId( userId );
-        List< Message > list;
-        if ( !StringUtils.isEmpty( time ) ) {
-            list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time, 1 );
-        } else {
-            list = messageDao.findByTargetIdAndIsDelete( userId, 1 );
-        }
-        List< UserMessage > userMessageList = new ArrayList<>();
-        if ( list.size() > 0 ) {
-            for ( Message m : list ) {
-                UserMessage um = new UserMessage();
-                um.setIsRead( 0 );
-                um.setUserId( userId );
-                Timestamp createTime = m.getCreateTime();
-                um.setCreateTime( new Timestamp( createTime.getTime() ) );
-                um.setIsDelete( 0 );
-                um.setMessageId( m.getId() );
-                userMessageList.add( um );
-                if ( userMessageList.size() >= 1000 ) {
+    public RestRecord getMessageByUserId( String userId, Integer id, Integer pageNum, Integer pageSize ) {
+        if ( id == null ) {
+            pageNum--;
+            Sort sort = Sort.by( Sort.Direction.fromString( DESC ), SORT_STR );
+            Pageable pageable = PageRequest.of( pageNum, pageSize, sort );
+            Timestamp time = messageDao.getNewestTimeByUserId( userId );
+            List< Message > list;
+            if ( !StringUtils.isEmpty( time ) ) {
+                list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time, 1 );
+            } else {
+                list = messageDao.findByTargetIdAndIsDelete( userId, 1 );
+            }
+            List< UserMessage > userMessageList = new ArrayList<>();
+            if ( list.size() > 0 ) {
+                for ( Message m : list ) {
+                    UserMessage um = new UserMessage();
+                    um.setIsRead( 0 );
+                    um.setUserId( userId );
+                    Timestamp createTime = m.getCreateTime();
+                    um.setCreateTime( new Timestamp( createTime.getTime() ) );
+                    um.setIsDelete( 0 );
+                    um.setMessageId( m.getId() );
+                    userMessageList.add( um );
+                    if ( userMessageList.size() >= 1000 ) {
+                        userMessageDao.saveAll( userMessageList );
+                        userMessageList.clear();
+                    }
+                }
+                if ( userMessageList.size() > 0 ) {
                     userMessageDao.saveAll( userMessageList );
-                    userMessageList.clear();
                 }
             }
-            if ( userMessageList.size() > 0 ) {
-                userMessageDao.saveAll( userMessageList );
-            }
+            Map< String, Object > info = new HashMap<>();
+            Page< UserMessage > page = userMessageDao.findByUserIdAndIsDelete( userId, 1, pageable );
+            info.put( "total", page.getTotalElements() );
+            info.put( "info", page.getContent() );
+            return new RestRecord( 200, info );
+        } else {
+            return new RestRecord( 200, userMessageDao.findByIdAndIsDelete( id, 1 ) );
         }
-        Map< String, Object > info = new HashMap<>();
-        Page< UserMessage > page = userMessageDao.findByUserIdAndIsDelete( userId, 1, pageable );
-        info.put( "total", page.getTotalElements() );
-        info.put( "info", page.getContent() );
-        return new RestRecord( 200, info );
     }
 }
 
