@@ -93,10 +93,19 @@ public class NewsService {
         } else {
             content = "%" + content + "%";
         }
-        if ( StringUtils.isEmpty( startDate ) ) {
-            page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1, content, 1, auditStatus, pageable );
-        } else {
-            page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1, content, 1, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+        String all = "3";
+        if(all.equals( auditStatus)) {
+            if ( StringUtils.isEmpty( startDate ) ) {
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnId( 1, content, 1, pageable );
+            } else {
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndUpdateTimeBetween( 1, content, 1, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+            }
+        }else{
+            if ( StringUtils.isEmpty( startDate ) ) {
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1, content, 1, auditStatus, pageable );
+            } else {
+                page = newsDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1, content, 1, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+            }
         }
         List< News > list = page.getContent();
         for ( News news : list ) {
