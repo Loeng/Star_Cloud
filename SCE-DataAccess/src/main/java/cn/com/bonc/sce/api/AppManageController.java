@@ -4,6 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppManageFunView;
 import cn.com.bonc.sce.entity.AppTypeEntity;
+import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppManageFunViewRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
@@ -58,18 +59,21 @@ public class AppManageController {
      * yanmin
      */
     private AppManageFunViewRepository appManageFunViewRepository;
+
     /**
      * 新增应用
      *
      * @param appInfo 应用信息， value为json格式
      * @return
      */
-    @PostMapping
-    public RestRecord addAppInfo( @RequestBody Map appInfo ) {
-        log.info( "appinfo::{}",appInfo );
-        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
-        final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
+    @PostMapping( "/{uid}" )
+    public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
+                                  @PathVariable( "uid" ) String uid ) {
+        log.info( "appinfo::{}", appInfo );
+//        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
+//        final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
+//        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, null );
     }
 
     /**
@@ -206,38 +210,38 @@ public class AppManageController {
                                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //TODO:这个数据随便查的，要重写
-    	if(StringUtils.isEmpty(sort)||sort.toUpperCase().equals("DESC")) {
-        	sort="DESC";
-        }else {
-        	sort="ASC";
+        if ( StringUtils.isEmpty( sort ) || sort.toUpperCase().equals( "DESC" ) ) {
+            sort = "DESC";
+        } else {
+            sort = "ASC";
         }
-    	if(orderType.equals("download")) {
-    		orderType="downloadCount";
-    	}else if(orderType.equals("time")){
-    		orderType="updateTime";
-    	}
-        Sort sort_p =Sort.by(Sort.Direction.fromString(sort), orderType);
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort_p);
+        if ( orderType.equals( "download" ) ) {
+            orderType = "downloadCount";
+        } else if ( orderType.equals( "time" ) ) {
+            orderType = "updateTime";
+        }
+        Sort sort_p = Sort.by( Sort.Direction.fromString( sort ), orderType );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize, sort_p );
 
-        @SuppressWarnings("serial")
-		Specification<AppManageFunView> spec = new Specification< AppManageFunView >() {
+        @SuppressWarnings( "serial" )
+        Specification< AppManageFunView > spec = new Specification< AppManageFunView >() {
             @Override
-            public Predicate toPredicate(Root<AppManageFunView> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate( Root< AppManageFunView > root, CriteriaQuery< ? > query, CriteriaBuilder cb ) {
                 // build query condition
-            	 Predicate predicate = cb.conjunction();
-                if (!StringUtils.isEmpty(appName)&&appName.trim().length()>0) {
-                	predicate.getExpressions().add(cb.like(root.get("appName").as(String.class), "%" + appName + "%"));
+                Predicate predicate = cb.conjunction();
+                if ( !StringUtils.isEmpty( appName ) && appName.trim().length() > 0 ) {
+                    predicate.getExpressions().add( cb.like( root.get( "appName" ).as( String.class ), "%" + appName + "%" ) );
                 }
-                if (appType>0) {
-                	predicate.getExpressions().add(cb.equal(root.get("appTypeId").as(Integer.class), appType));
+                if ( appType > 0 ) {
+                    predicate.getExpressions().add( cb.equal( root.get( "appTypeId" ).as( Integer.class ), appType ) );
                 }
-                if (!StringUtils.isEmpty(platformType)&&platformType.trim().length()>0&&!"0".equals(platformType)) {
-                	predicate.getExpressions().add(cb.equal(root.get("appSource").as(String.class), platformType.trim()));
+                if ( !StringUtils.isEmpty( platformType ) && platformType.trim().length() > 0 && !"0".equals( platformType ) ) {
+                    predicate.getExpressions().add( cb.equal( root.get( "appSource" ).as( String.class ), platformType.trim() ) );
                 }
                 return predicate;
             }
         };
-		Page<AppManageFunView> list = appManageFunViewRepository.findAll(spec,pageable);
+        Page< AppManageFunView > list = appManageFunViewRepository.findAll( spec, pageable );
         //Page< AppInfoEntity > list = appInfoRepository.findAll(spec, pageable );
         Map temp = new HashMap<>();
         temp.put( "data", list.getContent() );
@@ -257,31 +261,32 @@ public class AppManageController {
     public RestRecord selectAppById( @PathVariable String appId ) {
         AppInfoEntity appInfo = appInfoRepository.findByAppId( appId );
         String type = appInfo.getAppSource(); // type可用于分辨应用类型  平台应用/软件应用
-        Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "CREATE_TIME");
-        Page<Map<String,Object>>  appDetailInfo = appInfoRepository.findAppDetailById(appId,pageable);
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,appDetailInfo.getContent());
+        Pageable pageable = PageRequest.of( 0, 1, Sort.Direction.DESC, "CREATE_TIME" );
+        Page< Map< String, Object > > appDetailInfo = appInfoRepository.findAppDetailById( appId, pageable );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appDetailInfo.getContent() );
     }
 
     /**
      * DESC: 检测用户是否开通了该APP
-     * @Auther mkl
+     *
      * @param appId 应用ID
      * @return Map
+     * @Auther mkl
      */
-    @GetMapping("/detail/open/{appId}")
+    @GetMapping( "/detail/open/{appId}" )
     @ResponseBody
-    public RestRecord isOpenApp(@PathVariable String appId){
+    public RestRecord isOpenApp( @PathVariable String appId ) {
         String userId = "T666666";
-        Map<String, Object> openInfo = appInfoRepository.findAppOpenInfo(appId, userId);
-        Map<String,Object> map = new HashMap<>();
-        if (null == openInfo || CollectionUtils.isEmpty(openInfo)){
-             map.put("OPEN",false);
-             log.info("用户[{}]未开通应用[{}]",userId,appId);
-        }else {
-             map.put("OPEN",true);
-            log.info("用户[{}]已开通应用[{}]",userId,appId);
+        Map< String, Object > openInfo = appInfoRepository.findAppOpenInfo( appId, userId );
+        Map< String, Object > map = new HashMap<>();
+        if ( null == openInfo || CollectionUtils.isEmpty( openInfo ) ) {
+            map.put( "OPEN", false );
+            log.info( "用户[{}]未开通应用[{}]", userId, appId );
+        } else {
+            map.put( "OPEN", true );
+            log.info( "用户[{}]已开通应用[{}]", userId, appId );
         }
-           return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,map);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
     }
 
     /**
@@ -376,11 +381,21 @@ public class AppManageController {
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
 
+        //TODO
+        String userId = "1";
         Page< List< Map< String, Object > > > page;
         if ( "pt".equalsIgnoreCase( platformType ) ) {
+            //平台应用
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-            //平台应用 没有分类
-            page = appInfoRepository.getPlatformlist( pageable );
+            if ( appType == 0 ) {
+                //平台应用 没有分类
+                page = appInfoRepository.getPlatformlist( userId, pageable );
+            } else {
+                //根据分类id查询appid
+                List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
+                //根据appIdList 查询平台应用
+                page = appInfoRepository.getPlatformlistByIds( userId, appIdList, pageable );
+            }
 
         } else {
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT" );
@@ -405,15 +420,14 @@ public class AppManageController {
     }
 
 
-
     /**
      * 应用统计总量
      *
      * @return
      */
-    @GetMapping( "/count-app")
+    @GetMapping( "/count-app" )
     public RestRecord getAppCountInfo() {
-        return new RestRecord( 200,appInfoRepository.getAppCountInfo() );
+        return new RestRecord( 200, appInfoRepository.getAppCountInfo() );
     }
 
     /**
@@ -421,9 +435,9 @@ public class AppManageController {
      *
      * @return
      */
-    @GetMapping( "/app-info")
+    @GetMapping( "/app-info" )
     public RestRecord getAppInfo() {
-        return new RestRecord( 200,appInfoRepository.getAppInfo() );
+        return new RestRecord( 200, appInfoRepository.getAppInfo() );
     }
 
 
