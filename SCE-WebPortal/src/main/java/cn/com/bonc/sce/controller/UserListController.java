@@ -42,7 +42,7 @@ public class UserListController {
     public RestRecord getUserInfoByRole( @PathVariable( "roleId" )  @ApiParam( name = "roleId", value = "角色ID",required = true ) Integer roleId,
                                          @PathVariable( "pageNum" )  @ApiParam( name = "pageNum", value = "页码",required = true )Integer pageNum,
                                          @PathVariable( "pageSize" ) @ApiParam( name = "pageSize", value = "页数大小",required = true ) Integer pageSize,
-                                         @RequestBody(required = false)  @ApiParam( name = "condition", value = "用户参数",required = true )Map<String,Object> condition) {
+                                         @RequestBody(required = false)  @ApiParam( name = "condition", value = "搜索条件" )Map<String,Object> condition) {
         return userListService.getUserInfoByRole( roleId, pageNum, pageSize,condition );
     }
 
