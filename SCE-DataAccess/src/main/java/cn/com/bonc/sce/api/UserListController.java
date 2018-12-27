@@ -39,6 +39,7 @@ public class UserListController {
      * @return
      */
     @GetMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
+    @ResponseBody
     public RestRecord getUserInfoByRole( @PathVariable Integer roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
                                          @PathVariable( "pageSize" ) Integer pageSize,

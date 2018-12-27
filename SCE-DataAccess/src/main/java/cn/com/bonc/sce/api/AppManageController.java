@@ -247,7 +247,7 @@ public class AppManageController {
     }
 
     /**
-     * 查询单个应用详情
+     * 查询单个应用详情（不包含用户是否开通该APP）
      *
      * @param appId
      * @return
