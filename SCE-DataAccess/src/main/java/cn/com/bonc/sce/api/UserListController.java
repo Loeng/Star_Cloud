@@ -44,6 +44,8 @@ public class UserListController {
                                          @PathVariable( "pageNum" ) Integer pageNum,
                                          @PathVariable( "pageSize" ) Integer pageSize,
                                          @RequestBody(required = false) Map<String,Object> condition) {
+
+        // 此处在具体的角色ID确定下来之后更改分支走的方法
         Page page = null;
         switch ( roleId ) {
             case 1:
@@ -56,19 +58,19 @@ public class UserListController {
                 page = manufacturer(pageNum,pageSize,condition);
                 break;
             case 4:
+                 // 代理机构
                 break;
             case 5:
+                 // 审核用户
                 break;
             case 6:
+                page = teacher(pageNum,pageSize,condition); // 教师
                 break;
             case 7:
-                page = teacher(pageNum,pageSize,condition);
+                page = student(pageNum,pageSize,condition); // 学生
                 break;
             case 8:
-                page = student(pageNum,pageSize,condition);
-                break;
-            case 9:
-                page = family(pageNum,pageSize,condition);
+                page = family(pageNum,pageSize,condition); // 家长
                 break;
 
         }
@@ -107,6 +109,7 @@ public class UserListController {
         String account= "";
         String name = "";
         String organization_name = "";
+        String login = "";
         if (null != condition){
             if (StringUtils.isNotBlank(condition.get("account").toString())){
                 account = condition.get("account").toString();
@@ -116,6 +119,9 @@ public class UserListController {
             }
             if (StringUtils.isNotBlank(condition.get("organization_name").toString())){
                 organization_name = condition.get("organization_name").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("login").toString())){
+                login = condition.get("login").toString();
             }
         }
         info =  userInfoRepository.findSchoolByCondition(name,account,organization_name,pageable);
