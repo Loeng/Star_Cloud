@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文件上传存储信息保存
@@ -69,6 +71,16 @@ public class FileUploadApiController {
 
     }
 
-
+    /**
+     *@Author : lyy
+     *@Desc : 根据id获取文件储存路径
+     *@Date : 16:54 2018/12/27
+     */
+    @PostMapping("/getFileResource")
+    @ResponseBody
+    public RestRecord getFileResourceById(@RequestParam("resourceId") Integer resourceId) {
+        Map<String,Object>  fileResource = fileResourceRepository.getFileResourceById(resourceId);
+        return  new RestRecord( 200, fileResource );
+    }
 
 }

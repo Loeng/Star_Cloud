@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,4 +72,28 @@ public class AppDownloadController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
+    /**
+     *@Author : lyy
+     *@Desc :用户分类的人数
+     *@Date : 16:30 2018/12/27
+     */
+    @PostMapping("/userGroupCount")
+    @ResponseBody
+    public RestRecord getUserGroupCOunt(){
+        List<Map<String,Object>> map = null;
+        map = userDownloadRepository.getUserGroupCount();
+        log.info( "app的数量",map.toString());
+        return new RestRecord( 200, map );
+    }
+    /**
+     *@Author : lyy
+     *@Desc :所有app的下载量
+     *@Date : 2018/12/27
+     */
+    @PostMapping("/appCount")
+    @ResponseBody
+    public RestRecord getAppCount(){
+        Map<String,Object>  appCount = userDownloadRepository.getAppCount();
+        return  new RestRecord( 200, appCount );
+    }
 }

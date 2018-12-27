@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,7 +45,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
                       );
 
     /**
-     *@Desc: 根据id查询文件存储地址
+     *@Desc: 根据文件id查询文件存储地址
      *@Param: resourceId
      *@return: String
      *@Author: lyy
@@ -54,8 +53,6 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      */
     @Query(value = "SELECT FILE_STORE_PATH FROM STARCLOUDPORTAL.SCE_FILE_RESOURCE where RESOURCE_ID =?1"
             ,nativeQuery = true)
-    String findFileResourceById(Integer resourceId);
-
-
+    Map<String,Object> getFileResourceById(Integer resourceId);
 
 }
