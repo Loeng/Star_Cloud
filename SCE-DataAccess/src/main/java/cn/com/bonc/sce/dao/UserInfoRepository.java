@@ -20,7 +20,7 @@ import java.util.Map;
  * @Date: 2018/12/22 11:01
  * @Description:
  */
-
+@Repository
 public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>, JpaSpecificationExecutor<User> {
 
 
@@ -52,7 +52,7 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
      */
     @Query(value = "SELECT u.USER_TYPE,u.USER_NAME,u.GENDER,u.ADDRESS,u.LOGIN_PERMISSION_STATUS\n" +
             "FROM STARCLOUDPORTAL.SCE_COMMON_USER u inner JOIN STARCLOUDPORTAL.SCE_INFO_THIRD_PARTY p on p.USER_ID = u.USER_ID\n"+
-            "WHERE  u.USER_ACCOUNT like CONCAT('%',concat(?1,'%'))  or u.USER_NAME like CONCAT('%',concat(?2,'%'))",nativeQuery = true)
+            "WHERE  u.LOGIN_NAME like CONCAT('%',concat(?1,'%'))  or u.USER_NAME like CONCAT('%',concat(?2,'%'))",nativeQuery = true)
     Page<Map> findSelfRegALLByNameOrCount(String byName, String loginName, Pageable pageable);
 
 
