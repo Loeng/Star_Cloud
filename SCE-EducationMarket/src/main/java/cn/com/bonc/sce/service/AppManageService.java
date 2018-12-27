@@ -108,6 +108,21 @@ public class AppManageService {
     public RestRecord selectAppListByNameAndType( String appName, Integer appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
         return appManageDao.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
     }
+    /**
+     * 前台全部应用页面展示
+     *
+     * @param appName
+     * @param appType
+     * @param orderType
+     * @param sort
+     * @param platformType
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public RestRecord getAppListInfoByCondition( String appName, Integer appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
+        return appManageDao.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize );
+    }
 
     /**
      * 查询详情

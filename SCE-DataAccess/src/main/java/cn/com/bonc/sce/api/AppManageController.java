@@ -66,6 +66,7 @@ public class AppManageController {
      */
     @PostMapping
     public RestRecord addAppInfo( @RequestBody Map appInfo ) {
+        log.info( "appinfo::{}",appInfo );
         final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
         final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
@@ -351,7 +352,8 @@ public class AppManageController {
     }
 
     /**
-     * 应用列表首页
+     * 前台全部应用页面
+     * 应用列表
      * 条件查询
      *
      * @param appName
