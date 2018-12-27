@@ -7,6 +7,7 @@ import cn.com.bonc.sce.model.AppTypeMode;
 import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppNameTypeService;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,7 @@ public class AppManageController {
                 marketAppVersion.setCreateTime( new Date() );
                 marketAppVersion.setIsDelete( 1L );
                 marketAppVersion.setRunningPlatform( pc.getRunningPlatform() );
+                marketAppVersion.setCreateUserId( uid );
                 marketAppVersionRepository.saveAndFlush( marketAppVersion );
             } );
         } catch ( Exception e ) {
@@ -398,7 +400,16 @@ public class AppManageController {
                 //根据分类id查询appid
                 List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
                 //根据appIdList 查询平台应用
-                page = appInfoRepository.getPlatformlistByIds( userId, appIdList, pageable );
+                if( CollUtil.isEmpty(appIdList)){
+                    Map< String, Object > temp = new HashMap<>( 16 );
+                    temp.put( "data", null );
+                    temp.put( "totalPage", 0 );
+                    temp.put( "totalCount", 0 );
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+                }else {
+                    page = appInfoRepository.getPlatformlistByIds( userId, appIdList, pageable );
+                }
+
             }
 
         } else {
@@ -411,7 +422,16 @@ public class AppManageController {
             } else {
                 //根据appType 去 类型关联表查询 appid  数组
                 List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
-                page = appInfoRepository.getAppListInfoByIds( appIdList, pageable );
+                if( CollUtil.isEmpty(appIdList)){
+                    Map< String, Object > temp = new HashMap<>( 16 );
+                    temp.put( "data", null );
+                    temp.put( "totalPage", 0 );
+                    temp.put( "totalCount", 0 );
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+                }else {
+                    page = appInfoRepository.getAppListInfoByIds( appIdList, pageable );
+                }
+
             }
 
         }
