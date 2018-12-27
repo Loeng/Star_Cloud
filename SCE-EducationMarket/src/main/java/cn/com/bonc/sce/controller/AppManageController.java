@@ -265,7 +265,7 @@ public class AppManageController {
      */
     @ApiOperation( value = "查询用户是否开通了该应用",notes = "根据应用ID查询用户是否开通了该应用",httpMethod = "GET")
     @GetMapping("/detail/open/{appId}")
-    public RestRecord isOpenApp(@PathVariable String appId){
+    public RestRecord isOpenApp(@PathVariable @ApiParam( name = "appId",value = "appId",required = true) String appId){
         return appManageService.isOpenApp(appId );
     }
 
