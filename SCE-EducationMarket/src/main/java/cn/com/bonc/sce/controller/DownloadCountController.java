@@ -117,4 +117,11 @@ public class DownloadCountController {
 
         return countService.getDownloadByType( userId, time );
     }
+
+    @ApiOperation(value = "厂家应用数量及类型占比",notes = "根据用户ID查询用户对应的厂家下面APP总数及各类型占比",httpMethod = "GET" )
+    @GetMapping("/app-type-precent")
+    @ResponseBody
+    public RestRecord getAppTypePrecent(@RequestParam("userId") @ApiParam("用户Id") String userId){
+        return countService.getAppTypePrecent(userId);
+    }
 }
