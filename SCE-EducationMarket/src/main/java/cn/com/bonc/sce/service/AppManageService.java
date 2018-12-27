@@ -126,4 +126,19 @@ public class AppManageService {
     public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize ) {
         return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize );
     }
+
+    /**
+     * 应用统计详情
+     * @return
+     */
+
+    public RestRecord getAppCountInfo() {
+
+        return appManageDao.getAppCountInfo();
+    }
+
+    public RestRecord getAppInfo() {
+
+        return appManageDao.getAppInfo();
+    }
 }

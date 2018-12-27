@@ -129,4 +129,11 @@ public interface AppManageDao {
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     );
+
+
+    @RequestMapping( value = "/manage-app/count-app", method = RequestMethod.GET )
+    RestRecord getAppCountInfo();
+
+    @RequestMapping( value = "/manage-app/app-info", method = RequestMethod.GET )
+    RestRecord getAppInfo();
 }

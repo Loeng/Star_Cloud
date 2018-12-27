@@ -59,7 +59,7 @@ public class SendMessage {
 
         String str = "验证码:6462";
 
-        System.out.println(postMsgToPhone(str,"18227587920"));
+        System.out.println(postMsgToPhone(new String( "验证码:6462".getBytes(),"utf-8" ),"18227587920"));
 
     }
 

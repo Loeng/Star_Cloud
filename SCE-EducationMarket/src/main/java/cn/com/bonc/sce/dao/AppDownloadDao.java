@@ -27,5 +27,15 @@ public interface AppDownloadDao {
             @RequestParam( "pageSize" ) Integer pageSize,
             @RequestParam( "pageNumber" ) Integer pageNumber );
 
+    /**
+     * 添加用户下载信息
+     * @param userId
+     * @param appId
+     * @return
+     */
+    @RequestMapping( value = "/app-download/info", method = RequestMethod.POST )
+    RestRecord addUserDownloadInfo(
+            @RequestParam( "userId" ) String userId,
+            @RequestParam( "appId" ) String appId );
 
 }

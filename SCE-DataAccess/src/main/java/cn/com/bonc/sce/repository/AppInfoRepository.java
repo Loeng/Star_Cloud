@@ -66,4 +66,20 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     //查询全部类型 根据时间或下载量排序
     @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_CONDITION_INFO_VIEW\" WHERE APP_SOURCE='rj'" )
     Page< List< Map< String, Object > > > getSoftware( Pageable pageable );
+
+
+    @Query(value = "SELECT * FROM STARCLOUDMARKET.V_APP_DETAIL_INFO WHERE APP_ID = ?1 ", nativeQuery = true)
+    Page<Map<String,Object>>  findAppDetailById(String appId,Pageable pageable);
+
+    @Query(value = "SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN WHERE APP_ID = ?1 AND USER_ID = ?2",nativeQuery = true)
+    Map<String,Object> findAppOpenInfo (String appId,String userId);
+
+
+
+    @Query( nativeQuery = true, value = "SELECT count(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO  A  " )
+    int getAppCountInfo();
+
+    @Query( nativeQuery = true, value = "SELECT  COUNT(a.APP_TYPE_ID) as num,b.APP_TYPE_NAME FROM  STARCLOUDMARKET.TEST_MARKET_APP_APPTYPE_REL a INNER  JOIN (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE   WHERE IS_DELETE='1') b\n" +
+            "ON  a.APP_TYPE_ID = b.APP_TYPE_ID  GROUP BY  b.APP_TYPE_NAME,a.APP_TYPE_ID " )
+    List<Map> getAppInfo();
 }

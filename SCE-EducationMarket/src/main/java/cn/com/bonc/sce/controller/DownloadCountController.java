@@ -100,8 +100,21 @@ public class DownloadCountController {
     @ApiOperation( value = "查询软件下载量变化", notes = "厂商通过用户Id查询到所属公司数据", httpMethod = "GET" )
     @GetMapping( "/download-change" )
     @ResponseBody
-    public RestRecord getDownloadChange( @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId ) {
-        /*记录一个*/
-        return countService.getDownloadChange( userId );
+    public RestRecord getDownloadChange(
+            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
+            @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
+
+        return countService.getDownloadChange( userId, startTime, endTime );
+    }
+
+    @ApiOperation( value = "应用类型下载数量", notes = "通过用户信息查询到厂商所有应用", httpMethod = "GET" )
+    @GetMapping( "/download-type" )
+    @ResponseBody
+    public RestRecord getDownloadChange(
+            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @RequestParam( value = "startTime", required = false, defaultValue = "2018-12" ) @ApiParam( "查询月份" ) String time ) {
+
+        return countService.getDownloadByType( userId, time );
     }
 }

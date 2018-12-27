@@ -52,6 +52,23 @@ public class HotAppController {
         return hotAppService.addHotRecommendAppList( appIdList, userId );
     }
 
+    /**
+     * 添加单个热门应用
+     *
+     */
+    @ApiOperation( value = "添加热门应用", notes = "添加热门应用", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "appId", value = "应用id", paramType = "query", required = true )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @PostMapping("/one")
+    public RestRecord addHotRecommendApp( @RequestParam( "appId" ) String appId ) {
+        String userId = "101";
+        return hotAppService.addHotRecommendApp( userId, appId );
+    }
+
 
     /**
      * 查询所有热门应用

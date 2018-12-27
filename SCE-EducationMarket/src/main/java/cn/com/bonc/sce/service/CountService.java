@@ -32,7 +32,11 @@ public class CountService {
         return countDao.getAppDownloadRanking( pageSize, pageNum );
     }
 
-    public RestRecord getDownloadChange(String userId) {
-        return countDao.getDownloadChange(userId);
+    public RestRecord getDownloadChange( String userId, String startTime, String endTime ) {
+        return countDao.getDownloadChange( userId, startTime, endTime );
+    }
+
+    public RestRecord getDownloadByType( String userId, String time ) {
+        return countDao.getDownloadByType( userId, time );
     }
 }

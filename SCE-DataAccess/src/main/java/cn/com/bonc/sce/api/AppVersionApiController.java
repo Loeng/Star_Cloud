@@ -28,11 +28,8 @@ import java.util.Map;
 @RestController
 @RequestMapping( "/app-version" )
 public class AppVersionApiController {
-
-
     private AppVersionRepository appVersionRepository;
     private AppAuditingRepository appAuditingRepository;
-
 
     @Autowired
     public AppVersionApiController( AppVersionRepository appVersionRepository, AppAuditingRepository appAuditingRepository ) {

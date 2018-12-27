@@ -49,7 +49,6 @@ public class MessageController {
 
     /**
      * 添加公告
-     *
      * @param message 信息
      * @return 是否添加成功
      */
@@ -83,7 +82,6 @@ public class MessageController {
 
     /**
      * 通过id删除公告
-     *
      * @param announcementId id
      * @return 删除是否成功
      */

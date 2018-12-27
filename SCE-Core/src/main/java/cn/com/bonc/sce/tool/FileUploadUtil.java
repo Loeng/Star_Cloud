@@ -4,6 +4,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author BTW
@@ -22,7 +24,8 @@ public class FileUploadUtil {
     }
 
     public static boolean uploadFile ( byte[] bytes, String saveFileName, String fileSavePath ) {
-        File targetFile = new File(fileSavePath + File.separator + saveFileName );
+        Path path = Paths.get( fileSavePath, saveFileName );
+        File targetFile = new File( path.toAbsolutePath().toString() );
         if ( !targetFile.getParentFile().exists() ) {
             targetFile.getParentFile().mkdir();
         }
@@ -30,7 +33,6 @@ public class FileUploadUtil {
         try ( BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(targetFile)) ) {
             out.write( bytes );
             out.flush();
-            out.close();
             return true;
         } catch ( IOException e ) {
             return false;

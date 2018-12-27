@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.repository;
 
 import cn.com.bonc.sce.entity.MarketAppVersion;
+import io.swagger.models.auth.In;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -67,6 +68,6 @@ public interface MarketAppVersionRepository extends
      */
     @Modifying
     @Query( value = "UPDATE MarketAppVersion  SET appStatus= :applyType,updateUserId= :userId  where  appId in (:appIdList)" )
-    int applyAppOnShelfByUserId( @Param( "applyType" ) String applyType, @Param( "appIdList" ) List< String > appIdList, @Param( "userId" ) String userId );
+    int applyAppOnShelfByUserId( @Param( "applyType" ) Integer applyType, @Param( "appIdList" ) List< String > appIdList, @Param( "userId" ) String userId );
 
 }
