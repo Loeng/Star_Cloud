@@ -10,6 +10,7 @@ import cn.com.bonc.sce.repository.AppManageFunViewRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.repository.MarketAppVersionRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppNameTypeService;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class AppManageController {
     /**
      * yanmin
      */
-    private AppManageFunViewRepository appManageFunViewRepository;
+    private AppNameTypeService appNameTypeService;
 
     /**
      * 新增应用
@@ -210,44 +211,8 @@ public class AppManageController {
                                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //TODO:这个数据随便查的，要重写
-        if ( StringUtils.isEmpty( sort ) || sort.toUpperCase().equals( "DESC" ) ) {
-            sort = "DESC";
-        } else {
-            sort = "ASC";
-        }
-        if ( orderType.equals( "download" ) ) {
-            orderType = "downloadCount";
-        } else if ( orderType.equals( "time" ) ) {
-            orderType = "updateTime";
-        }
-        Sort sort_p = Sort.by( Sort.Direction.fromString( sort ), orderType );
-        Pageable pageable = PageRequest.of( pageNum - 1, pageSize, sort_p );
-
-        @SuppressWarnings( "serial" )
-        Specification< AppManageFunView > spec = new Specification< AppManageFunView >() {
-            @Override
-            public Predicate toPredicate( Root< AppManageFunView > root, CriteriaQuery< ? > query, CriteriaBuilder cb ) {
-                // build query condition
-                Predicate predicate = cb.conjunction();
-                if ( !StringUtils.isEmpty( appName ) && appName.trim().length() > 0 ) {
-                    predicate.getExpressions().add( cb.like( root.get( "appName" ).as( String.class ), "%" + appName + "%" ) );
-                }
-                if ( appType > 0 ) {
-                    predicate.getExpressions().add( cb.equal( root.get( "appTypeId" ).as( Integer.class ), appType ) );
-                }
-                if ( !StringUtils.isEmpty( platformType ) && platformType.trim().length() > 0 && !"0".equals( platformType ) ) {
-                    predicate.getExpressions().add( cb.equal( root.get( "appSource" ).as( String.class ), platformType.trim() ) );
-                }
-                return predicate;
-            }
-        };
-        Page< AppManageFunView > list = appManageFunViewRepository.findAll( spec, pageable );
-        //Page< AppInfoEntity > list = appInfoRepository.findAll(spec, pageable );
-        Map temp = new HashMap<>();
-        temp.put( "data", list.getContent() );
-        temp.put( "totalPage", list.getTotalPages() );
-        temp.put( "totalCount", list.getTotalElements() );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+        return appNameTypeService.selectAppListByNameAndType(appName, appType, orderType, sort, platformType, pageNum, pageSize);
+       
     }
 
     /**
@@ -310,9 +275,11 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/app-on-shelf" )
-    public RestRecord applyAppOnShelf( @RequestParam Integer applyType, @RequestBody List< String > appIdList, @RequestParam String userId ) {
+    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId) {
 
-        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( applyType, appIdList, userId );
+        String type = String.valueOf( applyType );
+
+        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( type, appIdList, userId );
         return new RestRecord( 200, appInfo );
     }
 
