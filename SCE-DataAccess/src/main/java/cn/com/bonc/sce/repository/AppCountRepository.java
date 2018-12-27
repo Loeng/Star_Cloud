@@ -58,7 +58,7 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     Page< List< Map< String, Object > > > getDownloadCountByType( @Param( "type" ) String type, Pageable pageable );
 
     /**
-     * 查询下载量变化
+     * 查询下载量变化(总量)
      *
      * @param companyId 厂商Id
      * @param startTime 开始时间
@@ -75,6 +75,26 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     List< Map< String, Object > > getDownloadChange( @Param( "companyId" ) Long companyId,
                                                      @Param( "startTime" ) String startTime,
                                                      @Param( "endTime" ) String endTime );
+
+    /**
+     * 查询下载量变化(单体应用)
+     *
+     * @param companyId 厂商Id
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @Query( value = "SELECT to_char ( t.DOWNLOAD_TIME, 'YYYY-MM' ) AS MONTH, \tsum( 1 ) AS \"COUNT\" \n" +
+            "FROM \"STARCLOUDMARKET\".\"DOWNLOAD_CHANGE_VIEW\" t  WHERE \n" +
+            "\tCOMPANY_ID=:companyId AND APP_ID=:appId \n" +
+            "\tand t.DOWNLOAD_TIME >= to_date ( :startTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "\tAND t.DOWNLOAD_TIME <= to_date ( :endTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "GROUP BY  to_char ( t.DOWNLOAD_TIME, 'YYYY-MM' ) \n" +
+            "ORDER BY MONTH", nativeQuery = true )
+    List< Map< String, Object > > getDownloadChangeAndApp( @Param( "companyId" ) Long companyId,
+                                                           @Param( "appId" ) String appId,
+                                                           @Param( "startTime" ) String startTime,
+                                                           @Param( "endTime" ) String endTime );
 
     /**
      * 通过userId查询到对应的厂商Id
@@ -117,7 +137,14 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
             "\tWHERE COMPANY_ID = ?1 GROUP BY COMPANY_ID ", nativeQuery = true )
     Map< String, Object > getAppCountByCompanyId( @Param( "companyId" ) String companyId );
 
-
+    /**
+     * 查询收藏量变化(总量)
+     *
+     * @param companyId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
     @Query( value = "SELECT to_char ( t.COLLECT_TIME, 'YYYY-MM' ) AS \"MONTH\", sum( 1 ) AS \"COUNT\" \n" +
             "FROM \"STARCLOUDMARKET\".\"COLLECTION_CHANGE_VIEW\" t  WHERE COMPANY_ID = :companyId \n" +
             "\tAND t.COLLECT_TIME >= to_date ( :startTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
@@ -126,4 +153,27 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     List< Map< String, Object > > getCollectionChange( @Param( "companyId" ) Long companyId,
                                                        @Param( "startTime" ) String startTime,
                                                        @Param( "endTime" ) String endTime );
+
+
+    /**
+     * 查询收藏量变化(单个应用)
+     *
+     * @param companyId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Query( value = "SELECT to_char ( t.COLLECT_TIME, 'YYYY-MM' ) AS \"MONTH\", sum( 1 ) AS \"COUNT\" \n" +
+            "FROM \"STARCLOUDMARKET\".\"COLLECTION_CHANGE_VIEW\" t  WHERE COMPANY_ID = :companyId AND APP_ID=:appId\n" +
+            "\tAND t.COLLECT_TIME >= to_date ( :startTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "\tAND t.COLLECT_TIME <= to_date ( :endTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
+            "GROUP BY to_char ( t.COLLECT_TIME, 'YYYY-MM' )  ORDER BY \"MONTH\"", nativeQuery = true )
+    List< Map< String, Object > > getCollectionChangeAndApp( @Param( "companyId" ) Long companyId,
+                                                             @Param( "appId" ) String appId,
+                                                             @Param( "startTime" ) String startTime,
+                                                             @Param( "endTime" ) String endTime );
+
+
+    @Query( value = "SELECT APP_NAME,APP_ID FROM \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" WHERE COMPANY_ID=:companyId ORDER BY CREATE_TIME DESC", nativeQuery = true )
+    List< Map< String, Object > > getCompanyAppList( @Param( "companyId" ) Long companyId );
 }

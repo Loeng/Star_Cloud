@@ -36,6 +36,7 @@ public interface CountDao {
 
     @RequestMapping( value = "/count/download-change", method = RequestMethod.GET )
     RestRecord getDownloadChange( @RequestParam( "userId" ) String userId,
+                                  @RequestParam( "appId" ) String appId,
                                   @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
                                   @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime );
 
@@ -48,6 +49,10 @@ public interface CountDao {
 
     @RequestMapping( value = "/count/collection-change", method = RequestMethod.GET )
     RestRecord getCollectionChange( @RequestParam( "userId" ) String userId,
+                                    @RequestParam( "appId" ) String appId,
                                     @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
                                     @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime );
+
+    @RequestMapping( value = "/count/company-app", method = RequestMethod.GET )
+    RestRecord getCompanyAppList( @RequestParam( "userId" ) String userId );
 }

@@ -54,6 +54,7 @@ public interface AppVersionRepository extends
 
     /**
      * 查询应用下载地址
+     *
      * @param appId
      * @param version
      * @param platform
