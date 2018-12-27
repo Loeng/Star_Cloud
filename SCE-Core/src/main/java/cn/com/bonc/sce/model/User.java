@@ -44,7 +44,7 @@ public class User {
 
     public void generateUserSecret() {
         this.secretKeyPair = new Secret();
-        this.secret = this.secretKeyPair.getSecretPair();
+        this.secret = this.secretKeyPair.getSecretKeyPair();
     }
 
     public Secret getSecretKeyPair() {
@@ -63,7 +63,7 @@ public class User {
     public void setSecretKeyPair( String secretKeyPair ) {
         if ( secretKeyPair != null ) {
             this.secretKeyPair = new Secret( secretKeyPair );
-            this.secret = this.getSecretKeyPair().getSecretPair();
+            this.secret = this.getSecretKeyPair().getSecretKeyPair();
         } else {
             this.secretKeyPair = null;
         }
