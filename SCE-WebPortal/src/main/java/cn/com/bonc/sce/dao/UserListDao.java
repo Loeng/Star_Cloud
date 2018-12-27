@@ -17,8 +17,8 @@ public interface UserListDao {
     /**
      * 根据角色id查询用户信息
      */
-    @RequestMapping( value = "/user-list/role/{roleId}/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord getUserInfoByRole( @PathVariable( "roleId" ) String roleId,
+    @RequestMapping( value = "/user-list/role/{roleId}/{pageNum}/{pageSize}", method = RequestMethod.POST )
+    RestRecord getUserInfoByRole( @PathVariable( "roleId" ) Integer roleId,
                                   @PathVariable( "pageNum" ) Integer pageNum,
                                   @PathVariable( "pageSize" ) Integer pageSize,
                                   @RequestBody (required = false) Map<String,Object> condition);

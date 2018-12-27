@@ -4,6 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,7 +39,7 @@ public class UserListController {
      * @param pageSize
      * @return
      */
-    @GetMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
+    @PostMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
     @ResponseBody
     public RestRecord getUserInfoByRole( @PathVariable Integer roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
