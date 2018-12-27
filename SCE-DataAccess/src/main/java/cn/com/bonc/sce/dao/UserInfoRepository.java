@@ -52,8 +52,8 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
      *@Date : 9:44 2018/12/25
      */
     @Query(value = "SELECT u.USER_TYPE,u.USER_NAME,u.GENDER,u.ADDRESS,u.LOGIN_PERMISSION_STATUS\n" +
-            "FROM STARCLOUDPORTAL.SCE_COMMON_USER u inner JOIN STARCLOUDPORTAL.SCE_INFO_THIRD_PARTY p on p.USER_ID = u.USER_ID\n"+
-            "WHERE  u.LOGIN_NAME like CONCAT('%',concat(?1,'%'))  or u.USER_NAME like CONCAT('%',concat(?2,'%'))",nativeQuery = true)
+            "FROM STARCLOUDPORTAL.SCE_COMMON_USER u INNER JOIN STARCLOUDPORTAL.SCE_INFO_THIRD_PARTY p on p.USER_ID = u.USER_ID\n" +
+            "WHERE u.LOGIN_NAME LIKE CONCAT('%',CONCAT(?1,'%')) AND u.USER_NAME LIKE CONCAT('%',CONCAT(?2,'%'))",nativeQuery = true)
     Page<Map> findSelfRegALLByNameOrCount(String byName, String loginName, Pageable pageable);
 
 
@@ -76,8 +76,8 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
 
     @Query(value = "SELECT ea.AUTHORITY_NAME AS AUTHORITY_NAME,u.LOGIN_NAME AS LOGIN_NAME,u.LOGIN_PERMISSION_STATUS AS LOGIN_PERMISSION_STATUS\n" +
             "FROM STARCLOUDPORTAL.SCE_COMMON_USER u INNER JOIN STARCLOUDPORTAL.SCE_ENTITY_AUTHORITY ea on ea.ID = u.ORGANIZATION_ID\n" +
-            "WHERE u.LOGIN_NAME like CONCAT('%',concat(?1,'%')) or ea.AUTHORITY_NAME like CONCAT('%',concat(?2,'%')) " +
-            "or u.LOGIN_PERMISSION_STATUS = ?3",nativeQuery = true)
+            "WHERE u.LOGIN_NAME like CONCAT('%',concat(?1,'%')) AND ea.AUTHORITY_NAME like CONCAT('%',concat(?2,'%')) " +
+            "AND u.LOGIN_PERMISSION_STATUS = ?3",nativeQuery = true)
     Page<Map> findByOrganizationLike(String loginName,String byAuthName,int status,Pageable pageable);
 
     /**
@@ -99,9 +99,9 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
     @Query(value = "SELECT mc.company_name AS company_name,u.LOGIN_NAME AS LOGIN_NAME,u.LOGIN_PERMISSION_STATUS AS LOGIN_PERMISSION_STATUS\n" +
             "FROM STARCLOUDPORTAL.SCE_COMMON_USER u INNER JOIN STARCLOUDPORTAL.SCE_INFO_COMPANY ic \n" +
             "      on ic.USER_ID = u.USER_ID INNER JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY mc on mc.COMPANY_ID = ic.COMPANY_ID\n" +
-            "WHERE u.LOGIN_NAME like CONCAT('%',concat(?1,'%')) or mc.company_name like CONCAT('%',concat(?2,'%'))\n" +
-            "      or u.LOGIN_PERMISSION_STATUS = ?3 ",nativeQuery = true)
-    Page<Map> findByManufacturerLike(String loginName,String byMarkName,int status,Pageable pageable);
+            "WHERE u.LOGIN_NAME like CONCAT('%',concat(?1,'%')) AND mc.company_name like CONCAT('%',concat(?2,'%'))\n" +
+            "      AND u.LOGIN_PERMISSION_STATUS = ?3 ",nativeQuery = true)
+    Page<Map> findByManufacturerLike(String loginName,String organizationName,int status,Pageable pageable);
 
 
 
