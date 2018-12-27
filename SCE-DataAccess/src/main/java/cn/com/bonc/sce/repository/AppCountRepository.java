@@ -21,8 +21,8 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
      * @param pageable
      * @return
      */
-    @Query( value = "SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKER_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID ORDER BY DOWNLOAD DESC",
-            countQuery = "SELECT COUNT(*) FROM (SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKER_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID)",
+    @Query( value = "SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID ORDER BY DOWNLOAD DESC",
+            countQuery = "SELECT COUNT(*) FROM (SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID)",
             nativeQuery = true )
     Page< List< Map< String, Object > > > getAppDownloadRankingList( Pageable pageable );
 
@@ -30,32 +30,73 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     /**
      * 通过应用Id查询下载下载量
      *
-     * @param appId 应用Id
+     * @param appId    应用Id
+     * @param pageable 分页参数
      * @return
      */
     @Query( value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE APP_ID=:appId", nativeQuery = true )
     Page< List< Map< String, Object > > > getDownloadCountByAppId( @Param( "appId" ) String appId, Pageable pageable );
 
+    /**
+     * 通过公司Id查询下载量
+     *
+     * @param companyId 公司Id
+     * @param pageable  分页参数
+     * @return
+     */
     @Query( value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE COMPANY_ID=:companyId", nativeQuery = true )
     Page< List< Map< String, Object > > > getDownloadCountByCompanyId( @Param( "companyId" ) Long companyId, Pageable pageable );
 
+    /**
+     * 通过类型查询下载量
+     *
+     * @param type     类型名称
+     * @param pageable 分页参数
+     * @return
+     */
     @Query( value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE APP_TYPE_NAME=:type", nativeQuery = true )
     Page< List< Map< String, Object > > > getDownloadCountByType( @Param( "type" ) String type, Pageable pageable );
 
+    /**
+     * 查询下载量变化
+     *
+     * @param companyId 厂商Id
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
     @Query( value = "SELECT to_char ( t.DOWNLOAD_TIME, 'YYYY-MM' ) AS MONTH, \tsum( 1 ) AS \"COUNT\" \n" +
             "FROM \"STARCLOUDMARKET\".\"DOWNLOAD_CHANGE_VIEW\" t  WHERE \n" +
             "\tCOMPANY_ID=:companyId \n" +
             "\tand t.DOWNLOAD_TIME >= to_date ( :startTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
             "\tAND t.DOWNLOAD_TIME <= to_date ( :endTime, 'yyyy-mm-dd hh24:mi:ss' ) \n" +
             "GROUP BY  to_char ( t.DOWNLOAD_TIME, 'YYYY-MM' ) \n" +
-            "ORDER BY MONTH" ,nativeQuery = true)
+            "ORDER BY MONTH", nativeQuery = true )
     List< Map< String, Object > > getDownloadChange( @Param( "companyId" ) Long companyId,
                                                      @Param( "startTime" ) String startTime,
                                                      @Param( "endTime" ) String endTime );
 
-
-    @Query( value = "SELECT SIC.USER_ID, SIC.COMPANY_ID, SMC.COMPANY_NAME, SMC.COMPANY_ADDRESS\n" +
+    /**
+     * 通过userId查询到对应的厂商Id
+     *
+     * @param userId 用户Id
+     * @return
+     */
+    @Query( value = "SELECT SIC.USER_ID, SIC.COMPANY_ID , SMC.COMPANY_NAME, SMC.COMPANY_ADDRESS\n" +
             "FROM \"STARCLOUDPORTAL\".\"SCE_INFO_COMPANY\" SIC LEFT JOIN \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC ON SIC.COMPANY_ID=SMC.COMPANY_ID\n" +
             "WHERE USER_ID =:userId", nativeQuery = true )
     Map< String, Object > getCompanyInfo( @Param( "userId" ) String userId );
+
+    /**
+     * 查询当月下载类型占比
+     *
+     * @param companyId 厂商Id
+     * @param time      月份
+     * @return
+     */
+    @Query( value = "SELECT t.APP_TYPE_NAME,count(t.APP_TYPE_NAME) AS COUNT FROM \"STARCLOUDMARKET\".\"DOWNLOAD_CHANGE_VIEW\" t \n" +
+            "WHERE COMPANY_ID =:companyId AND t.DOWNLOAD_TIME >= to_date(:time, 'yyyy-mm' ) \n" +
+            "GROUP BY t.APP_TYPE_NAME", nativeQuery = true )
+    List< Map< String, Object > > getDownloadByType( @Param( "companyId" ) Long companyId,
+                                                     @Param( "time" ) String time );
 }

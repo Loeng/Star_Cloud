@@ -104,7 +104,7 @@ public class NewsController {
                                    @RequestParam( value = "content", required = false ) @ApiParam( name = "content", value = "内容") String content,
                                    @RequestParam( value = "startDate", required = false ) @ApiParam( name = "startDate", value = "开始时间") String startDate,
                                    @RequestParam( value = "endDate", required = false ) @ApiParam( name = "endDate", value = "结束时间") String endDate,
-                                   @RequestParam( value = "pageNum", required = false, defaultValue = "0"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
+                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
                                    @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
         return newsService.getNewsList( auditStatus,content, startDate, endDate, pageNum, pageSize );
     }

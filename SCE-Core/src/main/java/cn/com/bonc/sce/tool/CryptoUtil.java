@@ -26,7 +26,7 @@ public class CryptoUtil {
 
     public static final CryptoUtil RSA_CRYPTO_UTIL_INSTANCE = new CryptoUtil();
 
-    private  KeyPairGenerator keyPairGenerator;
+    private KeyPairGenerator keyPairGenerator;
 
     public CryptoUtil() {
         this.keyPairGenerator = null;
@@ -143,6 +143,7 @@ public class CryptoUtil {
         KeyPair keyPair = CryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.generateKeyPair();
         RSA rsa = new RSA( keyPair.getPrivate(), keyPair.getPublic() );
 
+        System.out.println( ( rsa.getPrivateKeyBase64() + rsa.getPublicKeyBase64() ).length() );
         System.out.println( ( rsa.getPrivateKeyBase64() + rsa.getPublicKeyBase64() ) );
 
 //        System.out.println(generateKeyPair( SignatureAlgorithm.ES256.name() ));

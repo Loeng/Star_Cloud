@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppManageService;
 import io.swagger.annotations.*;
@@ -43,9 +44,11 @@ public class AppManageController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
-    public RestRecord addAppInfo( @RequestBody Map appInfo ) {
+    public RestRecord addAppInfo( @RequestBody AppAddModel appInfo ) {
 
-        return appManageService.addAppInfo( appInfo );
+        System.out.println( appInfo );
+        //TODO
+        return appManageService.addAppInfo( null );
     }
 
     /**
@@ -196,6 +199,42 @@ public class AppManageController {
 
         return appManageService.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
     }
+    /**
+     * 前台全部应用页面展示
+     *
+     * @param appName
+     * @param appType
+     * @param orderType
+     * @param sort
+     * @param platformType
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation( value = "前台全部应用页面展示", notes = "前台全部应用页面展示", httpMethod = "GET" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "appName", value = "appName", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "appType", value = "应用分类id(传0查全部rj)", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "platformType", value = "平台类型(pt|rj)", paramType = "query", required = false )
+
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/condition" )
+    public RestRecord getAppListInfoByCondition( @RequestParam( value = "appName", required = false ) String appName,
+                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                                  @RequestParam(value = "orderType",required = false,defaultValue = "download") String orderType,
+                                                  @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                                  @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+
+
+        return appManageService.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize );
+    }
 
     /**
      * 查询单个应用详情
@@ -250,4 +289,37 @@ public class AppManageController {
     ) {
         return appManageService.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize );
     }
+
+
+    /**
+     * app统计总量
+     *
+     * @return
+     */
+    @ApiOperation( value = "应用统计总量",tags = "应用统总量" ,notes = "应用统计总量", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/count-app" )
+    public RestRecord getAppCountInfo()
+    {
+        return appManageService.getAppCountInfo(  );
+    }
+
+
+    /**
+     * app分类信息统计
+     *
+     * @return
+     */
+    @ApiOperation( value = "应用统计详情",tags = "应用统计详情" ,notes = "应用统计详情", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/app-info" )
+    public RestRecord getAppInfo()
+    {
+        return appManageService.getAppInfo();
+    }
+
 }

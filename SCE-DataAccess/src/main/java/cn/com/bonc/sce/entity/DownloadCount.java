@@ -17,10 +17,11 @@ public class DownloadCount {
     private Time downloadTime;
     private String userId;
     private String downloadUserIp;
-    private Long isDelete;
+    private Long isDelete = 1L;
 
     @Id
-    @Column( name = "ID" )
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column( name = "ID", nullable = false, precision = 0 )
     public long getId() {
         return id;
     }
@@ -30,7 +31,7 @@ public class DownloadCount {
     }
 
     @Basic
-    @Column( name = "APP_ID" )
+    @Column( name = "APP_ID", nullable = true, precision = 0 )
     public String getAppId() {
         return appId;
     }
@@ -81,8 +82,12 @@ public class DownloadCount {
 
     @Override
     public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
+        if ( this == o ) {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() ) {
+            return false;
+        }
         DownloadCount that = ( DownloadCount ) o;
         return id == that.id &&
                 Objects.equals( appId, that.appId ) &&

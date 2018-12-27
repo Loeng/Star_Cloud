@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.LoginService;
 import cn.com.bonc.sce.service.UserService;
@@ -36,7 +37,9 @@ public class UserInfoController {
     @ApiOperation( value = "用户数据查询接口", notes = "使用 login_name 进行登录", httpMethod = "GET" )
     @GetMapping( value = "/{userId}", produces = "application/json" )
     @ResponseBody
-    public RestRecord login( HttpServletRequest request,@ApiParam() @PathVariable( "userId" ) String userId ) {
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, userService.getUserByUserId( userId ) );
+    public RestRecord getUserInfoByUserId( HttpServletRequest request, @ApiParam() @PathVariable( "userId" ) String userId ) {
+        User user = userService.getUserByUserId( userId );
+        userService.clearSensitiveInformation( user );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, user );
     }
 }

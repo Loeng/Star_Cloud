@@ -14,9 +14,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * 应用下载统计接口
+ *
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
  */
+
 @Slf4j
 @RestController
 @RequestMapping( "/count" )
@@ -166,5 +172,34 @@ public class DownloadCountApiController {
 
     }
 
+    /**
+     * http://localhost:10210/count/download-type?userId=123
+     *
+     * @param userId 用户Id
+     * @param time   查询的月份
+     * @return
+     */
+    @GetMapping( "/download-type" )
+    @ResponseBody
+    public RestRecord getDownloadTypeByMonth(
+            @RequestParam( "userId" ) String userId,
+            @RequestParam( value = "time", required = false, defaultValue = "2018-12" ) String time ) {
+        log.trace( "Query DownloadTypeByMonth userId is :{}", userId );
+        try {
+            Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
+            if ( companyInfo.get( "COMPANY_ID" ) == null ) {
+                return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
+            } else {
+                //获取当前月份拼接年月
 
+
+                RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+                restRecord.setData( appCountRepository.getDownloadByType( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), time ) );
+                return restRecord;
+            }
+        } catch ( Exception e ) {
+            log.error( "Query DownloadChange fail {}", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+    }
 }

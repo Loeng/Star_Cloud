@@ -75,12 +75,23 @@ public interface AppManageDao {
     /**
      * 根据输入名和选择类别查询应用
      */
-    @RequestMapping( value = "/manage-app/condition", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/apps-by-name-type", method = RequestMethod.GET )
     RestRecord selectAppListByNameAndType( @RequestParam( value = "appName", required = false ) String appName,
                                            @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                            @RequestParam(value ="orderType" ) String orderType,
                                            @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                            @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
+    /**
+     * 前台全部应用页面展示
+     */
+    @RequestMapping( value = "/manage-app/condition", method = RequestMethod.GET )
+    RestRecord getAppListInfoByCondition( @RequestParam( value = "appName", required = false ) String appName,
+                                           @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
+                                           @RequestParam(value ="orderType" ) String orderType,
+                                           @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
+                                           @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
                                            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
 
@@ -129,4 +140,11 @@ public interface AppManageDao {
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
     );
+
+
+    @RequestMapping( value = "/manage-app/count-app", method = RequestMethod.GET )
+    RestRecord getAppCountInfo();
+
+    @RequestMapping( value = "/manage-app/app-info", method = RequestMethod.GET )
+    RestRecord getAppInfo();
 }

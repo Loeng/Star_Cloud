@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.repository;
 
-import cn.com.bonc.sce.entity.App;
+import cn.com.bonc.sce.entity.AppCollectionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Transactional( rollbackFor = Exception.class )
-public interface UserCollectRepository extends JpaRepository<App,String> {
+public interface UserCollectRepository extends JpaRepository<AppCollectionEntity,String> {
 
 
     @Modifying
@@ -20,5 +20,8 @@ public interface UserCollectRepository extends JpaRepository<App,String> {
             " on T1.APP_ID = T2.APP_ID " +
             "WHERE T1.IS_DELETE = 1 and T1.USER_ID = :userId   ", nativeQuery = true )
     List< Map< String, Object > > getUserAppCollect(@Param(value = "userId") String userId);
+
+    @Override
+    < S extends AppCollectionEntity > S save( S s );
 
 }

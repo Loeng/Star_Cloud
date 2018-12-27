@@ -14,24 +14,28 @@ import java.util.Map;
  */
 @Service
 public class LoginService {
+    // TODO 启动一个定时跟新服务，去拉取角色 code
+    private String[] roleCodes = { "none", "vendor", "school", "teacher", "students", "parents", "eduBureau", "agency", "tourist" };
 
+
+    /**
+     * 根据用户私钥生成 ticket
+     *
+     * @param authenticatedUser 登录用户
+     *
+     * @return 字符串形式的 jwt ticket
+     */
     public String generateTicket( User authenticatedUser ) {
         Map< String, Object > claims = new HashMap<>( 2 );
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
         claims.put( "userType", authenticatedUser.getUserType() );
-        // TODO 传入真实的 ruleCode
-        claims.put( "ruleCode", "parents" );
+        // 签发人
+        claims.put( "iss", "SCE-SSO" );
+        // 受众
+        claims.put( "aud", "SCE-Application" );
+        claims.put( "ruleCode", roleCodes[ authenticatedUser.getUserType() ] );
 
-//        return JWTUtil.generateKeyWithSecret( claims, authenticatedUser.getSecrete2().getKeyPair().getPrivate() );
-        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecrete2().getPrivateKey() );
+        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey() );
     }
-
-//    public static void main( String[] args ) {
-//        UserService userService = new UserService( null );
-////        User user = userService.checkLoginByLoginName( "", "" );
-//        LoginService loginService = new LoginService();
-////        String ticket = loginService.generateTicket( user );
-//        System.out.println( ticket );
-//    }
 }

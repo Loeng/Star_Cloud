@@ -94,17 +94,34 @@ public class NotificationService {
         } else {
             content = "%" + content + "%";
         }
-        if ( StringUtils.isEmpty( type ) ) {
-            if ( StringUtils.isEmpty( startDate ) ) {
-                page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1, content, 0, auditStatus, pageable );
+        String all = "3";
+        if(all.equals( auditStatus)) {
+            if ( StringUtils.isEmpty( type ) ) {
+                if ( StringUtils.isEmpty( startDate ) ) {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnId( 1, content, 0, pageable );
+                } else {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndUpdateTimeBetween( 1, content, 0, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                }
             } else {
-                page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1, content, 0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                if ( StringUtils.isEmpty( startDate ) ) {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentType( 1, content, 0, type, pageable );
+                } else {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndUpdateTimeBetween( 1, content, 0, type, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                }
             }
-        } else {
-            if ( StringUtils.isEmpty( startDate ) ) {
-                page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatus( 1, content, 0, type, auditStatus, pageable );
+        }else{
+            if ( StringUtils.isEmpty( type ) ) {
+                if ( StringUtils.isEmpty( startDate ) ) {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( 1, content, 0, auditStatus, pageable );
+                } else {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( 1, content, 0, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                }
             } else {
-                page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatusAndUpdateTimeBetween( 1, content, 0, type, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                if ( StringUtils.isEmpty( startDate ) ) {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatus( 1, content, 0, type, auditStatus, pageable );
+                } else {
+                    page = notificationDao.findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatusAndUpdateTimeBetween( 1, content, 0, type, auditStatus, new Date( Long.parseLong( startDate ) ), new Date( Long.parseLong( endDate ) ), pageable );
+                }
             }
         }
         List< Notification > list = page.getContent();

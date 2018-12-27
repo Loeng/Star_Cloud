@@ -12,6 +12,9 @@
     <artifactId>SCE-DataAccess</artifactId>
     <version>0.0.1.DEV</version>
 
+
+
+
     <dependencies>
         <!-- Eureka Server -->
         <!-- cloud-->
@@ -73,6 +76,7 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>

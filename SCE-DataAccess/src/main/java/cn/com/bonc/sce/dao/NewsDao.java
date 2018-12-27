@@ -28,6 +28,18 @@ public interface NewsDao extends JpaRepository< News, Integer > {
 
     News findByIdAndIsDelete( Integer newsId, Integer isDelete );
 
+    Page< News > findByIsDeleteAndContentLikeAndColumnId( Integer isDelete,
+                                                          String content,
+                                                          Integer columnId,
+                                                          Pageable pageable );
+
+    Page< News > findByIsDeleteAndContentLikeAndColumnIdAndUpdateTimeBetween( Integer isDelete,
+                                                                              String content,
+                                                                              Integer columnId,
+                                                                              Date createTimeFrom,
+                                                                              Date createTimeTo,
+                                                                              Pageable pageable );
+
     Page< News > findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( Integer isDelete,
                                                                           String content,
                                                                           Integer columnId,

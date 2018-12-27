@@ -6,6 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
+ */
 @Slf4j
 @Service
 public class CountService {
@@ -32,7 +37,11 @@ public class CountService {
         return countDao.getAppDownloadRanking( pageSize, pageNum );
     }
 
-    public RestRecord getDownloadChange(String userId) {
-        return countDao.getDownloadChange(userId);
+    public RestRecord getDownloadChange( String userId, String startTime, String endTime ) {
+        return countDao.getDownloadChange( userId, startTime, endTime );
+    }
+
+    public RestRecord getDownloadByType( String userId, String time ) {
+        return countDao.getDownloadByType( userId, time );
     }
 }

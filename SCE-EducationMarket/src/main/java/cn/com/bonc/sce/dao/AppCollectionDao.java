@@ -8,27 +8,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
- * @author yinming
+ * @author BTW
  * @date 2018/12/25
  */
 @FeignClient( "sce-data-access" )
-public interface AppOpenDao {
-    /**
-     * 获取用户开通列表
-     * @param userId
-     * @return
-     */
-    @RequestMapping( value = "/app-open", method = RequestMethod.GET )
-    RestRecord getUserAppOpenList(
-            @RequestParam( "userId" ) String userId );
+public interface AppCollectionDao {
 
     /**
-     * 添加用户开通应用信息
+     * 添加用户收藏应用信息
      * @param userId
      * @param appId
      * @return
      */
-    @RequestMapping ( value = "/app-open/info", method = RequestMethod.POST )
+    @RequestMapping ( value = "/app-collect/info", method = RequestMethod.POST )
     RestRecord addUserAppOpenInfo( @RequestParam( "userId" ) String userId,
                                    @RequestParam( "appId" ) String appId );
 }

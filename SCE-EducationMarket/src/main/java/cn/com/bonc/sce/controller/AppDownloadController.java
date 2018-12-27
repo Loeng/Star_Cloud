@@ -50,7 +50,7 @@ public class AppDownloadController {
                                                @PathVariable( "pageSize" ) Integer pageSize,
                                                @PathVariable( "pageNumber" ) Integer pageNumber ) {
 
-        return  appDownloadService.getUserAppDownloadList( userId, pageSize, pageNumber );
+        return appDownloadService.getUserAppDownloadList( userId, pageSize, pageNumber );
 
     }
 
@@ -72,7 +72,7 @@ public class AppDownloadController {
     @ResponseBody
     public RestRecord addUserAppOpen ( @RequestParam( "userId" ) String userId,
                                        @RequestParam( "appId" ) String appId ) {
-        return null;
+        return appDownloadService.addUserDownloadInfo( userId, appId );
     }
 
 }

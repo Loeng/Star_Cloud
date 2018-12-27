@@ -42,4 +42,7 @@ public class ChannelInfo {
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
+
+    @Column(name = "CHANNEL_URL")
+    private String picUrl;
 }

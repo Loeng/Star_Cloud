@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by yinming on 2018/12/25.
+ *
+ * @author yinming
+ * @date 2018/12/25
  */
 @Service
 @Slf4j
@@ -21,5 +23,9 @@ public class AppOpenService {
 
     public RestRecord getUserAppOpenList(String userId) {
         return appOpenDao.getUserAppOpenList( userId);
+    }
+
+    public RestRecord addUserAppOpenInfo( String userId, String appId ) {
+        return appOpenDao.addUserAppOpenInfo( userId, appId );
     }
 }

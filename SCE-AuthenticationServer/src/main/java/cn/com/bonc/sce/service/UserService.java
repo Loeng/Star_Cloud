@@ -45,25 +45,20 @@ public class UserService {
         return null;
     }
 
-    /**
-     * 通过 loginId 和 密码 获取用户数据，获取不到返回 null
-     */
-    public User checkLoginByLoginName( String loginName ) {
-        // TODO 和 DataAccess 连接起来
-//       return userDao.getUserByLoginName( loginName );
-        User user = new User( "bonc1234", 5 );
-        user.generateSecret();
-        return user;
-    }
-
-    // TODO 解决 JSON 序列化的问题
-//    public User getUserByUserId( String userId ) {
-//        Map< String, Object > userInfo = userDao.getUserById( userId );
-//
-//        return new User( String.valueOf( userInfo.get( "userId" ) ), String.valueOf( userInfo.get( "loginName" ) ), String.valueOf( userInfo.get( "password" ) ) );
-//    }
-
     public User getUserByUserId( String userId ) {
         return userDao.getUserById( userId );
+    }
+
+    /**
+     * 清除用户敏感数据
+     */
+    public void clearSensitiveInformation( User userInfo ) {
+        userInfo.setSecret( null );
+        userInfo.setSecretKeyPair( null );
+        userInfo.setAccount( null );
+        userInfo.setCertificateType( null );
+        userInfo.setCertificateNumber( null );
+        userInfo.setAddress( null );
+        userInfo.setPassword( null );
     }
 }

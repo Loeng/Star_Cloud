@@ -2,8 +2,10 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.FileUploadDao;
+import cn.com.bonc.sce.model.ExcelToUser;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.FileUploadUtil;
+import cn.com.bonc.sce.tool.IDUtil;
 import cn.hutool.core.lang.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * @author BTW
@@ -42,17 +45,22 @@ public class FileUploadService {
 
     private FileUploadDao fileUploadDao;
 
+
+    public static final String STUDENT_PRE = "4";
+
+    public static final String TEACHER_PRE = "3";
+
     @Autowired
-    public FileUploadService ( FileUploadDao fileUploadDao ) {
+    public FileUploadService( FileUploadDao fileUploadDao ) {
         this.fileUploadDao = fileUploadDao;
     }
 
-    public RestRecord uploadMultipart ( MultipartFile multipartFile, String fileType ) {
+    public RestRecord uploadMultipart( MultipartFile multipartFile, String fileType ) {
         try {
             byte[] bytes = multipartFile.getBytes();
             String originFileName = multipartFile.getOriginalFilename();
             String suffixName = FileUploadUtil.getFileSuffix( originFileName );
-            String saveFileName = UUID.randomUUID().toString().replace( "-","" ) + suffixName;
+            String saveFileName = UUID.randomUUID().toString().replace( "-", "" ) + suffixName;
 
             String fileStorePath;
             String fileMappingPath;
@@ -80,7 +88,7 @@ public class FileUploadService {
                     return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_452 );
             }
 
-            boolean status = FileUploadUtil.uploadFile( bytes, saveFileName, fileSavePath  );
+            boolean status = FileUploadUtil.uploadFile( bytes, saveFileName, fileSavePath );
 
             if ( status ) {
                 RestRecord restRecord = fileUploadDao.saveUploadFile( fileType, fileStorePath, fileMappingPath );
@@ -89,8 +97,27 @@ public class FileUploadService {
                 return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
             }
         } catch ( IOException e ) {
-            return  new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_451 );
+            return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_451 );
         }
     }
 
+    public RestRecord uploadUserInfo( List< ExcelToUser > list, String userType ) {
+
+        StringBuilder pre = new StringBuilder();
+
+        if ( TEACHER_PRE.equals( userType ) ) {
+            pre = pre.append( "js_" );
+        } else if ( STUDENT_PRE.equals( userType ) ) {
+            pre = pre.append( "xs_" );
+        }
+
+        for ( ExcelToUser excelToUser : list ) {
+            excelToUser.setUserType(userType );
+            excelToUser.setCertificateType( "1" );
+            excelToUser.setLoginName(IDUtil.createID(pre));
+        }
+
+        return fileUploadDao.uploadUserInfo( list );
+
+    }
 }

@@ -62,8 +62,8 @@ public class AppOpenController {
     @PostMapping
     @ResponseBody
     public RestRecord addUserAppOpen ( @RequestParam( "userId" ) String userId,
-                                             @RequestParam( "appId" ) String appId ) {
-        return null;
+                                       @RequestParam( "appId" ) String appId ) {
+        return appOpenService.addUserAppOpenInfo( userId, appId );
     }
 
     /**
@@ -83,7 +83,7 @@ public class AppOpenController {
     @DeleteMapping("/{userId}/{appId}")
     @ResponseBody
     public RestRecord deleteUserAppOpen ( @RequestParam( "userId" ) String userId,
-                                                @RequestParam( "appId" ) String appId ) {
+                                          @RequestParam( "appId" ) String appId ) {
         return null;
     }
 }
