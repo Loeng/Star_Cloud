@@ -310,9 +310,11 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/app-on-shelf" )
-    public RestRecord applyAppOnShelf( @RequestParam Integer applyType, @RequestBody List< String > appIdList, @RequestParam String userId ) {
+    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId) {
 
-        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( applyType, appIdList, userId );
+        String type = String.valueOf( applyType );
+
+        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( type, appIdList, userId );
         return new RestRecord( 200, appInfo );
     }
 
