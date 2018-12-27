@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -35,6 +36,10 @@ public class MessageService {
     private MessageDao messageDao;
     @Autowired
     private UserMessageDao userMessageDao;
+
+    private final String ASC = "ASC";
+    private final String DESC = "DESC";
+    private final String SORT_STR = "createTime";
 
     /**
      * 添加message
@@ -106,7 +111,8 @@ public class MessageService {
      */
     public RestRecord getMessageByUserId( String userId, Integer pageNum, Integer pageSize ) {
         pageNum--;
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Sort sort =Sort.by(Sort.Direction.fromString(DESC), SORT_STR);
+        Pageable pageable = PageRequest.of( pageNum, pageSize, sort );
         Timestamp time = messageDao.getNewestTimeByUserId( userId );
         List< Message > list;
         if ( !StringUtils.isEmpty( time ) ) {

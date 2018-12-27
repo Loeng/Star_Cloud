@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -32,6 +33,10 @@ public class NotificationService {
 
     @Autowired
     private NotificationDao notificationDao;
+
+    private final String ASC = "ASC";
+    private final String DESC = "DESC";
+    private final String SORT_STR = "createTime";
 
     /**
      * 新增通知公告
@@ -87,7 +92,8 @@ public class NotificationService {
      */
     public RestRecord getNotificationList( Integer type, String content, String auditStatus, String startDate, String endDate, Integer pageNum, Integer pageSize ) {
         pageNum--;
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Sort sort =Sort.by(Sort.Direction.fromString(DESC), SORT_STR);
+        Pageable pageable = PageRequest.of( pageNum, pageSize, sort );
         Page< Notification > page;
         if ( StringUtils.isEmpty( content ) ) {
             content = "%%";
