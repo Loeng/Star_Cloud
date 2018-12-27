@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,8 +34,8 @@ import java.util.Date;
 @Table( name = "SCE_COMMON_USER", schema = "STARCLOUDPORTAL" )
 public class User {
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_COMMON_USER" )
-    @SequenceGenerator( name = "SEQ_GEN_COMMON_USER", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_COMMON_USER" )
+    @GeneratedValue( generator = "SEQ_GEN_COMMON_USER" )
+    @GenericGenerator( name = "SEQ_GEN_COMMON_USER" , strategy ="uuid" )
     @Column( name = "USER_ID" )
     private String userId;
     @Column( name = "LOGIN_NAME" )

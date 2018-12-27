@@ -24,6 +24,6 @@ public interface StudentParentRelDao extends JpaRepository< StudentParentRel, In
             "\tINNER JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL B ON A.USER_ID = B.STUDENT_USER_ID\n" +
             "\tINNER JOIN STARCLOUDPORTAL.SCE_COMMON_USER C ON B.PARENT_USER_ID = C.USER_ID \n" +
             "WHERE\n" +
-            "\tB.IS_MAIN = 1 AND A.USER_ACCOUNT = ?1",nativeQuery=true )
+            "\tB.IS_MAIN = 1 AND A.LOGIN_NAME = ?1",nativeQuery=true )
     String selectMainParentPhone( String studentAccount );
 }

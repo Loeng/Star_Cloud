@@ -30,7 +30,7 @@ public class AccountApiController {
      */
     @PutMapping( "" )
     @ResponseBody
-    public RestRecord updateAccount( Account account) {
+    public RestRecord updateAccount( @RequestBody Account account) {
         try {
             return accountService.updateAccount( account.getPhone(), account.getPassword() );
         }catch ( Exception e ){
