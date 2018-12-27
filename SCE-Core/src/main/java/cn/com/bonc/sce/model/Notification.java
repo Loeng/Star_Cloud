@@ -19,6 +19,7 @@ public class Notification {
     private String createUserId;
     private String updateUserId;
     private String remarks;
+    private Integer pidId;
 
     public Integer getId() {
         return id;
@@ -108,11 +109,19 @@ public class Notification {
         this.remarks = remarks;
     }
 
+    public Integer getPidId() {
+        return pidId;
+    }
+
+    public void setPidId( Integer pidId ) {
+        this.pidId = pidId;
+    }
+
     public Notification() {
 
     }
 
-    public Notification( Integer id, Integer columnId, Integer contentType, String contentTag, String contentTitle, String content, String contentStatus, String rejectOpinion, String createUserId, String updateUserId, String remarks ) {
+    public Notification( Integer id, Integer columnId, Integer contentType, String contentTag, String contentTitle, String content, String contentStatus, String rejectOpinion, String createUserId, String updateUserId, String remarks, Integer pidId ) {
 
         this.id = id;
         this.columnId = columnId;
@@ -125,5 +134,6 @@ public class Notification {
         this.createUserId = createUserId;
         this.updateUserId = updateUserId;
         this.remarks = remarks;
+        this.pidId = pidId;
     }
 }
