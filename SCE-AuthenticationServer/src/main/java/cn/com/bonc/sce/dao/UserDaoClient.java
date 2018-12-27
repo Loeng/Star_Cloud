@@ -23,7 +23,6 @@ public interface UserDaoClient {
      * @return 用户的详细数据
      */
     @RequestMapping( value = "/users/{userId}", method = RequestMethod.GET )
-//    public Map< String, Object > getUserById( @PathVariable( "userId" ) String userId );
     public User getUserById( @PathVariable( "userId" ) String userId );
 
     /**
