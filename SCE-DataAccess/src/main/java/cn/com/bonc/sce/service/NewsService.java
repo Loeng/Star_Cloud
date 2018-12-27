@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -31,6 +32,10 @@ public class NewsService {
 
     @Autowired
     private NewsDao newsDao;
+
+    private final String ASC = "ASC";
+    private final String DESC = "DESC";
+    private final String SORT_STR = "createTime";
 
     /**
      * 新增教育新闻
@@ -86,7 +91,8 @@ public class NewsService {
      */
     public RestRecord getNewsList( String auditStatus, String content, String startDate, String endDate, Integer pageNum, Integer pageSize ) {
         pageNum--;
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Sort sort =Sort.by(Sort.Direction.fromString(DESC), SORT_STR);
+        Pageable pageable = PageRequest.of( pageNum, pageSize, sort );
         Page< News > page;
         if ( StringUtils.isEmpty( content ) ) {
             content = "%%";
