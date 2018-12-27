@@ -14,9 +14,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * 应用下载统计接口
+ *
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
  */
+
 @Slf4j
 @RestController
 @RequestMapping( "/count" )
@@ -185,10 +191,8 @@ public class DownloadCountApiController {
                 return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
             } else {
                 //获取当前月份拼接年月
-//                Calendar cal = Calendar.getInstance();
-//                int year = cal.get( Calendar.YEAR );
-//                int month = cal.get( Calendar.MONTH ) + 1;
-//                String time = year + "-" + month;
+
+
                 RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
                 restRecord.setData( appCountRepository.getDownloadByType( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), time ) );
                 return restRecord;
@@ -198,6 +202,4 @@ public class DownloadCountApiController {
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
         }
     }
-
-
 }

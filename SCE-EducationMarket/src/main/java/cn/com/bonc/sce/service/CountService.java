@@ -6,6 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author yuehaibo
+ * @version 0.1
+ * @since 2018/12/14 14:26
+ */
 @Slf4j
 @Service
 public class CountService {
