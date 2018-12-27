@@ -46,6 +46,16 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
             , @Param( "loginName" ) String loginName,@Param( "userType" ) String userType
             , @Param( "certificateType" ) String certificateType);
 
+    /**
+     *@Desc: 根据id查询文件存储地址
+     *@Param: resourceId
+     *@return: String
+     *@Author: lyy
+     *@date: 2018/12/27
+     */
+    @Query(value = "SELECT FILE_STORE_PATH FROM STARCLOUDPORTAL.SCE_FILE_RESOURCE where RESOURCE_ID =?1"
+            ,nativeQuery = true)
+    String findFileResourceById(Integer resourceId);
 
 
 
