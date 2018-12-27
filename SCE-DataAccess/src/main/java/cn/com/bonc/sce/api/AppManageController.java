@@ -253,6 +253,7 @@ public class AppManageController {
      * @return
      */
     @GetMapping( "/detail-by-id/{appId}" )
+    @ResponseBody
     public RestRecord selectAppById( @PathVariable String appId ) {
         AppInfoEntity appInfo = appInfoRepository.findByAppId( appId );
         String type = appInfo.getAppSource(); // type可用于分辨应用类型  平台应用/软件应用
@@ -268,6 +269,7 @@ public class AppManageController {
      * @return Map
      */
     @GetMapping("/detail/open/{appId}")
+    @ResponseBody
     public RestRecord isOpenApp(@PathVariable String appId){
         String userId = "T666666";
         Map<String, Object> openInfo = appInfoRepository.findAppOpenInfo(appId, userId);
