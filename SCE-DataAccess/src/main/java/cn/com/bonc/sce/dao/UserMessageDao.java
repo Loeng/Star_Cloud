@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * 用户消息
  *
@@ -31,4 +33,6 @@ public interface UserMessageDao extends JpaRepository<UserMessage, Integer> {
     Integer updateIsReadById( Integer id );
 
     Page<UserMessage> findByUserIdAndIsDelete( String userId, Integer isDelete, Pageable pageable );
+
+    UserMessage findByIdAndIsDelete( Integer id, Integer isDelete);
 }

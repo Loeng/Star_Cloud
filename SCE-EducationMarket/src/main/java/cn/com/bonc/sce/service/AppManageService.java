@@ -157,4 +157,8 @@ public class AppManageService {
 
         return appManageDao.getAppInfo();
     }
+
+    public RestRecord isOpenApp( String appId) {
+        return appManageDao.isOpenApp(appId);
+    }
 }

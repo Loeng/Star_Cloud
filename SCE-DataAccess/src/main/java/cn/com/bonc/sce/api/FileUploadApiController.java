@@ -1,10 +1,13 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.FileResourceEntity;
 import cn.com.bonc.sce.model.ExcelToUser;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,11 @@ public class FileUploadApiController {
 
     private FileResourceRepository fileResourceRepository;
 
+    public static final String STUDENT_PRE = "4";
+
+    public static final String TEACHER_PRE = "3";
+
+    public static final String CERTIFICATE_TYPE = "1";
 
     @Autowired
     public FileUploadApiController ( FileResourceRepository fileResourceRepository ) {
@@ -56,18 +64,23 @@ public class FileUploadApiController {
      */
     @PostMapping("/upload-user-info")
     @ResponseBody
-    public RestRecord uploadParseExcel(@RequestBody List<ExcelToUser> list) {
+    public RestRecord uploadParseExcel(@RequestBody List<ExcelToUser> list, @RequestParam("userType") String userType) {
 
-        //batchExportUser.save( list );
-
-        for ( ExcelToUser excelToUser:list ) {
-            fileResourceRepository.savaAllUserInfo(UUID.getUUID(), excelToUser.getUserName(), excelToUser.getGender(),
-                    excelToUser.getLoginName(), excelToUser.getUserType(), excelToUser.getMailAddress()
-                    , excelToUser.getCertificateType(), excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber()
-                    ,excelToUser.getAddress()
-                );
+        String pre = "";
+        if ( TEACHER_PRE.equals( userType ) ) {
+            pre =  "js_";
+        } else if ( STUDENT_PRE.equals( userType ) ) {
+            pre =  "xs_";
         }
-        return  new RestRecord( 0,"上传成功");
+        for ( ExcelToUser excelToUser:list ) {
+            String secret = Secret.generateSecret();
+            String loginName = IDUtil.createID(pre);
+            fileResourceRepository.savaAllUserInfo(UUID.getUUID(), excelToUser.getUserName(), excelToUser.getGender(),
+                    loginName,userType, excelToUser.getMailAddress()
+                    , CERTIFICATE_TYPE, excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber()
+                    ,excelToUser.getAddress(),secret);
+        }
+        return  new RestRecord( 200,WebMessageConstants.SCE_PORTAL_MSG_200,list.size());
 
     }
 

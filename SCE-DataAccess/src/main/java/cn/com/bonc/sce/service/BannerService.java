@@ -64,7 +64,7 @@ public class BannerService {
      * @return 跟新是否成功
      */
     public RestRecord updateBannerUrl( Banner banner ) {
-        return new RestRecord( 200, bannerDao.updateUrlById( banner.getId(), banner.getUrl() ) );
+        return new RestRecord( 200, bannerDao.updateUrlById( banner.getId(), banner.getUrl() ));
     }
 
     /**

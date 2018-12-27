@@ -111,6 +111,7 @@ public class MessageApiController {
      * 获取message数据
      *
      * @param userId   userId
+     * @param id       id
      * @param pageNum  页码
      * @param pageSize 每页条数
      * @return message数据
@@ -118,10 +119,11 @@ public class MessageApiController {
     @GetMapping( "/{userId}/{pageNum}/{pageSize}" )
     @ResponseBody
     public RestRecord getMessageByUserId( @PathVariable( "userId" ) String userId,
+                                          @RequestParam( value = "id" ,required = false) Integer id,
                                           @PathVariable( "pageNum" ) Integer pageNum,
                                           @PathVariable( "pageSize" ) Integer pageSize ) {
         try {
-            return messageService.getMessageByUserId( userId, pageNum, pageSize );
+            return messageService.getMessageByUserId( userId, id, pageNum, pageSize );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

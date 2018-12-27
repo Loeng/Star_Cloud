@@ -102,10 +102,11 @@ public class DownloadCountController {
     @ResponseBody
     public RestRecord getDownloadChange(
             @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
 
-        return countService.getDownloadChange( userId, startTime, endTime );
+        return countService.getDownloadChange( userId, appId, startTime, endTime );
     }
 
     @ApiOperation( value = "应用类型下载数量", notes = "通过用户信息查询到厂商所有应用", httpMethod = "GET" )
@@ -130,8 +131,16 @@ public class DownloadCountController {
     @ResponseBody
     public RestRecord getCollectionChange(
             @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
-        return countService.getCollectionChange( userId, startTime, endTime );
+        return countService.getCollectionChange( userId, appId, startTime, endTime );
+    }
+
+    @ApiOperation( value = "查询用户所属厂商有的应用列表", notes = "", httpMethod = "GET" )
+    @GetMapping( "/company-app" )
+    @ResponseBody
+    public RestRecord getCompanyApp( @RequestParam( "userId" ) String userId ) {
+        return countService.getCompanyAppList( userId );
     }
 }

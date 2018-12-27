@@ -35,7 +35,6 @@ public class AppVersionController {
                                  AppAuditingService appAuditingService ) {
         this.appVersionService = appVersionService;
         this.appAuditingService = appAuditingService;
-
     }
 
 

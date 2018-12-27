@@ -20,7 +20,8 @@ public interface UserListDao {
     @RequestMapping( value = "/user-list/role/{roleId}/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord getUserInfoByRole( @PathVariable( "roleId" ) String roleId,
                                   @PathVariable( "pageNum" ) Integer pageNum,
-                                  @PathVariable( "pageSize" ) Integer pageSize );
+                                  @PathVariable( "pageSize" ) Integer pageSize,
+                                  @RequestBody (required = false) Map<String,Object> condition);
 
 
     /**
