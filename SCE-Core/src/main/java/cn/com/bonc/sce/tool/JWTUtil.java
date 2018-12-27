@@ -53,6 +53,10 @@ public class JWTUtil {
         return defaultBuilder().signWith( secret ).compact();
     }
 
+    public static boolean volidate( String jwt ) {
+        return Jwts.parser().isSigned( jwt );
+    }
+
     @SuppressWarnings( "unchecked" )
     public static JwtBuilder defaultBuilder() {
         Map defaultHeader = Jwts.header()

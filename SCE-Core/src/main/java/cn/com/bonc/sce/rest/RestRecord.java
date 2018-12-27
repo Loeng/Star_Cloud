@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.rest;
 
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -92,7 +93,6 @@ public class RestRecord implements Serializable {
         this.data = data;
     }
 
-
     public RestRecord( int code, String msg, Exception exception ) {
         this.code = code;
         this.msg = msg;
@@ -101,6 +101,14 @@ public class RestRecord implements Serializable {
     public RestRecord( boolean isSuccess, String msg, Exception exception ) {
         this.code = isSuccess ? 200 : 500;
         this.msg = msg;
+    }
+
+    public static RestRecord success( Object data ) {
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, data );
+    }
+
+    public static RestRecord success() {
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
     }
 
     @Override
