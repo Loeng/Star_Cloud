@@ -41,7 +41,7 @@ public class UserListController {
      */
     @PostMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getUserInfoByRole( @PathVariable Integer roleId,
+    public RestRecord getUserInfoByRole( @PathVariable("roleId") Integer roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
                                          @PathVariable( "pageSize" ) Integer pageSize,
                                          @RequestBody(required = false) Map<String,Object> condition) {

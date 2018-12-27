@@ -317,7 +317,6 @@ public class AppManageController {
     public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId ) {
 
         String type = String.valueOf( applyType );
-
         int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( type, appIdList, userId );
         return new RestRecord( 200, appInfo );
     }
