@@ -32,10 +32,10 @@ public class AppManageFunView {
 	private Long companyId;
 	@Column( name = "COMPANY_NAME" )
 	private String companyName;
-	@Column( name = "APP_TYPE_ID" )
+	/*@Column( name = "APP_TYPE_ID" )
 	private Integer appTypeId;
 	@Column( name = "APP_TYPE_NAME" )
-	private String appTypeName;
+	private String appTypeName;*/
 	
 	@Column( name = "APP_ICON" )
 	private String appIcon;
