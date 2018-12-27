@@ -4,11 +4,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.xml.ws.Response;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,18 +21,19 @@ import java.util.Date;
 
 public class SendMessage {
 
-        public static String postMsgToPhone( String msg, String phone ) throws UnsupportedEncodingException {
-            SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-            requestFactory.setConnectTimeout(1000);
-            requestFactory.setReadTimeout(1000);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            RestTemplate restTemplate = new RestTemplate(requestFactory);
-            HttpEntity request = new HttpEntity<>(getXmlInfo( msg, phone ), headers);
-            restTemplate.postForEntity( "http://userinterface.vcomcn.com/Opration.aspx" ,request,String.class );
+    public static String postMsgToPhone( String msg, String phone ) throws UnsupportedEncodingException {
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout( 1000 );
+        requestFactory.setReadTimeout( 1000 );
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType( MediaType.APPLICATION_FORM_URLENCODED );
+        RestTemplate restTemplate = new RestTemplate( requestFactory );
+        HttpEntity request = new HttpEntity<>( getXmlInfo( msg, phone ), headers );
+        restTemplate.postForEntity( "http://userinterface.vcomcn.com/Opration.aspx", request, String.class );
 
-            return  "SUCCESS";
-        }
+        return "SUCCESS";
+    }
+
     private static String getXmlInfo( String msg, String phone ) throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         Date now = new Date();
@@ -55,11 +53,12 @@ public class SendMessage {
         System.out.println( sb.toString() );
         return sb.toString();
     }
+
     public static void main( String[] args ) throws UnsupportedEncodingException {
 
         String str = "验证码:6462";
 
-        System.out.println(postMsgToPhone(new String( "验证码:6462".getBytes(),"utf-8" ),"18227587920"));
+        System.out.println( postMsgToPhone( new String( "验证码:6462".getBytes(), "utf-8" ), "18227587920" ) );
 
     }
 

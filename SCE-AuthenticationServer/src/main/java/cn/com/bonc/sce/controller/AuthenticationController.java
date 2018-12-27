@@ -86,7 +86,7 @@ public class AuthenticationController {
             return new RestRecord( 101, WebMessageConstants.SCE_PORTAL_MSG_101 );
         } else {
             // 密码不匹配
-            if ( !authentication.getPassword().equals( authenticatedUser.getPassword() ) ) {
+            if ( !authentication.getPassword().equals( authenticatedUser.getAccount().getPassword() ) ) {
                 return new RestRecord( 102, WebMessageConstants.SCE_PORTAL_MSG_102 );
             }
 

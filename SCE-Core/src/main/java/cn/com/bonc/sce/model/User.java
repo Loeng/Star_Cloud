@@ -33,7 +33,7 @@ public class User {
     private Date createTime;
     private String loginTime;
     private String lastLoginTime;
-    private Long loginTimes;
+    private Long loginCounts;
     private String organizationId;
     private Integer loginPermissionStatus;
     private String remarks;
@@ -54,12 +54,10 @@ public class User {
         return this.secretKeyPair;
     }
 
-    public String getPassword() {
-        return account.getPassword();
-    }
-
     public void setPassword( String newPassword ) {
-        account.setPassword( newPassword );
+        if ( account != null ) {
+            account.setPassword( newPassword );
+        }
     }
 
     public void setSecretKeyPair( String secretKeyPair ) {

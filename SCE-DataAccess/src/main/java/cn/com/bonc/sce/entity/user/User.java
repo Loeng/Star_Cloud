@@ -62,8 +62,8 @@ public class User {
     private String loginTime;
     @Column( name = "LAST_LOGIN_TIME" )
     private String lastLoginTime;
-    @Column( name = "LOGINTIMES" )
-    private Long loginTimes;
+    @Column( name = "LOGIN_COUNTS" )
+    private Long loginCounts;
     @Column( name = "ORGANIZATION_ID" )
     private String organizationId;
     @Column( name = "LOGIN_PERMISSION_STATUS" )

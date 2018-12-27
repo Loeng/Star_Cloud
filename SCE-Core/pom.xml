@@ -13,7 +13,7 @@
     <version>0.0.1.DEV</version>
 
     <dependencies>
-
+        <!-- 替换为 hutool -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -21,11 +21,6 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.minidev</groupId>
-            <artifactId>json-smart</artifactId>
-            <version>RELEASE</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -57,21 +52,18 @@
             <version>5.1.3.RELEASE</version>
             <scope>compile</scope>
         </dependency>
-
+        <!-- excel 导入导出-->
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-base</artifactId>
-            <version>3.0.3</version>
         </dependency>
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-web</artifactId>
-            <version>3.0.3</version>
         </dependency>
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-annotation</artifactId>
-            <version>3.0.3</version>
         </dependency>
     </dependencies>
     

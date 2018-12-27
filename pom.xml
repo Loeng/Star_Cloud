@@ -42,6 +42,8 @@
         <spring-swagger-ui-version>2.7.0</spring-swagger-ui-version>
         <!-- jwt version -->
         <jjwt-version>0.10.5</jjwt-version>
+        <!-- excel -->
+        <easypoi-base-version>3.0.3</easypoi-base-version>
         <!-- compilor -->
         <spring-boot-maven-plugin-version>2.1.0.RELEASE</spring-boot-maven-plugin-version>
         <maven-compiler-plugin-version>3.8.0</maven-compiler-plugin-version>
@@ -169,6 +171,22 @@
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt-version}</version>
                 <scope>runtime</scope>
+            </dependency>
+            <!-- excel 解析 -->
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-base</artifactId>
+                <version>${easypoi-base-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-web</artifactId>
+                <version>${easypoi-base-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-annotation</artifactId>
+                <version>${easypoi-base-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
