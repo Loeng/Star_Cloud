@@ -23,69 +23,63 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name="SCE_MARKET_APP_INFO")
+@EntityListeners( AuditingEntityListener.class )
+@Table( name = "SCE_MARKET_APP_INFO" )
 public class App {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_MARKET_APP_INFO")
-    @SequenceGenerator(name="SEQ_GEN_MARKET_APP_INFO",allocationSize=1,initialValue=1, sequenceName="SEQ_MARKET_APP_INFO")
-    @Column(name = "APP_ID")
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_MARKET_APP_INFO" )
+    @SequenceGenerator( name = "SEQ_GEN_MARKET_APP_INFO", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_MARKET_APP_INFO" )
+    @Column( name = "APP_ID" )
     private Integer appId;
 
-    @Column(name = "APP_NAME")
+    @Column( name = "APP_NAME" )
     private String appName;
 
-    @Column(name = "COMPANY_ID")
+    @Column( name = "COMPANY_ID" )
     private Integer companyId;
-
-    @Column(name = "APP_PHONE_PIC")
-    private String appPhonePic;
-
-    @Column(name = "APP_PC_PIC")
-    private String appPcPic;
-
-    @Column(name = "IS_DELETE")
+    
+    @Column( name = "IS_DELETE" )
     private Integer isDelete;
 
-    @Column(name = "CATEGORY_ID")
+    @Column( name = "CATEGORY_ID" )
     private Integer categoryId;
 
-    @Column(name = "CREATE_USER_ID")
+    @Column( name = "CREATE_USER_ID" )
     private String createUserId;
 
     @CreatedDate
-    @Column(name = "CREATE_TIME")
+    @Column( name = "CREATE_TIME" )
     private Date createTime;
 
-    @Column(name = "UPDATE_USER_ID")
+    @Column( name = "UPDATE_USER_ID" )
     private String updateUserId;
 
     @LastModifiedDate
-    @Column(name = "UPDATE_TIME")
+    @Column( name = "UPDATE_TIME" )
     private Date updateTime;
 
-    @Column(name = "APP_COPYRIGHT")
+    @Column( name = "APP_COPYRIGHT" )
     private String appCopyright;
 
-    @Column(name = "AUDIT_VOUCHER")
+    @Column( name = "AUDIT_VOUCHER" )
     private String auditVoucher;
 
-    @Column(name = "APP_NOTES")
+    @Column( name = "APP_NOTES" )
     private String appNotes;
 
-    @Column(name = "IS_HOT_RECOMMEND")
+    @Column( name = "IS_HOT_RECOMMEND" )
     private Integer isHotRecommend;
 
-    @Column(name = "IS_TOP_RECOMMEND")
+    @Column( name = "IS_TOP_RECOMMEND" )
     private Integer isTopRecommend;
 
-    @Column(name = "PAYMENT_STATUS")
+    @Column( name = "PAYMENT_STATUS" )
     private String paymentStatus;
 
-    @Column(name = "APP_SOURCE")
+    @Column( name = "APP_SOURCE" )
     private String appSource;
 
-    @Column(name = "REMARKS")
+    @Column( name = "REMARKS" )
     private String remarks;
 }

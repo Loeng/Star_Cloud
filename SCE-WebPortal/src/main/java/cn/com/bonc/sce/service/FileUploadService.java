@@ -94,7 +94,7 @@ public class FileUploadService {
                 RestRecord restRecord = fileUploadDao.saveUploadFile( fileType, fileStorePath, fileMappingPath );
                 return restRecord;
             } else {
-                return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
+                return new RestRecord( 560, WebMessageConstants.SCE_PORTAL_MSG_500 );
             }
         } catch ( IOException e ) {
             return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_451 );
@@ -120,4 +120,63 @@ public class FileUploadService {
         return fileUploadDao.uploadUserInfo( list );
 
     }
+    public RestRecord uploadMultipartAll ( MultipartFile[] multipartFileAll, String fileType ) {
+        Object[] result = new Object[multipartFileAll.length];
+        boolean flag = false;
+        for (int i = 0 ; i < multipartFileAll.length ; i++){
+            MultipartFile multipartFile = multipartFileAll[i];
+//            String fileType = fileTypeAll[i];
+            try {
+                byte[] bytes = multipartFile.getBytes();
+                String originFileName = multipartFile.getOriginalFilename();
+                String suffixName = FileUploadUtil.getFileSuffix( originFileName );
+                String saveFileName = UUID.randomUUID().toString().replace( "-","" ) + suffixName;
+
+                String fileStorePath;
+                String fileMappingPath;
+                String fileSavePath;
+                switch ( fileType ) {
+                    case "pic":
+                        fileStorePath = picFileStorePath + File.separator + saveFileName;
+                        fileMappingPath = picFileMappingPath + File.separator + saveFileName;
+                        fileSavePath = picFileStorePath;
+                        break;
+
+                    case "soft":
+                        fileStorePath = softFileStorePath + File.separator + saveFileName;
+                        fileMappingPath = softFileMappingPath + File.separator + saveFileName;
+                        fileSavePath = softFileStorePath;
+                        break;
+
+                    case "document":
+                        fileStorePath = documentFileStorePath + File.separator + saveFileName;
+                        fileMappingPath = documentFileMappingPath + File.separator + saveFileName;
+                        fileSavePath = documentFileStorePath;
+                        break;
+
+                    default:
+                        result[i] = WebMessageConstants.SCE_PORTAL_MSG_452;
+                        continue;
+//                        return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_452 );
+                }
+
+                boolean status = FileUploadUtil.uploadFile( bytes, saveFileName, fileSavePath  );
+
+                if ( status ) {
+                    flag = true;
+                    RestRecord restRecord = fileUploadDao.saveUploadFile( fileType, fileStorePath, fileMappingPath );
+                    result[i] = restRecord.getMsg()==null?restRecord.getData():restRecord.getMsg();
+//                    return restRecord;
+                } else {
+//                    return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
+                    result[i] = WebMessageConstants.SCE_PORTAL_MSG_500;
+                }
+            } catch ( IOException e ) {
+//                return  new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_451 );
+                result[i] = WebMessageConstants.SCE_PORTAL_MSG_501;
+            }
+        }
+        return new RestRecord( flag?200:500, result );
+    }
+
 }
