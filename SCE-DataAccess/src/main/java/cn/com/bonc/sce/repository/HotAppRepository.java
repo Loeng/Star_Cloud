@@ -63,7 +63,7 @@ public interface HotAppRepository extends JpaRepository< AppInfoEntity, String >
     List< Map<String,String> > selectHotAppList();
 
     /**
-     * 查询所有热门应用的appId
+     * 修改热门应用
      * @param appId
      * @param state
      * @param userId
@@ -72,9 +72,9 @@ public interface HotAppRepository extends JpaRepository< AppInfoEntity, String >
     @Transactional(rollbackOn = Exception.class)
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE AppInfoEntity SET IS_HOT_RECOMMEND = :state,UPDATE_TIME=sysdate,UPDATE_USER_ID = :userId WHERE APP_ID = :appId ", nativeQuery = false )
-    int addHotApp( @Param( value = "appId" ) String appId,
-                   @Param( value = "state" ) Long state,
-                   @Param( value = "userId") String userId );
+    int updateHotApp( @Param( value = "appId" ) String appId,
+                      @Param( value = "state" ) Long state,
+                      @Param( value = "userId") String userId );
 
     /**
      * find via id

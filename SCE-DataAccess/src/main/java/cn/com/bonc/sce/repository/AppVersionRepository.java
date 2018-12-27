@@ -52,5 +52,17 @@ public interface AppVersionRepository extends
     @Query( "UPDATE MarketAppVersion SET IS_DELETE=0 WHERE APP_ID=:appId" )
     int deleteByAppId( @Param( "appId" ) String appId );
 
+    /**
+     * 查询应用下载地址
+     * @param appId
+     * @param version
+     * @param platform
+     * @return
+     */
+    @Query( value = "SELECT APP_DOWNLOAD_ADDRESS FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_ID = :appId AND APP_VERSION = :version AND RUNNING_PLATFORM = :platform", nativeQuery = true )
+    String getDownloadAddressByIdAndVersionAndName( @Param( "appId" ) String appId,
+                                                    @Param( "version" ) String version,
+                                                    @Param( "platform" ) String platform );
+
 
 }

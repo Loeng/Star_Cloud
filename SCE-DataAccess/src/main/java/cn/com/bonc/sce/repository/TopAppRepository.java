@@ -45,4 +45,18 @@ public interface TopAppRepository extends JpaRepository< AppInfoEntity, String >
     Integer updateTopApp( @Param( value = "appIdList" ) List< String > ids,
                           @Param( value = "state" ) Long state,
                           @Param( value = "uid" ) String uid );
+
+    /**
+     * 修改重点推荐应用
+     * @param appId
+     * @param state
+     * @param userId
+     * @return
+     */
+    @Transactional(rollbackOn = Exception.class)
+    @Modifying( clearAutomatically = true )
+    @Query( value = "UPDATE AppInfoEntity SET IS_TOP_RECOMMEND = :state,UPDATE_TIME=sysdate,UPDATE_USER_ID = :userId WHERE APP_ID = :appId ", nativeQuery = false )
+    int updateTopAppById( @Param( value = "appId" ) String appId,
+                          @Param( value = "state" ) Long state,
+                          @Param( value = "userId") String userId );
 }

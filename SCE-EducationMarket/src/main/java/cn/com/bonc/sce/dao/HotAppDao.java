@@ -61,4 +61,15 @@ public interface HotAppDao {
     RestRecord addHotRecommendApp( @RequestParam( "userId" ) String userId,
                                    @RequestParam( "appId" ) String appId );
 
+    /**
+     * 删除热门应用
+     *
+     * @param appId app的id
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/hot-app/sub-one", method = RequestMethod.POST )
+    RestRecord cancelHotRecommendApp( @RequestParam( "userId" ) String userId,
+                                      @RequestParam( "appId" ) String appId );
+
 }

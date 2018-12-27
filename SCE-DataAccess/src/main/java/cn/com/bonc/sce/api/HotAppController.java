@@ -85,7 +85,7 @@ public class HotAppController {
     @PostMapping( "/new-one" )
     public RestRecord addHotRecommendAppList( @RequestParam( "appId" ) String appId,
                                               @RequestParam( "userId" ) String userId ) {
-        Integer i = hotAppRepository.addHotApp( appId, 1L, userId );
+        Integer i = hotAppRepository.updateHotApp( appId, 1L, userId );
         if ( i >= 0 ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else {
@@ -104,7 +104,7 @@ public class HotAppController {
     @PostMapping( "/sub-one" )
     public RestRecord cancelHotRecommendAppList( @RequestParam( "appId" ) String appId,
                                               @RequestParam( "userId" ) String userId ) {
-        Integer i = hotAppRepository.addHotApp( appId, 0L, userId );
+        Integer i = hotAppRepository.updateHotApp( appId, 0L, userId );
         if ( i >= 0 ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else {

@@ -2,10 +2,7 @@ package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,4 +31,26 @@ public interface TopAppRecommendDao {
     @RequestMapping( value = "/top-app/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord selectTopRecommendAppList( @PathVariable( "pageNum" ) Integer pageNum,
                                           @PathVariable( "pageSize" ) Integer pageSize );
+
+    /**
+     * 添加单个重点推荐应用
+     *
+     * @param appId app的id
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/top-app/new-one", method = RequestMethod.POST )
+    RestRecord addTopRecommendApp( @RequestParam( "userId" ) String userId,
+                                   @RequestParam( "appId" ) String appId );
+
+    /**
+     * 删除单个重点推荐应用
+     *
+     * @param appId app的id
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/top-app/sub-one", method = RequestMethod.POST )
+    RestRecord cancelTopRecommendApp( @RequestParam( "userId" ) String userId,
+                                      @RequestParam( "appId" ) String appId );
 }

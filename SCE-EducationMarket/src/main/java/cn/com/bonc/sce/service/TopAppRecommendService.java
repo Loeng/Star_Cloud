@@ -28,5 +28,14 @@ public class TopAppRecommendService {
         return topAppDao.selectTopRecommendAppList( pageNum, pageSize );
     }
 
+    public RestRecord addTopRecommendApp( String userId, String appId ) {
+        return topAppDao.addTopRecommendApp( userId, appId );
+    }
+
+    public RestRecord cancelTopRecommendApp( String userId, String appId ) {
+        return topAppDao.cancelTopRecommendApp( userId, appId );
+    }
+
+
 
 }

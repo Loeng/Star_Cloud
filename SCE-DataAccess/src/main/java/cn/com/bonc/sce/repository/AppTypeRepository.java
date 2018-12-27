@@ -32,7 +32,7 @@ public interface AppTypeRepository extends JpaRepository< AppTypeEntity, String 
      *
      * @return 返回类型名称与ID列表
      */
-    @Query( value = "SELECT APP_TYPE_ID, APP_TYPE_NAME FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE WHERE IS_DELETE = 1", nativeQuery = true )
+    @Query( value = "SELECT APP_TYPE_ID, APP_TYPE_NAME FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE WHERE IS_DELETE = 1 ORDER BY APP_TYPE_ID", nativeQuery = true )
     List< Map< String, Object > > getAllAppTypeList();
 
     /**

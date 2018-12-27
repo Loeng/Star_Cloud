@@ -57,4 +57,42 @@ public class TopAppController {
         return new RestRecord( 200, appInfoList );
     }
 
+    /**
+     * 添加重点推荐应用
+     *
+     * @param appId
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/new-one" )
+    public RestRecord addTopRecommendAppList( @RequestParam( "appId" ) String appId,
+                                              @RequestParam( "userId" ) String userId ) {
+        Integer i = topAppRepository.updateTopAppById( appId, 1L, userId );
+        if ( i >= 0 ) {
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } else {
+            return new RestRecord( 500,WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+
+    }
+
+    /**
+     * 取消重点推荐应用
+     *
+     * @param appId
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/sub-one" )
+    public RestRecord cancelHotRecommendAppList( @RequestParam( "appId" ) String appId,
+                                                 @RequestParam( "userId" ) String userId ) {
+        Integer i = topAppRepository.updateTopAppById( appId, 0L, userId );
+        if ( i >= 0 ) {
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        } else {
+            return new RestRecord( 500,WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+
+    }
+
 }

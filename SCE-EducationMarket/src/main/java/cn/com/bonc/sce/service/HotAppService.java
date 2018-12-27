@@ -45,4 +45,8 @@ public class HotAppService {
         return hotAppDao.addHotRecommendApp( userId, appId );
     }
 
+    public RestRecord cancelHotRecommendApp( String userId, String appId ) {
+        return hotAppDao.cancelHotRecommendApp( userId, appId );
+    }
+
 }
