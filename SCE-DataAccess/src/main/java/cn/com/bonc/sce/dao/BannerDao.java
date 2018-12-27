@@ -26,7 +26,7 @@ public interface BannerDao extends JpaRepository< Banner, Integer > {
 
     @Modifying
     @Query( "UPDATE Banner b SET b.url=?2 WHERE b.id=?1" )
-    Integer updateUrlById( Integer id, String url );
+    Integer updateUrlById( Integer id, Integer url );
 
     @Modifying
     @Query( "UPDATE Banner b SET b.appId=?2 WHERE b.id=?1" )
