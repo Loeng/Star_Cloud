@@ -27,7 +27,7 @@ public class FileUploadUtil {
         Path path = Paths.get( fileSavePath, saveFileName );
         File targetFile = new File( path.toAbsolutePath().toString() );
         if ( !targetFile.getParentFile().exists() ) {
-            targetFile.getParentFile().mkdir();
+            targetFile.getParentFile().mkdirs();
         }
 
         try ( BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(targetFile)) ) {
