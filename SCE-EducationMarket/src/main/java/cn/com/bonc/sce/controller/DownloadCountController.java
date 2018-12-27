@@ -118,10 +118,20 @@ public class DownloadCountController {
         return countService.getDownloadByType( userId, time );
     }
 
-    @ApiOperation(value = "厂家应用数量及类型占比",notes = "根据用户ID查询用户对应的厂家下面APP总数及各类型占比",httpMethod = "GET" )
-    @GetMapping("/app-type-precent")
+    @ApiOperation( value = "厂家应用数量及类型占比", notes = "根据用户ID查询用户对应的厂家下面APP总数及各类型占比", httpMethod = "GET" )
+    @GetMapping( "/app-type-percent" )
     @ResponseBody
-    public RestRecord getAppTypePrecent(@RequestParam("userId") @ApiParam("用户Id") String userId){
-        return countService.getAppTypePrecent(userId);
+    public RestRecord getAppTypePrecent( @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId ) {
+        return countService.getAppTypePrecent( userId );
+    }
+
+    @ApiOperation( value = "收藏变化量查询", notes = "查询到该厂家下所有应用按月被收藏的变化情况", httpMethod = "GET" )
+    @GetMapping( "/collection-change" )
+    @ResponseBody
+    public RestRecord getCollectionChange(
+            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
+            @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
+        return countService.getCollectionChange( userId, startTime, endTime );
     }
 }

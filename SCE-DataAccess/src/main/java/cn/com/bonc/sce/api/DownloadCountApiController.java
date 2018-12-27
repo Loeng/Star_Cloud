@@ -205,30 +205,54 @@ public class DownloadCountApiController {
 
     /**
      * Desc 根据用户ID查询用户对应的厂家下面APP总数及各类型占比
-     * @Auther mkl
+     *
      * @param userId
      * @return
+     * @Auther mkl
      */
 
-    @GetMapping("/app-type-precent")
-    public  RestRecord  getAppTypePrecent(@RequestParam String userId){
-        Map<String, Object> companyInfo = appCountRepository.getCompanyInfo(userId);
-        String companyId = companyInfo.get("COMPANY_ID").toString();
-        List<Map<String, Object>> appTypePrecent = appCountRepository.getAppTypePrecent(companyId);
-        appTypePrecent.add(getAppCountByCompanyId(companyId));
-        return  new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,appTypePrecent);
+    @GetMapping( "/app-type-percent" )
+    public RestRecord getAppTypePrecent( @RequestParam String userId ) {
+        Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
+        String companyId = companyInfo.get( "COMPANY_ID" ).toString();
+        List< Map< String, Object > > appTypePrecent = appCountRepository.getAppTypePrecent( companyId );
+        appTypePrecent.add( getAppCountByCompanyId( companyId ) );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appTypePrecent );
     }
 
     /**
      * DESC: 统计厂商下面的APP总数
+     *
      * @param companyId
      * @return
      */
-    public Map<String,Object> getAppCountByCompanyId(String companyId){
-        Map<String, Object> appCountByCompanyId = appCountRepository.getAppCountByCompanyId(companyId);
-        return  appCountByCompanyId;
+    public Map< String, Object > getAppCountByCompanyId( String companyId ) {
+        Map< String, Object > appCountByCompanyId = appCountRepository.getAppCountByCompanyId( companyId );
+        return appCountByCompanyId;
 
     }
 
+    @GetMapping( "/collection-change" )
+    @ResponseBody
+    public RestRecord getCollectionChange(
+            @RequestParam( "userId" ) String userId,
+            @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
+            @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime ) {
+        log.trace( "Query CollectionChange userId is :{}", userId );
+        try {
+            Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
+            if ( companyInfo.get( "COMPANY_ID" ) == null ) {
+                return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
+            } else {
+                List< Map< String, Object > > downloadInfo = appCountRepository.getCollectionChange( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), startTime, endTime );
+                RestRecord restRecord = new RestRecord( 200 );
+                restRecord.setData( downloadInfo );
+                return restRecord;
+            }
+        } catch ( Exception e ) {
+            log.error( "Query CollectionChange fail {}", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
 
+    }
 }

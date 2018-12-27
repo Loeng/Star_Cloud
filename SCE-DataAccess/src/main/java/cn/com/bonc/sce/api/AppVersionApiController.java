@@ -108,7 +108,6 @@ public class AppVersionApiController {
      */
     @DeleteMapping
     @ResponseBody
-    @Transactional
     public RestRecord deleteAppHistoryVersionInfo(
             @RequestParam( "appId" ) String appId,
             @RequestParam( value = "appVersion", required = false, defaultValue = "" ) String appVersion ) {
