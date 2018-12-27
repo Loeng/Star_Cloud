@@ -125,7 +125,6 @@ public class FileUploadService {
         boolean flag = false;
         for (int i = 0 ; i < multipartFileAll.length ; i++){
             MultipartFile multipartFile = multipartFileAll[i];
-//            String fileType = fileTypeAll[i];
             try {
                 byte[] bytes = multipartFile.getBytes();
                 String originFileName = multipartFile.getOriginalFilename();
@@ -157,7 +156,6 @@ public class FileUploadService {
                     default:
                         result[i] = WebMessageConstants.SCE_PORTAL_MSG_452;
                         continue;
-//                        return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_452 );
                 }
 
                 boolean status = FileUploadUtil.uploadFile( bytes, saveFileName, fileSavePath  );
@@ -166,13 +164,10 @@ public class FileUploadService {
                     flag = true;
                     RestRecord restRecord = fileUploadDao.saveUploadFile( fileType, fileStorePath, fileMappingPath );
                     result[i] = restRecord.getMsg()==null?restRecord.getData():restRecord.getMsg();
-//                    return restRecord;
                 } else {
-//                    return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
                     result[i] = WebMessageConstants.SCE_PORTAL_MSG_500;
                 }
             } catch ( IOException e ) {
-//                return  new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_451 );
                 result[i] = WebMessageConstants.SCE_PORTAL_MSG_501;
             }
         }

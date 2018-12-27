@@ -41,10 +41,6 @@ public class FileUploadController {
      * @return 返回对应文件在资源表中ID
      */
     @ApiOperation( value = "文件上传通用接口", notes = "文件上传通用接口", httpMethod = "POST" )
-    /*@ApiImplicitParams( {
-            @ApiImplicitParam( name = "file", value = "上传文件", dataType = "file", required = true ) ,
-            @ApiImplicitParam( name = "fileType", dataType = "String", value = "上传文件类型( 图片:pic  软件应用：soft 软件说明文档：document )", paramType = "query", required = true, allowableValues = "pic,soft,document" )
-    } )*/
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
@@ -101,10 +97,6 @@ public class FileUploadController {
      * @return 返回对应文件在资源表中ID
      */
     @ApiOperation( value = "多文件上传通用接口", notes = "多文件上传通用接口", httpMethod = "POST" )
-    /*@ApiImplicitParams( {
-            @ApiImplicitParam( name = "files", value = "上传文件", dataType = "file[]", required = true ) ,
-            @ApiImplicitParam( name = "fileType", dataType = "String", value = "上传文件类型( 图片:pic  软件应用：soft 软件说明文档：document )", paramType = "query", required = true, allowableValues = "pic,soft,document" )
-    } )*/
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
