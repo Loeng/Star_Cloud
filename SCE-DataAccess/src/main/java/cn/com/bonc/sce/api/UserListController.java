@@ -151,8 +151,8 @@ public class UserListController {
     public Page<Map<String,Object>> selfRegistration(int pageNum, int pageSize, Map<String,Object> condition) {
         Page info;
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
-        String name = "str";
-        String account = "str";
+        String name = "";
+        String account = "";
         if(condition!=null){
             if(StringUtils.isNotBlank(condition.get("name").toString())){
                 name = condition.get("name").toString();
@@ -175,18 +175,18 @@ public class UserListController {
     public Page<Map<String,Object>>  organization(int pageNum, int pageSize, Map<String,Object> condition) {
         Page info =null;
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
-        String loginName = "str";
-        String organizationName = "str";
+        String loginName = "";
+        String organizationName = "";
         int status =0;
         if(condition!=null){
-            if(StringUtils.isNotBlank(condition.get("loginName").toString())){
-                loginName = condition.get("loginName").toString();
+            if(StringUtils.isNotBlank(condition.get("account").toString())){
+                loginName = condition.get("account").toString();
             }
             if (StringUtils.isNotBlank(condition.get("organizationName").toString())){
                 organizationName = condition.get("organizationName").toString();
             }
-            if (condition.get("status").hashCode()==0 || condition.get("status").hashCode()==1){
-                status = condition.get("status").hashCode();
+            if (condition.get("login ").hashCode()==0 || condition.get("login ").hashCode()==1){
+                status = condition.get("login ").hashCode();
             }
             //模糊查询
             info = userInfoRepository.findByOrganizationLike(loginName,organizationName,status,pageable);
@@ -208,21 +208,21 @@ public class UserListController {
     public Page<Map<String,Object>>  manufacturer(int pageNum, int pageSize, Map<String,Object> condition) {
         Page info = null;
         Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "USER_ID" );
-        String ManufacturerName = "森海科技";
-        String loginName = "str";
+        String ManufacturerName = "";
+        String loginName = "";
         int status = 1;
         System.out.println("dayin="+condition.toString());
         if(condition!=null){
-            if(StringUtils.isNotBlank(condition.get("loginName").toString())){
-                loginName = condition.get("loginName").toString();
+            if(StringUtils.isNotBlank(condition.get("account").toString())){
+                loginName = condition.get("account").toString();
             }
-            if (StringUtils.isNotBlank(condition.get("ManufacturerName").toString())){
-                ManufacturerName = condition.get("ManufacturerName").toString();
+            if (StringUtils.isNotBlank(condition.get("manufacturerName").toString())){
+                ManufacturerName = condition.get("manufacturerName").toString();
             }
-            if (condition.get("status").hashCode()==0 || condition.get("status").hashCode()==1){
-                status = condition.get("status").hashCode();
+            if (condition.get("login ").hashCode()==0 || condition.get("login ").hashCode()==1){
+                status = condition.get("login ").hashCode();
             }
-            //模糊查询
+            //
             info = userInfoRepository.findByManufacturerLike(loginName,ManufacturerName,status,pageable);
             log.info("模糊查询");
         }else{
