@@ -33,8 +33,9 @@ public interface FileUploadDao {
     /**
      * 文件上传用户信息保存至user表
      * @param list  用户数据
+     * @param userType  用户类型
      * @return
      */
     @RequestMapping( value = "/file-upload/upload-user-info", method = RequestMethod.POST )
-    RestRecord uploadUserInfo( @RequestBody List<ExcelToUser> list );
+    RestRecord uploadUserInfo( @RequestBody List<ExcelToUser> list,@RequestParam("userType") String userType);
 }

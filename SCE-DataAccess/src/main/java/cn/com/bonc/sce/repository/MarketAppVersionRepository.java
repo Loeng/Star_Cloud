@@ -68,6 +68,6 @@ public interface MarketAppVersionRepository extends
      */
     @Modifying
     @Query( value = "UPDATE MarketAppVersion  SET appStatus= :applyType,updateUserId= :userId  where  appId in (:appIdList)" )
-    int applyAppOnShelfByUserId( @Param( "applyType" ) Integer applyType, @Param( "appIdList" ) List< String > appIdList, @Param( "userId" ) String userId );
+    int applyAppOnShelfByUserId( @Param( "applyType" ) String applyType, @Param( "appIdList" ) List< String > appIdList, @Param( "userId" ) String userId );
 
 }
