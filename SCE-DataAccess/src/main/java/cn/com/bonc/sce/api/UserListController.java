@@ -87,14 +87,14 @@ public class UserListController {
         String name = "";
         String organization_name = "";
         if (null != condition){
-            if (StringUtils.isNotBlank(condition.get("account").toString())){
+            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
             }
-            if (StringUtils.isNotBlank(condition.get("name").toString())){
-                name = condition.get("name").toString();
+            if (null != condition.get("name") && !"".equals(condition.get("name")) ){
+                account = condition.get("name").toString();
             }
-            if (StringUtils.isNotBlank(condition.get("organization_name").toString())){
-                organization_name = condition.get("organization_name").toString();
+            if (null != condition.get("organization_name") && !"".equals(condition.get("organization_name")) ){
+                account = condition.get("organization_name").toString();
             }
         }
         info = userInfoRepository.findTeacherByCondition(name,account,organization_name,pageable);
@@ -112,20 +112,20 @@ public class UserListController {
         String organization_name = "";
         String login = "";
         if (null != condition){
-            if (StringUtils.isNotBlank(condition.get("account").toString())){
+            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
             }
-            if (StringUtils.isNotBlank(condition.get("name").toString())){
-                name = condition.get("name").toString();
+            if (null != condition.get("name") && !"".equals(condition.get("name")) ){
+                account = condition.get("name").toString();
             }
-            if (StringUtils.isNotBlank(condition.get("organization_name").toString())){
-                organization_name = condition.get("organization_name").toString();
+            if (null != condition.get("organization_name") && !"".equals(condition.get("organization_name")) ){
+                account = condition.get("organization_name").toString();
             }
-            if (StringUtils.isNotBlank(condition.get("login").toString())){
-                login = condition.get("login").toString();
+            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
+                account = condition.get("login").toString();
             }
         }
-        info =  userInfoRepository.findSchoolByCondition(name,account,organization_name,pageable);
+        info =  userInfoRepository.findSchoolByCondition(name,account,organization_name,login,pageable);
         log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
         return info;
     }
@@ -139,11 +139,11 @@ public class UserListController {
         String account= "";
         String name = "";
         if (null != condition){
-            if (StringUtils.isNotBlank(condition.get("account").toString())){
+            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
             }
-            if (StringUtils.isNotBlank(condition.get("name").toString())){
-                name = condition.get("name").toString();
+            if (null != condition.get("name") && !"".equals(condition.get("name")) ){
+                account = condition.get("name").toString();
             }
         }
         info =  userInfoRepository.findFamilyByCondition(name,account,pageable);
