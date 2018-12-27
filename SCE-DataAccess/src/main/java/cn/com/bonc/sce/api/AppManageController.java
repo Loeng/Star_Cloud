@@ -1,14 +1,10 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.entity.AppInfoEntity;
-import cn.com.bonc.sce.entity.AppManageFunView;
-import cn.com.bonc.sce.entity.AppTypeEntity;
+import cn.com.bonc.sce.entity.*;
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.repository.AppInfoRepository;
-import cn.com.bonc.sce.repository.AppManageFunViewRepository;
-import cn.com.bonc.sce.repository.AppTypeRepository;
-import cn.com.bonc.sce.repository.MarketAppVersionRepository;
+import cn.com.bonc.sce.model.AppTypeMode;
+import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppNameTypeService;
 import cn.hutool.json.JSONUtil;
@@ -24,16 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 应用管理api
@@ -44,7 +36,8 @@ import java.util.Map;
 @Transactional( rollbackFor = Exception.class )
 @RequestMapping( "/manage-app" )
 public class AppManageController {
-
+    @Autowired
+    private AppTypeRelRepository appTypeRelRepository;
 
     @Autowired
     private AppInfoRepository appInfoRepository;
@@ -70,11 +63,55 @@ public class AppManageController {
     @PostMapping( "/{uid}" )
     public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
                                   @PathVariable( "uid" ) String uid ) {
-        log.info( "appinfo::{}", appInfo );
+        log.trace( "appinfo::{}", appInfo );
+        try {
+            //1.appinfo表
+            AppInfoEntity appInfoEntity = new AppInfoEntity();
+            appInfoEntity.setAppIcon( appInfo.getAppIcon() );
+            appInfoEntity.setAppName( appInfo.getAppName() );
+            appInfoEntity.setCreateUserId( uid );
+            appInfoEntity.setCreateTime( new Date() );
+            appInfoEntity.setIsDelete( 1 );
+            appInfoEntity.setAppSource( "rj" );
+            appInfoEntity.setAppNotes( appInfo.getAppNotes() );
+            AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
+            String appid = info.getAppId();
+            //2.类型关系表
+            AppTypeRelEntity appTypeRelEntity = new AppTypeRelEntity();
+            appTypeRelEntity.setAppId( appid );
+            appTypeRelEntity.setAppTypeId( appInfo.getAppTypeId() );
+            AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
+
+            //3.版本表
+            Set< AppTypeMode > pcSet = appInfo.getPc();
+            pcSet.forEach( pc -> {
+                MarketAppVersion marketAppVersion = new MarketAppVersion();
+                marketAppVersion.setAppId( appid );
+                marketAppVersion.setAppDownloadAddress( pc.getAddress() );
+                marketAppVersion.setAppVersion( pc.getAppVersion() );
+                marketAppVersion.setVersionInfo( appInfo.getAppNotes() );
+                marketAppVersion.setPackageName( pc.getPackageName() );
+                marketAppVersion.setVersionSize( pc.getVersionSize() );
+                marketAppVersion.setAppStatus( "1" );
+                marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
+                marketAppVersion.setAppPcPic( appInfo.getAppPcPic() );
+                marketAppVersion.setAppPhonePic( appInfo.getAppPhonePic() );
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
+                marketAppVersion.setCreateTime( new Date() );
+                marketAppVersion.setIsDelete( 1L );
+                marketAppVersion.setRunningPlatform( pc.getRunningPlatform() );
+                marketAppVersionRepository.saveAndFlush( marketAppVersion );
+            } );
+        } catch ( Exception e ) {
+            log.error( "add AppInfo fail {}", e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
+        }
+
 //        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
 //        final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
-//        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, null );
+//       return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
     }
 
     /**
@@ -275,7 +312,7 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/app-on-shelf" )
-    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId) {
+    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId ) {
 
         String type = String.valueOf( applyType );
 

@@ -14,7 +14,7 @@ public interface AppManageDao {
 
     @RequestMapping( value = "/manage-app/{uid}", method = RequestMethod.POST )
     RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
-                           @PathVariable( "uid" ) String dui );
+                           @PathVariable( "uid" ) String uid );
 
     /**
      * 删除应用信息
@@ -72,8 +72,8 @@ public interface AppManageDao {
     @RequestMapping( value = "/manage-app/apps-by-name", method = RequestMethod.GET )
     RestRecord selectAppListByName( @RequestParam( "appName" ) String appName,
                                     @RequestParam( "platformType" ) String platformType,
-                                    @PathVariable( "pageNum" ) Integer pageNum,
-                                    @PathVariable( "pageSize" ) Integer pageSize );
+                                    @RequestParam( "pageNum" ) Integer pageNum,
+                                    @RequestParam( "pageSize" ) Integer pageSize );
 
     /**
      * 根据输入名和选择类别查询应用
@@ -153,5 +153,5 @@ public interface AppManageDao {
     RestRecord getAppInfo();
 
     @RequestMapping(value = "/manage-app//detail/open/{appId}")
-    RestRecord isOpenApp( @PathVariable  String appId);
+    RestRecord isOpenApp( @PathVariable("appId")  String appId);
 }

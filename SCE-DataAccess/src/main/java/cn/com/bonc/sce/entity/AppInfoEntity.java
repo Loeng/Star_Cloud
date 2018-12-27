@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -26,7 +27,8 @@ import java.util.Set;
 @Table( name = "SCE_MARKET_APP_INFO", schema = "STARCLOUDMARKET" )
 public class AppInfoEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column( name = "APP_ID" )
     private String appId;
 

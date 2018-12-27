@@ -44,7 +44,8 @@ public class AppManageController {
 
     } )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
     @PostMapping
     public RestRecord addAppInfo( @RequestBody @ApiParam( "新增软件对象" ) AppAddModel appInfo ) {
