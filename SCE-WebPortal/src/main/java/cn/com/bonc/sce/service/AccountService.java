@@ -77,6 +77,15 @@ public class AccountService {
      */
     public RestRecord updateAccount( Account accountSecurity ) {
         Integer successCode = 200;
+        if(!StringUtils.isEmpty( accountSecurity.getUserId())&&
+                !StringUtils.isEmpty( accountSecurity.getPassword())&&
+                !StringUtils.isEmpty( accountSecurity.getNewPassword())){
+            RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );
+            if ( rr.getCode() == successCode ) {
+                rr.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
+            }
+            return rr;
+        }
         //加密加工
         //accountSecurity.getPassword();
         String code;

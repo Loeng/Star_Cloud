@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.model.AppRecommend;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.HotAppService;
 import cn.com.bonc.sce.service.TopAppRecommendService;
@@ -85,9 +86,10 @@ public class TopAppRecommendController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/one")
-    public RestRecord addHotRecommendApp( @RequestParam( "appId" ) String appId ) {
+    @ResponseBody
+    public RestRecord addHotRecommendApp( @RequestBody AppRecommend appRecommend ) {
         String userId = "101";
-        return topAppRecommendService.addTopRecommendApp( userId, appId );
+        return topAppRecommendService.addTopRecommendApp( userId, appRecommend.getAppId() );
     }
 
     /**
@@ -102,9 +104,10 @@ public class TopAppRecommendController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/sub-one")
-    public RestRecord cancelHotRecommendApp( @RequestParam( "appId" ) String appId ) {
+    @ResponseBody
+    public RestRecord cancelHotRecommendApp( @RequestBody AppRecommend appRecommend ) {
         String userId = "101";
-        return topAppRecommendService.cancelTopRecommendApp( userId, appId );
+        return topAppRecommendService.cancelTopRecommendApp( userId, appRecommend.getAppId() );
     }
 
 

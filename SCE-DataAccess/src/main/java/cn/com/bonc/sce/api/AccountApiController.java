@@ -5,6 +5,7 @@ import cn.com.bonc.sce.entity.Account;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +32,18 @@ public class AccountApiController {
     @PutMapping( "" )
     @ResponseBody
     public RestRecord updateAccount( @RequestBody Account account) {
-        try {
-            return accountService.updateAccount( account.getPhone(), account.getPassword() );
-        }catch ( Exception e ){
-            return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+        if( StringUtils.isEmpty(account.getNewPassword())&&!StringUtils.isEmpty(account.getPassword())) {
+            try {
+                return accountService.updatePasswordByPhone( account.getPhone(), account.getPassword() );
+            } catch ( Exception e ) {
+                return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+            }
+        }else{
+            try {
+                return accountService.updatePasswordById( account.getUserId(), account.getPassword(), account.getNewPassword() );
+            } catch ( Exception e ) {
+                return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+            }
         }
     }
 }

@@ -80,7 +80,7 @@ public class AccountController {
     /**
      * 修改账号信息
      *
-     * @param accountSecurity 安全码和账号信息
+     * @param accountSecurity 安全码和账号信息（或者是用户id、用户名和密码）
      * @return 修改结果
      */
     @ApiOperation( value = "修改账号信息", notes = "修改账号信息", httpMethod = "POST" )
