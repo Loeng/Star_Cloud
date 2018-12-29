@@ -386,7 +386,7 @@ public class AppManageController {
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
 
-        //TODO
+        //TODO  取userId
         String userId = "1";
         Page< List< Map< String, Object > > > page;
         if ( "pt".equalsIgnoreCase( platformType ) ) {
