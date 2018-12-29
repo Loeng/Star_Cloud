@@ -263,8 +263,6 @@ public class AppManageController {
     @GetMapping( "/detail-by-id/{appId}" )
     @ResponseBody
     public RestRecord selectAppById( @PathVariable String appId ) {
-        AppInfoEntity appInfo = appInfoRepository.findByAppId( appId );
-        String type = appInfo.getAppSource(); // type可用于分辨应用类型  平台应用/软件应用
         Pageable pageable = PageRequest.of( 0, 1, Sort.Direction.DESC, "CREATE_TIME" );
         Page< Map< String, Object > > appDetailInfo = appInfoRepository.findAppDetailById( appId, pageable );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appDetailInfo.getContent() );
