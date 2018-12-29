@@ -19,12 +19,6 @@ public interface UserDao extends JpaRepository< User, String > {
 
     // TODO 必须考虑并发修改的问题
     @Modifying
-    @Query( "UPDATE User user SET user.loginCounts = :counts WHERE user.userId = :userId" )
-    @Deprecated
-    public int updateUserLoginCount( @Param( "counts" ) int counts, @Param( "userId" ) String userId );
-
-    // TODO 必须考虑并发修改的问题
-    @Modifying
     @Query( "UPDATE User user SET user.isFirstLogin = :isFirstLogin WHERE user.userId = :userId" )
     public int updateUserLoginStatus( @Param( "userId" ) String userId, @Param( "isFirstLogin" ) Integer isFirstLogin );
 
