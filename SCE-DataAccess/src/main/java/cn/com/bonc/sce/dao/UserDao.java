@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Leucippus
@@ -16,12 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface UserDao extends JpaRepository< User, String > {
     public User findUserByUserId( String userId );
-
-    // TODO 必须考虑并发修改的问题
-    @Modifying
-    @Query( "UPDATE User user SET user.loginCounts = :counts WHERE user.userId = :userId" )
-    @Deprecated
-    public int updateUserLoginCount( @Param( "counts" ) int counts, @Param( "userId" ) String userId );
 
     // TODO 必须考虑并发修改的问题
     @Modifying
