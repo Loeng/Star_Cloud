@@ -183,7 +183,7 @@ public class UserListController {
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
         String loginName = "";
         String organizationName = "";
-        int status =1;
+        String status ="";
         if(condition!=null){
             //模糊查询
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
@@ -193,10 +193,8 @@ public class UserListController {
                 organizationName = condition.get("organizationName").toString();
             }
             if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                status = condition.get("login").hashCode();
+                status = condition.get("login").toString();
             }
-
-
         }
         info = userInfoRepository.findByOrganizationLike(loginName,organizationName,status,pageable);
         log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
@@ -214,7 +212,7 @@ public class UserListController {
         Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "USER_ID" );
         String ManufacturerName = "";
         String loginName = "";
-        int status = 1;
+        String status = "";
         if(condition!=null){
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 loginName = condition.get("account").toString();
@@ -223,7 +221,7 @@ public class UserListController {
                 ManufacturerName = condition.get("manufacturerName").toString();
             }
             if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                status = condition.get("login").hashCode();
+                status = condition.get("login").toString();
             }
         }
         info = userInfoRepository.findByManufacturerLike(loginName,ManufacturerName,status,pageable);

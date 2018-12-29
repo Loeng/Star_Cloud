@@ -77,8 +77,8 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
     @Query(value = "SELECT ea.AUTHORITY_NAME AS AUTHORITY_NAME,u.LOGIN_NAME AS LOGIN_NAME,u.LOGIN_PERMISSION_STATUS AS LOGIN_PERMISSION_STATUS\n" +
             "FROM STARCLOUDPORTAL.SCE_COMMON_USER u INNER JOIN STARCLOUDPORTAL.SCE_ENTITY_AUTHORITY ea on ea.ID = u.ORGANIZATION_ID\n" +
             "WHERE u.LOGIN_NAME like CONCAT('%',concat(?1,'%')) AND ea.AUTHORITY_NAME like CONCAT('%',concat(?2,'%')) " +
-            "AND u.LOGIN_PERMISSION_STATUS = ?3",nativeQuery = true)
-    Page<Map> findByOrganizationLike(String loginName,String byAuthName,int status,Pageable pageable);
+            "AND u.LOGIN_PERMISSION_STATUS LIKE CONCAT('%',CONCAT(?3,'%'))\t",nativeQuery = true)
+    Page<Map> findByOrganizationLike(String loginName,String byAuthName,String status,Pageable pageable);
 
     /**
      *@Author : lyy
@@ -100,8 +100,8 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
             "FROM STARCLOUDPORTAL.SCE_COMMON_USER u INNER JOIN STARCLOUDPORTAL.SCE_INFO_COMPANY ic \n" +
             "      on ic.USER_ID = u.USER_ID INNER JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY mc on mc.COMPANY_ID = ic.COMPANY_ID\n" +
             "WHERE u.LOGIN_NAME like CONCAT('%',concat(?1,'%')) AND mc.company_name like CONCAT('%',concat(?2,'%'))\n" +
-            "      AND u.LOGIN_PERMISSION_STATUS = ?3 ",nativeQuery = true)
-    Page<Map> findByManufacturerLike(String loginName,String organizationName,int status,Pageable pageable);
+            "      AND u.LOGIN_PERMISSION_STATUS LIKE CONCAT('%',CONCAT(?3,'%'))\t ",nativeQuery = true)
+    Page<Map> findByManufacturerLike(String loginName,String organizationName,String status,Pageable pageable);
 
 
 
