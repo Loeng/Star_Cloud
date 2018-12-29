@@ -15,6 +15,8 @@ public class Account {
 
     private String password;
 
+    private String newPassword;
+
     private String phone;
 
     private String code;
@@ -43,6 +45,13 @@ public class Account {
         this.password = password;
     }
 
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword( String newPassword ) {
+        this.newPassword = newPassword;
+    }
 
     public String getPhone() {
         return phone;
@@ -57,17 +66,6 @@ public class Account {
     }
 
     public void setCode( String code ) {
-        this.code = code;
-    }
-
-    public Account() {
-
-    }
-
-    public Account( String userId, String password, String phone, String code ) {
-        this.userId = userId;
-        this.password = password;
-        this.phone = phone;
         this.code = code;
     }
 }

@@ -53,4 +53,7 @@ public class Account {
 
     @Transient
     private String code;
+
+    @Transient
+    private String newPassword;
 }

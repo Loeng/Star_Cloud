@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,22 @@ public class AccountService {
      * @param password password
      * @return 修改结果
      */
-    public RestRecord updateAccount( String phone,String password) {
-        return new RestRecord( 200, accountSecurityDao.updateAccount( phone, password ) );
+    public RestRecord updatePasswordByPhone( String phone,String password) {
+        return new RestRecord( 200, accountSecurityDao.updatePasswordByPhone( phone, password ) );
+    }
+
+    /**
+     * 修改账号信息
+     *
+     * @param userId userId
+     * @param password password
+     * @return 修改结果
+     */
+    public RestRecord updatePasswordById( String userId,String password,String newPassword) {
+        if(accountSecurityDao.findByUserIdAndIsDelete(userId,1).getPassword().equals( password )) {
+            return new RestRecord( 200, accountSecurityDao.updatePasswordById( userId, newPassword ) );
+        }else{
+            return new RestRecord( 102, WebMessageConstants.SCE_PORTAL_MSG_102 );
+        }
     }
 }
