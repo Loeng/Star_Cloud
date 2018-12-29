@@ -48,7 +48,7 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
 
     /**
      *@Author : lyy
-     *@Desc : 根据姓名和账号查询出自注册的所有用户  显示：
+     *@Desc : 根据姓名和账号查询出自注册的所有用户
      *@Date : 9:44 2018/12/25
      */
     @Query(value = "SELECT u.USER_TYPE,u.USER_NAME,u.GENDER,u.ADDRESS,u.LOGIN_PERMISSION_STATUS\n" +

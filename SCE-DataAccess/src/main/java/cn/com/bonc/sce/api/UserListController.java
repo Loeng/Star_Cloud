@@ -209,7 +209,7 @@ public class UserListController {
 
     /**
      *@Author : lyy
-     *@Desc：查询厂商信息 :
+     *@Desc：查询 厂商信息   :
      *@Date : 15:22 2018/12/26
      */
     public Page<Map<String,Object>>  manufacturer(int pageNum, int pageSize, Map<String,Object> condition) {
