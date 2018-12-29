@@ -41,6 +41,7 @@ public class User {
     private Account account;
     private String secret;
     private Secret secretKeyPair;
+    private int isFirstLogin;
 
     public void generateUserSecret() {
         this.secretKeyPair = new Secret();

@@ -1,5 +1,16 @@
 package cn.com.bonc.sce.repository;
 
+import cn.com.bonc.sce.dao.UserInfoRepository;
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 /**
@@ -7,22 +18,33 @@ import java.util.*;
  * @description 自己造的假数据，后期要删掉
  * @date 2018/12/19
  **/
+// @Component
 public class UserListData {
-    /**
-     * 自注册用户1
-     * 学校2
-     * 机构3
-     * 厂商4
-     * 代理商5
-     * 审核用户6
-     */
+/*
 
-    /**
-     * 自注册用户
-     *
-     * @param pageNum
-     * @param pageSize
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
+    private Log log = LogFactory.get();
+    */
+/**
+ * 自注册用户1
+ * 学校2
+ * 机构3
+ * 厂商4
+ * 代理商5
+ * 审核用户6
+ *//*
+
+
      */
+/**
+ * 自注册用户
+ *
+ * @param pageNum
+ * @param pageSize
+ *//*
+
     public static List ziZhuCe( int pageNum, int pageSize, int total ) {
         List list = new ArrayList();
         for ( int i = ( pageNum - 1 ) * pageSize; i < pageNum * pageSize; i++ ) {
@@ -38,6 +60,7 @@ public class UserListData {
 
     public static List xueXiao( int pageNum, int pageSize, int total ) {
         List list = new ArrayList();
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
         for ( int i = ( pageNum - 1 ) * pageSize; i < pageNum * pageSize; i++ ) {
             Map map = new HashMap();
             map.put( "SCHOOL_NAME", "xxx学校" );
@@ -140,8 +163,75 @@ public class UserListData {
         return list;
     }
 
-    public static void main( String[] args ) {
-        System.out.println( shengHeYongHu( 2, 30, 100 ) );
+
+    // 查询 学校 -》 教师信息
+    public Page<Map<String,Object>> teacher(int pageNum, int pageSize, Map<String,Object> condition){
+        Page info;
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        String account= "";
+        String name = "";
+        String organization_name = "";
+        if (null != condition){
+            if (StringUtils.isNotBlank(condition.get("account").toString())){
+                account = condition.get("account").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("name").toString())){
+                name = condition.get("name").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("organization_name").toString())){
+                organization_name = condition.get("organization_name").toString();
+            }
+        }
+        info = userInfoRepository.findTeacherByCondition(name,account,organization_name,pageable);
+        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        return info;
+
     }
+
+    // 查询 学校 -》 学生信息
+    public Page<Map<String,Object>> student(int pageNum, int pageSize, Map<String,Object> condition){
+        Page info;
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        String account= "";
+        String name = "";
+        String organization_name = "";
+        if (null != condition){
+            if (StringUtils.isNotBlank(condition.get("account").toString())){
+                account = condition.get("account").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("name").toString())){
+                name = condition.get("name").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("organization_name").toString())){
+                organization_name = condition.get("organization_name").toString();
+            }
+        }
+        info =  userInfoRepository.findSchoolByCondition(name,account,organization_name,pageable);
+        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        return info;
+    }
+
+    // 查询 学校 -》 家长信息
+
+    public Page<Map<String,Object>> family(int pageNum, int pageSize, Map<String,Object> condition){
+        Page info;
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        String account= "";
+        String name = "";
+        if (null != condition){
+            if (StringUtils.isNotBlank(condition.get("account").toString())){
+                account = condition.get("account").toString();
+            }
+            if (StringUtils.isNotBlank(condition.get("name").toString())){
+                name = condition.get("name").toString();
+            }
+        }
+        info =  userInfoRepository.findFamilyByCondition(name,account,pageable);
+        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        return info;
+    }
+*/
+
+
 
 }

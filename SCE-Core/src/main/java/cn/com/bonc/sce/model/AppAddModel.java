@@ -21,7 +21,7 @@ public class AppAddModel {
     @ApiModelProperty( name = "类型id" )
     private Long appTypeId;
     @ApiModelProperty( name = "软件描述" )
-    private Long appNotes;
+    private String appNotes;
     @ApiModelProperty( name = "新版特性" )
     private String newFeatures;
     @ApiModelProperty( name = "软件图标" )
@@ -32,10 +32,8 @@ public class AppAddModel {
     private String appPhonePic;
     @ApiModelProperty( name = "权限详情用,分隔" )
     private String authDetail;
-    @ApiModelProperty( name = "pc版本相关信息" )
+    @ApiModelProperty( name = "上传的相关信息" )
     private Set< AppTypeMode > pc;
-    @ApiModelProperty( name = "手机版本相关信息" )
-    private Set< AppTypeMode > phone;
 
 
 }

@@ -58,13 +58,17 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\ta.APP_NOTES,\n" +
             "\ta.APP_LINK,\n" +
             "\ta.APP_SOURCE,\n" +
-            "CASE WHEN o.USER_ID = :userId  THEN '1' ELSE '0' END IS_OPEN \n" +
+            "\tDECODE(o.USER_ID,:userId, '1','0') IS_OPEN,\n" +
+            "\tDECODE(sac.USER_ID,:userId, '1', '0') IS_COLLECTION\n" +
+            "\n" +
             "FROM\n" +
-            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO a \n" +
-            "\tLEFT  JOIN\n" +
-            "\tSTARCLOUDMARKET.SCE_MARKET_APP_OPEN o  ON\n" +
-            "\ta.APP_ID = o.APP_ID  AND o.IS_DELETE = 1\n" +
-            "\tWHERE a.APP_SOURCE = 'pt'" )
+            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO a\n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN o ON a.APP_ID = o.APP_ID \n" +
+            "\tAND o.IS_DELETE = 1\n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SAC ON a.APP_ID = SAC.APP_ID \n" +
+            "\tAND SAC.USER_ID = :userId AND SAC.IS_DELETE=1\n" +
+            "WHERE\n" +
+            "\ta.APP_SOURCE = 'pt'" )
     Page< List< Map< String, Object > > > getPlatformlist( @Param( "userId" ) String userId, Pageable pageable );
 
 
@@ -76,13 +80,17 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\ta.APP_NOTES,\n" +
             "\ta.APP_LINK,\n" +
             "\ta.APP_SOURCE,\n" +
-            "CASE WHEN o.USER_ID = :userId  THEN '1' ELSE '0' END IS_OPEN \n" +
+            "\tDECODE(o.USER_ID,:userId, '1','0') IS_OPEN,\n" +
+            "\tDECODE(sac.USER_ID,:userId, '1', '0') IS_COLLECTION\n" +
+            "\n" +
             "FROM\n" +
-            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO a \n" +
-            "\tLEFT  JOIN\n" +
-            "\tSTARCLOUDMARKET.SCE_MARKET_APP_OPEN o  ON\n" +
-            "\ta.APP_ID = o.APP_ID  AND o.IS_DELETE = 1\n" +
-            "\tWHERE a.APP_SOURCE = 'pt' AND a.APP_ID IN (:appIdList)" )
+            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO a\n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN o ON a.APP_ID = o.APP_ID \n" +
+            "\tAND o.IS_DELETE = 1\n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SAC ON a.APP_ID = SAC.APP_ID \n" +
+            "\tAND SAC.USER_ID = :userId AND SAC.IS_DELETE=1\n" +
+            "WHERE\n" +
+            "\ta.APP_SOURCE = 'pt' AND a.APP_ID IN (:appIdList)" )
     Page< List< Map< String, Object > > > getPlatformlistByIds( @Param( "userId" ) String userId, @Param( "appIdList" ) List< Object > appIdList, Pageable pageable );
 
     //根据类型id 查询 appid 列表

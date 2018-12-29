@@ -38,7 +38,7 @@ public class App {
 
     @Column( name = "COMPANY_ID" )
     private Integer companyId;
-    
+
     @Column( name = "IS_DELETE" )
     private Integer isDelete;
 

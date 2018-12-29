@@ -43,7 +43,7 @@ public class AppNameTypeEntity {
     @JoinColumn( name = "COMPANY_ID" )
     public CompanyInfo companyInfo;
     
-    @OneToOne
+    @OneToOne(optional=false)
     @JoinColumn( name = "APP_ID" )
     public AppDownloadCountView appDownloadCount;
 

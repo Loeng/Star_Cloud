@@ -61,4 +61,5 @@ public class UserService {
         userInfo.setAddress( null );
         userInfo.setPassword( null );
     }
+
 }

@@ -1,15 +1,13 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.entity.AppInfoEntity;
-import cn.com.bonc.sce.entity.AppManageFunView;
-import cn.com.bonc.sce.entity.AppTypeEntity;
+import cn.com.bonc.sce.entity.*;
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.repository.AppInfoRepository;
-import cn.com.bonc.sce.repository.AppManageFunViewRepository;
-import cn.com.bonc.sce.repository.AppTypeRepository;
-import cn.com.bonc.sce.repository.MarketAppVersionRepository;
+import cn.com.bonc.sce.model.AppTypeMode;
+import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppNameTypeService;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 应用管理api
@@ -43,7 +37,8 @@ import java.util.Map;
 @Transactional( rollbackFor = Exception.class )
 @RequestMapping( "/manage-app" )
 public class AppManageController {
-
+    @Autowired
+    private AppTypeRelRepository appTypeRelRepository;
 
     @Autowired
     private AppInfoRepository appInfoRepository;
@@ -58,7 +53,7 @@ public class AppManageController {
     /**
      * yanmin
      */
-    private AppManageFunViewRepository appManageFunViewRepository;
+    private AppNameTypeService appNameTypeService;
 
     /**
      * 新增应用
@@ -69,11 +64,56 @@ public class AppManageController {
     @PostMapping( "/{uid}" )
     public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
                                   @PathVariable( "uid" ) String uid ) {
-        log.info( "appinfo::{}", appInfo );
+        log.trace( "appinfo::{}", appInfo );
+        try {
+            //1.appinfo表
+            AppInfoEntity appInfoEntity = new AppInfoEntity();
+            appInfoEntity.setAppIcon( appInfo.getAppIcon() );
+            appInfoEntity.setAppName( appInfo.getAppName() );
+            appInfoEntity.setCreateUserId( uid );
+            appInfoEntity.setCreateTime( new Date() );
+            appInfoEntity.setIsDelete( 1 );
+            appInfoEntity.setAppSource( "rj" );
+            appInfoEntity.setAppNotes( appInfo.getAppNotes() );
+            AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
+            String appid = info.getAppId();
+            //2.类型关系表
+            AppTypeRelEntity appTypeRelEntity = new AppTypeRelEntity();
+            appTypeRelEntity.setAppId( appid );
+            appTypeRelEntity.setAppTypeId( appInfo.getAppTypeId() );
+            AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
+
+            //3.版本表
+            Set< AppTypeMode > pcSet = appInfo.getPc();
+            pcSet.forEach( pc -> {
+                MarketAppVersion marketAppVersion = new MarketAppVersion();
+                marketAppVersion.setAppId( appid );
+                marketAppVersion.setAppDownloadAddress( pc.getAddress() );
+                marketAppVersion.setAppVersion( pc.getAppVersion() );
+                marketAppVersion.setVersionInfo( appInfo.getAppNotes() );
+                marketAppVersion.setPackageName( pc.getPackageName() );
+                marketAppVersion.setVersionSize( pc.getVersionSize() );
+                marketAppVersion.setAppStatus( "1" );
+                marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
+                marketAppVersion.setAppPcPic( appInfo.getAppPcPic() );
+                marketAppVersion.setAppPhonePic( appInfo.getAppPhonePic() );
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
+                marketAppVersion.setCreateTime( new Date() );
+                marketAppVersion.setIsDelete( 1L );
+                marketAppVersion.setRunningPlatform( pc.getRunningPlatform() );
+                marketAppVersion.setCreateUserId( uid );
+                marketAppVersionRepository.saveAndFlush( marketAppVersion );
+            } );
+        } catch ( Exception e ) {
+            log.error( "add AppInfo fail {}", e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
+        }
+
 //        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
 //        final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
-//        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, null );
+//       return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
     }
 
     /**
@@ -210,44 +250,8 @@ public class AppManageController {
                                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //TODO:这个数据随便查的，要重写
-        if ( StringUtils.isEmpty( sort ) || sort.toUpperCase().equals( "DESC" ) ) {
-            sort = "DESC";
-        } else {
-            sort = "ASC";
-        }
-        if ( orderType.equals( "download" ) ) {
-            orderType = "downloadCount";
-        } else if ( orderType.equals( "time" ) ) {
-            orderType = "updateTime";
-        }
-        Sort sort_p = Sort.by( Sort.Direction.fromString( sort ), orderType );
-        Pageable pageable = PageRequest.of( pageNum - 1, pageSize, sort_p );
-
-        @SuppressWarnings( "serial" )
-        Specification< AppManageFunView > spec = new Specification< AppManageFunView >() {
-            @Override
-            public Predicate toPredicate( Root< AppManageFunView > root, CriteriaQuery< ? > query, CriteriaBuilder cb ) {
-                // build query condition
-                Predicate predicate = cb.conjunction();
-                if ( !StringUtils.isEmpty( appName ) && appName.trim().length() > 0 ) {
-                    predicate.getExpressions().add( cb.like( root.get( "appName" ).as( String.class ), "%" + appName + "%" ) );
-                }
-                if ( appType > 0 ) {
-                    predicate.getExpressions().add( cb.equal( root.get( "appTypeId" ).as( Integer.class ), appType ) );
-                }
-                if ( !StringUtils.isEmpty( platformType ) && platformType.trim().length() > 0 && !"0".equals( platformType ) ) {
-                    predicate.getExpressions().add( cb.equal( root.get( "appSource" ).as( String.class ), platformType.trim() ) );
-                }
-                return predicate;
-            }
-        };
-        Page< AppManageFunView > list = appManageFunViewRepository.findAll( spec, pageable );
-        //Page< AppInfoEntity > list = appInfoRepository.findAll(spec, pageable );
-        Map temp = new HashMap<>();
-        temp.put( "data", list.getContent() );
-        temp.put( "totalPage", list.getTotalPages() );
-        temp.put( "totalCount", list.getTotalElements() );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+        return appNameTypeService.selectAppListByNameAndType(appName, appType, orderType, sort, platformType, pageNum, pageSize);
+       
     }
 
     /**
@@ -310,10 +314,9 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/app-on-shelf" )
-    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId) {
+    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId ) {
 
         String type = String.valueOf( applyType );
-
         int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( type, appIdList, userId );
         return new RestRecord( 200, appInfo );
     }
@@ -383,7 +386,7 @@ public class AppManageController {
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
 
-        //TODO
+        //TODO  取userId
         String userId = "1";
         Page< List< Map< String, Object > > > page;
         if ( "pt".equalsIgnoreCase( platformType ) ) {
@@ -396,7 +399,16 @@ public class AppManageController {
                 //根据分类id查询appid
                 List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
                 //根据appIdList 查询平台应用
-                page = appInfoRepository.getPlatformlistByIds( userId, appIdList, pageable );
+                if( CollUtil.isEmpty(appIdList)){
+                    Map< String, Object > temp = new HashMap<>( 16 );
+                    temp.put( "data", "[]" );
+                    temp.put( "totalPage", 0 );
+                    temp.put( "totalCount", 0 );
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+                }else {
+                    page = appInfoRepository.getPlatformlistByIds( userId, appIdList, pageable );
+                }
+
             }
 
         } else {
@@ -409,7 +421,16 @@ public class AppManageController {
             } else {
                 //根据appType 去 类型关联表查询 appid  数组
                 List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
-                page = appInfoRepository.getAppListInfoByIds( appIdList, pageable );
+                if( CollUtil.isEmpty(appIdList)){
+                    Map< String, Object > temp = new HashMap<>( 16 );
+                    temp.put( "data", "[]" );
+                    temp.put( "totalPage", 0 );
+                    temp.put( "totalCount", 0 );
+                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+                }else {
+                    page = appInfoRepository.getAppListInfoByIds( appIdList, pageable );
+                }
+
             }
 
         }
