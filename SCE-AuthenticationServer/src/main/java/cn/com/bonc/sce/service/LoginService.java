@@ -1,7 +1,10 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.dao.LoginHistoryDaoClient;
 import cn.com.bonc.sce.model.User;
+import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.JWTUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,9 +17,20 @@ import java.util.Map;
  */
 @Service
 public class LoginService {
-    // TODO 启动一个定时跟新服务，去拉取角色 code
-    private String[] roleCodes = { "none", "vendor", "school", "teacher", "students", "parents", "eduBureau", "agency", "tourist" };
 
+    private LoginHistoryDaoClient loginHistoryDao;
+
+    // TODO 启动一个定时跟新服务，去拉取角色 code
+    private String[] roleCodes = { "operator", "students", "teacher", "school", "vendor", "parents", "agency", "eduBureau", "tourist" };
+
+    @Autowired
+    public LoginService( LoginHistoryDaoClient loginHistoryDao ) {
+        this.loginHistoryDao = loginHistoryDao;
+    }
+
+    public RestRecord confirmUserInitialized( String userId ) {
+        return loginHistoryDao.changeLoginStatus( userId, 1 );
+    }
 
     /**
      * 根据用户私钥生成 ticket

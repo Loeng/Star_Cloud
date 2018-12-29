@@ -317,7 +317,6 @@ public class AppManageController {
     public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId ) {
 
         String type = String.valueOf( applyType );
-
         int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( type, appIdList, userId );
         return new RestRecord( 200, appInfo );
     }
@@ -402,7 +401,7 @@ public class AppManageController {
                 //根据appIdList 查询平台应用
                 if( CollUtil.isEmpty(appIdList)){
                     Map< String, Object > temp = new HashMap<>( 16 );
-                    temp.put( "data", null );
+                    temp.put( "data", "[]" );
                     temp.put( "totalPage", 0 );
                     temp.put( "totalCount", 0 );
                     return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
@@ -424,7 +423,7 @@ public class AppManageController {
                 List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
                 if( CollUtil.isEmpty(appIdList)){
                     Map< String, Object > temp = new HashMap<>( 16 );
-                    temp.put( "data", null );
+                    temp.put( "data", "[]" );
                     temp.put( "totalPage", 0 );
                     temp.put( "totalCount", 0 );
                     return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );

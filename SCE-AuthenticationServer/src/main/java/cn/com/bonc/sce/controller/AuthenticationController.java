@@ -97,4 +97,17 @@ public class AuthenticationController {
 
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, data );
     }
+
+    @PatchMapping( "/{userId}/init-status" )
+    @ResponseBody
+    public RestRecord confirmUserInitialized( @PathVariable( "userId" ) String userId ) {
+        RestRecord record = loginService.confirmUserInitialized( userId );
+        if ( record.getCode() == 200 ) {
+            return record;
+        } else if ( record.getCode() == 1020 ) {
+            return new RestRecord( 101, WebMessageConstants.SCE_PORTAL_MSG_101 );
+        } else {
+            return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
+        }
+    }
 }

@@ -35,7 +35,7 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue( generator = "SEQ_GEN_COMMON_USER" )
-    @GenericGenerator( name = "SEQ_GEN_COMMON_USER" , strategy ="uuid" )
+    @GenericGenerator( name = "SEQ_GEN_COMMON_USER", strategy = "uuid" )
     @Column( name = "USER_ID" )
     private String userId;
     @Column( name = "LOGIN_NAME" )
@@ -77,7 +77,8 @@ public class User {
     @JsonIgnoreProperties( value = { "hibernateLazyInitializer", "handler" } )
     @JsonIdentityInfo( generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id" )
     private Account account;
-    @Column( name = "SECRET", length = 1064 )
+    @Column( name = "SECRET", length = 2047 )
     private String secret;
-//    private UserExtraInfo userExtraInfo;
+    @Column( name = "IS_FIRST_LOGIN" )
+    private Integer isFirstLogin;
 }
