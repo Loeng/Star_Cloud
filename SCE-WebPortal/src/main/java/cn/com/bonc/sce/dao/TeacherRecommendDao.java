@@ -39,4 +39,9 @@ public interface TeacherRecommendDao {
             @RequestParam( value = "endTime", required = false ) String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
+
+    @RequestMapping( value = "/teacher-recommend-app/list", method = RequestMethod.GET )
+    RestRecord getTeacherCommendList( @RequestParam( "userId" ) String userId,
+                                      @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+                                      @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize );
 }

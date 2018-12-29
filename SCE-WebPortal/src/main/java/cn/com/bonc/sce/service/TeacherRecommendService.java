@@ -43,4 +43,7 @@ public class TeacherRecommendService {
     }
 
 
+    public RestRecord getTeacherCommendList( String userId, int pageNum, int pageSize ) {
+        return teacherRecommendDao.getTeacherCommendList( userId, pageNum, pageSize );
+    }
 }

@@ -110,5 +110,12 @@ public class TeacherRecommendAppController {
         return teacherRecommendService.selectTeacherRecommendAppList( teacherId, startTime, endTime, pageNum, pageSize );
     }
 
-
+    @ApiOperation( "查询教师推荐应用列表" )
+    @GetMapping( "/list" )
+    @ResponseBody
+    public RestRecord getTeacherCommendList( @RequestParam( "userId" ) String userId,
+                                             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+                                             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
+        return teacherRecommendService.getTeacherCommendList( userId, pageNum, pageSize );
+    }
 }
