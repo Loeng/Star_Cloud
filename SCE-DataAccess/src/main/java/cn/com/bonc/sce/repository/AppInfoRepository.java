@@ -106,6 +106,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\tAI.APP_SOURCE,\n" +
             "\tTEMPB.CREATE_TIME,\n" +
             "\tTEMPB.APP_STATUS,\n" +
+            "\tAI.APP_LINK," +
             "\tDECODE( AO.USER_ID, :userId, '1', '0' ) IS_OPEN,\n" +
             "\tDECODE( SUAC.USER_ID, :userId, '1', '0' ) IS_COLLECTION,\n" +
             "\tNVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT \n" +
@@ -144,6 +145,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\tAI.APP_SOURCE,\n" +
             "\tTEMPB.CREATE_TIME,\n" +
             "\tTEMPB.APP_STATUS,\n" +
+            "\tAI.APP_LINK," +
             "\tDECODE( AO.USER_ID, :userId, '1', '0' ) IS_OPEN,\n" +
             "\tDECODE( SUAC.USER_ID, :userId, '1', '0' ) IS_COLLECTION,\n" +
             "\tNVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT \n" +
