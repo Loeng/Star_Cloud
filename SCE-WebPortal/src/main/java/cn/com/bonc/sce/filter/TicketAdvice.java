@@ -29,7 +29,7 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
         String ticket = Base64.decodeStr( webRequest.getHeader( "authentication" ) );
-        String payloadsStr = ticket.split( "\\." )[ 1 ];
+        String payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
         return JSONUtil.toBean( payloadsStr, Map.class );
     }
 }
