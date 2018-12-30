@@ -28,11 +28,10 @@ public class RestConfig  implements  WebMvcConfigurer{
 
     @Override
     public void addResourceHandlers( ResourceHandlerRegistry registry ) {
-        registry.addResourceHandler( "/**" )
-        .addResourceLocations( "classpath:/META-INF/resources/" );
-
-        registry.addResourceHandler( "/*/**" )
+        registry.addResourceHandler( "swagger-ui.html" )
                 .addResourceLocations( "classpath:/META-INF/resources/" );
+        registry.addResourceHandler( "/webjars/**" )
+                .addResourceLocations( "classpath:/META-INF/resources/webjars/" );
     }
 
     @Override
