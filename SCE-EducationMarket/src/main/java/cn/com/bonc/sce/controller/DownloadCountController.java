@@ -105,7 +105,8 @@ public class DownloadCountController {
             @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
-
+        startTime = "".equals( startTime ) ? "1970-01-01 00:00:00" : startTime;
+        endTime = "".equals( endTime ) ? "2099-01-01 00:00:00" : endTime;
         return countService.getDownloadChange( userId, appId, startTime, endTime );
     }
 
@@ -134,6 +135,8 @@ public class DownloadCountController {
             @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
+        startTime = "".equals( startTime ) ? "1970-01-01 00:00:00" : startTime;
+        endTime = "".equals( endTime ) ? "2099-01-01 00:00:00" : endTime;
         return countService.getCollectionChange( userId, appId, startTime, endTime );
     }
 
