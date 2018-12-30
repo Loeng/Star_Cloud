@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.entity.AppCollectionEntity;
 import cn.com.bonc.sce.repository.UserCollectRepository;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -54,6 +54,6 @@ public class AppCollectApiController {
         appCollectionEntity.setAppId( appId );
         appCollectionEntity.setUserId( userId );
         userCollectRepository.save( appCollectionEntity );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
     }
 }
