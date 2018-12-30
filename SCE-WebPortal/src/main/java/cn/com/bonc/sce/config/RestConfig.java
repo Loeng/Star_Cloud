@@ -27,6 +27,12 @@ public class RestConfig  implements  WebMvcConfigurer{
     TicketAdvice ticketAdvice;
 
     @Override
+    public void addResourceHandlers( ResourceHandlerRegistry registry ) {
+        registry.addResourceHandler( "/**" )
+        .addResourceLocations( "classpath:/META-INF/resources/" );
+    }
+
+    @Override
     public void addArgumentResolvers( List< HandlerMethodArgumentResolver > argumentResolvers ) {
         argumentResolvers.add( ticketAdvice );
     }

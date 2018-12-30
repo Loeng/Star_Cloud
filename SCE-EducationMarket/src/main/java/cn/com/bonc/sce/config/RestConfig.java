@@ -7,10 +7,7 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.List;
 
@@ -34,12 +31,24 @@ public class RestConfig implements  WebMvcConfigurer{
         argumentResolvers.add( ticketAdvice );
     }
 
+
+    /**
+     * 放开对资源文件的拦截直接映射到对应资源下
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers( ResourceHandlerRegistry registry ) {
+        registry.addResourceHandler( "/**" )
+                .addResourceLocations( "classpath:/META-INF/resources/" );
+    }
+
     /**
      * Rest 配置
      */
     @Bean
     public WebMvcConfigurer restConfigurer() {
         return new WebMvcConfigurer() {
+
             @Override
             public void addCorsMappings( CorsRegistry registry ) {
                 log.info( "No rest interceptors" );
