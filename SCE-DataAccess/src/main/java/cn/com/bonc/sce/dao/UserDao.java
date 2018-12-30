@@ -25,7 +25,4 @@ public interface UserDao extends JpaRepository< User, String > {
     public int updateUserLoginStatus( @Param( "userId" ) String userId, @Param( "isFirstLogin" ) Integer isFirstLogin );
 
     public User findUserByLoginName( String loginName );
-
-    @Query( value="SELECT * FROM '?1'", nativeQuery=true)
-    List<Map> getUserDetailedInfo(String tableName);
 }
