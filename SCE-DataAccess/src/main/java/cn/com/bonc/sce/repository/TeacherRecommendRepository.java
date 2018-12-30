@@ -62,4 +62,20 @@ public interface TeacherRecommendRepository extends JpaRepository< TeacherRecomm
     int deleteTeacherRecommendByAppIdList(
             @Param( "userId" ) String userId,
             @Param( "appIdList" ) List< String > appIdList );
+
+    /**
+     * 查询教师推荐应用列表
+     *
+     * @param userId   用户Id
+     * @param pageable 分页参数
+     * @return
+     */
+    @Query( nativeQuery = true, value = "SELECT * FROM ( SELECT DISTINCT( INFO.APP_ID ), INFO.RECOMMEND_START_TIME, INFO.RECOMMEND_END_TIME, INFO.APP_NAME, INFO.APP_ICON, INFO.APP_NOTES, INFO.APP_SOURCE, INFO.APP_LINK,\n" +
+            "\tDECODE( MAO.USER_ID, :userId, '1', '0' ) IS_OPEN,\n" +
+            "\tDECODE( UAC.USER_ID, :userId, '1', '0' ) IS_COLLECTION \n" +
+            "FROM ( SELECT TRA.APP_ID, TRA.RECOMMEND_START_TIME, TRA.RECOMMEND_END_TIME, MAI.APP_NAME, MAI.APP_ICON, MAI.APP_NOTES, MAI.APP_SOURCE, MAI.APP_LINK \n" +
+            "FROM STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TRA LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_INFO MAI ON TRA.APP_ID = MAI.APP_ID  AND TRA.IS_DELETE = 1  ) INFO LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN MAO ON MAO.APP_ID = INFO.APP_ID  \tAND MAO.IS_DELETE = 1  AND MAO.USER_ID = :userId \n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION UAC ON INFO.APP_ID = UAC.APP_ID  AND UAC.USER_ID = :userId ) TEST\n" +
+            "\tWHERE   TEST.RECOMMEND_END_TIME >=SYSDATE AND TEST.RECOMMEND_START_TIME <=SYSDATE " )
+    Page< List< Map< String, Object > > > getTeacherRecommendList( @Param( "userId" ) String userId, Pageable pageable );
 }

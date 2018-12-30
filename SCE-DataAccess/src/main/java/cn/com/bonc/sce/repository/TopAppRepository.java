@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -59,4 +60,25 @@ public interface TopAppRepository extends JpaRepository< AppInfoEntity, String >
     int updateTopAppById( @Param( value = "appId" ) String appId,
                           @Param( value = "state" ) Long state,
                           @Param( value = "userId") String userId );
+
+    /**
+     * 查询重点推荐详情列表
+     * @param userId
+     * @param pageable
+     * @return
+     */
+    @Query( value = "SELECT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,MAIN.APP_SOURCE,MAIN.APP_LINK,\n" +
+            "CASE WHEN A.APP_ID IS NULL THEN '0' ELSE '1' END IS_OPEN,\n" +
+            "CASE WHEN C.APP_ID IS NULL THEN '0' ELSE '1' END IS_DOWNLOAD,\n" +
+            "CASE WHEN D.APP_ID IS NULL THEN '0' ELSE '1' END IS_COLLECT\n" +
+            "FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO MAIN \n" +
+            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=MAIN.APP_ID AND A.USER_ID = :userId AND A.IS_DELETE=1\n" +
+            "LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID=MAIN.APP_ID\n" +
+            "LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1\n" +
+            "WHERE MAIN.IS_TOP_RECOMMEND = 1",
+            countQuery = "SELECT COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_TOP_RECOMMEND = 1",
+            nativeQuery = true )
+    List< Map<String,String> > selectTopAppList( @Param( value = "userId" ) String userId,
+                                                 Pageable pageable );
+
 }

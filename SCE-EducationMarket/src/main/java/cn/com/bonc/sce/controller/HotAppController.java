@@ -1,13 +1,17 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.model.AppRecommend;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.HotAppService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 应用推荐-热门应用接口
@@ -64,9 +68,10 @@ public class HotAppController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/one")
-    public RestRecord addHotRecommendApp( @RequestParam( "appId" ) String appId ) {
+    @ResponseBody
+    public RestRecord addHotRecommendApp( @RequestBody AppRecommend appRecommend ) throws IOException {
         String userId = "101";
-        return hotAppService.addHotRecommendApp( userId, appId );
+        return hotAppService.addHotRecommendApp( userId, appRecommend.getAppId() );
     }
 
     /**
@@ -81,9 +86,10 @@ public class HotAppController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/sub-one")
-    public RestRecord cancelHotRecommendApp( @RequestParam( "appId" ) String appId ) {
+    @ResponseBody
+    public RestRecord cancelHotRecommendApp( @RequestBody AppRecommend appRecommend ) throws IOException {
         String userId = "101";
-        return hotAppService.cancelHotRecommendApp( userId, appId );
+        return hotAppService.cancelHotRecommendApp( userId, appRecommend.getAppId() );
     }
 
 
@@ -119,9 +125,11 @@ public class HotAppController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "" )
-    public RestRecord selectHotAppList() {
+    @GetMapping( "/detail-list/{pageNum}/{pageSize}" )
+    public RestRecord selectHotAppList( @PathVariable Integer pageNum,
+                                        @PathVariable Integer pageSize ) {
         // 查询应用表中重点推荐状态为1的应用
-        return hotAppService.selectHotAppList();
+        String userId = "101";
+        return hotAppService.selectHotAppList( pageNum, pageSize, userId );
     }
 }

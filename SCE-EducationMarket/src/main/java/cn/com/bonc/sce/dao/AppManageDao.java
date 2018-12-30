@@ -90,14 +90,15 @@ public interface AppManageDao {
     /**
      * 前台全部应用页面展示
      */
-    @RequestMapping( value = "/manage-app/condition", method = RequestMethod.GET )
+    @RequestMapping( value = "/manage-app/condition/{userId}", method = RequestMethod.GET )
     RestRecord getAppListInfoByCondition( @RequestParam( value = "appName", required = false ) String appName,
                                           @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                           @RequestParam( value = "orderType" ) String orderType,
                                           @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                           @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
+                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
+                                          @PathVariable( "userId" ) String userId );
 
     /**
      * 查询单个应用详情
@@ -152,6 +153,6 @@ public interface AppManageDao {
     @RequestMapping( value = "/manage-app/app-info", method = RequestMethod.GET )
     RestRecord getAppInfo();
 
-    @RequestMapping(value = "/manage-app//detail/open/{appId}")
-    RestRecord isOpenApp( @PathVariable("appId")  String appId);
+    @RequestMapping( value = "/manage-app//detail/open/{appId}" )
+    RestRecord isOpenApp( @PathVariable( "appId" ) String appId );
 }

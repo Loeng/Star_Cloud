@@ -27,8 +27,8 @@ import java.util.Set;
 @Table( name = "SCE_MARKET_APP_INFO", schema = "STARCLOUDMARKET" )
 public class AppInfoEntity {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Column( name = "APP_ID" )
     private String appId;
 

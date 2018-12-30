@@ -126,8 +126,8 @@ public class TeacherRecommendAppApiController {
     @ResponseBody
     public RestRecord selectTeacherRecommendAppList(
             @RequestParam( "teacherId" ) String teacherId,
-            @RequestParam( value = "startTime", required = false , defaultValue = "1970-01-01 00:00:00" ) String startTime,
-            @RequestParam( value = "endTime", required = false , defaultValue = "2099-01-01 00:00:00") String endTime,
+            @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) String startTime,
+            @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         log.trace( "query teacherCommend conditions is teacherId:{} startTime:{} endTime:{} pageNum:{} pageSize:{} ", teacherId, startTime, endTime, pageNum, pageSize );
@@ -144,6 +144,26 @@ public class TeacherRecommendAppApiController {
         } catch ( Exception e ) {
             log.error( "", e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+    }
+
+    @GetMapping( "/list" )
+    @ResponseBody
+    public RestRecord getTeacherRecommendList( @RequestParam( "userId" ) String userId,
+                                               @RequestParam( "pageNum" ) int pageNum,
+                                               @RequestParam( "pageSize" ) int pageSize ) {
+        log.trace( "query TeacherRecommend List condition is {}" );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+        try {
+            Page< List< Map< String, Object > > > page = teacherRecommendRepository.getTeacherRecommendList( userId, pageable );
+            Map< String, Object > result = new HashMap<>( 16 );
+            result.put( "data", page.getContent() );
+            result.put( "totalPage", page.getTotalPages() );
+            result.put( "totalCount", page.getTotalElements() );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
+        } catch ( Exception e ) {
+            log.error( "fail query TeacherRecommend", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
     }
 }

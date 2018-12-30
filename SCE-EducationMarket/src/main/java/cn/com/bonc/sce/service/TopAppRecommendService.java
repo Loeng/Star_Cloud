@@ -36,6 +36,10 @@ public class TopAppRecommendService {
         return topAppDao.cancelTopRecommendApp( userId, appId );
     }
 
+    public RestRecord selectTopAppList( Integer pageNum, Integer pageSize, String userId ) {
+        return topAppDao.selectTopAppList( pageNum, pageSize, userId );
+    }
+
 
 
 }

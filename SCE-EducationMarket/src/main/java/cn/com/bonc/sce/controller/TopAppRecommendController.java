@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.model.AppRecommend;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.HotAppService;
 import cn.com.bonc.sce.service.TopAppRecommendService;
@@ -12,7 +13,7 @@ import java.util.List;
 
 /**
  * 应用推荐-重点推荐应用接口
- * author jc_D
+ * @author jc_D
  */
 @Slf4j
 @Api( value = "应用推荐-重点推荐应用接口", tags = "应用推荐-重点推荐应用接口" )
@@ -85,9 +86,10 @@ public class TopAppRecommendController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/one")
-    public RestRecord addHotRecommendApp( @RequestParam( "appId" ) String appId ) {
+    @ResponseBody
+    public RestRecord addHotRecommendApp( @RequestBody AppRecommend appRecommend ) {
         String userId = "101";
-        return topAppRecommendService.addTopRecommendApp( userId, appId );
+        return topAppRecommendService.addTopRecommendApp( userId, appRecommend.getAppId() );
     }
 
     /**
@@ -102,10 +104,26 @@ public class TopAppRecommendController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/sub-one")
-    public RestRecord cancelHotRecommendApp( @RequestParam( "appId" ) String appId ) {
+    @ResponseBody
+    public RestRecord cancelHotRecommendApp( @RequestBody AppRecommend appRecommend ) {
         String userId = "101";
-        return topAppRecommendService.cancelTopRecommendApp( userId, appId );
+        return topAppRecommendService.cancelTopRecommendApp( userId, appRecommend.getAppId() );
     }
 
-
+    /**
+     * 查询所有重点推荐应用列表
+     *
+     * @return
+     */
+    @ApiOperation( value = "查询所有重点推荐应用列表", notes = "查询所有重点推荐应用列表", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/detail-list/{pageNum}/{pageSize}" )
+    public RestRecord selectTopAppList( @PathVariable Integer pageNum,
+                                        @PathVariable Integer pageSize ) {
+        // 查询应用表中重点推荐状态为1的应用
+        String userId = "101";
+        return topAppRecommendService.selectTopAppList( pageNum, pageSize, userId );
+    }
 }

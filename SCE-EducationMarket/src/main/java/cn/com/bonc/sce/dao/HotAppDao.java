@@ -43,11 +43,15 @@ public interface HotAppDao {
 
     /**
      * 查询所有热门应用列表
-     *
+     * @param pageNum  页码
+     * @param pageSize 每页数量
+     * @param userId
      * @return
      */
-    @RequestMapping( value = "/hot-app", method = RequestMethod.GET )
-    RestRecord selectHotAppList();
+    @RequestMapping( value = "/hot-app/detail/{pageNum}/{pageSize}/{userId}", method = RequestMethod.GET )
+    RestRecord selectHotAppList( @PathVariable( "pageNum" ) Integer pageNum,
+                                 @PathVariable( "pageSize" ) Integer pageSize,
+                                 @PathVariable( "userId" ) String userId  );
 
 
     /**

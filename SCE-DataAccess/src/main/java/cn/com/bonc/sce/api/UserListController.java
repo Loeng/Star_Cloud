@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Sort;
@@ -46,30 +47,30 @@ public class UserListController {
 
         // 此处在具体的角色ID确定下来之后更改分支走的方法
         Page page = null;
+        pageNum = pageNum - 1;
         switch ( roleId ) {
             case 1:
-                page = selfRegistration(pageNum,pageSize,condition);//自注冊
+                page = student(pageNum,pageSize,condition);  // 学生
                 break;
             case 2:
-                page = organization(pageNum,pageSize,condition);//机构
-                break;
-            case 3:
-                page = manufacturer(pageNum,pageSize,condition);
-                break;
-            case 4:
-                 // 代理机构
-                break;
-            case 5:
-                 // 审核用户
-                break;
-            case 6:
                 page = teacher(pageNum,pageSize,condition); // 教师
                 break;
+            case 3:
+                break;
+            case 4:
+                page = manufacturer(pageNum,pageSize,condition); // 厂商
+                break;
+            case 5:
+                page = family(pageNum,pageSize,condition); // 家长
+                break;
+            case 6:
+                // 代理商
+                break;
             case 7:
-                page = student(pageNum,pageSize,condition); // 学生
+                page = organization(pageNum,pageSize,condition);// 机构
                 break;
             case 8:
-                page = family(pageNum,pageSize,condition); // 家长
+                page = selfRegistration(pageNum,pageSize,condition);//自注冊
                 break;
 
         }
@@ -84,15 +85,16 @@ public class UserListController {
         String account= "";
         String name = "";
         String organization_name = "";
-        if (null != condition){
+        if (!CollectionUtils.isEmpty(condition)){
+            log.info("用户列表: 学校 -> 教师 信息模糊查询，查询条件为[{}]",condition);
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
             }
             if (null != condition.get("name") && !"".equals(condition.get("name")) ){
-                account = condition.get("name").toString();
+                name = condition.get("name").toString();
             }
             if (null != condition.get("organization_name") && !"".equals(condition.get("organization_name")) ){
-                account = condition.get("organization_name").toString();
+                organization_name = condition.get("organization_name").toString();
             }
         }
         info = userInfoRepository.findTeacherByCondition(name,account,organization_name,pageable);
@@ -109,18 +111,20 @@ public class UserListController {
         String name = "";
         String organization_name = "";
         String login = "";
-        if (null != condition){
+        if (!CollectionUtils.isEmpty(condition)){
+            log.info("用户列表: 学校 -> 学生 信息模糊查询，查询条件为[{}]",condition);
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
             }
             if (null != condition.get("name") && !"".equals(condition.get("name")) ){
-                account = condition.get("name").toString();
+                name = condition.get("name").toString();
             }
+
             if (null != condition.get("organization_name") && !"".equals(condition.get("organization_name")) ){
-                account = condition.get("organization_name").toString();
+                organization_name = condition.get("organization_name").toString();
             }
             if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                account = condition.get("login").toString();
+                login = condition.get("login").toString();
             }
         }
         info =  userInfoRepository.findSchoolByCondition(name,account,organization_name,login,pageable);
@@ -136,12 +140,13 @@ public class UserListController {
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
         String account= "";
         String name = "";
-        if (null != condition){
+        if (!CollectionUtils.isEmpty(condition)){
+            log.info("用户列表: 学校 -> 家长 信息模糊查询，查询条件为[{}]",condition);
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
             }
             if (null != condition.get("name") && !"".equals(condition.get("name")) ){
-                account = condition.get("name").toString();
+                name = condition.get("name").toString();
             }
         }
         info =  userInfoRepository.findFamilyByCondition(name,account,pageable);
@@ -158,7 +163,7 @@ public class UserListController {
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
         String name = "";
         String account = "";
-        if(condition!=null){
+        if(!CollectionUtils.isEmpty(condition)){
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
             }
@@ -183,8 +188,8 @@ public class UserListController {
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
         String loginName = "";
         String organizationName = "";
-        int status =1;
-        if(condition!=null){
+        String status ="";
+        if(!CollectionUtils.isEmpty(condition)){
             //模糊查询
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 loginName = condition.get("account").toString();
@@ -193,10 +198,8 @@ public class UserListController {
                 organizationName = condition.get("organizationName").toString();
             }
             if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                status = condition.get("login").hashCode();
+                status = condition.get("login").toString();
             }
-
-
         }
         info = userInfoRepository.findByOrganizationLike(loginName,organizationName,status,pageable);
         log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
@@ -206,7 +209,7 @@ public class UserListController {
 
     /**
      *@Author : lyy
-     *@Desc：查询厂商信息 :
+     *@Desc：查询 厂商信息   :
      *@Date : 15:22 2018/12/26
      */
     public Page<Map<String,Object>>  manufacturer(int pageNum, int pageSize, Map<String,Object> condition) {
@@ -214,8 +217,8 @@ public class UserListController {
         Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "USER_ID" );
         String ManufacturerName = "";
         String loginName = "";
-        int status = 1;
-        if(condition!=null){
+        String status = "";
+        if(!CollectionUtils.isEmpty(condition)){
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 loginName = condition.get("account").toString();
             }
@@ -223,7 +226,7 @@ public class UserListController {
                 ManufacturerName = condition.get("manufacturerName").toString();
             }
             if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                status = condition.get("login").hashCode();
+                status = condition.get("login").toString();
             }
         }
         info = userInfoRepository.findByManufacturerLike(loginName,ManufacturerName,status,pageable);

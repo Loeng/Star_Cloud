@@ -37,6 +37,10 @@ import java.util.*;
 @Transactional( rollbackFor = Exception.class )
 @RequestMapping( "/manage-app" )
 public class AppManageController {
+
+    @Autowired
+    private FileResourceRepository fileResourceRepository;
+
     @Autowired
     private AppTypeRelRepository appTypeRelRepository;
 
@@ -66,9 +70,13 @@ public class AppManageController {
                                   @PathVariable( "uid" ) String uid ) {
         log.trace( "appinfo::{}", appInfo );
         try {
+            //取icon
+            String iconId = appInfo.getAppIcon();
+            Map< String, Object > iconAd = fileResourceRepository.getFileResourceById( Integer.parseInt( iconId ) );
+            String iconAddress = iconAd.get( "FILE_MAPPING_PATH" ).toString();
             //1.appinfo表
             AppInfoEntity appInfoEntity = new AppInfoEntity();
-            appInfoEntity.setAppIcon( appInfo.getAppIcon() );
+            appInfoEntity.setAppIcon( iconAddress );
             appInfoEntity.setAppName( appInfo.getAppName() );
             appInfoEntity.setCreateUserId( uid );
             appInfoEntity.setCreateTime( new Date() );
@@ -76,19 +84,45 @@ public class AppManageController {
             appInfoEntity.setAppSource( "rj" );
             appInfoEntity.setAppNotes( appInfo.getAppNotes() );
             AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
-            String appid = info.getAppId();
+            String appId = info.getAppId();
             //2.类型关系表
             AppTypeRelEntity appTypeRelEntity = new AppTypeRelEntity();
-            appTypeRelEntity.setAppId( appid );
+            appTypeRelEntity.setAppId( appId );
             appTypeRelEntity.setAppTypeId( appInfo.getAppTypeId() );
             AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
+
+            //根据id取pc图片链接
+            String pcUrl = appInfo.getAppPcPic();
+            String[] pcId = pcUrl.split( "," );
+            StringBuilder sb1 = new StringBuilder();
+            for ( String s : pcId ) {
+                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
+                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
+                sb1.append( p ).append( "," );
+            }
+            //根据id取phone图片链接
+            String phoneUrl = appInfo.getAppPhonePic();
+            String[] phoneId = phoneUrl.split( "," );
+            StringBuilder sb2 = new StringBuilder();
+            for ( String s : phoneId ) {
+                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
+                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
+                sb2.append( p ).append( "," );
+            }
+
 
             //3.版本表
             Set< AppTypeMode > pcSet = appInfo.getPc();
             pcSet.forEach( pc -> {
+
+                //根据addressId获取软件存储路径
+                String addressId = pc.getAddress();
+                Map< String, Object > ad = fileResourceRepository.getFileResourceById( Integer.parseInt( addressId ) );
+                String softwareAddress = ad.get( "FILE_MAPPING_PATH" ).toString();
+                //往版本表存东西
                 MarketAppVersion marketAppVersion = new MarketAppVersion();
-                marketAppVersion.setAppId( appid );
-                marketAppVersion.setAppDownloadAddress( pc.getAddress() );
+                marketAppVersion.setAppId( appId );
+                marketAppVersion.setAppDownloadAddress( softwareAddress );
                 marketAppVersion.setAppVersion( pc.getAppVersion() );
                 marketAppVersion.setVersionInfo( appInfo.getAppNotes() );
                 marketAppVersion.setPackageName( pc.getPackageName() );
@@ -96,8 +130,8 @@ public class AppManageController {
                 marketAppVersion.setAppStatus( "1" );
                 marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
                 marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
-                marketAppVersion.setAppPcPic( appInfo.getAppPcPic() );
-                marketAppVersion.setAppPhonePic( appInfo.getAppPhonePic() );
+                marketAppVersion.setAppPcPic( sb1.toString() );
+                marketAppVersion.setAppPhonePic( sb2.toString() );
                 marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
                 marketAppVersion.setCreateTime( new Date() );
                 marketAppVersion.setIsDelete( 1L );
@@ -250,8 +284,8 @@ public class AppManageController {
                                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         //TODO:这个数据随便查的，要重写
-        return appNameTypeService.selectAppListByNameAndType(appName, appType, orderType, sort, platformType, pageNum, pageSize);
-       
+        return appNameTypeService.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
+
     }
 
     /**
@@ -263,8 +297,6 @@ public class AppManageController {
     @GetMapping( "/detail-by-id/{appId}" )
     @ResponseBody
     public RestRecord selectAppById( @PathVariable String appId ) {
-        AppInfoEntity appInfo = appInfoRepository.findByAppId( appId );
-        String type = appInfo.getAppSource(); // type可用于分辨应用类型  平台应用/软件应用
         Pageable pageable = PageRequest.of( 0, 1, Sort.Direction.DESC, "CREATE_TIME" );
         Page< Map< String, Object > > appDetailInfo = appInfoRepository.findAppDetailById( appId, pageable );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appDetailInfo.getContent() );
@@ -377,60 +409,38 @@ public class AppManageController {
      * @param pageSize
      * @return
      */
-    @GetMapping( "/condition" )
+    @GetMapping( "/condition/{userId}" )
     public RestRecord getAppListInfoByCondition( @RequestParam( value = "appName", required = false ) String appName,
                                                  @RequestParam( value = "appType", required = false, defaultValue = "0" ) Integer appType,
                                                  @RequestParam String orderType,
                                                  @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                                  @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                                 @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+                                                 @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
+                                                 @PathVariable( "userId" ) String userId ) {
 
-        //TODO  取userId
-        String userId = "1";
         Page< List< Map< String, Object > > > page;
         if ( "pt".equalsIgnoreCase( platformType ) ) {
             //平台应用
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
             if ( appType == 0 ) {
                 //平台应用 没有分类
-                page = appInfoRepository.getPlatformlist( userId, pageable );
+                page = appInfoRepository.getAppListInfoByPlatform( userId, "pt", pageable );
             } else {
-                //根据分类id查询appid
-                List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
-                //根据appIdList 查询平台应用
-                if( CollUtil.isEmpty(appIdList)){
-                    Map< String, Object > temp = new HashMap<>( 16 );
-                    temp.put( "data", "[]" );
-                    temp.put( "totalPage", 0 );
-                    temp.put( "totalCount", 0 );
-                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
-                }else {
-                    page = appInfoRepository.getPlatformlistByIds( userId, appIdList, pageable );
-                }
-
+                //根据typeId查
+                page = appInfoRepository.getAppListInfoByTypeIdandPlatform( appType, userId, "pt", pageable );
+                ;
             }
 
         } else {
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT" );
             //软件应用
             if ( appType == 0 ) {
-                //查全部 不分类  //查视图  STARCLOUDMARKET."APP_CONDITION_INFO_VIEW"
-                page = appInfoRepository.getSoftware( pageable );
-
+                //查全部
+                page = appInfoRepository.getAppListInfoByPlatform( userId, "rj", pageable );
             } else {
-                //根据appType 去 类型关联表查询 appid  数组
-                List< Object > appIdList = appInfoRepository.getAppIdByTypeId( appType );
-                if( CollUtil.isEmpty(appIdList)){
-                    Map< String, Object > temp = new HashMap<>( 16 );
-                    temp.put( "data", "[]" );
-                    temp.put( "totalPage", 0 );
-                    temp.put( "totalCount", 0 );
-                    return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
-                }else {
-                    page = appInfoRepository.getAppListInfoByIds( appIdList, pageable );
-                }
-
+                //根据typeId查
+                page = appInfoRepository.getAppListInfoByTypeIdandPlatform( appType, userId, "rj", pageable );
             }
 
         }

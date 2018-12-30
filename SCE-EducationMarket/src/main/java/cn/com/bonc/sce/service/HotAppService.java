@@ -37,8 +37,8 @@ public class HotAppService {
         return hotAppDao.selectHotRecommendAppList( pageNum, pageSize );
     }
 
-    public RestRecord selectHotAppList( ) {
-        return hotAppDao.selectHotAppList();
+    public RestRecord selectHotAppList( Integer pageNum, Integer pageSize, String userId ) {
+        return hotAppDao.selectHotAppList( pageNum, pageSize, userId );
     }
 
     public RestRecord addHotRecommendApp( String userId, String appId ) {
