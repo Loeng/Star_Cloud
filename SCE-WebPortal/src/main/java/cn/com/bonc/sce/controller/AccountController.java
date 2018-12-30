@@ -90,7 +90,7 @@ public class AccountController {
     } )
     @PostMapping("")
     @ResponseBody
-    public RestRecord updateAccount(@RequestBody @ApiParam( name = "accountSecurity", value = "安全码和手机号和修改信息", required = true ) Account accountSecurity){
+    public RestRecord updateAccount(@RequestBody @ApiParam( name = "accountSecurity", value = "安全码和账号信息（或者是用户id、用户名和密码）", required = true ) Account accountSecurity){
         return accountSecurityService.updateAccount(accountSecurity);
     }
 }

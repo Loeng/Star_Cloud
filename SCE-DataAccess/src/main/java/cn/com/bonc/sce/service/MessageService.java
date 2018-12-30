@@ -118,9 +118,9 @@ public class MessageService {
             Timestamp time = messageDao.getNewestTimeByUserId( userId );
             List< Message > list;
             if ( !StringUtils.isEmpty( time ) ) {
-                list = messageDao.findByTargetIdAndCreateTimeAfterAndIsDelete( userId, time, 1 );
+                list = messageDao.findByTypeAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( 0,time, 1,userId, time, 1 );
             } else {
-                list = messageDao.findByTargetIdAndIsDelete( userId, 1 );
+                list = messageDao.findByTypeAndIsDeleteOrTargetIdAndIsDelete( 0, 1,userId, 1 );
             }
             List< UserMessage > userMessageList = new ArrayList<>();
             if ( list.size() > 0 ) {
@@ -130,7 +130,7 @@ public class MessageService {
                     um.setUserId( userId );
                     Timestamp createTime = m.getCreateTime();
                     um.setCreateTime( new Timestamp( createTime.getTime() ) );
-                    um.setIsDelete( 0 );
+                    um.setIsDelete( 1 );
                     um.setMessageId( m.getId() );
                     userMessageList.add( um );
                     if ( userMessageList.size() >= 1000 ) {
