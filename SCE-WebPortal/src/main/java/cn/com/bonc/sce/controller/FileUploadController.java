@@ -62,13 +62,12 @@ public class FileUploadController {
      * @return 返回成功与否
      */
     @ApiOperation( value = "文件上传解析Excel", notes = "文件上传解析Excel", httpMethod = "POST" )
-
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping( "/upload-user-info" )
     @ResponseBody
-    public RestRecord uploadParseExcel( @ModelAttribute UploadFileModel uploadFileModel ) {
+    public RestRecord uploadParseExcel( @ModelAttribute @ApiParam(name = "file", value = "上传信息", required = true,example = "{multipartFile:'file',fileType:'document',userType:3}") UploadFileModel uploadFileModel ) {
         if ( uploadFileModel.getMultipartFile() == null || uploadFileModel.getMultipartFile().isEmpty()
                 || uploadFileModel.getFileType().isEmpty() || uploadFileModel.getUserType().isEmpty() ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
