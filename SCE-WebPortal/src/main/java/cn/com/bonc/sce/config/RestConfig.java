@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.config;
 
+import cn.com.bonc.sce.filter.TicketAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -23,11 +24,11 @@ public class RestConfig  implements  WebMvcConfigurer{
 
 
     @Autowired
-    CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver;
+    TicketAdvice ticketAdvice;
 
     @Override
     public void addArgumentResolvers( List< HandlerMethodArgumentResolver > argumentResolvers ) {
-        argumentResolvers.add(currentUserMethodArgumentResolver);
+        argumentResolvers.add( ticketAdvice );
     }
 
     /**
