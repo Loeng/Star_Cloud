@@ -30,6 +30,9 @@ public class RestConfig  implements  WebMvcConfigurer{
     public void addResourceHandlers( ResourceHandlerRegistry registry ) {
         registry.addResourceHandler( "/**" )
         .addResourceLocations( "classpath:/META-INF/resources/" );
+
+        registry.addResourceHandler( "/*/**" )
+                .addResourceLocations( "classpath:/META-INF/resources/" );
     }
 
     @Override
