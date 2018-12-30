@@ -24,21 +24,22 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter( MethodParameter parameter ) {
 
-        if ( parameter.hasParameterAnnotation( Payloads.class ) || parameter.hasParameterAnnotation( CurrentUserId.class ) ) {
-            return true;
+
+        if( parameter.hasParameterAnnotation( Payloads.class ) || parameter.hasParameterAnnotation( CurrentUserId.class )){
+            return  true;
         }
         return false;
     }
 
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
-        String ticket = webRequest.getHeader( "authentication" );
+        String ticket =  webRequest.getHeader( "authentication" );
         String payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
 
-        if ( parameter.hasParameterAnnotation( Payloads.class ) ) {
+        if( parameter.hasParameterAnnotation( Payloads.class )){
             return payloadsStr;
-        } else if ( parameter.hasParameterAnnotation( CurrentUserId.class ) ) {
-            return JSONUtil.toBean( payloadsStr, Map.class ).get( "userId" );
+        }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
+            return  JSONUtil.toBean( payloadsStr,Map.class ).get( "userId" );
         }
         return "";
     }

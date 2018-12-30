@@ -43,7 +43,7 @@ public class UserListController {
     public RestRecord getUserInfoByRole( @PathVariable("roleId") Integer roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
                                          @PathVariable( "pageSize" ) Integer pageSize,
-                                         @RequestBody(required = false) Map<String,Object> condition) {
+                                         @RequestBody( required = false) Map<String,Object> condition) {
 
         // 此处在具体的角色ID确定下来之后更改分支走的方法
         Page page = null;
@@ -74,9 +74,8 @@ public class UserListController {
                 break;
 
         }
-        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,page.getContent());
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,page);
     }
-
 
     // 查询 学校 -》 教师信息
     public Page<Map<String,Object>> teacher(int pageNum, int pageSize, Map<String,Object> condition){

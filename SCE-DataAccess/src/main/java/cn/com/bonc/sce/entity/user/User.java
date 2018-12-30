@@ -79,4 +79,6 @@ public class User {
     private String secret;
     @Column( name = "IS_FIRST_LOGIN" )
     private Integer isFirstLogin;
+    @Transient
+    private Object userDetailedInfo;
 }

@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.User;
+import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,5 +35,14 @@ public interface UserDaoClient {
      */
     @RequestMapping( value = "/users/login-name-is/", method = RequestMethod.POST )
     public User getUserByLoginName( @RequestBody String loginName );
+
+    /**
+     * 获取用户详细信息
+     *
+     * @param userId userId
+     * @return 获取用户
+     */
+    @RequestMapping( value = "/users/detailed/{userId}", method = RequestMethod.GET )
+    public RestRecord getUserInfo( @PathVariable( "userId" )String userId);
 
 }
