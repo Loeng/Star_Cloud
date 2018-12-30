@@ -47,30 +47,30 @@ public class UserListController {
 
         // 此处在具体的角色ID确定下来之后更改分支走的方法
         Page page = null;
+        pageNum = pageNum - 1;
         switch ( roleId ) {
             case 1:
-                page = selfRegistration(pageNum,pageSize,condition);//自注冊
+                page = student(pageNum,pageSize,condition);  // 学生
                 break;
             case 2:
-                page = organization(pageNum,pageSize,condition);//机构
-                break;
-            case 3:
-                page = manufacturer(pageNum,pageSize,condition);
-                break;
-            case 4:
-                 // 代理机构
-                break;
-            case 5:
-                 // 审核用户
-                break;
-            case 6:
                 page = teacher(pageNum,pageSize,condition); // 教师
                 break;
+            case 3:
+                break;
+            case 4:
+                page = manufacturer(pageNum,pageSize,condition); // 厂商
+                break;
+            case 5:
+                page = family(pageNum,pageSize,condition); // 家长
+                break;
+            case 6:
+                // 代理商
+                break;
             case 7:
-                page = student(pageNum,pageSize,condition); // 学生
+                page = organization(pageNum,pageSize,condition);// 机构
                 break;
             case 8:
-                page = family(pageNum,pageSize,condition); // 家长
+                page = selfRegistration(pageNum,pageSize,condition);//自注冊
                 break;
 
         }
