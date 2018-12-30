@@ -62,29 +62,31 @@ public class FileUploadController {
      * @return 返回成功与否
      */
     @ApiOperation( value = "文件上传解析Excel", notes = "文件上传解析Excel", httpMethod = "POST" )
+
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping( "/upload-user-info" )
     @ResponseBody
     public RestRecord uploadParseExcel( @ModelAttribute UploadFileModel uploadFileModel ) {
-
         if ( uploadFileModel.getMultipartFile() == null || uploadFileModel.getMultipartFile().isEmpty()
                 || uploadFileModel.getFileType().isEmpty() || uploadFileModel.getUserType().isEmpty() ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }
+        try {
+            List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getMultipartFile(), 1, 1, ExcelToUser.class );
 
-        List< ExcelToUser > list = ParseExcel.importExcel( multipartFile, 1, 1, ExcelToUser.class );
+            log.info( "解析Excel成功" );
 
-        log.info( "解析Excel成功" );
+            fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
 
-        RestRecord restRecord = fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
-
-        log.info( "上传用户成功" );
+            log.info( "上传用户成功" );
+        }catch ( Exception e ){
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
+        }
 
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
-
 
     /**
      * @param multipartFileAll 上传文件
