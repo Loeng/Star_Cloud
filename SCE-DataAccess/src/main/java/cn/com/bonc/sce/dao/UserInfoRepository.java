@@ -21,7 +21,6 @@ import java.util.Map;
  * @Date: 2018/12/22 11:01
  * @Description:
  */
-@Repository
 public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>, JpaSpecificationExecutor<User> {
 
 
@@ -30,12 +29,12 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
     Page<Map<String,Object>> findTeacherByCondition(String name, String account, String organization_name, Pageable pageable);
 
      // 查询和搜索 学校 -> 学生 的列表信息
-    @Query(value = "SELECT * FROM STARCLOUDPORTAL.v_student_info WHERE USER_NAME LIKE CONCAT('%',CONCAT(?1,'%'))  AND USER_ACCOUNT LIKE CONCAT('%',CONCAT(?2,'%'))  AND  AUTHORITY_NAME LIKE CONCAT('%',CONCAT(?3,'%')) AND LOGIN_PERMISSION_STATUS LIKE CONCAT('%',CONCAT(?4,'%'))",nativeQuery = true)
+    @Query(value = "SELECT * FROM STARCLOUDPORTAL.v_student_info WHERE USER_NAME LIKE CONCAT('%',CONCAT(?1,'%'))  AND USER_ACCOUNT LIKE CONCAT('%',CONCAT(?2,'%'))  AND  AUTHORITY_NAME LIKE CONCAT('%',CONCAT(?3,'%')) AND TO_CHAR(LOGIN_PERMISSION_STATUS,'999') LIKE CONCAT('%',CONCAT(?4,'%'))",nativeQuery = true)
     Page<Map<String,Object>> findSchoolByCondition(String name, String account, String organization_name,String login, Pageable pageable);
 
     // 查询和搜索 学校 -> 家长 的列表信息 // countQuery = "SELECT COUNT(*) FROM \"v_family_info\"  "
    @Query( value = "SELECT * FROM STARCLOUDPORTAL.v_family_info WHERE USER_NAME LIKE CONCAT('%',CONCAT(?1,'%')) AND USER_ACCOUNT LIKE CONCAT('%',CONCAT(?2,'%'))", nativeQuery = true)
-    Page<Map<String,Object>> findFamilyByCondition(@Param("name") String name, @Param("account") String account, Pageable pageable);
+    Page<Map<String,Object>> findFamilyByCondition( String name, String account, Pageable pageable);
 
     /**
      *@Author : lyy
