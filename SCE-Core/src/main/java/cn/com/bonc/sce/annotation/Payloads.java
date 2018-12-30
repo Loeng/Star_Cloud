@@ -12,5 +12,4 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 public @interface Payloads {
-    String varName() default "payloads";
 }
