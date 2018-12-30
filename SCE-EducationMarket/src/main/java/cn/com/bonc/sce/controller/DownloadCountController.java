@@ -124,7 +124,7 @@ public class DownloadCountController {
     @ApiOperation( value = "厂家应用数量及类型占比", notes = "根据用户ID查询用户对应的厂家下面APP总数及各类型占比", httpMethod = "GET" )
     @GetMapping( "/app-type-percent" )
     @ResponseBody
-    public RestRecord getAppTypePrecent(  @ApiParam( "用户Id" ) @CurrentUserId String userId ) {
+    public RestRecord getAppTypePrecent( @ApiParam( "用户Id" ) @CurrentUserId String userId ) {
         return countService.getAppTypePrecent( userId );
     }
 
@@ -146,5 +146,15 @@ public class DownloadCountController {
     @ResponseBody
     public RestRecord getCompanyApp( @RequestParam( "userId" ) String userId ) {
         return countService.getCompanyAppList( userId );
+    }
+
+    @ApiOperation( value = "查询应用下载数量等信息接口", notes = "市场分析页面接口" )
+    @GetMapping( "/list" )
+    @ResponseBody
+    public RestRecord getDownloadList( @RequestParam( "userId" ) String userId,
+                                       @RequestParam( "appType" ) int appType,
+                                       @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                       @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
+        return countService.getDownloadList( userId, appType, pageNum, pageSize );
     }
 }
