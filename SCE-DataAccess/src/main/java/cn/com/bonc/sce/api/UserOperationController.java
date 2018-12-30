@@ -56,6 +56,8 @@ public class UserOperationController {
     @ResponseBody
     public RestRecord updateTeacherRecommendAppInfo(
             @RequestBody  Map   userInfo ) {
+
+
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, "" );
     }
 
