@@ -1,11 +1,14 @@
 package cn.com.bonc.sce.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Leucippus
@@ -14,7 +17,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Slf4j
 @SpringBootConfiguration
-public class RestConfig {
+@EnableWebMvc
+@ComponentScan(basePackages = "cn.com.bonc.sce.controller")
+public class RestConfig  implements  WebMvcConfigurer{
+
+
+    @Autowired
+    CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver;
+
+    @Override
+    public void addArgumentResolvers( List< HandlerMethodArgumentResolver > argumentResolvers ) {
+        argumentResolvers.add(currentUserMethodArgumentResolver);
+    }
+
     /**
      * Rest 配置
      */
