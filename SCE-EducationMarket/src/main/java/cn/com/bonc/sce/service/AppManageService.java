@@ -32,8 +32,8 @@ public class AppManageService {
      * @param appInfo 应用信息， value为json格式
      * @return
      */
-    public RestRecord addAppInfo( AppAddModel appInfo,String uid ) {
-        return appManageDao.addAppInfo( appInfo ,uid);
+    public RestRecord addAppInfo( AppAddModel appInfo, String uid ) {
+        return appManageDao.addAppInfo( appInfo, uid );
     }
 
     /**
@@ -109,6 +109,7 @@ public class AppManageService {
     public RestRecord selectAppListByNameAndType( String appName, Integer appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
         return appManageDao.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
     }
+
     /**
      * 前台全部应用页面展示
      *
@@ -121,8 +122,8 @@ public class AppManageService {
      * @param pageSize
      * @return
      */
-    public RestRecord getAppListInfoByCondition( String appName, Integer appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize ) {
-        return appManageDao.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize );
+    public RestRecord getAppListInfoByCondition( String appName, Integer appType, String orderType, String sort, String platformType, Integer pageNum, Integer pageSize, String userId ) {
+        return appManageDao.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize, userId );
     }
 
     /**
@@ -145,6 +146,7 @@ public class AppManageService {
 
     /**
      * 应用统计详情
+     *
      * @return
      */
 
@@ -158,7 +160,7 @@ public class AppManageService {
         return appManageDao.getAppInfo();
     }
 
-    public RestRecord isOpenApp( String appId) {
-        return appManageDao.isOpenApp(appId);
+    public RestRecord isOpenApp( String appId ) {
+        return appManageDao.isOpenApp( appId );
     }
 }

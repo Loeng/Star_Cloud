@@ -235,8 +235,8 @@ public class AppManageController {
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
 
-
-        return appManageService.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize );
+        String userId="1";
+        return appManageService.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize ,userId);
     }
 
     /**
