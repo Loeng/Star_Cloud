@@ -3,6 +3,7 @@ package cn.com.bonc.sce.service;
 import cn.com.bonc.sce.dao.UserDaoClient;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.User;
+import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,15 @@ public class UserService {
         userInfo.setCertificateNumber( null );
         userInfo.setAddress( null );
         userInfo.setPassword( null );
+    }
+
+    /**
+     * 获取用户
+     *
+     * @return 获取用户
+     */
+    public RestRecord getUserInfo( String userId) {
+        return userDao.getUserInfo(userId);
     }
 
 }

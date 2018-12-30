@@ -10,18 +10,18 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class UploadFileModel {
 
-    MultipartFile multipartFile;
+    MultipartFile file;
 
     String fileType;
 
     String userType;
 
-    public MultipartFile getMultipartFile() {
-        return multipartFile;
+    public MultipartFile getFile() {
+        return file;
     }
 
-    public void setMultipartFile( MultipartFile multipartFile ) {
-        this.multipartFile = multipartFile;
+    public void setFile( MultipartFile file ) {
+        this.file = file;
     }
 
     public String getFileType() {
