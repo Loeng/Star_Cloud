@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CountService;
 import io.swagger.annotations.*;
@@ -105,7 +106,8 @@ public class DownloadCountController {
             @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
-
+        startTime = "".equals( startTime ) ? "1970-01-01 00:00:00" : startTime;
+        endTime = "".equals( endTime ) ? "2099-01-01 00:00:00" : endTime;
         return countService.getDownloadChange( userId, appId, startTime, endTime );
     }
 
@@ -122,7 +124,7 @@ public class DownloadCountController {
     @ApiOperation( value = "厂家应用数量及类型占比", notes = "根据用户ID查询用户对应的厂家下面APP总数及各类型占比", httpMethod = "GET" )
     @GetMapping( "/app-type-percent" )
     @ResponseBody
-    public RestRecord getAppTypePrecent( @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId ) {
+    public RestRecord getAppTypePrecent(  @ApiParam( "用户Id" ) @CurrentUserId String userId ) {
         return countService.getAppTypePrecent( userId );
     }
 
@@ -134,6 +136,8 @@ public class DownloadCountController {
             @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
+        startTime = "".equals( startTime ) ? "1970-01-01 00:00:00" : startTime;
+        endTime = "".equals( endTime ) ? "2099-01-01 00:00:00" : endTime;
         return countService.getCollectionChange( userId, appId, startTime, endTime );
     }
 

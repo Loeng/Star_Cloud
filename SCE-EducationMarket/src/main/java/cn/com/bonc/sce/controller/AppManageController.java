@@ -39,10 +39,6 @@ public class AppManageController {
      * @return
      */
     @ApiOperation( value = "新增应用", notes = "新增应用", httpMethod = "POST" )
-    @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appInfo", value = "app相关信息，json格式", paramType = "body", required = true )
-
-    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )

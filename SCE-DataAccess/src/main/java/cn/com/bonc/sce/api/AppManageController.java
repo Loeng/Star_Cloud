@@ -140,8 +140,8 @@ public class AppManageController {
                 marketAppVersionRepository.saveAndFlush( marketAppVersion );
             } );
         } catch ( Exception e ) {
-            log.error( "add AppInfo fail {}", e );
-            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
+            log.error( "add appInfo fail {}", e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e );
         }
 
 //        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
@@ -159,17 +159,17 @@ public class AppManageController {
     @DeleteMapping( "/{uid}" ) //TODO 是啥意思?
     public RestRecord deleteApps( @RequestBody List< String > appIdList,
                                   @PathVariable( "uid" ) String uid ) {
-        //应用版本表  是否删除字段改为1
-        List< AppInfoEntity > appInfoEntities = new ArrayList<>( appIdList.size() );
-        appIdList.forEach( id -> {
-            final AppInfoEntity appInfoEntity = new AppInfoEntity();
-            appInfoEntity.setAppId( id );
-            appInfoEntity.setUpdateUserId( uid );
-            appInfoEntity.setIsDelete( 0 );
-            appInfoEntities.add( appInfoEntity );
-        } );
-        final List< AppInfoEntity > results = appInfoRepository.saveAll( appInfoEntities );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, results );
+        //应用info表  是否删除字段改为1
+
+        try {
+            appIdList.forEach( id -> {
+                appInfoRepository.deleteAppInfo( appIdList, uid );
+            } );
+        } catch ( Exception e ) {
+            log.error( "delete appInfo fail {}", e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_422, e );
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -429,7 +429,6 @@ public class AppManageController {
             } else {
                 //根据typeId查
                 page = appInfoRepository.getAppListInfoByTypeIdandPlatform( appType, userId, "pt", pageable );
-                ;
             }
 
         } else {
