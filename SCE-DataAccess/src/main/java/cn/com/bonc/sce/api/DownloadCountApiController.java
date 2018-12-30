@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -215,8 +216,13 @@ public class DownloadCountApiController {
      */
 
     @GetMapping( "/app-type-percent" )
+    @ResponseBody
     public RestRecord getAppTypePrecent( @RequestParam String userId ) {
         Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
+        if (null == companyInfo || CollectionUtils.isEmpty(companyInfo)){
+            log.info("没有与[{}]相关联的厂商",userId);
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_110 );
+        }
         String companyId = companyInfo.get( "COMPANY_ID" ).toString();
         List< Map< String, Object > > appTypePrecent = appCountRepository.getAppTypePrecent( companyId );
         appTypePrecent.add( getAppCountByCompanyId( companyId ) );

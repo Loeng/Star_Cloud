@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CountService;
 import io.swagger.annotations.*;
@@ -122,7 +123,7 @@ public class DownloadCountController {
     @ApiOperation( value = "厂家应用数量及类型占比", notes = "根据用户ID查询用户对应的厂家下面APP总数及各类型占比", httpMethod = "GET" )
     @GetMapping( "/app-type-percent" )
     @ResponseBody
-    public RestRecord getAppTypePrecent( @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId ) {
+    public RestRecord getAppTypePrecent(  @ApiParam( "用户Id" ) @CurrentUserId String userId ) {
         return countService.getAppTypePrecent( userId );
     }
 

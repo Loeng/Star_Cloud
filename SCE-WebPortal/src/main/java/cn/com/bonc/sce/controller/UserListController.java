@@ -47,23 +47,4 @@ public class UserListController {
     }
 
 
-    /**
-     * 根据条件查询
-     *
-     * @param conditionMap
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation( value = "根据条件查询", notes = "根据条件查询", httpMethod = "POST" )
-    @ApiResponses( {
-            @ApiResponse( code = 0, message = "成功", response = RestRecord.class )
-    } )
-    @PostMapping( "/condition/{pageNum}/{pageSize}" )
-    public RestRecord getUserInfoByCondition( @RequestBody( required = false ) Map conditionMap,
-                                              @PathVariable( "pageNum" ) Integer pageNum,
-                                              @PathVariable( "pageSize" ) Integer pageSize ) {
-
-        return userListService.getUserInfoByCondition( conditionMap, pageNum, pageSize );
-    }
 }
