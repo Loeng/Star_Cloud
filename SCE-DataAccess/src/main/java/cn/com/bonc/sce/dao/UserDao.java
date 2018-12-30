@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Leucippus
  * @version 0.1
@@ -22,4 +25,7 @@ public interface UserDao extends JpaRepository< User, String > {
     public int updateUserLoginStatus( @Param( "userId" ) String userId, @Param( "isFirstLogin" ) Integer isFirstLogin );
 
     public User findUserByLoginName( String loginName );
+
+    @Query( value="SELECT * FROM '?1'", nativeQuery=true)
+    List<Map> getUserDetailedInfo(String tableName);
 }

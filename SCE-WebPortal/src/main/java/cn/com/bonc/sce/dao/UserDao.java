@@ -1,0 +1,27 @@
+package cn.com.bonc.sce.dao;
+
+import cn.com.bonc.sce.rest.RestRecord;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+/**
+ * 用户
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/12/30 16:00
+ */
+@Repository
+@FeignClient( "sce-data-access" )
+public interface UserDao {
+    /**
+     * 获取用户
+     *
+     * @return 获取用户
+     */
+    @RequestMapping( value = "/users/{userId}", method = RequestMethod.GET )
+    public RestRecord getUserInfo(@PathVariable( "userId" )String userId);
+}
