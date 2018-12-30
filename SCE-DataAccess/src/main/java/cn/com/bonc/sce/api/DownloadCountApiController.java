@@ -219,8 +219,8 @@ public class DownloadCountApiController {
     @ResponseBody
     public RestRecord getAppTypePrecent( @RequestParam String userId ) {
         Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
-        if (null == companyInfo || CollectionUtils.isEmpty(companyInfo)){
-            log.info("没有与[{}]相关联的厂商",userId);
+        if ( null == companyInfo || CollectionUtils.isEmpty( companyInfo ) ) {
+            log.info( "没有与[{}]相关联的厂商", userId );
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_110 );
         }
         String companyId = companyInfo.get( "COMPANY_ID" ).toString();
@@ -282,5 +282,31 @@ public class DownloadCountApiController {
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
         }
 
+    }
+
+
+    @RequestMapping( "/list" )
+    @ResponseBody
+    public RestRecord getDownloadList( @RequestParam( "userId" ) String userId,
+                                       @RequestParam( "appType" ) int appType,
+                                       @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                       @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
+        log.trace( "Query DownloadList userId is :{}", userId );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+        try {
+            Map< String, Object > companyInfo = appCountRepository.getCompanyInfo( userId );
+            if ( companyInfo.get( "COMPANY_ID" ) == null ) {
+                return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
+            }
+            Page< List< Map< String, Object > > > page = appCountRepository.getDownloadList( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), appType, pageable );
+            Map< String, Object > result = new HashMap<>( 16 );
+            result.put( "data", page.getContent() );
+            result.put( "totalPage", page.getTotalPages() );
+            result.put( "totalCount", page.getTotalElements() );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
+        } catch ( Exception e ) {
+            log.error( "Query DownloadList fail {}", e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
     }
 }

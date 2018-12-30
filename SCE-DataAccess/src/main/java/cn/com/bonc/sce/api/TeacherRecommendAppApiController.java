@@ -150,8 +150,8 @@ public class TeacherRecommendAppApiController {
     @GetMapping( "/list" )
     @ResponseBody
     public RestRecord getTeacherRecommendList( @RequestParam( "userId" ) String userId,
-                                               @RequestParam( "pageNum" ) int pageNum,
-                                               @RequestParam( "pageSize" ) int pageSize ) {
+                                               @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
+                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         log.trace( "query TeacherRecommend List condition is {}" );
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         try {
