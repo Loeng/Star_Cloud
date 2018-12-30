@@ -297,7 +297,7 @@ public class AppManageController {
     @GetMapping( "/detail-by-id/{appId}" )
     @ResponseBody
     public RestRecord selectAppById( @PathVariable String appId ) {
-        Pageable pageable = PageRequest.of( 0, 1, Sort.Direction.DESC, "CREATE_TIME" );
+        Pageable pageable = PageRequest.of( 0, 10, Sort.Direction.DESC, "CREATE_TIME" );
         Page< Map< String, Object > > appDetailInfo = appInfoRepository.findAppDetailById( appId, pageable );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appDetailInfo.getContent() );
     }
