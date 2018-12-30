@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.resolvers;
 
-import cn.com.bonc.sce.annotation.CurrentUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

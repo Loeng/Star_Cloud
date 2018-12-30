@@ -2,6 +2,7 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.ExcelToUser;
+import cn.com.bonc.sce.model.UploadFileModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.FileUploadService;
 import cn.com.bonc.sce.tool.ParseExcel;
@@ -58,9 +59,7 @@ public class FileUploadController {
     /**
      * 批量上传Excel解析用户数据
      *
-     * @param multipartFile 上传文件
-     * @param fileType      上传文件类型
-     * @return 返回对应文件在资源表中ID
+     * @return 返回成功与否
      */
     @ApiOperation( value = "文件上传解析Excel", notes = "文件上传解析Excel", httpMethod = "POST" )
     @ApiResponses( {
@@ -68,12 +67,10 @@ public class FileUploadController {
     } )
     @PostMapping( "/upload-user-info" )
     @ResponseBody
-    public RestRecord uploadParseExcel( @RequestParam( "file" ) @ApiParam( name = "file", value = "上传文件", required = true ) MultipartFile multipartFile,
-                                        @RequestParam( "fileType" ) @ApiParam( name = "file-type", value = "文件类型" ) String fileType,
-                                        @RequestParam( "userType" ) @ApiParam( name = "user-type", value = "用户类型" ) String userType ) {
-        this.multipartFile = multipartFile;
-        this.fileType = fileType;
-        if ( multipartFile == null || multipartFile.isEmpty() || userType.isEmpty() ) {
+    public RestRecord uploadParseExcel( @ModelAttribute UploadFileModel uploadFileModel ) {
+
+        if ( uploadFileModel.getMultipartFile() == null || uploadFileModel.getMultipartFile().isEmpty()
+                || uploadFileModel.getFileType().isEmpty() || uploadFileModel.getUserType().isEmpty() ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }
 
@@ -81,11 +78,11 @@ public class FileUploadController {
 
         log.info( "解析Excel成功" );
 
-        RestRecord restRecord = fileUploadService.uploadUserInfo( list, userType );
+        RestRecord restRecord = fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
 
         log.info( "上传用户成功" );
 
-        return new  RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
 

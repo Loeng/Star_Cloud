@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.filter;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.annotation.Payloads;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.json.JSONUtil;
@@ -22,14 +23,24 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter( MethodParameter parameter ) {
-        return parameter.hasParameterAnnotation( Payloads.class );
+
+
+        if( parameter.hasParameterAnnotation( Payloads.class ) || parameter.hasParameterAnnotation( CurrentUserId.class )){
+            return  true;
+        }
+        return false;
     }
 
-    @SuppressWarnings( "unchecked" )
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
-        String ticket = Base64.decodeStr( webRequest.getHeader( "authentication" ) );
+        String ticket =  webRequest.getHeader( "authentication" );
         String payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
-        return JSONUtil.toBean( payloadsStr, Map.class );
+
+        if( parameter.hasParameterAnnotation( Payloads.class )){
+            return payloadsStr;
+        }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
+            return  JSONUtil.toBean( payloadsStr,Map.class ).get( "userId" );
+        }
+        return "";
     }
 }
