@@ -5,6 +5,7 @@ import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.repository.HotAppRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.logging.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -70,9 +71,12 @@ public class HotAppController {
      *
      * @return
      */
-    @GetMapping( "" )
-    public RestRecord selectHotAppList() {
-        return new RestRecord( 200, hotAppRepository.selectHotAppList() );
+    @GetMapping( "/detail/{pageNum}/{pageSize}/{userId}" )
+    public RestRecord selectHotAppList( @PathVariable( "pageNum" ) Integer pageNum,
+                                        @PathVariable( "pageSize" ) Integer pageSize,
+                                        @PathVariable( "userId" ) String userId) {
+        Pageable pageable = PageRequest.of( pageNum-1, pageSize );
+        return new RestRecord( 200, hotAppRepository.selectHotAppList( userId, pageable ) );
     }
 
     /**

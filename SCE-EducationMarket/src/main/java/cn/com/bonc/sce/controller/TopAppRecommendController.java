@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * 应用推荐-重点推荐应用接口
- * author jc_D
+ * @author jc_D
  */
 @Slf4j
 @Api( value = "应用推荐-重点推荐应用接口", tags = "应用推荐-重点推荐应用接口" )
@@ -110,5 +110,20 @@ public class TopAppRecommendController {
         return topAppRecommendService.cancelTopRecommendApp( userId, appRecommend.getAppId() );
     }
 
-
+    /**
+     * 查询所有重点推荐应用列表
+     *
+     * @return
+     */
+    @ApiOperation( value = "查询所有重点推荐应用列表", notes = "查询所有重点推荐应用列表", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/detail-list/{pageNum}/{pageSize}" )
+    public RestRecord selectTopAppList( @PathVariable Integer pageNum,
+                                        @PathVariable Integer pageSize ) {
+        // 查询应用表中重点推荐状态为1的应用
+        String userId = "101";
+        return topAppRecommendService.selectTopAppList( pageNum, pageSize, userId );
+    }
 }

@@ -95,4 +95,17 @@ public class TopAppController {
 
     }
 
+    /**
+     * 查询所有重点推荐应用列表
+     *
+     * @return
+     */
+    @GetMapping( "/detail/{pageNum}/{pageSize}/{userId}" )
+    public RestRecord selectTopAppList( @PathVariable( "pageNum" ) Integer pageNum,
+                                        @PathVariable( "pageSize" ) Integer pageSize,
+                                        @PathVariable( "userId" ) String userId) {
+        Pageable pageable = PageRequest.of( pageNum-1, pageSize );
+        return new RestRecord( 200, topAppRepository.selectTopAppList( userId, pageable ) );
+    }
+
 }

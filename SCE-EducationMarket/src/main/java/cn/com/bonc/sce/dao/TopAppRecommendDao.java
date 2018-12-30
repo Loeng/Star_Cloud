@@ -53,4 +53,16 @@ public interface TopAppRecommendDao {
     @RequestMapping( value = "/top-app/sub-one", method = RequestMethod.POST )
     RestRecord cancelTopRecommendApp( @RequestParam( "userId" ) String userId,
                                       @RequestParam( "appId" ) String appId );
+
+    /**
+     * 查询所有重点推荐应用列表
+     * @param pageNum  页码
+     * @param pageSize 每页数量
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/top-app/detail/{pageNum}/{pageSize}/{userId}", method = RequestMethod.GET )
+    RestRecord selectTopAppList( @PathVariable( "pageNum" ) Integer pageNum,
+                                 @PathVariable( "pageSize" ) Integer pageSize,
+                                 @PathVariable( "userId" ) String userId  );
 }

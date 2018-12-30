@@ -125,9 +125,11 @@ public class HotAppController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @GetMapping( "" )
-    public RestRecord selectHotAppList() {
+    @GetMapping( "/detail-list/{pageNum}/{pageSize}" )
+    public RestRecord selectHotAppList( @PathVariable Integer pageNum,
+                                        @PathVariable Integer pageSize ) {
         // 查询应用表中重点推荐状态为1的应用
-        return hotAppService.selectHotAppList();
+        String userId = "101";
+        return hotAppService.selectHotAppList( pageNum, pageSize, userId );
     }
 }

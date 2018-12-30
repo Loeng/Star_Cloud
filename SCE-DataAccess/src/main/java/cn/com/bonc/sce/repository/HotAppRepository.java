@@ -49,18 +49,24 @@ public interface HotAppRepository extends JpaRepository< AppInfoEntity, String >
                       @Param( value = "uid" ) String uid );
 
     /**
+     * 查询热门推荐详情列表
+     * @param userId
+     * @param pageable
      * @return
      */
-    @Query( value = "SELECT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,\n" +
+    @Query( value = "SELECT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,MAIN.APP_SOURCE,MAIN.APP_LINK,\n" +
             "CASE WHEN A.APP_ID IS NULL THEN '0' ELSE '1' END IS_OPEN,\n" +
             "CASE WHEN C.APP_ID IS NULL THEN '0' ELSE '1' END IS_DOWNLOAD,\n" +
             "CASE WHEN D.APP_ID IS NULL THEN '0' ELSE '1' END IS_COLLECT\n" +
             "FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO MAIN \n" +
-            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=MAIN.APP_ID AND A.IS_DELETE=1\n" +
-            "LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B GROUP BY B.APP_ID) C ON C.APP_ID=MAIN.APP_ID\n" +
-            "LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.IS_DELETE=1\n" +
-            "WHERE MAIN.IS_HOT_RECOMMEND = 1", nativeQuery = true )
-    List< Map<String,String> > selectHotAppList();
+            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=MAIN.APP_ID AND A.USER_ID = :userId AND A.IS_DELETE=1\n" +
+            "LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID=MAIN.APP_ID\n" +
+            "LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1\n" +
+            "WHERE MAIN.IS_HOT_RECOMMEND = 1",
+            countQuery = "SELECT COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_HOT_RECOMMEND = 1",
+            nativeQuery = true )
+    List< Map<String,String> > selectHotAppList( @Param( value = "userId" ) String userId,
+                                                 Pageable pageable );
 
     /**
      * 修改热门应用
