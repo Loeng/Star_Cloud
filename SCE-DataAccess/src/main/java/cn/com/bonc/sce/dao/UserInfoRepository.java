@@ -6,9 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Map;
  * @Date: 2018/12/22 11:01
  * @Description:
  */
+@Transactional
 public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>, JpaSpecificationExecutor<User> {
 
 
@@ -101,6 +104,21 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
             "WHERE u.LOGIN_NAME like CONCAT('%',concat(?1,'%')) AND mc.company_name like CONCAT('%',concat(?2,'%'))\n" +
             "      AND u.LOGIN_PERMISSION_STATUS LIKE CONCAT('%',CONCAT(?3,'%'))\t ",nativeQuery = true)
     Page<Map> findByManufacturerLike(String loginName,String organizationName,String status,Pageable pageable);
+
+    // 修改是否允许用户登录
+    @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET LOGIN_PERMISSION_STATUS = :isLogin WHERE USER_ID = :userId ",nativeQuery = true)
+    @Modifying
+    int updateUserLoginStatus(@Param("isLogin") int isLogin,@Param("userId") String userId);
+
+    // 删除用户
+    @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET IS_DELETE = ?1 WHERE USER_ID = ?2 ",nativeQuery = true)
+    @Modifying
+    int deleteUser(int isDelete,String userId);
+
+ // 重置用户密码
+    @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD SET PASSWORD = ?1 WHERE USER_ID = ?2 ",nativeQuery = true )
+    @Modifying
+    int resetUserPassword(String isReset,String userId);
 
 
 
