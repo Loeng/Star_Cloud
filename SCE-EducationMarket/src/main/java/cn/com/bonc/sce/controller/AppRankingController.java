@@ -2,6 +2,7 @@ package cn.com.bonc.sce.controller;
 
 import java.util.List;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,8 +51,9 @@ public class AppRankingController {
     } )
     @GetMapping
     @ResponseBody
-    public RestRecord applyAppOnShelf ( @RequestParam( "topSize" ) Integer topSize ) {
-        RestRecord restRecord =   appRankingService.getTopRankAppList( topSize );
+    public RestRecord latestAppRanking ( @RequestParam( "topSize" ) Integer topSize,
+                                         @CurrentUserId String userId) {
+        RestRecord restRecord =   appRankingService.getTopRankAppList( topSize, userId );
         return restRecord;
     }
 }
