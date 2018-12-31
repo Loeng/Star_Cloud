@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -44,6 +43,5 @@ public class RestConfig implements WebMvcConfigurer {
                 .addResourceLocations( "classpath:/META-INF/resources/" );
         registry.addResourceHandler( "/webjars/**" )
                 .addResourceLocations( "classpath:/META-INF/resources/webjars/" );
-
     }
 }

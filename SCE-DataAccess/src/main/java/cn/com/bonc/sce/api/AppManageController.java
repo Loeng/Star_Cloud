@@ -135,7 +135,7 @@ public class AppManageController {
                 marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
                 marketAppVersion.setCreateTime( new Date() );
                 marketAppVersion.setIsDelete( 1L );
-                marketAppVersion.setRunningPlatform( pc.getRunningPlatform() );
+                marketAppVersion.setRunningPlatform( pc.getVersioInfo() );
                 marketAppVersion.setCreateUserId( uid );
                 marketAppVersionRepository.saveAndFlush( marketAppVersion );
             } );
@@ -160,7 +160,6 @@ public class AppManageController {
     public RestRecord deleteApps( @RequestBody List< String > appIdList,
                                   @PathVariable( "uid" ) String uid ) {
         //应用info表  是否删除字段改为1
-
         try {
             appIdList.forEach( id -> {
                 appInfoRepository.deleteAppInfo( appIdList, uid );

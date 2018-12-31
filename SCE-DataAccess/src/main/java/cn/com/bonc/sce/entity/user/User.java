@@ -54,6 +54,8 @@ public class User {
     private String certificateNumber;
     @Column( name = "PHONE_NUMBER" )
     private String phoneNumber;
+    @Transient
+    private String briefAddress;
     @Column( name = "ADDRESS" )
     private String address;
     @CreatedDate
