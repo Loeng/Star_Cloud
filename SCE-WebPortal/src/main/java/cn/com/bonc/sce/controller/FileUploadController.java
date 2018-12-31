@@ -67,22 +67,20 @@ public class FileUploadController {
     } )
     @PostMapping( "/upload-user-info" )
     @ResponseBody
-    public RestRecord uploadParseExcel( @ModelAttribute @ApiParam(name = "file", value = "上传信息", required = true,example = "{multipartFile:'file',fileType:'document',userType:3}") UploadFileModel uploadFileModel ) {
-        if ( uploadFileModel.getMultipartFile() == null || uploadFileModel.getMultipartFile().isEmpty()
+    public RestRecord uploadParseExcel( @ModelAttribute @ApiParam( name = "file", value = "上传信息", required = true, example = "{multipartFile:'file',fileType:'document',userType:3}" ) UploadFileModel uploadFileModel ) {
+        if ( uploadFileModel.getFile() == null || uploadFileModel.getFile().isEmpty()
                 || uploadFileModel.getFileType().isEmpty() || uploadFileModel.getUserType().isEmpty() ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }
-        try {
-            List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getMultipartFile(), 1, 1, ExcelToUser.class );
 
-            log.info( "解析Excel成功" );
+        List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
 
-            fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
+        log.info( "解析Excel成功" );
 
-            log.info( "上传用户成功" );
-        }catch ( Exception e ){
-            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
-        }
+        fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
+
+        log.info( "上传用户成功" );
+
 
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }

@@ -55,4 +55,10 @@ public interface CountDao {
 
     @RequestMapping( value = "/count/company-app", method = RequestMethod.GET )
     RestRecord getCompanyAppList( @RequestParam( "userId" ) String userId );
+
+    @RequestMapping( value = "/count/list", method = RequestMethod.GET )
+    RestRecord getDownloadList( @RequestParam( "userId" ) String userId,
+                                @RequestParam( "appType" ) int appType,
+                                @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize );
 }
