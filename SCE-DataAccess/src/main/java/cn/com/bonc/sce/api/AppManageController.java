@@ -1,13 +1,15 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.entity.*;
+import cn.com.bonc.sce.entity.AppInfoEntity;
+import cn.com.bonc.sce.entity.AppTypeEntity;
+import cn.com.bonc.sce.entity.AppTypeRelEntity;
+import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
 import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppNameTypeService;
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.util.CollectionUtils;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import java.util.*;
 

@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -42,9 +43,8 @@ public class AppManageController {
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
     @PostMapping
-    public RestRecord addAppInfo( @RequestBody @ApiParam( "新增软件对象" ) AppAddModel appInfo ) {
-        String uid = "0110100";
-        return appManageService.addAppInfo( appInfo,uid );
+    public RestRecord addAppInfo( @RequestBody @ApiParam( "新增软件对象" ) AppAddModel appInfo, @CurrentUserId String userId ) {
+        return appManageService.addAppInfo( appInfo, userId );
     }
 
     /**
@@ -61,9 +61,8 @@ public class AppManageController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @DeleteMapping
-    public RestRecord deleteApps( @RequestBody List< String > appIdList ) {
-        String uid = "0110100";
-        return appManageService.deleteApps( appIdList, uid );
+    public RestRecord deleteApps( @RequestBody List< String > appIdList, @CurrentUserId String userId ) {
+        return appManageService.deleteApps( appIdList, userId );
     }
 
     /**
@@ -227,10 +226,10 @@ public class AppManageController {
                                                  @RequestParam( value = "sort", required = false, defaultValue = "desc" ) String sort,
                                                  @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                                 @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+                                                 @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
+                                                 @CurrentUserId String userId) {
 
-        String userId="1";
-        return appManageService.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize ,userId);
+        return appManageService.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize, userId );
     }
 
     /**
@@ -254,14 +253,15 @@ public class AppManageController {
 
     /**
      * DESC: 检测用户是否开通了该APP
-     * @Auther mkl
+     *
      * @param appId 应用ID
      * @return Map
+     * @Auther mkl
      */
-    @ApiOperation( value = "查询用户是否开通了该应用",notes = "根据应用ID查询用户是否开通了该应用",httpMethod = "GET")
-    @GetMapping("/detail/open/{appId}")
-    public RestRecord isOpenApp(@PathVariable @ApiParam( name = "appId",value = "appId",required = true) String appId){
-        return appManageService.isOpenApp(appId );
+    @ApiOperation( value = "查询用户是否开通了该应用", notes = "根据应用ID查询用户是否开通了该应用", httpMethod = "GET" )
+    @GetMapping( "/detail/open/{appId}" )
+    public RestRecord isOpenApp( @PathVariable @ApiParam( name = "appId", value = "appId", required = true ) String appId ) {
+        return appManageService.isOpenApp( appId );
     }
 
     /**
