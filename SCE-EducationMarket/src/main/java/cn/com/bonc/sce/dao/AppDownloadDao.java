@@ -36,6 +36,8 @@ public interface AppDownloadDao {
     @RequestMapping( value = "/app-download/info", method = RequestMethod.POST )
     RestRecord addUserDownloadInfo(
             @RequestParam( "userId" ) String userId,
-            @RequestParam( "appId" ) String appId );
+            @RequestParam( "appId" ) String appId,
+            @RequestParam( "version" ) String version,
+            @RequestParam( "platform" ) String platform );
 
 }

@@ -58,12 +58,16 @@ public class AppDownloadController {
      * 用户下载应用接口
      * @param userId 用户Id
      * @param appId  下载的应用Id
+     * @param version 版本号
+     * @param platform 应用平台
      * @return 开通应用是否成功
      */
     @ApiOperation( value = "用户下载应用接口", notes = "用户下载选中的应用", httpMethod = "POST" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "version", dataType = "String", value = "应用Id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "platform", dataType = "String", value = "应用Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
@@ -71,8 +75,10 @@ public class AppDownloadController {
     @PostMapping
     @ResponseBody
     public RestRecord addUserAppOpen ( @RequestParam( "userId" ) String userId,
-                                       @RequestParam( "appId" ) String appId ) {
-        return appDownloadService.addUserDownloadInfo( userId, appId );
+                                       @RequestParam( "appId" ) String appId,
+                                       @RequestParam( "version" ) String version,
+                                       @RequestParam( "platform" ) String platform ) {
+        return appDownloadService.addUserDownloadInfo( userId, appId, version, platform );
     }
 
 }

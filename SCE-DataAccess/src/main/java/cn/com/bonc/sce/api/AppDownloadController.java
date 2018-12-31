@@ -4,6 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.DownloadCount;
 import cn.com.bonc.sce.repository.UserDownloadRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppDownloadService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,12 @@ import java.util.Map;
 public class AppDownloadController {
 
     private UserDownloadRepository userDownloadRepository;
+    private AppDownloadService appDownloadService;
 
     @Autowired
-    public AppDownloadController ( UserDownloadRepository userDownloadRepository ) {
+    public AppDownloadController ( UserDownloadRepository userDownloadRepository, AppDownloadService appDownloadService ) {
         this.userDownloadRepository = userDownloadRepository;
+        this.appDownloadService = appDownloadService;
     }
 
 
@@ -59,17 +62,18 @@ public class AppDownloadController {
      * 用户应用下载接口
      * @param userId 用户Id
      * @param appId 应用Id
+     * @param version
+     * @param platform
      * @return
      */
     @PostMapping("/info")
     @ResponseBody
     public RestRecord getUserAppDownloadList ( @RequestParam( "userId" ) String userId,
-                                               @RequestParam( "appId" ) String appId ) {
-        DownloadCount downloadCount = new DownloadCount();
-        downloadCount.setUserId( userId );
-        downloadCount.setAppId( appId );
-        userDownloadRepository.save( downloadCount );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+                                               @RequestParam( "appId" ) String appId,
+                                               @RequestParam( "version" ) String version,
+                                               @RequestParam( "platform" ) String platform
+                                               ) {
+        return appDownloadService.getAppDownloadPath( userId, appId, version, platform );
     }
 
     /**

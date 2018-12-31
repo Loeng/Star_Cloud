@@ -21,10 +21,21 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
      * @param pageable
      * @return
      */
-    @Query( value = "SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID ORDER BY DOWNLOAD DESC",
+    @Query( value = "SELECT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,MAIN.APP_SOURCE,MAIN.APP_LINK,MAIN.CREATE_TIME, \n" +
+            "            CASE WHEN A.APP_ID IS NULL THEN '0' ELSE '1' END IS_OPEN, \n" +
+            "            CASE WHEN C.APP_ID IS NULL THEN '0' ELSE '1' END IS_DOWNLOAD, \n" +
+            "            CASE WHEN D.APP_ID IS NULL THEN '0' ELSE '1' END IS_COLLECT,\n" +
+            "            CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END AS DOWNLOAD\n" +
+            "            FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO MAIN  \n" +
+            "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=MAIN.APP_ID AND A.USER_ID = :userId AND A.IS_DELETE=1 \n" +
+            "            LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID = MAIN.APP_ID \n" +
+            "            LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1 \n" +
+            "            LEFT JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON MAIN.APP_ID = T2.APP_ID \n" +
+            "            ORDER BY DOWNLOAD DESC",
             countQuery = "SELECT COUNT(*) FROM (SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID)",
             nativeQuery = true )
-    Page< List< Map< String, Object > > > getAppDownloadRankingList( Pageable pageable );
+    Page< List< Map< String, Object > > > getAppDownloadRankingList( @Param( "userId" ) String userId,
+                                                                     Pageable pageable );
 
 
     /**

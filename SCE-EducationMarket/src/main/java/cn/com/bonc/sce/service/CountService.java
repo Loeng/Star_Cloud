@@ -33,8 +33,8 @@ public class CountService {
         return countDao.countAppDownloadByCompanyId( companyId, pageNum, pageSize );
     }
 
-    public RestRecord getAppDownloadRanking( Integer pageSize, Integer pageNum ) {
-        return countDao.getAppDownloadRanking( pageSize, pageNum );
+    public RestRecord getAppDownloadRanking( Integer pageSize, Integer pageNum, String userId ) {
+        return countDao.getAppDownloadRanking( pageSize, pageNum, userId );
     }
 
     public RestRecord getDownloadChange( String userId, String appId, String startTime, String endTime ) {
