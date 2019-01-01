@@ -8,6 +8,7 @@ import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -91,31 +92,17 @@ public class AppVersionApiController {
         log.trace( "更新应用版本信息  appId:{}  appVersionInfo:{}", appId, appVersionInfo );
         try {
             //根据id取pc图片链接
-            String pcUrl = appVersionInfo.getAppPcPic();
-            String[] pcId = pcUrl.split( "," );
-            StringBuilder sb1 = new StringBuilder();
-            for ( String s : pcId ) {
-                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
-                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
-                sb1.append( p ).append( "," );
-            }
-            //根据id取phone图片链接
-            String phoneUrl = appVersionInfo.getAppPhonePic();
-            String[] phoneId = phoneUrl.split( "," );
-            StringBuilder sb2 = new StringBuilder();
-            for ( String s : phoneId ) {
-                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
-                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
-                sb2.append( p ).append( "," );
-            }
-            //根据addressId获取软件存储路径
-            String addressId = appVersionInfo.getAppDownloadAddress();
-            Map< String, Object > ad = fileResourceRepository.getFileResourceById( Integer.parseInt( addressId ) );
-            String softwareAddress = ad.get( "FILE_MAPPING_PATH" ).toString();
+            String pcUrl = findRealUrl( appVersionInfo.getAppPcPic() );
 
-            appVersionInfo.setAppDownloadAddress( softwareAddress );
-            appVersionInfo.setAppPcPic( sb1.toString() );
-            appVersionInfo.setAppPhonePic( sb2.toString() );
+            //根据id取phone图片链接
+            String phoneUrl = findRealUrl( appVersionInfo.getAppPhonePic() );
+
+            //根据addressId获取软件存储路径
+            String addressId = findRealUrl( appVersionInfo.getAppDownloadAddress() );
+
+            appVersionInfo.setAppDownloadAddress( addressId );
+            appVersionInfo.setAppPcPic( pcUrl );
+            appVersionInfo.setAppPhonePic( phoneUrl );
             appVersionInfo.setAppId( appId );
             appVersionInfo.setAppVersion( appVersion );
             appVersionInfo.setIsDelete( 1L );
@@ -175,31 +162,17 @@ public class AppVersionApiController {
         log.trace( "apply appVersion appId is {} , userId us {} , detail is {}", appId, userId, appVersionInfo );
         try {
             //根据id取pc图片链接
-            String pcUrl = appVersionInfo.getAppPcPic();
-            String[] pcId = pcUrl.split( "," );
-            StringBuilder sb1 = new StringBuilder();
-            for ( String s : pcId ) {
-                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
-                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
-                sb1.append( p ).append( "," );
-            }
-            //根据id取phone图片链接
-            String phoneUrl = appVersionInfo.getAppPhonePic();
-            String[] phoneId = phoneUrl.split( "," );
-            StringBuilder sb2 = new StringBuilder();
-            for ( String s : phoneId ) {
-                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
-                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
-                sb2.append( p ).append( "," );
-            }
-            //根据addressId获取软件存储路径
-            String addressId = appVersionInfo.getAppDownloadAddress();
-            Map< String, Object > ad = fileResourceRepository.getFileResourceById( Integer.parseInt( addressId ) );
-            String softwareAddress = ad.get( "FILE_MAPPING_PATH" ).toString();
+            String pcUrl = findRealUrl( appVersionInfo.getAppPcPic() );
 
-            appVersionInfo.setAppDownloadAddress( softwareAddress );
-            appVersionInfo.setAppPcPic( sb1.toString() );
-            appVersionInfo.setAppPhonePic( sb2.toString() );
+            //根据id取phone图片链接
+            String phoneUrl = findRealUrl( appVersionInfo.getAppPhonePic() );
+
+            //根据addressId获取软件存储路径
+            String addressId = findRealUrl( appVersionInfo.getAppDownloadAddress() );
+
+            appVersionInfo.setAppDownloadAddress( addressId );
+            appVersionInfo.setAppPcPic( pcUrl );
+            appVersionInfo.setAppPhonePic( phoneUrl );
             appVersionInfo.setIsDelete( 1L );
             appVersionInfo.setCreateTime( new Date() );
             appVersionInfo.setCreateUserId( userId );
@@ -270,4 +243,28 @@ public class AppVersionApiController {
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
     }
+
+    /**
+     * 通过接收的下载地址Id获取到真实地址
+     *
+     * @param query 需要查询的Id数组字符串
+     * @return 地址字符串
+     */
+    public String findRealUrl( String query ) {
+        if ( "".equals( query ) ) {
+            return null;
+        } else if ( query == null ) {
+            return null;
+        }
+        String[] temp = query.split( "," );
+        StringBuilder result = new StringBuilder();
+        for ( String s : temp ) {
+            Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
+            String p = String.valueOf( fileStorePath.get( "FILE_MAPPING_PATH" ) );
+            result.append( p ).append( "," );
+        }
+        return StringUtils.substring( result.toString(), 0, result.length() - 1 );
+    }
+
+
 }
