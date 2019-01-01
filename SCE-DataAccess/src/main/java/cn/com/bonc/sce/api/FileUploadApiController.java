@@ -75,10 +75,12 @@ public class FileUploadApiController {
         for ( ExcelToUser excelToUser:list ) {
             String secret = Secret.generateSecret();
             String loginName = IDUtil.createID(pre);
-            fileResourceRepository.savaAllUserInfo(UUID.getUUID(), excelToUser.getUserName(), excelToUser.getGender(),
-                    loginName,userType, excelToUser.getMailAddress()
-                    , CERTIFICATE_TYPE, excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber()
-                    ,excelToUser.getAddress(),secret);
+            String userId = UUID.getUUID();
+            fileResourceRepository.savaAllUserInfo(userId, excelToUser.getUserName(), excelToUser.getGender(),
+                    loginName,userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
+                    excelToUser.getPhoneNumber(),excelToUser.getAddress(),secret);
+            fileResourceRepository.saveUserPassword(userId);
+
         }
         return  new RestRecord( 200,WebMessageConstants.SCE_PORTAL_MSG_200,list.size());
 

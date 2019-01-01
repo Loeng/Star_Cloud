@@ -32,6 +32,7 @@ public class Account {
     @Column( name = "ID" )
     private Integer id;
 
+    @Id
     @Column( name = "USER_ID" )
     private String userId;
 

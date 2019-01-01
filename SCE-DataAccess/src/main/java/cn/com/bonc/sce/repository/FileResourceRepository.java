@@ -45,6 +45,18 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
                          ,String secret);
 
     /**
+     * 插入用户密码吗
+     * @param
+     * @return
+     */
+    @Modifying
+    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD(USER_ID ,PASSWORD,IS_DELETE) VALUES " +
+            "(?1,'star123!',1)  " )
+    void saveUserPassword(String passWord);
+
+
+
+    /**
      *@Desc: 根据文件id查询文件FILE_MAPPING_PATH
      *@Param: resourceId
      *@return: String
@@ -54,5 +66,8 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     @Query(value = "SELECT FILE_MAPPING_PATH FROM STARCLOUDPORTAL.SCE_FILE_RESOURCE where RESOURCE_ID =?1"
             ,nativeQuery = true)
     Map<String,Object> getFileResourceById(Integer resourceId);
+
+
+
 
 }

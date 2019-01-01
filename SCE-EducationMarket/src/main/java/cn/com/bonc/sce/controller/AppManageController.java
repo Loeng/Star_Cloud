@@ -38,12 +38,16 @@ public class AppManageController {
      * @return
      */
     @ApiOperation( value = "新增应用", notes = "新增应用", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
     @PostMapping
-    public RestRecord addAppInfo( @RequestBody @ApiParam( "新增软件对象" ) AppAddModel appInfo, @CurrentUserId String userId ) {
+    public RestRecord addAppInfo( @RequestBody @ApiParam( "新增软件对象" ) AppAddModel appInfo,
+                                  @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return appManageService.addAppInfo( appInfo, userId );
     }
 
@@ -54,14 +58,17 @@ public class AppManageController {
      * @return
      */
     @ApiOperation( value = "删除应用", notes = "删除应用", httpMethod = "DELETE" )
+
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appIdList", value = "appId,json数组", paramType = "body", required = true )
+            @ApiImplicitParam( name = "appIdList", value = "appId,json数组", paramType = "body", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @DeleteMapping
-    public RestRecord deleteApps( @RequestBody List< String > appIdList, @CurrentUserId String userId ) {
+    public RestRecord deleteApps( @RequestBody List< String > appIdList,
+                                  @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return appManageService.deleteApps( appIdList, userId );
     }
 
@@ -213,7 +220,8 @@ public class AppManageController {
             @ApiImplicitParam( name = "appType", value = "应用分类id(传0查全部rj)", paramType = "query", required = false ),
             @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = false ),
             @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = false ),
-            @ApiImplicitParam( name = "platformType", value = "平台类型(pt|rj)", paramType = "query", required = false )
+            @ApiImplicitParam( name = "platformType", value = "平台类型(pt|rj)", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
 
     } )
     @ApiResponses( {
@@ -227,7 +235,7 @@ public class AppManageController {
                                                  @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
-                                                 @CurrentUserId String userId) {
+                                                 @CurrentUserId @ApiParam( hidden = true ) String userId ) {
 
         return appManageService.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize, userId );
     }

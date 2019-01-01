@@ -93,7 +93,7 @@ public class UserApiController {
             }
             List< String > list = roleRelDao.getRoleTable( userId );
             if ( list != null && list.size() > 0 ) {
-                String sql = "SELECT * FROM "+list.get( 0 );
+                String sql = "SELECT * FROM "+list.get( 0 )+"WHERE USER_ID ="+"'"+userId+"'";
                 Query query = entityManager.createNativeQuery(sql);
                 query.unwrap(org.hibernate.SQLQuery.class).setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP);
                 user.setUserDetailedInfo( query.getResultList() );

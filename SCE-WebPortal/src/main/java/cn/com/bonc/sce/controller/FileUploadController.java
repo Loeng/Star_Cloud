@@ -73,14 +73,13 @@ public class FileUploadController {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }
 
-        List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
+            List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
 
-        log.info( "解析Excel成功" );
+            log.info( "解析Excel成功" );
 
-        fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
+            fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
 
-        log.info( "上传用户成功" );
-
+            log.info( "上传用户成功" );
 
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
