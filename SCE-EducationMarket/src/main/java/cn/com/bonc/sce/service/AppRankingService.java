@@ -21,7 +21,7 @@ public class AppRankingService {
 		 this.appRankingDao = appRankingDao;
 	 }
 	 
-	  public RestRecord getTopRankAppList(Integer topSize ) {
-	        return appRankingDao.getTopRankAppList(topSize);
+	  public RestRecord getTopRankAppList( Integer topSize, String userId ) {
+	        return appRankingDao.getTopRankAppList( topSize, userId );
 	    }
 }	

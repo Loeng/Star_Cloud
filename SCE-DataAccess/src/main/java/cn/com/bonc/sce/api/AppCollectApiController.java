@@ -53,6 +53,25 @@ public class AppCollectApiController {
         AppCollectionEntity appCollectionEntity = new AppCollectionEntity(  );
         appCollectionEntity.setAppId( appId );
         appCollectionEntity.setUserId( userId );
+        appCollectionEntity.setIsDelete( 1L );
+        userCollectRepository.save( appCollectionEntity );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+    }
+
+    /**
+     * 用户删除收藏应用信息
+     * @param appId
+     * @param userId
+     * @return
+     */
+    @PostMapping("/remove-info")
+    @ResponseBody
+    public RestRecord deleteUserAppCollectionInfo ( @RequestParam( "userId" ) String userId,
+                                                 @RequestParam( "appId" ) String appId ) {
+        AppCollectionEntity appCollectionEntity = new AppCollectionEntity(  );
+        appCollectionEntity.setAppId( appId );
+        appCollectionEntity.setUserId( userId );
+        appCollectionEntity.setIsDelete( 0L );
         userCollectRepository.save( appCollectionEntity );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
     }

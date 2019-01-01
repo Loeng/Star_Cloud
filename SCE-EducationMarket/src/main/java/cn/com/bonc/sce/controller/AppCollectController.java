@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.AppRecommend;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppCollectService;
 import io.swagger.annotations.*;
@@ -21,10 +23,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/app-collect")
 public class AppCollectController {
-
+    private AppCollectService appCollectService;
 
     @Autowired
-    AppCollectService appCollectService;
+    public AppCollectController ( AppCollectService appCollectService ) {
+        this.appCollectService = appCollectService;
+    }
+
     /**
      * 用户收藏应用查询接口
      * @param userId 查询的用户Id
@@ -39,19 +44,17 @@ public class AppCollectController {
     } )
     @GetMapping("/list")
     @ResponseBody
-    public RestRecord getUserAppCollection ( @RequestParam( "userId" ) String userId ) {
+    public RestRecord getUserAppCollection ( @RequestParam( "userId" ) String userId1,
+                                             @CurrentUserId String userId) {
         return appCollectService.getUserAppCollect(userId);
     }
 
     /**
      * 用户收藏应用新增接口
-     * @param userId 用户Id
-     * @param appId  收藏的应用Id
      * @return 添加应用收藏是否成功
      */
     @ApiOperation( value = "用户添加收藏应用接口", notes = "用户收藏选中的应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true ),
             @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
@@ -59,9 +62,9 @@ public class AppCollectController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord addUserAppCollection ( @RequestParam( "userId" ) String userId,
-                                             @RequestParam( "appId" ) String appId ) {
-        return appCollectService.addUserAppCollectionInfo( userId, appId );
+    public RestRecord addUserAppCollection ( @CurrentUserId String userId,
+                                             AppRecommend appRecommend ) {
+        return appCollectService.addUserAppCollectionInfo( userId, appRecommend.getAppId() );
     }
 
     /**
@@ -72,17 +75,16 @@ public class AppCollectController {
      */
     @ApiOperation( value = "用户删除收藏应用接口", notes = "用户删除选中的收藏应用", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true ),
             @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "path", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @DeleteMapping("/{userId}/{appId}")
+    @DeleteMapping("/{appId}")
     @ResponseBody
-    public RestRecord deleteUserAppCollection ( @RequestParam( "userId" ) String userId,
+    public RestRecord deleteUserAppCollection ( @CurrentUserId String userId,
                                                 @RequestParam( "appId" ) String appId ) {
-        return null;
+        return appCollectService.deleteUserAppCollectionInfo( userId, appId );
     }
 
 }

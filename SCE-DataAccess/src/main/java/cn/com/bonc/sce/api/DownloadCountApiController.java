@@ -137,9 +137,10 @@ public class DownloadCountApiController {
     @GetMapping( "/download-ranking" )
     @ResponseBody
     public RestRecord getAppDownloadRanking( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
-                                             @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum ) {
+                                             @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                             @RequestParam( value = "userId" ) String userId ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page< List< Map< String, Object > > > downloadRankingList = appCountRepository.getAppDownloadRankingList( pageable );
+        Page< List< Map< String, Object > > > downloadRankingList = appCountRepository.getAppDownloadRankingList( userId, pageable );
         return new RestRecord( 200, downloadRankingList );
     }
 

@@ -48,6 +48,8 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_451 = "上传文件失败";
     String SCE_PORTAL_MSG_452 = "上传文件类型异常";
 
+    String SCE_PORTAL_MSG_470 = "下载应用失败";
+
     /**
      * 通用错误信息
      */

@@ -27,8 +27,8 @@ public class AppDownloadService {
         return appDownloadDao.getUserAppDownloadList( userId, pageSize, pageNumber );
     }
 
-    public RestRecord addUserDownloadInfo( String userId, String appId ) {
-        return appDownloadDao.addUserDownloadInfo( userId, appId );
+    public RestRecord addUserDownloadInfo( String userId, String appId, String version, String platform ) {
+        return appDownloadDao.addUserDownloadInfo( userId, appId, version, platform );
     }
 
 }

@@ -7,6 +7,7 @@ import cn.com.bonc.sce.rest.RestRecord;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,12 +27,14 @@ import java.util.Map;
 @RequestMapping( "/user-info" )
 public class UserOperationController {
 
-    /*    private UserInfoRepository userInfoRepository;
+    public static final String PASSWORD = "star123!";
+
+    private UserInfoRepository userInfoRepository;
 
     @Autowired
     public UserOperationController( UserInfoRepository userInfoRepository ) {
         this.userInfoRepository = userInfoRepository;
-    }*/
+    }
 
     /**
      * 添加用户信息
@@ -47,18 +50,37 @@ public class UserOperationController {
     }
 
     /**
-     * 修改用户信息
+     * 修改用户信息（登录状态、重置密码、删除）
      *
      * @param userInfo 用户信息
+     * @param userId 修改的用户ID
      * @return 修改是否成功
      */
-    @PutMapping
+    @PutMapping("/updateUserInfo")
     @ResponseBody
-    public RestRecord updateTeacherRecommendAppInfo(
-            @RequestBody  Map   userInfo ) {
-
-
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, "" );
+    public RestRecord updateTeacherRecommendAppInfo( @RequestBody Map<String,Object>  userInfo,@RequestParam("userId") String userId ) {
+        int isLogin ;
+        int isDelete ;
+        String isReset ;
+        int status = 0;
+        if (!CollectionUtils.isEmpty(userInfo)){
+            if (null != userInfo.get("isLogin") && !"".equals(userInfo.get("isLogin"))){
+                isLogin = (int) userInfo.get("isLogin");
+                log.info("更正用户[{}]的登录权限[{}]",userId,isLogin);
+                status = userInfoRepository.updateUserLoginStatus(isLogin,userId);
+            }
+            else if (null != userInfo.get("isDelete") && !"".equals(userInfo.get("isDelete"))){
+                isDelete = (int) userInfo.get("isDelete");
+                log.info("删除用户[{}]-[{}]",userId,isDelete);
+                status = userInfoRepository.deleteUser(isDelete,userId);
+            }
+            else if(null != userInfo.get("isReset") && !"".equals(userInfo.get("isReset"))){
+                isReset = PASSWORD;
+                log.info("更正用户[{}]的密码[{}]",userId,isReset);
+                status = userInfoRepository.resetUserPassword(isReset,userId);
+            }
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,status );
     }
 
     /**

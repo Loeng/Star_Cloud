@@ -2,6 +2,8 @@ package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +17,7 @@ import java.util.Map;
  * @Description:
  */
 @FeignClient( value = "sce-data-access" )
+@Repository
 public interface UserOperationDao {
 
     /**
@@ -34,8 +37,8 @@ public interface UserOperationDao {
      * @param userInfo
      * @return 是否更新成功
      */
-    @RequestMapping( value = "/user-info", method = RequestMethod.PUT )
-    RestRecord updateUserInfoById( @RequestBody Map< String, Object > userInfo );
+    @RequestMapping( value = "/user-info/updateUserInfo", method = RequestMethod.PUT )
+    RestRecord updateUserInfoById( @RequestBody Map< String, Object > userInfo,@RequestParam("userId") String userId );
 
 
     /**

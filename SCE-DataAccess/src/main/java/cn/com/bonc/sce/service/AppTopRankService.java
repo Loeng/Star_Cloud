@@ -1,8 +1,10 @@
 package cn.com.bonc.sce.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import cn.com.bonc.sce.constants.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +27,16 @@ public class AppTopRankService {
 	 @Autowired
 	 private AppTopRankRepository appTopRankRepository;
 	 
-	 public  RestRecord getAppTopRank(Integer topSize) { 
+	 public  RestRecord getAppTopRank( Integer topSize, String userId ) {
 		
-	        Sort sort_p =Sort.by(Sort.Direction.DESC, "createTime"); 
-	        Pageable pageable = PageRequest.of(0, topSize, sort_p); 
-
-			Page<AppTopRankView> list = appTopRankRepository.findAll(pageable);
-	        //Page< AppInfoEntity > list = appInfoRepository.findAll(spec, pageable );
-	        Map temp = new HashMap<>();
-	        temp.put( "data", list.getContent() );
-	        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+//	        Sort sort_p =Sort.by(Sort.Direction.DESC, "createTime");
+//	        Pageable pageable = PageRequest.of(0, topSize, sort_p);
+		 Pageable pageable = PageRequest.of( 0, topSize );
+		 List< Map<String,String>> list = appTopRankRepository.selectTopAppList( userId, pageable );
+		 //Page< AppInfoEntity > list = appInfoRepository.findAll(spec, pageable );
+		 Map temp = new HashMap<>();
+		 temp.put( "data", list );
+		 return new RestRecord( 200, MessageConstants.SCE_MSG_0200, temp );
 	 }
 
 }

@@ -17,7 +17,7 @@ public class AppTypeMode {
     @ApiModelProperty( name = "版本号" )
     private String appVersion;
     @ApiModelProperty( name = "运行平台" )
-    private String runningPlatform;
+    private String versioInfo;
     @ApiModelProperty( name = "软件上传后返回的id" )
     private String address;
     @ApiModelProperty( name = "软件大小" )

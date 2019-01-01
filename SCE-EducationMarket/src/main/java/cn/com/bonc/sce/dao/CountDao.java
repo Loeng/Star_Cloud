@@ -32,7 +32,8 @@ public interface CountDao {
 
     @RequestMapping( value = "/count/download-ranking", method = RequestMethod.GET )
     public RestRecord getAppDownloadRanking( @RequestParam( "pageSize" ) Integer pageSize,
-                                             @RequestParam( "pageNum" ) Integer pageNum );
+                                             @RequestParam( "pageNum" ) Integer pageNum,
+                                             @RequestParam( "userId" ) String userId );
 
     @RequestMapping( value = "/count/download-change", method = RequestMethod.GET )
     RestRecord getDownloadChange( @RequestParam( "userId" ) String userId,
@@ -45,7 +46,7 @@ public interface CountDao {
                                   @RequestParam( value = "startTime", required = false, defaultValue = "2018-12" ) String time );
 
     @RequestMapping( value = "/count/app-type-percent", method = RequestMethod.GET )
-    RestRecord getAppTypePrecent( @RequestParam( "userId" ) String userId );
+    RestRecord getAppTypePrecent( @RequestParam("userId")  String userId );
 
     @RequestMapping( value = "/count/collection-change", method = RequestMethod.GET )
     RestRecord getCollectionChange( @RequestParam( "userId" ) String userId,
