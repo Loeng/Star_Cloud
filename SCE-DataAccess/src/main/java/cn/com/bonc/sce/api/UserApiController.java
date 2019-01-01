@@ -8,7 +8,9 @@ import cn.com.bonc.sce.entity.Account;
 import cn.com.bonc.sce.entity.user.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -32,6 +34,8 @@ public class UserApiController {
     private RoleRelDao roleRelDao;
     @PersistenceContext
     private EntityManager entityManager;
+
+    private String splitStr = "市";
 
     @Autowired
     public UserApiController( UserDao userDao, AccountDao accountDao,RoleRelDao roleRelDao ) {
@@ -82,12 +86,17 @@ public class UserApiController {
     public RestRecord getUserInfo( @PathVariable( "userId" ) String userId ) {
         try {
             User user = userDao.findUserByUserId( userId );
+            String address = user.getAddress();
+            if( !StringUtils.isEmpty( address )) {
+                String[] strs = address.split( splitStr );
+                user.setBriefAddress( strs[ 0 ] + splitStr );
+            }
             List< String > list = roleRelDao.getRoleTable( userId );
             if ( list != null && list.size() > 0 ) {
                 String sql = "SELECT * FROM "+list.get( 0 );
-                Query query =  entityManager.createNativeQuery(sql);
-                List objecArraytList = query.getResultList();
-                user.setUserDetailedInfo( objecArraytList );
+                Query query = entityManager.createNativeQuery(sql);
+                query.unwrap(org.hibernate.SQLQuery.class).setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP);
+                user.setUserDetailedInfo( query.getResultList() );
             }
             return new RestRecord( 200, user );
         } catch ( Exception e ) {

@@ -93,9 +93,10 @@ public class DownloadCountController {
     @GetMapping( "/download-ranking/{pageSize}/{pageNum}" )
     @ResponseBody
     public RestRecord getAppDownloadRanking( @PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
-                                             @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum ) {
+                                             @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
+                                             @CurrentUserId String userId ) {
         // 根据厂商名查找对应的应用，统计下载量
-        return countService.getAppDownloadRanking( pageSize, pageNum );
+        return countService.getAppDownloadRanking( pageSize, pageNum, userId );
     }
 
     @ApiOperation( value = "查询软件下载量变化", notes = "厂商通过用户Id查询到所属公司数据", httpMethod = "GET" )

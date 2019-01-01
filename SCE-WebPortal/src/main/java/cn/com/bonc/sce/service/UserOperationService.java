@@ -6,6 +6,7 @@ import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -18,18 +19,20 @@ import java.util.Map;
 @Slf4j
 @Service
 public class UserOperationService {
-    private UserOperationDao userOperationDao;
 
     @Autowired
+    private UserOperationDao userOperationDao;
+
+   /* @Autowired
     public UserOperationService( UserOperationDao userOperationDao ) {
         this.userOperationDao = userOperationDao;
-    }
+    }*/
     public RestRecord addUserInfo(Map< String, Object >  userInfo ) {
         return userOperationDao.addUserInfo( userInfo );
     }
 
-    public RestRecord updateUserInfoById(Map< String, Object >  userInfo ) {
-        return userOperationDao.updateUserInfoById(userInfo);
+    public RestRecord updateUserInfoById(Map< String, Object >  userInfo,String userId ) {
+        return userOperationDao.updateUserInfoById(userInfo, userId);
 
     }
 

@@ -28,9 +28,9 @@ public class FileUploadApiController {
 
     private FileResourceRepository fileResourceRepository;
 
-    public static final String STUDENT_PRE = "4";
+    public static final String STUDENT_PRE = "1";
 
-    public static final String TEACHER_PRE = "3";
+    public static final String TEACHER_PRE = "2";
 
     public static final String CERTIFICATE_TYPE = "1";
 

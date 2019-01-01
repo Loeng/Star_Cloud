@@ -30,4 +30,8 @@ public class AppCollectService {
     public RestRecord addUserAppCollectionInfo( String userId, String appId ) {
         return appCollectDao.addUserAppOpenInfo( userId, appId );
     }
+
+    public RestRecord deleteUserAppCollectionInfo( String userId, String appId ) {
+        return appCollectDao.addUserAppOpenInfo( userId, appId );
+    }
 }

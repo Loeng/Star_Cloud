@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserOperationService;
@@ -23,12 +24,14 @@ import java.util.Map;
 @RestController
 @RequestMapping( "/user-info" )
 public class UserOperationController {
-    private UserOperationService userOperationService;
 
     @Autowired
+    private UserOperationService userOperationService;
+
+   /* @Autowired
     public UserOperationController( UserOperationService userOperationService ) {
         this.userOperationService = userOperationService;
-    }
+    }*/
 
     /**
      * 单个用户新增接口1
@@ -54,17 +57,20 @@ public class UserOperationController {
      */
     @ApiOperation( value = "用户信息更改接口", notes = "根据用户Id更改用户信息", httpMethod = "PUT" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userInfo", dataType = "String", value = "需更改的具体用户信息", paramType = "body", required = true )
-    } )
+            @ApiImplicitParam( name = "userInfo", dataType = "String", value = "需更改的具体用户信息", paramType = "body", required = true ),
+            @ApiImplicitParam( name = "userId", dataType = "String", value = "需更改的用户ID", paramType = "query", required = true )
+    }
+    )
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
 
-    @PutMapping
+    @PutMapping("/updateUserInfo")
     @ResponseBody
     public RestRecord updateUserInfoById(
-            @RequestBody @ApiParam(example ="{'userId':1231,'userName':'loader','address':'成都市青羊区'}" ) Map userInfo ) {
-        return userOperationService.updateUserInfoById( userInfo );
+            @RequestBody   Map<String,Object> userInfo,
+            @RequestParam("userId")  String userId) {
+        return userOperationService.updateUserInfoById(userInfo,userId );
     }
 
     /**
