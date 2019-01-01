@@ -306,7 +306,7 @@ public class AppManageController {
      */
     @GetMapping( "/detail/open/{appId}" )
     @ResponseBody
-    public RestRecord isOpenApp( @PathVariable String appId,@RequestParam String userId ) {
+    public RestRecord isOpenApp( @PathVariable String appId,@RequestParam("userId") String userId ) {
         Map< String, Object > openInfo = appInfoRepository.findAppOpenInfo( appId, userId );
         Map< String, Object > map = new HashMap<>();
         if ( null == openInfo || CollectionUtils.isEmpty( openInfo ) ) {
