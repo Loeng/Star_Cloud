@@ -213,7 +213,8 @@ public class AppManageController {
             @ApiImplicitParam( name = "appType", value = "应用分类id(传0查全部rj)", paramType = "query", required = false ),
             @ApiImplicitParam( name = "orderType", value = "排序字段（download|time）", paramType = "query", required = false ),
             @ApiImplicitParam( name = "sort", value = "升降序(asc|desc)", paramType = "query", required = false ),
-            @ApiImplicitParam( name = "platformType", value = "平台类型(pt|rj)", paramType = "query", required = false )
+            @ApiImplicitParam( name = "platformType", value = "平台类型(pt|rj)", paramType = "query", required = false ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
 
     } )
     @ApiResponses( {
@@ -227,7 +228,7 @@ public class AppManageController {
                                                  @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
                                                  @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                  @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
-                                                 @CurrentUserId String userId) {
+                                                 @CurrentUserId  @ApiParam(hidden = true) String userId) {
 
         return appManageService.getAppListInfoByCondition( appName, appType, orderType, sort, platformType, pageNum, pageSize, userId );
     }
