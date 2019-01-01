@@ -54,7 +54,7 @@ public interface HotAppRepository extends JpaRepository< AppInfoEntity, String >
      * @param pageable
      * @return
      */
-    @Query( value = "SELECT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,MAIN.APP_SOURCE,MAIN.APP_LINK,\n" +
+    @Query( value = "SELECT DISTINCT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,MAIN.APP_SOURCE,MAIN.APP_LINK,\n" +
             "CASE WHEN A.APP_ID IS NULL THEN '0' ELSE '1' END IS_OPEN,\n" +
             "CASE WHEN C.APP_ID IS NULL THEN '0' ELSE '1' END IS_DOWNLOAD,\n" +
             "CASE WHEN D.APP_ID IS NULL THEN '0' ELSE '1' END IS_COLLECT\n" +
