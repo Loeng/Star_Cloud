@@ -98,7 +98,7 @@ public class AppVersionController {
      * 应用版本更新申请接口
      * 1. 在应用版本信息表中插入一条新的版本信息, 并将状态设置为待审核
      * 2. 创建一条待办消息，创建人为申请人，接收人为系统管理员
-     * todo 等待消息服务完成
+
      *
      * @param appId            更新版本的应用Id
      * @param userId           提交版本更新申请的用户Id
@@ -121,7 +121,7 @@ public class AppVersionController {
      * 应用版本审批接口
      * 1	将应用版本表中应用状态更新为通过审核
      * 2	创建一条消息，通知对应厂商用户
-     * todo 等待消息服务完成
+
      *
      * @param userId      用户Id
      * @param approveList 提交审核的APP列表
@@ -141,7 +141,7 @@ public class AppVersionController {
      * 审批不通过接口
      * 1 将应用版本表中应用状态更新为不通过审核，并更新不通过原因
      * 2 创建一条消息，通知对应厂商用户
-     * todo 等待消息服务完成
+
      *
      * @param userId       管理员用户Id
      * @param userId       管理员用户Id
