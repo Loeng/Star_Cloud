@@ -34,10 +34,10 @@ public class Message {
     @Column(name = "INFORMATION_TOPIC_TYPE")
     private Integer topicType;
 
-    @Column(name = "TARGET_USER_ID")
+    @Column(name = "TARGET_USER_ID",nullable = false,updatable = false)
     private String targetId;
 
-    @Column(name = "INITIATE_USER_ID")
+    @Column(name = "INITIATE_USER_ID",nullable = false,updatable = false)
     private String sourceId;
 
     /*private String sourceAccount;*/

@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.News;
@@ -37,13 +38,15 @@ public class NewsController {
      * @return 添加新闻是否成功
      */
     @ApiOperation( value = "新增教育新闻", notes = "新增教育新闻", httpMethod = "POST" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertNews( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) News news ) {
+    public RestRecord insertNews( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) News news,@CurrentUserId @ApiParam( hidden = true) String userId ) {
+        news.setCreateUserId( userId );
         return newsService.insertNews( news );
     }
 
@@ -72,13 +75,15 @@ public class NewsController {
      * @return 更新新闻是否成功
      */
     @ApiOperation( value = "更改教育新闻", notes = "更改教育新闻", httpMethod = "PUT" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping
     @ResponseBody
-    public RestRecord updateNews( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) News news ) {
+    public RestRecord updateNews( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) News news,@CurrentUserId @ApiParam( hidden = true) String userId ) {
+        news.setUpdateUserId( userId );
         return newsService.updateNews( news );
     }
 

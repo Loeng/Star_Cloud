@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Message;
@@ -42,8 +43,11 @@ public class MessageController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertMessage( @RequestBody @ApiParam( name = "message", value = "信息", required = true )Message message ) {
-        if(message.getContent().length()>200)return new RestRecord(409,MessageConstants.SCE_MSG_409);
+    public RestRecord insertMessage( @RequestBody @ApiParam( name = "message", value = "信息", required = true )Message message,@CurrentUserId String userId ) {
+        message.setSourceId( userId );
+        if(message.getContent().length()>200){
+            return new RestRecord(409,MessageConstants.SCE_MSG_409);
+        }
         return messageService.insertMessage( message );
     }
 
@@ -122,13 +126,14 @@ public class MessageController {
      * @return message数据
      */
     @ApiOperation( value = "获取message数据", notes = "获取message数据", httpMethod = "GET" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/{userId}" )
+    @GetMapping( "/" )
     @ResponseBody
-    public RestRecord getMessageByUserId( @PathVariable( "userId" ) @ApiParam( name = "userId", value = "userId", required = true )String userId,
+    public RestRecord getMessageByUserId( @CurrentUserId @ApiParam( hidden = true) String userId,
                                           @RequestParam( value = "id", required = false) @ApiParam( name = "id", value = "id")Integer id,
                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
@@ -142,13 +147,14 @@ public class MessageController {
      * @return count
      */
     @ApiOperation( value = "获取未读信息数据", notes = "获取未读信息数据", httpMethod = "GET" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/count/{userId}" )
+    @GetMapping( "/count" )
     @ResponseBody
-    public RestRecord getIsNotReadCount( @PathVariable( "userId" ) @ApiParam( name = "userId", value = "userId", required = true )String userId ) {
+    public RestRecord getIsNotReadCount( @CurrentUserId @ApiParam( hidden = true) String userId ) {
         return messageService.getIsNotReadCount( userId );
     }
 }

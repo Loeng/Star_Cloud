@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Notification;
@@ -37,13 +38,15 @@ public class NotificationController {
      * @return 添加通知公告是否成功
      */
     @ApiOperation( value = "新增通知公告接口", notes = "新增通知公告接口", httpMethod = "POST" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertNotification( @RequestBody @ApiParam( name = "notification", value = "公告信息", required = true ) Notification notification ) {
+    public RestRecord insertNotification( @RequestBody @ApiParam( name = "notification", value = "公告信息", required = true ) Notification notification ,@CurrentUserId @ApiParam( hidden = true) String userId) {
+        notification.setCreateUserId( userId );
         return notificationService.insertNotification( notification );
     }
 
@@ -71,13 +74,15 @@ public class NotificationController {
      * @return 更新通知公告是否成功
      */
     @ApiOperation( value = "更改通知公告接口", notes = "更改通知公告接口", httpMethod = "PUT" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
     } )
     @PutMapping
     @ResponseBody
-    public RestRecord updateNotification( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) Notification notification ) {
+    public RestRecord updateNotification( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) Notification notification ,@CurrentUserId @ApiParam( hidden = true) String userId) {
+        notification.setUpdateUserId( userId );
         return notificationService.updateNotification( notification );
     }
 
