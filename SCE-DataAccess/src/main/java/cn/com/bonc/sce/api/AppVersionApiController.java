@@ -251,9 +251,7 @@ public class AppVersionApiController {
      * @return 地址字符串
      */
     public String findRealUrl( String query ) {
-        if ( "".equals( query ) ) {
-            return null;
-        } else if ( query == null ) {
+        if ( "".equals( query ) || query == null ) {
             return null;
         }
         String[] temp = query.split( "," );
@@ -265,6 +263,4 @@ public class AppVersionApiController {
         }
         return StringUtils.substring( result.toString(), 0, result.length() - 1 );
     }
-
-
 }

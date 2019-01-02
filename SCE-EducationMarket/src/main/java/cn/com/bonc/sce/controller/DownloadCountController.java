@@ -103,7 +103,7 @@ public class DownloadCountController {
     @GetMapping( "/download-change" )
     @ResponseBody
     public RestRecord getDownloadChange(
-            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
             @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
@@ -116,7 +116,7 @@ public class DownloadCountController {
     @GetMapping( "/download-type" )
     @ResponseBody
     public RestRecord getDownloadChange(
-            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
             @RequestParam( value = "startTime", required = false, defaultValue = "2018-12" ) @ApiParam( "查询月份" ) String time ) {
 
         return countService.getDownloadByType( userId, time );
@@ -125,7 +125,7 @@ public class DownloadCountController {
     @ApiOperation( value = "厂家应用数量及类型占比", notes = "根据用户ID查询用户对应的厂家下面APP总数及各类型占比", httpMethod = "GET" )
     @GetMapping( "/app-type-percent" )
     @ResponseBody
-    public RestRecord getAppTypePrecent( @ApiParam( "用户Id" ) @CurrentUserId String userId ) {
+    public RestRecord getAppTypePrecent( @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return countService.getAppTypePrecent( userId );
     }
 
@@ -133,7 +133,7 @@ public class DownloadCountController {
     @GetMapping( "/collection-change" )
     @ResponseBody
     public RestRecord getCollectionChange(
-            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
             @RequestParam( value = "appId", required = false ) @ApiParam( "应用Id" ) String appId,
             @RequestParam( value = "startTime", required = false, defaultValue = "1970-01-01 00:00:00" ) @ApiParam( "开始时间" ) String startTime,
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) @ApiParam( "结束时间" ) String endTime ) {
@@ -145,14 +145,14 @@ public class DownloadCountController {
     @ApiOperation( value = "查询用户所属厂商有的应用列表", notes = "", httpMethod = "GET" )
     @GetMapping( "/company-app" )
     @ResponseBody
-    public RestRecord getCompanyApp( @RequestParam( "userId" ) String userId ) {
+    public RestRecord getCompanyApp( @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return countService.getCompanyAppList( userId );
     }
 
     @ApiOperation( value = "查询应用下载数量等信息接口", notes = "市场分析页面接口" )
     @GetMapping( "/list" )
     @ResponseBody
-    public RestRecord getDownloadList( @RequestParam( "userId" ) String userId,
+    public RestRecord getDownloadList( @CurrentUserId @ApiParam( hidden = true ) String userId,
                                        @RequestParam( "appType" ) int appType,
                                        @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
                                        @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {

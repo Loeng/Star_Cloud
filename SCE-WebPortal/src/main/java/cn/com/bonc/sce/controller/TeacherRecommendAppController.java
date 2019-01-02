@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.TeacherRecommendService;
@@ -62,7 +63,7 @@ public class TeacherRecommendAppController {
     @PutMapping
     @ResponseBody
     public RestRecord updateTeacherRecommendAppInfo(
-            @RequestParam( "teacherId" ) @ApiParam( value = "教师用户Id", required = true ) String teacherId,
+            @CurrentUserId @ApiParam( hidden = true ) String teacherId,
             @RequestBody @ApiParam( value = "应用于推荐时段\r[{\r\"appId\":\"String\",\r\"recommendStartTime\":\"1545636712000\",\r\"recommendEndTime\":\"1545636712000\"},{\r\"略\":\"略\"}]" )
                     List< Map< String, Object > > recommendPerMap ) {
         return teacherRecommendService.updateTeacherRecommendAppInfo( teacherId, recommendPerMap );
@@ -80,7 +81,7 @@ public class TeacherRecommendAppController {
     @DeleteMapping
     @ResponseBody
     public RestRecord deleteTeacherRecommendApp(
-            @RequestParam @ApiParam( value = "教师Id", required = true ) String teacherId,
+            @CurrentUserId @ApiParam( hidden = true ) String teacherId,
             @RequestParam @ApiParam( value = "应用Id列表" ) List< String > appIdList ) {
         return teacherRecommendService.deleteTeacherRecommendApp( teacherId, appIdList );
     }
@@ -100,7 +101,7 @@ public class TeacherRecommendAppController {
     @GetMapping
     @ResponseBody
     public RestRecord selectTeacherRecommendAppList(
-            @RequestParam( "teacherId" ) @ApiParam( value = "教师Id", required = true ) String teacherId,
+            @CurrentUserId @ApiParam( hidden = true ) String teacherId,
             @RequestParam( value = "startTime", defaultValue = "1970-01-01 00:00:00" ) @ApiParam( value = "开始时间", example = "2012-06-18 00:00:00" ) String startTime,
             @RequestParam( value = "endTime", defaultValue = "2099-01-01 00:00:00" ) @ApiParam( value = "结束时间", example = "2019-06-18 23:59:59" ) String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
@@ -113,7 +114,7 @@ public class TeacherRecommendAppController {
     @ApiOperation( "查询教师推荐应用列表" )
     @GetMapping( "/list" )
     @ResponseBody
-    public RestRecord getTeacherCommendList( @RequestParam( "userId" ) String userId,
+    public RestRecord getTeacherCommendList( @CurrentUserId @ApiParam( hidden = true ) String userId,
                                              @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
                                              @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         return teacherRecommendService.getTeacherCommendList( userId, pageNum, pageSize );
