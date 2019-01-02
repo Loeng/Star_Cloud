@@ -106,7 +106,7 @@ public class AppVersionController {
      * @return
      */
     @ApiOperation( value = "应用版本更新申请接口", notes = "添加一条版本更新申请", httpMethod = "POST" )
-    @PostMapping( "apply/{appId}" )
+    @PostMapping( "/apply/{appId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApply(
             @PathVariable( "appId" ) @ApiParam( "应用Id" ) String appId,
@@ -127,7 +127,7 @@ public class AppVersionController {
      * @return
      */
     @ApiOperation( value = "应用版本审批接口", notes = "将应用版本表中应用状态更新为通过审核", httpMethod = "PUT" )
-    @PutMapping( "/approve/{userId}" )
+    @PutMapping( "/approve" )
     @ResponseBody
     public RestRecord appVersionUpdateApprove(
             @CurrentUserId @ApiParam( hidden = true ) String userId,
@@ -146,7 +146,7 @@ public class AppVersionController {
      * @return
      */
     @ApiOperation( value = "审批不通过接口", notes = "不通过审核，并更新不通过原因", httpMethod = "PUT" )
-    @PutMapping( "/reject/{userId}" )
+    @PutMapping( "/reject" )
     @ResponseBody
     public RestRecord appVersionUpdateReject(
             @CurrentUserId @ApiParam( hidden = true ) String userId,
