@@ -67,7 +67,7 @@ public class AppCollectApiController {
     @PostMapping("/remove-info")
     @ResponseBody
     public RestRecord deleteUserAppCollectionInfo ( @RequestParam( "userId" ) String userId,
-                                                 @RequestParam( "appId" ) String appId ) {
+                                                    @RequestParam( "appId" ) String appId ) {
         AppCollectionEntity appCollectionEntity = new AppCollectionEntity(  );
         appCollectionEntity.setAppId( appId );
         appCollectionEntity.setUserId( userId );

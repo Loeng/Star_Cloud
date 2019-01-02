@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.AppVersionModel;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -98,7 +99,6 @@ public class AppVersionController {
      * 应用版本更新申请接口
      * 1. 在应用版本信息表中插入一条新的版本信息, 并将状态设置为待审核
      * 2. 创建一条待办消息，创建人为申请人，接收人为系统管理员
-
      *
      * @param appId            更新版本的应用Id
      * @param userId           提交版本更新申请的用户Id
@@ -110,7 +110,7 @@ public class AppVersionController {
     @ResponseBody
     public RestRecord appVersionUpdateApply(
             @PathVariable( "appId" ) @ApiParam( "应用Id" ) String appId,
-            @RequestParam( "userId" ) @ApiParam( "用户Id" ) String userId,
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
             @RequestBody @ApiParam( "应用版本信息对象" ) AppVersionModel marketAppVersion ) {
         return appVersionService.createVersionInfo( appId, userId, marketAppVersion );
 //        messageService.createAppVersionUpdateApplyMessage( userId, appId );
@@ -121,7 +121,6 @@ public class AppVersionController {
      * 应用版本审批接口
      * 1	将应用版本表中应用状态更新为通过审核
      * 2	创建一条消息，通知对应厂商用户
-
      *
      * @param userId      用户Id
      * @param approveList 提交审核的APP列表
@@ -131,7 +130,7 @@ public class AppVersionController {
     @PutMapping( "/approve/{userId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApprove(
-            @PathVariable( "userId" ) String userId,
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
             @RequestBody @ApiParam( "需通过审核的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList ) {
         return appAuditingService.appVersionUpdateApprove( userId, approveList );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
@@ -141,9 +140,7 @@ public class AppVersionController {
      * 审批不通过接口
      * 1 将应用版本表中应用状态更新为不通过审核，并更新不通过原因
      * 2 创建一条消息，通知对应厂商用户
-
      *
-     * @param userId       管理员用户Id
      * @param userId       管理员用户Id
      * @param rejectReason 驳回请求原因
      * @return
@@ -152,7 +149,7 @@ public class AppVersionController {
     @PutMapping( "/reject/{userId}" )
     @ResponseBody
     public RestRecord appVersionUpdateReject(
-            @PathVariable( "userId" ) String userId,
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
             @RequestBody @ApiParam( "需通过审核的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList,
             @RequestParam( "rejectReason" ) String rejectReason ) {
         return appAuditingService.appVersionUpdateReject( userId, approveList, rejectReason );

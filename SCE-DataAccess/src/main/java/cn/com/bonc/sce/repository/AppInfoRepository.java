@@ -98,7 +98,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     List< Object > getAppIdByTypeId( @Param( "appTypeId" ) Integer appTypeId );
 
     //根据appid 查询APP_CONDITION_INFO_VIEW视图
-    @Query( nativeQuery = true, value = "SELECT\n" +
+    @Query( nativeQuery = true, value = "SELECT DISTINCT \n" +
             "\tAI.APP_ID,\n" +
             "\tAI.APP_NAME,\n" +
             "\tAI.APP_NOTES,\n" +
@@ -137,7 +137,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                                                                Pageable page );
 
     //查询全部类型 根据时间或下载量排序
-    @Query( nativeQuery = true, value = "SELECT\n" +
+    @Query( nativeQuery = true, value = "SELECT DISTINCT \n" +
             "\tAI.APP_ID,\n" +
             "\tAI.APP_NAME,\n" +
             "\tAI.APP_NOTES,\n" +
@@ -170,7 +170,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\tAND SUAC.USER_ID = :userId \n" +
             "WHERE\n" +
             "\tAPP_SOURCE = :platform ",
-            countQuery = "SELECT COUNT(*) FROM " +
+            countQuery = "SELECT count( DISTINCT AI.APP_ID) FROM " +
                     "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
                     "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
                     "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID \n" +

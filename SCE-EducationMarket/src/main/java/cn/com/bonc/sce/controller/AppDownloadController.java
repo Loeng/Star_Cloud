@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AppDownloadDao;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -39,14 +40,16 @@ public class AppDownloadController {
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true ),
             @ApiImplicitParam( name = "pageSize", dataType = "Integer", value = "分页条数", paramType = "path", required = true ),
-            @ApiImplicitParam( name = "pageNumber", dataType = "Integer", value = "页数", paramType = "path", required = true )
+            @ApiImplicitParam( name = "pageNumber", dataType = "Integer", value = "页数", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/{userId}/{pageSize}/{pageNumber}")
     @ResponseBody
-    public RestRecord getUserAppDownloadList ( @PathVariable( "userId" ) String userId,
+    public RestRecord getUserAppDownloadList ( @PathVariable( "userId" ) String userId1,
+                                               @CurrentUserId @ApiParam( hidden = true ) String userId,
                                                @PathVariable( "pageSize" ) Integer pageSize,
                                                @PathVariable( "pageNumber" ) Integer pageNumber ) {
 
@@ -64,7 +67,7 @@ public class AppDownloadController {
      */
     @ApiOperation( value = "用户下载应用接口", notes = "用户下载选中的应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" ),
             @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true ),
             @ApiImplicitParam( name = "version", dataType = "String", value = "应用Id", paramType = "query", required = true ),
             @ApiImplicitParam( name = "platform", dataType = "String", value = "应用Id", paramType = "query", required = true )
@@ -74,7 +77,7 @@ public class AppDownloadController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord addUserAppOpen ( @RequestParam( "userId" ) String userId,
+    public RestRecord addUserAppOpen ( @CurrentUserId @ApiParam( hidden = true ) String userId,
                                        @RequestParam( "appId" ) String appId,
                                        @RequestParam( "version" ) String version,
                                        @RequestParam( "platform" ) String platform ) {
