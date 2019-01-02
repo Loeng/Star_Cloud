@@ -153,6 +153,6 @@ public interface AppManageDao {
     @RequestMapping( value = "/manage-app/app-info", method = RequestMethod.GET )
     RestRecord getAppInfo();
 
-    @RequestMapping( value = "/manage-app//detail/open/{appId}" )
-    RestRecord isOpenApp( @PathVariable( "appId" ) String appId );
+    @RequestMapping( value = "/manage-app//detail/open/{appId}",method = RequestMethod.GET)
+    RestRecord isOpenApp( @PathVariable( "appId" ) String appId,@RequestParam("userId") String userId );
 }
