@@ -79,5 +79,14 @@ public interface MessageDao {
                                           @RequestParam( "id" ) Integer id,
                                           @PathVariable( "pageNum" ) Integer pageNum,
                                           @PathVariable( "pageSize" ) Integer pageSize );
+
+    /**
+     * 获取未读信息数据
+     *
+     * @param userId userId
+     * @return count
+     */
+    @RequestMapping( value = "/messages/count/{userId}", method = RequestMethod.GET )
+    public RestRecord getIsNotReadCount( @PathVariable( "userId" ) String userId);
 }
 

@@ -35,4 +35,7 @@ public interface UserMessageDao extends JpaRepository<UserMessage, Integer> {
     Page<UserMessage> findByUserIdAndIsDelete( String userId, Integer isDelete, Pageable pageable );
 
     UserMessage findByIdAndIsDelete( Integer id, Integer isDelete);
+
+    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER_INFO WHERE IS_READ=0 AND USER_ID=?1 AND IS_DELETE=1",nativeQuery = true )
+    Integer getIsNotReadCount(String userId);
 }

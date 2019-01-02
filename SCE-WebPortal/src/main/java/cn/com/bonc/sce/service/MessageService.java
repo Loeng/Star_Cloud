@@ -86,5 +86,15 @@ public class MessageService {
     public RestRecord getMessageByUserId( String userId, Integer id, Integer pageNum, Integer pageSize ) {
         return messageDao.getMessageByUserId( userId, id, pageNum, pageSize );
     }
+
+    /**
+     * 获取未读信息数据
+     *
+     * @param userId userId
+     * @return count
+     */
+    public RestRecord getIsNotReadCount( String userId ) {
+        return messageDao.getIsNotReadCount( userId );
+    }
 }
 

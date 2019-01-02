@@ -134,5 +134,22 @@ public class MessageController {
                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
         return messageService.getMessageByUserId( userId,id,pageNum,pageSize );
     }
+
+    /**
+     * 获取未读信息数据
+     *
+     * @param userId userId
+     * @return count
+     */
+    @ApiOperation( value = "获取未读信息数据", notes = "获取未读信息数据", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
+    } )
+    @GetMapping( "/count/{userId}" )
+    @ResponseBody
+    public RestRecord getIsNotReadCount( @PathVariable( "userId" ) @ApiParam( name = "userId", value = "userId", required = true )String userId ) {
+        return messageService.getIsNotReadCount( userId );
+    }
 }
 
