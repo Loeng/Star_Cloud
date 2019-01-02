@@ -63,7 +63,7 @@ public class AppOpenController {
     @PostMapping
     @ResponseBody
     public RestRecord addUserAppOpen ( @CurrentUserId @ApiParam( hidden = true ) String userId,
-                                       @RequestBody AppRecommend appRecommend ) {
+                                       @RequestBody @ApiParam( hidden = true ) AppRecommend appRecommend ) {
         return appOpenService.addUserAppOpenInfo( userId, appRecommend.getAppId() );
     }
 
