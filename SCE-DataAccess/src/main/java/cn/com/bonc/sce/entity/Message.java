@@ -46,7 +46,7 @@ public class Message {
     private String status;
 
     @CreatedDate
-    @Column(name = "CREATE_TIME")
+    @Column(name = "CREATE_TIME",nullable = false,updatable = false)
     private Timestamp createTime;
 
     @Column(name = "IS_DELETE")

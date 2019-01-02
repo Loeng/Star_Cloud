@@ -58,7 +58,7 @@ public class News {
     private String rejectOpinion;
 
     @CreatedDate
-    @Column(name = "CREATE_TIME")
+    @Column(name = "CREATE_TIME",nullable = false,updatable = false)
     private Date createTime;
 
     @LastModifiedDate
