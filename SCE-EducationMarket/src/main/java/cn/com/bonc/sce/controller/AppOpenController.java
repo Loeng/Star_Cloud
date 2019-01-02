@@ -36,14 +36,14 @@ public class AppOpenController {
      */
     @ApiOperation( value = "用户开通应用查询接口", notes = "根据用户id查询开通应用信息", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true )
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/{userId}")
+    @GetMapping
     @ResponseBody
-    public RestRecord getUserAppOpenList ( @PathVariable( "userId" ) String userId ) {
+    public RestRecord getUserAppOpenList ( @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return appOpenService.getUserAppOpenList( userId);
     }
 
