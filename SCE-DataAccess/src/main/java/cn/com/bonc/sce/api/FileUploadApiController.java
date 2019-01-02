@@ -87,7 +87,7 @@ public class FileUploadApiController {
             String loginName = IDUtil.createID( pre );
             String userId = UUID.getUUID();
             userPassword.setIsDelete( 1 );
-            userPassword.setPassword( "start123!" );
+            userPassword.setPassword( "star123!" );
             userPassword.setUserId( userId );
             fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
                     loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
