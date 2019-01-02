@@ -28,4 +28,8 @@ public class AppOpenService {
     public RestRecord addUserAppOpenInfo( String userId, String appId ) {
         return appOpenDao.addUserAppOpenInfo( userId, appId );
     }
+
+    public RestRecord deleteUserAppOpenInfo( String userId, String appId ) {
+        return appOpenDao.deleteUserAppOpenInfo( userId, appId );
+    }
 }

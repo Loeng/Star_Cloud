@@ -58,6 +58,25 @@ public class AppOpenController {
         AppOpenEntity appOpenEntity = new AppOpenEntity(  );
         appOpenEntity.setAppId( appId );
         appOpenEntity.setUserId( userId );
+        appOpenEntity.setIsDelete( 1L );
+        userOpenRepository.save( appOpenEntity );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    /**
+     * 用户开通应用信息删除
+     * @param appId
+     * @param userId
+     * @return
+     */
+    @PostMapping("/remove-info")
+    @ResponseBody
+    public RestRecord deleteUserAppOpenInfo ( @RequestParam( "userId" ) String userId,
+                                              @RequestParam( "appId" ) String appId ) {
+        AppOpenEntity appOpenEntity = new AppOpenEntity(  );
+        appOpenEntity.setAppId( appId );
+        appOpenEntity.setUserId( userId );
+        appOpenEntity.setIsDelete( 0L );
         userOpenRepository.save( appOpenEntity );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }

@@ -31,4 +31,14 @@ public interface AppOpenDao {
     @RequestMapping ( value = "/app-open/info", method = RequestMethod.POST )
     RestRecord addUserAppOpenInfo( @RequestParam( "userId" ) String userId,
                                    @RequestParam( "appId" ) String appId );
+
+    /**
+     * 删除用户开通应用信息
+     * @param userId
+     * @param appId
+     * @return
+     */
+    @RequestMapping ( value = "/app-open/remove-info", method = RequestMethod.POST )
+    RestRecord deleteUserAppOpenInfo( @RequestParam( "userId" ) String userId,
+                                      @RequestParam( "appId" ) String appId );
 }

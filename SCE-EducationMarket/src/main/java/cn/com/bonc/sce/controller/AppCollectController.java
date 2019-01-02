@@ -37,7 +37,8 @@ public class AppCollectController {
      */
     @ApiOperation( value = "用户收藏应用查询接口", notes = "根据用户id查询收藏应用信息", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true )
+            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
@@ -45,7 +46,7 @@ public class AppCollectController {
     @GetMapping("/list")
     @ResponseBody
     public RestRecord getUserAppCollection ( @RequestParam( "userId" ) String userId1,
-                                             @CurrentUserId String userId) {
+                                             @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return appCollectService.getUserAppCollect(userId);
     }
 
@@ -55,15 +56,16 @@ public class AppCollectController {
      */
     @ApiOperation( value = "用户添加收藏应用接口", notes = "用户收藏选中的应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord addUserAppCollection ( @CurrentUserId String userId,
-                                             AppRecommend appRecommend ) {
+    public RestRecord addUserAppCollection ( @CurrentUserId @ApiParam( hidden = true ) String userId,
+                                             @RequestBody AppRecommend appRecommend ) {
         return appCollectService.addUserAppCollectionInfo( userId, appRecommend.getAppId() );
     }
 
@@ -75,14 +77,15 @@ public class AppCollectController {
      */
     @ApiOperation( value = "用户删除收藏应用接口", notes = "用户删除选中的收藏应用", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "path", required = true )
+            @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @DeleteMapping("/{appId}")
     @ResponseBody
-    public RestRecord deleteUserAppCollection ( @CurrentUserId String userId,
+    public RestRecord deleteUserAppCollection ( @CurrentUserId @ApiParam( hidden = true ) String userId,
                                                 @RequestParam( "appId" ) String appId ) {
         return appCollectService.deleteUserAppCollectionInfo( userId, appId );
     }

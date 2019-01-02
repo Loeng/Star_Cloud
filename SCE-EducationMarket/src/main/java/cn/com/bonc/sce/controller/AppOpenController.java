@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.AppRecommend;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppOpenService;
 import io.swagger.annotations.*;
@@ -48,12 +50,11 @@ public class AppOpenController {
     /**
      * 用户开通应用新增接口
      * @param userId 用户Id
-     * @param appId  开通的应用Id
      * @return 开通应用是否成功
      */
     @ApiOperation( value = "用户开通应用接口", notes = "用户开通选中的应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" ),
             @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "query", required = true )
     } )
     @ApiResponses( {
@@ -61,9 +62,9 @@ public class AppOpenController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord addUserAppOpen ( @RequestParam( "userId" ) String userId,
-                                       @RequestParam( "appId" ) String appId ) {
-        return appOpenService.addUserAppOpenInfo( userId, appId );
+    public RestRecord addUserAppOpen ( @CurrentUserId @ApiParam( hidden = true ) String userId,
+                                       @RequestBody AppRecommend appRecommend ) {
+        return appOpenService.addUserAppOpenInfo( userId, appRecommend.getAppId() );
     }
 
     /**
@@ -74,16 +75,16 @@ public class AppOpenController {
      */
     @ApiOperation( value = "用户取消开通应用接口", notes = "用户删除选中的开通应用", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "用户Id", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" ),
             @ApiImplicitParam( name = "appId", dataType = "String", value = "应用Id", paramType = "path", required = true )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @DeleteMapping("/{userId}/{appId}")
+    @DeleteMapping("/{appId}")
     @ResponseBody
-    public RestRecord deleteUserAppOpen ( @RequestParam( "userId" ) String userId,
+    public RestRecord deleteUserAppOpen ( @CurrentUserId @ApiParam( hidden = true ) String userId,
                                           @RequestParam( "appId" ) String appId ) {
-        return null;
+        return appOpenService.deleteUserAppOpenInfo( userId, appId );
     }
 }
