@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 安全
@@ -24,15 +25,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table( name = "SCE_COMMON_USER_PASSWORD", schema = "STARCLOUDPORTAL" )
-public class Account {
+public class Account  implements Serializable {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_COMMON_USER_PASSWORD" )
-    @SequenceGenerator( name = "SEQ_GEN_COMMON_USER_PASSWORD", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_COMMON_USER_PASSWORD" )
+//    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_COMMON_USER_PASSWORD" )
+//    @SequenceGenerator( name = "SEQ_GEN_COMMON_USER_PASSWORD", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_COMMON_USER_PASSWORD" )
+    @GeneratedValue
     @Column( name = "ID" )
     private Integer id;
 
-    @Id
     @Column( name = "USER_ID" )
     private String userId;
 

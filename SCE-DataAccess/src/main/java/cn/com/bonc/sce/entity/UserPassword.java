@@ -10,7 +10,7 @@ import javax.persistence.*;
  * @since 2018/12/21 9:00
  */
 @Entity
-@Table( name = "SCE_COMMON_USER_PASSWORD",schema = "STARCLOUDPORTAL" )
+@Table( name = "SCE_COMMON_USER_PASSWORD", schema = "STARCLOUDPORTAL" )
 public class UserPassword {
 
     @Id
@@ -28,7 +28,7 @@ public class UserPassword {
     @Column( name = "IS_DELETE" )
     private Integer isDelete;
 
-    public UserPassword( Integer id,String userId, String password, Integer isDelete ) {
+    public UserPassword( Integer id, String userId, String password, Integer isDelete ) {
         this.id = id;
         this.userId = userId;
         this.password = password;

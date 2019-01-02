@@ -17,6 +17,7 @@ import java.util.Map;
  */
 @Repository
 public interface UserDao extends JpaRepository< User, String > {
+
     public User findUserByUserId( String userId );
 
     // TODO 必须考虑并发修改的问题

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserPasswordDao extends JpaRepository< UserPassword, Integer > {
+
     @Override
     UserPassword save( UserPassword user );
 }
