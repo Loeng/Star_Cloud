@@ -12,6 +12,7 @@ import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppNameTypeService;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -139,11 +139,19 @@ public class AppManageController {
             log.error( "add appInfo fail {}", e );
             return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e );
         }
-
-//        final AppInfoEntity appInfoEntity = JSONUtil.toBean( JSONUtil.parseFromMap( appInfo ), AppInfoEntity.class );
-//        final AppInfoEntity result = appInfoRepository.saveAndFlush( appInfoEntity );
-//       return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
+    }
+
+    //根据文件id取图片
+    private String getFilesUrlById( String ids ) {
+        String[] id = ids.split( "," );
+        StringBuilder sb = new StringBuilder();
+        for ( String s : id ) {
+            Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
+            String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
+            sb.append( p ).append( "," );
+        }
+        return StringUtils.substring( sb.toString(), 0, sb.length() - 1 );
     }
 
     /**
@@ -371,7 +379,7 @@ public class AppManageController {
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
 
             //分类id为空
-            if ( StringUtils.isEmpty( typeId ) || typeId == 0 ) {
+            if ( typeId == 0 ) {
                 page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
             } else {
                 //分类id不为空
@@ -426,7 +434,7 @@ public class AppManageController {
             }
 
         } else {
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT" );
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" );
             //软件应用
             if ( appType == 0 ) {
                 //查全部
