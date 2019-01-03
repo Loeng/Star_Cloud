@@ -10,6 +10,7 @@ import cn.com.bonc.sce.model.AppTypeMode;
 import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppNameTypeService;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -67,8 +68,8 @@ public class AppManageController {
         log.trace( "appinfo::{}", appInfo );
         try {
             //取icon
-            String iconId = appInfo.getAppIcon();
-            Map< String, Object > iconAd = fileResourceRepository.getFileResourceById( Integer.parseInt( iconId ) );
+            Integer iconId = appInfo.getAppIcon();
+            Map< String, Object > iconAd = fileResourceRepository.getFileResourceById( iconId );
             String iconAddress = iconAd.get( "FILE_MAPPING_PATH" ).toString();
             //1.appinfo表
             AppInfoEntity appInfoEntity = new AppInfoEntity();
@@ -88,29 +89,18 @@ public class AppManageController {
             AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
 
             //根据id取pc图片链接
-            String pcUrl = appInfo.getAppPcPic();
-            String[] pcId = pcUrl.split( "," );
-            StringBuilder sb1 = new StringBuilder();
-            for ( String s : pcId ) {
-                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
-                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
-                sb1.append( p ).append( "," );
-            }
-            //根据id取phone图片链接
-            String phoneUrl = appInfo.getAppPhonePic();
-            String[] phoneId = phoneUrl.split( "," );
-            StringBuilder sb2 = new StringBuilder();
-            for ( String s : phoneId ) {
-                Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
-                String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
-                sb2.append( p ).append( "," );
-            }
+            String pcUrl = getFilesUrlById( appInfo.getAppPcPic() );
 
+            //根据id取phone图片链接
+            String phoneUrl = getFilesUrlById( appInfo.getAppPhonePic() );
 
             //3.版本表
             Set< AppTypeMode > pcSet = appInfo.getPc();
             pcSet.forEach( pc -> {
-
+                String version = pc.getAppVersion();
+                if ( StringUtils.isEmpty( version ) ) {
+                    return;
+                }
                 //根据addressId获取软件存储路径
                 String addressId = pc.getAddress();
                 Map< String, Object > ad = fileResourceRepository.getFileResourceById( Integer.parseInt( addressId ) );
@@ -119,16 +109,15 @@ public class AppManageController {
                 MarketAppVersion marketAppVersion = new MarketAppVersion();
                 marketAppVersion.setAppId( appId );
                 marketAppVersion.setAppDownloadAddress( softwareAddress );
-                marketAppVersion.setAppVersion( pc.getAppVersion() );
+                marketAppVersion.setAppVersion( version );
                 marketAppVersion.setVersionInfo( appInfo.getAppNotes() );
                 marketAppVersion.setPackageName( pc.getPackageName() );
                 marketAppVersion.setVersionSize( pc.getVersionSize() );
                 marketAppVersion.setAppStatus( "1" );
                 marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
-                marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
-                marketAppVersion.setAppPcPic( sb1.toString() );
-                marketAppVersion.setAppPhonePic( sb2.toString() );
-                marketAppVersion.setAuthDetail( appInfo.getAuthDetail() );
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString() );
+                marketAppVersion.setAppPcPic( pcUrl );
+                marketAppVersion.setAppPhonePic( phoneUrl );
                 marketAppVersion.setCreateTime( new Date() );
                 marketAppVersion.setIsDelete( 1L );
                 marketAppVersion.setRunningPlatform( pc.getVersioInfo() );
@@ -142,12 +131,14 @@ public class AppManageController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
     }
 
-    //根据文件id取图片
-    private String getFilesUrlById( String ids ) {
-        String[] id = ids.split( "," );
+    //根据文件id取文件路径
+    private String getFilesUrlById( Set< Integer > ids ) {
+        if ( CollUtil.isEmpty( ids ) ) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
-        for ( String s : id ) {
-            Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
+        for ( Integer id : ids ) {
+            Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( id );
             String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
             sb.append( p ).append( "," );
         }
@@ -318,7 +309,7 @@ public class AppManageController {
      */
     @GetMapping( "/detail/open/{appId}" )
     @ResponseBody
-    public RestRecord isOpenApp( @PathVariable String appId,@RequestParam("userId") String userId ) {
+    public RestRecord isOpenApp( @PathVariable String appId, @RequestParam( "userId" ) String userId ) {
         Map< String, Object > openInfo = appInfoRepository.findAppOpenInfo( appId, userId );
         Map< String, Object > map = new HashMap<>();
         if ( null == openInfo || CollectionUtils.isEmpty( openInfo ) ) {
