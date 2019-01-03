@@ -302,6 +302,10 @@ public class AppManageController {
     public RestRecord selectAppById( @PathVariable String appId ) {
         Pageable pageable = PageRequest.of( 0, 10, Sort.Direction.DESC, "CREATE_TIME" );
         Page< Map< String, Object > > appDetailInfo = appInfoRepository.findAppDetailById( appId, pageable );
+       /* List<Map<String, Object>> content = appDetailInfo.getContent();
+        for (Map<String,Object> appDetail:content) {
+
+        }*/
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appDetailInfo.getContent() );
     }
 
