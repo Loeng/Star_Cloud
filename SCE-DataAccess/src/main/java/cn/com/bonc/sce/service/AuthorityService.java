@@ -1,10 +1,19 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AuthorityDao;
+import cn.com.bonc.sce.entity.Authority;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 机构
@@ -24,7 +33,15 @@ public class AuthorityService {
      *
      * @return 获取机构
      */
-    public RestRecord getAll() {
-        return new RestRecord( 200, authorityDao.findByIsDelete( 1 ) );
+    public RestRecord getAll(Integer pageNum, Integer pageSize) {
+        pageNum--;
+        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Page< Authority > page;
+        page = authorityDao.findByIsDelete( 1,pageable );
+        Map< String, Object > info = new HashMap<>();
+        List< Authority > list = page.getContent();
+        info.put( "total", page.getTotalElements() );
+        info.put( "info", list );
+        return new RestRecord( 200, info );
     }
 }

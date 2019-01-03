@@ -25,5 +25,6 @@ public interface AuthorityDao {
      * @return 获取机构
      */
     @RequestMapping( value = "/authoritys", method = RequestMethod.GET )
-    public RestRecord getAll();
+    public RestRecord getAll(@RequestParam( "pageNum" ) Integer pageNum,
+                             @RequestParam( "pageSize" ) Integer pageSize);
 }

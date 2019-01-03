@@ -25,5 +25,6 @@ public interface SchoolDao {
      * @return 获取学校
      */
     @RequestMapping( value = "/schools", method = RequestMethod.GET )
-    public RestRecord getAll();
+    public RestRecord getAll(@RequestParam( "pageNum" ) Integer pageNum,
+                             @RequestParam( "pageSize" ) Integer pageSize);
 }
