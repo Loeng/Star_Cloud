@@ -131,21 +131,21 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     List< Map< String, Object > > getDownloadByType( @Param( "companyId" ) Long companyId,
                                                      @Param( "time" ) String time );
 
-    @Query( value = "SELECT\n" +
-            "\t MAT.APP_TYPE_NAME,COUNT(MAT.APP_TYPE_NAME) AS APP_TYPE_COUNT\n" +
-            "FROM\n" +
-            "\t STARCLOUDMARKET.SCE_MARKET_APP_INFO MAI \n" +
-            "\t LEFT JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY SMC ON SMC.COMPANY_ID = MAI.COMPANY_ID\n" +
-            "\t LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL MAAR ON MAAR.APP_ID = MAI.APP_ID\n" +
-            "\t LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE MAT ON MAAR.APP_TYPE_ID = MAT.APP_TYPE_ID \n" +
-            "\t WHERE SMC.COMPANY_ID=?1\n" +
-            "\t GROUP BY\n" +
-            "\t MAT.APP_TYPE_NAME\n", nativeQuery = true )
+    @Query( value ="SELECT\n" +
+            "            MAT.APP_TYPE_NAME,COUNT(MAT.APP_TYPE_NAME) AS APP_TYPE_COUNT\n" +
+            "            FROM\n" +
+            "            (SELECT * FROM SCE_MARKET_APP_INFO WHERE IS_DELETE = 1) MAI \n" +
+            "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY SMC ON SMC.COMPANY_ID = MAI.COMPANY_ID\n" +
+            "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL MAAR ON MAAR.APP_ID = MAI.APP_ID\n" +
+            "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE MAT ON MAAR.APP_TYPE_ID = MAT.APP_TYPE_ID\n" +
+            "            WHERE SMC.COMPANY_ID=?1\n" +
+            "            GROUP BY\n" +
+            "            MAT.APP_TYPE_NAME", nativeQuery = true )
     List< Map< String, Object > > getAppTypePrecent( @Param( "companyId" ) String companyId );
 
 
     @Query( value = "\tSELECT  COUNT(COMPANY_ID) AS APP_COUNT  FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO \n" +
-            "\tWHERE COMPANY_ID = ?1 GROUP BY COMPANY_ID ", nativeQuery = true )
+            "\tWHERE COMPANY_ID = ?1 AND IS_DELETE = 1 GROUP BY COMPANY_ID ", nativeQuery = true )
     Map< String, Object > getAppCountByCompanyId( @Param( "companyId" ) String companyId );
 
     /**
