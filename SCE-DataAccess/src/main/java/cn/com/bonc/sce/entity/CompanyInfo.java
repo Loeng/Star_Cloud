@@ -66,7 +66,7 @@ public class CompanyInfo {
     }
 
     @Basic
-    @Column( name = "COMPANT_TAX_NUM", nullable = true, length = 20 )
+    @Column( name = "COMPANY_TAX_NUM", nullable = true, length = 20 )
     public String getCompanyTaxNum() {
         return companyTaxNum;
     }
