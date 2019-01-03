@@ -84,7 +84,7 @@ public class AppOpenController {
     @DeleteMapping("/{appId}")
     @ResponseBody
     public RestRecord deleteUserAppOpen ( @CurrentUserId @ApiParam( hidden = true ) String userId,
-                                          @RequestParam( "appId" ) String appId ) {
+                                          @PathVariable( "appId" ) String appId ) {
         return appOpenService.deleteUserAppOpenInfo( userId, appId );
     }
 }
