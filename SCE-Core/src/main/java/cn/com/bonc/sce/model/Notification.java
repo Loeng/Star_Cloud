@@ -19,7 +19,7 @@ public class Notification {
     private String createUserId;
     private String updateUserId;
     private String remarks;
-    private Integer pidId;
+    private Integer picId;
 
     public Integer getId() {
         return id;
@@ -109,31 +109,11 @@ public class Notification {
         this.remarks = remarks;
     }
 
-    public Integer getPidId() {
-        return pidId;
+    public Integer getPicId() {
+        return picId;
     }
 
-    public void setPidId( Integer pidId ) {
-        this.pidId = pidId;
-    }
-
-    public Notification() {
-
-    }
-
-    public Notification( Integer id, Integer columnId, Integer contentType, String contentTag, String contentTitle, String content, String contentStatus, String rejectOpinion, String createUserId, String updateUserId, String remarks, Integer pidId ) {
-
-        this.id = id;
-        this.columnId = columnId;
-        this.contentType = contentType;
-        this.contentTag = contentTag;
-        this.contentTitle = contentTitle;
-        this.content = content;
-        this.contentStatus = contentStatus;
-        this.rejectOpinion = rejectOpinion;
-        this.createUserId = createUserId;
-        this.updateUserId = updateUserId;
-        this.remarks = remarks;
-        this.pidId = pidId;
+    public void setPicId( Integer picId ) {
+        this.picId = picId;
     }
 }
