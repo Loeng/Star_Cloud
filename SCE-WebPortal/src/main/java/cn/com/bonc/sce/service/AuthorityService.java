@@ -24,7 +24,7 @@ public class AuthorityService {
      *
      * @return 获取机构
      */
-    public RestRecord getAll() {
-        return authorityDao.getAll();
+    public RestRecord getAll(Integer pageNum,Integer pageSize) {
+        return authorityDao.getAll(pageNum,pageSize);
     }
 }
