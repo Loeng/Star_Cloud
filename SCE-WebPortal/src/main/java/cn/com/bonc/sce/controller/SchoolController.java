@@ -44,7 +44,8 @@ public class SchoolController {
     } )
     @GetMapping
     @ResponseBody
-    public RestRecord getAll() {
-        return schoolService.getAll();
+    public RestRecord getAll(@RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
+                             @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize) {
+        return schoolService.getAll(pageNum,pageSize);
     }
 }

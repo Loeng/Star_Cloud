@@ -63,7 +63,7 @@ public class AppOpenController {
     @PostMapping
     @ResponseBody
     public RestRecord addUserAppOpen ( @CurrentUserId @ApiParam( hidden = true ) String userId,
-                                       @RequestBody AppRecommend appRecommend ) {
+                                       @RequestBody @ApiParam( hidden = true ) AppRecommend appRecommend ) {
         return appOpenService.addUserAppOpenInfo( userId, appRecommend.getAppId() );
     }
 
@@ -84,7 +84,7 @@ public class AppOpenController {
     @DeleteMapping("/{appId}")
     @ResponseBody
     public RestRecord deleteUserAppOpen ( @CurrentUserId @ApiParam( hidden = true ) String userId,
-                                          @RequestParam( "appId" ) String appId ) {
+                                          @PathVariable( "appId" ) String appId ) {
         return appOpenService.deleteUserAppOpenInfo( userId, appId );
     }
 }

@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.model.AppRecommend;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.HotAppService;
@@ -37,16 +38,15 @@ public class TopAppRecommendController {
      */
     @ApiOperation( value = "添加重点推荐应用", notes = "添加重点推荐应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appIdList", value = "appId数组", paramType = "body", required = true, example = "[1,2,3]" )
+            @ApiImplicitParam( name = "appIdList", value = "appId数组", paramType = "body", required = true, example = "[1,2,3]" ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
-    public RestRecord addHotRecommendAppList( @RequestBody List< String > appIdList ) {
-
-        String userId = "0110100";//userId从后端取
-
+    public RestRecord addHotRecommendAppList( @RequestBody List< String > appIdList,
+                                              @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return topAppRecommendService.addTopRecommendAppList( appIdList, userId );
     }
 
@@ -80,15 +80,16 @@ public class TopAppRecommendController {
      */
     @ApiOperation( value = "添加重点推荐应用", notes = "添加重点推荐应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用id", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appId", value = "应用id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/one")
     @ResponseBody
-    public RestRecord addHotRecommendApp( @RequestBody AppRecommend appRecommend ) {
-        String userId = "101";
+    public RestRecord addHotRecommendApp( @RequestBody @ApiParam( hidden = true ) AppRecommend appRecommend,
+                                          @CurrentUserId @ApiParam( hidden = true ) String userId  ) {
         return topAppRecommendService.addTopRecommendApp( userId, appRecommend.getAppId() );
     }
 
@@ -98,15 +99,16 @@ public class TopAppRecommendController {
      */
     @ApiOperation( value = "删除重点推荐应用", notes = "删除重点推荐应用", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "appId", value = "应用id", paramType = "query", required = true )
+            @ApiImplicitParam( name = "appId", value = "应用id", paramType = "query", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping("/sub-one")
     @ResponseBody
-    public RestRecord cancelHotRecommendApp( @RequestBody AppRecommend appRecommend ) {
-        String userId = "101";
+    public RestRecord cancelHotRecommendApp( @RequestBody @ApiParam( hidden = true ) AppRecommend appRecommend,
+                                             @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return topAppRecommendService.cancelTopRecommendApp( userId, appRecommend.getAppId() );
     }
 
@@ -116,14 +118,15 @@ public class TopAppRecommendController {
      * @return
      */
     @ApiOperation( value = "查询所有重点推荐应用列表", notes = "查询所有重点推荐应用列表", httpMethod = "GET" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/detail-list/{pageNum}/{pageSize}" )
     public RestRecord selectTopAppList( @PathVariable Integer pageNum,
-                                        @PathVariable Integer pageSize ) {
+                                        @PathVariable Integer pageSize,
+                                        @CurrentUserId @ApiParam( hidden = true ) String userId) {
         // 查询应用表中重点推荐状态为1的应用
-        String userId = "101";
         return topAppRecommendService.selectTopAppList( pageNum, pageSize, userId );
     }
 }

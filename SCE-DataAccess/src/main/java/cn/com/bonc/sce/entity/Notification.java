@@ -58,14 +58,14 @@ public class Notification {
     private String rejectOpinion;
 
     @CreatedDate
-    @Column(name = "CREATE_TIME")
+    @Column(name = "CREATE_TIME",nullable = false,updatable = false)
     private Date createTime;
 
     @LastModifiedDate
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
 
-    @Column(name = "CREATE_USER_ID")
+    @Column(name = "CREATE_USER_ID",nullable = false,updatable = false)
     private String createUserId;
 
     @Column(name = "UPDATE_USER_ID")

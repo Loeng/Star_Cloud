@@ -86,7 +86,7 @@ public class AppCollectController {
     @DeleteMapping("/{appId}")
     @ResponseBody
     public RestRecord deleteUserAppCollection ( @CurrentUserId @ApiParam( hidden = true ) String userId,
-                                                @RequestParam( "appId" ) String appId ) {
+                                                @PathVariable( "appId" ) String appId ) {
         return appCollectService.deleteUserAppCollectionInfo( userId, appId );
     }
 

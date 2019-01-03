@@ -151,5 +151,15 @@ public class MessageService {
             return new RestRecord( 200, userMessageDao.findByIdAndIsDelete( id, 1 ) );
         }
     }
+
+    /**
+     * 获取未读信息数据
+     *
+     * @param userId userId
+     * @return count
+     */
+    public RestRecord getIsNotReadCount( String userId ) {
+        return new RestRecord( 200, userMessageDao.getIsNotReadCount(userId) );
+    }
 }
 

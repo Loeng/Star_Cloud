@@ -20,15 +20,15 @@ import java.sql.Date;
 @Getter
 @Setter
 @Entity
-@Table(name="SCE_ENTITY_AUTHORITY",schema = "STARCLOUDPORTAL")
+@Table(name="SCE_ENTITY_INSTITUTION",schema = "STARCLOUDPORTAL")
 public class Authority {
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_ENTITY_AUTHORITY")
-    @SequenceGenerator(name="SEQ_GEN_ENTITY_AUTHORITY",allocationSize=1,initialValue=1, sequenceName="SEQ_ENTITY_AUTHORITY")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_ENTITY_INSTITUTION")
+    @SequenceGenerator(name="SEQ_GEN_ENTITY_INSTITUTION",allocationSize=1,initialValue=1, sequenceName="SEQ_ENTITY_INSTITUTION")
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "AUTHORITY_NAME")
+    @Column(name = "INSTITUTION_NAME")
     private String authorityName;
 
     @Column(name = "IS_DELETE")

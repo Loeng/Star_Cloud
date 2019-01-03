@@ -129,5 +129,22 @@ public class MessageApiController {
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
+
+    /**
+     * 获取未读信息数据
+     *
+     * @param userId userId
+     * @return count
+     */
+    @GetMapping( "/count/{userId}" )
+    @ResponseBody
+    public RestRecord getIsNotReadCount( @PathVariable( "userId" ) String userId) {
+        try {
+            return messageService.getIsNotReadCount( userId);
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
+        }
+    }
 }
 

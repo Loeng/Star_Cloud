@@ -24,7 +24,7 @@ public class SchoolService {
      *
      * @return 获取学校
      */
-    public RestRecord getAll() {
-        return schoolDao.getAll();
+    public RestRecord getAll(Integer pageNum,Integer pageSize) {
+        return schoolDao.getAll(pageNum,pageSize);
     }
 }

@@ -63,7 +63,6 @@ public class AuthenticationController {
         if ( authentication.getAuthType() == AUTH_TYPE_0 ) {
             log.info( MessageConstants.SCE_MSG_1001, authentication.getIdentifier(), request.getRemoteAddr() );
             authenticatedUser = userService.getUserByLoginName( authentication.getIdentifier() );
-
         } else if ( authentication.getAuthType() == AUTH_TYPE_1 ) {
             unSupportedAuthType = true;
         } else if ( authentication.getAuthType() == AUTH_TYPE_2 ) {
@@ -88,6 +87,14 @@ public class AuthenticationController {
             // 密码不匹配
             if ( !authentication.getPassword().equals( authenticatedUser.getAccount().getPassword() ) ) {
                 return new RestRecord( 102, WebMessageConstants.SCE_PORTAL_MSG_102 );
+            }
+            // 验证账户是否停用
+            if ( authenticatedUser.getLoginPermissionStatus() == 0 ) {
+                return new RestRecord( 103, WebMessageConstants.SCE_PORTAL_MSG_103 );
+            }
+            // 验证账户是否已注销
+            if ( authenticatedUser.getIsDelete() == 0 ) {
+                return new RestRecord( 104, WebMessageConstants.SCE_PORTAL_MSG_104 );
             }
 
             data = new HashMap<>( 2 );

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,20 +19,20 @@ import java.util.Set;
 public class AppAddModel {
     @ApiModelProperty( name = "app名称" )
     private String appName;
-    @ApiModelProperty( name = "类型id" )
+    @ApiModelProperty( name = "类型id" , example = "101")
     private Long appTypeId;
     @ApiModelProperty( name = "软件描述" )
     private String appNotes;
     @ApiModelProperty( name = "新版特性" )
     private String newFeatures;
     @ApiModelProperty( name = "软件图标" )
-    private String appIcon;
-    @ApiModelProperty( name = "pc端界面截图" )
-    private String appPcPic;
-    @ApiModelProperty( name = "手机端界面截图" )
-    private String appPhonePic;
+    private Integer appIcon;
+    @ApiModelProperty( name = "pc端界面截图(json数组)" )
+    private Set<Integer> appPcPic;
+    @ApiModelProperty( name = "手机端界面截图(json数组)" )
+    private Set<Integer> appPhonePic;
     @ApiModelProperty( name = "权限详情用,分隔" )
-    private String authDetail;
+    private Set<String> authDetail;
     @ApiModelProperty( name = "上传的相关信息" )
     private Set< AppTypeMode > pc;
 
