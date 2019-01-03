@@ -131,7 +131,7 @@ public class MessageController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping( "/" )
+    @GetMapping
     @ResponseBody
     public RestRecord getMessageByUserId( @CurrentUserId @ApiParam( hidden = true) String userId,
                                           @RequestParam( value = "id", required = false) @ApiParam( name = "id", value = "id")Integer id,
