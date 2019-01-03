@@ -358,7 +358,7 @@ public class AppManageController {
         } else {
             List< Sort.Order > orders = new ArrayList< Sort.Order >();
             orders.add( new Sort.Order( "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" ) );
-            orders.add( new Sort.Order( Sort.Direction.DESC, "AI.APP_ID" ) );
+            orders.add( new Sort.Order( Sort.Direction.DESC, "APP_ID" ) );
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( orders ) );
             //  Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" );
             //软件应用
