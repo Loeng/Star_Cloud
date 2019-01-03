@@ -140,7 +140,7 @@ public class NotificationService {
             if ( notification.getPic() == null ) {
                 continue;
             }
-            notification.setPicUrl( notification.getPic().getFileMappingPath() );
+            notification.setPicUrl( notification.getPic().getFileStorePath() );
             notification.setPic( null );
         }
         Map< String, Object > info = new HashMap<>();

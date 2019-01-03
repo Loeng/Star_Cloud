@@ -123,7 +123,7 @@ public class NewsService {
             if ( news.getPic() == null ) {
                 continue;
             }
-            news.setPicUrl( news.getPic().getFileMappingPath() );
+            news.setPicUrl( news.getPic().getFileStorePath() );
             news.setPic( null );
         }
         Map< String, Object > info = new HashMap<>();
