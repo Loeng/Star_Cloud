@@ -32,6 +32,6 @@ public class AppCollectService {
     }
 
     public RestRecord deleteUserAppCollectionInfo( String userId, String appId ) {
-        return appCollectDao.addUserAppOpenInfo( userId, appId );
+        return appCollectDao.deleteUserAppOpenInfo( userId, appId );
     }
 }
