@@ -73,13 +73,13 @@ public class FileUploadController {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }
 
-            List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
+        List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
 
-            log.info( "解析Excel成功" );
+        log.info( "解析Excel成功" );
 
-            fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
+        fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
 
-            log.info( "上传用户成功" );
+        log.info( "上传用户成功" );
 
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
@@ -101,6 +101,22 @@ public class FileUploadController {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }
         return fileUploadService.uploadMultipartAll( multipartFileAll, fileType );
+    }
+
+    /**
+     * 文件删除
+     *
+     * @param idChar
+     */
+    @ApiOperation( value = "多文件删除接口", notes = "根据文件id的json数组删除文件接口", httpMethod = "delete" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 422, message = WebMessageConstants.SCE_PORTAL_MSG_422, response = RestRecord.class )
+    } )
+    @DeleteMapping
+    public RestRecord deleteFile( @RequestBody @ApiParam( "文件id，json数组，例如[1,2,3,4]" ) List< Integer > idChar ) {
+        log.trace( "删除文件id数组:{}", idChar );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
 }

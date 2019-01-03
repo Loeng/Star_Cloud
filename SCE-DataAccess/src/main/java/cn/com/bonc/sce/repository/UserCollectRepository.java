@@ -15,7 +15,7 @@ public interface UserCollectRepository extends JpaRepository<AppCollectionEntity
 
 
     @Modifying
-    @Query( value = "select T2.APP_NAME APP_NAME,T1.APP_ID APP_ID,T2.APP_NOTES APP_NOTES,T2.APP_LINK APP_LINK,null APP_ICON " +
+    @Query( value = "select T2.APP_NAME APP_NAME,T1.APP_ID APP_ID,T2.APP_NOTES APP_NOTES,T2.APP_LINK APP_LINK,T2.APP_ICON APP_ICON " +
             "from STARCLOUDMARKET.SCE_USER_APP_COLLECTION T1 left join STARCLOUDMARKET.SCE_MARKET_APP_INFO T2" +
             " on T1.APP_ID = T2.APP_ID " +
             "WHERE T1.IS_DELETE = 1 and T1.USER_ID = :userId   ", nativeQuery = true )

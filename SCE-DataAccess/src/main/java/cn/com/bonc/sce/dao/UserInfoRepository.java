@@ -28,7 +28,7 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
 
 
      // 查询和搜索 学校 -> 教师 的列表信息
-   @Query(value = "SELECT * FROM  STARCLOUDPORTAL.v_teacher_info WHERE  NVL(USER_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%'))  AND  NVL(USER_ACCOUNT,'')LIKE CONCAT('%',CONCAT(?2,'%'))  AND   NVL(AUTHORITY_NAME,' ')LIKE CONCAT('%',CONCAT(?3,'%'))",nativeQuery = true)
+   @Query(value = "SELECT * FROM  STARCLOUDPORTAL.v_teacher_info WHERE  NVL(USER_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%'))  AND  NVL(USER_ACCOUNT,' ')LIKE CONCAT('%',CONCAT(?2,'%'))  AND   NVL(AUTHORITY_NAME,' ')LIKE CONCAT('%',CONCAT(?3,'%'))",nativeQuery = true)
     Page<Map<String,Object>> findTeacherByCondition(String name, String account, String organization_name, Pageable pageable);
 
      // 查询和搜索 学校 -> 学生 的列表信息
