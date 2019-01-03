@@ -119,5 +119,4 @@ public class FileUploadController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
-
 }
