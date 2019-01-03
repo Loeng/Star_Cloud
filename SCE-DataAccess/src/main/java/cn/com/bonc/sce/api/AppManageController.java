@@ -69,8 +69,8 @@ public class AppManageController {
         try {
             //取icon
             Integer iconId = appInfo.getAppIcon();
-            Map< String, Object > iconAd = fileResourceRepository.getFileResourceById( iconId );
-            String iconAddress = iconAd.get( "FILE_MAPPING_PATH" ).toString();
+            Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
+            String iconAddress = iconAd.get( "FILE_STORE_PATH" ).toString();
             //1.appinfo表
             AppInfoEntity appInfoEntity = new AppInfoEntity();
             appInfoEntity.setAppIcon( iconAddress );
@@ -103,8 +103,8 @@ public class AppManageController {
                 }
                 //根据addressId获取软件存储路径
                 String addressId = pc.getAddress();
-                Map< String, Object > ad = fileResourceRepository.getFileResourceById( Integer.parseInt( addressId ) );
-                String softwareAddress = ad.get( "FILE_MAPPING_PATH" ).toString();
+                Map< String, Object > ad = fileResourceRepository.getFileStorePathById( Integer.parseInt( addressId ) );
+                String softwareAddress = ad.get( "FILE_STORE_PATH" ).toString();
                 //往版本表存东西
                 MarketAppVersion marketAppVersion = new MarketAppVersion();
                 marketAppVersion.setAppId( appId );
@@ -139,8 +139,8 @@ public class AppManageController {
         }
         StringBuilder sb = new StringBuilder();
         for ( Integer id : ids ) {
-            Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( id );
-            String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
+            Map< String, Object > fileStorePath = fileResourceRepository.getFileStorePathById( id );
+            String p = fileStorePath.get( "FILE_STORE_PATH" ).toString();
             sb.append( p ).append( "," );
         }
         return StringUtils.substring( sb.toString(), 0, sb.length() - 1 );
