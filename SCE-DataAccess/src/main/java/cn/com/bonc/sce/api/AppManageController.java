@@ -115,7 +115,8 @@ public class AppManageController {
                 marketAppVersion.setVersionSize( pc.getVersionSize() );
                 marketAppVersion.setAppStatus( "1" );
                 marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
-                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString() );
+
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString().replace( "[", "" ).replace( "]", "" ) );
                 marketAppVersion.setAppPcPic( pcUrl );
                 marketAppVersion.setAppPhonePic( phoneUrl );
                 marketAppVersion.setCreateTime( new Date() );
