@@ -1,9 +1,9 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.model.AppRecommend;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.HotAppService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 应用推荐-热门应用接口
- * @author jc_D
  *
- * @version 2.0
+ * @author jc_D
+ * @version 2.1
  * @update 修改字段命名，将错写的字段名称改为驼峰式，去掉 getter setter
  * @updateFrom 2018/12/26 11:20
  * @updateAuthor wzm
+ * @update 修改用户ID获取方式改为从header获取。
+ * @updateAuthor yhb
  */
 @Slf4j
 @Api( value = "应用推荐-热门应用接口", tags = "应用推荐-热门应用接口" )
@@ -32,7 +33,7 @@ public class HotAppController {
     private HotAppService hotAppService;
 
     @Autowired
-    public HotAppController ( HotAppService hotAppService ) {
+    public HotAppController( HotAppService hotAppService ) {
         this.hotAppService = hotAppService;
     }
 
@@ -50,15 +51,13 @@ public class HotAppController {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @PostMapping
-    public RestRecord addHotRecommendAppList( @RequestBody List< String > appIdList ) {
-
-        String userId = "0110100";
+    public RestRecord addHotRecommendAppList( @RequestBody List< String > appIdList,
+                                              @CurrentUserId String userId ) {
         return hotAppService.addHotRecommendAppList( appIdList, userId );
     }
 
     /**
      * 添加单个热门应用
-     *
      */
     @ApiOperation( value = "添加热门应用", notes = "添加热门应用", httpMethod = "POST" )
     @ApiImplicitParams( {
@@ -67,16 +66,15 @@ public class HotAppController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @PostMapping("/one")
+    @PostMapping( "/one" )
     @ResponseBody
-    public RestRecord addHotRecommendApp( @RequestBody AppRecommend appRecommend ) throws IOException {
-        String userId = "101";
+    public RestRecord addHotRecommendApp( @RequestBody AppRecommend appRecommend,
+                                          @CurrentUserId String userId ) throws IOException {
         return hotAppService.addHotRecommendApp( userId, appRecommend.getAppId() );
     }
 
     /**
      * 删除单个热门应用
-     *
      */
     @ApiOperation( value = "删除热门应用", notes = "删除热门应用", httpMethod = "POST" )
     @ApiImplicitParams( {
@@ -85,10 +83,11 @@ public class HotAppController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
-    @PostMapping("/sub-one")
+    @PostMapping( "/sub-one" )
     @ResponseBody
-    public RestRecord cancelHotRecommendApp( @RequestBody AppRecommend appRecommend ) throws IOException {
-        String userId = "101";
+    public RestRecord cancelHotRecommendApp( @RequestBody AppRecommend appRecommend,
+                                             @CurrentUserId String userId ) throws IOException {
+
         return hotAppService.cancelHotRecommendApp( userId, appRecommend.getAppId() );
     }
 
@@ -127,9 +126,9 @@ public class HotAppController {
     } )
     @GetMapping( "/detail-list/{pageNum}/{pageSize}" )
     public RestRecord selectHotAppList( @PathVariable Integer pageNum,
-                                        @PathVariable Integer pageSize ) {
+                                        @PathVariable Integer pageSize,
+                                        @CurrentUserId String userId ) {
         // 查询应用表中重点推荐状态为1的应用
-        String userId = "101";
         return hotAppService.selectHotAppList( pageNum, pageSize, userId );
     }
 }
