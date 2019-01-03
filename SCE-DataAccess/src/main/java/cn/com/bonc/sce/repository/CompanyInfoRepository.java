@@ -29,14 +29,14 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "FROM \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC2 LEFT JOIN \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" MAI2 ON SMC2.\"COMPANY_ID\" = MAI2.\"COMPANY_ID\" \n" +
                     "\tAND SMC2.\"IS_DELETE\" = 1  AND MAI2.\"IS_DELETE\" = 1 \n" +
                     "GROUP BY SMC2.\"COMPANY_ID\"  ) COUNT_TEMP ON SMC.\"COMPANY_ID\" = COUNT_TEMP.\"COMPANY_ID\" \n" +
-                    "WHERE SMC.COMPANY_ID=:companyId ",
+                    "WHERE SMC.IS_DELETE=1 AND SMC.COMPANY_ID=:companyId ",
             countQuery = "SELECT COUNT(*) FROM \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC LEFT JOIN \"STARCLOUDPORTAL\".\"SCE_INFO_COMPANY\" SIC ON SMC.\"COMPANY_ID\" = SIC.\"COMPANY_ID\"\n" +
                     "\tLEFT JOIN \"STARCLOUDPORTAL\".\"SCE_COMMON_USER\" SCU ON SIC.\"USER_ID\" = SCU.\"USER_ID\" LEFT JOIN (\n" +
                     "SELECT SMC2.\"COMPANY_ID\", COUNT( MAI2.\"COMPANY_ID\" ) AS APP_COUNT \n" +
                     "FROM \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC2 LEFT JOIN \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" MAI2 ON SMC2.\"COMPANY_ID\" = MAI2.\"COMPANY_ID\" \n" +
                     "\tAND SMC2.\"IS_DELETE\" = 1  AND MAI2.\"IS_DELETE\" = 1 \n" +
                     "GROUP BY SMC2.\"COMPANY_ID\"  ) COUNT_TEMP ON SMC.\"COMPANY_ID\" = COUNT_TEMP.\"COMPANY_ID\" \n" +
-                    "WHERE SMC.COMPANY_ID=:companyId " )
+                    "WHERE SMC.IS_DELETE=1 AND SMC.COMPANY_ID=:companyId " )
     Page< List< Map< String, Object > > > findCompanyInfoByCompanyId( @Param( "companyId" ) Long companyId,
                                                            Pageable pageable );
 
@@ -49,14 +49,14 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "FROM \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC2 LEFT JOIN \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" MAI2 ON SMC2.\"COMPANY_ID\" = MAI2.\"COMPANY_ID\" \n" +
                     "\tAND SMC2.\"IS_DELETE\" = 1  AND MAI2.\"IS_DELETE\" = 1 \n" +
                     "GROUP BY SMC2.\"COMPANY_ID\"  ) COUNT_TEMP ON SMC.\"COMPANY_ID\" = COUNT_TEMP.\"COMPANY_ID\" \n" +
-                    "WHERE  SMC.COMPANY_NAME LIKE  CONCAT('%',CONCAT(:companyName,'%'))",
+                    "WHERE  SMC.IS_DELETE=1 AND SMC.COMPANY_NAME LIKE  CONCAT('%',CONCAT(:companyName,'%'))",
             countQuery = "SELECT COUNT(*) FROM \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC LEFT JOIN \"STARCLOUDPORTAL\".\"SCE_INFO_COMPANY\" SIC ON SMC.\"COMPANY_ID\" = SIC.\"COMPANY_ID\"\n" +
                     "\tLEFT JOIN \"STARCLOUDPORTAL\".\"SCE_COMMON_USER\" SCU ON SIC.\"USER_ID\" = SCU.\"USER_ID\" LEFT JOIN (\n" +
                     "SELECT SMC2.\"COMPANY_ID\", COUNT( MAI2.\"COMPANY_ID\" ) AS APP_COUNT \n" +
                     "FROM \"STARCLOUDMARKET\".\"SCE_MARKET_COMPANY\" SMC2 LEFT JOIN \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" MAI2 ON SMC2.\"COMPANY_ID\" = MAI2.\"COMPANY_ID\" \n" +
                     "\tAND SMC2.\"IS_DELETE\" = 1  AND MAI2.\"IS_DELETE\" = 1 \n" +
                     "GROUP BY SMC2.\"COMPANY_ID\"  ) COUNT_TEMP ON SMC.\"COMPANY_ID\" = COUNT_TEMP.\"COMPANY_ID\" \n" +
-                    "WHERE SMC.COMPANY_NAME LIKE  CONCAT('%',CONCAT(:companyName,'%'))" )
+                    "WHERE SMC.IS_DELETE=1 AND SMC.COMPANY_NAME LIKE  CONCAT('%',CONCAT(:companyName,'%'))" )
     Page< List< Map< String, Object > > > findCompanyInfoByCompanyName( @Param( "companyName" ) String companyName,
                                                                       Pageable pageable );
 }

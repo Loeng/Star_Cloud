@@ -257,8 +257,8 @@ public class AppVersionApiController {
         String[] temp = query.split( "," );
         StringBuilder result = new StringBuilder();
         for ( String s : temp ) {
-            Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( Integer.parseInt( s ) );
-            String p = String.valueOf( fileStorePath.get( "FILE_MAPPING_PATH" ) );
+            Map< String, Object > fileStorePath = fileResourceRepository.getFileStorePathById( Integer.parseInt( s ) );
+            String p = String.valueOf( fileStorePath.get( "FILE_STORE_PATH" ) );
             result.append( p ).append( "," );
         }
         return StringUtils.substring( result.toString(), 0, result.length() - 1 );

@@ -113,7 +113,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "FROM\n" +
             "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
             "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID \n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 \n" +
             "\tAND AO.IS_DELETE = 1 \n" +
             "\tAND AO.USER_ID = :userId\n" +
             "\tLEFT JOIN (\n" +
@@ -127,7 +127,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
             "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
             "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID \n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
             "\tAND SUAC.USER_ID = :userId \n" +
             "WHERE\n" +
             "\tAPP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)",
@@ -135,7 +135,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "FROM\n" +
                     "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
                     "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
-                    "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID \n" +
+                    "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 \n" +
                     "\tAND AO.IS_DELETE = 1 \n" +
                     "\tAND AO.USER_ID = :userId\n" +
                     "\tLEFT JOIN (\n" +
@@ -149,7 +149,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
                     "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
                     "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-                    "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID \n" +
+                    "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
                     "\tAND SUAC.USER_ID = :userId \n" +
                     "WHERE\n" +
                     "\tAPP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)"
@@ -175,7 +175,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "FROM\n" +
             "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
             "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID \n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 \n" +
             "\tAND AO.IS_DELETE = 1 \n" +
             "\tAND AO.USER_ID = :userId\n" +
             "\tLEFT JOIN (\n" +
@@ -189,7 +189,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
             "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
             "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID \n" +
+            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
             "\tAND SUAC.USER_ID = :userId \n" +
             "WHERE\n" +
             "\tAPP_SOURCE = :platform ",
@@ -210,7 +210,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
                     "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
                     "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-                    "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID \n" +
+                    "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
                     "\tAND SUAC.USER_ID = :userId \n" +
                     "WHERE\n" +
                     "\tAPP_SOURCE = :platform ")

@@ -3,17 +3,15 @@ package cn.com.bonc.sce.api;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
-import cn.com.bonc.sce.entity.AppTypeRelEntity;
-import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.model.AppTypeMode;
-import cn.com.bonc.sce.repository.*;
+import cn.com.bonc.sce.repository.AppInfoRepository;
+import cn.com.bonc.sce.repository.AppTypeRepository;
+import cn.com.bonc.sce.repository.MarketAppVersionRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AppManageService;
 import cn.com.bonc.sce.service.AppNameTypeService;
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 应用管理api
@@ -31,15 +31,9 @@ import java.util.*;
  */
 @Slf4j
 @RestController
-@Transactional( rollbackFor = Exception.class )
 @RequestMapping( "/manage-app" )
 public class AppManageController {
 
-    @Autowired
-    private FileResourceRepository fileResourceRepository;
-
-    @Autowired
-    private AppTypeRelRepository appTypeRelRepository;
 
     @Autowired
     private AppInfoRepository appInfoRepository;
@@ -56,6 +50,9 @@ public class AppManageController {
      */
     private AppNameTypeService appNameTypeService;
 
+    @Autowired
+    private AppManageService appManageService;
+
     /**
      * 新增应用
      *
@@ -66,84 +63,9 @@ public class AppManageController {
     public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
                                   @PathVariable( "uid" ) String uid ) {
         log.trace( "appinfo::{}", appInfo );
-        try {
-            //取icon
-            Integer iconId = appInfo.getAppIcon();
-            Map< String, Object > iconAd = fileResourceRepository.getFileResourceById( iconId );
-            String iconAddress = iconAd.get( "FILE_MAPPING_PATH" ).toString();
-            //1.appinfo表
-            AppInfoEntity appInfoEntity = new AppInfoEntity();
-            appInfoEntity.setAppIcon( iconAddress );
-            appInfoEntity.setAppName( appInfo.getAppName() );
-            appInfoEntity.setCreateUserId( uid );
-            appInfoEntity.setCreateTime( new Date() );
-            appInfoEntity.setIsDelete( 1 );
-            appInfoEntity.setAppSource( "rj" );
-            appInfoEntity.setAppNotes( appInfo.getAppNotes() );
-            AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
-            String appId = info.getAppId();
-            //2.类型关系表
-            AppTypeRelEntity appTypeRelEntity = new AppTypeRelEntity();
-            appTypeRelEntity.setAppId( appId );
-            appTypeRelEntity.setAppTypeId( appInfo.getAppTypeId() );
-            AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
-
-            //根据id取pc图片链接
-            String pcUrl = getFilesUrlById( appInfo.getAppPcPic() );
-
-            //根据id取phone图片链接
-            String phoneUrl = getFilesUrlById( appInfo.getAppPhonePic() );
-
-            //3.版本表
-            Set< AppTypeMode > pcSet = appInfo.getPc();
-            pcSet.forEach( pc -> {
-                String version = pc.getAppVersion();
-                if ( StringUtils.isEmpty( version ) ) {
-                    return;
-                }
-                //根据addressId获取软件存储路径
-                String addressId = pc.getAddress();
-                Map< String, Object > ad = fileResourceRepository.getFileResourceById( Integer.parseInt( addressId ) );
-                String softwareAddress = ad.get( "FILE_MAPPING_PATH" ).toString();
-                //往版本表存东西
-                MarketAppVersion marketAppVersion = new MarketAppVersion();
-                marketAppVersion.setAppId( appId );
-                marketAppVersion.setAppDownloadAddress( softwareAddress );
-                marketAppVersion.setAppVersion( version );
-                marketAppVersion.setVersionInfo( appInfo.getAppNotes() );
-                marketAppVersion.setPackageName( pc.getPackageName() );
-                marketAppVersion.setVersionSize( pc.getVersionSize() );
-                marketAppVersion.setAppStatus( "1" );
-                marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
-                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString() );
-                marketAppVersion.setAppPcPic( pcUrl );
-                marketAppVersion.setAppPhonePic( phoneUrl );
-                marketAppVersion.setCreateTime( new Date() );
-                marketAppVersion.setIsDelete( 1L );
-                marketAppVersion.setRunningPlatform( pc.getVersioInfo() );
-                marketAppVersion.setCreateUserId( uid );
-                marketAppVersionRepository.saveAndFlush( marketAppVersion );
-            } );
-        } catch ( Exception e ) {
-            log.error( "add appInfo fail {}", e );
-            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e );
-        }
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
+        return appManageService.addAppInfo( appInfo, uid );
     }
 
-    //根据文件id取文件路径
-    private String getFilesUrlById( Set< Integer > ids ) {
-        if ( CollUtil.isEmpty( ids ) ) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-        for ( Integer id : ids ) {
-            Map< String, Object > fileStorePath = fileResourceRepository.getFileResourceById( id );
-            String p = fileStorePath.get( "FILE_MAPPING_PATH" ).toString();
-            sb.append( p ).append( "," );
-        }
-        return StringUtils.substring( sb.toString(), 0, sb.length() - 1 );
-    }
 
     /**
      * 删除应用
@@ -151,6 +73,7 @@ public class AppManageController {
      * @param appIdList appId数组
      * @return
      */
+    @Transactional
     @DeleteMapping( "/{uid}" ) //TODO 是啥意思?
     public RestRecord deleteApps( @RequestBody List< String > appIdList,
                                   @PathVariable( "uid" ) String uid ) {
@@ -173,6 +96,7 @@ public class AppManageController {
      * @param appId         所需更新的应用ID
      * @return
      */
+    @Transactional
     @PutMapping( "/{appId}" )
     public RestRecord updateAppInfo( @RequestBody Map updateAppInfo,
                                      @PathVariable String appId ) {
