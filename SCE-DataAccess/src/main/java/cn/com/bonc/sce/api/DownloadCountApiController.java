@@ -224,7 +224,8 @@ public class DownloadCountApiController {
             log.info( "没有与[{}]相关联的厂商", userId );
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_110 );
         }
-        String companyId = companyInfo.get( "COMPANY_ID" ).toString();
+        int companyId = Integer.parseInt(companyInfo.get( "COMPANY_ID" ).toString());
+        log.info("用户[{}]关联的厂商为[{}]",userId,companyId);
         List< Map< String, Object > > appTypePrecent = appCountRepository.getAppTypePrecent( companyId );
         appTypePrecent.add( getAppCountByCompanyId( companyId ) );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appTypePrecent );
@@ -236,7 +237,7 @@ public class DownloadCountApiController {
      * @param companyId
      * @return
      */
-    public Map< String, Object > getAppCountByCompanyId( String companyId ) {
+    public Map< String, Object > getAppCountByCompanyId( int companyId ) {
         Map< String, Object > appCountByCompanyId = appCountRepository.getAppCountByCompanyId( companyId );
         return appCountByCompanyId;
 
