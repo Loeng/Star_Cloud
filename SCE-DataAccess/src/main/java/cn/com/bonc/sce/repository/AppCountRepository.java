@@ -131,7 +131,7 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     List< Map< String, Object > > getDownloadByType( @Param( "companyId" ) Long companyId,
                                                      @Param( "time" ) String time );
 
-    @Query( value ="SELECT\n" +
+    @Query( value = "SELECT\n" +
             "            MAT.APP_TYPE_NAME,COUNT(MAT.APP_TYPE_NAME) AS APP_TYPE_COUNT\n" +
             "            FROM\n" +
             "            (SELECT * FROM SCE_MARKET_APP_INFO WHERE IS_DELETE = 1) MAI \n" +
@@ -196,4 +196,12 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     Page< List< Map< String, Object > > > getDownloadList( @Param( "companyId" ) Long companyId,
                                                            @Param( "appType" ) int appType,
                                                            Pageable pageable );
+
+
+    /**
+     * 查询市场分析的接口（全部分类）
+     */
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE COMPANY_ID=:companyId" )
+    Page< List< Map< String, Object > > > getDownloadAllList( @Param( "companyId" ) Long companyId,
+                                                              Pageable pageable );
 }

@@ -6,10 +6,7 @@ import cn.com.bonc.sce.entity.AppTypeRelEntity;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
-import cn.com.bonc.sce.repository.AppInfoRepository;
-import cn.com.bonc.sce.repository.AppTypeRelRepository;
-import cn.com.bonc.sce.repository.FileResourceRepository;
-import cn.com.bonc.sce.repository.MarketAppVersionRepository;
+import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
 import java.util.Map;
@@ -31,7 +26,7 @@ import java.util.Set;
  **/
 @Slf4j
 @Service
-@Transactional( rollbackFor = Exception.class )
+
 public class AppManageService {
     @Autowired
     private FileResourceRepository fileResourceRepository;
@@ -44,9 +39,16 @@ public class AppManageService {
     @Autowired
     private MarketAppVersionRepository marketAppVersionRepository;
 
-    public RestRecord addAppInfo(  AppAddModel appInfo,
-                                   String uid ) {
+    @Autowired
+    private CompanyInfoRepository companyInfoRepository;
+
+    @Transactional( rollbackFor = Exception.class )
+    public RestRecord addAppInfo( AppAddModel appInfo,
+                                  String uid ) {
         try {
+            //根据uid查companyId
+            Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
+
             //取icon
             Integer iconId = appInfo.getAppIcon();
             Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
@@ -60,6 +62,7 @@ public class AppManageService {
             appInfoEntity.setIsDelete( 1 );
             appInfoEntity.setAppSource( "rj" );
             appInfoEntity.setAppNotes( appInfo.getAppNotes() );
+            appInfoEntity.setCompanyId( companyId );
             AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
             String appId = info.getAppId();
             //2.类型关系表
@@ -78,9 +81,6 @@ public class AppManageService {
             Set< AppTypeMode > pcSet = appInfo.getPc();
             pcSet.forEach( pc -> {
                 String version = pc.getAppVersion();
-                if ( StringUtils.isEmpty( version ) ) {
-                    return;
-                }
                 //根据addressId获取软件存储路径
                 String addressId = pc.getAddress();
                 Map< String, Object > ad = fileResourceRepository.getFileStorePathById( Integer.parseInt( addressId ) );
@@ -95,8 +95,7 @@ public class AppManageService {
                 marketAppVersion.setVersionSize( pc.getVersionSize() );
                 marketAppVersion.setAppStatus( "1" );
                 marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
-
-                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString().replace( "[", "" ).replace( "]", "" ) );
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString().replace( "[", "" ).replace( "]", "" ).replaceAll("\\s*", "") );
                 marketAppVersion.setAppPcPic( pcUrl );
                 marketAppVersion.setAppPhonePic( phoneUrl );
                 marketAppVersion.setCreateTime( new Date() );
@@ -107,7 +106,7 @@ public class AppManageService {
             } );
         } catch ( Exception e ) {
             log.error( "add appInfo fail {}", e );
-            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
     }

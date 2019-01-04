@@ -4,6 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
+import cn.com.bonc.sce.model.AppTypeMode;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.repository.MarketAppVersionRepository;
@@ -18,14 +19,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.*;
 
 
 /**
@@ -63,10 +64,43 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/{uid}" )
-    public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
+    public RestRecord addAppInfo( @Valid @RequestBody AppAddModel appInfo,
+                                  BindingResult results,
                                   @PathVariable( "uid" ) String uid ) {
         log.trace( "appinfo::{}", appInfo );
-        return appManageService.addAppInfo( appInfo, uid );
+        if ( results.hasErrors() ) {
+            return new RestRecord( 423, results.getFieldError().getDefaultMessage() );
+        }
+        Set< AppTypeMode > pc = appInfo.getPc();
+        for ( AppTypeMode appTypeMode : pc ) {
+            if ( StringUtils.isEmpty( appTypeMode.getAddress() ) ) {
+                return new RestRecord( 423, "请上传软件" );
+            }
+            if ( StringUtils.isEmpty( appTypeMode.getAppVersion() ) ) {
+                return new RestRecord( 423, "版本号不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( appTypeMode.getVersioInfo() ) ) {
+                return new RestRecord( 423, "运行平台不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( appTypeMode.getVersionSize() ) ) {
+                return new RestRecord( 423, "软件大小不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( appTypeMode.getPackageName() ) ) {
+                return new RestRecord( 423, "包名不能为空" );
+            }
+
+        }
+        RestRecord ret;
+        try {
+            ret = appManageService.addAppInfo( appInfo, uid );
+        } catch ( Exception e ) {
+            log.error( "{}", e.getMessage() );
+            ret = new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
+        }
+        return ret;
     }
 
 
