@@ -299,7 +299,13 @@ public class DownloadCountApiController {
             if ( companyInfo.get( "COMPANY_ID" ) == null ) {
                 return new RestRecord( 110, WebMessageConstants.SCE_PORTAL_MSG_110 );
             }
-            Page< List< Map< String, Object > > > page = appCountRepository.getDownloadList( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), appType, pageable );
+            /*判断是否查询全部类型*/
+            Page< List< Map< String, Object > > > page;
+            if ( appType == 0 ) {
+                page = appCountRepository.getDownloadAllList( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), pageable );
+            } else {
+                page = appCountRepository.getDownloadList( Long.parseLong( ( String ) companyInfo.get( "COMPANY_ID" ) ), appType, pageable );
+            }
             Map< String, Object > result = new HashMap<>( 16 );
             result.put( "data", page.getContent() );
             result.put( "totalPage", page.getTotalPages() );
