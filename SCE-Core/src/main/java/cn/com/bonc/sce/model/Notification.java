@@ -19,7 +19,7 @@ public class Notification {
     private String createUserId;
     private String updateUserId;
     private String remarks;
-    private Integer picId;
+    private Integer fileId;
 
     public Integer getId() {
         return id;
@@ -109,11 +109,11 @@ public class Notification {
         this.remarks = remarks;
     }
 
-    public Integer getPicId() {
-        return picId;
+    public Integer getFileId() {
+        return fileId;
     }
 
-    public void setPicId( Integer picId ) {
-        this.picId = picId;
+    public void setFileId( Integer fileId ) {
+        this.fileId = fileId;
     }
 }

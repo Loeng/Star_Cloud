@@ -38,4 +38,12 @@ public interface FileUploadDao {
      */
     @RequestMapping( value = "/file-upload/upload-user-info", method = RequestMethod.POST )
     RestRecord uploadUserInfo( @RequestBody List<ExcelToUser> list,@RequestParam("userType") String userType);
+
+    /**
+     * 根据id获取文件储存路径
+     * @param resourceId
+     * @return
+     */
+    @RequestMapping(value = "/file-upload/getFileResource",method = RequestMethod.GET)
+    RestRecord fileUploadDao(@RequestParam( "resourceId" ) Integer resourceId );
 }

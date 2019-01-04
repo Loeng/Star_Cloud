@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.entity.FamilyInfoEntity;
+import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +92,13 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD SET PASSWORD = ?1 WHERE USER_ID = ?2 ",nativeQuery = true )
     @Modifying
     int resetUserPassword(String isReset,String userId);
+
+
+    // 插入用户基本信息
+    @Query(value = "INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,NULL ,NULL ,0,?12,?13,NULL ,?14,?15,0,0)",
+           nativeQuery = true)
+    @Modifying
+    int addCommonUser(String user_id, String login_name, String user_name, String gender, int user_type, String mail_address, int certificate_type, String certificate_number, String phone_number, String address, Date create_time, String organization_id, Integer loginPermissionStatus, Integer isDelete, String secret);
 
 
 

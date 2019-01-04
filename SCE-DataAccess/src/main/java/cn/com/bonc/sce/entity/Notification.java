@@ -85,14 +85,14 @@ public class Notification {
     @Transient
     private String userName;
 
-    @Column(name = "PIC_ID")
-    private Integer picId;
+    @Column(name = "FILE_ID")
+    private Integer fileId;
 
     @ManyToOne
-    @JoinColumn(name="PIC_ID", referencedColumnName="RESOURCE_ID", insertable=false, updatable=false)
-    private Pic pic;
+    @JoinColumn(name="FILE_ID", referencedColumnName="RESOURCE_ID", insertable=false, updatable=false)
+    private File file;
 
     @Transient
-    private String picUrl;
+    private String fileUrl;
 
 }

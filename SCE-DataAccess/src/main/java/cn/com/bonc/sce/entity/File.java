@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="SCE_FILE_RESOURCE",schema = "STARCLOUDPORTAL")
-public class Pic {
+public class File {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE,generator="SEQ_GEN_FILE_RESOURCE")
     @SequenceGenerator(name="SEQ_GEN_FILE_RESOURCE",allocationSize=1,initialValue=1, sequenceName="SEQ_FILE_RESOURCE")

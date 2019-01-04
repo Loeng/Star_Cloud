@@ -104,10 +104,10 @@ public class FileUploadApiController {
      * @Desc : 根据id获取文件储存路径
      * @Date : 16:54 2018/12/27
      */
-    @PostMapping( "/getFileResource" )
+    @GetMapping( "/getFileResource" )
     @ResponseBody
     public RestRecord getFileResourceById( @RequestParam( "resourceId" ) Integer resourceId ) {
-        Map< String, Object > fileResource = fileResourceRepository.getFileResourceById( resourceId );
+        Map< String, Object > fileResource = fileResourceRepository.getFileStorePathById( resourceId );
         return new RestRecord( 200, fileResource );
     }
 
