@@ -17,8 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
 import java.util.Map;
@@ -31,7 +29,7 @@ import java.util.Set;
  **/
 @Slf4j
 @Service
-@Transactional( rollbackFor = Exception.class )
+
 public class AppManageService {
     @Autowired
     private FileResourceRepository fileResourceRepository;
@@ -44,6 +42,7 @@ public class AppManageService {
     @Autowired
     private MarketAppVersionRepository marketAppVersionRepository;
 
+    @Transactional( rollbackFor = Exception.class )
     public RestRecord addAppInfo(  AppAddModel appInfo,
                                    String uid ) {
         try {
@@ -104,7 +103,7 @@ public class AppManageService {
             } );
         } catch ( Exception e ) {
             log.error( "add appInfo fail {}", e );
-            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
     }

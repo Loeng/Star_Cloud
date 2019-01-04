@@ -73,33 +73,34 @@ public class AppManageController {
         }
         Set< AppTypeMode > pc = appInfo.getPc();
         for ( AppTypeMode appTypeMode : pc ) {
-            String appVersion = appTypeMode.getAppVersion();
-            String packageName = appTypeMode.getPackageName();
-            String versioInfo = appTypeMode.getVersioInfo();
-            String versionSize = appTypeMode.getVersionSize();
-            String address = appTypeMode.getAddress();
-
-            if ( StringUtils.isEmpty( address ) ) {
+            if ( StringUtils.isEmpty( appTypeMode.getAddress() ) ) {
                 return new RestRecord( 423, "请上传软件" );
             }
-            if ( StringUtils.isEmpty( appVersion ) ) {
+            if ( StringUtils.isEmpty( appTypeMode.getAppVersion() ) ) {
                 return new RestRecord( 423, "版本号不能为空" );
             }
 
-            if ( StringUtils.isEmpty( versioInfo ) ) {
+            if ( StringUtils.isEmpty( appTypeMode.getVersioInfo() ) ) {
                 return new RestRecord( 423, "运行平台不能为空" );
             }
 
-            if ( StringUtils.isEmpty( versionSize ) ) {
+            if ( StringUtils.isEmpty( appTypeMode.getVersionSize() ) ) {
                 return new RestRecord( 423, "软件大小不能为空" );
             }
 
-            if ( StringUtils.isEmpty( packageName ) ) {
+            if ( StringUtils.isEmpty( appTypeMode.getPackageName() ) ) {
                 return new RestRecord( 423, "包名不能为空" );
             }
 
         }
-        return appManageService.addAppInfo( appInfo, uid );
+        RestRecord ret;
+        try {
+            ret = appManageService.addAppInfo( appInfo, uid );
+        } catch ( Exception e ) {
+            log.error( "{}", e.getMessage() );
+            ret = new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
+        }
+        return ret;
     }
 
 
