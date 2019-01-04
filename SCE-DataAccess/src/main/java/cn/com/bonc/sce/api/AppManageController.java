@@ -4,6 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
+import cn.com.bonc.sce.model.AppTypeMode;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.repository.MarketAppVersionRepository;
@@ -17,13 +18,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.*;
+
 
 /**
  * 应用管理api
@@ -60,9 +64,41 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/{uid}" )
-    public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
+    public RestRecord addAppInfo( @Valid @RequestBody AppAddModel appInfo,
+                                  BindingResult results,
                                   @PathVariable( "uid" ) String uid ) {
         log.trace( "appinfo::{}", appInfo );
+        if ( results.hasErrors() ) {
+            return new RestRecord( 423, results.getFieldError().getDefaultMessage() );
+        }
+        Set< AppTypeMode > pc = appInfo.getPc();
+        for ( AppTypeMode appTypeMode : pc ) {
+            String appVersion = appTypeMode.getAppVersion();
+            String packageName = appTypeMode.getPackageName();
+            String versioInfo = appTypeMode.getVersioInfo();
+            String versionSize = appTypeMode.getVersionSize();
+            String address = appTypeMode.getAddress();
+
+            if ( StringUtils.isEmpty( address ) ) {
+                return new RestRecord( 423, "请上传软件" );
+            }
+            if ( StringUtils.isEmpty( appVersion ) ) {
+                return new RestRecord( 423, "版本号不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( versioInfo ) ) {
+                return new RestRecord( 423, "运行平台不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( versionSize ) ) {
+                return new RestRecord( 423, "软件大小不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( packageName ) ) {
+                return new RestRecord( 423, "包名不能为空" );
+            }
+
+        }
         return appManageService.addAppInfo( appInfo, uid );
     }
 
@@ -353,7 +389,11 @@ public class AppManageController {
             }
 
         } else {
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" );
+            List< Sort.Order > orders = new ArrayList< Sort.Order >();
+            orders.add( new Sort.Order( "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" ) );
+            orders.add( new Sort.Order( Sort.Direction.DESC, "APP_ID" ) );
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( orders ) );
+            //  Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" );
             //软件应用
             if ( appType == 0 ) {
                 //查全部

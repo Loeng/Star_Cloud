@@ -78,9 +78,6 @@ public class AppManageService {
             Set< AppTypeMode > pcSet = appInfo.getPc();
             pcSet.forEach( pc -> {
                 String version = pc.getAppVersion();
-                if ( StringUtils.isEmpty( version ) ) {
-                    return;
-                }
                 //根据addressId获取软件存储路径
                 String addressId = pc.getAddress();
                 Map< String, Object > ad = fileResourceRepository.getFileStorePathById( Integer.parseInt( addressId ) );
