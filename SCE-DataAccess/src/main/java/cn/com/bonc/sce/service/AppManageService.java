@@ -6,10 +6,7 @@ import cn.com.bonc.sce.entity.AppTypeRelEntity;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
-import cn.com.bonc.sce.repository.AppInfoRepository;
-import cn.com.bonc.sce.repository.AppTypeRelRepository;
-import cn.com.bonc.sce.repository.FileResourceRepository;
-import cn.com.bonc.sce.repository.MarketAppVersionRepository;
+import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -42,10 +39,16 @@ public class AppManageService {
     @Autowired
     private MarketAppVersionRepository marketAppVersionRepository;
 
+    @Autowired
+    private CompanyInfoRepository companyInfoRepository;
+
     @Transactional( rollbackFor = Exception.class )
-    public RestRecord addAppInfo(  AppAddModel appInfo,
-                                   String uid ) {
+    public RestRecord addAppInfo( AppAddModel appInfo,
+                                  String uid ) {
         try {
+            //根据uid查companyId
+            Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
+
             //取icon
             Integer iconId = appInfo.getAppIcon();
             Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
@@ -59,6 +62,7 @@ public class AppManageService {
             appInfoEntity.setIsDelete( 1 );
             appInfoEntity.setAppSource( "rj" );
             appInfoEntity.setAppNotes( appInfo.getAppNotes() );
+            appInfoEntity.setCompanyId( companyId );
             AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
             String appId = info.getAppId();
             //2.类型关系表
@@ -91,8 +95,7 @@ public class AppManageService {
                 marketAppVersion.setVersionSize( pc.getVersionSize() );
                 marketAppVersion.setAppStatus( "1" );
                 marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
-
-                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString().replace( "[", "" ).replace( "]", "" ) );
+                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString().replace( "[", "" ).replace( "]", "" ).replaceAll("\\s*", "") );
                 marketAppVersion.setAppPcPic( pcUrl );
                 marketAppVersion.setAppPhonePic( phoneUrl );
                 marketAppVersion.setCreateTime( new Date() );
