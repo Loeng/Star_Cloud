@@ -2,7 +2,9 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.dao.UserPasswordDao;
+import cn.com.bonc.sce.entity.Account;
 import cn.com.bonc.sce.entity.FileResourceEntity;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.ExcelToUser;
@@ -15,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,9 +107,8 @@ public class FileUploadApiController {
     @PostMapping( "/getFileResource" )
     @ResponseBody
     public RestRecord getFileResourceById( @RequestParam( "resourceId" ) Integer resourceId ) {
-        Map< String, Object > fileResource = fileResourceRepository.getFileResourceById( resourceId );
+        Map< String, Object > fileResource = fileResourceRepository.getFileStorePathById( resourceId );
         return new RestRecord( 200, fileResource );
     }
-
 
 }
