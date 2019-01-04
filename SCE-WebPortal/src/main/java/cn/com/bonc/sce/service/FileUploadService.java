@@ -159,4 +159,7 @@ public class FileUploadService {
         return new RestRecord( flag?200:500, result );
     }
 
+    public RestRecord getFileResourceById( Integer resourceId ) {
+        return fileUploadDao.fileUploadDao(resourceId);
+    }
 }

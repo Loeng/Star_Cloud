@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 通用文件上传接口
@@ -117,6 +118,24 @@ public class FileUploadController {
     public RestRecord deleteFile( @RequestBody @ApiParam( "文件id，json数组，例如[1,2,3,4]" ) List< Integer > idChar ) {
         log.trace( "删除文件id数组:{}", idChar );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+
+    /**
+     * 根据id获取文件储存路径
+     *
+     * @param resourceId
+     * @return
+     */
+    @ApiOperation( value = "根据文件id查询文件路径", notes = "根据文件id查询文件路径", httpMethod = "get" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+    } )
+    @GetMapping( "/getFileResource" )
+    @ResponseBody
+    public RestRecord getFileResourceById( @ApiParam( "文件id" ) @RequestParam( "resourceId" ) Integer resourceId ) {
+
+        return fileUploadService.getFileResourceById( resourceId );
     }
 
 }
