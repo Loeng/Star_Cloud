@@ -90,7 +90,7 @@ public class News {
 
     @ManyToOne
     @JoinColumn(name="PIC_ID", referencedColumnName="RESOURCE_ID", insertable=false, updatable=false)
-    private Pic pic;
+    private File pic;
 
     @Transient
     private String picUrl;
