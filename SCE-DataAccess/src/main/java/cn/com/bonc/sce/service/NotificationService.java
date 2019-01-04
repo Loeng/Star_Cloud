@@ -137,11 +137,11 @@ public class NotificationService {
             }
             notification.setUserName( notification.getUser().getUserName() );
             notification.setUser( null );
-            if ( notification.getPic() == null ) {
+            if ( notification.getFile() == null ) {
                 continue;
             }
-            notification.setPicUrl( notification.getPic().getFileStorePath() );
-            notification.setPic( null );
+            notification.setFileUrl( notification.getFile().getFileStorePath() );
+            notification.setFile( null );
         }
         Map< String, Object > info = new HashMap<>();
         info.put( "total", page.getTotalElements() );
