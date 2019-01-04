@@ -3,7 +3,6 @@ package cn.com.bonc.sce.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 import java.util.Objects;
 
@@ -33,6 +32,7 @@ public class MarketAppVersion implements Serializable {
     private String authDetail;
     private String appPhonePic;
     private String appPcPic;
+    private String lastVersion;
 
     @Basic
     @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
@@ -202,6 +202,16 @@ public class MarketAppVersion implements Serializable {
 
     public void setAuthDetail( String authDetail ) {
         this.authDetail = authDetail;
+    }
+
+    @Basic
+    @Column( name = "LAST_VERSION", nullable = true, length = 100 )
+    public String getLastVersion() {
+        return lastVersion;
+    }
+
+    public void setLastVersion( String lastVersion ) {
+        this.lastVersion = lastVersion;
     }
 
     @Override

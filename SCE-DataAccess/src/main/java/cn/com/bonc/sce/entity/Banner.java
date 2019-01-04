@@ -52,7 +52,7 @@ public class Banner {
 
     @ManyToOne
     @JoinColumn(name="IMAGE_URL", referencedColumnName="RESOURCE_ID", insertable=false, updatable=false)
-    private Pic pic;
+    private File pic;
 
     @Transient
     private String picUrl;
