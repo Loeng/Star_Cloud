@@ -27,8 +27,8 @@ public class UserOperationService {
     public UserOperationService( UserOperationDao userOperationDao ) {
         this.userOperationDao = userOperationDao;
     }*/
-    public RestRecord addUserInfo(Map< String, Object >  userInfo ) {
-        return userOperationDao.addUserInfo( userInfo );
+    public RestRecord addUserInfo(Integer roleId, Map<String, Object> userInfo) {
+        return userOperationDao.addUserInfo( roleId,userInfo );
     }
 
     public RestRecord updateUserInfoById(Map< String, Object >  userInfo,String userId ) {

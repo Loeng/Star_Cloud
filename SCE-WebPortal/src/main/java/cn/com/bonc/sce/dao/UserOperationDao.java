@@ -4,10 +4,8 @@ import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
 /**
@@ -23,12 +21,13 @@ public interface UserOperationDao {
     /**
      * 添加用户
      *
+     *
+     * @param roleId
      * @param userInfo
      * @return 是否添加成功
      */
-    @RequestMapping( value = "/user-info", method = RequestMethod.POST )
-    RestRecord addUserInfo(
-            @RequestBody Map< String, Object > userInfo );
+    @RequestMapping( value = "/user-info/addUser/{roleId}", method = RequestMethod.POST )
+    RestRecord addUserInfo( @PathVariable("roleId") Integer roleId, @RequestBody Map<String, Object> userInfo);
 
 
     /**

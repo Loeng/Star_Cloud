@@ -43,10 +43,12 @@ public class UserOperationController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
-    @PostMapping
+    @PostMapping("/addUser/{roleId}")
     @ResponseBody
-    public RestRecord addUserInfo( @RequestBody @ApiParam(example ="{'userId':1231,'userName':'loader','address':'成都市青羊区'...}" )  Map map ) {
-        return userOperationService.addUserInfo( map );
+    public RestRecord addUserInfo(
+            @PathVariable("roleId") @ApiParam(name = "roleId",value = "角色ID",required = true) Integer roleId,
+            @RequestBody @ApiParam(example ="{'userId':1231,'userName':'loader','address':'成都市青羊区'...}" )  Map map ) {
+        return userOperationService.addUserInfo( roleId,map );
     }
 
     /**
