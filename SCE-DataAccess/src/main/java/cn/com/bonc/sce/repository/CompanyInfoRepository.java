@@ -38,7 +38,7 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "GROUP BY SMC2.\"COMPANY_ID\"  ) COUNT_TEMP ON SMC.\"COMPANY_ID\" = COUNT_TEMP.\"COMPANY_ID\" \n" +
                     "WHERE SMC.IS_DELETE=1 AND SMC.COMPANY_ID=:companyId " )
     Page< List< Map< String, Object > > > findCompanyInfoByCompanyId( @Param( "companyId" ) Long companyId,
-                                                           Pageable pageable );
+                                                                      Pageable pageable );
 
 
     @Query( nativeQuery = true,
@@ -58,5 +58,14 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "GROUP BY SMC2.\"COMPANY_ID\"  ) COUNT_TEMP ON SMC.\"COMPANY_ID\" = COUNT_TEMP.\"COMPANY_ID\" \n" +
                     "WHERE SMC.IS_DELETE=1 AND SMC.COMPANY_NAME LIKE  CONCAT('%',CONCAT(:companyName,'%'))" )
     Page< List< Map< String, Object > > > findCompanyInfoByCompanyName( @Param( "companyName" ) String companyName,
-                                                                      Pageable pageable );
+                                                                        Pageable pageable );
+
+    /**
+     * 根据用户id 查询厂家id
+     *
+     * @param uid
+     * @return
+     */
+    @Query( nativeQuery = true, value = "SELECT COMPANY_ID FROM STARCLOUDPORTAL.SCE_INFO_COMPANY WHERE USER_ID = :uid" )
+    Long getCompanyIdByUid( @Param( "uid" ) String uid );
 }
