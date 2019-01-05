@@ -237,12 +237,13 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( updateTime, that.updateTime ) &&
                 Objects.equals( newFeatures, that.newFeatures ) &&
                 Objects.equals( packageName, that.packageName ) &&
-                Objects.equals( authDetail, that.authDetail );
+                Objects.equals( authDetail, that.authDetail ) &&
+                Objects.equals( lastVersion, that.lastVersion );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, lastVersion );
     }
 }
