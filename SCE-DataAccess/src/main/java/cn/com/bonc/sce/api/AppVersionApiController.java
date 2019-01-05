@@ -174,6 +174,7 @@ public class AppVersionApiController {
             appVersionInfo.setAppPcPic( pcUrl );
             appVersionInfo.setAppPhonePic( phoneUrl );
             appVersionInfo.setIsDelete( 1L );
+            appVersionInfo.setAppStatus( "2" );
             appVersionInfo.setCreateTime( new Date() );
             appVersionInfo.setCreateUserId( userId );
             appVersionInfo.setAppId( appId );
