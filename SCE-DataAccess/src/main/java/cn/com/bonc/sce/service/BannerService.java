@@ -107,7 +107,7 @@ public class BannerService {
             if ( banner.getPic() == null ) {
                 continue;
             }
-            banner.setPicUrl( banner.getPic().getFileMappingPath() );
+            banner.setPicUrl( banner.getPic().getFileStorePath() );
             banner.setPic( null );
         }
         return new RestRecord( 200, list );
@@ -124,7 +124,7 @@ public class BannerService {
             if ( banner.getPic() == null ) {
                 continue;
             }
-            banner.setPicUrl( banner.getPic().getFileMappingPath() );
+            banner.setPicUrl( banner.getPic().getFileStorePath() );
             banner.setPic( null );
         }
         return new RestRecord( 200, list );
