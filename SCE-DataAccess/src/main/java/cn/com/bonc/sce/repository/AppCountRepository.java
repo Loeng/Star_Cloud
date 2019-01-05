@@ -134,19 +134,19 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     @Query( value = "SELECT\n" +
             "            MAT.APP_TYPE_NAME,COUNT(MAT.APP_TYPE_NAME) AS APP_TYPE_COUNT\n" +
             "            FROM\n" +
-            "            (SELECT * FROM SCE_MARKET_APP_INFO WHERE IS_DELETE = 1) MAI \n" +
+            "            (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_DELETE = 1) MAI \n" +
             "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY SMC ON SMC.COMPANY_ID = MAI.COMPANY_ID\n" +
             "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL MAAR ON MAAR.APP_ID = MAI.APP_ID\n" +
             "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE MAT ON MAAR.APP_TYPE_ID = MAT.APP_TYPE_ID\n" +
             "            WHERE SMC.COMPANY_ID=?1\n" +
             "            GROUP BY\n" +
             "            MAT.APP_TYPE_NAME", nativeQuery = true )
-    List< Map< String, Object > > getAppTypePrecent( @Param( "companyId" ) String companyId );
+    List< Map< String, Object > > getAppTypePrecent( @Param( "companyId" ) int companyId );
 
 
     @Query( value = "\tSELECT  COUNT(COMPANY_ID) AS APP_COUNT  FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO \n" +
             "\tWHERE COMPANY_ID = ?1 AND IS_DELETE = 1 GROUP BY COMPANY_ID ", nativeQuery = true )
-    Map< String, Object > getAppCountByCompanyId( @Param( "companyId" ) String companyId );
+    Map< String, Object > getAppCountByCompanyId( @Param( "companyId" ) int companyId );
 
     /**
      * 查询收藏量变化(总量)
