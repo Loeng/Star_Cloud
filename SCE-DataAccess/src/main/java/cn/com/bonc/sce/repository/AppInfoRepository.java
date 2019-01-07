@@ -107,8 +107,8 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\tTEMPB.CREATE_TIME,\n" +
             "\tTEMPB.APP_STATUS,\n" +
             "\tAI.APP_LINK," +
-            "\tDECODE( AO.USER_ID, :userId, '1', '0' ) IS_OPEN,\n" +
-            "\tDECODE( SUAC.USER_ID, :userId, '1', '0' ) IS_COLLECTION,\n" +
+            "\tNVL2( AO.USER_ID,'1', '0' ) IS_OPEN,\n" +
+            "\tNVL2( SUAC.USER_ID, '1', '0' ) IS_COLLECTION,\n" +
             "\tNVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT \n" +
             "FROM\n" +
             "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
@@ -155,9 +155,9 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "\tAPP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)"
     )
     Page< List< Map< String, Object > > > getAppListInfoByTypeIdandPlatform( @Param( "typeId" ) Integer typeId,
-                                                               @Param( "userId" ) String userId,
-                                                               @Param( "platform" ) String platform,
-                                                               Pageable page );
+                                                                             @Param( "userId" ) String userId,
+                                                                             @Param( "platform" ) String platform,
+                                                                             Pageable page );
 
     //查询全部类型 根据时间或下载量排序
     @Query( nativeQuery = true, value = "SELECT DISTINCT \n" +
@@ -169,8 +169,8 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "\tTEMPB.CREATE_TIME,\n" +
             "\tTEMPB.APP_STATUS,\n" +
             "\tAI.APP_LINK," +
-            "\tDECODE( AO.USER_ID, :userId, '1', '0' ) IS_OPEN,\n" +
-            "\tDECODE( SUAC.USER_ID, :userId, '1', '0' ) IS_COLLECTION,\n" +
+            "\tNVL2( AO.USER_ID,'1', '0' ) IS_OPEN,\n" +
+            "\tNVL2( SUAC.USER_ID,'1', '0' ) IS_COLLECTION,\n" +
             "\tNVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT \n" +
             "FROM\n" +
             "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
@@ -213,10 +213,10 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
                     "\tAND SUAC.USER_ID = :userId \n" +
                     "WHERE\n" +
-                    "\tAPP_SOURCE = :platform ")
+                    "\tAPP_SOURCE = :platform " )
     Page< List< Map< String, Object > > > getAppListInfoByPlatform( @Param( "userId" ) String userId,
-                                                       @Param( "platform" ) String platform,
-                                                       Pageable pageable );
+                                                                    @Param( "platform" ) String platform,
+                                                                    Pageable pageable );
 
 
     @Query( value = "SELECT * FROM STARCLOUDMARKET.V_APP_DETAIL_INFO WHERE APP_ID = ?1 ", nativeQuery = true )
