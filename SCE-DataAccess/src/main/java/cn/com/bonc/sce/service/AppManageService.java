@@ -43,71 +43,66 @@ public class AppManageService {
     private CompanyInfoRepository companyInfoRepository;
 
     @Transactional( rollbackFor = Exception.class )
-    public RestRecord addAppInfo( AppAddModel appInfo,
-                                  String uid ) {
-        try {
-            //根据uid查companyId
-            Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
+    public RestRecord addAppInfo( AppAddModel appInfo, String uid ) throws Exception {
+        //根据uid查companyId
+        Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
 
-            //取icon
-            Integer iconId = appInfo.getAppIcon();
-            Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
-            String iconAddress = iconAd.get( "FILE_STORE_PATH" ).toString();
-            //1.appinfo表
-            AppInfoEntity appInfoEntity = new AppInfoEntity();
-            appInfoEntity.setAppIcon( iconAddress );
-            appInfoEntity.setAppName( appInfo.getAppName() );
-            appInfoEntity.setCreateUserId( uid );
-            appInfoEntity.setCreateTime( new Date() );
-            appInfoEntity.setIsDelete( 1 );
-            appInfoEntity.setAppSource( "rj" );
-            appInfoEntity.setAppNotes( appInfo.getAppNotes() );
-            appInfoEntity.setCompanyId( companyId );
-            AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
-            String appId = info.getAppId();
-            //2.类型关系表
-            AppTypeRelEntity appTypeRelEntity = new AppTypeRelEntity();
-            appTypeRelEntity.setAppId( appId );
-            appTypeRelEntity.setAppTypeId( appInfo.getAppTypeId() );
-            AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
+        //取icon
+        Integer iconId = appInfo.getAppIcon();
+        Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
+        String iconAddress = iconAd.get( "FILE_STORE_PATH" ).toString();
+        //1.appinfo表
+        AppInfoEntity appInfoEntity = new AppInfoEntity();
+        appInfoEntity.setAppIcon( iconAddress );
+        appInfoEntity.setAppName( appInfo.getAppName() );
+        appInfoEntity.setCreateUserId( uid );
+        appInfoEntity.setCreateTime( new Date() );
+        appInfoEntity.setIsDelete( 1 );
+        appInfoEntity.setAppSource( "rj" );
+        appInfoEntity.setAppNotes( appInfo.getAppNotes() );
+        appInfoEntity.setCompanyId( companyId );
+        AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
+        String appId = info.getAppId();
+        //2.类型关系表
+        AppTypeRelEntity appTypeRelEntity = new AppTypeRelEntity();
+        appTypeRelEntity.setAppId( appId );
+        appTypeRelEntity.setAppTypeId( appInfo.getAppTypeId() );
+        AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
 
-            //根据id取pc图片链接
-            String pcUrl = getFilesUrlById( appInfo.getAppPcPic() );
+        //根据id取pc图片链接
+        String pcUrl = getFilesUrlById( appInfo.getAppPcPic() );
 
-            //根据id取phone图片链接
-            String phoneUrl = getFilesUrlById( appInfo.getAppPhonePic() );
+        //根据id取phone图片链接
+        String phoneUrl = getFilesUrlById( appInfo.getAppPhonePic() );
 
-            //3.版本表
-            Set< AppTypeMode > pcSet = appInfo.getPc();
-            pcSet.forEach( pc -> {
-                String version = pc.getAppVersion();
-                //根据addressId获取软件存储路径
-                String addressId = pc.getAddress();
-                Map< String, Object > ad = fileResourceRepository.getFileStorePathById( Integer.parseInt( addressId ) );
-                String softwareAddress = ad.get( "FILE_STORE_PATH" ).toString();
-                //往版本表存东西
-                MarketAppVersion marketAppVersion = new MarketAppVersion();
-                marketAppVersion.setAppId( appId );
-                marketAppVersion.setAppDownloadAddress( softwareAddress );
-                marketAppVersion.setAppVersion( version );
-                marketAppVersion.setVersionInfo( appInfo.getAppNotes() );
-                marketAppVersion.setPackageName( pc.getPackageName() );
-                marketAppVersion.setVersionSize( pc.getVersionSize() );
-                marketAppVersion.setAppStatus( "1" );
-                marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
-                marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString().replace( "[", "" ).replace( "]", "" ).replaceAll("\\s*", "") );
-                marketAppVersion.setAppPcPic( pcUrl );
-                marketAppVersion.setAppPhonePic( phoneUrl );
-                marketAppVersion.setCreateTime( new Date() );
-                marketAppVersion.setIsDelete( 1L );
-                marketAppVersion.setRunningPlatform( pc.getVersioInfo() );
-                marketAppVersion.setCreateUserId( uid );
-                marketAppVersionRepository.saveAndFlush( marketAppVersion );
-            } );
-        } catch ( Exception e ) {
-            log.error( "add appInfo fail {}", e );
-            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
-        }
+        //3.版本表
+        Set< AppTypeMode > pcSet = appInfo.getPc();
+        pcSet.forEach( pc -> {
+            String version = pc.getAppVersion();
+            //根据addressId获取软件存储路径
+            String addressId = pc.getAddress();
+            Map< String, Object > ad = fileResourceRepository.getFileStorePathById( Integer.parseInt( addressId ) );
+            String softwareAddress = ad.get( "FILE_STORE_PATH" ).toString();
+            //往版本表存东西
+            MarketAppVersion marketAppVersion = new MarketAppVersion();
+            marketAppVersion.setAppId( appId );
+            marketAppVersion.setAppDownloadAddress( softwareAddress );
+            marketAppVersion.setAppVersion( version );
+            marketAppVersion.setVersionInfo( appInfo.getAppNotes() );
+            marketAppVersion.setPackageName( pc.getPackageName() );
+            marketAppVersion.setVersionSize( pc.getVersionSize() );
+            marketAppVersion.setAppStatus( "1" );
+            marketAppVersion.setNewFeatures( appInfo.getNewFeatures() );
+            marketAppVersion.setAuthDetail( appInfo.getAuthDetail().toString().replace( "[", "" ).replace( "]", "" ).replaceAll( "\\s*", "" ) );
+            marketAppVersion.setAppPcPic( pcUrl );
+            marketAppVersion.setAppPhonePic( phoneUrl );
+            marketAppVersion.setCreateTime( new Date() );
+            marketAppVersion.setIsDelete( 1L );
+            marketAppVersion.setRunningPlatform( pc.getVersioInfo() );
+            marketAppVersion.setCreateUserId( uid );
+            marketAppVersionRepository.saveAndFlush( marketAppVersion );
+        } );
+
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
     }
 
