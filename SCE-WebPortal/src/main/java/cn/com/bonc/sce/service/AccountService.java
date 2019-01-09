@@ -41,7 +41,8 @@ public class AccountService {
     public RestRecord sendSecurityPhoneValid( String phone ) {
         String valid;
         try {
-            valid = VaildSecurityUtils.randomStr();
+            //valid = VaildSecurityUtils.randomStr();
+            valid="123456";
             VaildSecurityUtils.addValid(getAccountEncryptionCode(phone,valid));
             SendMessage.postMsgToPhone(valid,phone);
         } catch ( UnsupportedEncodingException e ) {
