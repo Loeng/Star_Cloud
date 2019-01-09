@@ -32,7 +32,7 @@ public class MarketAppVersion implements Serializable {
     private String authDetail;
     private String appPhonePic;
     private String appPcPic;
-    private String lastVersion;
+    private String currentVersion;
 
     @Basic
     @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
@@ -205,13 +205,13 @@ public class MarketAppVersion implements Serializable {
     }
 
     @Basic
-    @Column( name = "LAST_VERSION", nullable = true, length = 100 )
-    public String getLastVersion() {
-        return lastVersion;
+    @Column( name = "CURRENT_VERSION", nullable = true, length = 100 )
+    public String getCurrentVersion() {
+        return currentVersion;
     }
 
-    public void setLastVersion( String lastVersion ) {
-        this.lastVersion = lastVersion;
+    public void setCurrentVersion( String currentVersion ) {
+        this.currentVersion = currentVersion;
     }
 
     @Override
@@ -238,12 +238,12 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( newFeatures, that.newFeatures ) &&
                 Objects.equals( packageName, that.packageName ) &&
                 Objects.equals( authDetail, that.authDetail ) &&
-                Objects.equals( lastVersion, that.lastVersion );
+                Objects.equals( currentVersion, that.currentVersion );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, lastVersion );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion );
     }
 }
