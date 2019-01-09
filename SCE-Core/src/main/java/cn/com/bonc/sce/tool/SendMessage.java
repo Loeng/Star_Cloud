@@ -40,25 +40,25 @@ public class SendMessage {
         DateFormat bf = new SimpleDateFormat( "yyyy-MM-dd  HH:mm:ss" );
         String sendtime = bf.format( now );
         sb.append(
-                "<Group Login_Name=\"fjxydsj\" Login_Pwd=\"A811F841A5C62BD7D3025BB28C6A1A3D\" OpKind=\"0\" InterFaceID=\"0\" SerType=\"test\">" );
+                "<Group Login_Name=\"fjxydsj\" Login_Pwd=\"A811F841A5C62BD7D3025BB28C6A1A3D\" OpKind=\"0\" InterFaceID=\"0\" SerType=\"Smit\">" );
         sb.append( "<E_Time>" + sendtime + "</E_Time>" );
         sb.append( "<Item>" );
         sb.append( "<Task>" );
         sb.append( "<Recive_Phone_Number>" + phone + "</Recive_Phone_Number>" );
-        sb.append( "<Content><![CDATA[" + new String( msg.getBytes( "utf-8" ), "utf-8" ) + "]]></Content>" );
+        sb.append( "<Content><![CDATA[" +  msg + "]]></Content>" );
         sb.append( "<Search_ID>test</Search_ID>" );
         sb.append( "</Task>" );
         sb.append( "</Item>" );
         sb.append( "</Group>" );
         System.out.println( sb.toString() );
-        return sb.toString();
+        return new String(sb.toString().getBytes(),"gbk" );
     }
 
     public static void main( String[] args ) throws UnsupportedEncodingException {
 
         String str = "验证码:6462";
 
-        System.out.println( postMsgToPhone( new String( "验证码:6462".getBytes(), "utf-8" ), "18227587920" ) );
+        System.out.println( postMsgToPhone(str, "18227587920" ) );
 
     }
 
