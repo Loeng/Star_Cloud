@@ -10,6 +10,11 @@ spring:
   cloud:
     config:
       uri: http://localhost:10100
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 300MB
+      max-request-size: 10240MB
 logging:
 #  file: ./logs/dev_app.log
   pattern:
