@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,8 +49,6 @@ public class FileUploadService {
     private FileUploadDao fileUploadDao;
 
 
-
-
     @Autowired
     public FileUploadService( FileUploadDao fileUploadDao ) {
         this.fileUploadDao = fileUploadDao;
@@ -59,7 +59,9 @@ public class FileUploadService {
             byte[] bytes = multipartFile.getBytes();
             String originFileName = multipartFile.getOriginalFilename();
             String suffixName = FileUploadUtil.getFileSuffix( originFileName );
-            String saveFileName = UUID.randomUUID().toString().replace( "-", "" ) + suffixName;
+            String prefixName = FileUploadUtil.getFilePrefix( originFileName );
+            String date = new SimpleDateFormat( "yyyyMMddHHmmss" ).format( new Date() );
+            String saveFileName = prefixName + date+suffixName;
 
             String fileStorePath;
             String fileMappingPath;
@@ -102,19 +104,20 @@ public class FileUploadService {
 
     public RestRecord uploadUserInfo( List< ExcelToUser > list, String userType ) {
 
-        return fileUploadDao.uploadUserInfo( list , userType );
+        return fileUploadDao.uploadUserInfo( list, userType );
 
     }
-    public RestRecord uploadMultipartAll ( MultipartFile[] multipartFileAll, String fileType ) {
-        Object[] result = new Object[multipartFileAll.length];
+
+    public RestRecord uploadMultipartAll( MultipartFile[] multipartFileAll, String fileType ) {
+        Object[] result = new Object[ multipartFileAll.length ];
         boolean flag = false;
-        for (int i = 0 ; i < multipartFileAll.length ; i++){
-            MultipartFile multipartFile = multipartFileAll[i];
+        for ( int i = 0; i < multipartFileAll.length; i++ ) {
+            MultipartFile multipartFile = multipartFileAll[ i ];
             try {
                 byte[] bytes = multipartFile.getBytes();
                 String originFileName = multipartFile.getOriginalFilename();
                 String suffixName = FileUploadUtil.getFileSuffix( originFileName );
-                String saveFileName = UUID.randomUUID().toString().replace( "-","" ) + suffixName;
+                String saveFileName = UUID.randomUUID().toString().replace( "-", "" ) + suffixName;
 
                 String fileStorePath;
                 String fileMappingPath;
@@ -139,27 +142,27 @@ public class FileUploadService {
                         break;
 
                     default:
-                        result[i] = WebMessageConstants.SCE_PORTAL_MSG_452;
+                        result[ i ] = WebMessageConstants.SCE_PORTAL_MSG_452;
                         continue;
                 }
 
-                boolean status = FileUploadUtil.uploadFile( bytes, saveFileName, fileSavePath  );
+                boolean status = FileUploadUtil.uploadFile( bytes, saveFileName, fileSavePath );
 
                 if ( status ) {
                     flag = true;
                     RestRecord restRecord = fileUploadDao.saveUploadFile( fileType, fileStorePath, fileMappingPath );
-                    result[i] = restRecord.getMsg()==null?restRecord.getData():restRecord.getMsg();
+                    result[ i ] = restRecord.getMsg() == null ? restRecord.getData() : restRecord.getMsg();
                 } else {
-                    result[i] = WebMessageConstants.SCE_PORTAL_MSG_500;
+                    result[ i ] = WebMessageConstants.SCE_PORTAL_MSG_500;
                 }
             } catch ( IOException e ) {
-                result[i] = WebMessageConstants.SCE_PORTAL_MSG_501;
+                result[ i ] = WebMessageConstants.SCE_PORTAL_MSG_501;
             }
         }
-        return new RestRecord( flag?200:500, result );
+        return new RestRecord( flag ? 200 : 500, result );
     }
 
     public RestRecord getFileResourceById( Integer resourceId ) {
-        return fileUploadDao.fileUploadDao(resourceId);
+        return fileUploadDao.fileUploadDao( resourceId );
     }
 }
