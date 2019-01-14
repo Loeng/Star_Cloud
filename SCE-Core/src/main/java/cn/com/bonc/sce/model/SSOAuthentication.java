@@ -30,5 +30,4 @@ public class SSOAuthentication {
     private String ticketReceiveUrl;
     @ApiModelProperty( name = "需要和身份令牌一同传递的身份信息", example = "&extra0=IPhoneX&extra1=red", required = false , position = 5)
     private String extraInfo;
-
 }

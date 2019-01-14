@@ -13,10 +13,17 @@ public interface WebMessageConstants {
      * 100 - 199
      */
     String SCE_PORTAL_MSG_100 = "不支持的登录类型";
-    String SCE_PORTAL_MSG_101 = "找不到用户";
-    String SCE_PORTAL_MSG_102 = "密码错误";
+    String SCE_PORTAL_MSG_101 = "用户名或密码错误";
+    String SCE_PORTAL_MSG_102 = "用户名或密码错误";
     String SCE_PORTAL_MSG_103 = "账户已停用";
     String SCE_PORTAL_MSG_104 = "账户已注销";
+
+    String SCE_PORTAL_MSG_120 = "用户 ticket 过期或无效";
+
+    String SCE_PORTAL_MSG_150 = "无效或过期的token";
+    String SCE_PORTAL_MSG_151 = "缺少应用 ID 或 TOKEN 信息";
+    String SCE_PORTAL_MSG_152 = "应用 ID 或 TOKEN 无效";
+
 
     String SCE_PORTAL_MSG_110 = "没有关联的厂商";
     /**

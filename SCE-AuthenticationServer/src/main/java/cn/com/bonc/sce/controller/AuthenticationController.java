@@ -74,7 +74,7 @@ public class AuthenticationController {
          * 验证数据有效性并验证用户登录
          */
         if ( authentication.getAuthType() == AUTH_TYPE_0 ) {
-            log.info( MessageConstants.SCE_MSG_1001, authentication.getIdentifier(), request.getRemoteAddr() );
+            log.info( MessageConstants.SCE_MSG_1001, authentication.getIdentifier(), request.getRemoteHost() );
             authenticatedUser = userService.getUserByLoginName( authentication.getIdentifier() );
         } else if ( authentication.getAuthType() == AUTH_TYPE_1 ) {
             unSupportedAuthType = true;
@@ -99,7 +99,7 @@ public class AuthenticationController {
         } else {
             // 密码不匹配
             if ( !authentication.getPassword().equals( authenticatedUser.getAccount().getPassword() ) ) {
-                return new RestRecord( 102, WebMessageConstants.SCE_PORTAL_MSG_102 );
+                return new RestRecord( 101, WebMessageConstants.SCE_PORTAL_MSG_101 );
             }
             // 验证账户是否停用
             if ( authenticatedUser.getLoginPermissionStatus() == 0 ) {
