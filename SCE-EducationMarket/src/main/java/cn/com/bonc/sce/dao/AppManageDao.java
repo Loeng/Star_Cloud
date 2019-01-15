@@ -117,7 +117,7 @@ public interface AppManageDao {
      * @author tlz
      */
     @RequestMapping( value = "/manage-app/app-on-shelf", method = RequestMethod.POST )
-    RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId );
+    RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< Map > appIdList, @RequestParam( "userId" ) String userId );
 
     /**
      * 查询[应用审核状态码表]中相关信息
