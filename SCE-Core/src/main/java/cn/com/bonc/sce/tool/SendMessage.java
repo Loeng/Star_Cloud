@@ -58,7 +58,7 @@ public class SendMessage {
 
         String str = "验证码:6462";
 
-        System.out.println( postMsgToPhone(str, "18227587920" ) );
+        System.out.println( postMsgToPhone(new String(str.getBytes(),"gbk"), "18227587920" ) );
 
     }
 

@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author BTW
@@ -22,6 +24,17 @@ public class FileUploadUtil {
             return fileName.substring( fileName.lastIndexOf(".") );
         }
     }
+
+    public static String getFilePrefix ( String fileName ) {
+        int suffixIndex = fileName.lastIndexOf( "." );
+        if ( suffixIndex == -1 ) {
+            return fileName;
+        } else {
+            return fileName.substring( 0,fileName.lastIndexOf(".") );
+        }
+    }
+
+
 
     public static boolean uploadFile ( byte[] bytes, String saveFileName, String fileSavePath ) {
         Path path = Paths.get( fileSavePath, saveFileName );

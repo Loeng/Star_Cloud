@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 厂商应用上架审核申请
@@ -44,7 +45,7 @@ public class AppApplyController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord applyAppOnShelf ( @RequestBody @ApiParam( name = "appIdList", value = "申请上/下架的应用ID", required = true )  List<String>  appIdList,
+    public RestRecord applyAppOnShelf ( @RequestBody @ApiParam( name = "appIdList", value = "申请上/下架的应用ID", required = true )  List<Map>  appIdList,
                                         @RequestParam( "applyType" ) @ApiParam( name = "applyType", value = "请求的业务类型（1：上架 0：下架）", required = true, allowableValues = "0,1" ) Integer applyType,
                                         @RequestParam( "userId" ) @ApiParam( name = "userId",  value = "提出上/下架申请的用户ID", required = true ) String userId ) {
 

@@ -111,7 +111,7 @@ public class AppManageController {
      * @return
      */
     @Transactional
-    @DeleteMapping( "/{uid}" ) //TODO 是啥意思?
+    @DeleteMapping( "/{uid}" )
     public RestRecord deleteApps( @RequestBody List< String > appIdList,
                                   @PathVariable( "uid" ) String uid ) {
         //应用info表  是否删除字段改为1
@@ -304,10 +304,14 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/app-on-shelf" )
-    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< String > appIdList, @RequestParam( "userId" ) String userId ) {
-
+    public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< Map > appIdList, @RequestParam( "userId" ) String userId ) {
         String type = String.valueOf( applyType );
-        int appInfo = marketAppVersionRepository.applyAppOnShelfByUserId( type, appIdList, userId );
+        int appInfo = 0;
+        for ( Map map:appIdList ) {
+            String appId = map.get( "APP_ID" ).toString();
+            String appVersion = map.get( "APP_VERSION" ).toString();
+            appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId ,appId,appVersion);
+        }
         return new RestRecord( 200, appInfo );
     }
 

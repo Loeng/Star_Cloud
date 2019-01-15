@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -25,7 +26,7 @@ public class AppApplyService {
         this.appManageDao = appManageDao;
     }
 
-    public RestRecord applyAppOnShelf(Integer applyType, List< String > appIdList, String userId ) {
+    public RestRecord applyAppOnShelf( Integer applyType, List< Map > appIdList, String userId ) {
         return appManageDao.applyAppOnShelf(applyType, appIdList, userId );
     }
 

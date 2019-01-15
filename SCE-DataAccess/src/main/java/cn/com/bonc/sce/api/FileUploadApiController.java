@@ -93,7 +93,7 @@ public class FileUploadApiController {
                     loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
                     excelToUser.getPhoneNumber(), excelToUser.getAddress(), secret );
 
-           userPasswordDao.save( userPassword );
+            userPasswordDao.save( userPassword );
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, list.size() );
 
