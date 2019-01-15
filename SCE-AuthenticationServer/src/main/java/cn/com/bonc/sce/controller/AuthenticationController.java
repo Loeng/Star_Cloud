@@ -7,15 +7,28 @@ import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.LoginService;
 import cn.com.bonc.sce.service.UserService;
+import cn.com.bonc.sce.utils.GeneratorVerifyCode;
+import com.netflix.client.http.HttpResponse;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotBlank;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Leucippus
@@ -116,5 +129,79 @@ public class AuthenticationController {
         } else {
             return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
         }
+    }
+
+    /**
+     * 生成并获取验证码
+     * @Return 验证码图片路径
+     */
+    @ApiOperation(value = "验证码生成接口",notes = "验证码生成接口",httpMethod = "GET")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = WebMessageConstants.SCE_PORTAL_MSG_200,response = RestRecord.class)
+    })
+    @GetMapping("/generator")
+    @ResponseBody
+    public RestRecord generator(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        response.setHeader("Pragma", "no-cache");
+        response.setContentType("image/jpeg");
+        GeneratorVerifyCode generator = new GeneratorVerifyCode();
+        OutputStream os = response.getOutputStream();
+        String verifyCode_flag = UUID.randomUUID().toString().replaceAll("-", ""); // 标志当前用户所属的验证码信息
+        try {
+            log.info("开始调用验证码生成器。。。");
+            Map<String, Object> verifyCode = generator.drawCode(os);
+            request.getSession().setAttribute(verifyCode_flag,verifyCode);
+            request.getSession().setMaxInactiveInterval(60); // 设置有效时间1分钟
+            ImageIO.write((BufferedImage) verifyCode.get("image"), "jpg", os);
+            response.addHeader("status","success");
+            response.addHeader("flag",verifyCode_flag);
+            log.info("图形验证码生成成功，验证码信息:{},用户标志:{}",verifyCode,verifyCode_flag);
+        } catch (IOException e) {
+            response.addHeader("status","fail");
+            log.error("验证码生成失败，异常信息:{}",e);
+        }finally {
+            os.flush();
+            os.close();
+        }
+        return null;
+    }
+
+    /**
+     * 验证码输入验证
+     */
+    @ApiOperation(value = "验证码验证接口",notes = "验证码验证接口",httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code",value = "用户输入的验证码",paramType = "query",required = true),
+            @ApiImplicitParam(name = "flag",value = "用户标志",paramType = "query",required = true)
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200,message = WebMessageConstants.SCE_PORTAL_MSG_200,response = RestRecord.class)
+    })
+    @GetMapping("/verify")
+    public RestRecord verify(HttpSession session, @RequestParam("code")  String verifyCode, @RequestParam("flag")   String flag){
+        if (null != session.getAttribute(flag)){
+            Map<String,Object> verifyInfo = (Map<String, Object>) session.getAttribute(flag);
+            String code  = verifyInfo.get("code").toString();
+            if (StringUtils.isEmpty(verifyCode)){
+                log.info("验证码为空,请重新输入!");
+                return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_410,"验证码为空，请重新输入!");
+            }
+            else if (code.equals(verifyCode)){
+                log.info("验证成功!");
+                session.removeAttribute(flag);
+                return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,"验证成功");
+            }
+            else {
+                log.info("验证失败!");
+                return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_410,"验证失败");
+            }
+        }else {
+            log.info("验证码已失效，请刷新页面重新获取!");
+            return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_410,"验证码已失效，请刷新页面重新获取!");
+        }
+
     }
 }
