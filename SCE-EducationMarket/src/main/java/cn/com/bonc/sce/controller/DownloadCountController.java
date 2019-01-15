@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 应用下载统计接口
- *
+ * http://localhost:10301/count/
  * @author yuehaibo
  * @version 0.1
  * @since 2018/12/14 14:26
@@ -118,7 +118,7 @@ public class DownloadCountController {
     @ResponseBody
     public RestRecord getDownloadChange(
             @CurrentUserId @ApiParam( hidden = true ) String userId,
-            @RequestParam( value = "startTime", required = false, defaultValue = "2018-12" ) @ApiParam( "查询月份" ) String time ) {
+            @RequestParam( value = "startTime", required = false ) @ApiParam( "查询月份" ) String time ) {
 
         return countService.getDownloadByType( userId, time );
     }

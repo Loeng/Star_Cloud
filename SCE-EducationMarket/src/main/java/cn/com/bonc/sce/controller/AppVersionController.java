@@ -131,7 +131,7 @@ public class AppVersionController {
     @ResponseBody
     public RestRecord appVersionUpdateApprove(
             @CurrentUserId @ApiParam( hidden = true ) String userId,
-            @RequestBody @ApiParam( "需通过审核的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList ) {
+            @RequestBody @ApiParam( "需通过审核的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\",\"currentVersion\":\"v1.0\"},{略}]" ) List< Map< String, String > > approveList ) {
         return appAuditingService.appVersionUpdateApprove( userId, approveList );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
     }

@@ -125,11 +125,18 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
      * @param time      月份
      * @return
      */
-    @Query( value = "SELECT t.APP_TYPE_NAME,count(t.APP_TYPE_NAME) AS COUNT FROM \"STARCLOUDMARKET\".\"DOWNLOAD_CHANGE_VIEW\" t \n" +
-            "WHERE COMPANY_ID =:companyId AND t.DOWNLOAD_TIME >= to_date(:time, 'yyyy-mm' ) \n" +
-            "GROUP BY t.APP_TYPE_NAME", nativeQuery = true )
+    @Query( value = "SELECT\n" +
+            "\t( CASE WHEN t.APP_TYPE_NAME IS NULL THEN '未知' ELSE t.APP_TYPE_NAME END ) AS APP_TYPE_NAME ,\n" +
+            "\tcount( 1 ) AS COUNT \n" +
+            "FROM\n" +
+            "\t\"STARCLOUDMARKET\".\"DOWNLOAD_CHANGE_VIEW\" t \n" +
+            "WHERE\n" +
+            "\tCOMPANY_ID = :companyId \n" +
+            "\tAND to_char ( t.DOWNLOAD_TIME, 'yyyy-mm' ) = :startTime \n" +
+            "GROUP BY\n" +
+            "\tt.APP_TYPE_NAME", nativeQuery = true )
     List< Map< String, Object > > getDownloadByType( @Param( "companyId" ) Long companyId,
-                                                     @Param( "time" ) String time );
+                                                     @Param( "startTime" ) String startTime );
 
     @Query( value = "SELECT\n" +
             "            MAT.APP_TYPE_NAME,COUNT(MAT.APP_TYPE_NAME) AS APP_TYPE_COUNT\n" +
