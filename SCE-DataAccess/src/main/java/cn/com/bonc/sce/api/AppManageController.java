@@ -413,11 +413,10 @@ public class AppManageController {
             }
 
         } else {
-            List< Sort.Order > orders = new ArrayList< Sort.Order >();
-            orders.add( new Sort.Order( "asc".equalsIgnoreCase( sort ) ? Sort.Direction.ASC : Sort.Direction.DESC, "time".equalsIgnoreCase( orderType ) ? "tempb.CREATE_TIME" : "DOWNLOAD_COUNT" ) );
-            orders.add( new Sort.Order( Sort.Direction.DESC, "APP_ID" ) );
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( orders ) );
-            //  Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" );
+            List<String> properties =new ArrayList<>(2  );
+            properties.add( "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT"  );
+            properties.add( "APP_ID" );
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( "asc".equalsIgnoreCase( sort ) ? Sort.Direction.ASC : Sort.Direction.DESC,properties ) );
             //软件应用
             if ( appType == 0 ) {
                 //查全部
