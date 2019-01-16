@@ -7,6 +7,7 @@ import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
+import cn.com.bonc.sce.repository.CompanyInfoRepository;
 import cn.com.bonc.sce.repository.MarketAppVersionRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppManageService;
@@ -56,6 +57,9 @@ public class AppManageController {
 
     @Autowired
     private AppManageService appManageService;
+
+    @Autowired
+    private CompanyInfoRepository companyInfoRepository;
 
     /**
      * 新增应用
@@ -307,10 +311,10 @@ public class AppManageController {
     public RestRecord applyAppOnShelf( @RequestParam( "applyType" ) Integer applyType, @RequestBody List< Map > appIdList, @RequestParam( "userId" ) String userId ) {
         String type = String.valueOf( applyType );
         int appInfo = 0;
-        for ( Map map:appIdList ) {
+        for ( Map map : appIdList ) {
             String appId = map.get( "APP_ID" ).toString();
             String appVersion = map.get( "APP_VERSION" ).toString();
-            appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId ,appId,appVersion);
+            appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId, appId, appVersion );
         }
         return new RestRecord( 200, appInfo );
     }
@@ -331,20 +335,35 @@ public class AppManageController {
                                                @RequestParam( value = "keyword", required = false ) String keyword,
                                                @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
+                                               @RequestParam( value = "userId" ) String userId
     ) {
         try {
+            //根据userId查询厂商id
+            Long companyId = companyInfoRepository.getCompanyIdByUid( userId );
+
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             Page< List< Map< String, Object > > > page;
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
-
-            //分类id为空
-            if ( typeId == 0 ) {
-                page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
+            //管理员
+            if ( companyId == null ) {
+                if ( typeId == 0 ) {
+                    //分类id为空
+                    page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
+                } else {
+                    //分类id不为空
+                    page = appInfoRepository.getInfoByTypeIdAndKeyword( auditStatus, typeId, keyword, pageable );
+                }
             } else {
-                //分类id不为空
-                page = appInfoRepository.getInfoByTypeIdAndKeyword( auditStatus, typeId, keyword, pageable );
+                if ( typeId == 0 ) {
+                    //分类id为空
+                    page = appInfoRepository.getInfoByKeywordAndCompanyId( auditStatus, keyword, companyId, pageable );
+                } else {
+                    //分类id不为空
+                    page = appInfoRepository.getInfoByTypeIdAndKeywordAndCompanyId( auditStatus, typeId, keyword, companyId, pageable );
+                }
             }
+
             Map< String, Object > temp = new HashMap<>( 16 );
             temp.put( "data", page.getContent() );
             temp.put( "totalPage", page.getTotalPages() );
@@ -395,7 +414,7 @@ public class AppManageController {
 
         } else {
             List< Sort.Order > orders = new ArrayList< Sort.Order >();
-            orders.add( new Sort.Order( "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" ) );
+            orders.add( new Sort.Order( "asc".equalsIgnoreCase( sort ) ? Sort.Direction.ASC : Sort.Direction.DESC, "time".equalsIgnoreCase( orderType ) ? "tempb.CREATE_TIME" : "DOWNLOAD_COUNT" ) );
             orders.add( new Sort.Order( Sort.Direction.DESC, "APP_ID" ) );
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( orders ) );
             //  Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( sort ) ? Sort.Direction.DESC : Sort.Direction.ASC, "time".equalsIgnoreCase( orderType ) ? "TEMPB.CREATE_TIME" : "DOWNLOAD_COUNT" );

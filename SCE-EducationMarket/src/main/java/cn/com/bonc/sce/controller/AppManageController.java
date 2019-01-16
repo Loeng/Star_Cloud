@@ -268,8 +268,8 @@ public class AppManageController {
      */
     @ApiOperation( value = "查询用户是否开通了该应用", notes = "根据应用ID查询用户是否开通了该应用", httpMethod = "GET" )
     @GetMapping( "/detail/open/{appId}" )
-    public RestRecord isOpenApp( @PathVariable @ApiParam( name = "appId", value = "appId", required = true ) String appId,@ApiParam(name = "userId",value = "用户ID",required = true) @CurrentUserId String userId ) {
-        return appManageService.isOpenApp( appId,userId );
+    public RestRecord isOpenApp( @PathVariable @ApiParam( name = "appId", value = "appId", required = true ) String appId, @ApiParam( name = "userId", value = "用户ID", required = true ) @CurrentUserId String userId ) {
+        return appManageService.isOpenApp( appId, userId );
     }
 
     /**
@@ -291,19 +291,23 @@ public class AppManageController {
      * @param keyword
      * @return
      */
-    @ApiOperation( value = "通过审核状态查询app列表", notes = "应用管理页面，通过审核状态查询app列表1，审核2，迭代审核3，未通过审核，4上架， 5下架", httpMethod = "GET" )
+    @ApiOperation( value = "通过审核状态查询app列表", notes = "1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架" , httpMethod = "GET" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
     } )
     @GetMapping( "/list-by-audit-status" )
-    public RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) @ApiParam( "1，审核2，迭代审核3，未通过审核，4上架， 5下架" ) String auditStatus,
+    public RestRecord getAppListByAuditStatus( @RequestParam( "auditStatus" ) @ApiParam( "1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架" ) String auditStatus,
                                                @RequestParam( value = "typeId", required = false, defaultValue = "0" ) @ApiParam( "app分类id" ) Integer typeId,
                                                @RequestParam( value = "keyword", required = false ) @ApiParam( "搜索关键词" ) String keyword,
                                                @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) @ApiParam( "下载量排序（asc|desc）" ) String downloadCount,
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+                                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
+                                               @CurrentUserId String userId
     ) {
-        return appManageService.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize );
+        return appManageService.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize, userId );
     }
 
 

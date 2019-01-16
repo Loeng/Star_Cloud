@@ -140,8 +140,8 @@ public class AppManageService {
         return appManageDao.getAllAuditStatus();
     }
 
-    public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize ) {
-        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize );
+    public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize, String userId ) {
+        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize, userId );
     }
 
     /**
@@ -160,7 +160,7 @@ public class AppManageService {
         return appManageDao.getAppInfo();
     }
 
-    public RestRecord isOpenApp( String appId,String userId ) {
-        return appManageDao.isOpenApp( appId,userId );
+    public RestRecord isOpenApp( String appId, String userId ) {
+        return appManageDao.isOpenApp( appId, userId );
     }
 }

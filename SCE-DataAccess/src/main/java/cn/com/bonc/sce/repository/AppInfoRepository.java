@@ -50,6 +50,21 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                                                                      @Param( value = "keyword" ) String keyword,
                                                                      Pageable pageable );
 
+    //通过审核状态查询信息
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A WHERE  A.APP_STATUS =:auditStatus AND A.COMPANY_ID =:companyId AND A.APP_NAME  LIKE  CONCAT('%',CONCAT(:keyword,'%'))" )
+    Page< List< Map< String, Object > > > getInfoByKeywordAndCompanyId( @Param( value = "auditStatus" ) String auditStatus,
+                                                                        @Param( value = "keyword" ) String keyword,
+                                                                        @Param( value = "companyId" ) Long companyId,
+                                                                        Pageable pageable );
+
+    //通过审核状态查询信息
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A  WHERE A.APP_TYPE_ID=:typeId AND A.APP_STATUS =:auditStatus AND A.COMPANY_ID =:companyId AND A.APP_NAME LIKE CONCAT('%',CONCAT(:keyword,'%'))" )
+    Page< List< Map< String, Object > > > getInfoByTypeIdAndKeywordAndCompanyId( @Param( value = "auditStatus" ) String auditStatus,
+                                                                                 @Param( value = "typeId" ) Integer typeId,
+                                                                                 @Param( value = "keyword" ) String keyword,
+                                                                                 @Param( value = "companyId" ) Long companyId,
+                                                                                 Pageable pageable );
+
     //查询平台应用图标，名字，id,平台连接  是否开通
     @Query( nativeQuery = true, value = "SELECT\n" +
             "\ta.APP_ID,\n" +
