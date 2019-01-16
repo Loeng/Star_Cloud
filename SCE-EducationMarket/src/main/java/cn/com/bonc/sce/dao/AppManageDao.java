@@ -143,7 +143,8 @@ public interface AppManageDao {
                                         @RequestParam( value = "keyword", required = false ) String keyword,
                                         @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
                                         @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
-                                        @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize
+                                        @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
+                                        @RequestParam( value = "userId" ) String userId
     );
 
 
@@ -153,6 +154,6 @@ public interface AppManageDao {
     @RequestMapping( value = "/manage-app/app-info", method = RequestMethod.GET )
     RestRecord getAppInfo();
 
-    @RequestMapping( value = "/manage-app//detail/open/{appId}",method = RequestMethod.GET)
-    RestRecord isOpenApp( @PathVariable( "appId" ) String appId,@RequestParam("userId") String userId );
+    @RequestMapping( value = "/manage-app//detail/open/{appId}", method = RequestMethod.GET )
+    RestRecord isOpenApp( @PathVariable( "appId" ) String appId, @RequestParam( "userId" ) String userId );
 }

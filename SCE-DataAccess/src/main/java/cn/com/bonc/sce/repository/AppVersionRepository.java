@@ -25,7 +25,7 @@ public interface AppVersionRepository extends
         JpaRepository< MarketAppVersion, Long >, JpaSpecificationExecutor< MarketAppVersion > {
 
     @Query( nativeQuery = true,
-            value = "SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_ID=:appId AND APP_VERSION LIKE CONCAT('%',CONCAT(:appVersion,'%')) AND IS_DELETE=1" )
+            value = "SELECT * FROM STARCLOUDMARKET.APP_VERSION_DETAIL_VIEW WHERE APP_ID=:appId AND APP_VERSION=:appVersion" )
     Page< List< Map< String, Object > > > queryAppVersionInfo( @Param( "appId" ) String appId,
                                                                @Param( "appVersion" ) String appVersion,
                                                                Pageable pageable );
