@@ -66,5 +66,5 @@ public class AppVersionModel {
     private String appPcPic;
 
     @ApiModelProperty( name = "应用当前版本" )
-    private String lastVersion;
+    private String currentVersion;
 }
