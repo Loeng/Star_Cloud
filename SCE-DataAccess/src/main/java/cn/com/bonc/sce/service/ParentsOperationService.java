@@ -105,4 +105,12 @@ public class ParentsOperationService {
         }
         return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
     }
+
+    public RestRecord getExamine() {
+        return new RestRecord( 9999, "test");
+    }
+
+    public RestRecord examine( List<String> list ) {
+        return new RestRecord( 9999, list);
+    }
 }

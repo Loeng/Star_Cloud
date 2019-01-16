@@ -12,7 +12,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Sort;
-import java.util.Map;
+
+import java.util.*;
 
 /**
  * 用户列表-查询api
@@ -131,6 +132,27 @@ public class UserListController {
         return info;
     }
 
+    @GetMapping( "/number" )
+    @ResponseBody
+    public RestRecord getUserInfoByRole() {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set( Calendar.DAY_OF_YEAR, calendar.get( Calendar.DAY_OF_YEAR ) - 7 );
+            Date time = calendar.getTime();
+            Integer userCount = userInfoRepository.getUserCount();
+            List<Map<String,Object>> roleCount = userInfoRepository.getRoleCount();
+            Integer activeCount = userInfoRepository.getActiveCount( time );
+            Float activeProportion = activeCount.floatValue() / userCount;
+            Map< String, Object > result = new HashMap<>();
+            result.put( "userCount", userCount );
+            result.put( "roleCount", roleCount );
+            result.put( "activeCount", activeCount );
+            result.put( "activeProportion", activeProportion );
+            return new RestRecord( 200,result );
+        }catch ( Exception e ){
+            return new RestRecord( 420,WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+    }
 
     // 查询 学校 -》 家长信息
 

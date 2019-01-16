@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserListService;
 import io.swagger.annotations.*;
@@ -47,4 +48,18 @@ public class UserListController {
     }
 
 
+    /**
+     * 获取用户数量信息
+     *
+     * @return 用户数量信息
+     */
+    @ApiOperation( value = "获取用户数量信息", notes = "获取用户数量信息", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 420, message = WebMessageConstants.SCE_PORTAL_MSG_420, response = RestRecord.class )
+    } )
+    @GetMapping("/number")
+    @ResponseBody
+    public RestRecord getUserNumberInfo() {
+        return userListService.getUserNumberInfo();
+    }
 }

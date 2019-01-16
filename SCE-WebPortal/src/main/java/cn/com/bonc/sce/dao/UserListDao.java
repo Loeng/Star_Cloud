@@ -24,6 +24,9 @@ public interface UserListDao {
                                   @RequestBody (required = false) Map<String,Object> condition);
 
 
+    @RequestMapping( value = "/user-list/number", method = RequestMethod.GET )
+    RestRecord getUserNumberInfo();
+
     /**
      * 根据条件查询
      */
