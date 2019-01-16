@@ -81,7 +81,7 @@ public class UserListController {
     // 查询 学校 -》 教师信息
     public Page<Map<String,Object>> teacher(int pageNum, int pageSize, Map<String,Object> condition){
         Page info;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
         String account= "";
         String name = "";
         String organization_name = "";
@@ -106,7 +106,7 @@ public class UserListController {
     // 查询 学校 -》 学生信息
     public Page<Map<String,Object>> student(int pageNum, int pageSize, Map<String,Object> condition){
         Page info;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
         String account= "";
         String name = "";
         String organization_name = "";
@@ -158,7 +158,7 @@ public class UserListController {
 
     public Page<Map<String,Object>> family(int pageNum, int pageSize, Map<String,Object> condition){
         Page info;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
         String account= "";
         String name = "";
         if (!CollectionUtils.isEmpty(condition)){
