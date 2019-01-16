@@ -9,6 +9,7 @@ import cn.com.bonc.sce.entity.StudentParentRel;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.entity.user.User;
 import cn.com.bonc.sce.model.ParentsInfo;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -68,6 +69,7 @@ public class ParentsOperationService {
             u.setUserName( parentsInfo.getParentName() );
             u.setCertificateNumber( parentsInfo.getParentNum() );
             u.setIsDelete( 1 );
+            u.setSecret( Secret.generateSecret() );
             User user = userParentDao.save( u );
             String parentId = user.getUserId();
 
