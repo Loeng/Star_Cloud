@@ -41,6 +41,18 @@ public interface UserInfoRepository extends JpaRepository<FamilyInfoEntity,Long>
    @Query( value = "SELECT * FROM STARCLOUDPORTAL.v_family_info WHERE NVL(USER_NAME,' ') LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(USER_ACCOUNT,' ')LIKE CONCAT('%',CONCAT(?2,'%'))", nativeQuery = true)
     Page<Map<String,Object>> findFamilyByCondition( String name, String account, Pageable pageable);
 
+    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE IS_FIRST_LOGIN = 1", nativeQuery = true)
+    Integer getUserCount();
+
+    @Query( value = "SELECT A.ROLE_ID,A.ROLE_NAME,(CASE B.COUNT WHEN NULL THEN 0 ELSE B.COUNT END) COUNT FROM STARCLOUDPORTAL.SCE_COMMON_USER_ROLE A\n" +
+            "LEFT JOIN (SELECT ROLE_ID,COUNT(*) COUNT FROM STARCLOUDPORTAL.SCE_COMMON_USER_ROLE_REL GROUP BY ROLE_ID) B\n" +
+            "ON A.ROLE_ID=B.ROLE_ID ", nativeQuery = true)
+    List<Map<String,Object>> getRoleCount();
+
+    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER " +
+            "WHERE IS_FIRST_LOGIN = 1 AND LAST_LOGIN_TIME > ?1", nativeQuery = true)
+    Integer getActiveCount(Date lastLoginTime);
+
 
     /**
      *@Author : lyy

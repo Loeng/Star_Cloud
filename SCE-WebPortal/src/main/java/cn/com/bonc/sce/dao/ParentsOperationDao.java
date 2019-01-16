@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 @Repository
 @FeignClient( "sce-data-access" )
 public interface ParentsOperationDao {
@@ -25,4 +27,21 @@ public interface ParentsOperationDao {
      */
     @RequestMapping( value = "/parents-operation", method = RequestMethod.POST )
     public RestRecord insertParentsInfo( ParentsInfo parentsInfo );
+
+    /**
+     * 获取审核列表
+     *
+     * @return 结果
+     */
+    @RequestMapping( value = "/parents-operation/examine", method = RequestMethod.GET )
+    public RestRecord getExamine();
+
+    /**
+     * 审核通过
+     *
+     * @param list 通过列表
+     * @return 结果
+     */
+    @RequestMapping( value = "/parents-operation/examine", method = RequestMethod.POST )
+    public RestRecord examine( List<String> list );
 }

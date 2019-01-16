@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -61,6 +62,25 @@ public class ParentsOperationService {
         VaildSecurityUtils.delValid( mainParentValid );
         VaildSecurityUtils.delValid( parentValid );
         return parentsOperationDao.insertParentsInfo(parentsInfo);
+    }
+
+    /**
+     * 获取审核列表
+     *
+     * @return 结果
+     */
+    public RestRecord getExamine(){
+        return parentsOperationDao.getExamine();
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param list 通过列表
+     * @return 结果
+     */
+    public RestRecord examine(List<String> list){
+        return parentsOperationDao.examine( list );
     }
 
     private String getAccountEncryptionCode( String str1, String str2 ) {

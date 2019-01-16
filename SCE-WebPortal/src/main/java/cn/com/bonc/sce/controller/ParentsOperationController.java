@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 家长操作接口
@@ -64,7 +65,42 @@ public class ParentsOperationController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertParentsInfo( HttpServletRequest request,@RequestBody @ApiParam( name = "parentsInfo", value = "新闻信息", required = true )ParentsInfo parentsInfo){
+    public RestRecord insertParentsInfo( @RequestBody @ApiParam( name = "parentsInfo", value = "新闻信息", required = true )ParentsInfo parentsInfo){
         return parentsOperationService.insertParentsInfo( parentsInfo );
+    }
+
+    /**
+     * 获取审核列表
+     *
+     * @return 结果
+     */
+    @ApiOperation( value = "获取审核列表", notes = "获取审核列表", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 411, message = WebMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class ),
+            @ApiResponse( code = 420, message = WebMessageConstants.SCE_PORTAL_MSG_420, response = RestRecord.class )
+    } )
+    @GetMapping("/examine")
+    @ResponseBody
+    public RestRecord getExamine(){
+        return parentsOperationService.getExamine();
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param list 通过列表
+     * @return 结果
+     */
+    @ApiOperation( value = "审核通过", notes = "审核通过", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 411, message = WebMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class ),
+            @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class )
+    } )
+    @PostMapping("/examine")
+    @ResponseBody
+    public RestRecord examine(@RequestBody @ApiParam( name = "list", value = "审核通过列表", required = true )List<String> list){
+        return parentsOperationService.examine( list );
     }
 }

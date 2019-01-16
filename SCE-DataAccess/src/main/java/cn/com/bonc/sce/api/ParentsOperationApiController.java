@@ -1,12 +1,15 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.ParentsInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.ParentsOperationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 家长操作
@@ -37,6 +40,39 @@ public class ParentsOperationApiController {
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
+        }
+    }
+
+    /**
+     * 获取审核列表
+     *
+     * @return 结果
+     */
+    @GetMapping( "/examine" )
+    @ResponseBody
+    public RestRecord getExamine() {
+        try {
+            return parentsOperationService.getExamine();
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
+        }
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param list 通过列表
+     * @return 结果
+     */
+    @PostMapping( "/examine" )
+    @ResponseBody
+    public RestRecord examine( @RequestBody List<String> list ) {
+        try {
+            return parentsOperationService.examine( list );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
     }
 

@@ -50,6 +50,21 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                                                                      @Param( value = "keyword" ) String keyword,
                                                                      Pageable pageable );
 
+    //通过审核状态查询信息
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A WHERE  A.APP_STATUS =:auditStatus AND A.COMPANY_ID =:companyId AND A.APP_NAME  LIKE  CONCAT('%',CONCAT(:keyword,'%'))" )
+    Page< List< Map< String, Object > > > getInfoByKeywordAndCompanyId( @Param( value = "auditStatus" ) String auditStatus,
+                                                                        @Param( value = "keyword" ) String keyword,
+                                                                        @Param( value = "companyId" ) Long companyId,
+                                                                        Pageable pageable );
+
+    //通过审核状态查询信息
+    @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\"  A  WHERE A.APP_TYPE_ID=:typeId AND A.APP_STATUS =:auditStatus AND A.COMPANY_ID =:companyId AND A.APP_NAME LIKE CONCAT('%',CONCAT(:keyword,'%'))" )
+    Page< List< Map< String, Object > > > getInfoByTypeIdAndKeywordAndCompanyId( @Param( value = "auditStatus" ) String auditStatus,
+                                                                                 @Param( value = "typeId" ) Integer typeId,
+                                                                                 @Param( value = "keyword" ) String keyword,
+                                                                                 @Param( value = "companyId" ) Long companyId,
+                                                                                 Pageable pageable );
+
     //查询平台应用图标，名字，id,平台连接  是否开通
     @Query( nativeQuery = true, value = "SELECT\n" +
             "\ta.APP_ID,\n" +
@@ -98,122 +113,104 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     List< Object > getAppIdByTypeId( @Param( "appTypeId" ) Integer appTypeId );
 
     //根据分类 查 应用列表
-    @Query( nativeQuery = true, value = "SELECT DISTINCT \n" +
-            "\tAI.APP_ID,\n" +
-            "\tAI.APP_NAME,\n" +
-            "\tAI.APP_NOTES,\n" +
-            "\tAI.APP_ICON,\n" +
-            "\tAI.APP_SOURCE,\n" +
-            "\tTEMPB.CREATE_TIME,\n" +
-            "\tTEMPB.APP_STATUS,\n" +
-            "\tAI.APP_LINK," +
-            "\tNVL2( AO.USER_ID,'1', '0' ) IS_OPEN,\n" +
-            "\tNVL2( SUAC.USER_ID, '1', '0' ) IS_COLLECTION,\n" +
-            "\tNVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT \n" +
-            "FROM\n" +
-            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
-            "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 \n" +
-            "\tAND AO.IS_DELETE = 1 \n" +
-            "\tAND AO.USER_ID = :userId\n" +
-            "\tLEFT JOIN (\n" +
-            "\tSELECT\n" +
-            "\t\tAVC.APP_ID,\n" +
-            "\t\tAVC.APP_VERSION,\n" +
-            "\t\tAVC.APP_STATUS,\n" +
-            "\t\tTEMPA.CREATE_TIME CREATE_TIME \n" +
-            "\tFROM\n" +
-            "\t\tSTARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC\n" +
-            "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
-            "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
-            "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
-            "\tAND SUAC.USER_ID = :userId \n" +
-            "WHERE\n" +
-            "\tAPP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)",
-            countQuery = "SELECT count( DISTINCT AI.APP_ID) " +
-                    "FROM\n" +
-                    "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
-                    "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
-                    "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 \n" +
-                    "\tAND AO.IS_DELETE = 1 \n" +
-                    "\tAND AO.USER_ID = :userId\n" +
-                    "\tLEFT JOIN (\n" +
-                    "\tSELECT\n" +
-                    "\t\tAVC.APP_ID,\n" +
-                    "\t\tAVC.APP_VERSION,\n" +
-                    "\t\tAVC.APP_STATUS,\n" +
-                    "\t\tTEMPA.CREATE_TIME CREATE_TIME \n" +
-                    "\tFROM\n" +
-                    "\t\tSTARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC\n" +
-                    "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
-                    "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
-                    "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-                    "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
-                    "\tAND SUAC.USER_ID = :userId \n" +
-                    "WHERE\n" +
-                    "\tAPP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)"
-    )
+    @Query( nativeQuery = true, value = "SELECT DISTINCT " +
+            "           AI.APP_ID," +
+            "           AI.APP_NAME," +
+            "           AI.APP_NOTES," +
+            "           AI.APP_ICON," +
+            "           AI.APP_SOURCE," +
+            "           AI.APP_LINK," +
+            "           TEMPB.CREATE_TIME," +
+            "           TEMPB.APP_STATUS," +
+            "           NVL2( AO.USER_ID,'1', '0' ) IS_OPEN," +
+            "           NVL2( SUAC.USER_ID,'1', '0' ) IS_COLLECTION," +
+            "           NVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT " +
+            "           FROM" +
+            "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
+            "           INNER JOIN (" +
+            "           SELECT" +
+            "           AVC.APP_ID," +
+            "           AVC.APP_VERSION," +
+            "           AVC.APP_STATUS," +
+            "           TEMPA.CREATE_TIME CREATE_TIME " +
+            "           FROM" +
+            "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
+            "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+            "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME " +
+            "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
+            "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
+            "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
+            "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+            "           WHERE APP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)",
+            countQuery = "SELECT COUNT( DISTINCT AI.APP_ID) FROM " +
+                    "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
+                    "           INNER JOIN (" +
+                    "           SELECT" +
+                    "           AVC.APP_ID," +
+                    "           AVC.APP_VERSION," +
+                    "           AVC.APP_STATUS," +
+                    "           TEMPA.CREATE_TIME CREATE_TIME " +
+                    "           FROM" +
+                    "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
+                    "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+                    "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME " +
+                    "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
+                    "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
+                    "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
+                    "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+                    "           WHERE APP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)" )
     Page< List< Map< String, Object > > > getAppListInfoByTypeIdandPlatform( @Param( "typeId" ) Integer typeId,
                                                                              @Param( "userId" ) String userId,
                                                                              @Param( "platform" ) String platform,
                                                                              Pageable page );
 
-    //查询全部类型 根据时间或下载量排序
-    @Query( nativeQuery = true, value = "SELECT DISTINCT \n" +
-            "\tAI.APP_ID,\n" +
-            "\tAI.APP_NAME,\n" +
-            "\tAI.APP_NOTES,\n" +
-            "\tAI.APP_ICON,\n" +
-            "\tAI.APP_SOURCE,\n" +
-            "\tTEMPB.CREATE_TIME,\n" +
-            "\tTEMPB.APP_STATUS,\n" +
-            "\tAI.APP_LINK," +
-            "\tNVL2( AO.USER_ID,'1', '0' ) IS_OPEN,\n" +
-            "\tNVL2( SUAC.USER_ID,'1', '0' ) IS_COLLECTION,\n" +
-            "\tNVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT \n" +
-            "FROM\n" +
-            "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
-            "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 \n" +
-            "\tAND AO.IS_DELETE = 1 \n" +
-            "\tAND AO.USER_ID = :userId\n" +
-            "\tLEFT JOIN (\n" +
-            "\tSELECT\n" +
-            "\t\tAVC.APP_ID,\n" +
-            "\t\tAVC.APP_VERSION,\n" +
-            "\t\tAVC.APP_STATUS,\n" +
-            "\t\tTEMPA.CREATE_TIME CREATE_TIME \n" +
-            "\tFROM\n" +
-            "\t\tSTARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC\n" +
-            "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
-            "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
-            "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-            "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
-            "\tAND SUAC.USER_ID = :userId \n" +
-            "WHERE\n" +
-            "\tAPP_SOURCE = :platform ",
-            countQuery = "SELECT count( DISTINCT AI.APP_ID) FROM " +
-                    "\tSTARCLOUDMARKET.SCE_MARKET_APP_INFO AI \n" +
-                    "\tLEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID\n" +
-                    "\tLEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID \n" +
-                    "\tAND AO.IS_DELETE = 1 \n" +
-                    "\tAND AO.USER_ID = :userId\n" +
-                    "\tLEFT JOIN (\n" +
-                    "\tSELECT\n" +
-                    "\t\tAVC.APP_ID,\n" +
-                    "\t\tAVC.APP_VERSION,\n" +
-                    "\t\tAVC.APP_STATUS,\n" +
-                    "\t\tTEMPA.CREATE_TIME CREATE_TIME \n" +
-                    "\tFROM\n" +
-                    "\t\tSTARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC\n" +
-                    "\t\tINNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
-                    "\t\tAND TEMPA.CREATE_TIME = AVC.CREATE_TIME \n" +
-                    "\t) TEMPB ON AI.APP_ID = TEMPB.APP_ID\n" +
-                    "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 \n" +
-                    "\tAND SUAC.USER_ID = :userId \n" +
-                    "WHERE\n" +
-                    "\tAPP_SOURCE = :platform " )
+    //查询全部类型
+    @Query( nativeQuery = true, value = "SELECT DISTINCT " +
+            "           AI.APP_ID," +
+            "           AI.APP_NAME," +
+            "           AI.APP_NOTES," +
+            "           AI.APP_ICON," +
+            "           AI.APP_SOURCE," +
+            "           AI.APP_LINK," +
+            "           TEMPB.CREATE_TIME," +
+            "           TEMPB.APP_STATUS," +
+            "           NVL2( AO.USER_ID,'1', '0' ) IS_OPEN," +
+            "           NVL2( SUAC.USER_ID,'1', '0' ) IS_COLLECTION," +
+            "           NVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT " +
+            "           FROM" +
+            "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
+            "           INNER JOIN (" +
+            "           SELECT" +
+            "           AVC.APP_ID," +
+            "           AVC.APP_VERSION," +
+            "           AVC.APP_STATUS," +
+            "           TEMPA.CREATE_TIME CREATE_TIME " +
+            "           FROM" +
+            "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
+            "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+            "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME " +
+            "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
+            "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
+            "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
+            "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+            "           WHERE APP_SOURCE = :platform",
+            countQuery = "SELECT COUNT( DISTINCT AI.APP_ID) FROM " +
+                    "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
+                    "           INNER JOIN (" +
+                    "           SELECT" +
+                    "           AVC.APP_ID," +
+                    "           AVC.APP_VERSION," +
+                    "           AVC.APP_STATUS," +
+                    "           TEMPA.CREATE_TIME CREATE_TIME " +
+                    "           FROM" +
+                    "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
+                    "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+                    "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME " +
+                    "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
+                    "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
+                    "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
+                    "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+                    "           WHERE APP_SOURCE = :platform" )
     Page< List< Map< String, Object > > > getAppListInfoByPlatform( @Param( "userId" ) String userId,
                                                                     @Param( "platform" ) String platform,
                                                                     Pageable pageable );

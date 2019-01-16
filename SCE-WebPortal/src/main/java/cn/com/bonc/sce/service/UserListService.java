@@ -37,6 +37,15 @@ public class UserListService {
         return userListDao.getUserInfoByRole( roleId, pageNum, pageSize,condition );
     }
 
+    /**
+     * 获取用户数量信息
+     *
+     * @return 用户数量信息
+     */
+    public RestRecord getUserNumberInfo() {
+        return userListDao.getUserNumberInfo();
+    }
+
 
     /**
      * 根据条件查询
