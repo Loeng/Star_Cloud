@@ -205,7 +205,7 @@ public class AppVersionApiController {
         log.trace( "Approve {} AppVersion By {}", approveList.size(), userId );
         try {
             for ( Map< String, String > approve : approveList ) {
-                appAuditingRepository.appVersionApprove( approve.get( "appId" ), approve.get( "appVersion" ), userId );
+                appAuditingRepository.appVersionApprove( approve.get( "APP_ID" ), approve.get( "APP_VERSION" ), userId );
             }
             //todo 这里需要添加 通知到相关用户
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
