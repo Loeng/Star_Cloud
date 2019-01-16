@@ -6,7 +6,14 @@ package cn.com.bonc.sce.constants;
  * @since 2018/12/11 17:35
  */
 public interface WebMessageConstants {
+    /**
+     * 通用信息提示
+     * 0 - 99
+     */
     String SCE_PORTAL_MSG_000 = MessageConstants.SCE_MSG_0000;
+
+    String SCE_WEB_MSG_001 = "参数  {} 长度不可为 0";
+    String SCE_WEb_MSG_002 = "缺少 {} 参数";
 
     /**
      * 登录相关
@@ -18,11 +25,12 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_103 = "账户已停用";
     String SCE_PORTAL_MSG_104 = "账户已注销";
 
-    String SCE_PORTAL_MSG_120 = "用户 ticket 过期或无效";
+    String SCE_WEB_MSG_120 = "用户 ticket 过期或无效";
 
-    String SCE_PORTAL_MSG_150 = "无效或过期的token";
-    String SCE_PORTAL_MSG_151 = "缺少应用 ID 或 TOKEN 信息";
-    String SCE_PORTAL_MSG_152 = "应用 ID 或 TOKEN 无效";
+    String SCE_WEB_MSG_150 = "无效或过期的token";
+    String SCE_WEB_MSG_151 = "缺少应用 ID 或 TOKEN 信息";
+    String SCE_WEB_MSG_152 = "应用 ID 或 TOKEN 无效";
+    String SCE_WEB_MSG_153 = "无效的用户 id";
 
 
     String SCE_PORTAL_MSG_110 = "没有关联的厂商";
@@ -64,4 +72,11 @@ public interface WebMessageConstants {
      */
     String SCE_PORTAL_MSG_500 = "服务器发生意外错误";
     String SCE_PORTAL_MSG_501 = "服务器发生意外错误,错误信息 {}";
+
+    /**
+     * 待办相关
+     * 600 - 640
+     */
+    String SCE_WEB_MSG_600 = "需指定待办事项处理人";
+    String SCE_WEB_MSG_601 = "不支持的待办类型";
 }
