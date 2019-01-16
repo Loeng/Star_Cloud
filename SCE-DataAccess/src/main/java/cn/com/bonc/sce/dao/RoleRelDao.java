@@ -2,10 +2,12 @@ package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.entity.RoleRel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色信息对应
@@ -24,4 +26,12 @@ public interface RoleRelDao extends JpaRepository< RoleRel, Integer > {
             "WHERE A.USER_ID=?1",nativeQuery=true)
     List<String> getRoleTable( String userId);
 
+    @Query(value="SELECT * FROM STARCLOUDPORTAL.SCE_COMMON_USER_ROLE_REL A\n" +
+            "LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER B ON A.USER_ID=B.USER_ID\n" +
+            "WHERE ROLE_ID=8",nativeQuery=true)
+    List<Map<String,Object> > getUnExamine();
+
+    @Modifying
+    @Query( "UPDATE RoleRel r SET r.roleId=2 WHERE r.userId IN (?1)" )
+    Integer updateParentStatus( List<String> list );
 }
