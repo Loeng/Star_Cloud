@@ -59,7 +59,7 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_422 = "数据删除失败";
     String SCE_PORTAL_MSG_423 = "数据添加失败";
 
-    String SCE_PORTAL_MSG_430 = "学生与家长信息不匹配";
+    String SCE_PORTAL_MSG_430 = "学生与家长信息手机号不匹配";
 
     String SCE_PORTAL_MSG_450 = "上传文件为空";
     String SCE_PORTAL_MSG_451 = "上传文件失败";

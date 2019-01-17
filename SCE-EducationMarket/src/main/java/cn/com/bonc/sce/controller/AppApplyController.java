@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppApplyService;
@@ -47,7 +48,7 @@ public class AppApplyController {
     @ResponseBody
     public RestRecord applyAppOnShelf ( @RequestBody @ApiParam( name = "appIdList", value = "申请上/下架的应用ID", required = true )  List<Map>  appIdList,
                                         @RequestParam( "applyType" ) @ApiParam( name = "applyType", value = "请求的业务类型（1：上架 0：下架）", required = true, allowableValues = "0,1" ) Integer applyType,
-                                        @RequestParam( "userId" ) @ApiParam( name = "userId",  value = "提出上/下架申请的用户ID", required = true ) String userId ) {
+                                        @CurrentUserId String userId ) {
 
         RestRecord restRecord =   appApplyService.applyAppOnShelf( applyType,appIdList,userId );
 

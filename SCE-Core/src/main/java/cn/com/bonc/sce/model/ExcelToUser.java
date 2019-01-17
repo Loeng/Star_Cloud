@@ -26,6 +26,10 @@ public class ExcelToUser {
     @Excel( name = "电子邮箱", orderNum = "5" )
     private String mailAddress;
 
+    @Excel( name = "组织编号", orderNum = "6" )
+    private String organizationId;
+
+
     private String loginName;
 
     private String userType;
@@ -33,6 +37,14 @@ public class ExcelToUser {
     private String certificateType;
 
     private String  secret;
+
+    public String getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId( String organizationId ) {
+        this.organizationId = organizationId;
+    }
 
     public String getSecret() {
         return secret;

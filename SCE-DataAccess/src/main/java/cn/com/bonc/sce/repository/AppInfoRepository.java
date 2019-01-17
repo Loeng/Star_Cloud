@@ -113,7 +113,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     List< Object > getAppIdByTypeId( @Param( "appTypeId" ) Integer appTypeId );
 
     //根据分类 查 应用列表
-    @Query( nativeQuery = true, value = "SELECT DISTINCT " +
+    @Query( nativeQuery = true, value = "SELECT  " +
             "           AI.APP_ID," +
             "           AI.APP_NAME," +
             "           AI.APP_NOTES," +
@@ -130,7 +130,6 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           INNER JOIN (" +
             "           SELECT" +
             "           AVC.APP_ID," +
-            "           AVC.APP_VERSION," +
             "           AVC.APP_STATUS," +
             "           TEMPA.CREATE_TIME CREATE_TIME " +
             "           FROM" +
@@ -142,12 +141,11 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
             "           WHERE APP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)",
-            countQuery = "SELECT COUNT( DISTINCT AI.APP_ID) FROM " +
+            countQuery = "SELECT COUNT(AI.APP_ID) FROM " +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
                     "           INNER JOIN (" +
-                    "           SELECT" +
+                    "           SELECT DISTINCT " +
                     "           AVC.APP_ID," +
-                    "           AVC.APP_VERSION," +
                     "           AVC.APP_STATUS," +
                     "           TEMPA.CREATE_TIME CREATE_TIME " +
                     "           FROM" +
@@ -165,7 +163,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                                                                              Pageable page );
 
     //查询全部类型
-    @Query( nativeQuery = true, value = "SELECT DISTINCT " +
+    @Query( nativeQuery = true, value = "SELECT  " +
             "           AI.APP_ID," +
             "           AI.APP_NAME," +
             "           AI.APP_NOTES," +
@@ -180,9 +178,8 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           FROM" +
             "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
             "           INNER JOIN (" +
-            "           SELECT" +
+            "           SELECT DISTINCT" +
             "           AVC.APP_ID," +
-            "           AVC.APP_VERSION," +
             "           AVC.APP_STATUS," +
             "           TEMPA.CREATE_TIME CREATE_TIME " +
             "           FROM" +
@@ -194,12 +191,11 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
             "           WHERE APP_SOURCE = :platform",
-            countQuery = "SELECT COUNT( DISTINCT AI.APP_ID) FROM " +
+            countQuery = "SELECT COUNT( AI.APP_ID) FROM " +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
                     "           INNER JOIN (" +
-                    "           SELECT" +
+                    "           SELECT DISTINCT" +
                     "           AVC.APP_ID," +
-                    "           AVC.APP_VERSION," +
                     "           AVC.APP_STATUS," +
                     "           TEMPA.CREATE_TIME CREATE_TIME " +
                     "           FROM" +
