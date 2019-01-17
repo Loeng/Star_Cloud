@@ -7,6 +7,7 @@ import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -243,6 +244,94 @@ public class AppVersionApiController {
             log.error( "Reject fail {}", e );
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
+    }
+
+
+    /* *
+     * @Description 应用数据暂存
+     * @Date 9:58 2019/1/15
+     * @Param [userId, appVersionInfo]
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    @PutMapping( "/temp/save" )
+    @ResponseBody
+    public RestRecord tempSaveVersionInfo(
+            @RequestParam( "userId" ) String userId,
+            @RequestBody Map<String,String> tempData) {
+        log.trace( "temp save {} AppInfo", userId );
+
+        String appNAME = tempData.get("appNAME")==null?"":tempData.get("appNAME");
+//        String createUserId=userId;
+        String appVersion=tempData.get("appVersion")==null?"":tempData.get("appVersion");
+        String downloadAddress=tempData.get("downloadAddress")==null?"":tempData.get("downloadAddress");
+        String versionInfo=tempData.get("versionInfo")==null?"":tempData.get("versionInfo");
+        String versionSsize=tempData.get("versionSsize")==null?"":tempData.get("versionSsize");
+        String runningPlatform=tempData.get("runningPlatform")==null?"":tempData.get("runningPlatform");
+        String newFeatures=tempData.get("newFeatures")==null?"":tempData.get("newFeatures");
+        String packageName=tempData.get("packageName")==null?"":tempData.get("packageName");
+        String authDetail=tempData.get("authDetail")==null?"":tempData.get("authDetail");
+        String appPhonePic=tempData.get("appPhonePic")==null?"":tempData.get("appPhonePic");
+        String appPcPic=tempData.get("appPcPic")==null?"":tempData.get("appPcPic");
+        String appIcon=tempData.get("appIcon")==null?"":tempData.get("appIcon");
+        String companyId=tempData.get("companyId")==null?"":tempData.get("companyId");
+        String appType=tempData.get("appType")==null?"":tempData.get("appType");
+//        String tempAppId=tempData.get("tempAppId")==null?"":tempData.get("tempAppId");
+
+        if (tempData.get("tempAppId")==null){
+            try {
+                appVersionRepository.insertTempAppInfo(
+                        appNAME,
+                        userId,
+                        appVersion,
+                        downloadAddress,
+                        versionInfo,
+                        versionSsize,
+                        runningPlatform,
+                        newFeatures,
+                        packageName,
+                        authDetail,
+                        appPhonePic,
+                        appPcPic,
+                        appIcon,
+                        companyId,
+                        appType,
+                        UUID.getUUID());
+                return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+
+            }catch ( Exception e ){
+                log.error( "app tempsave fail {}", e );
+                return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
+            }
+
+        }else {
+
+            try {
+                appVersionRepository.updateTempAppInfo(
+                        appNAME,
+                        userId,
+                        appVersion,
+                        downloadAddress,
+                        versionInfo,
+                        versionSsize,
+                        runningPlatform,
+                        newFeatures,
+                        packageName,
+                        authDetail,
+                        appPhonePic,
+                        appPcPic,
+                        appIcon,
+                        companyId,
+                        appType,
+                        tempData.get("tempAppId"));
+                return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+
+            }catch ( Exception e ){
+                log.error( "app tempsave fail {}", e );
+                return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+            }
+
+        }
+
     }
 
     /**

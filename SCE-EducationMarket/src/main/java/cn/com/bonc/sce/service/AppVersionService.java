@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @author yuehaibo
  * @version 0.1
@@ -36,6 +38,11 @@ public class AppVersionService {
 
     public RestRecord createVersionInfo( String appId, String userId, AppVersionModel marketAppVersion ) {
         return appVersionDao.createVersionInfo( appId, userId, marketAppVersion );
+    }
+
+
+    public RestRecord tempSaveVersionInfo(String userId, Map<String,String> tempData) {
+        return appVersionDao.tempSaveVersionInfo(userId,tempData);
     }
 
 

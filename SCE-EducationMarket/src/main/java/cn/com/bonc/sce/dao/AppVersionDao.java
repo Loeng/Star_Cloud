@@ -5,6 +5,8 @@ import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @author yuehaibo
  * @version 0.1
@@ -43,4 +45,9 @@ public interface AppVersionDao {
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId,
             @RequestBody AppVersionModel appVersionInfo );
+
+    @RequestMapping( value = "/app-version/temp/save", method = RequestMethod.PUT )
+    public RestRecord tempSaveVersionInfo(
+            @RequestParam( "userId" ) String userId,
+            @RequestBody Map<String,String> tempData);
 }

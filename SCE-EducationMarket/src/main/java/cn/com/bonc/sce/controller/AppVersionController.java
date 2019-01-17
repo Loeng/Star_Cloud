@@ -156,4 +156,22 @@ public class AppVersionController {
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
 
     }
+
+
+
+    /* *
+     * @Description 
+     * @Date 17:45 2019/1/14
+     * @Param [userId, marketAppVersion]
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    @ApiOperation( value = "应用数据暂存接口", notes = "暂存应用数据", httpMethod = "POST" )
+    @PostMapping("/temp/save")
+    @ResponseBody
+    public RestRecord appVersionTempSave(
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
+            @RequestBody @ApiParam( "应用信息暂存对象" ) Map<String,String> tempData
+    ){
+        return appVersionService.tempSaveVersionInfo(userId,tempData);
+    }
 }
