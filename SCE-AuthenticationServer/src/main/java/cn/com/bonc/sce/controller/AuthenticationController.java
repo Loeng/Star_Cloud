@@ -2,7 +2,11 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.encrypt.AppSecretAutoManageService;
+import cn.com.bonc.sce.encrypt.SingleInstanceAppSecretAutoManageService;
+import cn.com.bonc.sce.encrypt.UnstandardEncryptedDataException;
 import cn.com.bonc.sce.model.SSOAuthentication;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.LoginService;
@@ -52,11 +56,13 @@ public class AuthenticationController {
 
     private UserService userService;
     private LoginService loginService;
+    private AppSecretAutoManageService appSecretAutoManageService;
 
     @Autowired
-    public AuthenticationController( UserService userService, LoginService loginService ) {
+    public AuthenticationController(UserService userService, LoginService loginService, SingleInstanceAppSecretAutoManageService singleInstanceAppSecretAutoManageService) {
         this.userService = userService;
         this.loginService = loginService;
+        this.appSecretAutoManageService = singleInstanceAppSecretAutoManageService;
     }
 
     @ApiOperation( value = "用户登录接口", notes = "用戶名/邮箱/手机号登录都需要走此接口", httpMethod = "POST" )
@@ -144,24 +150,23 @@ public class AuthenticationController {
     })
     @GetMapping("/generator")
     @ResponseBody
-    public RestRecord generator(HttpServletRequest request) throws IOException {
+    public RestRecord generator() throws IOException {
         GeneratorVerifyCode generator = new GeneratorVerifyCode();
         BASE64Encoder encoder = new BASE64Encoder();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        String verifyCode_flag = UUID.randomUUID().toString().replaceAll("-", ""); // 标志当前用户所属的验证码信息
-        Map<String,String> info = new HashMap<>();
+        Map<String,Object> info = new HashMap<>();
         try {
             log.info("开始调用验证码生成器。。。");
             Map<String, Object> verifyCode = generator.drawCode(os);
-            request.getSession().setAttribute(verifyCode_flag,verifyCode);
-            request.getSession().setMaxInactiveInterval(60); // 设置有效时间1分钟
+            String code = appSecretAutoManageService.encryptData(verifyCode.get("code").toString());
             ImageIO.write((BufferedImage) verifyCode.get("image"), "jpg", os);
             byte[] bytes = os.toByteArray();
             String images = encoder.encode(bytes).trim().replaceAll("\n", "").replaceAll("\r", "");
             info.put("status","success");
-            info.put("flag",verifyCode_flag);
+            info.put("verify_code",code);
             info.put("images",images);
-            log.info("图形验证码生成成功，验证码信息:{},用户标志:{}",verifyCode,verifyCode_flag);
+            info.put("generator_date",verifyCode.get("generator_date"));
+            log.info("图形验证码生成成功，验证码信息:{}",verifyCode);
         } catch (IOException e) {
             info.put("status","fail");
             log.error("验证码生成失败，异常信息:{}",e);
@@ -177,33 +182,38 @@ public class AuthenticationController {
      */
     @ApiOperation(value = "验证码验证接口",notes = "验证码验证接口",httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "code",value = "用户输入的验证码",paramType = "query",required = true),
-            @ApiImplicitParam(name = "flag",value = "用户标志",paramType = "query",required = true)
+            @ApiImplicitParam(name = "input_code",value = "用户输入的验证码",paramType = "query",required = true),
+            @ApiImplicitParam(name = "verify_code",value = "生成的验证码",paramType = "query",required = true),
+            @ApiImplicitParam(name = "generator_date",value = "生成验证码的时间",paramType = "query",required = true)
     })
     @ApiResponses({
             @ApiResponse(code = 200,message = WebMessageConstants.SCE_PORTAL_MSG_200,response = RestRecord.class)
     })
     @GetMapping("/verify")
-    public RestRecord verify(HttpSession session, @RequestParam("code")  String verifyCode, @RequestParam("flag")   String flag){
-        if (null != session.getAttribute(flag)){
-            Map<String,Object> verifyInfo = (Map<String, Object>) session.getAttribute(flag);
-            String code  = verifyInfo.get("code").toString();
-            if (StringUtils.isEmpty(verifyCode)){
+    public RestRecord verify(@RequestParam("input_code")  String input_code, @RequestParam("verify_code")   String verify_code,@RequestParam("generator_date") long generator_date){
+        try {
+            String real_code = appSecretAutoManageService.decryptData(verify_code);
+            log.info("解密之后的验证码信息：{}",real_code);
+            if (StringUtils.isEmpty(input_code)){
                 log.info("验证码为空,请重新输入!");
                 return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_410,"验证码为空，请重新输入!");
             }
-            else if (code.equals(verifyCode)){
+            else if ((System.currentTimeMillis()-generator_date) / 1000 / 60 > 2){
+                log.info("验证码已失效，请刷新页面重新获取");
+                return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_410,"验证码已失效，请刷新页面重新获取!");
+            }
+            else if (input_code.equals(real_code)){
                 log.info("验证成功!");
-                session.removeAttribute(flag);
                 return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,"验证成功");
             }
             else {
                 log.info("验证失败!");
                 return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_410,"验证失败");
             }
-        }else {
-            log.info("验证码已失效，请刷新页面重新获取!");
-            return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_410,"验证码已失效，请刷新页面重新获取!");
+        }
+        catch (UnstandardEncryptedDataException e) {
+           log.error("解密验证码{}失败，异常信息为：",verify_code,e);
+           return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_412);
         }
 
     }
