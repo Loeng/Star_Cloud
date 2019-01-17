@@ -265,7 +265,7 @@ public class AppVersionApiController {
         String appVersion=tempData.get("appVersion")==null?"":tempData.get("appVersion");
         String downloadAddress=tempData.get("downloadAddress")==null?"":tempData.get("downloadAddress");
         String versionInfo=tempData.get("versionInfo")==null?"":tempData.get("versionInfo");
-        String versionSsize=tempData.get("versionSsize")==null?"":tempData.get("versionSsize");
+        String versionSize=tempData.get("versionSize")==null?"":tempData.get("versionSize");
         String runningPlatform=tempData.get("runningPlatform")==null?"":tempData.get("runningPlatform");
         String newFeatures=tempData.get("newFeatures")==null?"":tempData.get("newFeatures");
         String packageName=tempData.get("packageName")==null?"":tempData.get("packageName");
@@ -285,7 +285,7 @@ public class AppVersionApiController {
                         appVersion,
                         downloadAddress,
                         versionInfo,
-                        versionSsize,
+                        versionSize,
                         runningPlatform,
                         newFeatures,
                         packageName,
@@ -312,7 +312,7 @@ public class AppVersionApiController {
                         appVersion,
                         downloadAddress,
                         versionInfo,
-                        versionSsize,
+                        versionSize,
                         runningPlatform,
                         newFeatures,
                         packageName,
