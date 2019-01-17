@@ -44,4 +44,8 @@ public interface TeacherRecommendDao {
     RestRecord getTeacherCommendList( @RequestParam( "userId" ) String userId,
                                       @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
                                       @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize );
+
+    @RequestMapping( value = "/teacher-recommend-app/commend", method = RequestMethod.POST )
+    RestRecord updateIsCommend( @RequestParam("userId") String userId,
+                                @RequestParam("appId") String appId );
 }

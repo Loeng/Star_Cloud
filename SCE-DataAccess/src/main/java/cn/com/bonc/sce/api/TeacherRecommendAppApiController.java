@@ -166,4 +166,12 @@ public class TeacherRecommendAppApiController {
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
         }
     }
+
+
+    @PostMapping( "commend" )
+    RestRecord updateIsCommend( @RequestParam String userId, @RequestParam String appId ) {
+        System.out.println( userId );
+        System.out.println( appId );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, teacherRecommendRepository.updateIsCommend( userId, appId ) );
+    }
 }

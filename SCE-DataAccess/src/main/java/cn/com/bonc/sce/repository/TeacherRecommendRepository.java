@@ -78,4 +78,20 @@ public interface TeacherRecommendRepository extends JpaRepository< TeacherRecomm
             "\tLEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION UAC ON INFO.APP_ID = UAC.APP_ID  AND UAC.USER_ID = :userId ) TEST\n" +
             "\tWHERE   TEST.RECOMMEND_END_TIME >=SYSDATE AND TEST.RECOMMEND_START_TIME <=SYSDATE " )
     Page< List< Map< String, Object > > > getTeacherRecommendList( @Param( "userId" ) String userId, Pageable pageable );
+
+    /**
+     * 教师点击推荐按钮。
+     * 第一次则新增记录
+     * 非第一次，如果收藏则取消，如果以未收藏则收藏
+     *
+     * @param userId 用户Id
+     * @param appId  应用Id
+     * @return
+     */
+    @Modifying
+    @Query( nativeQuery = true, value =
+            "MERGE INTO \"STARCLOUDMARKET\".\"SCE_TEACHER_RECOMMEND_APP\" t USING DUAL ON ( t.APP_ID = :appId AND t.USER_ID = :userId )  \n" +
+                    "WHEN NOT matched THEN INSERT ( t.APP_ID, t.USER_ID, t.IS_DELETE , t.UPDATE_TIME) VALUES ( :appId, :userId, '1', SYSDATE ) \n" +
+                    "WHEN matched THEN UPDATE  SET t.IS_DELETE = ABS( t.IS_DELETE - 1 ), t.UPDATE_TIME=SYSDATE" )
+    int updateIsCommend( @Param( "userId" ) String userId, @Param( "appId" ) String appId );
 }

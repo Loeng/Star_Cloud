@@ -119,4 +119,13 @@ public class TeacherRecommendAppController {
                                              @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         return teacherRecommendService.getTeacherCommendList( userId, pageNum, pageSize );
     }
+
+
+    @ApiOperation( "点击教师推荐按钮" )
+    @PostMapping( "/commend" )
+    @ResponseBody
+    public RestRecord updateIsCommend( @CurrentUserId @ApiParam( hidden = true ) String userId,
+                                       @RequestParam @ApiParam( value = "应用Id" ) String appId ) {
+        return teacherRecommendService.updateIsCommend( userId, appId );
+    }
 }
