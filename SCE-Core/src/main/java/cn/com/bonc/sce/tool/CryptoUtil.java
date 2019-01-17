@@ -1,8 +1,6 @@
 package cn.com.bonc.sce.tool;
 
-import cn.com.bonc.sce.model.Secret;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -66,15 +64,16 @@ public class CryptoUtil {
     }
 
     /**
-     * 加密数据
+     * 通过私钥加密数据
      *
-     * @param data    待加密数据
-     * @param keyPair 秘钥对
+     * @param data       待加密数据
+     * @param privateKey 私钥
      *
-     * @return 被加密后的数据
+     * @return 加密后的数据
      */
-    public byte[] encryptData( String data, KeyPair keyPair ) {
-        return new RSA( keyPair.getPrivate(), null ).encrypt( data, "UTF-8", KeyType.PrivateKey );
+    public String encryptDataByRSAPrivateKey( String data, PrivateKey privateKey ) {
+        byte[] encrypt = new RSA( privateKey, null ).encrypt( StrUtil.bytes( data, CharsetUtil.CHARSET_UTF_8 ), KeyType.PublicKey );
+        return byteToString( encrypt );
     }
 
     /**
@@ -85,20 +84,9 @@ public class CryptoUtil {
      *
      * @return 加密后的数据
      */
-    public byte[] encryptDataByPrivateKey( String data, PrivateKey privateKey ) {
-        return new RSA( privateKey, null ).encrypt( data, "UTF-8", KeyType.PrivateKey );
-    }
-
-    /**
-     * 通过私钥加密数据
-     *
-     * @param data       待加密数据
-     * @param privateKey 私钥
-     *
-     * @return 加密后的数据
-     */
-    public byte[] encryptDataByPrivateKey( String data, String privateKey ) {
-        return new RSA( privateKey, null ).encrypt( data, "UTF-8", KeyType.PrivateKey );
+    public String encryptDataByRSAPrivateKey( String data, String privateKey ) {
+        byte[] encrypt = new RSA( privateKey, null ).encrypt( StrUtil.bytes( data, CharsetUtil.CHARSET_UTF_8 ), KeyType.PublicKey );
+        return byteToString( encrypt );
     }
 
     /**
@@ -109,8 +97,8 @@ public class CryptoUtil {
      *
      * @return 加密后的数据
      */
-    public byte[] encryptDataByPublicKey( String data, String publicKey ) {
-        return new RSA( null, publicKey ).encrypt( data, "UTF-8", KeyType.PublicKey );
+    public String encryptDataByRSAPublicKey( String data, String publicKey ) {
+        return byteToString( new RSA( null, publicKey ).encrypt( StrUtil.bytes( data, CharsetUtil.CHARSET_UTF_8 ), KeyType.PublicKey ) );
     }
 
     /**
@@ -121,8 +109,8 @@ public class CryptoUtil {
      *
      * @return 加密后的数据
      */
-    public byte[] encryptDataByPublicKey( String data, PublicKey publicKey ) {
-        return new RSA( null, publicKey ).encrypt( data, "UTF-8", KeyType.PublicKey );
+    public String encryptDataByRSAPublicKey( String data, PublicKey publicKey ) {
+        return byteToString( new RSA( null, publicKey ).encrypt( data, "UTF-8", KeyType.PublicKey ) );
     }
 
     /**
@@ -133,20 +121,57 @@ public class CryptoUtil {
      *
      * @return 解密后的数据
      */
-    public String decryptRSAData( String encryptedData, PrivateKey privateKey ) {
-        RSA rsa = new RSA( privateKey, null );
-        byte[] aByte = HexUtil.decodeHex( encryptedData );
-        byte[] decrypt = rsa.decrypt( aByte, KeyType.PrivateKey );
-        return StrUtil.str( decrypt, CharsetUtil.CHARSET_UTF_8 );
+    public String decryptRSADataByPrivateKey( String encryptedData, PrivateKey privateKey ) {
+        return new String( new RSA( privateKey, null ).decrypt( stringToByte( encryptedData ), KeyType.PrivateKey ) );
+    }
+
+
+    //    把byte[]元素之间添加空格，并转化成字符串返回，
+    private static String byteToString( byte[] resouce ) {
+        StringBuffer sb = new StringBuffer();
+        for ( int i = 0; i < resouce.length; i++ ) {
+            if ( i == resouce.length - 1 ) {
+                sb.append( Byte.toString( resouce[ i ] ) );
+            } else {
+                sb.append( Byte.toString( resouce[ i ] ) );
+                sb.append( " " );
+            }
+        }
+        return sb.toString();
+
+    }
+
+    //    把字符串按照空格进行拆分成数组，然后转化成byte[],返回
+    private static byte[] stringToByte( String resouce ) {
+        String[] strArr = resouce.split( " " );
+        int len = strArr.length;
+        byte[] clone = new byte[ len ];
+        for ( int i = 0; i < len; i++ ) {
+            clone[ i ] = Byte.parseByte( strArr[ i ] );
+        }
+
+        return clone;
+
     }
 
     public static void main( String[] args ) {
+
         KeyPair keyPair = CryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.generateKeyPair();
         RSA rsa = new RSA( keyPair.getPrivate(), keyPair.getPublic() );
 
-        System.out.println( ( rsa.getPrivateKeyBase64() + rsa.getPublicKeyBase64() ).length() );
-        System.out.println( ( rsa.getPrivateKeyBase64() + rsa.getPublicKeyBase64() ) );
+        byte[] encrypt = rsa.encrypt( StrUtil.bytes( "我是一段测试aaaa", CharsetUtil.CHARSET_UTF_8 ), KeyType.PublicKey );
+        String encrypted = byteToString( encrypt );
 
-//        System.out.println(generateKeyPair( SignatureAlgorithm.ES256.name() ));
+        System.out.println( encrypted );
+
+
+        byte[] decrypt = rsa.decrypt( stringToByte( encrypted ), KeyType.PrivateKey );
+
+        System.out.println( new String( decrypt ) );
+
+        String encrypted2 = CryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.encryptDataByRSAPublicKey( "测试一下", keyPair.getPublic() );
+
+        System.out.println( CryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.decryptRSADataByPrivateKey( encrypted2, keyPair.getPrivate() ) );
+
     }
 }

@@ -20,3 +20,9 @@ logging:
     org.hibernate: DEBUG
 server:
   port: 10200
+sce:
+  service:
+    secret:
+      auto-management:
+        enable: true
+        refresh-period: 1

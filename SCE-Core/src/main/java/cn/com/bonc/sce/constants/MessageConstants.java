@@ -12,6 +12,8 @@ public interface MessageConstants {
      * 0 - 199
      */
     String SCE_MSG_0000 = "服务 {} 启动, ip: {}, port: []";
+    String SCE_MSG_0001 = "读取到公私钥自维护服务启动配置，初始化应用公私钥对, 更新周期: {} ms";
+    String SCE_MSG_0002 = "公私钥自维护服务：  对应用公私钥进行更新";
 
     String SCE_MSG_0200 = "操作成功";
 
@@ -50,6 +52,11 @@ public interface MessageConstants {
 
     String SCE_MSG_1020 = "修改用户状态时找不到用户数据， userId: [{}]; changeStatus: [{}]";
     String SCE_MSG_1021 = "修改用户登录状态，是否第一次登录： {}， userId: [{}]";
+
+    /**
+     * 加密错误
+     */
+    String SCE_MSG_1100 = "解析到没有使用平台微服务指定加密方式进行加密的字符串";
 
     /**
      * 通用异常处理

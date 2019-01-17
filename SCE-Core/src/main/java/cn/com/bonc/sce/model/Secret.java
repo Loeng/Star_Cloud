@@ -39,6 +39,10 @@ public class Secret {
         return rsa.getPublicKeyBase64() + rsa.getPrivateKeyBase64();
     }
 
+    public KeyPair getKeyPair() {
+        return keyPair;
+    }
+
     /**
      * 自动生成一个由私钥/公钥组成的字符串，格式如下:
      * <bold>^[privateKey][publicKey]&</bold> 私钥长 1624 个字符，公钥长 382 个字符，组成共计 2016 个字符的 secret
