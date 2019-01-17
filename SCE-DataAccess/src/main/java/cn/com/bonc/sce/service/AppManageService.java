@@ -98,7 +98,7 @@ public class AppManageService {
             marketAppVersion.setAppPhonePic( phoneUrl );
             marketAppVersion.setCreateTime( new Date() );
             marketAppVersion.setIsDelete( 1L );
-            marketAppVersion.setRunningPlatform( pc.getVersioInfo() );
+            marketAppVersion.setRunningPlatform( pc.getRunningPlatform() );
             marketAppVersion.setCreateUserId( uid );
             marketAppVersionRepository.saveAndFlush( marketAppVersion );
         } );
