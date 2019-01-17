@@ -84,7 +84,7 @@ public class AppManageController {
                 return new RestRecord( 423, "版本号不能为空" );
             }
 
-            if ( StringUtils.isEmpty( appTypeMode.getVersioInfo() ) ) {
+            if ( StringUtils.isEmpty( appTypeMode.getRunningPlatform() ) ) {
                 return new RestRecord( 423, "运行平台不能为空" );
             }
 
