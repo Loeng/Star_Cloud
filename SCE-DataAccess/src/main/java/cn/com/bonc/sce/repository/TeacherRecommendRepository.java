@@ -88,7 +88,7 @@ public interface TeacherRecommendRepository extends JpaRepository< TeacherRecomm
      * @param appId  应用Id
      * @return
      */
-    @Modifying
+     @Modifying
     @Query( nativeQuery = true, value =
             "MERGE INTO \"STARCLOUDMARKET\".\"SCE_TEACHER_RECOMMEND_APP\" t USING DUAL ON ( t.APP_ID = :appId AND t.USER_ID = :userId )  \n" +
                     "WHEN NOT matched THEN INSERT ( t.APP_ID, t.USER_ID, t.IS_DELETE , t.UPDATE_TIME) VALUES ( :appId, :userId, '1', SYSDATE ) \n" +
