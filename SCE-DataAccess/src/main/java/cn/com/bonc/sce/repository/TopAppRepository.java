@@ -30,7 +30,7 @@ public interface TopAppRepository extends JpaRepository< AppInfoEntity, String >
      * 查询所有重点推荐应用的appId
      * @return
      */
-    @Query( value = "SELECT APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_TOP_RECOMMEND =1", nativeQuery = true )
+    @Query( value = "SELECT APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_TOP_RECOMMEND =1 AND IS_DELETE = 1", nativeQuery = true )
     List< String > getAllTopAppId();
 
     /**
@@ -71,12 +71,12 @@ public interface TopAppRepository extends JpaRepository< AppInfoEntity, String >
             "CASE WHEN A.APP_ID IS NULL THEN '0' ELSE '1' END IS_OPEN,\n" +
             "CASE WHEN C.APP_ID IS NULL THEN '0' ELSE '1' END IS_DOWNLOAD,\n" +
             "CASE WHEN D.APP_ID IS NULL THEN '0' ELSE '1' END IS_COLLECT\n" +
-            "FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO MAIN \n" +
+            "FROM (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_DELETE = 1 ) MAIN \n" +
             "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=MAIN.APP_ID AND A.USER_ID = :userId AND A.IS_DELETE=1\n" +
             "LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID=MAIN.APP_ID\n" +
             "LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1\n" +
             "WHERE MAIN.IS_TOP_RECOMMEND = 1",
-            countQuery = "SELECT COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_TOP_RECOMMEND = 1",
+            countQuery = "SELECT COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_TOP_RECOMMEND = 1 AND IS_DELETE = 1",
             nativeQuery = true )
     List< Map<String,String> > selectTopAppList( @Param( value = "userId" ) String userId,
                                                  Pageable pageable );

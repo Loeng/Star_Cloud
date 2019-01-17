@@ -1,6 +1,6 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.entity.DownloadCount;
 import cn.com.bonc.sce.repository.UserDownloadRepository;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,17 +62,19 @@ public class AppDownloadController {
      * @param userId 用户Id
      * @param appId 应用Id
      * @param version
-     * @param platform
      * @return
      */
     @PostMapping("/info")
     @ResponseBody
     public RestRecord getUserAppDownloadList ( @RequestParam( "userId" ) String userId,
                                                @RequestParam( "appId" ) String appId,
-                                               @RequestParam( "version" ) String version,
-                                               @RequestParam( "platform" ) String platform
+                                               @RequestParam( "version" ) String version
                                                ) {
-        return appDownloadService.getAppDownloadPath( userId, appId, version, platform );
+        DownloadCount downloadCount = new DownloadCount();
+        downloadCount.setUserId( userId );
+        downloadCount.setAppId( appId );
+        userDownloadRepository.save( downloadCount );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
     }
 
     /**
