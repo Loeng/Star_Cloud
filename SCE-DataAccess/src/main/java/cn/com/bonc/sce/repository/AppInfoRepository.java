@@ -124,6 +124,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           TEMPB.APP_STATUS," +
             "           NVL2( AO.USER_ID,'1', '0' ) IS_OPEN," +
             "           NVL2( SUAC.USER_ID,'1', '0' ) IS_COLLECTION," +
+            "           NVL2( TR.USER_ID,'1', '0' ) IS_RECOMMEND," +
             "           NVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT " +
             "           FROM" +
             "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
@@ -140,6 +141,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+            "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
             "           WHERE APP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)",
             countQuery = "SELECT COUNT(AI.APP_ID) FROM " +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
@@ -156,6 +158,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+                    "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
                     "           WHERE APP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)" )
     Page< List< Map< String, Object > > > getAppListInfoByTypeIdandPlatform( @Param( "typeId" ) Integer typeId,
                                                                              @Param( "userId" ) String userId,
@@ -174,6 +177,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           TEMPB.APP_STATUS," +
             "           NVL2( AO.USER_ID,'1', '0' ) IS_OPEN," +
             "           NVL2( SUAC.USER_ID,'1', '0' ) IS_COLLECTION," +
+            "           NVL2( TR.USER_ID,'1', '0' ) IS_RECOMMEND," +
             "           NVL( AD.DOWNLOAD_COUNT, 0 ) DOWNLOAD_COUNT " +
             "           FROM" +
             "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
@@ -190,6 +194,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+            "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
             "           WHERE APP_SOURCE = :platform",
             countQuery = "SELECT COUNT( AI.APP_ID) FROM " +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
@@ -206,6 +211,7 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
+                    "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
                     "           WHERE APP_SOURCE = :platform" )
     Page< List< Map< String, Object > > > getAppListInfoByPlatform( @Param( "userId" ) String userId,
                                                                     @Param( "platform" ) String platform,
