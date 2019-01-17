@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Service
 @ConditionalOnProperty( name = "sce.service.secret.auto-management.enable", havingValue = "true" )
-public class ApplicationSecretAutoManagementService {
+public class SingleInstanceAppSecretAutoManageService implements AppSecretAutoManageService {
     private Map< Integer, Secret > serviceSecretMap;
     private int currentKeyPairNo;
     private ExecutorService secretRefreshThread;
@@ -107,23 +107,13 @@ public class ApplicationSecretAutoManagementService {
     }
 
     public static void main( String[] args ) {
-        ApplicationSecretAutoManagementService test = new ApplicationSecretAutoManagementService();
+        SingleInstanceAppSecretAutoManageService test = new SingleInstanceAppSecretAutoManageService();
         String encrypted = test.encryptData( "你猜对不对" );
         try {
             System.out.println( encrypted );
             log.info( test.decryptData( encrypted ) );
         } catch ( UnstandardEncryptedDataException e ) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * 待加密的字符串没有使用 ServiceKeyPairKeeper 进行加密，故加密数据无法正常进行解密。
-     */
-    private class UnstandardEncryptedDataException extends Throwable {
-        @Override
-        public String getMessage() {
-            return MessageConstants.SCE_MSG_1100;
         }
     }
 
