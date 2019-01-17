@@ -37,7 +37,6 @@ public interface AppDownloadDao {
     RestRecord addUserDownloadInfo(
             @RequestParam( "userId" ) String userId,
             @RequestParam( "appId" ) String appId,
-            @RequestParam( "version" ) String version,
-            @RequestParam( "platform" ) String platform );
+            @RequestParam( "version" ) String version );
 
 }
