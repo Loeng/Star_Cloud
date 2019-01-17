@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -130,21 +131,21 @@ public class TeacherRecommendAppApiController {
             @RequestParam( value = "endTime", required = false, defaultValue = "2099-01-01 00:00:00" ) String endTime,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
-        log.trace( "query teacherCommend conditions is teacherId:{} startTime:{} endTime:{} pageNum:{} pageSize:{} ", teacherId, startTime, endTime, pageNum, pageSize );
-        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        try {
-            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
-            Page< List< Map< String, Object > > > page = teacherRecommendRepository.findAllByUserIdAndTime( teacherId, startTime, endTime, pageable );
-            Map< String, Object > temp = new HashMap<>( 16 );
-            temp.put( "data", page.getContent() );
-            temp.put( "totalPage", page.getTotalPages() );
-            temp.put( "totalCount", page.getTotalElements() );
-            restRecord.setData( temp );
-            return restRecord;
-        } catch ( Exception e ) {
-            log.error( "", e );
+//        log.trace( "query teacherCommend conditions is teacherId:{} startTime:{} endTime:{} pageNum:{} pageSize:{} ", teacherId, startTime, endTime, pageNum, pageSize );
+//        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+//        try {
+//            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+//            Page< List< Map< String, Object > > > page = teacherRecommendRepository.findAllByUserIdAndTime( teacherId, startTime, endTime, pageable );
+//            Map< String, Object > temp = new HashMap<>( 16 );
+//            temp.put( "data", page.getContent() );
+//            temp.put( "totalPage", page.getTotalPages() );
+//            temp.put( "totalCount", page.getTotalElements() );
+//            restRecord.setData( temp );
+//            return restRecord;
+//        } catch ( Exception e ) {
+//            log.error( "", e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
-        }
+//        }
     }
 
     @GetMapping( "/list" )
@@ -153,7 +154,7 @@ public class TeacherRecommendAppApiController {
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) int pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) int pageSize ) {
         log.trace( "query TeacherRecommend List condition is {}" );
-        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize , Sort.Direction.DESC,"COUNT" );
         try {
             Page< List< Map< String, Object > > > page = teacherRecommendRepository.getTeacherRecommendList( userId, pageable );
             Map< String, Object > result = new HashMap<>( 16 );
@@ -168,7 +169,7 @@ public class TeacherRecommendAppApiController {
     }
 
 
-    @PostMapping( "commend" )
+    @PostMapping( "/commend" )
     RestRecord updateIsCommend( @RequestParam String userId, @RequestParam String appId ) {
         try {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, teacherRecommendRepository.updateIsCommend( userId, appId ) );
