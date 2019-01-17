@@ -170,8 +170,11 @@ public class TeacherRecommendAppApiController {
 
     @PostMapping( "commend" )
     RestRecord updateIsCommend( @RequestParam String userId, @RequestParam String appId ) {
-        System.out.println( userId );
-        System.out.println( appId );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, teacherRecommendRepository.updateIsCommend( userId, appId ) );
+        try {
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, teacherRecommendRepository.updateIsCommend( userId, appId ) );
+        } catch ( Exception e ) {
+            log.error( "", e );
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
     }
 }
