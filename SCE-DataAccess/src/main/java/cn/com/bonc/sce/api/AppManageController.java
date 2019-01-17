@@ -312,8 +312,8 @@ public class AppManageController {
         String type = String.valueOf( applyType );
         int appInfo = 0;
         for ( Map map : appIdList ) {
-            String appId = map.get( "APP_ID" ).toString();
-            String appVersion = map.get( "APP_VERSION" ).toString();
+            String appId = String.valueOf(  map.get( "appId" ));
+            String appVersion = String.valueOf(  map.get( "appVersion" ));
             appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId, appId, appVersion );
         }
         return new RestRecord( 200, appInfo );

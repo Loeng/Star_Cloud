@@ -91,8 +91,7 @@ public class FileUploadApiController {
             userPassword.setUserId( userId );
             fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
                     loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                    excelToUser.getPhoneNumber(), excelToUser.getAddress(), secret );
-
+                    excelToUser.getPhoneNumber(),excelToUser.getAddress(),excelToUser.getOrganizationId(), secret );
             userPasswordDao.save( userPassword );
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, list.size() );
