@@ -212,8 +212,8 @@ public class AuthenticationController {
             }
         }
         catch (UnstandardEncryptedDataException e) {
-           log.error("解密验证码{}失败，异常信息为：",verify_code,e);
-           return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_412);
+           log.error("解密验证码{}失败，异常信息为：{}",verify_code,e);
+           return new RestRecord(500,WebMessageConstants.SCE_PORTAL_MSG_412,"解密失败，验证异常,请重试!");
         }
 
     }
