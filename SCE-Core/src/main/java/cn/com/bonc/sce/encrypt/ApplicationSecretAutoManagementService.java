@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Service
 @ConditionalOnProperty( name = "sce.service.secret.auto-management.enable", havingValue = "true" )
-public class ServiceKeyPairKeeper {
+public class ApplicationSecretAutoManagementService {
     private Map< Integer, Secret > serviceSecretMap;
     private int currentKeyPairNo;
     private ExecutorService secretRefreshThread;
@@ -107,7 +107,7 @@ public class ServiceKeyPairKeeper {
     }
 
     public static void main( String[] args ) {
-        ServiceKeyPairKeeper test = new ServiceKeyPairKeeper();
+        ApplicationSecretAutoManagementService test = new ApplicationSecretAutoManagementService();
         String encrypted = test.encryptData( "你猜对不对" );
         try {
             System.out.println( encrypted );
