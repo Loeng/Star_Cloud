@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 通用文件上传接口
@@ -30,8 +29,6 @@ import java.util.Map;
 public class FileUploadController {
 
     private FileUploadService fileUploadService;
-    private MultipartFile multipartFile;
-    private String fileType;
 
     @Autowired
     public FileUploadController( FileUploadService fileUploadService ) {
@@ -50,7 +47,7 @@ public class FileUploadController {
     @PostMapping( "" )
     @ResponseBody
     public RestRecord uploadPicture( @RequestParam( "file" ) @ApiParam( name = "file", value = "上传文件", required = true ) MultipartFile multipartFile,
-                                     @RequestParam( "fileType" ) @ApiParam( name = "fileType", value = "文件类型", allowableValues = "pic,soft,document" ) String fileType ) {
+                                     @RequestParam( "fileType" ) @ApiParam( name = "fileType", value = "文件类型", allowableValues = "pic,soft,document,war" ) String fileType ) {
         if ( multipartFile == null || multipartFile.isEmpty() ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }

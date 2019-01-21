@@ -30,8 +30,10 @@ fileUpload:
   image: img
   soft:  soft
   document: document
+  war: war
   mapping:
     image:  http://192.168.1.31:4400/img
     soft:  http://192.168.1.31:4400/soft
     document: http://192.168.1.31:4400/document
+    war: http://192.168.1.31:4400/war
 
