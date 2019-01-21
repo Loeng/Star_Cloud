@@ -34,6 +34,9 @@ public class MarketAppVersion implements Serializable {
     private String appPhonePic;
     private String appPcPic;
     private String currentVersion;
+    private String installInfo;
+    private String storeLocation;
+    private String indexUrl;
 
     @Basic
     @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
@@ -216,6 +219,36 @@ public class MarketAppVersion implements Serializable {
         this.currentVersion = currentVersion;
     }
 
+    @Basic
+    @Column( name = "INSTALL_INFO", nullable = true, length = 1200 )
+    public String getInstallInfo() {
+        return installInfo;
+    }
+
+    public void setInstallInfo( String installInfo ) {
+        this.installInfo = installInfo;
+    }
+
+    @Basic
+    @Column( name = "STORE_LOCATION", nullable = true, length = 200 )
+    public String getStoreLocation() {
+        return storeLocation;
+    }
+
+    public void setStoreLocation( String storeLocation ) {
+        this.storeLocation = storeLocation;
+    }
+
+    @Basic
+    @Column( name = "INDEX_URL", nullable = true, length = 200 )
+    public String getIndexUrl() {
+        return indexUrl;
+    }
+
+    public void setIndexUrl( String indexUrl ) {
+        this.indexUrl = indexUrl;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) {
@@ -240,12 +273,15 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( newFeatures, that.newFeatures ) &&
                 Objects.equals( packageName, that.packageName ) &&
                 Objects.equals( authDetail, that.authDetail ) &&
-                Objects.equals( currentVersion, that.currentVersion );
+                Objects.equals( currentVersion, that.currentVersion ) &&
+                Objects.equals( installInfo, that.installInfo ) &&
+                Objects.equals( storeLocation, that.storeLocation ) &&
+                Objects.equals( indexUrl, that.indexUrl );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl );
     }
 }
