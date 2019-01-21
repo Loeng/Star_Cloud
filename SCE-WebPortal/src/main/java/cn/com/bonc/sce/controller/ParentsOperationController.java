@@ -65,8 +65,26 @@ public class ParentsOperationController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertParentsInfo( @RequestBody @ApiParam( name = "parentsInfo", value = "新闻信息", required = true )ParentsInfo parentsInfo){
+    public RestRecord insertParentsInfo( @RequestBody @ApiParam( name = "parentsInfo", value = "用户信息", required = true )ParentsInfo parentsInfo){
         return parentsOperationService.insertParentsInfo( parentsInfo );
+    }
+
+    /**
+     * 用户注册
+     *
+     * @param info 注册信息
+     * @return 添加结果
+     */
+    @ApiOperation( value = "用户注册", notes = "用户注册", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 411, message = WebMessageConstants.SCE_PORTAL_MSG_411, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+    } )
+    @PostMapping("/free")
+    @ResponseBody
+    public RestRecord insertUsersInfo( @RequestBody @ApiParam( name = "info", value = "注册信息", required = true )ParentsInfo info){
+        return parentsOperationService.insertUsersInfo( info );
     }
 
     /**

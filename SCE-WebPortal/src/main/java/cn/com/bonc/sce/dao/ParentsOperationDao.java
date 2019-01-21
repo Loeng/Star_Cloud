@@ -30,6 +30,15 @@ public interface ParentsOperationDao {
     public RestRecord insertParentsInfo( ParentsInfo parentsInfo );
 
     /**
+     * 用户注册
+     *
+     * @param info 注册信息
+     * @return 添加结果
+     */
+    @RequestMapping( value = "/parents-operation/free", method = RequestMethod.POST )
+    public RestRecord insertUsersInfo( ParentsInfo info );
+
+    /**
      * 获取审核列表
      *
      * @return 结果

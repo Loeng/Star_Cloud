@@ -44,6 +44,23 @@ public class ParentsOperationApiController {
     }
 
     /**
+     * 用户注册
+     *
+     * @param info 注册信息
+     * @return 添加结果
+     */
+    @PostMapping( "/free" )
+    @ResponseBody
+    public RestRecord insertUsersInfo( @RequestBody ParentsInfo info ) {
+        try {
+            return parentsOperationService.insertUsersInfo( info );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
+        }
+    }
+
+    /**
      * 获取审核列表
      *
      * @return 结果

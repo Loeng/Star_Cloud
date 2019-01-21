@@ -76,7 +76,7 @@ public class ParentsOperationService {
             u.setIsDelete( 1 );
             u.setSecret( Secret.generateSecret() );
             u.setLoginPermissionStatus( 1 );
-            u.setUserType( 8 );
+            u.setUserType( 9 );
             User user = userParentDao.save( u );
             String parentId = user.getUserId();
 
@@ -115,19 +115,48 @@ public class ParentsOperationService {
         return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
     }
 
-    public RestRecord getExamine(Integer pageNum, Integer pageSize) {
-        Page< Map<String,Object> > page;
+    /**
+     * 用户注册
+     *
+     * @param info 注册信息
+     * @return 添加结果
+     */
+    public RestRecord insertUsersInfo( ParentsInfo info ) {
+        //存储用户表
+        User u = new User();
+        u.setLoginName( info.getAccount() );
+        u.setPhoneNumber( info.getParentPhone() );
+        u.setUserName( info.getParentName() );
+        u.setCertificateNumber( info.getParentNum() );
+        u.setIsDelete( 1 );
+        u.setSecret( Secret.generateSecret() );
+        u.setLoginPermissionStatus( 1 );
+        u.setUserType( 8 );
+        User user = userParentDao.save( u );
+        String parentId = user.getUserId();
+
+        //存储密码表
+        UserPassword up = new UserPassword();
+        up.setUserId( parentId );
+        up.setPassword( info.getPassword() );
+        up.setIsDelete( 1 );
+        userPasswordDao.save( up );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    public RestRecord getExamine( Integer pageNum, Integer pageSize ) {
+        Page< Map< String, Object > > page;
         pageNum--;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
-        page = userParentDao.getUnExamine(pageable);
-        List< Map<String,Object> > list = page.getContent();
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
+        page = userParentDao.getUnExamine( pageable );
+        List< Map< String, Object > > list = page.getContent();
         Map< String, Object > info = new HashMap<>();
         info.put( "total", page.getTotalElements() );
         info.put( "info", list );
-        return new RestRecord( 200,info );
+        return new RestRecord( 200, info );
     }
 
-    public RestRecord examine( List<String> list ) {
-        return new RestRecord( 200, userParentDao.updateParentStatus(list));
+    public RestRecord examine( List< String > list ) {
+        return new RestRecord( 200, userParentDao.updateParentStatus( list ) );
     }
 }

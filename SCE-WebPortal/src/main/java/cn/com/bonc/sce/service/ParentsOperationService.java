@@ -65,6 +65,21 @@ public class ParentsOperationService {
     }
 
     /**
+     * 用户注册
+     *
+     * @param info 注册信息
+     * @return 添加结果
+     */
+    public RestRecord insertUsersInfo( ParentsInfo info ){
+        String parentValid = getAccountEncryptionCode( info.getParentPhone(), info.getParentPhoneValid() );
+        if ( !VaildSecurityUtils.checkValid( parentValid ) ){
+            return new RestRecord( 411, WebMessageConstants.SCE_PORTAL_MSG_411 );
+        }
+        VaildSecurityUtils.delValid( parentValid );
+        return parentsOperationDao.insertUsersInfo(info);
+    }
+
+    /**
      * 获取审核列表
      *
      * @return 结果
