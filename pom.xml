@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.com.bonc</groupId>
+    <artifactId>StarCloudEducation</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1.DEV</version>
+    <modules>
+        <module>SCE-AuthenticationServer</module>
+        <module>SCE-ConfigServer</module>
+        <module>SCE-ServiceDiscovery</module>
+        <module>SCE-DataAccess</module>
+        <module>SCE-SSO</module>
+        <module>SCE-WebPortal</module>
+        <module>SCE-Core</module>
+        <module>SCE-EducationMarket</module>
+        <module>SCE-BusStation</module>
+        <module>SCE-Gateway</module>
+    </modules>
+
+    <properties>
+        <!-- spring -->
+        <spring-boot-version>2.0.7.RELEASE</spring-boot-version>
+        <spring-cloud-denpendencies-version>Finchley.SR2</spring-cloud-denpendencies-version>
+        <!-- persistant -->
+        <spring-data-jpa-version>${spring-boot-version}</spring-data-jpa-version>
+        <hikari-connection-pool-version></hikari-connection-pool-version>
+        <odbc-version>12.1.0.1-atlassian-hosted</odbc-version>
+        <druid-version>1.1.12</druid-version>
+        <!-- tools -->
+        <lombok-version>1.18.4</lombok-version>
+        <jackson-databind-version>2.9.7</jackson-databind-version>
+        <jackson-yaml-format-version>${jackson-databind-version}</jackson-yaml-format-version>
+        <gson-version>2.8.5</gson-version>
+        <hutool-version>4.3.0</hutool-version>
+        <!-- api generator-->
+        <swagger-version>2.9.2</swagger-version>
+        <swagger-ui-version>3.18.3</swagger-ui-version>
+        <spring-swagger-ui-version>2.7.0</spring-swagger-ui-version>
+        <!-- jwt version -->
+        <jjwt-version>0.10.5</jjwt-version>
+        <!-- excel -->
+        <easypoi-base-version>3.0.3</easypoi-base-version>
+        <!-- aop -->
+        <aspectj-weaver-version>1.5.3</aspectj-weaver-version>
+        <!-- compilor -->
+        <spring-boot-maven-plugin-version>2.1.0.RELEASE</spring-boot-maven-plugin-version>
+        <maven-compiler-plugin-version>3.8.0</maven-compiler-plugin-version>
+        <java-version>1.8</java-version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- spring frameworks-->
+            <!-- web service -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot-version}</version>
+            </dependency>
+            <!-- cloud-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-denpendencies-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- fundamental tools -->
+            <!-- logs -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j2</artifactId>
+                <version>${spring-boot-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok-version}</version>
+            </dependency>
+            <!-- data -->
+            <!-- spring data jpa, remove default tomcat pool -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring-data-jpa-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-jdbc</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- Oracle JDBC driver -->
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc6</artifactId>
+                <version>${odbc-version}</version>
+            </dependency>
+            <!-- HikariCP connection pool -->
+            <!--<dependency>-->
+            <!--<groupId>com.zaxxer</groupId>-->
+            <!--<artifactId>HikariCP</artifactId>-->
+            <!--<version>${hikari-connection-pool-version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid-version}</version>
+            </dependency>
+            <!-- yaml -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-databind-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jackson-yaml-format-version}</version>
+            </dependency>
+            <!-- tools -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-version}</version>
+            </dependency>
+            <!-- API generator-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger-ui-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gizwits</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${spring-swagger-ui-version}</version>
+            </dependency>
+            <!-- test -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- jwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt-version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt-version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <!-- excel 解析 -->
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-base</artifactId>
+                <version>${easypoi-base-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-web</artifactId>
+                <version>${easypoi-base-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-annotation</artifactId>
+                <version>${easypoi-base-version}</version>
+            </dependency>
+            <!-- aop -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-boot-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj-weaver-version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin-version}</version>
+                    <configuration>
+                        <source>${java-version}</source>
+                        <target>${java-version}</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <!-- package&plugin repositories -->
+    <repositories>
+        <repository>
+            <id>maven-ali</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-libs-release</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-libs-snapshot</id>
+            <name>Spring Snapshot Repository</name>
+            <url>http://repo.spring.io/libs-snapshot</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/libs-snapshot-local</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone-local</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

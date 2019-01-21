@@ -1,0 +1,23 @@
+spring.profiles.active: native
+---
+spring:
+  application:
+    name: sce-config-server
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config
+server:
+  port: 10100
+  servlet:
+    context-path: /
+logging:
+#  file: ./logs/dev_app.log
+  pattern:
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: INFO
+    guru.springframework.controllers: INFO
+    org.hibernate: INFO

@@ -1,0 +1,86 @@
+package cn.com.bonc.sce.dao;
+
+import cn.com.bonc.sce.entity.Notification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+
+/**
+ * 新闻
+ *
+ * @author wzm
+ * @version 0.1
+ * @since 2018/12/21 9:00
+ */
+@Repository
+public interface NotificationDao extends JpaRepository< Notification, Integer > {
+    @Override
+    Notification save( Notification banner );
+
+    @Modifying
+    @Query( "UPDATE Notification n SET n.isDelete=0 WHERE n.id=?1" )
+    Integer updateDeleteStatusById( Integer id );
+
+    Notification findByIdAndIsDelete( Integer newsId, Integer isDelete );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnId( Integer isDelete,
+                                                                  String content,
+                                                                  Integer columnId,
+                                                                  Pageable pageable );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndUpdateTimeBetween( Integer isDelete,
+                                                                                      String content,
+                                                                                      Integer columnId,
+                                                                                      Date createTimeFrom,
+                                                                                      Date createTimeTo,
+                                                                                      Pageable pageable );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentType( Integer isDelete,
+                                                                                String content,
+                                                                                Integer columnId,
+                                                                                Integer type,
+                                                                                Pageable pageable );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndUpdateTimeBetween( Integer isDelete,
+                                                                                                    String content,
+                                                                                                    Integer columnId,
+                                                                                                    Integer contentType,
+                                                                                                    Date createTimeFrom,
+                                                                                                    Date createTimeTo,
+                                                                                                    Pageable pageable );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentStatus( Integer isDelete,
+                                                                                  String content,
+                                                                                  Integer columnId,
+                                                                                  String contentStatus,
+                                                                                  Pageable pageable );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentStatusAndUpdateTimeBetween( Integer isDelete,
+                                                                                                      String content,
+                                                                                                      Integer columnId,
+                                                                                                      String contentStatus,
+                                                                                                      Date createTimeFrom,
+                                                                                                      Date createTimeTo,
+                                                                                                      Pageable pageable );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatus( Integer isDelete,
+                                                                                                String content,
+                                                                                                Integer columnId,
+                                                                                                Integer type,
+                                                                                                String contentStatus,
+                                                                                                Pageable pageable );
+
+    Page< Notification > findByIsDeleteAndContentLikeAndColumnIdAndContentTypeAndContentStatusAndUpdateTimeBetween( Integer isDelete,
+                                                                                                                    String content,
+                                                                                                                    Integer columnId,
+                                                                                                                    Integer contentType,
+                                                                                                                    String contentStatus,
+                                                                                                                    Date createTimeFrom,
+                                                                                                                    Date createTimeTo,
+                                                                                                                    Pageable pageable );
+}
