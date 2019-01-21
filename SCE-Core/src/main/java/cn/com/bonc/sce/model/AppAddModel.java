@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
- * 软件上传参数
+ * 软件资源上传参数
  *
  * @author jc_D
  * @description 用于绑定前端传来的json
