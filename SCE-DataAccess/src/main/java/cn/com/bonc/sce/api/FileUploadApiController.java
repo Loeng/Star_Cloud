@@ -44,7 +44,7 @@ public class FileUploadApiController {
 
     public static final String TEACHER_PRE = "2";
 
-    public static final String PARENT_CODE = "2";
+    public static final String PARENT_CODE = "5";
 
     public static final String CERTIFICATE_TYPE = "1";
 
