@@ -3,15 +3,21 @@ package cn.com.bonc.sce.controller;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.AppAddModel;
+import cn.com.bonc.sce.model.AppTypeMode;
+import cn.com.bonc.sce.model.PlatFormAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppManageService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 应用管理
@@ -32,12 +38,12 @@ public class AppManageController {
     }
 
     /**
-     * 新增应用
+     * 新增软件应用
      *
      * @param appInfo 应用信息， value为json格式
      * @return
      */
-    @ApiOperation( value = "新增应用", notes = "新增应用", httpMethod = "POST" )
+    @ApiOperation( value = "新增软件应用", notes = "新增软件应用", httpMethod = "POST" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
@@ -46,9 +52,62 @@ public class AppManageController {
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
     @PostMapping
-    public RestRecord addAppInfo( @RequestBody @ApiParam( "新增软件对象" ) AppAddModel appInfo,
+    public RestRecord addAppInfo( @Valid @RequestBody @ApiParam( "新增软件对象" ) AppAddModel appInfo,
+                                  BindingResult results,
                                   @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        log.trace( "appinfo::{}", appInfo );
+        if ( results.hasErrors() ) {
+            return new RestRecord( 423, results.getFieldError().getDefaultMessage() );
+        }
+        Set< AppTypeMode > pc = appInfo.getPc();
+        for ( AppTypeMode appTypeMode : pc ) {
+            if ( StringUtils.isEmpty( appTypeMode.getAddress() ) ) {
+                return new RestRecord( 423, "请上传软件" );
+            }
+            if ( StringUtils.isEmpty( appTypeMode.getAppVersion() ) ) {
+                return new RestRecord( 423, "版本号不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( appTypeMode.getRunningPlatform() ) ) {
+                return new RestRecord( 423, "运行平台不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( appTypeMode.getVersionSize() ) ) {
+                return new RestRecord( 423, "软件大小不能为空" );
+            }
+
+            if ( StringUtils.isEmpty( appTypeMode.getPackageName() ) ) {
+                return new RestRecord( 423, "包名不能为空" );
+            }
+
+        }
         return appManageService.addAppInfo( appInfo, userId );
+    }
+
+    /**
+     * 新增平台应用
+     *
+     * @param platFormInfo 平台应用信息， value为json格式
+     * @return
+     */
+    @ApiOperation( value = "新增平台应用", notes = "新增平台应用", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
+    } )
+    @PostMapping( "/pt" )
+    public RestRecord addPlatFormInfo( @Valid @RequestBody @ApiParam( "新增平台对象" ) PlatFormAddModel platFormInfo,
+                                       BindingResult results,
+                                       @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+
+        log.trace( "platFormInfo::{}", platFormInfo );
+        if ( results.hasErrors() ) {
+            return new RestRecord( 423, results.getFieldError().getDefaultMessage() );
+        }
+        return appManageService.addPlatFormInfo( platFormInfo, userId );
     }
 
     /**
@@ -291,7 +350,7 @@ public class AppManageController {
      * @param keyword
      * @return
      */
-    @ApiOperation( value = "通过审核状态查询app列表", notes = "1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架" , httpMethod = "GET" )
+    @ApiOperation( value = "通过审核状态查询app列表", notes = "1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )

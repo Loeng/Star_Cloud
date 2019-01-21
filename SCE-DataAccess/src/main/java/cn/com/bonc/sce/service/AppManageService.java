@@ -6,6 +6,7 @@ import cn.com.bonc.sce.entity.AppTypeRelEntity;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
+import cn.com.bonc.sce.model.PlatFormAddModel;
 import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.hutool.core.collection.CollUtil;
@@ -43,7 +44,7 @@ public class AppManageService {
     private CompanyInfoRepository companyInfoRepository;
 
     @Transactional( rollbackFor = Exception.class )
-    public RestRecord addAppInfo( AppAddModel appInfo, String uid ) throws Exception {
+    public RestRecord addAppInfo( AppAddModel appInfo, String uid ) {
         //根据uid查companyId
         Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
 
@@ -103,11 +104,71 @@ public class AppManageService {
             marketAppVersionRepository.saveAndFlush( marketAppVersion );
         } );
 
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appInfo );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appId );
+    }
+
+    @Transactional( rollbackFor = Exception.class )
+    public RestRecord addPlatFormInfo( PlatFormAddModel platFormInfo, String uid ) {
+        //根据uid查companyId
+        Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
+        //取icon
+        Integer iconId = platFormInfo.getAppIcon();
+        Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
+        String iconAddress = iconAd.get( "FILE_STORE_PATH" ).toString();
+        //1.appinfo表
+        AppInfoEntity appInfoEntity = new AppInfoEntity();
+        appInfoEntity.setAppIcon( iconAddress );
+        appInfoEntity.setAppName( platFormInfo.getAppName() );
+        appInfoEntity.setCreateUserId( uid );
+        appInfoEntity.setCreateTime( new Date() );
+        appInfoEntity.setIsDelete( 1 );
+        appInfoEntity.setAppSource( "pt" );
+        appInfoEntity.setAppNotes( platFormInfo.getAppNotes() );
+        appInfoEntity.setCompanyId( companyId );
+        AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
+        String appId = info.getAppId();
+        //2.类型关系表
+        AppTypeRelEntity appTypeRelEntity = new AppTypeRelEntity();
+        appTypeRelEntity.setAppId( appId );
+        appTypeRelEntity.setAppTypeId( platFormInfo.getAppTypeId() );
+        AppTypeRelEntity rel = appTypeRelRepository.saveAndFlush( appTypeRelEntity );
+
+        //根据id取pc图片链接
+        String pcUrl = getFilesUrlById( platFormInfo.getAppPcPic() );
+
+        //3.版本表
+        //根据addressId获取软件存储路径
+        Integer storeLocation = platFormInfo.getStoreLocation();
+        Map< String, Object > ptStoreLocation = fileResourceRepository.getFileStorePathById( storeLocation );
+        String platFormAddress = ptStoreLocation.get( "FILE_STORE_PATH" ).toString();
+        //往版本表存东西
+        MarketAppVersion marketAppVersion = new MarketAppVersion();
+        marketAppVersion.setAppId( appId );
+        marketAppVersion.setAppDownloadAddress( platFormAddress );
+        marketAppVersion.setAppVersion( platFormInfo.getAppVersion() );
+        marketAppVersion.setVersionInfo( platFormInfo.getAppNotes() );
+        marketAppVersion.setPackageName( platFormInfo.getPackageName() );
+        marketAppVersion.setAppStatus( "1" );
+        marketAppVersion.setNewFeatures( platFormInfo.getNewFeatures() );
+        marketAppVersion.setAppPcPic( pcUrl );
+        marketAppVersion.setCreateTime( new Date() );
+        marketAppVersion.setIsDelete( 1L );
+        marketAppVersion.setCreateUserId( uid );
+        marketAppVersion.setIndexUrl( platFormInfo.getIndexUrl() );
+        marketAppVersion.setInstallInfo( platFormInfo.getInstallInfo() );
+        marketAppVersion.setStoreLocation( platFormAddress );
+        marketAppVersion.setTestUrl( platFormInfo.getTestUrl() );
+        marketAppVersionRepository.saveAndFlush( marketAppVersion );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appId );
     }
 
 
-    //根据文件id取文件路径
+    /**
+     * 根据文件id取文件路径
+     *
+     * @param ids 一批文件id
+     * @return
+     */
     private String getFilesUrlById( Set< Integer > ids ) {
         if ( CollUtil.isEmpty( ids ) ) {
             return null;

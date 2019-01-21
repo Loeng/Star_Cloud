@@ -37,6 +37,7 @@ public class MarketAppVersion implements Serializable {
     private String installInfo;
     private String storeLocation;
     private String indexUrl;
+    private String testUrl;
 
     @Basic
     @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
@@ -249,6 +250,16 @@ public class MarketAppVersion implements Serializable {
         this.indexUrl = indexUrl;
     }
 
+    @Basic
+    @Column( name = "TEST_URL", nullable = true, length = 200 )
+    public String getTestUrl() {
+        return testUrl;
+    }
+
+    public void setTestUrl( String testUrl ) {
+        this.testUrl = testUrl;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) {
@@ -276,12 +287,13 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( currentVersion, that.currentVersion ) &&
                 Objects.equals( installInfo, that.installInfo ) &&
                 Objects.equals( storeLocation, that.storeLocation ) &&
-                Objects.equals( indexUrl, that.indexUrl );
+                Objects.equals( indexUrl, that.indexUrl )&&
+                Objects.equals( testUrl, that.testUrl );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl,testUrl );
     }
 }
