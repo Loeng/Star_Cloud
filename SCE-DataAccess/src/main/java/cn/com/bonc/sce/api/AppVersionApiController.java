@@ -262,7 +262,7 @@ public class AppVersionApiController {
             for ( Map< String, String > approve : approveList ) {
                 appAuditingRepository.appVersionReject( approve.get( "appId" ), approve.get( "appVersion" ), userId );
                 MarketAppVersion appReject = appAuditingRepository.findByAppIdAndAppVersion( approve.get( "appId" ), approve.get( "appVersion" ) );
-                appReject.setAppStatus( "5" );
+                appReject.setAppStatus( "3" );
                 appReject.setUpdateTime( new Date() );
                 appReject.setUpdateUserId( userId );
                 appAuditingRepository.saveAndFlush( appReject );
