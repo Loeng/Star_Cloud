@@ -60,7 +60,7 @@ public class ParentsOperationService {
     public RestRecord insertParentsInfo( ParentsInfo parentsInfo ) {
         String account = parentsInfo.getStudentAccount();
         String phone = studentParentRelDao.selectMainParentPhone( account );
-        if ( StringUtils.isEmpty( phone ) || !phone.equals( parentsInfo.getParentPhone() ) ) {
+        if ( StringUtils.isEmpty( phone ) || !phone.equals( parentsInfo.getMainParentPhone() ) ) {
             return new RestRecord( 430, WebMessageConstants.SCE_PORTAL_MSG_430 );
         }
         List< Map< String, String > > list = userParentDao.selectUserInfo( account );
