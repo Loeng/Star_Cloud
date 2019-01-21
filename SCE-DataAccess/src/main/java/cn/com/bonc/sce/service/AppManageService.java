@@ -47,7 +47,9 @@ public class AppManageService {
     public RestRecord addAppInfo( AppAddModel appInfo, String uid ) {
         //根据uid查companyId
         Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
-
+        if ( companyId == null ) {
+            return new RestRecord( 423, "您不是厂商用户，无法新增软件应用" );
+        }
         //取icon
         Integer iconId = appInfo.getAppIcon();
         Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
@@ -112,6 +114,9 @@ public class AppManageService {
         //根据uid查companyId
         Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
         //取icon
+        if ( companyId == null ) {
+            return new RestRecord( 423, "您不是厂商用户，无法新增平台应用" );
+        }
         Integer iconId = platFormInfo.getAppIcon();
         Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
         String iconAddress = iconAd.get( "FILE_STORE_PATH" ).toString();
