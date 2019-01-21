@@ -15,6 +15,7 @@ import java.util.Objects;
 @Table( name = "SCE_MARKET_APP_VERSION", schema = "STARCLOUDMARKET" )
 @IdClass( MarketAppVersionPK.class )
 public class MarketAppVersion implements Serializable {
+
     private String appId;
     private String appVersion;
     private String appStatus;
@@ -189,6 +190,7 @@ public class MarketAppVersion implements Serializable {
     public String getPackageName() {
         return packageName;
     }
+
 
     public void setPackageName( String packageName ) {
         this.packageName = packageName;
