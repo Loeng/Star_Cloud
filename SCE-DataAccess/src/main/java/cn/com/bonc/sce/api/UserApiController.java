@@ -119,6 +119,8 @@ public class UserApiController {
             String address = user.getAddress();
             String number = user.getCertificateNumber();
             String mailAddress = user.getMailAddress();
+            String phoneNumber = user.getPhoneNumber();
+            String gender = user.getGender();
             if(!StringUtils.isEmpty( username )){
                 conditionUser = conditionUser + ",USER_NAME='" + username + "'";
             }
@@ -130,6 +132,12 @@ public class UserApiController {
             }
             if(!StringUtils.isEmpty( mailAddress )){
                 conditionUser = conditionUser + ",MAIL_ADDRESS='" + mailAddress + "'";
+            }
+            if(!StringUtils.isEmpty( phoneNumber )){
+                conditionUser = conditionUser + ",PHONE_NUMBER='" + phoneNumber + "'";
+            }
+            if(!StringUtils.isEmpty( gender )){
+                conditionUser = conditionUser + ",GENDER='" + gender + "'";
             }
             if(conditionUser.length()>0){
                 String sqlUser = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET " + conditionUser.substring( 1 ) + " WHERE USER_ID = " + "'"+userId+"'";
