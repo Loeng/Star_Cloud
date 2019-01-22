@@ -45,4 +45,12 @@ public interface UserDaoClient {
     @RequestMapping( value = "/users/detailed/{userId}", method = RequestMethod.GET )
     public RestRecord getUserInfo( @PathVariable( "userId" )String userId);
 
+    /**
+     * 修改用户
+     *
+     * @return 修改用户
+     */
+    @RequestMapping( value = "/users/detailed", method = RequestMethod.POST )
+    public RestRecord updateUserInfo( User user );
+
 }

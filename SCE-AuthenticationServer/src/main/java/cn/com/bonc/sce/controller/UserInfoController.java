@@ -57,4 +57,20 @@ public class UserInfoController {
     public RestRecord getUserInfo(@PathVariable( "userId" ) @ApiParam( name = "userId", value = "用户id") String userId) {
         return userService.getUserInfo(userId);
     }
+
+    /**
+     * 修改用户
+     *
+     * @return 修改用户
+     */
+    @ApiOperation( value = "修改用户", notes = "修改用户", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
+    } )
+    @PostMapping("/detailed")
+    @ResponseBody
+    public RestRecord updateUserInfo( @RequestBody @ApiParam( name = "user", value = "用户") User user) {
+        return userService.updateUserInfo(user);
+}
 }
