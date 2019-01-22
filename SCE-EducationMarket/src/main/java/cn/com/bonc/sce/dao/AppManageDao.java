@@ -30,9 +30,9 @@ public interface AppManageDao {
      * @param uid
      * @return
      */
-    @PostMapping( "/manage-app/pt/{uid}" )
-     RestRecord addPlatFormInfo( @RequestBody PlatFormAddModel platFormInfo,
-                                 @PathVariable( "uid" ) String uid );
+    @RequestMapping( value = "/manage-app/pt/{uid}", method = RequestMethod.POST )
+    RestRecord addPlatFormInfo( @RequestBody PlatFormAddModel platFormInfo,
+                                @PathVariable( "uid" ) String uid );
 
     /**
      * 删除应用信息
@@ -160,6 +160,7 @@ public interface AppManageDao {
                                         @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
                                         @RequestParam( value = "keyword", required = false ) String keyword,
                                         @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                        @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
                                         @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                         @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
                                         @RequestParam( value = "userId" ) String userId

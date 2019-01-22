@@ -362,11 +362,12 @@ public class AppManageController {
                                                @RequestParam( value = "typeId", required = false, defaultValue = "0" ) @ApiParam( "app分类id" ) Integer typeId,
                                                @RequestParam( value = "keyword", required = false ) @ApiParam( "搜索关键词" ) String keyword,
                                                @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) @ApiParam( "下载量排序（asc|desc）" ) String downloadCount,
+                                               @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) @ApiParam( "平台类型 rj||pt，默认查询软件的列表" )String platformType,
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
                                                @CurrentUserId String userId
     ) {
-        return appManageService.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize, userId );
+        return appManageService.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize, userId ,platformType);
     }
 
 

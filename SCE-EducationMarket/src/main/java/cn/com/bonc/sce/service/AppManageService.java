@@ -151,8 +151,8 @@ public class AppManageService {
         return appManageDao.getAllAuditStatus();
     }
 
-    public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize, String userId ) {
-        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize, userId );
+    public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize, String userId, String platformType ) {
+        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, platformType, pageNum, pageSize, userId );
     }
 
     /**
