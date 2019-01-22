@@ -6,7 +6,7 @@ import cn.com.bonc.sce.entity.AppTypeRelEntity;
 import cn.com.bonc.sce.entity.MarketAppVersion;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
-import cn.com.bonc.sce.model.PlatFormAddModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.hutool.core.collection.CollUtil;
@@ -110,7 +110,7 @@ public class AppManageService {
     }
 
     @Transactional( rollbackFor = Exception.class )
-    public RestRecord addPlatFormInfo( PlatFormAddModel platFormInfo, String uid ) {
+    public RestRecord addPlatFormInfo( PlatformAddModel platFormInfo, String uid ) {
         //根据uid查companyId
         Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
         //取icon

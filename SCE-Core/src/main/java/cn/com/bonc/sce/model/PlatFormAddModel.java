@@ -17,7 +17,7 @@ import java.util.Set;
  **/
 @ApiModel
 @Data
-public class PlatFormAddModel {
+public class PlatformAddModel {
     @NotBlank( message = "应用名称不能为空" )
     @ApiModelProperty( name = "应用名称" )
     private String appName;
@@ -34,7 +34,7 @@ public class PlatFormAddModel {
     @ApiModelProperty( name = "新版特性" )
     private String newFeatures;
 
-    @NotBlank( message = "安装说明不能为空" )
+   // @NotBlank( message = "安装说明不能为空" )
     @ApiModelProperty( name = "安装说明" )
     private String installInfo;
 
@@ -61,6 +61,14 @@ public class PlatFormAddModel {
     @NotBlank( message = "测试url不能为空" )
     @ApiModelProperty( name = "测试url" )
     private String testUrl;
+
+    @NotBlank( message = "Token接收地址不能为空" )
+    @ApiModelProperty( name = "Token接收地址" )
+    private String tokenAddress;
+
+    //@NotBlank( message = "应用md5码不能为空" )
+    @ApiModelProperty( name = "测试url" )
+    private String md5Code;
 
     @ApiModelProperty( name = "pc端界面截图(json数组)" )
     private Set< Integer > appPcPic;

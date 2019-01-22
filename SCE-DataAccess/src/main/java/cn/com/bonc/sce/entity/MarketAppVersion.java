@@ -38,6 +38,8 @@ public class MarketAppVersion implements Serializable {
     private String storeLocation;
     private String indexUrl;
     private String testUrl;
+    private String tokenAddress;
+    private String md5Code;
 
     @Basic
     @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
@@ -260,6 +262,26 @@ public class MarketAppVersion implements Serializable {
         this.testUrl = testUrl;
     }
 
+    @Basic
+    @Column( name = "TOKEN_ADDRESS", nullable = true, length = 200 )
+    public String getTokenAddress() {
+        return tokenAddress;
+    }
+
+    public void setTokenAddress( String tokenAddress ) {
+        this.tokenAddress = tokenAddress;
+    }
+
+    @Basic
+    @Column( name = "MD5_CODE", nullable = true, length = 500 )
+    public String getMd5Code() {
+        return md5Code;
+    }
+
+    public void setMd5Code( String md5Code ) {
+        this.md5Code = md5Code;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) {
@@ -287,13 +309,15 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( currentVersion, that.currentVersion ) &&
                 Objects.equals( installInfo, that.installInfo ) &&
                 Objects.equals( storeLocation, that.storeLocation ) &&
-                Objects.equals( indexUrl, that.indexUrl )&&
-                Objects.equals( testUrl, that.testUrl );
+                Objects.equals( indexUrl, that.indexUrl ) &&
+                Objects.equals( testUrl, that.testUrl ) &&
+                Objects.equals( tokenAddress, that.tokenAddress ) &&
+                Objects.equals( md5Code, that.md5Code );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl,testUrl );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl, testUrl, tokenAddress, md5Code );
     }
 }

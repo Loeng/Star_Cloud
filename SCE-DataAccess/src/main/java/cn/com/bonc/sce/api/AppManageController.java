@@ -4,7 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.model.PlatFormAddModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.repository.CompanyInfoRepository;
@@ -96,7 +96,7 @@ public class AppManageController {
      * @return
      */
     @PostMapping( "/pt/{userId}" )
-    public RestRecord addPlatFormInfo( @RequestBody PlatFormAddModel platFormInfo,
+    public RestRecord addPlatFormInfo( @RequestBody PlatformAddModel platFormInfo,
                                        @PathVariable String userId ) {
         RestRecord ret;
         try {

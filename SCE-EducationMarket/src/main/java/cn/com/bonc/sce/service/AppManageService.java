@@ -2,7 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppManageDao;
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.model.PlatFormAddModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class AppManageService {
      * @param platFormInfo 平台应用信息， value为json格式
      * @return
      */
-    public RestRecord addPlatFormInfo( PlatFormAddModel platFormInfo, String uid ) {
+    public RestRecord addPlatFormInfo( PlatformAddModel platFormInfo, String uid ) {
         return appManageDao.addPlatFormInfo( platFormInfo, uid );
     }
 

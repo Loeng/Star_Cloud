@@ -4,7 +4,7 @@ import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
-import cn.com.bonc.sce.model.PlatFormAddModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppManageService;
 import io.swagger.annotations.*;
@@ -99,7 +99,7 @@ public class AppManageController {
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
     @PostMapping( "/pt" )
-    public RestRecord addPlatFormInfo( @Valid @RequestBody @ApiParam( "新增平台对象" ) PlatFormAddModel platFormInfo,
+    public RestRecord addPlatFormInfo( @Valid @RequestBody @ApiParam( "新增平台对象" ) PlatformAddModel platFormInfo,
                                        BindingResult results,
                                        @CurrentUserId @ApiParam( hidden = true ) String userId ) {
 

@@ -1,7 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.model.PlatFormAddModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public interface AppManageDao {
      * @return
      */
     @RequestMapping( value = "/manage-app/pt/{uid}", method = RequestMethod.POST )
-    RestRecord addPlatFormInfo( @RequestBody PlatFormAddModel platFormInfo,
+    RestRecord addPlatFormInfo( @RequestBody PlatformAddModel platFormInfo,
                                 @PathVariable( "uid" ) String uid );
 
     /**
