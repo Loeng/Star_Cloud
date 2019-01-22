@@ -8,9 +8,15 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 此类用作接受参数，创建用户使用
+ */
 @ApiModel
 @Data
 public class UserModel {
+
+    @ApiModelProperty(value = "用户Id",hidden = true)
+    private String userId;
 
     @ApiModelProperty( value = "账号", required = true )
     private String loginName;
@@ -51,7 +57,7 @@ public class UserModel {
     @ApiModelProperty( value = "登录次数", hidden = true )
     private int loginCounts;
 
-    @ApiModelProperty( value = "组织Id" )
+    @ApiModelProperty( value = "组织Id" ,notes = "实际上为学校Id")
     private String organizationId;
 
     @ApiModelProperty( value = "是否允许登录", hidden = true )

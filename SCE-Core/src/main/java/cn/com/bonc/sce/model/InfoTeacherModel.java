@@ -13,7 +13,7 @@ public class InfoTeacherModel {
     @ApiModelProperty( value = "用户Id", hidden = true )
     private String userId;
 
-    @ApiModelProperty( value = "学校Id" )
+    @ApiModelProperty( value = "学校Id" ,hidden = true,notes = "重复，未使用")
     private String schoolId;
 
     @ApiModelProperty( value = "职位" )

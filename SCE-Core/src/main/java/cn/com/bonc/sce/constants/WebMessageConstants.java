@@ -41,6 +41,15 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_200 = "操作成功";
     String SCE_PORTAL_MSG_240 = "文件上传成功";
 
+    String SCE_PORTAL_MSG_250 = "添加用户成功";
+    String SCE_PORTAL_MSG_251 = "添加学生用户成功";
+    String SCE_PORTAL_MSG_252 = "添加教师用户成功";
+    String SCE_PORTAL_MSG_253 = "添加学校用户成功";
+    String SCE_PORTAL_MSG_254 = "添加厂家用户成功";
+    String SCE_PORTAL_MSG_255 = "添加家长用户成功";
+    String SCE_PORTAL_MSG_256 = "添加代理商用户成功";
+    String SCE_PORTAL_MSG_257 = "添加机构用户成功";
+
     /**
      * 操作失败相关
      * 400 - 600
