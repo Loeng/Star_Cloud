@@ -14,14 +14,20 @@ import cn.com.bonc.sce.service.AppManageService;
 import cn.com.bonc.sce.service.AppNameTypeService;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +65,9 @@ public class AppManageController {
 
     @Autowired
     private CompanyInfoRepository companyInfoRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * 新增软件
@@ -326,72 +335,64 @@ public class AppManageController {
                                                @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
                                                @RequestParam( value = "keyword", required = false ) String keyword,
                                                @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                               @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
                                                @RequestParam( value = "userId" ) String userId
     ) {
         try {
-            //根据userId查询厂商id
-            Long companyId = companyInfoRepository.getCompanyIdByUid( userId );
-
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             Page< List< Map< String, Object > > > page;
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
-
-
             if ( "6".equals( auditStatus ) ) { // 查询暂存列表  1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架  6,暂存
                 Pageable newpageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( "desc" ) ? Sort.Direction.DESC : Sort.Direction.ASC, "APP_NAME" );
                 page = appInfoRepository.getTempAPPInfoByTypeIdAndKeyword( typeId, keyword, newpageable );
+                Map< String, Object > temp = new HashMap<>( 16 );
+                temp.put( "data", page.getContent() );
+                temp.put( "totalPage", page.getTotalPages() );
+                temp.put( "totalCount", page.getTotalElements() );
+                restRecord.setData( temp );
+                return restRecord;
             } else {
 
-                //管理员
-                if ( companyId == null ) {
-                    if ( typeId == 0 ) {
-                        //分类id为空
-                        page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
-                    } else {
-                        //分类id不为空
-                        page = appInfoRepository.getInfoByTypeIdAndKeyword( auditStatus, typeId, keyword, pageable );
-                    }
-                } else {
-                    if ( typeId == 0 ) {
-                        //分类id为空
-                        page = appInfoRepository.getInfoByKeywordAndCompanyId( auditStatus, keyword, companyId, pageable );
-                    } else {
-                        //分类id不为空
-                        page = appInfoRepository.getInfoByTypeIdAndKeywordAndCompanyId( auditStatus, typeId, keyword, companyId, pageable );
-                    }
+                //根据userId查询厂商id
+                Long companyId = companyInfoRepository.getCompanyIdByUid( userId );
+
+                StringBuilder sql = new StringBuilder( "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\" V WHERE 1 = 1 " );
+                //是管理员？
+                if ( companyId != null ) {
+                    sql.append( "V.COMPANY_ID = " ).append( companyId );
                 }
+                //app分类id
+                if ( typeId > 0 ) {
+                    sql.append( " AND V.APP_TYPE_ID = " ).append( typeId );
+                }
+                //平台类型
+                if ( !StringUtils.isEmpty( platformType ) ) {
+                    sql.append( " AND V.APP_SOURCE = " ).append( " '" ).append( platformType ).append( "' " );
+                }
+                //appName
+                if ( !StringUtils.isEmpty( keyword ) ) {
+                    sql.append( " AND V.APP_NAME LIKE '%" ).append( keyword ).append( "%'" );
+                }
+                sql.append( "ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
+                Session session = entityManager.unwrap( org.hibernate.Session.class );
+                NativeQuery query = session.createNativeQuery( sql.toString() );
+                query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
+                int start = ( pageNum - 1 ) * pageSize;
+                int total = query.getResultList().size();
+                //判断分页
+                if ( start < total && pageSize > 0 ) {
+                    query.setFirstResult( start );
+                    query.setMaxResults( pageSize );
+                }
+                Map< String, Object > temp = new HashMap<>( 16 );
+                temp.put( "data", query.getResultList() );
+                temp.put( "totalPage", ( total + pageSize - 1 ) / pageSize );
+                temp.put( "totalCount", total );
+                restRecord.setData( temp );
+                return restRecord;
 
             }
-
-
-//            //管理员
-//            if ( companyId == null ) {
-//                if ( typeId == 0 ) {
-//                    //分类id为空
-//                    page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
-//                } else {
-//                    //分类id不为空
-//                    page = appInfoRepository.getInfoByTypeIdAndKeyword( auditStatus, typeId, keyword, pageable );
-//                }
-//            } else {
-//                if ( typeId == 0 ) {
-//                    //分类id为空
-//                    page = appInfoRepository.getInfoByKeywordAndCompanyId( auditStatus, keyword, companyId, pageable );
-//                } else {
-//                    //分类id不为空
-//                    page = appInfoRepository.getInfoByTypeIdAndKeywordAndCompanyId( auditStatus, typeId, keyword, companyId, pageable );
-//                }
-//            }
-
-
-            Map< String, Object > temp = new HashMap<>( 16 );
-            temp.put( "data", page.getContent() );
-            temp.put( "totalPage", page.getTotalPages() );
-            temp.put( "totalCount", page.getTotalElements() );
-            restRecord.setData( temp );
-            return restRecord;
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );

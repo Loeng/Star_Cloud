@@ -6,6 +6,7 @@ import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.dao.UserPasswordDao;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.Secret;
+import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import lombok.extern.slf4j.Slf4j;
@@ -214,4 +215,17 @@ public class UserOperationController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
     }
 
+    @PostMapping("/insert")
+    @ResponseBody
+    public RestRecord insertUser( @RequestBody UserModel userModel){
+//        1	学生
+//        2	教师
+//        3	学校
+//        4	厂家
+//        5	家长
+//        6	代理商
+//        7	机构
+
+        return null;
+    }
 }
