@@ -21,8 +21,8 @@ public interface RoleRelDao extends JpaRepository< RoleRel, Integer > {
     @Override
     RoleRel save( RoleRel user );
 
-    @Query(value="SELECT B.INFO_TABLE_NAME FROM STARCLOUDPORTAL.SCE_COMMON_USER_ROLE_REL A\n" +
-            "LEFT JOIN STARCLOUDPORTAL.SCE_ROLE_INFOTABLE_REL B ON A.ROLE_ID=B.ROLE_ID\n" +
+    @Query(value="SELECT B.INFO_TABLE_NAME FROM STARCLOUDPORTAL.SCE_COMMON_USER A\n" +
+            "LEFT JOIN STARCLOUDPORTAL.SCE_ROLE_INFOTABLE_REL B ON A.USER_TYPE=B.ROLE_ID\n" +
             "WHERE A.USER_ID=?1",nativeQuery=true)
     List<String> getRoleTable( String userId);
 }

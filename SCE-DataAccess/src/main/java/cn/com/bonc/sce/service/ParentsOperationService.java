@@ -60,7 +60,7 @@ public class ParentsOperationService {
     public RestRecord insertParentsInfo( ParentsInfo parentsInfo ) {
         String account = parentsInfo.getStudentAccount();
         String phone = studentParentRelDao.selectMainParentPhone( account );
-        if ( StringUtils.isEmpty( phone ) || !phone.equals( parentsInfo.getMainParentPhone() ) ) {
+        if ( StringUtils.isEmpty( phone ) || !phone.equals( parentsInfo.getParentPhone() ) ) {
             return new RestRecord( 430, WebMessageConstants.SCE_PORTAL_MSG_430 );
         }
         List< Map< String, String > > list = userParentDao.selectUserInfo( account );
@@ -73,10 +73,12 @@ public class ParentsOperationService {
             u.setPhoneNumber( parentsInfo.getParentPhone() );
             u.setUserName( parentsInfo.getParentName() );
             u.setCertificateNumber( parentsInfo.getParentNum() );
+            u.setCertificateType( "1" );
             u.setIsDelete( 1 );
             u.setSecret( Secret.generateSecret() );
             u.setLoginPermissionStatus( 1 );
             u.setUserType( 9 );
+            u.setIsFirstLogin( 0 );
             User user = userParentDao.save( u );
             String parentId = user.getUserId();
 
@@ -128,10 +130,12 @@ public class ParentsOperationService {
         u.setPhoneNumber( info.getParentPhone() );
         u.setUserName( info.getParentName() );
         u.setCertificateNumber( info.getParentNum() );
+        u.setCertificateType( "1" );
         u.setIsDelete( 1 );
         u.setSecret( Secret.generateSecret() );
         u.setLoginPermissionStatus( 1 );
         u.setUserType( 8 );
+        u.setIsFirstLogin( 0 );
         User user = userParentDao.save( u );
         String parentId = user.getUserId();
 
