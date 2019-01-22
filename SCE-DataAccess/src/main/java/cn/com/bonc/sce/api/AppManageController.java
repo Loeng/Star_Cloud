@@ -360,7 +360,7 @@ public class AppManageController {
                 StringBuilder sql = new StringBuilder( "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\" V WHERE 1 = 1 " );
                 //是管理员？
                 if ( companyId != null ) {
-                    sql.append( "V.COMPANY_ID = " ).append( companyId );
+                    sql.append( " AND V.COMPANY_ID = " ).append( companyId );
                 }
                 //app分类id
                 if ( typeId > 0 ) {
