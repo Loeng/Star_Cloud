@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.AppAddModel;
+import cn.com.bonc.sce.model.PlatFormAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,27 @@ import java.util.Map;
 @FeignClient( "sce-data-access" )
 public interface AppManageDao {
 
-
+    /**
+     * 新增软件应用
+     *
+     * @param appInfo
+     * @param uid
+     * @return
+     */
     @RequestMapping( value = "/manage-app/{uid}", method = RequestMethod.POST )
     RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
                            @PathVariable( "uid" ) String uid );
+
+    /**
+     * 新增平台应用
+     *
+     * @param platFormInfo
+     * @param uid
+     * @return
+     */
+    @PostMapping( "/manage-app/pt/{uid}" )
+     RestRecord addPlatFormInfo( @RequestBody PlatFormAddModel platFormInfo,
+                                 @PathVariable( "uid" ) String uid );
 
     /**
      * 删除应用信息

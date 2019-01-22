@@ -4,7 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.model.AppTypeMode;
+import cn.com.bonc.sce.model.PlatFormAddModel;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.repository.CompanyInfoRepository;
@@ -20,14 +20,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,44 +61,37 @@ public class AppManageController {
     private CompanyInfoRepository companyInfoRepository;
 
     /**
-     * 新增应用
+     * 新增软件
      *
      * @param appInfo 应用信息， value为json格式
      * @return
      */
     @PostMapping( "/{uid}" )
-    public RestRecord addAppInfo( @Valid @RequestBody AppAddModel appInfo,
-                                  BindingResult results,
+    public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
                                   @PathVariable( "uid" ) String uid ) {
-        log.trace( "appinfo::{}", appInfo );
-        if ( results.hasErrors() ) {
-            return new RestRecord( 423, results.getFieldError().getDefaultMessage() );
-        }
-        Set< AppTypeMode > pc = appInfo.getPc();
-        for ( AppTypeMode appTypeMode : pc ) {
-            if ( StringUtils.isEmpty( appTypeMode.getAddress() ) ) {
-                return new RestRecord( 423, "请上传软件" );
-            }
-            if ( StringUtils.isEmpty( appTypeMode.getAppVersion() ) ) {
-                return new RestRecord( 423, "版本号不能为空" );
-            }
-
-            if ( StringUtils.isEmpty( appTypeMode.getRunningPlatform() ) ) {
-                return new RestRecord( 423, "运行平台不能为空" );
-            }
-
-            if ( StringUtils.isEmpty( appTypeMode.getVersionSize() ) ) {
-                return new RestRecord( 423, "软件大小不能为空" );
-            }
-
-            if ( StringUtils.isEmpty( appTypeMode.getPackageName() ) ) {
-                return new RestRecord( 423, "包名不能为空" );
-            }
-
-        }
         RestRecord ret;
         try {
             ret = appManageService.addAppInfo( appInfo, uid );
+        } catch ( Exception e ) {
+            log.error( "{}", e.getMessage() );
+            ret = new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
+        }
+        return ret;
+    }
+
+    /**
+     * 新增平台应用
+     *
+     * @param platFormInfo
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/pt/{userId}" )
+    public RestRecord addPlatFormInfo( @RequestBody PlatFormAddModel platFormInfo,
+                                       @PathVariable String userId ) {
+        RestRecord ret;
+        try {
+            ret = appManageService.addPlatFormInfo( platFormInfo, userId );
         } catch ( Exception e ) {
             log.error( "{}", e.getMessage() );
             ret = new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
@@ -312,8 +304,8 @@ public class AppManageController {
         String type = String.valueOf( applyType );
         int appInfo = 0;
         for ( Map map : appIdList ) {
-            String appId = String.valueOf(  map.get( "appId" ));
-            String appVersion = String.valueOf(  map.get( "appVersion" ));
+            String appId = String.valueOf( map.get( "appId" ) );
+            String appVersion = String.valueOf( map.get( "appVersion" ) );
             appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId, appId, appVersion );
         }
         return new RestRecord( 200, appInfo );
@@ -347,10 +339,10 @@ public class AppManageController {
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
 
 
-            if ("6".equals(auditStatus)){ // 查询暂存列表  1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架  6,暂存
+            if ( "6".equals( auditStatus ) ) { // 查询暂存列表  1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架  6,暂存
                 Pageable newpageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( "desc" ) ? Sort.Direction.DESC : Sort.Direction.ASC, "APP_NAME" );
-                page = appInfoRepository.getTempAPPInfoByTypeIdAndKeyword(typeId,keyword,newpageable);
-            }else {
+                page = appInfoRepository.getTempAPPInfoByTypeIdAndKeyword( typeId, keyword, newpageable );
+            } else {
 
                 //管理员
                 if ( companyId == null ) {
@@ -392,7 +384,6 @@ public class AppManageController {
 //                    page = appInfoRepository.getInfoByTypeIdAndKeywordAndCompanyId( auditStatus, typeId, keyword, companyId, pageable );
 //                }
 //            }
-
 
 
             Map< String, Object > temp = new HashMap<>( 16 );
@@ -444,10 +435,10 @@ public class AppManageController {
             }
 
         } else {
-            List<String> properties =new ArrayList<>(2  );
-            properties.add( "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT"  );
+            List< String > properties = new ArrayList<>( 2 );
+            properties.add( "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT" );
             properties.add( "APP_ID" );
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( "asc".equalsIgnoreCase( sort ) ? Sort.Direction.ASC : Sort.Direction.DESC,properties ) );
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( "asc".equalsIgnoreCase( sort ) ? Sort.Direction.ASC : Sort.Direction.DESC, properties ) );
             //软件应用
             if ( appType == 0 ) {
                 //查全部
