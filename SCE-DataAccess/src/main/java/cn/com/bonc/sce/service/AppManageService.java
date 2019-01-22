@@ -160,9 +160,17 @@ public class AppManageService {
         marketAppVersion.setIsDelete( 1L );
         marketAppVersion.setCreateUserId( uid );
         marketAppVersion.setIndexUrl( platFormInfo.getIndexUrl() );
-        marketAppVersion.setInstallInfo( platFormInfo.getInstallInfo() );
+        String installInfo = platFormInfo.getInstallInfo();
+        marketAppVersion.setTokenAddress( platFormInfo.getTokenAddress() );
         marketAppVersion.setStoreLocation( platFormAddress );
         marketAppVersion.setTestUrl( platFormInfo.getTestUrl() );
+        if ( StringUtils.isNotEmpty( installInfo ) ) {
+            marketAppVersion.setInstallInfo( installInfo );
+        }
+        String md5Code = platFormInfo.getMd5Code();
+        if ( StringUtils.isNotEmpty( md5Code ) ) {
+            marketAppVersion.setMd5Code( md5Code );
+        }
         marketAppVersionRepository.saveAndFlush( marketAppVersion );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appId );
     }
