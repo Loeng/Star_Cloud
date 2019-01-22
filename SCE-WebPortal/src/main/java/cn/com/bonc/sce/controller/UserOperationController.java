@@ -119,9 +119,9 @@ public class UserOperationController {
     }
 
     @ApiOperation( value = "添加单个用户", notes = "通过控制接口参数，添加不同角色的用户", httpMethod = "POST" )
-    @PostMapping("/insert")
+    @PostMapping( "/insert" )
     @ResponseBody
-    public RestRecord insertUser( @RequestBody @ApiParam("用户对象")UserModel userModel) {
-        return null;
+    public RestRecord insertUser( @RequestBody @ApiParam( "用户对象" ) UserModel userModel ) {
+        return userOperationService.insertUser( userModel );
     }
 }
