@@ -360,7 +360,7 @@ public class AppManageController {
                 StringBuilder sql = new StringBuilder( "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\" V WHERE 1 = 1 " );
                 //是管理员？
                 if ( companyId != null ) {
-                    sql.append( "V.COMPANY_ID = " ).append( companyId );
+                    sql.append( " AND V.COMPANY_ID = " ).append( companyId );
                 }
                 //app分类id
                 if ( typeId > 0 ) {
@@ -374,7 +374,8 @@ public class AppManageController {
                 if ( !StringUtils.isEmpty( keyword ) ) {
                     sql.append( " AND V.APP_NAME LIKE '%" ).append( keyword ).append( "%'" );
                 }
-                sql.append( "ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
+                sql.append( " AND V.APP_STATUS ='" ).append( auditStatus ).append( "' " );
+                sql.append( " ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
                 Session session = entityManager.unwrap( org.hibernate.Session.class );
                 NativeQuery query = session.createNativeQuery( sql.toString() );
                 query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );

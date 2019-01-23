@@ -154,15 +154,27 @@ public class AppManageService {
         marketAppVersion.setVersionInfo( platFormInfo.getAppNotes() );
         marketAppVersion.setPackageName( platFormInfo.getPackageName() );
         marketAppVersion.setAppStatus( "1" );
-        marketAppVersion.setNewFeatures( platFormInfo.getNewFeatures() );
         marketAppVersion.setAppPcPic( pcUrl );
         marketAppVersion.setCreateTime( new Date() );
         marketAppVersion.setIsDelete( 1L );
         marketAppVersion.setCreateUserId( uid );
         marketAppVersion.setIndexUrl( platFormInfo.getIndexUrl() );
-        marketAppVersion.setInstallInfo( platFormInfo.getInstallInfo() );
+
+        marketAppVersion.setTokenAddress( platFormInfo.getTokenAddress() );
         marketAppVersion.setStoreLocation( platFormAddress );
         marketAppVersion.setTestUrl( platFormInfo.getTestUrl() );
+        String installInfo = platFormInfo.getInstallInfo();
+        String newFeatures = platFormInfo.getNewFeatures();
+        String md5Code = platFormInfo.getMd5Code();
+        if ( StringUtils.isNotEmpty( installInfo ) ) {
+            marketAppVersion.setNewFeatures( newFeatures );
+        }
+        if ( StringUtils.isNotEmpty( installInfo ) ) {
+            marketAppVersion.setInstallInfo( installInfo );
+        }
+        if ( StringUtils.isNotEmpty( md5Code ) ) {
+            marketAppVersion.setMd5Code( md5Code );
+        }
         marketAppVersionRepository.saveAndFlush( marketAppVersion );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appId );
     }

@@ -30,7 +30,7 @@ public class PlatformAddModel {
     @ApiModelProperty( name = "应用描述" )
     private String appNotes;
 
-    @NotBlank( message = "新版特性不能为空" )
+   //@NotBlank( message = "新版特性不能为空" )
     @ApiModelProperty( name = "新版特性" )
     private String newFeatures;
 
