@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.AppAddModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,27 @@ import java.util.Map;
 @FeignClient( "sce-data-access" )
 public interface AppManageDao {
 
-
+    /**
+     * 新增软件应用
+     *
+     * @param appInfo
+     * @param uid
+     * @return
+     */
     @RequestMapping( value = "/manage-app/{uid}", method = RequestMethod.POST )
     RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
                            @PathVariable( "uid" ) String uid );
+
+    /**
+     * 新增平台应用
+     *
+     * @param platFormInfo
+     * @param uid
+     * @return
+     */
+    @RequestMapping( value = "/manage-app/pt/{uid}", method = RequestMethod.POST )
+    RestRecord addPlatFormInfo( @RequestBody PlatformAddModel platFormInfo,
+                                @PathVariable( "uid" ) String uid );
 
     /**
      * 删除应用信息
@@ -142,6 +160,7 @@ public interface AppManageDao {
                                         @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
                                         @RequestParam( value = "keyword", required = false ) String keyword,
                                         @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                        @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
                                         @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                         @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
                                         @RequestParam( value = "userId" ) String userId

@@ -4,9 +4,11 @@ package cn.com.bonc.sce.api;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.AppAuditingRepository;
 import cn.com.bonc.sce.entity.MarketAppVersion;
+import cn.com.bonc.sce.entity.Message;
 import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.MessageService;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -35,6 +37,9 @@ public class AppVersionApiController {
 
     @Autowired
     private FileResourceRepository fileResourceRepository;
+
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
     public AppVersionApiController( AppVersionRepository appVersionRepository, AppAuditingRepository appAuditingRepository ) {
@@ -205,10 +210,33 @@ public class AppVersionApiController {
             @RequestBody List< Map< String, String > > approveList ) {
         log.trace( "Approve {} AppVersion By {}", approveList.size(), userId );
         try {
+            Date date = new Date();
             for ( Map< String, String > approve : approveList ) {
-                appAuditingRepository.appVersionApprove( approve.get( "appId" ), approve.get( "appVersion" ), userId );
+                /*更改目标版本号应用状态为上架*/
+                MarketAppVersion appAbove = appAuditingRepository.findByAppIdAndAppVersion( approve.get( "appId" ), approve.get( "appVersion" ) );
+                appAbove.setAppStatus( "4" );
+                appAbove.setUpdateTime( date );
+                appAbove.setUpdateUserId( userId );
+                appAuditingRepository.saveAndFlush( appAbove );
+                /*更改目标版本号应用状态为上架*/
+                if ( approve.get( "currentVersion" ) != null ) {
+                    MarketAppVersion appUnder = appAuditingRepository.findByAppIdAndAppVersion( approve.get( "appId" ), approve.get( "currentVersion" ) );
+                    appUnder.setAppStatus( "5" );
+                    appUnder.setUpdateTime( date );
+                    appUnder.setUpdateUserId( userId );
+                    appAuditingRepository.saveAndFlush( appUnder );
+                }
+                //平台审核会传url ,将url存入SCE_MARKET_APP_INFO表的applink字段
+                if ( StringUtils.isNotEmpty(approve.get( "appLink" )) ) {
+                    appAuditingRepository.updateAppLink( approve.get( "appId" ), userId, approve.get( "appLink" ) );
+                }
+                /*给提交审核人员发送消息，通知其审核通过*/
+                Message message = new Message();
+                String appName = String.valueOf( appAuditingRepository.getAppName( appAbove.getAppId() ).get( "appName" ) );
+                message.setContent( String.format( WebMessageConstants.SCE_PORTAL_MSG_641, appName, appAbove.getAppVersion() ) );
+                message.setTargetId( appAbove.getCreateUserId() );
+                messageService.insertMessage( message );
             }
-            //todo 这里需要添加 通知到相关用户
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } catch ( Exception e ) {
             log.error( "Approve fail {}", e );
@@ -237,8 +265,22 @@ public class AppVersionApiController {
         try {
             for ( Map< String, String > approve : approveList ) {
                 appAuditingRepository.appVersionReject( approve.get( "appId" ), approve.get( "appVersion" ), userId );
+                MarketAppVersion appReject = appAuditingRepository.findByAppIdAndAppVersion( approve.get( "appId" ), approve.get( "appVersion" ) );
+                appReject.setAppStatus( "3" );
+                appReject.setUpdateTime( new Date() );
+                appReject.setUpdateUserId( userId );
+                appAuditingRepository.saveAndFlush( appReject );
+                /*给提交审核人员发送消息，通知其审核为通过，如果有原因则表明原因*/
+                Message message = new Message();
+                String appName = String.valueOf( appAuditingRepository.getAppName( appReject.getAppId() ).get( "appName" ) );
+                if ( StringUtils.isBlank( rejectReason ) ) {
+                    message.setContent( String.format( WebMessageConstants.SCE_PORTAL_MSG_642, appName, appReject.getAppVersion() ) );
+                } else {
+                    message.setContent( String.format( WebMessageConstants.SCE_PORTAL_MSG_643, appName, appReject.getAppVersion(), rejectReason ) );
+                }
+                message.setTargetId( appReject.getCreateUserId() );
+                messageService.insertMessage( message );
             }
-            //todo 这里需要添加 通知到相关用户
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } catch ( Exception e ) {
             log.error( "Reject fail {}", e );
@@ -257,27 +299,27 @@ public class AppVersionApiController {
     @ResponseBody
     public RestRecord tempSaveVersionInfo(
             @RequestParam( "userId" ) String userId,
-            @RequestBody Map<String,String> tempData) {
+            @RequestBody Map< String, String > tempData ) {
         log.trace( "temp save {} AppInfo", userId );
 
-        String appNAME = tempData.get("appNAME")==null?"":tempData.get("appNAME");
+        String appNAME = tempData.get( "appNAME" ) == null ? "" : tempData.get( "appNAME" );
 //        String createUserId=userId;
-        String appVersion=tempData.get("appVersion")==null?"":tempData.get("appVersion");
-        String downloadAddress=tempData.get("downloadAddress")==null?"":tempData.get("downloadAddress");
-        String versionInfo=tempData.get("versionInfo")==null?"":tempData.get("versionInfo");
-        String versionSize=tempData.get("versionSize")==null?"":tempData.get("versionSize");
-        String runningPlatform=tempData.get("runningPlatform")==null?"":tempData.get("runningPlatform");
-        String newFeatures=tempData.get("newFeatures")==null?"":tempData.get("newFeatures");
-        String packageName=tempData.get("packageName")==null?"":tempData.get("packageName");
-        String authDetail=tempData.get("authDetail")==null?"":tempData.get("authDetail");
-        String appPhonePic=tempData.get("appPhonePic")==null?"":tempData.get("appPhonePic");
-        String appPcPic=tempData.get("appPcPic")==null?"":tempData.get("appPcPic");
-        String appIcon=tempData.get("appIcon")==null?"":tempData.get("appIcon");
-        String companyId=tempData.get("companyId")==null?"":tempData.get("companyId");
-        String appType=tempData.get("appType")==null?"":tempData.get("appType");
+        String appVersion = tempData.get( "appVersion" ) == null ? "" : tempData.get( "appVersion" );
+        String downloadAddress = tempData.get( "downloadAddress" ) == null ? "" : tempData.get( "downloadAddress" );
+        String versionInfo = tempData.get( "versionInfo" ) == null ? "" : tempData.get( "versionInfo" );
+        String versionSize = tempData.get( "versionSize" ) == null ? "" : tempData.get( "versionSize" );
+        String runningPlatform = tempData.get( "runningPlatform" ) == null ? "" : tempData.get( "runningPlatform" );
+        String newFeatures = tempData.get( "newFeatures" ) == null ? "" : tempData.get( "newFeatures" );
+        String packageName = tempData.get( "packageName" ) == null ? "" : tempData.get( "packageName" );
+        String authDetail = tempData.get( "authDetail" ) == null ? "" : tempData.get( "authDetail" );
+        String appPhonePic = tempData.get( "appPhonePic" ) == null ? "" : tempData.get( "appPhonePic" );
+        String appPcPic = tempData.get( "appPcPic" ) == null ? "" : tempData.get( "appPcPic" );
+        String appIcon = tempData.get( "appIcon" ) == null ? "" : tempData.get( "appIcon" );
+        String companyId = tempData.get( "companyId" ) == null ? "" : tempData.get( "companyId" );
+        String appType = tempData.get( "appType" ) == null ? "0" : tempData.get( "appType" );
 //        String tempAppId=tempData.get("tempAppId")==null?"":tempData.get("tempAppId");
 
-        if (tempData.get("tempAppId")==null){
+        if ( tempData.get( "tempAppId" ) == null ) {
             try {
                 appVersionRepository.insertTempAppInfo(
                         appNAME,
@@ -295,15 +337,15 @@ public class AppVersionApiController {
                         appIcon,
                         companyId,
                         appType,
-                        UUID.getUUID());
+                        UUID.getUUID() );
                 return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
 
-            }catch ( Exception e ){
+            } catch ( Exception e ) {
                 log.error( "app tempsave fail {}", e );
                 return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423 );
             }
 
-        }else {
+        } else {
 
             try {
                 appVersionRepository.updateTempAppInfo(
@@ -322,10 +364,10 @@ public class AppVersionApiController {
                         appIcon,
                         companyId,
                         appType,
-                        tempData.get("tempAppId"));
+                        tempData.get( "tempAppId" ) );
                 return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
 
-            }catch ( Exception e ){
+            } catch ( Exception e ) {
                 log.error( "app tempsave fail {}", e );
                 return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
             }

@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -21,13 +22,12 @@ public interface UserOperationDao {
     /**
      * 添加用户
      *
-     *
      * @param roleId
      * @param userInfo
      * @return 是否添加成功
      */
     @RequestMapping( value = "/user-info/addUser/{roleId}", method = RequestMethod.POST )
-    RestRecord addUserInfo( @PathVariable("roleId") Integer roleId, @RequestBody Map<String, Object> userInfo);
+    RestRecord addUserInfo( @PathVariable( "roleId" ) Integer roleId, @RequestBody Map< String, Object > userInfo );
 
 
     /**
@@ -37,7 +37,7 @@ public interface UserOperationDao {
      * @return 是否更新成功
      */
     @RequestMapping( value = "/user-info/updateUserInfo", method = RequestMethod.PUT )
-    RestRecord updateUserInfoById( @RequestBody Map< String, Object > userInfo,@RequestParam("userId") String userId );
+    RestRecord updateUserInfoById( @RequestBody Map< String, Object > userInfo, @RequestParam( "userId" ) String userId );
 
 
     /**
@@ -60,4 +60,6 @@ public interface UserOperationDao {
     RestRecord selectUserInfoById( @RequestParam( "userId" ) String userId );
 
 
+    @RequestMapping( value = "/user-info/insert", method = RequestMethod.POST )
+    RestRecord insertUser( @RequestBody UserModel userModel );
 }

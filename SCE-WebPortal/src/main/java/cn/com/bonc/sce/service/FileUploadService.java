@@ -3,10 +3,8 @@ package cn.com.bonc.sce.service;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.FileUploadDao;
 import cn.com.bonc.sce.model.ExcelToUser;
-import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.FileUploadUtil;
-import cn.com.bonc.sce.tool.IDUtil;
 import cn.hutool.core.lang.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +36,9 @@ public class FileUploadService {
     @Value( "${fileUpload.document}" )
     String documentFileStorePath;
 
+    @Value( "${fileUpload.war}" )
+    String warFileStorePath;
+
     @Value( "${fileUpload.mapping.image}" )
     String picFileMappingPath;
 
@@ -45,6 +47,9 @@ public class FileUploadService {
 
     @Value( "${fileUpload.mapping.document}" )
     String documentFileMappingPath;
+
+    @Value( "${fileUpload.mapping.war}" )
+    String warFileMappingPath;
 
     private FileUploadDao fileUploadDao;
 
@@ -61,7 +66,7 @@ public class FileUploadService {
             String suffixName = FileUploadUtil.getFileSuffix( originFileName );
             String prefixName = FileUploadUtil.getFilePrefix( originFileName );
             String date = new SimpleDateFormat( "yyyyMMddHHmmss" ).format( new Date() );
-            String saveFileName = prefixName + date+suffixName;
+            String saveFileName = prefixName + date + suffixName;
 
             String fileStorePath;
             String fileMappingPath;
@@ -83,6 +88,12 @@ public class FileUploadService {
                     fileStorePath = documentFileStorePath + File.separator + saveFileName;
                     fileMappingPath = documentFileMappingPath + File.separator + saveFileName;
                     fileSavePath = documentFileStorePath;
+                    break;
+
+                case "war":
+                    fileStorePath = warFileStorePath + File.separator + saveFileName;
+                    fileMappingPath = warFileMappingPath + File.separator + saveFileName;
+                    fileSavePath = warFileStorePath;
                     break;
 
                 default:
@@ -139,6 +150,12 @@ public class FileUploadService {
                         fileStorePath = documentFileStorePath + File.separator + saveFileName;
                         fileMappingPath = documentFileMappingPath + File.separator + saveFileName;
                         fileSavePath = documentFileStorePath;
+                        break;
+
+                    case "war":
+                        fileStorePath = warFileStorePath + File.separator + saveFileName;
+                        fileMappingPath = warFileMappingPath + File.separator + saveFileName;
+                        fileSavePath = warFileStorePath;
                         break;
 
                     default:

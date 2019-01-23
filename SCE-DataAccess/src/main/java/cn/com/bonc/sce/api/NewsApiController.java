@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 新闻增删改
  *
@@ -95,7 +98,22 @@ public class NewsApiController {
                                    @RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
                                    @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
-            return newsService.getNewsList( auditStatus, content, startDate, endDate, pageNum, pageSize );
+
+            RestRecord rr = newsService.getNewsList( auditStatus, content, startDate, endDate, pageNum, pageSize );
+            List< News > list = (List< News >)((Map< String, Object > )rr.getData()).get( "info" );
+            for ( News news : list ) {
+                if ( news.getUser() == null ) {
+                    continue;
+                }
+                news.setUserName( news.getUser().getUserName() );
+                news.setUser( null );
+                if ( news.getPic() == null ) {
+                    continue;
+                }
+                news.setPicUrl( news.getPic().getFileStorePath() );
+                news.setPic( null );
+            }
+            return rr;
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
@@ -112,7 +130,12 @@ public class NewsApiController {
     @ResponseBody
     public RestRecord getNews( @PathVariable( "newsId" ) Integer newsId ) {
         try {
-            return newsService.getNews( newsId );
+            News news = newsService.getNews( newsId );
+            if ( news.getUser() != null ) {
+                news.setUserName( news.getUser().getUserName() );
+                news.setUser( null );
+            }
+            return new RestRecord( 200, news );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

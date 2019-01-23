@@ -15,6 +15,7 @@ import java.util.Objects;
 @Table( name = "SCE_MARKET_APP_VERSION", schema = "STARCLOUDMARKET" )
 @IdClass( MarketAppVersionPK.class )
 public class MarketAppVersion implements Serializable {
+
     private String appId;
     private String appVersion;
     private String appStatus;
@@ -33,6 +34,12 @@ public class MarketAppVersion implements Serializable {
     private String appPhonePic;
     private String appPcPic;
     private String currentVersion;
+    private String installInfo;
+    private String storeLocation;
+    private String indexUrl;
+    private String testUrl;
+    private String tokenAddress;
+    private String md5Code;
 
     @Basic
     @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
@@ -190,6 +197,7 @@ public class MarketAppVersion implements Serializable {
         return packageName;
     }
 
+
     public void setPackageName( String packageName ) {
         this.packageName = packageName;
     }
@@ -212,6 +220,66 @@ public class MarketAppVersion implements Serializable {
 
     public void setCurrentVersion( String currentVersion ) {
         this.currentVersion = currentVersion;
+    }
+
+    @Basic
+    @Column( name = "INSTALL_INFO", nullable = true, length = 1200 )
+    public String getInstallInfo() {
+        return installInfo;
+    }
+
+    public void setInstallInfo( String installInfo ) {
+        this.installInfo = installInfo;
+    }
+
+    @Basic
+    @Column( name = "STORE_LOCATION", nullable = true, length = 200 )
+    public String getStoreLocation() {
+        return storeLocation;
+    }
+
+    public void setStoreLocation( String storeLocation ) {
+        this.storeLocation = storeLocation;
+    }
+
+    @Basic
+    @Column( name = "INDEX_URL", nullable = true, length = 200 )
+    public String getIndexUrl() {
+        return indexUrl;
+    }
+
+    public void setIndexUrl( String indexUrl ) {
+        this.indexUrl = indexUrl;
+    }
+
+    @Basic
+    @Column( name = "TEST_URL", nullable = true, length = 200 )
+    public String getTestUrl() {
+        return testUrl;
+    }
+
+    public void setTestUrl( String testUrl ) {
+        this.testUrl = testUrl;
+    }
+
+    @Basic
+    @Column( name = "TOKEN_ADDRESS", nullable = true, length = 200 )
+    public String getTokenAddress() {
+        return tokenAddress;
+    }
+
+    public void setTokenAddress( String tokenAddress ) {
+        this.tokenAddress = tokenAddress;
+    }
+
+    @Basic
+    @Column( name = "MD5_CODE", nullable = true, length = 500 )
+    public String getMd5Code() {
+        return md5Code;
+    }
+
+    public void setMd5Code( String md5Code ) {
+        this.md5Code = md5Code;
     }
 
     @Override
@@ -238,12 +306,18 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( newFeatures, that.newFeatures ) &&
                 Objects.equals( packageName, that.packageName ) &&
                 Objects.equals( authDetail, that.authDetail ) &&
-                Objects.equals( currentVersion, that.currentVersion );
+                Objects.equals( currentVersion, that.currentVersion ) &&
+                Objects.equals( installInfo, that.installInfo ) &&
+                Objects.equals( storeLocation, that.storeLocation ) &&
+                Objects.equals( indexUrl, that.indexUrl ) &&
+                Objects.equals( testUrl, that.testUrl ) &&
+                Objects.equals( tokenAddress, that.tokenAddress ) &&
+                Objects.equals( md5Code, that.md5Code );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl, testUrl, tokenAddress, md5Code );
     }
 }

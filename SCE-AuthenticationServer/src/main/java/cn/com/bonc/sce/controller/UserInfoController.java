@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.User;
@@ -57,4 +58,21 @@ public class UserInfoController {
     public RestRecord getUserInfo(@PathVariable( "userId" ) @ApiParam( name = "userId", value = "用户id") String userId) {
         return userService.getUserInfo(userId);
     }
+
+    /**
+     * 修改用户
+     *
+     * @return 修改用户
+     */
+    @ApiOperation( value = "修改用户", notes = "修改用户", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
+    } )
+    @PostMapping("/detailed")
+    @ResponseBody
+    public RestRecord updateUserInfo( @RequestBody @ApiParam( name = "user", value = "用户") User user, @CurrentUserId String userId ) {
+        user.setUserId( userId );
+        return userService.updateUserInfo(user);
+}
 }

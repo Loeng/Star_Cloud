@@ -39,7 +39,8 @@ public class MessageService {
 
     private final String ASC = "ASC";
     private final String DESC = "DESC";
-    private final String SORT_STR = "createTime";
+    private final String SORT_CREATE_TIME = "createTime";
+    private final String SORT_IS_READ = "isRead";
 
     /**
      * 添加message
@@ -113,14 +114,16 @@ public class MessageService {
     public RestRecord getMessageByUserId( String userId, Integer id, Integer pageNum, Integer pageSize ) {
         if ( id == null ) {
             pageNum--;
-            Sort sort = Sort.by( Sort.Direction.fromString( DESC ), SORT_STR );
-            Pageable pageable = PageRequest.of( pageNum, pageSize, sort );
+            List< Sort.Order > orders = new ArrayList<>();
+            orders.add( new Sort.Order( Sort.Direction.ASC, SORT_IS_READ ) );
+            orders.add( new Sort.Order( Sort.Direction.DESC, SORT_CREATE_TIME ) );
+            Pageable pageable = PageRequest.of( pageNum, pageSize, new Sort(orders) );
             Timestamp time = messageDao.getNewestTimeByUserId( userId );
             List< Message > list;
             if ( !StringUtils.isEmpty( time ) ) {
-                list = messageDao.findByTypeAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( 0,time, 1,userId, time, 1 );
+                list = messageDao.findByTypeAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( 0, time, 1, userId, time, 1 );
             } else {
-                list = messageDao.findByTypeAndIsDeleteOrTargetIdAndIsDelete( 0, 1,userId, 1 );
+                list = messageDao.findByTypeAndIsDeleteOrTargetIdAndIsDelete( 0, 1, userId, 1 );
             }
             List< UserMessage > userMessageList = new ArrayList<>();
             if ( list.size() > 0 ) {
@@ -159,7 +162,7 @@ public class MessageService {
      * @return count
      */
     public RestRecord getIsNotReadCount( String userId ) {
-        return new RestRecord( 200, userMessageDao.getIsNotReadCount(userId) );
+        return new RestRecord( 200, userMessageDao.getIsNotReadCount( userId ) );
     }
 }
 

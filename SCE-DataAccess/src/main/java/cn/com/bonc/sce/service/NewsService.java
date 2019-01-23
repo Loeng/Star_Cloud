@@ -114,18 +114,6 @@ public class NewsService {
             }
         }
         List< News > list = page.getContent();
-        for ( News news : list ) {
-            if ( news.getUser() == null ) {
-                continue;
-            }
-            news.setUserName( news.getUser().getUserName() );
-            news.setUser( null );
-            if ( news.getPic() == null ) {
-                continue;
-            }
-            news.setPicUrl( news.getPic().getFileStorePath() );
-            news.setPic( null );
-        }
         Map< String, Object > info = new HashMap<>();
         info.put( "total", page.getTotalElements() );
         info.put( "info", list );
@@ -138,12 +126,8 @@ public class NewsService {
      * @param newsId 新闻id
      * @return 分页后的新闻列表
      */
-    public RestRecord getNews( Integer newsId ) {
+    public News getNews( Integer newsId ) {
         News news = newsDao.findByIdAndIsDelete( newsId, 1 );
-        if ( news.getUser() != null ) {
-            news.setUserName( news.getUser().getUserName() );
-            news.setUser( null );
-        }
-        return new RestRecord( 200, news );
+        return news;
     }
 }

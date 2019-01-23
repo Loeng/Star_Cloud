@@ -60,4 +60,8 @@ public class CountService {
     public RestRecord getDownloadList( String userId, int appType, Integer pageNum, Integer pageSize ) {
         return countDao.getDownloadList( userId, appType, pageNum, pageSize );
     }
+
+    public RestRecord getAppUseTimeRank() {
+        return countDao.getAppUseTimeRank();
+    }
 }

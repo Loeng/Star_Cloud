@@ -2,15 +2,19 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.dao.AccountDao;
+
 import cn.com.bonc.sce.dao.UserPasswordDao;
-import cn.com.bonc.sce.entity.Account;
+
 import cn.com.bonc.sce.entity.FileResourceEntity;
+import cn.com.bonc.sce.entity.StudentParentRel;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.ExcelToUser;
+import cn.com.bonc.sce.entity.Message;
 import cn.com.bonc.sce.model.Secret;
+import cn.com.bonc.sce.repository.ExportUserRepository;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.MessageService;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -35,16 +39,25 @@ public class FileUploadApiController {
 
     private UserPasswordDao userPasswordDao;
 
+
+    private ExportUserRepository exportUserRepository;
+
+    private MessageService messageService;
+
     public static final String STUDENT_PRE = "1";
 
     public static final String TEACHER_PRE = "2";
 
+    public static final String PARENT_CODE = "5";
+
     public static final String CERTIFICATE_TYPE = "1";
 
     @Autowired
-    public FileUploadApiController( FileResourceRepository fileResourceRepository, UserPasswordDao userPasswordDao ) {
+    public FileUploadApiController( FileResourceRepository fileResourceRepository, UserPasswordDao userPasswordDao ,ExportUserRepository exportUserRepository,MessageService messageService) {
         this.fileResourceRepository = fileResourceRepository;
         this.userPasswordDao = userPasswordDao;
+        this.exportUserRepository = exportUserRepository;
+        this.messageService=messageService;
     }
 
     @PostMapping
@@ -74,26 +87,67 @@ public class FileUploadApiController {
     @ResponseBody
     public RestRecord uploadParseExcel( @RequestBody List< ExcelToUser > list, @RequestParam( "userType" ) String userType ) {
 
-        String pre = "";
 
         if ( TEACHER_PRE.equals( userType ) ) {
-            pre = "js_";
+            String pre = "js_";
+            for ( ExcelToUser excelToUser : list ) {
+                UserPassword userPassword = new UserPassword();
+                String secret = Secret.generateSecret();
+                String loginName = IDUtil.createID( pre );
+                String userId = UUID.getUUID();
+                userPassword.setIsDelete( 1 );
+                userPassword.setPassword( "star123!" );
+                userPassword.setUserId( userId );
+                fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
+                        loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
+                        excelToUser.getPhoneNumber(), excelToUser.getAddress(), excelToUser.getOrganizationId(), secret );
+                userPasswordDao.save( userPassword );
+            }
         } else if ( STUDENT_PRE.equals( userType ) ) {
-            pre = "xs_";
+            String pre = "xs_";
+            for ( ExcelToUser excelToUser : list ) {
+                //生成学生用户，并自动生成家长用户关联学生
+                UserPassword userPassword = new UserPassword();
+                String secret = Secret.generateSecret();
+                String loginName = IDUtil.createID( pre );
+                String studentId = UUID.getUUID();
+                userPassword.setIsDelete( 1 );
+                userPassword.setPassword( "star123!" );
+                userPassword.setUserId( studentId );
+                fileResourceRepository.savaAllUserInfo( studentId, excelToUser.getUserName(), excelToUser.getGender(),
+                        loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
+                        excelToUser.getPhoneNumber(), excelToUser.getAddress(), excelToUser.getOrganizationId(), secret );
+                userPasswordDao.save( userPassword );
+
+                //生成家长用户，并关联学生
+                UserPassword parentPassword = new UserPassword();
+                String secretParent = Secret.generateSecret();
+                String loginParentName = IDUtil.createID( "zj_" );
+                String parentId = UUID.getUUID();
+                parentPassword.setIsDelete( 1 );
+                parentPassword.setPassword( "star123!" );
+                parentPassword.setUserId( parentId );
+                fileResourceRepository.savaAllUserInfo( parentId, "", "",
+                        loginParentName, PARENT_CODE, "", "", "",
+                        "", "", "", secretParent );
+                userPasswordDao.save( parentPassword );
+
+                //建立学生家长关系
+                StudentParentRel studentParentRel = new StudentParentRel();
+                studentParentRel.setIsMain( 1 );
+                studentParentRel.setParentUserId( parentId );
+                studentParentRel.setStudentUserId( studentId );
+                exportUserRepository.save( studentParentRel);
+
+                //向学生账号发送一条消息告知家长账号
+                Message message = new Message();
+                message.setContent( "恭喜您，申请主家长账号分配成功！账号："+loginParentName );
+                message.setSourceId("0");
+                message.setTargetId(studentId );
+                messageService.insertMessage(  message);
+            }
         }
-        for ( ExcelToUser excelToUser : list ) {
-            UserPassword userPassword = new UserPassword();
-            String secret = Secret.generateSecret();
-            String loginName = IDUtil.createID( pre );
-            String userId = UUID.getUUID();
-            userPassword.setIsDelete( 1 );
-            userPassword.setPassword( "star123!" );
-            userPassword.setUserId( userId );
-            fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
-                    loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                    excelToUser.getPhoneNumber(),excelToUser.getAddress(),excelToUser.getOrganizationId(), secret );
-            userPasswordDao.save( userPassword );
-        }
+
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, list.size() );
 
     }

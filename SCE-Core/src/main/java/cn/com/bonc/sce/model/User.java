@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Leucippus
@@ -42,6 +43,47 @@ public class User {
     private String secret;
     private Secret secretKeyPair;
     private int isFirstLogin;
+    private Map<String,String> userDetailedInfo;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId( String userId ) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName( String userName ) {
+        this.userName = userName;
+    }
+
+    public String getCertificateNumber() {
+        return certificateNumber;
+    }
+
+    public void setCertificateNumber( String certificateNumber ) {
+        this.certificateNumber = certificateNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress( String address ) {
+        this.address = address;
+    }
+
+    public Map< String, String > getUserDetailedInfo() {
+        return userDetailedInfo;
+    }
+
+    public void setUserDetailedInfo( Map< String, String > userDetailedInfo ) {
+        this.userDetailedInfo = userDetailedInfo;
+    }
 
     public void generateUserSecret() {
         this.secretKeyPair = new Secret();

@@ -10,6 +10,8 @@ import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,5 +105,69 @@ public class UserApiController {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
+    }
+
+    @PostMapping( "/detailed" )
+    @ResponseBody
+    @Transactional
+    public RestRecord updateUserInfo( @RequestBody User user ) {
+        int num = 0;
+        try{
+            String conditionUser = "";
+            String conditionRole = "";
+            String userId = user.getUserId();
+            String username = user.getUserName();
+            String address = user.getAddress();
+            String number = user.getCertificateNumber();
+            String mailAddress = user.getMailAddress();
+            String phoneNumber = user.getPhoneNumber();
+            String gender = user.getGender();
+            if(!StringUtils.isEmpty( username )){
+                conditionUser = conditionUser + ",USER_NAME='" + username + "'";
+            }
+            if(!StringUtils.isEmpty( address )){
+                conditionUser = conditionUser + ",ADDRESS='" + address + "'";
+            }
+            if(!StringUtils.isEmpty( number )){
+                conditionUser = conditionUser + ",CERTIFICATE_NUMBER='" + number + "'";
+            }
+            if(!StringUtils.isEmpty( mailAddress )){
+                conditionUser = conditionUser + ",MAIL_ADDRESS='" + mailAddress + "'";
+            }
+            if(!StringUtils.isEmpty( phoneNumber )){
+                conditionUser = conditionUser + ",PHONE_NUMBER='" + phoneNumber + "'";
+            }
+            if(!StringUtils.isEmpty( gender )){
+                conditionUser = conditionUser + ",GENDER='" + gender + "'";
+            }
+            if(conditionUser.length()>0){
+                String sqlUser = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET " + conditionUser.substring( 1 ) + " WHERE USER_ID = " + "'"+userId+"'";
+                Query query = entityManager.createNativeQuery( sqlUser );
+                num+=query.executeUpdate();
+            }
+
+
+            Map<String,String> userDetailedInfo = ( Map<String,String> )user.getUserDetailedInfo();
+            if( ObjectUtils.isEmpty( userDetailedInfo )){
+                return new RestRecord( 200 );
+            }
+            for(Map.Entry<String,String> entry : userDetailedInfo.entrySet()){
+                if(entry.getKey().equals( "USER_ID" )||entry.getKey().equals( "IS_DELETE" )){
+                    continue;
+                }
+                conditionRole = conditionRole + "," + entry.getKey() + "='" + entry.getValue() + "'";
+            }
+            List< String > list = roleRelDao.getRoleTable( userId );
+            if ( list != null && list.size() > 0 && conditionRole.length()>0 ) {
+                String tableName = list.get( 0 );
+                String sqlRole = "UPDATE " + tableName + " SET " + conditionRole.substring( 1 ) + " WHERE USER_ID = " + "'"+userId+"'";
+                Query query = entityManager.createNativeQuery( sqlRole );
+                num+=query.executeUpdate();
+            }
+        }catch ( Exception e ){
+            log.error( e.getMessage(), e );
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
+        }
+        return new RestRecord( 200,num );
     }
 }

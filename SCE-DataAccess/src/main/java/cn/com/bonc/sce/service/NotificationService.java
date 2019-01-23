@@ -131,18 +131,6 @@ public class NotificationService {
             }
         }
         List< Notification > list = page.getContent();
-        for ( Notification notification : list ) {
-            if ( notification.getUser() == null ) {
-                continue;
-            }
-            notification.setUserName( notification.getUser().getUserName() );
-            notification.setUser( null );
-            if ( notification.getFile() == null ) {
-                continue;
-            }
-            notification.setFileUrl( notification.getFile().getFileStorePath() );
-            notification.setFile( null );
-        }
         Map< String, Object > info = new HashMap<>();
         info.put( "total", page.getTotalElements() );
         info.put( "info", list );
@@ -155,12 +143,8 @@ public class NotificationService {
      * @param notificationId 通知公告id
      * @return 分页后的通知公告列表
      */
-    public RestRecord getNotification( Integer notificationId ) {
+    public Notification getNotification( Integer notificationId ) {
         Notification notification = notificationDao.findByIdAndIsDelete( notificationId, 1 );
-        if ( notification.getUser() != null ) {
-            notification.setUserName( notification.getUser().getUserName() );
-            notification.setUser( null );
-        }
-        return new RestRecord( 200, notification );
+        return notification;
     }
 }

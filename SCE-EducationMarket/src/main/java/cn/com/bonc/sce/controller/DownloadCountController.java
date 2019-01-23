@@ -160,4 +160,12 @@ public class DownloadCountController {
                                        @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
         return countService.getDownloadList( userId, appType, pageNum, pageSize );
     }
+
+    @ApiOperation(value = "查询应用使用时长排行",notes = "查询应用使用时长排行",httpMethod = "GET")
+    @GetMapping("/getAppUseTimeRank")
+    @ResponseBody
+    public  RestRecord getAppUseTimeRank(){
+        return countService.getAppUseTimeRank();
+
+    }
 }

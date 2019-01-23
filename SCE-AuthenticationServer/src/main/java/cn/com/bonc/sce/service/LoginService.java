@@ -21,7 +21,7 @@ public class LoginService {
     private LoginHistoryDaoClient loginHistoryDao;
 
     // TODO 启动一个定时跟新服务，去拉取角色 code
-    private String[] roleCodes = { "operator", "students", "teacher", "school", "vendor", "parents", "agency", "eduBureau", "tourist" };
+    private String[] roleCodes = { "operator", "students", "teacher", "school", "vendor", "parents", "agency", "eduBureau", "tourist","wait","9"};
 
     @Autowired
     public LoginService( LoginHistoryDaoClient loginHistoryDao ) {

@@ -4,7 +4,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
-import cn.com.bonc.sce.model.AppTypeMode;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.repository.AppInfoRepository;
 import cn.com.bonc.sce.repository.AppTypeRepository;
 import cn.com.bonc.sce.repository.CompanyInfoRepository;
@@ -14,6 +14,9 @@ import cn.com.bonc.sce.service.AppManageService;
 import cn.com.bonc.sce.service.AppNameTypeService;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,13 +24,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -61,45 +66,41 @@ public class AppManageController {
     @Autowired
     private CompanyInfoRepository companyInfoRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     /**
-     * 新增应用
+     * 新增软件
      *
      * @param appInfo 应用信息， value为json格式
      * @return
      */
     @PostMapping( "/{uid}" )
-    public RestRecord addAppInfo( @Valid @RequestBody AppAddModel appInfo,
-                                  BindingResult results,
+    public RestRecord addAppInfo( @RequestBody AppAddModel appInfo,
                                   @PathVariable( "uid" ) String uid ) {
-        log.trace( "appinfo::{}", appInfo );
-        if ( results.hasErrors() ) {
-            return new RestRecord( 423, results.getFieldError().getDefaultMessage() );
-        }
-        Set< AppTypeMode > pc = appInfo.getPc();
-        for ( AppTypeMode appTypeMode : pc ) {
-            if ( StringUtils.isEmpty( appTypeMode.getAddress() ) ) {
-                return new RestRecord( 423, "请上传软件" );
-            }
-            if ( StringUtils.isEmpty( appTypeMode.getAppVersion() ) ) {
-                return new RestRecord( 423, "版本号不能为空" );
-            }
-
-            if ( StringUtils.isEmpty( appTypeMode.getRunningPlatform() ) ) {
-                return new RestRecord( 423, "运行平台不能为空" );
-            }
-
-            if ( StringUtils.isEmpty( appTypeMode.getVersionSize() ) ) {
-                return new RestRecord( 423, "软件大小不能为空" );
-            }
-
-            if ( StringUtils.isEmpty( appTypeMode.getPackageName() ) ) {
-                return new RestRecord( 423, "包名不能为空" );
-            }
-
-        }
         RestRecord ret;
         try {
             ret = appManageService.addAppInfo( appInfo, uid );
+        } catch ( Exception e ) {
+            log.error( "{}", e.getMessage() );
+            ret = new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
+        }
+        return ret;
+    }
+
+    /**
+     * 新增平台应用
+     *
+     * @param platFormInfo
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/pt/{userId}" )
+    public RestRecord addPlatFormInfo( @RequestBody PlatformAddModel platFormInfo,
+                                       @PathVariable String userId ) {
+        RestRecord ret;
+        try {
+            ret = appManageService.addPlatFormInfo( platFormInfo, userId );
         } catch ( Exception e ) {
             log.error( "{}", e.getMessage() );
             ret = new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e.getMessage() );
@@ -312,8 +313,8 @@ public class AppManageController {
         String type = String.valueOf( applyType );
         int appInfo = 0;
         for ( Map map : appIdList ) {
-            String appId = String.valueOf(  map.get( "appId" ));
-            String appVersion = String.valueOf(  map.get( "appVersion" ));
+            String appId = String.valueOf( map.get( "appId" ) );
+            String appVersion = String.valueOf( map.get( "appVersion" ) );
             appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId, appId, appVersion );
         }
         return new RestRecord( 200, appInfo );
@@ -334,42 +335,65 @@ public class AppManageController {
                                                @RequestParam( value = "typeId", required = false, defaultValue = "0" ) Integer typeId,
                                                @RequestParam( value = "keyword", required = false ) String keyword,
                                                @RequestParam( value = "downloadCount", required = false, defaultValue = "desc" ) String downloadCount,
+                                               @RequestParam( value = "platformType", required = false, defaultValue = "rj" ) String platformType,
                                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
                                                @RequestParam( value = "userId" ) String userId
     ) {
         try {
-            //根据userId查询厂商id
-            Long companyId = companyInfoRepository.getCompanyIdByUid( userId );
-
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             Page< List< Map< String, Object > > > page;
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC, "DOWNLOAD_COUNT" );
-            //管理员
-            if ( companyId == null ) {
-                if ( typeId == 0 ) {
-                    //分类id为空
-                    page = appInfoRepository.getInfoByKeyword( auditStatus, keyword, pageable );
-                } else {
-                    //分类id不为空
-                    page = appInfoRepository.getInfoByTypeIdAndKeyword( auditStatus, typeId, keyword, pageable );
-                }
+            if ( "6".equals( auditStatus ) ) { // 查询暂存列表  1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架  6,暂存
+                Pageable newpageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( "desc" ) ? Sort.Direction.DESC : Sort.Direction.ASC, "APP_NAME" );
+                page = appInfoRepository.getTempAPPInfoByTypeIdAndKeyword( typeId, keyword, newpageable );
+                Map< String, Object > temp = new HashMap<>( 16 );
+                temp.put( "data", page.getContent() );
+                temp.put( "totalPage", page.getTotalPages() );
+                temp.put( "totalCount", page.getTotalElements() );
+                restRecord.setData( temp );
+                return restRecord;
             } else {
-                if ( typeId == 0 ) {
-                    //分类id为空
-                    page = appInfoRepository.getInfoByKeywordAndCompanyId( auditStatus, keyword, companyId, pageable );
-                } else {
-                    //分类id不为空
-                    page = appInfoRepository.getInfoByTypeIdAndKeywordAndCompanyId( auditStatus, typeId, keyword, companyId, pageable );
-                }
-            }
 
-            Map< String, Object > temp = new HashMap<>( 16 );
-            temp.put( "data", page.getContent() );
-            temp.put( "totalPage", page.getTotalPages() );
-            temp.put( "totalCount", page.getTotalElements() );
-            restRecord.setData( temp );
-            return restRecord;
+                //根据userId查询厂商id
+                Long companyId = companyInfoRepository.getCompanyIdByUid( userId );
+
+                StringBuilder sql = new StringBuilder( "SELECT * FROM STARCLOUDMARKET.\"APP_MANAGE_INFO_VIEW\" V WHERE 1 = 1 " );
+                //是管理员？
+                if ( companyId != null ) {
+                    sql.append( " AND V.COMPANY_ID = " ).append( companyId );
+                }
+                //app分类id
+                if ( typeId > 0 ) {
+                    sql.append( " AND V.APP_TYPE_ID = " ).append( typeId );
+                }
+                //平台类型
+                if ( !StringUtils.isEmpty( platformType ) ) {
+                    sql.append( " AND V.APP_SOURCE = " ).append( " '" ).append( platformType ).append( "' " );
+                }
+                //appName
+                if ( !StringUtils.isEmpty( keyword ) ) {
+                    sql.append( " AND V.APP_NAME LIKE '%" ).append( keyword ).append( "%'" );
+                }
+                sql.append( " AND V.APP_STATUS ='" ).append( auditStatus ).append( "' " );
+                sql.append( " ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
+                Session session = entityManager.unwrap( org.hibernate.Session.class );
+                NativeQuery query = session.createNativeQuery( sql.toString() );
+                query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
+                int start = ( pageNum - 1 ) * pageSize;
+                int total = query.getResultList().size();
+                //判断分页
+                if ( start < total && pageSize > 0 ) {
+                    query.setFirstResult( start );
+                    query.setMaxResults( pageSize );
+                }
+                Map< String, Object > temp = new HashMap<>( 16 );
+                temp.put( "data", query.getResultList() );
+                temp.put( "totalPage", ( total + pageSize - 1 ) / pageSize );
+                temp.put( "totalCount", total );
+                restRecord.setData( temp );
+                return restRecord;
+
+            }
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
@@ -413,10 +437,10 @@ public class AppManageController {
             }
 
         } else {
-            List<String> properties =new ArrayList<>(2  );
-            properties.add( "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT"  );
+            List< String > properties = new ArrayList<>( 2 );
+            properties.add( "time".equalsIgnoreCase( orderType ) ? "CREATE_TIME" : "DOWNLOAD_COUNT" );
             properties.add( "APP_ID" );
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( "asc".equalsIgnoreCase( sort ) ? Sort.Direction.ASC : Sort.Direction.DESC,properties ) );
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, new Sort( "asc".equalsIgnoreCase( sort ) ? Sort.Direction.ASC : Sort.Direction.DESC, properties ) );
             //软件应用
             if ( appType == 0 ) {
                 //查全部

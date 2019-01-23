@@ -211,4 +211,14 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     @Query( nativeQuery = true, value = "SELECT * FROM STARCLOUDMARKET.DOWNLOAD_COUNT_ANALYSIS_VIEW WHERE COMPANY_ID=:companyId" )
     Page< List< Map< String, Object > > > getDownloadAllList( @Param( "companyId" ) Long companyId,
                                                               Pageable pageable );
+
+    @Query(value = "SELECT SMA.APP_NAME, SMT.APP_TYPE_NAME, 0 AS TIME\n" +
+            "FROM\n" +
+            "(SELECT APP_ID,COUNT(USER_ID) AS OPEN_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN GROUP BY APP_ID ORDER BY OPEN_COUNT DESC) MAIN\n" +
+            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_INFO SMA ON SMA.APP_ID = MAIN.APP_ID AND SMA.IS_DELETE=1\n" +
+            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL SMR ON SMR.APP_ID = SMA.APP_ID\n" +
+            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE SMT ON SMT.APP_TYPE_ID = SMR.APP_TYPE_ID\n" +
+            "INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) SMV ON SMV.APP_ID = SMA.APP_ID\n" +
+            "ORDER BY MAIN.OPEN_COUNT DESC\n",nativeQuery = true)
+    Page<Map<String,Object>> getAppUseTimeRank(Pageable pageable);
 }

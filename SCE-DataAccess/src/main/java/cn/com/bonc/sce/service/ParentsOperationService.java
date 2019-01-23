@@ -14,9 +14,14 @@ import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +42,8 @@ public class ParentsOperationService {
 
     @Autowired
     private UserParentDao userParentDao;
-    @Autowired
-    private RoleRelDao roleRelDao;
+    /*@Autowired
+    private RoleRelDao roleRelDao;*/
     @Autowired
     private StudentParentRelDao studentParentRelDao;
     @Autowired
@@ -55,7 +60,7 @@ public class ParentsOperationService {
     public RestRecord insertParentsInfo( ParentsInfo parentsInfo ) {
         String account = parentsInfo.getStudentAccount();
         String phone = studentParentRelDao.selectMainParentPhone( account );
-        if ( StringUtils.isEmpty( phone ) || !phone.equals( parentsInfo.getParentPhone() ) ) {
+        if ( StringUtils.isEmpty( phone ) || !phone.equals( parentsInfo.getMainParentPhone() ) ) {
             return new RestRecord( 430, WebMessageConstants.SCE_PORTAL_MSG_430 );
         }
         List< Map< String, String > > list = userParentDao.selectUserInfo( account );
@@ -68,9 +73,12 @@ public class ParentsOperationService {
             u.setPhoneNumber( parentsInfo.getParentPhone() );
             u.setUserName( parentsInfo.getParentName() );
             u.setCertificateNumber( parentsInfo.getParentNum() );
+            u.setCertificateType( "1" );
             u.setIsDelete( 1 );
             u.setSecret( Secret.generateSecret() );
             u.setLoginPermissionStatus( 1 );
+            u.setUserType( 9 );
+            u.setIsFirstLogin( 0 );
             User user = userParentDao.save( u );
             String parentId = user.getUserId();
 
@@ -82,14 +90,14 @@ public class ParentsOperationService {
             userPasswordDao.save( up );
 
             //存储角色表
-            RoleRel rrParent = new RoleRel();
+            /*RoleRel rrParent = new RoleRel();
             rrParent.setRoleId( 8 );
             rrParent.setUserId( parentId );
             roleRelDao.save( rrParent );
             RoleRel rrStudent = new RoleRel();
             rrStudent.setRoleId( 1 );
             rrStudent.setUserId( studentId );
-            roleRelDao.save( rrStudent );
+            roleRelDao.save( rrStudent );*/
 
             //存储学生家长对应表
             StudentParentRel spr = new StudentParentRel();
@@ -109,11 +117,50 @@ public class ParentsOperationService {
         return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
     }
 
-    public RestRecord getExamine() {
-        return new RestRecord( 200, roleRelDao.getUnExamine());
+    /**
+     * 用户注册
+     *
+     * @param info 注册信息
+     * @return 添加结果
+     */
+    public RestRecord insertUsersInfo( ParentsInfo info ) {
+        //存储用户表
+        User u = new User();
+        u.setLoginName( info.getAccount() );
+        u.setPhoneNumber( info.getParentPhone() );
+        u.setUserName( info.getParentName() );
+        u.setCertificateNumber( info.getParentNum() );
+        u.setCertificateType( "1" );
+        u.setIsDelete( 1 );
+        u.setSecret( Secret.generateSecret() );
+        u.setLoginPermissionStatus( 1 );
+        u.setUserType( 8 );
+        u.setIsFirstLogin( 0 );
+        User user = userParentDao.save( u );
+        String parentId = user.getUserId();
+
+        //存储密码表
+        UserPassword up = new UserPassword();
+        up.setUserId( parentId );
+        up.setPassword( info.getPassword() );
+        up.setIsDelete( 1 );
+        userPasswordDao.save( up );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
-    public RestRecord examine( List<String> list ) {
-        return new RestRecord( 200, roleRelDao.updateParentStatus(list));
+    public RestRecord getExamine( Integer pageNum, Integer pageSize ) {
+        Page< Map< String, Object > > page;
+        pageNum--;
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
+        page = userParentDao.getUnExamine( pageable );
+        List< Map< String, Object > > list = page.getContent();
+        Map< String, Object > info = new HashMap<>();
+        info.put( "total", page.getTotalElements() );
+        info.put( "info", list );
+        return new RestRecord( 200, info );
+    }
+
+    public RestRecord examine( List< String > list ) {
+        return new RestRecord( 200, userParentDao.updateParentStatus( list ) );
     }
 }

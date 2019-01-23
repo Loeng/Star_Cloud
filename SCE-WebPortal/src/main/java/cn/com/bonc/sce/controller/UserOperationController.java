@@ -2,6 +2,7 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserOperationService;
 import io.swagger.annotations.*;
@@ -19,7 +20,7 @@ import java.util.Map;
  * @since 2018/12/14 14:26
  */
 @Slf4j
-@Api( value = "用户信息增删改相关接口" )
+@Api( value = "用户信息增删改相关接口", tags = "用户相关接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
 @RequestMapping( "/user-info" )
@@ -43,12 +44,12 @@ public class UserOperationController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
-    @PostMapping("/addUser/{roleId}")
+    @PostMapping( "/addUser/{roleId}" )
     @ResponseBody
     public RestRecord addUserInfo(
-            @PathVariable("roleId") @ApiParam(name = "roleId",value = "角色ID",required = true) Integer roleId,
-            @RequestBody @ApiParam(example ="{'userId':1231,'userName':'loader','address':'成都市青羊区'...}" )  Map map ) {
-        return userOperationService.addUserInfo( roleId,map );
+            @PathVariable( "roleId" ) @ApiParam( name = "roleId", value = "角色ID", required = true ) Integer roleId,
+            @RequestBody @ApiParam( example = "{'userId':1231,'userName':'loader','address':'成都市青羊区'...}" ) Map map ) {
+        return userOperationService.addUserInfo( roleId, map );
     }
 
     /**
@@ -67,12 +68,12 @@ public class UserOperationController {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
 
-    @PutMapping("/updateUserInfo")
+    @PutMapping( "/updateUserInfo" )
     @ResponseBody
     public RestRecord updateUserInfoById(
-            @RequestBody   Map<String,Object> userInfo,
-            @RequestParam("userId")  String userId) {
-        return userOperationService.updateUserInfoById(userInfo,userId );
+            @RequestBody Map< String, Object > userInfo,
+            @RequestParam( "userId" ) String userId ) {
+        return userOperationService.updateUserInfoById( userInfo, userId );
     }
 
     /**
@@ -88,13 +89,13 @@ public class UserOperationController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
-    @DeleteMapping("/{userId}")
+    @DeleteMapping( "/{userId}" )
     @ResponseBody
     public RestRecord deleteUserInfoById( @PathVariable( "userId" ) String userId ) {
         // 1. 将用户表中状态改为已删除
 
         // 2. 将所有相关关系表中该用户信息删除
-        return   userOperationService.deleteUserInfoById( userId );
+        return userOperationService.deleteUserInfoById( userId );
     }
 
     /**
@@ -110,11 +111,17 @@ public class UserOperationController {
     @ApiResponses( {
             @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
     } )
-    @GetMapping("/{userId}")
+    @GetMapping( "/{userId}" )
     @ResponseBody
     public RestRecord selectUserInfoById( @PathVariable( "userId" ) String userId ) {
 
         return userOperationService.selectUserInfoById( userId );
     }
 
+    @ApiOperation( value = "添加单个用户", notes = "通过控制接口参数，添加不同角色的用户", httpMethod = "POST" )
+    @PostMapping( "/insert" )
+    @ResponseBody
+    public RestRecord insertUser( @RequestBody @ApiParam( "用户对象" ) UserModel userModel ) {
+        return userOperationService.insertUser( userModel );
+    }
 }

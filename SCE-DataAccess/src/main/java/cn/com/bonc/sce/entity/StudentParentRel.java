@@ -14,8 +14,8 @@ import javax.persistence.*;
 @Table( name = "SCE_INFO_STUDENT_PARENT_REL",schema = "STARCLOUDPORTAL" )
 public class StudentParentRel {
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_INFO_STUDENT_PAREBNT_REL" )
-    @SequenceGenerator( name = "SEQ_GEN_INFO_STUDENT_PAREBNT_REL", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_INFO_STUDENT_PAREBNT_REL" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN_INFO_STUDENT_PARENT_REL" )
+    @SequenceGenerator( name = "SEQ_GEN_INFO_STUDENT_PARENT_REL", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_INFO_STUDENT_PARENT_REL" )
     @Column( name = "ID" )
     private Integer id;
     @Column( name = "PARENT_USER_ID" )

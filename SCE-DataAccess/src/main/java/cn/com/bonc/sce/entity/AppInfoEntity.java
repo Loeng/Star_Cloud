@@ -89,6 +89,9 @@ public class AppInfoEntity {
     @Column( name = "REMARKS" )
     private String remarks;
 
+    @Column( name = "APP_LINK" )
+    private String appLink;
+
 /*    @Override
     public String toString() {
         return "AppInfoEntity{" +

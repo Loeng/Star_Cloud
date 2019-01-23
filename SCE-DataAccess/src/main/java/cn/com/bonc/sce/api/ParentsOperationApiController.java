@@ -44,15 +44,33 @@ public class ParentsOperationApiController {
     }
 
     /**
+     * 用户注册
+     *
+     * @param info 注册信息
+     * @return 添加结果
+     */
+    @PostMapping( "/free" )
+    @ResponseBody
+    public RestRecord insertUsersInfo( @RequestBody ParentsInfo info ) {
+        try {
+            return parentsOperationService.insertUsersInfo( info );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
+        }
+    }
+
+    /**
      * 获取审核列表
      *
      * @return 结果
      */
     @GetMapping( "/examine" )
     @ResponseBody
-    public RestRecord getExamine() {
+    public RestRecord getExamine(@RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
+                                 @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize) {
         try {
-            return parentsOperationService.getExamine();
+            return parentsOperationService.getExamine(pageNum,pageSize);
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );

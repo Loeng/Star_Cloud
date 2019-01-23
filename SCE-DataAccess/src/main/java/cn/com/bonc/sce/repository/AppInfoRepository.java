@@ -231,4 +231,16 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
     @Query( nativeQuery = true, value = "SELECT  COUNT(a.APP_TYPE_ID) as num,b.APP_TYPE_NAME FROM  STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL a INNER  JOIN (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE   WHERE IS_DELETE='1') b\n" +
             "ON  a.APP_TYPE_ID = b.APP_TYPE_ID  GROUP BY  b.APP_TYPE_NAME,a.APP_TYPE_ID " )
     List< Map > getAppInfo();
+
+
+
+    //通过审核状态(auditStatus=6，暂存)查询APP暂存信息
+    @Query( nativeQuery = true, value = "SELECT A.APP_NAME,A.CREATE_USER_ID,A.APP_VERSION,A.DOWNLOAD_ADDRESS,A.VERSION_INFO,A.VERSION_SIZE,A.RUNNING_PLATFORM,\n" +
+            "A.NEW_FEATURES,A.PACKAGE_NAME,A.AUTH_DETAIL,A.APP_ICON,A.APP_PHONE_PIC,A.APP_PC_PIC,A.COMPANY_ID,A.APP_TYPE,B.APP_TYPE_NAME,A.TEMP_APP_ID \n" +
+            "FROM STARCLOUDMARKET.SCE_MARKET_TEMP_APP A \n" +
+            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE B ON A.APP_TYPE = B.APP_TYPE_ID AND B.IS_DELETE = '1' \n" +
+            "WHERE ((DECODE(:typeId, 0, 1, 0) = 1) OR A.APP_TYPE = :typeId) AND NVL(A.APP_NAME, 0) LIKE CONCAT('%', CONCAT(:keyword, '%'))" )
+    Page< List< Map< String, Object > > > getTempAPPInfoByTypeIdAndKeyword( @Param( value = "typeId" ) Integer typeId,
+                                                                            @Param( value = "keyword" ) String keyword,
+                                                                            Pageable pageable);
 }

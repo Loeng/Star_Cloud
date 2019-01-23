@@ -72,4 +72,13 @@ public class UserService {
         return userDao.getUserInfo(userId);
     }
 
+    /**
+     * 修改用户
+     *
+     * @return 修改用户
+     */
+    public RestRecord updateUserInfo( User user ) {
+        return userDao.updateUserInfo(user);
+    }
+
 }

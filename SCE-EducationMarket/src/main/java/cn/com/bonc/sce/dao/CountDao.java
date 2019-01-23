@@ -62,4 +62,7 @@ public interface CountDao {
                                 @RequestParam( "appType" ) int appType,
                                 @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
                                 @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize );
+
+    @RequestMapping(value = "/count/getAppUseTimeRank",method = RequestMethod.GET)
+    RestRecord getAppUseTimeRank();
 }

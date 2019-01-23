@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 通知增删改
  *
@@ -96,7 +99,22 @@ public class NotificationApiController {
                                            @RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
-            return notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, pageNum, pageSize );
+            RestRecord rr =notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, pageNum, pageSize );
+            List< Notification > list = (List< Notification >)((Map< String, Object > )rr.getData()).get( "info" );
+            for ( Notification notification : list ) {
+                if ( notification.getUser() == null ) {
+                    continue;
+                }
+                notification.setUserName( notification.getUser().getUserName() );
+                notification.setUser( null );
+                if ( notification.getFile() == null ) {
+                    continue;
+                }
+                notification.setFileUrl( notification.getFile().getFileStorePath() );
+                notification.setFile( null );
+            }
+
+            return rr;
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
@@ -113,7 +131,12 @@ public class NotificationApiController {
     @ResponseBody
     public RestRecord getNotification( @PathVariable( "notificationId" ) Integer notificationId ) {
         try {
-            return notificationService.getNotification( notificationId );
+            Notification notification = notificationService.getNotification( notificationId );
+            if ( notification.getUser() != null ) {
+                notification.setUserName( notification.getUser().getUserName() );
+                notification.setUser( null );
+            }
+            return new RestRecord( 200,notification);
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

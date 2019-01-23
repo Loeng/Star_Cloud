@@ -2,6 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppManageDao;
 import cn.com.bonc.sce.model.AppAddModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,23 @@ public class AppManageService {
     }
 
     /**
-     * 新增应用
+     * 新增软件应用
      *
      * @param appInfo 应用信息， value为json格式
      * @return
      */
     public RestRecord addAppInfo( AppAddModel appInfo, String uid ) {
         return appManageDao.addAppInfo( appInfo, uid );
+    }
+
+    /**
+     * 新增平台应用
+     *
+     * @param platFormInfo 平台应用信息， value为json格式
+     * @return
+     */
+    public RestRecord addPlatFormInfo( PlatformAddModel platFormInfo, String uid ) {
+        return appManageDao.addPlatFormInfo( platFormInfo, uid );
     }
 
     /**
@@ -140,8 +151,8 @@ public class AppManageService {
         return appManageDao.getAllAuditStatus();
     }
 
-    public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize, String userId ) {
-        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, pageNum, pageSize, userId );
+    public RestRecord getAppListByAuditStatus( String auditStatus, Integer typeId, String keyword, String downloadCount, Integer pageNum, Integer pageSize, String userId, String platformType ) {
+        return appManageDao.getAppListByAuditStatus( auditStatus, typeId, keyword, downloadCount, platformType, pageNum, pageSize, userId );
     }
 
     /**

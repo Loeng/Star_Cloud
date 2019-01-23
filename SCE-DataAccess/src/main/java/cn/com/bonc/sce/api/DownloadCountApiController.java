@@ -315,4 +315,16 @@ public class DownloadCountApiController {
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
         }
     }
+
+    /**
+     * 查询应用使用时长排名
+     */
+    @GetMapping("/getAppUseTimeRank")
+    @ResponseBody
+    public RestRecord getAppUseTimeRank(){
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Map<String, Object>> appUseTimeRank = appCountRepository.getAppUseTimeRank(pageable);
+        log.info("应用使用时长排名查询，共查询到{}条应用",appUseTimeRank.getTotalElements());
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,appUseTimeRank);
+    }
 }
