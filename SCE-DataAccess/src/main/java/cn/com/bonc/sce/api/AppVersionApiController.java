@@ -176,6 +176,10 @@ public class AppVersionApiController {
             //根据addressId获取软件存储路径
             String addressId = findRealUrl( appVersionInfo.getAppDownloadAddress() );
 
+            //根据storeLocationId获取平台包的存储位置
+            String storeLocation = findRealUrl( appVersionInfo.getStoreLocation() );
+            appVersionInfo.setStoreLocation( storeLocation );
+
             appVersionInfo.setAppDownloadAddress( addressId );
             appVersionInfo.setAppPcPic( pcUrl );
             appVersionInfo.setAppPhonePic( phoneUrl );
