@@ -43,7 +43,7 @@ public interface AppAuditingRepository extends JpaRepository< MarketAppVersion, 
 
     @Modifying
     @Query(
-            value = "UPDATE STARCLOUDMARKET.SCE_MARKET_APP_INFO SET APP_LINK=:appLink,UPDATE_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId " )
+            value = "UPDATE AppInfoEntity SET APP_LINK=:appLink,UPDATE_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId ",nativeQuery = true)
     int updateAppLink( @Param( "appId" ) String appId, @Param( "userId" ) String userId, @Param( "appLink" ) String appLink );
 
 
