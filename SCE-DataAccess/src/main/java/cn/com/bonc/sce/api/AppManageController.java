@@ -427,7 +427,7 @@ public class AppManageController {
         Page< List< Map< String, Object > > > page;
         if ( "pt".equalsIgnoreCase( platformType ) ) {
             //平台应用
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize ,Sort.Direction.DESC,"CREATE_TIME");
             if ( appType == 0 ) {
                 //平台应用 没有分类
                 page = appInfoRepository.getAppListInfoByPlatform( userId, "pt", pageable );
