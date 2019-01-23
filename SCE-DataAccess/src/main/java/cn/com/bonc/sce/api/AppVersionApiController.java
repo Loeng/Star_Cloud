@@ -227,7 +227,7 @@ public class AppVersionApiController {
                     appAuditingRepository.saveAndFlush( appUnder );
                 }
                 //平台审核会传url ,将url存入SCE_MARKET_APP_INFO表的applink字段
-                if ( StringUtils.isNotEmpty(approve.get( "appLink" )) ) {
+                if ( StringUtils.isNotEmpty( approve.get( "appLink" ) ) ) {
                     appAuditingRepository.updateAppLink( approve.get( "appId" ), userId, approve.get( "appLink" ) );
                 }
                 /*给提交审核人员发送消息，通知其审核通过*/

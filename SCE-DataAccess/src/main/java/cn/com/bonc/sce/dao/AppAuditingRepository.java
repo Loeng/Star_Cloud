@@ -43,7 +43,7 @@ public interface AppAuditingRepository extends JpaRepository< MarketAppVersion, 
 
     @Modifying
     @Query(
-            value = "UPDATE AppInfoEntity SET APP_LINK=:appLink,UPDATE_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId ",nativeQuery = true)
+            value = "UPDATE AppInfoEntity SET APP_LINK=:appLink,UPDATE_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId ",nativeQuery = false)
     int updateAppLink( @Param( "appId" ) String appId, @Param( "userId" ) String userId, @Param( "appLink" ) String appLink );
 
 
