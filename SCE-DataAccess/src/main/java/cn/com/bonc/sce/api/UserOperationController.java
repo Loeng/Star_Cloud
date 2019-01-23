@@ -9,6 +9,7 @@ import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.rest.RestRecord;
 
+import cn.com.bonc.sce.tool.IDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -221,7 +222,30 @@ public class UserOperationController {
         userModel.setSecret( Secret.generateSecret() );
         userModel.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
         userModel.setCreateTime( new Date() );
-
+        int flag = userModel.getUserType();
+        switch ( flag ){
+            case 1:
+                userModel.setLoginName( IDUtil.createID( "xs_" ) );
+                break;
+            case 2:
+                userModel.setLoginName( IDUtil.createID( "js_" ) );
+                break;
+            case 3:
+                userModel.setLoginName( IDUtil.createID( "xx_" ) );
+                break;
+            case 4:
+                userModel.setLoginName( IDUtil.createID( "cj_" ) );
+                break;
+            case 5:
+                userModel.setLoginName( IDUtil.createID( "jz_" ) );
+                break;
+            case 6:
+                userModel.setLoginName( IDUtil.createID( "dl_" ) );
+                break;
+            case 7:
+                userModel.setLoginName( IDUtil.createID( "jyj_" ) );
+                break;
+        }
         //插入基本信息
         userInfoRepository.insertUser( userModel.getUserId(), userModel.getLoginName(), userModel.getUserName()
                 , userModel.getGender(), userModel.getUserType(), userModel.getMailAddress(), userModel.getCertificateType(), userModel.getCertificateNumber()
