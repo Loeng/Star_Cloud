@@ -92,7 +92,25 @@ public class AccountController {
     } )
     @PostMapping("")
     @ResponseBody
-    public RestRecord updateAccount(@RequestBody @ApiParam( name = "accountSecurity", value = "安全码和账号信息（或者是用户id、用户名和密码）", required = true ) Account accountSecurity,@CurrentUserId @ApiParam( hidden = true) String userId){
+    public RestRecord updateAccount(@RequestBody @ApiParam( name = "accountSecurity", value = "安全码和账号信息（或者是用户id、用户名和密码）", required = true ) Account accountSecurity){
+        return accountSecurityService.updateAccount(accountSecurity);
+    }
+
+    /**
+     * 修改账号信息
+     *
+     * @param accountSecurity 安全码和账号信息（或者是用户id、用户名和密码）
+     * @return 修改结果
+     */
+    @ApiOperation( value = "修改账号信息", notes = "修改账号信息", httpMethod = "POST" )
+    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 412, message = WebMessageConstants.SCE_PORTAL_MSG_412, response = RestRecord.class )
+    } )
+    @PostMapping("/user")
+    @ResponseBody
+    public RestRecord updateAccountByUser(@RequestBody @ApiParam( name = "accountSecurity", value = "安全码和账号信息（或者是用户id、用户名和密码）", required = true ) Account accountSecurity,@CurrentUserId @ApiParam( hidden = true) String userId){
         accountSecurity.setUserId( userId );
         return accountSecurityService.updateAccount(accountSecurity);
     }
