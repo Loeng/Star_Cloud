@@ -1,7 +1,5 @@
 package cn.com.bonc.sce.model;
 
-import com.sun.xml.internal.bind.unmarshaller.InfosetScanner;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

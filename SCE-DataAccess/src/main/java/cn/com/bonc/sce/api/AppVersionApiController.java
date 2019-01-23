@@ -226,6 +226,10 @@ public class AppVersionApiController {
                     appUnder.setUpdateUserId( userId );
                     appAuditingRepository.saveAndFlush( appUnder );
                 }
+                //平台审核会传url ,将url存入SCE_MARKET_APP_INFO表的applink字段
+                if ( StringUtils.isNotEmpty(approve.get( "appLink" )) ) {
+                    appAuditingRepository.updateAppLink( approve.get( "appId" ), userId, approve.get( "appLink" ) );
+                }
                 /*给提交审核人员发送消息，通知其审核通过*/
                 Message message = new Message();
                 String appName = String.valueOf( appAuditingRepository.getAppName( appAbove.getAppId() ).get( "appName" ) );
@@ -300,19 +304,19 @@ public class AppVersionApiController {
 
         String appNAME = tempData.get( "appNAME" ) == null ? "" : tempData.get( "appNAME" );
 //        String createUserId=userId;
-        String appVersion=tempData.get("appVersion")==null?"":tempData.get("appVersion");
-        String downloadAddress=tempData.get("downloadAddress")==null?"":tempData.get("downloadAddress");
-        String versionInfo=tempData.get("versionInfo")==null?"":tempData.get("versionInfo");
-        String versionSize=tempData.get("versionSize")==null?"":tempData.get("versionSize");
-        String runningPlatform=tempData.get("runningPlatform")==null?"":tempData.get("runningPlatform");
-        String newFeatures=tempData.get("newFeatures")==null?"":tempData.get("newFeatures");
-        String packageName=tempData.get("packageName")==null?"":tempData.get("packageName");
-        String authDetail=tempData.get("authDetail")==null?"":tempData.get("authDetail");
-        String appPhonePic=tempData.get("appPhonePic")==null?"":tempData.get("appPhonePic");
-        String appPcPic=tempData.get("appPcPic")==null?"":tempData.get("appPcPic");
-        String appIcon=tempData.get("appIcon")==null?"":tempData.get("appIcon");
-        String companyId=tempData.get("companyId")==null?"":tempData.get("companyId");
-        String appType=tempData.get("appType")==null?"0":tempData.get("appType");
+        String appVersion = tempData.get( "appVersion" ) == null ? "" : tempData.get( "appVersion" );
+        String downloadAddress = tempData.get( "downloadAddress" ) == null ? "" : tempData.get( "downloadAddress" );
+        String versionInfo = tempData.get( "versionInfo" ) == null ? "" : tempData.get( "versionInfo" );
+        String versionSize = tempData.get( "versionSize" ) == null ? "" : tempData.get( "versionSize" );
+        String runningPlatform = tempData.get( "runningPlatform" ) == null ? "" : tempData.get( "runningPlatform" );
+        String newFeatures = tempData.get( "newFeatures" ) == null ? "" : tempData.get( "newFeatures" );
+        String packageName = tempData.get( "packageName" ) == null ? "" : tempData.get( "packageName" );
+        String authDetail = tempData.get( "authDetail" ) == null ? "" : tempData.get( "authDetail" );
+        String appPhonePic = tempData.get( "appPhonePic" ) == null ? "" : tempData.get( "appPhonePic" );
+        String appPcPic = tempData.get( "appPcPic" ) == null ? "" : tempData.get( "appPcPic" );
+        String appIcon = tempData.get( "appIcon" ) == null ? "" : tempData.get( "appIcon" );
+        String companyId = tempData.get( "companyId" ) == null ? "" : tempData.get( "companyId" );
+        String appType = tempData.get( "appType" ) == null ? "0" : tempData.get( "appType" );
 //        String tempAppId=tempData.get("tempAppId")==null?"":tempData.get("tempAppId");
 
         if ( tempData.get( "tempAppId" ) == null ) {

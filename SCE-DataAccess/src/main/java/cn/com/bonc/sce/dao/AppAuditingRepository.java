@@ -28,7 +28,7 @@ public interface AppAuditingRepository extends JpaRepository< MarketAppVersion, 
      */
     MarketAppVersion findByAppIdAndAppVersion( String appId, String appVersion );
 
-    @Query(nativeQuery = true,value = "SELECT APP_NAME AS appName FROM \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" WHERE APP_ID=:appId")
+    @Query( nativeQuery = true, value = "SELECT APP_NAME AS appName FROM \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" WHERE APP_ID=:appId" )
     Map< String, Object > getAppName( @Param( "appId" ) String appId );
 
     @Modifying
@@ -40,4 +40,11 @@ public interface AppAuditingRepository extends JpaRepository< MarketAppVersion, 
     @Query(
             value = "UPDATE MarketAppVersion SET APP_STATUS=3,UPDATE_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId AND APP_VERSION=:appVersion " )
     int appVersionReject( @Param( "appId" ) String appId, @Param( "appVersion" ) String appVersion, @Param( "userId" ) String userId );
+
+    @Modifying
+    @Query(
+            value = "UPDATE AppInfoEntity SET APP_LINK=:appLink,UPDATE_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId ",nativeQuery = true)
+    int updateAppLink( @Param( "appId" ) String appId, @Param( "userId" ) String userId, @Param( "appLink" ) String appLink );
+
+
 }

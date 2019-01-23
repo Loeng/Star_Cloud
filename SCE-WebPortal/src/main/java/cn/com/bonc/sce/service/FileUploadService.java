@@ -36,7 +36,7 @@ public class FileUploadService {
     @Value( "${fileUpload.document}" )
     String documentFileStorePath;
 
-    @Value( "${fileUpload.document}" )
+    @Value( "${fileUpload.war}" )
     String warFileStorePath;
 
     @Value( "${fileUpload.mapping.image}" )
@@ -48,7 +48,7 @@ public class FileUploadService {
     @Value( "${fileUpload.mapping.document}" )
     String documentFileMappingPath;
 
-    @Value( "${fileUpload.mapping.document}" )
+    @Value( "${fileUpload.mapping.war}" )
     String warFileMappingPath;
 
     private FileUploadDao fileUploadDao;

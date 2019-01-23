@@ -59,7 +59,7 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
      * @Desc : 根据姓名和账号查询出自注册的所有用户
      * @Date : 9:44 2018/12/25
      */
-    @Query( value = "SELECT u.USER_TYPE,u.USER_NAME,u.GENDER,u.ADDRESS,u.LOGIN_PERMISSION_STATUS\n" +
+    @Query( value = "SELECT u.LOGIN_NAME,u.PHONE_NUMBER,u.CERTIFICATE_NUMBER,u.USER_TYPE,u.USER_NAME,u.GENDER,u.ADDRESS,u.LOGIN_PERMISSION_STATUS\n" +
             "FROM STARCLOUDPORTAL.SCE_COMMON_USER u INNER JOIN STARCLOUDPORTAL.SCE_INFO_THIRD_PARTY p on p.USER_ID = u.USER_ID\n" +
             "WHERE NVL(u.LOGIN_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(u.USER_NAME,' ')LIKE CONCAT('%',CONCAT(?2,'%'))", nativeQuery = true )
     Page< Map > findSelfRegALLByNameOrCount( String byName, String loginName, Pageable pageable );
@@ -119,7 +119,7 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
     @Modifying
     @Query( nativeQuery = true,
             value = "INSERT INTO \"STARCLOUDPORTAL\".\"SCE_COMMON_USER\" (\"USER_ID\",\"LOGIN_NAME\",\"USER_NAME\",\"GENDER\",\"USER_TYPE\",\"MAIL_ADDRESS\",\"CERTIFICATE_TYPE\",\"CERTIFICATE_NUMBER\",\"PHONE_NUMBER\",\"ADDRESS\",\"CREATE_TIME\",\"ORGANIZATION_ID\", \"REMARKS\", \"SECRET\" )\n" +
-                    "VALUES ( :userId,:loginName,:userName,:gender,:userType,:mailAddress,:certificateType,:certificateNumber,:phoneNumber,:address,:createTime,:organizationId,:remarks,:secret);" )
+                    "VALUES ( :userId,:loginName,:userName,:gender,:userType,:mailAddress,:certificateType,:certificateNumber,:phoneNumber,:address,:createTime,:organizationId,:remarks,:secret)" )
     int insertUser( @Param( "userId" ) String userId, @Param( "loginName" ) String loginName,
                     @Param( "userName" ) String userName, @Param( "gender" ) String gender,
                     @Param( "userType" ) int userType, @Param( "mailAddress" ) String mailAddress,
