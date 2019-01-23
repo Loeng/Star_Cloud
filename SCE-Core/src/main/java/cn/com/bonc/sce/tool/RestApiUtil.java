@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.tool;
 
+import cn.com.bonc.sce.constants.MessageConstants;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 
@@ -34,7 +36,7 @@ public class RestApiUtil {
                 } catch ( Exception e ) {
                     e.printStackTrace();
                 }
-                ip = inet.getHostAddress();
+                ip = inet != null ? inet.getHostAddress() : MessageConstants.SCE_MSG_1002;
             }
         }
         // 多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
