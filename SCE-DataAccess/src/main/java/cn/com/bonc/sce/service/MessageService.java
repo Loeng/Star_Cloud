@@ -119,7 +119,9 @@ public class MessageService {
         User user = userDao.findByUserId( userId );
         Integer roleId = user.getUserType();
         List<Integer> typeList = new ArrayList<>(  );
-        typeList.add(0);
+        if(roleId!=0){
+            typeList.add(0);
+        }
         typeList.add(roleId);
         if ( id == null ) {
             pageNum--;
