@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.User;
@@ -70,7 +71,8 @@ public class UserInfoController {
     } )
     @PostMapping("/detailed")
     @ResponseBody
-    public RestRecord updateUserInfo( @RequestBody @ApiParam( name = "user", value = "用户") User user) {
+    public RestRecord updateUserInfo( @RequestBody @ApiParam( name = "user", value = "用户") User user, @CurrentUserId String userId ) {
+        user.setUserId( userId );
         return userService.updateUserInfo(user);
 }
 }

@@ -2,17 +2,19 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.dao.AccountDao;
+
 import cn.com.bonc.sce.dao.UserPasswordDao;
-import cn.com.bonc.sce.entity.Account;
+
 import cn.com.bonc.sce.entity.FileResourceEntity;
 import cn.com.bonc.sce.entity.StudentParentRel;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.ExcelToUser;
+import cn.com.bonc.sce.entity.Message;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.repository.ExportUserRepository;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.MessageService;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,8 @@ public class FileUploadApiController {
 
     private ExportUserRepository exportUserRepository;
 
+    private MessageService messageService;
+
     public static final String STUDENT_PRE = "1";
 
     public static final String TEACHER_PRE = "2";
@@ -49,10 +53,11 @@ public class FileUploadApiController {
     public static final String CERTIFICATE_TYPE = "1";
 
     @Autowired
-    public FileUploadApiController( FileResourceRepository fileResourceRepository, UserPasswordDao userPasswordDao ,ExportUserRepository exportUserRepository) {
+    public FileUploadApiController( FileResourceRepository fileResourceRepository, UserPasswordDao userPasswordDao ,ExportUserRepository exportUserRepository,MessageService messageService) {
         this.fileResourceRepository = fileResourceRepository;
         this.userPasswordDao = userPasswordDao;
         this.exportUserRepository = exportUserRepository;
+        this.messageService=messageService;
     }
 
     @PostMapping
@@ -134,6 +139,12 @@ public class FileUploadApiController {
                 studentParentRel.setStudentUserId( studentId );
                 exportUserRepository.save( studentParentRel);
 
+                //向学生账号发送一条消息告知家长账号
+                Message message = new Message();
+                message.setContent( "恭喜您，申请主家长账号分配成功！账号："+loginParentName );
+                message.setSourceId("0");
+                message.setTargetId(studentId );
+                messageService.insertMessage(  message);
             }
         }
 
