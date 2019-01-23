@@ -119,7 +119,7 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
     @Modifying
     @Query( nativeQuery = true,
             value = "INSERT INTO \"STARCLOUDPORTAL\".\"SCE_COMMON_USER\" (\"USER_ID\",\"LOGIN_NAME\",\"USER_NAME\",\"GENDER\",\"USER_TYPE\",\"MAIL_ADDRESS\",\"CERTIFICATE_TYPE\",\"CERTIFICATE_NUMBER\",\"PHONE_NUMBER\",\"ADDRESS\",\"CREATE_TIME\",\"ORGANIZATION_ID\", \"REMARKS\", \"SECRET\" )\n" +
-                    "VALUES ( :userId,:loginName,:userName,:gender,:userType,:mailAddress,:certificateType,:certificateNumber,:phoneNumber,:address,:createTime,:organizationId,:remarks,:secret);" )
+                    "VALUES ( :userId,:loginName,:userName,:gender,:userType,:mailAddress,:certificateType,:certificateNumber,:phoneNumber,:address,:createTime,:organizationId,:remarks,:secret)" )
     int insertUser( @Param( "userId" ) String userId, @Param( "loginName" ) String loginName,
                     @Param( "userName" ) String userName, @Param( "gender" ) String gender,
                     @Param( "userType" ) int userType, @Param( "mailAddress" ) String mailAddress,
