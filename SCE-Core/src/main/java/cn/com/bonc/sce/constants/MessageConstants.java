@@ -48,6 +48,7 @@ public interface MessageConstants {
      */
     String SCE_MSG_1000 = "ip:{} 的用户尝试使用不支持的登录方式进行登录，使用登录方式: {}";
     String SCE_MSG_1001 = "用户: {} 在 ip: {} 尝试进行登录";
+    String SCE_MSG_1002 = "未知IP";
     String SCE_MSG_1010 = "找不到用户 userId: [{}]";
 
     String SCE_MSG_1020 = "修改用户状态时找不到用户数据， userId: [{}]; changeStatus: [{}]";
