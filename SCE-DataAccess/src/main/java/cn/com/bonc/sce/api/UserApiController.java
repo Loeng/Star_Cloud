@@ -111,6 +111,7 @@ public class UserApiController {
     @ResponseBody
     @Transactional
     public RestRecord updateUserInfo( @RequestBody User user ) {
+        int num = 0;
         try{
             String conditionUser = "";
             String conditionRole = "";
@@ -142,7 +143,7 @@ public class UserApiController {
             if(conditionUser.length()>0){
                 String sqlUser = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET " + conditionUser.substring( 1 ) + " WHERE USER_ID = " + "'"+userId+"'";
                 Query query = entityManager.createNativeQuery( sqlUser );
-                query.executeUpdate();
+                num+=query.executeUpdate();
             }
 
 
@@ -161,12 +162,12 @@ public class UserApiController {
                 String tableName = list.get( 0 );
                 String sqlRole = "UPDATE " + tableName + " SET " + conditionRole.substring( 1 ) + " WHERE USER_ID = " + "'"+userId+"'";
                 Query query = entityManager.createNativeQuery( sqlRole );
-                query.executeUpdate();
+                num+=query.executeUpdate();
             }
         }catch ( Exception e ){
             log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
-        return new RestRecord( 200 );
+        return new RestRecord( 200,num );
     }
 }
