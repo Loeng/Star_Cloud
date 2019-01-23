@@ -54,7 +54,6 @@ public class MessageService {
      */
     public RestRecord insertMessage( Message message ) {
         message.setId( null );
-        message.setType( 1 );
         message.setStatus( "0" );
         message.setIsDelete( 1 );
         return new RestRecord( 200, messageDao.save( message ) );
