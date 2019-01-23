@@ -30,9 +30,9 @@ public interface MessageDao extends JpaRepository<Message, Integer> {
 
     List<Message> findByTargetIdAndCreateTimeAfterAndIsDelete( String targetId, Timestamp createTime, Integer isDelete );
 
-    List<Message> findByTypeAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( Integer type, Timestamp createTime, Integer isDelete,String targetId, Timestamp createTime2, Integer isDelete2 );
+    List<Message> findByTypeInAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( List type, Timestamp createTime, Integer isDelete,String targetId, Timestamp createTime2, Integer isDelete2 );
 
     List<Message> findByTargetIdAndIsDelete( String targetId, Integer isDelete );
 
-    List<Message> findByTypeAndIsDeleteOrTargetIdAndIsDelete( Integer type,Integer isDelete,String targetId, Integer isDelete2 );
+    List<Message> findByTypeInAndIsDeleteOrTargetIdAndIsDelete( List type,Integer isDelete,String targetId, Integer isDelete2 );
 }

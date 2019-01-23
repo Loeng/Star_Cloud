@@ -1,9 +1,11 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.MessageDao;
+import cn.com.bonc.sce.dao.UserDao;
 import cn.com.bonc.sce.dao.UserMessageDao;
 import cn.com.bonc.sce.entity.Message;
 import cn.com.bonc.sce.entity.UserMessage;
+import cn.com.bonc.sce.entity.user.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ public class MessageService {
     private MessageDao messageDao;
     @Autowired
     private UserMessageDao userMessageDao;
+    @Autowired
+    private UserDao userDao;
 
     private final String ASC = "ASC";
     private final String DESC = "DESC";
@@ -112,6 +116,11 @@ public class MessageService {
      * @return message数据
      */
     public RestRecord getMessageByUserId( String userId, Integer id, Integer pageNum, Integer pageSize ) {
+        User user = userDao.findByUserId( userId );
+        Integer roleId = user.getUserType();
+        List<Integer> typeList = new ArrayList<>(  );
+        typeList.add(0);
+        typeList.add(roleId);
         if ( id == null ) {
             pageNum--;
             List< Sort.Order > orders = new ArrayList<>();
@@ -121,9 +130,9 @@ public class MessageService {
             Timestamp time = messageDao.getNewestTimeByUserId( userId );
             List< Message > list;
             if ( !StringUtils.isEmpty( time ) ) {
-                list = messageDao.findByTypeAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( 0, time, 1, userId, time, 1 );
+                list = messageDao.findByTypeInAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( typeList, time, 1, userId, time, 1 );
             } else {
-                list = messageDao.findByTypeAndIsDeleteOrTargetIdAndIsDelete( 0, 1, userId, 1 );
+                list = messageDao.findByTypeInAndIsDeleteOrTargetIdAndIsDelete( typeList, 1, userId, 1 );
             }
             List< UserMessage > userMessageList = new ArrayList<>();
             if ( list.size() > 0 ) {
