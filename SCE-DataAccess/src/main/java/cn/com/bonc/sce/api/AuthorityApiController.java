@@ -65,6 +65,7 @@ public class AuthorityApiController {
                 authority.setLoginName( user.getLoginName() );
                 authority.setIsFirstLogin( user.getIsFirstLogin() );
                 authority.setLoginPermissionStatus( user.getLoginPermissionStatus() );
+                authority.setUser( null );
             }
             return authorityService.getAll(pageNum, pageSize);
         } catch ( Exception e ) {
