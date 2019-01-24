@@ -93,4 +93,7 @@ public class UserService {
         return userDao.changeUserInfoIntegrityAndAccuracyStatus( userId, allCorrect).getCode();
     }
 
+    public RestRecord updatePasswordById( String userId, String passWord ) {
+        return userDao.updatePasswordById( userId, passWord);
+    }
 }

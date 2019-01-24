@@ -61,4 +61,6 @@ public interface UserDaoClient {
     @RequestMapping( value = "/users/detailed/{userId}", method = RequestMethod.GET )
     public RestRecord getUserInfo( @PathVariable( "userId" ) String userId );
 
+    @RequestMapping( value = "/user-info/password", method = RequestMethod.PUT )
+    RestRecord updatePasswordById( @RequestParam("userId")  String userId, @RequestParam("password")  String password );
 }
