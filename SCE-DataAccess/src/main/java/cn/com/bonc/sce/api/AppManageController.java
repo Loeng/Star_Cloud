@@ -415,7 +415,7 @@ public class AppManageController {
                     sql.append( " AND V.APP_NAME LIKE '%" ).append( keyword ).append( "%'" );
                 }
                 sql.append( " AND V.APP_STATUS ='" ).append( auditStatus ).append( "' " );
-                sql.append( " ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
+              //  sql.append( " ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
                 Session session = entityManager.unwrap( org.hibernate.Session.class );
                 NativeQuery query = session.createNativeQuery( sql.toString() );
                 query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
