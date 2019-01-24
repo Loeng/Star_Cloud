@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
+
 /**
  * @author Leucippus
  * @version 0.1
@@ -18,6 +20,7 @@ public interface UserDao extends JpaRepository< User, String > {
     public User findUserByUserId( String userId );
 
     // TODO 必须考虑并发修改的问题
+    @Transactional
     @Modifying
     @Query( "UPDATE User user SET user.isFirstLogin = :isFirstLogin WHERE user.userId = :userId" )
     public int updateUserLoginStatus( @Param( "userId" ) String userId, @Param( "isFirstLogin" ) Integer isFirstLogin );

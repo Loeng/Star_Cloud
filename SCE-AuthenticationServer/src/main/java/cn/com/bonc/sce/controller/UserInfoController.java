@@ -89,15 +89,14 @@ public class UserInfoController {
     } )
     @PatchMapping( "/info/correction" )
     @ResponseBody
-    public RestRecord confirmUserInfoIntegrityAndAccuracy( @RequestBody Boolean isAllCorrect ) {
-        String userId = "123";
+    public RestRecord confirmUserInfoIntegrityAndAccuracy( @CurrentUserId String userId, @RequestBody Boolean isAllCorrect ) {
         int result = userService.changeUserInfoIntegrityAndAccuracyStatus( userId, isAllCorrect );
         if ( result == 200 ) {
-            return new RestRecord();
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else if ( result == 1020 ) {
             return new RestRecord( 153, WebMessageConstants.SCE_WEB_MSG_153 );
-        }  else {
-            return new RestRecord( false );
+        } else {
+            return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
         }
     }
 }
