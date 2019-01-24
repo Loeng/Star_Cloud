@@ -80,4 +80,16 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
             Pageable pageable,
             @Param( "loginName" ) String loginName,
             @Param( "companyName" ) String companyName );
+
+    @Query( nativeQuery = true, value = "SELECT *  FROM \"STARCLOUDPORTAL\".\"V_COMPANY_INFO\" \n" +
+            "WHERE COMPANY_NAME LIKE CONCAT( '%', CONCAT( :companyName, '%' ) ) \n" +
+            "AND LOGIN_NAME LIKE CONCAT( '%', CONCAT( :loginName, '%' ) ) AND LOGIN_PERMISSION_STATUS = :enable ",
+            countQuery = "SELECT COUNT(*)  FROM \"STARCLOUDPORTAL\".\"V_COMPANY_INFO\" \n" +
+                    "WHERE COMPANY_NAME LIKE CONCAT( '%', CONCAT( :companyName, '%' ) ) \n" +
+                    "AND LOGIN_NAME LIKE CONCAT( '%', CONCAT( :loginName, '%' ) ) AND LOGIN_PERMISSION_STATUS =:enable")
+    Page< Map< String, Object > > getAllCompanyUserAndEnable(
+            Pageable pageable,
+            @Param( "loginName" ) String loginName,
+            @Param( "companyName" ) String companyName,
+            @Param( "enable" )String enable);
 }

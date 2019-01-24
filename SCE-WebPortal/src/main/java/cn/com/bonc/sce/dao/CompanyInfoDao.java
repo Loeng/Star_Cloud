@@ -38,6 +38,7 @@ public interface CompanyInfoDao {
     @RequestMapping( value = "/company/user-info", method = RequestMethod.GET )
     RestRecord getAllUserInfo( @RequestParam( value = "loginName", required = false, defaultValue = "" ) String loginName,
                                @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
+                               @RequestParam( value = "enable", required = false ) String enable,
                                @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
 }

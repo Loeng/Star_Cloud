@@ -193,11 +193,17 @@ public class CompanyInfoApiController {
     public RestRecord getAllUserInfo(
             @RequestParam( value = "loginName", required = false, defaultValue = "" ) String loginName,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
+            @RequestParam( value = "enable", required = false ) String enable,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
-            Page page = companyInfoRepository.getAllCompanyUser( pageable, loginName, companyName );
+            Page page;
+            if ( enable == null ) {
+                page = companyInfoRepository.getAllCompanyUser( pageable, loginName, companyName );
+            } else {
+                page = companyInfoRepository.getAllCompanyUserAndEnable( pageable, loginName, companyName, enable );
+            }
             Map< String, Object > temp = new HashMap<>( pageSize );
             if ( null != page ) {
                 temp.put( "data", page.getContent() );
