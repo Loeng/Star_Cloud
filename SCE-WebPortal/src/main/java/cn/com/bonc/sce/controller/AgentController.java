@@ -38,9 +38,24 @@ public class AgentController {
     @ApiOperation( value = "添加单个代理信息", notes = "新建代理信息", httpMethod = "POST" )
     @PostMapping
     @ResponseBody
-    public RestRecord addCompanyInfo(
+    public RestRecord addAgentInfo(
             @RequestBody @ApiParam( name = "agentModel", value = "代理信息对象", required = true )
                     AgentModel agentModel ) {
         return agentService.saveAgentInfo( agentModel );
+    }
+
+    @ApiOperation( value = "查询所有代理用户信息", notes = "查询所有代理用户信息", httpMethod = "GET" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "pageNum", value = "页数", paramType = "path", required = true ),
+            @ApiImplicitParam( name = "pageSize", value = "每页显示数量", paramType = "path", required = true )
+
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "成功", response = RestRecord.class )
+    } )
+    @GetMapping( "/all-user-info/{pageNum}/{pageSize}" )
+    public RestRecord getAllAgentUserInfo( @PathVariable Integer pageNum,
+                                           @PathVariable Integer pageSize ) {
+        return agentService.getAllAgentUserInfo( pageNum, pageSize );
     }
 }

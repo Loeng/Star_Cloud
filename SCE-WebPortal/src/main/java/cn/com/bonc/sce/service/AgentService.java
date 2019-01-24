@@ -15,8 +15,12 @@ public class AgentService {
         this.agentDao = agentDao;
     }
 
-    public RestRecord saveAgentInfo( AgentModel agentModel){
+    public RestRecord saveAgentInfo( AgentModel agentModel ) {
         return agentDao.saveAgentInfo( agentModel );
+    }
+
+    public RestRecord getAllAgentUserInfo( Integer pageNum, Integer pageSize ) {
+        return agentDao.getAllAgentUserInfo( pageNum, pageSize );
     }
 
 }
