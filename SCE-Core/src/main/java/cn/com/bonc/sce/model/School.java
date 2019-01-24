@@ -9,11 +9,11 @@ package cn.com.bonc.sce.model;
  */
 public class School {
     private String schoolName;
-    private Integer authorityName;
-    private Integer schoolAddress;
-    private Integer telephone;
+    private String authorityName;
+    private String schoolAddress;
+    private String telephone;
     private Integer institutionId;
-    private Integer grade;
+    private String grade;
 
     public String getSchoolName() {
         return schoolName;
@@ -23,27 +23,27 @@ public class School {
         this.schoolName = schoolName;
     }
 
-    public Integer getAuthorityName() {
+    public String getAuthorityName() {
         return authorityName;
     }
 
-    public void setAuthorityName( Integer authorityName ) {
+    public void setAuthorityName( String authorityName ) {
         this.authorityName = authorityName;
     }
 
-    public Integer getSchoolAddress() {
+    public String getSchoolAddress() {
         return schoolAddress;
     }
 
-    public void setSchoolAddress( Integer schoolAddress ) {
+    public void setSchoolAddress( String schoolAddress ) {
         this.schoolAddress = schoolAddress;
     }
 
-    public Integer getTelephone() {
+    public String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone( Integer telephone ) {
+    public void setTelephone( String telephone ) {
         this.telephone = telephone;
     }
 
@@ -55,11 +55,11 @@ public class School {
         this.institutionId = institutionId;
     }
 
-    public Integer getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade( Integer grade ) {
+    public void setGrade( String grade ) {
         this.grade = grade;
     }
 }

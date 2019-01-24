@@ -47,7 +47,7 @@ public class School {
     private String telephone;
 
     @Column(name = "INSTITUTION_ID")
-    private String institutionId;
+    private Integer institutionId;
 
     @Column(name = "GRADE")
     private String grade;

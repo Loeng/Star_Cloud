@@ -38,20 +38,20 @@ public class Authority {
     private Integer pid;
 
     @Column(name = "DISTRICT")
-    private Integer district;
+    private String district;
 
     @Column(name = "CITY")
-    private Integer city;
+    private String city;
 
     @Column(name = "PROVINCE")
-    private Integer province;
+    private String province;
 
     @Column(name = "COUNTY")
-    private Integer county;
+    private String county;
 
     @Column(name = "ADDRESS")
-    private Integer address;
+    private String address;
 
     @Column(name = "TELEPHONE")
-    private Integer telePhone;
+    private String telePhone;
 }

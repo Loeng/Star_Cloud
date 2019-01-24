@@ -10,12 +10,12 @@ package cn.com.bonc.sce.model;
 public class Authority {
     private String authorityName;
     private Integer pid;
-    private Integer district;
-    private Integer city;
-    private Integer province;
-    private Integer county;
-    private Integer address;
-    private Integer telePhone;
+    private String district;
+    private String city;
+    private String province;
+    private String county;
+    private String address;
+    private String telePhone;
 
     public String getAuthorityName() {
         return authorityName;
@@ -33,51 +33,51 @@ public class Authority {
         this.pid = pid;
     }
 
-    public Integer getDistrict() {
+    public String getDistrict() {
         return district;
     }
 
-    public void setDistrict( Integer district ) {
+    public void setDistrict( String district ) {
         this.district = district;
     }
 
-    public Integer getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity( Integer city ) {
+    public void setCity( String city ) {
         this.city = city;
     }
 
-    public Integer getProvince() {
+    public String getProvince() {
         return province;
     }
 
-    public void setProvince( Integer province ) {
+    public void setProvince( String province ) {
         this.province = province;
     }
 
-    public Integer getCounty() {
+    public String getCounty() {
         return county;
     }
 
-    public void setCounty( Integer county ) {
+    public void setCounty( String county ) {
         this.county = county;
     }
 
-    public Integer getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress( Integer address ) {
+    public void setAddress( String address ) {
         this.address = address;
     }
 
-    public Integer getTelePhone() {
+    public String getTelePhone() {
         return telePhone;
     }
 
-    public void setTelePhone( Integer telePhone ) {
+    public void setTelePhone( String telePhone ) {
         this.telePhone = telePhone;
     }
 }
