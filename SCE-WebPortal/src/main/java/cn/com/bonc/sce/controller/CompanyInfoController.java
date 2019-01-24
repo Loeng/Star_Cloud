@@ -120,7 +120,7 @@ public class CompanyInfoController {
     public RestRecord getAllUserInfo(
             @RequestParam( value = "loginName", required = false, defaultValue = "" ) @ApiParam( "模糊查询账号" ) String loginName,
             @RequestParam( value = "companyName", required = false, defaultValue = "" ) @ApiParam( "模糊查询厂商名" ) String companyName,
-            @RequestParam( value = "enable", required = false ) String enable,
+            @RequestParam( value = "enable", required = false ) @ApiParam( "是否允许登录" )String enable,
             @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         return companyInfoService.getAllUserInfo( loginName, companyName, enable, pageNum, pageSize );

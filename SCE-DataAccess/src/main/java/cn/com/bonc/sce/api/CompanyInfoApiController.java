@@ -184,8 +184,11 @@ public class CompanyInfoApiController {
     /**
      * 查询所有厂商用户
      *
-     * @param pageNum
-     * @param pageSize
+     * @param loginName   账号
+     * @param companyName 厂商名
+     * @param enable      是否允许登录
+     * @param pageNum     页数
+     * @param pageSize    每页大小
      * @return
      */
     @GetMapping( "/user-info" )
