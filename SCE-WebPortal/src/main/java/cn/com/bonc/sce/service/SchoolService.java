@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.SchoolDao;
+import cn.com.bonc.sce.model.School;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,16 @@ import org.springframework.stereotype.Service;
 public class SchoolService {
     @Autowired
     private SchoolDao schoolDao;
+
+    /**
+     * 添加school
+     *
+     * @param school 信息
+     * @return 是否添加成功
+     */
+    public RestRecord insertSchool(School school) {
+        return schoolDao.insertSchool(school);
+    }
 
     /**
      * 获取学校

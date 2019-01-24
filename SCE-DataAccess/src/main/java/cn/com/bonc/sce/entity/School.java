@@ -14,7 +14,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 通知
+ * 学校
  *
  * @author wzm
  * @version 0.1
@@ -39,4 +39,19 @@ public class School {
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
+
+    @Column(name = "AUTHORITY_NAME")
+    private Integer authorityName;
+
+    @Column(name = "SCHOOL_ADDRESS")
+    private Integer schoolAddress;
+
+    @Column(name = "TELEPHONE")
+    private Integer telephone;
+
+    @Column(name = "INSTITUTION_ID")
+    private Integer institutionId;
+
+    @Column(name = "GRADE")
+    private Integer grade;
 }

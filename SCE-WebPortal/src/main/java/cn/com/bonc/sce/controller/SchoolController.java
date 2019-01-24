@@ -3,6 +3,7 @@ package cn.com.bonc.sce.controller;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Banner;
+import cn.com.bonc.sce.model.School;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.BannerService;
 import cn.com.bonc.sce.service.SchoolService;
@@ -31,6 +32,23 @@ import java.util.List;
 public class SchoolController {
     @Autowired
     private SchoolService schoolService;
+
+    /**
+     * 添加school
+     *
+     * @param school 信息
+     * @return 是否添加成功
+     */
+    @ApiOperation( value = "添加school", notes = "添加school", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+    } )
+    @PostMapping
+    @ResponseBody
+    public RestRecord insertSchool( @RequestBody @ApiParam( name = "school", value = "信息", required = true ) School school ) {
+        return schoolService.insertSchool( school );
+    }
 
     /**
      * 获取学校

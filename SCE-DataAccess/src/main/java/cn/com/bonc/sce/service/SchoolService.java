@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.service;
 
-import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.SchoolDao;
 import cn.com.bonc.sce.entity.School;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -9,12 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +26,17 @@ import java.util.Map;
 public class SchoolService {
     @Autowired
     private SchoolDao schoolDao;
+
+    /**
+     * 添加school
+     *
+     * @param school 信息
+     * @return 是否添加成功
+     */
+    public RestRecord insertSchool(School school){
+        school.setIsDelete( 1 );
+        return new RestRecord(200, schoolDao.save( school ));
+    }
 
     /**
      * 获取学校

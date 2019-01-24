@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.entity.School;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.SchoolService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,23 @@ import org.springframework.web.bind.annotation.*;
 public class SchoolApiController {
     @Autowired
     private SchoolService schoolService;
+
+    /**
+     * 添加school
+     *
+     * @param school 信息
+     * @return 是否添加成功
+     */
+    @PostMapping( "" )
+    @ResponseBody
+    public RestRecord insertSchool( @RequestBody School school ) {
+        try {
+            return schoolService.insertSchool( school );
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 409, MessageConstants.SCE_MSG_409, e );
+        }
+    }
 
     /**
      * 获取学校
