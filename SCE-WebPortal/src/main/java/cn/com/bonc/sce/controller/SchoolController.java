@@ -34,22 +34,22 @@ public class SchoolController {
     @Autowired
     private SchoolService schoolService;
 
-    /**
-     * 添加school
-     *
-     * @param school 信息
-     * @return 是否添加成功
-     */
-    @ApiOperation( value = "添加school", notes = "添加school", httpMethod = "POST" )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
-    } )
-    @PostMapping
-    @ResponseBody
-    public RestRecord insertSchool( @RequestBody @ApiParam( name = "school", value = "信息", required = true ) School school ) {
-        return schoolService.insertSchool( school );
-    }
+//    /**
+//     * 添加school
+//     *
+//     * @param school 信息
+//     * @return 是否添加成功
+//     */
+//    @ApiOperation( value = "添加school", notes = "添加school", httpMethod = "POST" )
+//    @ApiResponses( {
+//            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+//            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+//    } )
+//    @PostMapping
+//    @ResponseBody
+//    public RestRecord insertSchool( @RequestBody @ApiParam( name = "school", value = "信息", required = true ) School school ) {
+//        return schoolService.insertSchool( school );
+//    }
 
     /**
      * 获取学校
