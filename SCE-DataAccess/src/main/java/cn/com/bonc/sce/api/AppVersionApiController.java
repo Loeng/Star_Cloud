@@ -169,6 +169,18 @@ public class AppVersionApiController {
         log.trace( "apply appVersion appId is {} , userId us {} , detail is {}", appId, userId, appVersionInfo );
         try {
 
+            MarketAppVersion currentVersion = appAuditingRepository.findByAppIdAndAppVersion( appVersionInfo.getAppId(), appVersionInfo.getCurrentVersion() );
+            //用户填写的版本号
+            String appversion = appVersionInfo.getAppVersion();
+            if ( StringUtils.isEmpty( appversion ) ) {
+                return new RestRecord( 423, "版本号不能为空" );
+            }
+            List< String > versionList = appVersionRepository.getVersionByAppId( appId );
+            for ( String s : versionList ) {
+                if ( s.equals( appversion ) ) {
+                    return new RestRecord( 423, "版本号重复，请重新设置一个版本号" );
+                }
+            }
             //根据id取pc图片链接
             String pcUrl = findRealUrl( appVersionInfo.getAppPcPic() );
             //根据id取phone图片链接
@@ -183,14 +195,13 @@ public class AppVersionApiController {
             appVersionInfo.setAppPhonePic( phoneUrl );
             appVersionInfo.setIsDelete( 1L );
             appVersionInfo.setAppStatus( "2" );
-//            appVersionInfo.setCreateTime( new Date() );
-//            appVersionInfo.setCreateUserId( userId );
+//          appVersionInfo.setCreateTime( new Date() );
+//          appVersionInfo.setCreateUserId( userId );
             appVersionInfo.setUpdateTime( new Date() );
             appVersionInfo.setUpdateUserId( userId );
             appVersionInfo.setAppId( appId );
 
             //将appVersionInfo为空的属性用当前版本的信息
-            MarketAppVersion currentVersion = appAuditingRepository.findByAppIdAndAppVersion( appVersionInfo.getAppId(), appVersionInfo.getCurrentVersion() );
             ClassCopyUtil.Copy( currentVersion, appVersionInfo );
 
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
