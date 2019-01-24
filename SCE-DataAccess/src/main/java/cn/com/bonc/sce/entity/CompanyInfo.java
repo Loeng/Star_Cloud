@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -13,30 +14,25 @@ import java.util.Objects;
 @ApiModel
 @Entity
 @Data
-@Table( name = "SCE_MARKET_COMPANY", schema = "STARCLOUDMARKET", catalog = "" )
+@Table( name = "SCE_MARKET_COMPANY", schema = "STARCLOUDMARKET" )
 public class CompanyInfo {
 
-    @ApiModelProperty( name = "厂商ID" )
     private Long companyId;
-
-    @ApiModelProperty( name = "厂商名称" )
     private String companyName;
-
-    @ApiModelProperty( name = "厂商地址" )
     private String companyAddress;
-
-    @ApiModelProperty( name = "厂商税号" )
     private String companyTaxNum;
-
-    @ApiModelProperty( name = "备注" )
     private String remarks;
-
-    @ApiModelProperty( name = "是否删除" )
     private Long isDelete;
+    private String juridicalPerson;
+    private String companyWebsite;
+    private String companyRegistationId;
+    private String companyEmail;
+    private String companyIntroduction;
+    private Date establishingTime;
 
     @Id
     @GeneratedValue
-    @Column( name = "COMPANY_ID", nullable = false, precision = 0 )
+    @Column( name = "COMPANY_ID", nullable = false )
     public Long getCompanyId() {
         return companyId;
     }
@@ -86,7 +82,7 @@ public class CompanyInfo {
     }
 
     @Basic
-    @Column( name = "IS_DELETE", nullable = true, precision = 0 )
+    @Column( name = "IS_DELETE", nullable = true)
     public Long getIsDelete() {
         return isDelete;
     }
@@ -94,6 +90,67 @@ public class CompanyInfo {
     public void setIsDelete( Long isDelete ) {
         this.isDelete = isDelete;
     }
+
+    @Basic
+    @Column( name = "JURIDICAL_PERSON", nullable = true )
+    public String getJuridicalPerson() {
+        return juridicalPerson;
+    }
+
+    public void setJuridicalPerson( String juridicalPerson ) {
+        this.juridicalPerson = juridicalPerson;
+    }
+
+    @Basic
+    @Column( name = "COMPANY_WEBSITE", nullable = true )
+    public String getCompanyWebsite() {
+        return companyWebsite;
+    }
+
+    public void setCompanyWebsite( String isDelete ) {
+        this.companyWebsite = companyWebsite;
+    }
+
+    @Basic
+    @Column( name = "COMPANY_REGISTATION_ID", nullable = true )
+    public String getCompanyRegistationId() {
+        return companyRegistationId;
+    }
+
+    public void setCompanyRegistationId( String companyRegistationId ) {
+        this.companyRegistationId = companyRegistationId;
+    }
+
+    @Basic
+    @Column( name = "COMPANY_EMAIL", nullable = true )
+    public String getCompanyEmail() {
+        return companyEmail;
+    }
+
+    public void setCompanyEmail( String companyEmail ) {
+        this.companyEmail = companyEmail;
+    }
+
+    @Basic
+    @Column( name = "COMPANY_INTRODUCTION", nullable = true )
+    public String getCompanyIntroduction() {
+        return companyIntroduction;
+    }
+
+    public void setCompanyIntroduction( String companyIntroduction ) {
+        this.companyIntroduction = companyIntroduction;
+    }
+
+    @Basic
+    @Column( name = "ESTABLISHING_TIME", nullable = true )
+    public Date getEstablishingTime() {
+        return establishingTime;
+    }
+
+    public void setEstablishingTime( Date isDelete ) {
+        this.establishingTime = establishingTime;
+    }
+
 
     @Override
     public boolean equals( Object o ) {
@@ -109,12 +166,19 @@ public class CompanyInfo {
                 Objects.equals( companyAddress, that.companyAddress ) &&
                 Objects.equals( companyTaxNum, that.companyTaxNum ) &&
                 Objects.equals( remarks, that.remarks ) &&
-                Objects.equals( isDelete, that.isDelete );
+                Objects.equals( isDelete, that.isDelete )&&
+                Objects.equals( juridicalPerson, that.juridicalPerson )&&
+                Objects.equals( companyWebsite, that.companyWebsite )&&
+                Objects.equals( companyRegistationId, that.companyRegistationId )&&
+                Objects.equals( companyEmail, that.companyEmail )&&
+                Objects.equals( companyIntroduction, that.companyIntroduction )&&
+                Objects.equals( establishingTime, that.establishingTime );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( companyId, companyName, companyAddress, companyTaxNum, remarks, isDelete );
+        return Objects.hash( companyId, companyName, companyAddress, companyTaxNum, remarks, isDelete,
+                juridicalPerson,companyWebsite,companyRegistationId,companyEmail,companyIntroduction,establishingTime );
     }
 }

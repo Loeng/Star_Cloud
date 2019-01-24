@@ -111,7 +111,9 @@ public class CompanyInfoApiController {
         log.trace( "add company :{}", companyInfo );
         try {
             //保存厂商实体
-            companyInfoRepository.saveAndFlush( companyInfo );
+            companyInfo.setEstablishingTime( new Date() );
+            companyInfo.setIsDelete( 1L );
+            companyInfo = companyInfoRepository.saveAndFlush( companyInfo );
             //创建“管理员账号”
             String userId = UUID.getUUID();
             userInfoRepository.insertUser( userId, IDUtil.createID( "cj_" ), "", "", 4, "", 0, "", "",
@@ -195,7 +197,7 @@ public class CompanyInfoApiController {
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
             Pageable pageable = PageRequest.of( pageNum - 1, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
-            Page page = companyInfoRepository.getAllCompanyUser( pageable,loginName,companyName );
+            Page page = companyInfoRepository.getAllCompanyUser( pageable, loginName, companyName );
             Map< String, Object > temp = new HashMap<>( pageSize );
             if ( null != page ) {
                 temp.put( "data", page.getContent() );

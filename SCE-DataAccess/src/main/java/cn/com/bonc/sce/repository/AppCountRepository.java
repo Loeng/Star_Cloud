@@ -31,8 +31,15 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
             "            LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID = MAIN.APP_ID \n" +
             "            LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1 \n" +
             "            LEFT JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON MAIN.APP_ID = T2.APP_ID \n" +
+            "            INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) V ON MAIN.APP_ID = V.APP_ID \n" +
             "            ORDER BY DOWNLOAD DESC",
-            countQuery = "SELECT COUNT(*) FROM (SELECT T1.APP_NAME,(CASE WHEN T2.COUNT IS NULL THEN 0 ELSE T2.COUNT END) AS DOWNLOAD FROM (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_DELETE = 1 ) T1 LEFT OUTER JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON T1.APP_ID = T2.APP_ID)",
+            countQuery = "SELECT COUNT(*) " +
+                    "            FROM (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_DELETE = 1 ) MAIN  \n" +
+                    "            LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=MAIN.APP_ID AND A.USER_ID = :userId AND A.IS_DELETE=1 \n" +
+                    "            LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID = MAIN.APP_ID \n" +
+                    "            LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1 \n" +
+                    "            LEFT JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON MAIN.APP_ID = T2.APP_ID \n" +
+                    "            INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) V ON MAIN.APP_ID = V.APP_ID \n",
             nativeQuery = true )
     Page< List< Map< String, Object > > > getAppDownloadRankingList( @Param( "userId" ) String userId,
                                                                      Pageable pageable );
@@ -212,13 +219,13 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
     Page< List< Map< String, Object > > > getDownloadAllList( @Param( "companyId" ) Long companyId,
                                                               Pageable pageable );
 
-    @Query(value = "SELECT SMA.APP_NAME, SMT.APP_TYPE_NAME, 0 AS TIME\n" +
+    @Query( value = "SELECT SMA.APP_NAME, SMT.APP_TYPE_NAME, 0 AS TIME\n" +
             "FROM\n" +
             "(SELECT APP_ID,COUNT(USER_ID) AS OPEN_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN GROUP BY APP_ID ORDER BY OPEN_COUNT DESC) MAIN\n" +
             "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_INFO SMA ON SMA.APP_ID = MAIN.APP_ID AND SMA.IS_DELETE=1\n" +
             "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL SMR ON SMR.APP_ID = SMA.APP_ID\n" +
             "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE SMT ON SMT.APP_TYPE_ID = SMR.APP_TYPE_ID\n" +
             "INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) SMV ON SMV.APP_ID = SMA.APP_ID\n" +
-            "ORDER BY MAIN.OPEN_COUNT DESC\n",nativeQuery = true)
-    Page<Map<String,Object>> getAppUseTimeRank(Pageable pageable);
+            "ORDER BY MAIN.OPEN_COUNT DESC\n", nativeQuery = true )
+    Page< Map< String, Object > > getAppUseTimeRank( Pageable pageable );
 }
