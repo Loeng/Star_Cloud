@@ -50,4 +50,7 @@ public class CompanyInfoService {
     }
 
 
+    public RestRecord getAllUserInfo( String loginName, String companyName, Integer pageNum, Integer pageSize ) {
+        return companyInfoDao.getAllUserInfo( loginName, companyName, pageNum, pageSize );
+    }
 }

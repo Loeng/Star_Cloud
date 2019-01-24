@@ -27,23 +27,23 @@ import java.util.Map;
 public class SchoolApiController {
     @Autowired
     private SchoolService schoolService;
-
-    /**
-     * 添加school
-     *
-     * @param school 信息
-     * @return 是否添加成功
-     */
-    @PostMapping( "" )
-    @ResponseBody
-    public RestRecord insertSchool( @RequestBody School school ) {
-        try {
-            return schoolService.insertSchool( school );
-        } catch ( Exception e ) {
-            log.error( e.getMessage(), e );
-            return new RestRecord( 409, MessageConstants.SCE_MSG_409, e );
-        }
-    }
+//
+//    /**
+//     * 添加school
+//     *
+//     * @param school 信息
+//     * @return 是否添加成功
+//     */
+//    @PostMapping( "" )
+//    @ResponseBody
+//    public RestRecord insertSchool( @RequestBody School school ) {
+//        try {
+//            return schoolService.insertSchool( school );
+//        } catch ( Exception e ) {
+//            log.error( e.getMessage(), e );
+//            return new RestRecord( 409, MessageConstants.SCE_MSG_409, e );
+//        }
+//    }
 
     /**
      * 获取学校
@@ -61,4 +61,22 @@ public class SchoolApiController {
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
+
+
+    /**
+     * 新增学校实体
+     *
+     * @return 新增学校实体
+     */
+    @ApiOperation( value = "新增学校实体", notes = "新增学校实体", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+    } )
+    @PostMapping
+    @ResponseBody
+    public RestRecord saveSchool( @RequestBody Map map ) {
+        return schoolService.saveSchool(map);
+    }
+
 }

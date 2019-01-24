@@ -76,7 +76,7 @@ public interface AppVersionRepository extends
     @Modifying
     @Query( nativeQuery = true,
             value = "INSERT INTO STARCLOUDMARKET.SCE_MARKET_TEMP_APP(APP_NAME,CREATE_USER_ID,APP_VERSION,DOWNLOAD_ADDRESS,VERSION_INFO,VERSION_SIZE,RUNNING_PLATFORM,NEW_FEATURES,PACKAGE_NAME,AUTH_DETAIL,APP_PHONE_PIC,APP_PC_PIC,APP_ICON,COMPANY_ID,APP_TYPE,TEMP_APP_ID) " +
-            " VALUES (:APP_NAME, :CREATE_USER_ID, :APP_VERSION, :DOWNLOAD_ADDRESS, :VERSION_INFO, :VERSION_SIZE, :RUNNING_PLATFORM, :NEW_FEATURES, :PACKAGE_NAME, :AUTH_DETAIL, :APP_PHONE_PIC, :APP_PC_PIC, :APP_ICON, :COMPANY_ID, :APP_TYPE, :TEMP_APP_ID)")
+                    " VALUES (:APP_NAME, :CREATE_USER_ID, :APP_VERSION, :DOWNLOAD_ADDRESS, :VERSION_INFO, :VERSION_SIZE, :RUNNING_PLATFORM, :NEW_FEATURES, :PACKAGE_NAME, :AUTH_DETAIL, :APP_PHONE_PIC, :APP_PC_PIC, :APP_ICON, :COMPANY_ID, :APP_TYPE, :TEMP_APP_ID)" )
     int insertTempAppInfo( @Param( "APP_NAME" ) String appNAME,
                            @Param( "CREATE_USER_ID" ) String createUserId,
                            @Param( "APP_VERSION" ) String appVersion,
@@ -92,7 +92,7 @@ public interface AppVersionRepository extends
                            @Param( "APP_ICON" ) String appIcon,
                            @Param( "COMPANY_ID" ) String companyId,
                            @Param( "APP_TYPE" ) String appType,
-                           @Param( "TEMP_APP_ID" ) String tempAppId);
+                           @Param( "TEMP_APP_ID" ) String tempAppId );
 
 
     /* *
@@ -105,21 +105,30 @@ public interface AppVersionRepository extends
     @Query( value = "UPDATE STARCLOUDMARKET.SCE_MARKET_TEMP_APP SET APP_NAME= :APP_NAME,CREATE_USER_ID= :CREATE_USER_ID,APP_VERSION= :APP_VERSION," +
             "DOWNLOAD_ADDRESS= :DOWNLOAD_ADDRESS,VERSION_INFO= :VERSION_INFO,VERSION_SIZE= :VERSION_SIZE,RUNNING_PLATFORM= :RUNNING_PLATFORM," +
             "NEW_FEATURES= :NEW_FEATURES,PACKAGE_NAME= :PACKAGE_NAME,AUTH_DETAIL= :AUTH_DETAIL,APP_PHONE_PIC= :APP_PHONE_PIC,APP_PC_PIC= :APP_PC_PIC," +
-            "APP_ICON= :APP_ICON,COMPANY_ID= :COMPANY_ID,APP_TYPE= :APP_TYPE WHERE TEMP_APP_ID= :TEMP_APP_ID ",nativeQuery = true)
-    int updateTempAppInfo(@Param( "APP_NAME" ) String appNAME,
-                          @Param( "CREATE_USER_ID" ) String createUserId,
-                          @Param( "APP_VERSION" ) String appVersion,
-                          @Param( "DOWNLOAD_ADDRESS" ) String downloadAddress,
-                          @Param( "VERSION_INFO" ) String versionInfo,
-                          @Param( "VERSION_SIZE" ) String versionSize,
-                          @Param( "RUNNING_PLATFORM" ) String runningPlatform,
-                          @Param( "NEW_FEATURES" ) String newFeatures,
-                          @Param( "PACKAGE_NAME" ) String packageName,
-                          @Param( "AUTH_DETAIL" ) String authDetail,
-                          @Param( "APP_PHONE_PIC" ) String appPhonePic,
-                          @Param( "APP_PC_PIC" ) String appPcPic,
-                          @Param( "APP_ICON" ) String appIcon,
-                          @Param( "COMPANY_ID" ) String companyId,
-                          @Param( "APP_TYPE" ) String appType,
-                          @Param( "TEMP_APP_ID" ) String tempAppId);
+            "APP_ICON= :APP_ICON,COMPANY_ID= :COMPANY_ID,APP_TYPE= :APP_TYPE WHERE TEMP_APP_ID= :TEMP_APP_ID ", nativeQuery = true )
+    int updateTempAppInfo( @Param( "APP_NAME" ) String appNAME,
+                           @Param( "CREATE_USER_ID" ) String createUserId,
+                           @Param( "APP_VERSION" ) String appVersion,
+                           @Param( "DOWNLOAD_ADDRESS" ) String downloadAddress,
+                           @Param( "VERSION_INFO" ) String versionInfo,
+                           @Param( "VERSION_SIZE" ) String versionSize,
+                           @Param( "RUNNING_PLATFORM" ) String runningPlatform,
+                           @Param( "NEW_FEATURES" ) String newFeatures,
+                           @Param( "PACKAGE_NAME" ) String packageName,
+                           @Param( "AUTH_DETAIL" ) String authDetail,
+                           @Param( "APP_PHONE_PIC" ) String appPhonePic,
+                           @Param( "APP_PC_PIC" ) String appPcPic,
+                           @Param( "APP_ICON" ) String appIcon,
+                           @Param( "COMPANY_ID" ) String companyId,
+                           @Param( "APP_TYPE" ) String appType,
+                           @Param( "TEMP_APP_ID" ) String tempAppId );
+
+    /**
+     * 根据appId查所有版本号
+     *
+     * @param appId
+     * @return
+     */
+    @Query( nativeQuery = true, value = "SELECT APP_VERSION FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_ID=:appId" )
+    List< String > getVersionByAppId( @Param( "appId" ) String appId );
 }

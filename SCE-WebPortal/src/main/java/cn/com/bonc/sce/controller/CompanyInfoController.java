@@ -106,4 +106,22 @@ public class CompanyInfoController {
             @PathVariable( "companyId" ) Long companyId ) {
         return companyInfoService.deleteCompanyInfo( companyId );
     }
+
+    /**
+     * 查询所有厂商用户
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation( value = "查询所有厂商用户", notes = "查询所有厂商用户", httpMethod = "GET" )
+    @GetMapping( "/user-info" )
+    @ResponseBody
+    public RestRecord getAllUserInfo(
+            @RequestParam( value = "loginName", required = false, defaultValue = "" ) @ApiParam( "模糊查询账号" ) String loginName,
+            @RequestParam( value = "companyName", required = false, defaultValue = "" ) @ApiParam( "模糊查询厂商名" ) String companyName,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+        return companyInfoService.getAllUserInfo( loginName, companyName, pageNum, pageSize );
+    }
 }
