@@ -53,10 +53,10 @@ public class UserInfoController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping("/detailed/{userId}")
+    @GetMapping( "/detailed/{userId}" )
     @ResponseBody
-    public RestRecord getUserInfo(@PathVariable( "userId" ) @ApiParam( name = "userId", value = "用户id") String userId) {
-        return userService.getUserInfo(userId);
+    public RestRecord getUserInfo( @PathVariable( "userId" ) @ApiParam( name = "userId", value = "用户id" ) String userId ) {
+        return userService.getUserInfo( userId );
     }
 
     /**
@@ -69,10 +69,35 @@ public class UserInfoController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @PostMapping("/detailed")
+    @PostMapping( "/detailed" )
     @ResponseBody
-    public RestRecord updateUserInfo( @RequestBody @ApiParam( name = "user", value = "用户") User user, @CurrentUserId String userId ) {
+    public RestRecord updateUserInfo( @RequestBody @ApiParam( name = "user", value = "用户" ) User user, @CurrentUserId String userId ) {
         user.setUserId( userId );
-        return userService.updateUserInfo(user);
-}
+        return userService.updateUserInfo( user );
+    }
+
+    /**
+     * 修改用户的信息完整度/正确度公示值
+     * 用户基础表有字段 isFirstLogin ，表示用户是否完成 “用户数据完整性和正确性” 验证。
+     *
+     * @return 修改用户
+     */
+    @ApiOperation( value = "更新用户的登录状态", notes = "修改用户", httpMethod = "PATCH" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
+    } )
+    @PatchMapping( "/info/correction" )
+    @ResponseBody
+    public RestRecord confirmUserInfoIntegrityAndAccuracy( @RequestBody Boolean isAllCorrect ) {
+        String userId = "123";
+        int result = userService.changeUserInfoIntegrityAndAccuracyStatus( userId, isAllCorrect );
+        if ( result == 200 ) {
+            return new RestRecord();
+        } else if ( result == 1020 ) {
+            return new RestRecord( 153, WebMessageConstants.SCE_WEB_MSG_153 );
+        }  else {
+            return new RestRecord( false );
+        }
+    }
 }

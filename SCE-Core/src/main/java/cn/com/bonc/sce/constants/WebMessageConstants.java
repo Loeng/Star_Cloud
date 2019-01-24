@@ -30,7 +30,7 @@ public interface WebMessageConstants {
     String SCE_WEB_MSG_150 = "无效或过期的token";
     String SCE_WEB_MSG_151 = "缺少应用 ID 或 TOKEN 信息";
     String SCE_WEB_MSG_152 = "应用 ID 或 TOKEN 无效";
-    String SCE_WEB_MSG_153 = "无效的用户 id";
+    String SCE_WEB_MSG_153 = "找不到用户";
 
 
     String SCE_PORTAL_MSG_110 = "没有关联的厂商";

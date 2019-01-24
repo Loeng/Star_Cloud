@@ -68,8 +68,8 @@ public class UserService {
      *
      * @return 获取用户
      */
-    public RestRecord getUserInfo( String userId) {
-        return userDao.getUserInfo(userId);
+    public RestRecord getUserInfo( String userId ) {
+        return userDao.getUserInfo( userId );
     }
 
     /**
@@ -78,7 +78,19 @@ public class UserService {
      * @return 修改用户
      */
     public RestRecord updateUserInfo( User user ) {
-        return userDao.updateUserInfo(user);
+        return userDao.updateUserInfo( user );
+    }
+
+    /**
+     * 修改用户数据完整性/正确性显示参数
+     *
+     * @param userId     用户Id
+     * @param allCorrect 用户数据是否完整/正确
+     *
+     * @return
+     */
+    public int changeUserInfoIntegrityAndAccuracyStatus( String userId, boolean allCorrect ) {
+        return userDao.changeUserInfoIntegrityAndAccuracyStatus( userId, allCorrect).getCode();
     }
 
 }
