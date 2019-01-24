@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author BTW
@@ -24,5 +25,17 @@ public interface AgentDao {
     @RequestMapping( value = "/agent", method = RequestMethod.POST )
     public RestRecord saveAgentInfo(
             @RequestBody AgentModel agentModel );
+
+    /**
+     * 查询所有代理用户信息
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping( value = "/agent/all-user-info", method = RequestMethod.GET )
+    public RestRecord getAllAgentUserInfo(
+            @RequestParam("pageNum") Integer pageNum,
+            @RequestParam("pageSize") Integer pageSize );
 
 }
