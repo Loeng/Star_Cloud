@@ -149,7 +149,7 @@ public class UserApiController {
 
             Map<String,String> userDetailedInfo = ( Map<String,String> )user.getUserDetailedInfo();
             if( ObjectUtils.isEmpty( userDetailedInfo )){
-                return new RestRecord( 200 );
+                return new RestRecord( 200,num );
             }
             for(Map.Entry<String,String> entry : userDetailedInfo.entrySet()){
                 if(entry.getKey().equals( "USER_ID" )||entry.getKey().equals( "IS_DELETE" )){
