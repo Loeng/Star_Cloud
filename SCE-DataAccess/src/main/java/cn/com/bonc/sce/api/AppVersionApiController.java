@@ -9,6 +9,7 @@ import cn.com.bonc.sce.repository.AppVersionRepository;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.MessageService;
+import cn.com.bonc.sce.utils.ClassCopyUtil;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -167,19 +168,16 @@ public class AppVersionApiController {
             @RequestBody MarketAppVersion appVersionInfo ) {
         log.trace( "apply appVersion appId is {} , userId us {} , detail is {}", appId, userId, appVersionInfo );
         try {
+
             //根据id取pc图片链接
             String pcUrl = findRealUrl( appVersionInfo.getAppPcPic() );
-
             //根据id取phone图片链接
             String phoneUrl = findRealUrl( appVersionInfo.getAppPhonePic() );
-
             //根据addressId获取软件存储路径
             String addressId = findRealUrl( appVersionInfo.getAppDownloadAddress() );
-
             //根据storeLocationId获取平台包的存储位置
             String storeLocation = findRealUrl( appVersionInfo.getStoreLocation() );
             appVersionInfo.setStoreLocation( storeLocation );
-
             appVersionInfo.setAppDownloadAddress( addressId );
             appVersionInfo.setAppPcPic( pcUrl );
             appVersionInfo.setAppPhonePic( phoneUrl );
@@ -188,6 +186,11 @@ public class AppVersionApiController {
             appVersionInfo.setCreateTime( new Date() );
             appVersionInfo.setCreateUserId( userId );
             appVersionInfo.setAppId( appId );
+
+            //将appVersionInfo为空的属性用当前版本的信息
+            MarketAppVersion currentVersion = appAuditingRepository.findByAppIdAndAppVersion( appVersionInfo.getAppId(), appVersionInfo.getAppVersion() );
+            ClassCopyUtil.Copy( currentVersion, appVersionInfo );
+
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             restRecord.setData( appVersionRepository.save( appVersionInfo ) );
             //todo 添加消息通知,通知管理员进行审核
