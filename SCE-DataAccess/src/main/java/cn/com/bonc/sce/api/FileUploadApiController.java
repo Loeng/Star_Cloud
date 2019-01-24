@@ -141,7 +141,7 @@ public class FileUploadApiController {
 
                 //向学生账号发送一条消息告知家长账号
                 Message message = new Message();
-                message.setContent( "恭喜您，申请主家长账号分配成功！账号："+loginParentName );
+                message.setContent( "恭喜您，申请主家长账号分配成功！账号："+loginParentName +" 密码：star123!");
                 message.setSourceId("0");
                 message.setTargetId(studentId );
                 messageService.insertMessage(  message);
