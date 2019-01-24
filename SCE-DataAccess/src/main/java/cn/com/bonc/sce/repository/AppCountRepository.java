@@ -31,7 +31,12 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
             "            LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID = MAIN.APP_ID \n" +
             "            LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1 \n" +
             "            LEFT JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON MAIN.APP_ID = T2.APP_ID \n" +
-            "            INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) V ON MAIN.APP_ID = V.APP_ID \n" +
+            "            INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
+            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
+            "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
+            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+            "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
+            "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID" +
             "            ORDER BY DOWNLOAD DESC",
             countQuery = "SELECT COUNT(*) " +
                     "            FROM (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_DELETE = 1 ) MAIN  \n" +
@@ -39,7 +44,12 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
                     "            LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID = MAIN.APP_ID \n" +
                     "            LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1 \n" +
                     "            LEFT JOIN (SELECT APP_ID,COUNT(*) AS COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD GROUP BY APP_ID) T2 ON MAIN.APP_ID = T2.APP_ID \n" +
-                    "            INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) V ON MAIN.APP_ID = V.APP_ID \n",
+                    "            INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
+                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
+                    "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
+                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+                    "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
+                    "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID ",
             nativeQuery = true )
     Page< List< Map< String, Object > > > getAppDownloadRankingList( @Param( "userId" ) String userId,
                                                                      Pageable pageable );
