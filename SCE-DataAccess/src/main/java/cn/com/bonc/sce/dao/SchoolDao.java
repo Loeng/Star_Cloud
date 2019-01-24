@@ -26,7 +26,7 @@ public interface SchoolDao extends JpaRepository< School, Integer > {
     School save( School school);
 
     @Query(value = " select * FROM \n" +
-            " (SELECT USER_ID,LOGIN_NAME,LOGIN_PERMISSION_STATUS,IS_FIRST_LOGIN,ORGANIZATION_ID FROM  STARCLOUDPORTAL.SCE_COMMON_USER  WHERE user_type= 3 AND ORGANIZATION_ID  IS NOT NULL) \n" +
+            " (SELECT USER_ID,LOGIN_NAME,LOGIN_PERMISSION_STATUS,IS_FIRST_LOGIN,ORGANIZATION_ID FROM  STARCLOUDPORTAL.SCE_COMMON_USER  WHERE user_type= 3 AND IS_DELETE = 1 AND  ORGANIZATION_ID  IS NOT NULL) \n" +
             "  u LEFT  JOIN \n" +
             "STARCLOUDPORTAL.SCE_ENTITY_SCHOOL s \n" +
             "ON  u.ORGANIZATION_ID = s.id   ",nativeQuery = true)

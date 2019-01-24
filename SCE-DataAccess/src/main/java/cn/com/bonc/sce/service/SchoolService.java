@@ -70,9 +70,9 @@ public class SchoolService {
      */
     public RestRecord getAll( Integer pageNum, Integer pageSize ) {
         pageNum--;
-        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC ,"CREATE_TIME" );
         Page< School > page;
-        page = schoolDao.findByIsDelete( 1,pageable );
+        page = schoolDao.selectAllSchool( 1,pageable);
         Map< String, Object > info = new HashMap<>();
         List< School > list = page.getContent();
         info.put( "total", page.getTotalElements() );
