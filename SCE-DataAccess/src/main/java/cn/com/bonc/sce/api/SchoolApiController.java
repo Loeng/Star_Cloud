@@ -61,21 +61,4 @@ public class SchoolApiController {
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
-
-    /**
-     * 新增学校实体
-     *
-     * @return 新增学校实体
-     */
-    @ApiOperation( value = "新增学校实体", notes = "新增学校实体", httpMethod = "POST" )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
-    } )
-    @PostMapping
-    @ResponseBody
-    public RestRecord saveSchool( @RequestBody Map map ) {
-        return schoolService.saveSchool(map);
-    }
-
 }
