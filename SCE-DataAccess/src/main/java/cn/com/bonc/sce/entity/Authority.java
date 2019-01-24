@@ -33,4 +33,25 @@ public class Authority {
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
+
+    @Column(name = "PID")
+    private Integer pid;
+
+    @Column(name = "DISTRICT")
+    private Integer district;
+
+    @Column(name = "CITY")
+    private Integer city;
+
+    @Column(name = "PROVINCE")
+    private Integer province;
+
+    @Column(name = "COUNTY")
+    private Integer county;
+
+    @Column(name = "ADDRESS")
+    private Integer address;
+
+    @Column(name = "TELEPHONE")
+    private Integer telePhone;
 }

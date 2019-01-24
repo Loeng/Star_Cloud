@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AuthorityDao;
+import cn.com.bonc.sce.model.Authority;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,16 @@ import org.springframework.stereotype.Service;
 public class AuthorityService {
     @Autowired
     private AuthorityDao authorityDao;
+
+    /**
+     * 添加authority
+     *
+     * @param authority 信息
+     * @return 是否添加成功
+     */
+    public RestRecord insertAuthority(Authority authority) {
+        return authorityDao.insertAuthority(authority);
+    }
 
     /**
      * 获取机构

@@ -2,16 +2,13 @@ package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.model.Banner;
+import cn.com.bonc.sce.model.Authority;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AuthorityService;
-import cn.com.bonc.sce.service.BannerService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 机构
@@ -31,6 +28,23 @@ import java.util.List;
 public class AuthorityController {
     @Autowired
     private AuthorityService authorityService;
+
+    /**
+     * 添加authority
+     *
+     * @param authority 信息
+     * @return 是否添加成功
+     */
+    @ApiOperation( value = "添加authority", notes = "添加authority", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+    } )
+    @PostMapping
+    @ResponseBody
+    public RestRecord insertAuthority( @RequestBody @ApiParam( name = "authority", value = "authority信息", required = true ) Authority authority ) {
+        return authorityService.insertAuthority( authority );
+    }
 
     /**
      * 获取机构

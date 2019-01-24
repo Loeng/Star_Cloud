@@ -28,6 +28,11 @@ public class AuthorityService {
     @Autowired
     private AuthorityDao authorityDao;
 
+    public RestRecord insertAuthority(Authority authority){
+        authority.setIsDelete( 1 );
+        return new RestRecord(200, authorityDao.save( authority ));
+    }
+
     /**
      * 获取机构
      *
