@@ -111,7 +111,7 @@ public class CompanyInfoApiController {
         log.trace( "add company :{}", companyInfo );
         try {
             //保存厂商实体
-            companyInfoRepository.saveAndFlush( companyInfo );
+            companyInfo = companyInfoRepository.saveAndFlush( companyInfo );
             //创建“管理员账号”
             String userId = UUID.getUUID();
             userInfoRepository.insertUser( userId, IDUtil.createID( "cj_" ), "", "", 4, "", 0, "", "",

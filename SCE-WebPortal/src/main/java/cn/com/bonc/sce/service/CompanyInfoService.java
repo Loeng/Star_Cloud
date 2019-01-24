@@ -17,18 +17,6 @@ public class CompanyInfoService {
         this.companyInfoDao = companyInfoDao;
     }
 
-    //    public RestRecord selectAllCompanyList() {
-//        return companyInfoDao.selectAllCompanyList();
-//    }
-//
-//    public RestRecord selectCompanyListByName( String companyName ) {
-//        return companyInfoDao.selectCompanyListByName( companyName );
-//    }
-//
-//    public RestRecord selectCompanyById( Long companyId ) {
-//        return companyInfoDao.selectCompanyById( companyId );
-//    }
-
     public RestRecord queryCompanyInfo( Long companyId, String companyName, int pageNum, int pageSize ) {
         return companyInfoDao.queryCompanyInfo( companyId, companyName, pageNum, pageSize );
     }

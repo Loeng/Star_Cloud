@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel( value = "Company", description = "厂商对象" )
 public class CompanyInfoModel {
-    @ApiModelProperty( name = "厂商ID" )
+    @ApiModelProperty( name = "厂商ID", hidden = true )
     private long companyId;
 
     @ApiModelProperty( name = "厂商名称" )
@@ -25,7 +25,7 @@ public class CompanyInfoModel {
     @ApiModelProperty( name = "备注" )
     private String remarks;
 
-    @ApiModelProperty( name = "是否删除" )
+    @ApiModelProperty( name = "是否删除", hidden = true )
     private Long isDelete;
 
     public long getCompanyId() {

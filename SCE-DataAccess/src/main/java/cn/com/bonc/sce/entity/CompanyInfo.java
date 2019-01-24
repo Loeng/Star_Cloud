@@ -13,7 +13,7 @@ import java.util.Objects;
 @ApiModel
 @Entity
 @Data
-@Table( name = "SCE_MARKET_COMPANY", schema = "STARCLOUDMARKET", catalog = "" )
+@Table( name = "SCE_MARKET_COMPANY", schema = "STARCLOUDMARKET"  )
 public class CompanyInfo {
 
     @ApiModelProperty( name = "厂商ID" )
@@ -36,7 +36,7 @@ public class CompanyInfo {
 
     @Id
     @GeneratedValue
-    @Column( name = "COMPANY_ID", nullable = false, precision = 0 )
+    @Column( name = "COMPANY_ID", nullable = false )
     public Long getCompanyId() {
         return companyId;
     }
