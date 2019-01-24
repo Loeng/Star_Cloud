@@ -64,6 +64,18 @@ public class AppManageService {
         appInfoEntity.setAppSource( "rj" );
         appInfoEntity.setAppNotes( appInfo.getAppNotes() );
         appInfoEntity.setCompanyId( companyId );
+        //开发者信息
+        Integer idCardId = appInfo.getDeveloperIdPic();
+        Map< String, Object > idCardIdMap = fileResourceRepository.getFileStorePathById( idCardId );
+        String idCardUrl = idCardIdMap.get( "FILE_STORE_PATH" ).toString();
+        appInfoEntity.setDeveloperName( appInfo.getDeveloperName() );
+        appInfoEntity.setDeveloperIdNumber( appInfo.getDeveloperIdNumber() );
+        appInfoEntity.setDeveloperPhone( appInfo.getDeveloperPhone() );
+        appInfoEntity.setMainContact( appInfo.getMainContact() );
+        appInfoEntity.setDeveloperIdPic( idCardUrl );
+        appInfoEntity.setChargeMode( appInfo.getChargeMode() );
+
+        //appinfo入库操作
         AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
         String appId = info.getAppId();
         //2.类型关系表
@@ -130,6 +142,17 @@ public class AppManageService {
         appInfoEntity.setAppSource( "pt" );
         appInfoEntity.setAppNotes( platFormInfo.getAppNotes() );
         appInfoEntity.setCompanyId( companyId );
+
+        //开发者信息
+        Integer idCardId = platFormInfo.getDeveloperIdPic();
+        Map< String, Object > idCardIdMap = fileResourceRepository.getFileStorePathById( idCardId );
+        String idCardUrl = idCardIdMap.get( "FILE_STORE_PATH" ).toString();
+        appInfoEntity.setDeveloperName( platFormInfo.getDeveloperName() );
+        appInfoEntity.setDeveloperIdNumber( platFormInfo.getDeveloperIdNumber() );
+        appInfoEntity.setDeveloperPhone( platFormInfo.getDeveloperPhone() );
+        appInfoEntity.setMainContact( platFormInfo.getMainContact() );
+        appInfoEntity.setDeveloperIdPic( idCardUrl );
+        appInfoEntity.setChargeMode( platFormInfo.getChargeMode() );
         AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
         String appId = info.getAppId();
         //2.类型关系表
@@ -149,7 +172,7 @@ public class AppManageService {
         //往版本表存东西
         MarketAppVersion marketAppVersion = new MarketAppVersion();
         marketAppVersion.setAppId( appId );
-       // marketAppVersion.setAppDownloadAddress( platFormAddress );
+        // marketAppVersion.setAppDownloadAddress( platFormAddress );
         marketAppVersion.setAppVersion( platFormInfo.getAppVersion() );
         marketAppVersion.setVersionInfo( platFormInfo.getAppNotes() );
         marketAppVersion.setPackageName( platFormInfo.getPackageName() );

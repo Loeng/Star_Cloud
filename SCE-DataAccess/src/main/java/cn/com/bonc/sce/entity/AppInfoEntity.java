@@ -92,6 +92,24 @@ public class AppInfoEntity {
     @Column( name = "APP_LINK" )
     private String appLink;
 
+    @Column( name = "DEVELOPER_NAME" )
+    private String developerName;
+
+    @Column( name = "DEVELOPER_ID_NUMBER" )
+    private String developerIdNumber;
+
+    @Column( name = "DEVELOPER_PHONE" )
+    private String developerPhone;
+
+    @Column( name = "MAIN_CONTACT" )
+    private String mainContact;
+
+    @Column( name = "DEVELOPER_ID_PIC" )
+    private String developerIdPic;
+
+    @Column( name = "CHARGE_MODE" )
+    private String chargeMode;
+
 /*    @Override
     public String toString() {
         return "AppInfoEntity{" +
