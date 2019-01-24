@@ -238,7 +238,7 @@ public class AppVersionApiController {
                 appAbove.setUpdateTime( date );
                 appAbove.setUpdateUserId( userId );
                 appAuditingRepository.saveAndFlush( appAbove );
-                /*更改目标版本号应用状态为上架*/
+                /*更改目标版本号应用状态为下架*/
                 if ( approve.get( "currentVersion" ) != null ) {
                     MarketAppVersion appUnder = appAuditingRepository.findByAppIdAndAppVersion( approve.get( "appId" ), approve.get( "currentVersion" ) );
                     appUnder.setAppStatus( "5" );
