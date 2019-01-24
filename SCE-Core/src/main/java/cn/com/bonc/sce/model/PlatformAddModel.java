@@ -30,11 +30,11 @@ public class PlatformAddModel {
     @ApiModelProperty( name = "应用描述" )
     private String appNotes;
 
-   //@NotBlank( message = "新版特性不能为空" )
+    //@NotBlank( message = "新版特性不能为空" )
     @ApiModelProperty( name = "新版特性" )
     private String newFeatures;
 
-   // @NotBlank( message = "安装说明不能为空" )
+    // @NotBlank( message = "安装说明不能为空" )
     @ApiModelProperty( name = "安装说明" )
     private String installInfo;
 
@@ -72,4 +72,22 @@ public class PlatformAddModel {
 
     @ApiModelProperty( name = "pc端界面截图(json数组)" )
     private Set< Integer > appPcPic;
+
+    @ApiModelProperty( name = "开发者姓名" )
+    private String developerName;
+
+    @ApiModelProperty( name = "开发者身份证号" )
+    private String developerIdNumber;
+
+    @ApiModelProperty( name = "开发者联系电话" )
+    private String developerPhone;
+
+    @ApiModelProperty( name = "主联系人" )
+    private String mainContact;
+
+    @ApiModelProperty( name = "开发者身份证图片" )
+    private Integer developerIdPic;
+
+    @ApiModelProperty( name = "计费模式" )
+    private String chargeMode;
 }

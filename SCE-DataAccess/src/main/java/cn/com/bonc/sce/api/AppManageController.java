@@ -355,7 +355,7 @@ public class AppManageController {
         for ( Map map : appIdList ) {
             String appId = String.valueOf( map.get( "appId" ) );
             String appVersion = String.valueOf( map.get( "appVersion" ) );
-            appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId, appId, appVersion );
+            appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( "5", userId, appId, appVersion );
         }
         return new RestRecord( 200, appInfo );
     }

@@ -50,5 +50,23 @@ public class AppAddModel {
     @ApiModelProperty( name = "上传的相关信息" )
     private Set< AppTypeMode > pc;
 
+    @ApiModelProperty( name = "开发者姓名" )
+    private String developerName;
+
+    @ApiModelProperty( name = "开发者身份证号" )
+    private String developerIdNumber;
+
+    @ApiModelProperty( name = "开发者联系电话" )
+    private String developerPhone;
+
+    @ApiModelProperty( name = "主联系人" )
+    private String mainContact;
+
+    @ApiModelProperty( name = "开发者身份证图片" )
+    private Integer developerIdPic;
+
+    @ApiModelProperty( name = "计费模式" )
+    private String chargeMode;
+
 
 }
