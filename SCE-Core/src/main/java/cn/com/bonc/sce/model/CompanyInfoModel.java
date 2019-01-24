@@ -2,12 +2,16 @@ package cn.com.bonc.sce.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @Author: yhb
  * @Date: 2018/12/24 9:49
  * @Version 1.0
  */
+@Data
 @ApiModel( value = "Company", description = "厂商对象" )
 public class CompanyInfoModel {
     @ApiModelProperty( name = "厂商ID", hidden = true )
@@ -28,51 +32,21 @@ public class CompanyInfoModel {
     @ApiModelProperty( name = "是否删除", hidden = true )
     private Long isDelete;
 
-    public long getCompanyId() {
-        return companyId;
-    }
+    @ApiModelProperty( name = "法人" )
+    private String juridicalPerson;
 
-    public void setCompanyId( long companyId ) {
-        this.companyId = companyId;
-    }
+    @ApiModelProperty( name = "网址" )
+    private String companyWebsite;
 
-    public String getCompanyName() {
-        return companyName;
-    }
+    @ApiModelProperty( name = "注册号" )
+    private String companyRegistationId;
 
-    public void setCompanyName( String companyName ) {
-        this.companyName = companyName;
-    }
+    @ApiModelProperty( name = "厂商邮箱" )
+    private String companyEmail;
 
-    public String getCompanyAddress() {
-        return companyAddress;
-    }
+    @ApiModelProperty( name = "厂商简介" )
+    private String companyIntroduction;
 
-    public void setCompanyAddress( String companyAddress ) {
-        this.companyAddress = companyAddress;
-    }
-
-    public String getCompanyTaxNum() {
-        return companyTaxNum;
-    }
-
-    public void setCompanyTaxNum( String companyTaxNum ) {
-        this.companyTaxNum = companyTaxNum;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks( String remarks ) {
-        this.remarks = remarks;
-    }
-
-    public Long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete( Long isDelete ) {
-        this.isDelete = isDelete;
-    }
+    @ApiModelProperty( name = "创建时间", hidden = true )
+    private Date establishingTime;
 }
