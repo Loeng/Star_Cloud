@@ -57,7 +57,7 @@ public interface HotAppRepository extends JpaRepository< AppInfoEntity, String >
      * @param pageable
      * @return
      */
-    @Query( value = "SELECT  AI.APP_ID,AI.APP_NAME,AI.COMPANY_ID,AI.APP_ICON,AI.APP_NOTES,AI.APP_SOURCE,AI.APP_LINK,AI.IS_HOT_RECOMMEND" +
+    @Query( value = "SELECT  AI.APP_ID,AI.APP_NAME,AI.COMPANY_ID,AI.APP_ICON,AI.APP_NOTES,AI.APP_SOURCE,AI.APP_LINK,AI.IS_HOT_RECOMMEND," +
             "                    NVL2(A.APP_ID ,'1','0') IS_OPEN," +
             "                    NVL2(C.APP_ID ,'1','0') IS_DOWNLOAD," +
             "                    NVL2(D.APP_ID ,'1','0') IS_COLLECT," +
