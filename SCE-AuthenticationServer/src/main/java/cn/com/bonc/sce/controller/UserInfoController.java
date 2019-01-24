@@ -99,4 +99,19 @@ public class UserInfoController {
             return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_500 );
         }
     }
+
+
+    /**
+     *
+     * @return 修改用户密码
+     */
+    @ApiOperation( value = "修改用户密码", notes = "修改用户密码", httpMethod = "PUT" )
+    @PutMapping( "/password" )
+    @ResponseBody
+    public RestRecord updatePasswordById( @CurrentUserId String userId, @RequestParam("password") String password ) {
+        return  userService.updatePasswordById(userId,password);
+    }
+
+
+
 }

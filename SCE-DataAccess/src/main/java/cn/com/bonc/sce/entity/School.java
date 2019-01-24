@@ -55,4 +55,5 @@ public class School {
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
+
 }

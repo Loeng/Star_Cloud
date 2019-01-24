@@ -41,9 +41,12 @@ public class UserOperationController {
 
     private UserInfoRepository userInfoRepository;
 
+    private UserPasswordDao userPasswordDao;
+
     @Autowired
-    public UserOperationController( UserInfoRepository userInfoRepository ) {
+    public UserOperationController( UserInfoRepository userInfoRepository, UserPasswordDao userPasswordDao ) {
         this.userInfoRepository = userInfoRepository;
+        this.userPasswordDao = userPasswordDao;
     }
 
     @Autowired
@@ -223,7 +226,7 @@ public class UserOperationController {
         userModel.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
         userModel.setCreateTime( new Date() );
         int flag = userModel.getUserType();
-        switch ( flag ){
+        switch ( flag ) {
             case 1:
                 userModel.setLoginName( IDUtil.createID( "xs_" ) );
                 break;
@@ -310,4 +313,20 @@ public class UserOperationController {
 
         return new RestRecord( 250, WebMessageConstants.SCE_PORTAL_MSG_250 );
     }
+
+    //修改密码
+
+    /**
+     * 查询用户信息
+     *
+     * @param userId 用户ID
+     * @return 用户信息
+     */
+    @PutMapping("/password")
+    @ResponseBody
+    public RestRecord saveUserPassword( @RequestParam("userId") String userId, @RequestParam("password") String password ) {
+        int date = userPasswordDao.updatePasswordById( userId, password );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, date );
+    }
+
 }
