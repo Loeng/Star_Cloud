@@ -1,10 +1,19 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.dao.UserInfoRepository;
+import cn.com.bonc.sce.dao.UserPasswordDao;
 import cn.com.bonc.sce.entity.CompanyInfo;
+import cn.com.bonc.sce.entity.UserPassword;
+import cn.com.bonc.sce.model.Secret;
+import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.repository.CompanyInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IDUtil;
+import cn.com.bonc.sce.utils.UUID;
+import cn.hutool.system.UserInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.omg.PortableServer.ID_UNIQUENESS_POLICY_ID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +39,12 @@ public class CompanyInfoApiController {
     public CompanyInfoApiController( CompanyInfoRepository companyInfoRepository ) {
         this.companyInfoRepository = companyInfoRepository;
     }
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private UserPasswordDao passwordDao;
 
     @GetMapping
     @ResponseBody
@@ -95,7 +111,21 @@ public class CompanyInfoApiController {
         companyInfo.setIsDelete( 1L );
         log.trace( "add company :{}", companyInfo );
         try {
+            //保存厂商实体
             companyInfoRepository.save( companyInfo );
+            //创建“管理员账号”
+            String userId = UUID.getUUID();
+            userInfoRepository.insertUser( userId, IDUtil.createID( "cj_" ), "", "", 4, "", 0, "", "",
+                    "", new Date(), companyInfo.getCompanyId().toString(), "厂商管理员", Secret.generateSecret() );
+            //创建密码
+            UserPassword password = new UserPassword();
+            password.setUserId( userId );
+            password.setPassword( "star123!" );
+            passwordDao.save( password );
+
+            //关联资料表
+            userInfoRepository.insertInfoCompany( userId, companyInfo.getCompanyId().toString(), "" );
+
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             restRecord.setData( companyInfo );
             return restRecord;

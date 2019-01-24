@@ -67,4 +67,22 @@ public class AppVersionModel {
 
     @ApiModelProperty( name = "应用当前版本" )
     private String currentVersion;
+
+    @ApiModelProperty( name = "应用当前版本" )
+    private String installInfo;
+
+    @ApiModelProperty( name = "应用当前版本" )
+    private String storeLocation;
+
+    @ApiModelProperty( name = "根路径" )
+    private String indexUrl;
+
+    @ApiModelProperty( name = "测试url" )
+    private String testUrl;
+
+    @ApiModelProperty( name = "tokenAddress" )
+    private String tokenAddress;
+
+    @ApiModelProperty( name = "md5Code" )
+    private String md5Code;
 }

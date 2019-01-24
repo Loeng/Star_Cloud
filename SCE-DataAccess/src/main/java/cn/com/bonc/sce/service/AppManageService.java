@@ -149,7 +149,7 @@ public class AppManageService {
         //往版本表存东西
         MarketAppVersion marketAppVersion = new MarketAppVersion();
         marketAppVersion.setAppId( appId );
-        marketAppVersion.setAppDownloadAddress( platFormAddress );
+       // marketAppVersion.setAppDownloadAddress( platFormAddress );
         marketAppVersion.setAppVersion( platFormInfo.getAppVersion() );
         marketAppVersion.setVersionInfo( platFormInfo.getAppNotes() );
         marketAppVersion.setPackageName( platFormInfo.getPackageName() );

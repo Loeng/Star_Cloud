@@ -1,17 +1,17 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
+import cn.com.bonc.sce.entity.AppNameTypeEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.PlatformAddModel;
-import cn.com.bonc.sce.repository.AppInfoRepository;
-import cn.com.bonc.sce.repository.AppTypeRepository;
-import cn.com.bonc.sce.repository.CompanyInfoRepository;
-import cn.com.bonc.sce.repository.MarketAppVersionRepository;
+import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppManageService;
 import cn.com.bonc.sce.service.AppNameTypeService;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
@@ -53,6 +53,9 @@ public class AppManageController {
 
     @Autowired
     private MarketAppVersionRepository marketAppVersionRepository;
+
+    @Autowired
+    private AppNameTypeRepository appNameTypeRepository;
 
     @Autowired
     /**
@@ -243,8 +246,45 @@ public class AppManageController {
                                                   @RequestParam( value = "platformType", required = false, defaultValue = "0" ) String platformType,
                                                   @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
                                                   @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+
+        boolean existsName = StrUtil.isNotBlank( appName );
+        boolean existsType = ( appType != null && appType != 0 );
+
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+        Page<Map<String,Object>> list = null;
+        // 名字类型都有输入
+        if ( existsName && existsType ) {
+            appName = StrUtil.builder().append( "%" ).append( appName ).append( "%" ).toString();
+            list = appNameTypeRepository.selectAppListByNameAndType( appName, appType, pageable );
+        }
+
+        // 只输入名字
+        if ( existsName && !existsType ) {
+            appName = StrUtil.builder().append( "%" ).append( appName ).append( "%" ).toString();
+            list = appNameTypeRepository.selectAppListByName( appName, pageable );
+        }
+
+        // 只输入类型
+        if ( !existsName && existsType ) {
+            list = appNameTypeRepository.selectAppListByType( appType, pageable );
+        }
+
+        if ( !existsName && !existsType ) {
+            list = appNameTypeRepository.selectAppList( pageable );
+        }
+
+        if ( null != list ) {
+            Map temp = new HashMap<>();
+            temp.put( "data", list.getContent() );
+            temp.put( "totalPage", list.getTotalPages() );
+            temp.put( "totalCount", list.getTotalElements() );
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, temp );
+        } else {
+            return new RestRecord( 500, MessageConstants.SCE_MSG_406 );
+        }
+
         //TODO:这个数据随便查的，要重写
-        return appNameTypeService.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
+//        return appNameTypeService.selectAppListByNameAndType( appName, appType, orderType, sort, platformType, pageNum, pageSize );
 
     }
 
@@ -427,7 +467,7 @@ public class AppManageController {
         Page< List< Map< String, Object > > > page;
         if ( "pt".equalsIgnoreCase( platformType ) ) {
             //平台应用
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize ,Sort.Direction.DESC,"CREATE_TIME");
             if ( appType == 0 ) {
                 //平台应用 没有分类
                 page = appInfoRepository.getAppListInfoByPlatform( userId, "pt", pageable );

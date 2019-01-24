@@ -320,4 +320,34 @@ public class MarketAppVersion implements Serializable {
 
         return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl, testUrl, tokenAddress, md5Code );
     }
+
+    @Override
+    public String toString() {
+        return "MarketAppVersion{" +
+                "appId='" + appId + '\'' +
+                ", appVersion='" + appVersion + '\'' +
+                ", appStatus='" + appStatus + '\'' +
+                ", appDownloadAddress='" + appDownloadAddress + '\'' +
+                ", createTime=" + createTime +
+                ", versionInfo='" + versionInfo + '\'' +
+                ", versionSize='" + versionSize + '\'' +
+                ", runningPlatform='" + runningPlatform + '\'' +
+                ", isDelete=" + isDelete +
+                ", createUserId='" + createUserId + '\'' +
+                ", updateUserId='" + updateUserId + '\'' +
+                ", updateTime=" + updateTime +
+                ", newFeatures='" + newFeatures + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", authDetail='" + authDetail + '\'' +
+                ", appPhonePic='" + appPhonePic + '\'' +
+                ", appPcPic='" + appPcPic + '\'' +
+                ", currentVersion='" + currentVersion + '\'' +
+                ", installInfo='" + installInfo + '\'' +
+                ", storeLocation='" + storeLocation + '\'' +
+                ", indexUrl='" + indexUrl + '\'' +
+                ", testUrl='" + testUrl + '\'' +
+                ", tokenAddress='" + tokenAddress + '\'' +
+                ", md5Code='" + md5Code + '\'' +
+                '}';
+    }
 }
