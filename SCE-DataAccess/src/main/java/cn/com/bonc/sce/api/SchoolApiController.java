@@ -1,12 +1,18 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.School;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.SchoolService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 学校
@@ -55,4 +61,21 @@ public class SchoolApiController {
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
+
+    /**
+     * 新增学校实体
+     *
+     * @return 新增学校实体
+     */
+    @ApiOperation( value = "新增学校实体", notes = "新增学校实体", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+    } )
+    @PostMapping
+    @ResponseBody
+    public RestRecord saveSchool( @RequestBody Map map ) {
+        return schoolService.saveSchool(map);
+    }
+
 }

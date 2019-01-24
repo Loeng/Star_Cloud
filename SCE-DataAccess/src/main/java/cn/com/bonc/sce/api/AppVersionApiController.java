@@ -183,12 +183,14 @@ public class AppVersionApiController {
             appVersionInfo.setAppPhonePic( phoneUrl );
             appVersionInfo.setIsDelete( 1L );
             appVersionInfo.setAppStatus( "2" );
-            appVersionInfo.setCreateTime( new Date() );
-            appVersionInfo.setCreateUserId( userId );
+//            appVersionInfo.setCreateTime( new Date() );
+//            appVersionInfo.setCreateUserId( userId );
+            appVersionInfo.setUpdateTime( new Date() );
+            appVersionInfo.setUpdateUserId( userId );
             appVersionInfo.setAppId( appId );
 
             //将appVersionInfo为空的属性用当前版本的信息
-            MarketAppVersion currentVersion = appAuditingRepository.findByAppIdAndAppVersion( appVersionInfo.getAppId(), appVersionInfo.getAppVersion() );
+            MarketAppVersion currentVersion = appAuditingRepository.findByAppIdAndAppVersion( appVersionInfo.getAppId(), appVersionInfo.getCurrentVersion() );
             ClassCopyUtil.Copy( currentVersion, appVersionInfo );
 
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );

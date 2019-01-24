@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * 学校
  *
@@ -37,5 +39,10 @@ public class SchoolService {
      */
     public RestRecord getAll(Integer pageNum,Integer pageSize) {
         return schoolDao.getAll(pageNum,pageSize);
+    }
+
+    public RestRecord saveSchool( Map map ) {
+
+         return schoolDao.saveSchool(map);
     }
 }
