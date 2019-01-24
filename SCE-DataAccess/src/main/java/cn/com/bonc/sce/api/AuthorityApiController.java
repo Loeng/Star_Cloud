@@ -2,11 +2,15 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.entity.Authority;
+import cn.com.bonc.sce.entity.user.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AuthorityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 机构
@@ -50,6 +54,18 @@ public class AuthorityApiController {
     public RestRecord getAll(@RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
                              @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize) {
         try {
+            RestRecord rr = authorityService.getAll(pageNum, pageSize);
+            List< Authority > list = (List< Authority > )((Map< String, Object > )rr.getData()).get( "info" );
+            for ( Authority authority : list ) {
+                User user = authority.getUser();
+                if ( user == null ) {
+                    continue;
+                }
+                authority.setUserId( user.getUserId() );
+                authority.setLoginName( user.getLoginName() );
+                authority.setIsFirstLogin( user.getIsFirstLogin() );
+                authority.setLoginPermissionStatus( user.getLoginPermissionStatus() );
+            }
             return authorityService.getAll(pageNum, pageSize);
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
