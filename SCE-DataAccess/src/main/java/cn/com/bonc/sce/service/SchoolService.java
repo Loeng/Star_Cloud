@@ -1,14 +1,22 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.dao.SchoolDao;
+import cn.com.bonc.sce.dao.UserDao;
+import cn.com.bonc.sce.entity.Account;
 import cn.com.bonc.sce.entity.School;
+import cn.com.bonc.sce.entity.user.User;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IDUtil;
+import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,9 +31,14 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@Transactional( rollbackFor = Exception.class )
 public class SchoolService {
     @Autowired
     private SchoolDao schoolDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private AccountDao accountDao;
 
     /**
      * 添加school
@@ -34,6 +47,21 @@ public class SchoolService {
      * @return 是否添加成功
      */
     public RestRecord insertSchool(School school){
+        User user = new User();
+        String secret = Secret.generateSecret();
+        String loginName = IDUtil.createID( "xx_" );
+        user.setSecret( secret );
+        user.setLoginName( loginName );
+        user.setUserType( 3 );
+        user.setIsDelete( 1 );
+        userDao.save( user );
+
+        Account account = new Account();
+        account.setUserId( user.getUserId() );
+        account.setPassword( "star123!" );
+        account.setIsDelete( 1 );
+        accountDao.save( account );
+
         school.setIsDelete( 1 );
         return new RestRecord(200, schoolDao.save( school ));
     }

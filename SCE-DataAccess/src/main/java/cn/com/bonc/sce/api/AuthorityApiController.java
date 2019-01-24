@@ -22,6 +22,7 @@ public class AuthorityApiController {
     @Autowired
     private AuthorityService authorityService;
 
+
     /**
      * 添加authority
      *

@@ -38,7 +38,7 @@ public class Account  implements Serializable {
     private String userId;
 
     @OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false )
-    @JoinColumn( name = "user_id" )
+    @JoinColumn( name = "user_id" , insertable=false, updatable=false)
     // @JsonIgnore
     @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler"})
     @JsonIdentityInfo( generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id" )

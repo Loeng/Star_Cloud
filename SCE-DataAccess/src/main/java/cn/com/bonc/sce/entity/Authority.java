@@ -26,7 +26,7 @@ public class Authority {
     @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_ENTITY_INSTITUTION")
     @SequenceGenerator(name="SEQ_GEN_ENTITY_INSTITUTION",allocationSize=1,initialValue=1, sequenceName="SEQ_ENTITY_INSTITUTION")
     @Column(name = "ID")
-    private String id;
+    private Integer id;
 
     @Column(name = "INSTITUTION_NAME")
     private String authorityName;
