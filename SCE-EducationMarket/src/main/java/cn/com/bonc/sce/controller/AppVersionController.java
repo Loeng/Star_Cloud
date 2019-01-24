@@ -106,6 +106,9 @@ public class AppVersionController {
      * @return
      */
     @ApiOperation( value = "应用版本更新申请接口", notes = "添加一条版本更新申请", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
     @PostMapping( "/apply/{appId}" )
     @ResponseBody
     public RestRecord appVersionUpdateApply(
