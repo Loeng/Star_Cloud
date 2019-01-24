@@ -108,7 +108,8 @@ public class UserInfoController {
     @ApiOperation( value = "修改用户密码", notes = "修改用户密码", httpMethod = "PUT" )
     @PutMapping( "/password" )
     @ResponseBody
-    public RestRecord updatePasswordById( @CurrentUserId String userId, @RequestParam("password") String password ) {
+    public RestRecord updatePasswordById(@ApiParam(hidden = true) @CurrentUserId String userId, @RequestParam("password") String password ) {
+        System.out.println(111);
         return  userService.updatePasswordById(userId,password);
     }
 

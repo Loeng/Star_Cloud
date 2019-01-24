@@ -325,7 +325,7 @@ public class UserOperationController {
     @PutMapping("/password")
     @ResponseBody
     public RestRecord saveUserPassword( @RequestParam("userId") String userId, @RequestParam("password") String password ) {
-        int date = userPasswordDao.updatePasswordById( userId, password );
+        int date = userPasswordDao.updateUserPassword( userId, password );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, date );
     }
 
