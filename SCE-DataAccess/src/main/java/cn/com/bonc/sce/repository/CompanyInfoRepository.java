@@ -68,4 +68,16 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
      */
     @Query( nativeQuery = true, value = "SELECT COMPANY_ID FROM STARCLOUDPORTAL.SCE_INFO_COMPANY WHERE USER_ID = :uid" )
     Long getCompanyIdByUid( @Param( "uid" ) String uid );
+
+
+    @Query( nativeQuery = true, value = "SELECT *  FROM \"STARCLOUDPORTAL\".\"V_COMPANY_INFO\" \n" +
+            "WHERE COMPANY_NAME LIKE CONCAT( '%', CONCAT( :companyName, '%' ) ) \n" +
+            "AND LOGIN_NAME LIKE CONCAT( '%', CONCAT( :loginName, '%' ) ) ",
+    countQuery = "SELECT COUNT(*)  FROM \"STARCLOUDPORTAL\".\"V_COMPANY_INFO\" \n" +
+            "WHERE COMPANY_NAME LIKE CONCAT( '%', CONCAT( :companyName, '%' ) ) \n" +
+            "AND LOGIN_NAME LIKE CONCAT( '%', CONCAT( :loginName, '%' ) ) ")
+    Page< Map< String, Object > > getAllCompanyUser(
+            Pageable pageable,
+            @Param( "loginName" ) String loginName,
+            @Param( "companyName" ) String companyName );
 }

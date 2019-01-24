@@ -6,18 +6,17 @@ import cn.com.bonc.sce.dao.UserPasswordDao;
 import cn.com.bonc.sce.entity.CompanyInfo;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.Secret;
-import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.repository.CompanyInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
-import cn.hutool.system.UserInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.PortableServer.ID_UNIQUENESS_POLICY_ID;
+import net.bytebuddy.description.type.TypeDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -156,7 +155,6 @@ public class CompanyInfoApiController {
             log.error( WebMessageConstants.SCE_PORTAL_MSG_501, e );
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
-//        return new RestRecord( 0, companyInfoRepository.updateCompanyInfo( companyId, companyInfo ) );
     }
 
     /**
@@ -177,6 +175,36 @@ public class CompanyInfoApiController {
         } catch ( Exception e ) {
             log.error( "{}", e );
             return new RestRecord( 422, WebMessageConstants.SCE_PORTAL_MSG_422 );
+        }
+    }
+
+
+    /**
+     * 查询所有厂商用户
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping( "/user-info" )
+    @ResponseBody
+    public RestRecord getAllUserInfo(
+            @RequestParam( value = "loginName", required = false, defaultValue = "" ) String loginName,
+            @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
+            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
+        try {
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
+            Page page = companyInfoRepository.getAllCompanyUser( pageable,loginName,companyName );
+            Map< String, Object > temp = new HashMap<>( pageSize );
+            if ( null != page ) {
+                temp.put( "data", page.getContent() );
+                temp.put( "totalPage", page.getTotalPages() );
+                temp.put( "totalCount", page.getTotalElements() );
+            }
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
+        } catch ( Exception e ) {
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
         }
     }
 }

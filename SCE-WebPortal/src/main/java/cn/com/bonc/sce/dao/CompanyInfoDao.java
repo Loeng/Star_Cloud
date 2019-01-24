@@ -35,5 +35,9 @@ public interface CompanyInfoDao {
     public RestRecord deleteCompanyInfo(
             @PathVariable( "companyId" ) Long companyId );
 
-
+    @RequestMapping( value = "/company/user-info", method = RequestMethod.GET )
+    RestRecord getAllUserInfo( @RequestParam( value = "loginName", required = false, defaultValue = "" ) String loginName,
+                               @RequestParam( value = "companyName", required = false, defaultValue = "" ) String companyName,
+                               @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) Integer pageNum,
+                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize );
 }
