@@ -73,7 +73,7 @@ public class UserApiController {
     @PostMapping( "/{userId}/info/correction" )
     @ResponseBody
     public RestRecord changeUserInfoIntegrityAndAccuracyStatus( @PathVariable( "userId" ) String userId, @RequestBody Boolean isAllCorrect ) {
-        int effeted = userDao.updateUserLoginStatus( userId, isAllCorrect ? 0 : 1 );
+        int effeted = userDao.updateUserLoginStatus( userId, isAllCorrect ? 1 : 0 );
         if ( effeted == 0 ) {
             log.error( MessageConstants.SCE_MSG_1020, userId, isAllCorrect );
             return new RestRecord( 1020 );
