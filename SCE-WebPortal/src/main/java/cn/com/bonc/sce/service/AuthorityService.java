@@ -38,4 +38,13 @@ public class AuthorityService {
     public RestRecord getAll(Integer pageNum,Integer pageSize) {
         return authorityDao.getAll(pageNum,pageSize);
     }
+
+    /**
+     * 获取机构用户
+     *
+     * @return 获取机构用户
+     */
+    public RestRecord getUser(Integer pageNum,Integer pageSize) {
+        return authorityDao.getUser(pageNum,pageSize);
+    }
 }

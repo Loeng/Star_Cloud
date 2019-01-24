@@ -67,17 +67,23 @@ public interface TopAppRepository extends JpaRepository< AppInfoEntity, String >
      * @param pageable
      * @return
      */
-    @Query( value = "SELECT MAIN.APP_ID,MAIN.APP_NAME,MAIN.COMPANY_ID,MAIN.APP_ICON,MAIN.APP_NOTES,MAIN.APP_SOURCE,MAIN.APP_LINK,\n" +
-            "CASE WHEN A.APP_ID IS NULL THEN '0' ELSE '1' END IS_OPEN,\n" +
-            "CASE WHEN C.APP_ID IS NULL THEN '0' ELSE '1' END IS_DOWNLOAD,\n" +
-            "CASE WHEN D.APP_ID IS NULL THEN '0' ELSE '1' END IS_COLLECT\n" +
-            "FROM (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_DELETE = 1 ) MAIN \n" +
-            "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=MAIN.APP_ID AND A.USER_ID = :userId AND A.IS_DELETE=1\n" +
-            "LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID=MAIN.APP_ID\n" +
-            "LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=MAIN.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1\n" +
-            "INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) SMV ON SMV.APP_ID = MAIN.APP_ID\n" +
-            "WHERE MAIN.IS_TOP_RECOMMEND = 1",
-            countQuery = "SELECT COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO WHERE IS_TOP_RECOMMEND = 1 AND IS_DELETE = 1",
+    @Query( value = "SELECT  AI.APP_ID,AI.APP_NAME,AI.COMPANY_ID,AI.APP_ICON,AI.APP_NOTES,AI.APP_SOURCE,AI.APP_LINK,AI.IS_TOP_RECOMMEND," +
+            "                    NVL2(A.APP_ID ,'1','0') IS_OPEN," +
+            "                    NVL2(C.APP_ID ,'1','0') IS_DOWNLOAD," +
+            "                    NVL2(D.APP_ID ,'1','0') IS_COLLECT," +
+            "                    NVL2( TR.USER_ID,'1', '0' ) IS_RECOMMEND" +
+            "                    FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
+            "                    INNER JOIN ( SELECT DISTINCT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AI.APP_ID = TEMPA.APP_ID " +
+            "                    LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN A ON A.APP_ID=AI.APP_ID AND A.USER_ID = :userId AND A.IS_DELETE=1" +
+            "                    LEFT JOIN (SELECT B.APP_ID,COUNT(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD B WHERE B.USER_ID = :userId GROUP BY B.APP_ID) C ON C.APP_ID=AI.APP_ID" +
+            "                    LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION D ON D.APP_ID=AI.APP_ID AND D.USER_ID = :userId AND D.IS_DELETE=1" +
+            "                    LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
+            "                    WHERE AI.IS_TOP_RECOMMEND = 1  AND AI.IS_DELETE = 1 " +
+            "                    ORDER BY AI.CREATE_TIME DESC ",
+            countQuery = "SELECT COUNT(*)" +
+                    "                    FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
+                    "                    INNER JOIN ( SELECT DISTINCT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE=1 GROUP BY AVB.APP_ID ) TEMPA ON AI.APP_ID = TEMPA.APP_ID " +
+                    "                    WHERE AI.IS_TOP_RECOMMEND = 1  AND AI.IS_DELETE = 1 ",
             nativeQuery = true )
     List< Map<String,String> > selectTopAppList( @Param( value = "userId" ) String userId,
                                                  Pageable pageable );

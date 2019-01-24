@@ -91,10 +91,10 @@ public class SchoolService {
     public RestRecord getAll( Integer pageNum, Integer pageSize ) {
         pageNum--;
         Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC ,"CREATE_TIME" );
-        Page< School > page;
+        Page< List<Map > > page;
         page = schoolDao.selectAllSchool( 1,pageable);
         Map< String, Object > info = new HashMap<>();
-        List< School > list = page.getContent();
+        List<List<Map>> list = page.getContent();
         info.put( "total", page.getTotalElements() );
         info.put( "info", list );
         return new RestRecord( 200, info );

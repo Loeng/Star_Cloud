@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 学校
@@ -30,5 +31,5 @@ public interface SchoolDao extends JpaRepository< School, Integer > {
             "  u LEFT  JOIN \n" +
             "STARCLOUDPORTAL.SCE_ENTITY_SCHOOL s \n" +
             "ON  u.ORGANIZATION_ID = s.id   ",nativeQuery = true)
-    Page<School> selectAllSchool( Integer isDelete , Pageable pageable);
+    Page<List<Map >> selectAllSchool( Integer isDelete , Pageable pageable);
 }

@@ -28,10 +28,6 @@ public class LoginService {
         this.loginHistoryDao = loginHistoryDao;
     }
 
-    public RestRecord confirmUserInitialized( String userId ) {
-        return loginHistoryDao.changeLoginStatus( userId, 1 );
-    }
-
     /**
      * 根据用户私钥生成 ticket
      *
@@ -49,6 +45,7 @@ public class LoginService {
         // 受众
         claims.put( "aud", "SCE-Application" );
         claims.put( "ruleCode", roleCodes[ authenticatedUser.getUserType() ] );
+        claims.put( "isFirstLogin", authenticatedUser.getIsFirstLogin() );
 
         return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey() );
     }

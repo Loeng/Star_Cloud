@@ -3,10 +3,7 @@ package cn.com.bonc.sce.dao;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leucippus
@@ -40,10 +37,11 @@ public interface UserDaoClient {
      * 获取用户详细信息
      *
      * @param userId userId
+     *
      * @return 获取用户
      */
-    @RequestMapping( value = "/users/detailed/{userId}", method = RequestMethod.GET )
-    public RestRecord getUserInfo( @PathVariable( "userId" )String userId);
+    @RequestMapping( value = "/users/{userId}/info/correction", method = RequestMethod.POST )
+    public RestRecord changeUserInfoIntegrityAndAccuracyStatus( @PathVariable( "userId" ) String userId, @RequestBody Boolean isUserInfoCorrect );
 
     /**
      * 修改用户
@@ -52,5 +50,15 @@ public interface UserDaoClient {
      */
     @RequestMapping( value = "/users/detailed", method = RequestMethod.POST )
     public RestRecord updateUserInfo( User user );
+
+    /**
+     * 获取用户详细信息
+     *
+     * @param userId userId
+     *
+     * @return 获取用户
+     */
+    @RequestMapping( value = "/users/detailed/{userId}", method = RequestMethod.GET )
+    public RestRecord getUserInfo( @PathVariable( "userId" ) String userId );
 
 }

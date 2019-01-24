@@ -38,4 +38,13 @@ public interface AuthorityDao {
     @RequestMapping( value = "/authoritys", method = RequestMethod.GET )
     public RestRecord getAll(@RequestParam( "pageNum" ) Integer pageNum,
                              @RequestParam( "pageSize" ) Integer pageSize);
+
+    /**
+     * 获取机构用户
+     *
+     * @return 获取机构用户
+     */
+    @RequestMapping( value = "/authoritys/user", method = RequestMethod.GET )
+    public RestRecord getUser(@RequestParam( "pageNum" ) Integer pageNum,
+                             @RequestParam( "pageSize" ) Integer pageSize);
 }

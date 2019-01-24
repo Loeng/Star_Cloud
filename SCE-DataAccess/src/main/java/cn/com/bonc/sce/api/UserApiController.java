@@ -40,7 +40,7 @@ public class UserApiController {
     private String splitStr = "市";
 
     @Autowired
-    public UserApiController( UserDao userDao, AccountDao accountDao,RoleRelDao roleRelDao ) {
+    public UserApiController( UserDao userDao, AccountDao accountDao, RoleRelDao roleRelDao ) {
         this.userDao = userDao;
         this.accountDao = accountDao;
         this.roleRelDao = roleRelDao;
@@ -70,15 +70,15 @@ public class UserApiController {
         }
     }
 
-    @PostMapping( "/{userId}/login-status" )
+    @PostMapping( "/{userId}/info/correction" )
     @ResponseBody
-    public RestRecord changeLoginStatus( @PathVariable( "userId" ) String userId, @RequestBody() Integer isFirstLogin ) {
-        int effeted = userDao.updateUserLoginStatus( userId, isFirstLogin );
+    public RestRecord changeUserInfoIntegrityAndAccuracyStatus( @PathVariable( "userId" ) String userId, @RequestBody Boolean isAllCorrect ) {
+        int effeted = userDao.updateUserLoginStatus( userId, isAllCorrect ? 0 : 1 );
         if ( effeted == 0 ) {
-            log.error( MessageConstants.SCE_MSG_1020, userId, isFirstLogin );
+            log.error( MessageConstants.SCE_MSG_1020, userId, isAllCorrect );
             return new RestRecord( 1020 );
         } else {
-            log.info( MessageConstants.SCE_MSG_1021, isFirstLogin == 1 ? "非" : "是" );
+            log.info( MessageConstants.SCE_MSG_1021, isAllCorrect ? "非" : "是" );
             return RestRecord.success();
         }
     }
@@ -89,15 +89,15 @@ public class UserApiController {
         try {
             User user = userDao.findUserByUserId( userId );
             String address = user.getAddress();
-            if( !StringUtils.isEmpty( address )) {
+            if ( !StringUtils.isEmpty( address ) ) {
                 String[] strs = address.split( splitStr );
                 user.setBriefAddress( strs[ 0 ] + splitStr );
             }
             List< String > list = roleRelDao.getRoleTable( userId );
             if ( list != null && list.size() > 0 ) {
-                String sql = "SELECT * FROM "+list.get( 0 )+" WHERE USER_ID ="+"'"+userId+"'";
-                Query query = entityManager.createNativeQuery(sql);
-                query.unwrap(org.hibernate.SQLQuery.class).setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP);
+                String sql = "SELECT * FROM " + list.get( 0 ) + " WHERE USER_ID =" + "'" + userId + "'";
+                Query query = entityManager.createNativeQuery( sql );
+                query.unwrap( org.hibernate.SQLQuery.class ).setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
                 user.setUserDetailedInfo( query.getResultList() );
             }
             return new RestRecord( 200, user );
@@ -112,7 +112,7 @@ public class UserApiController {
     @Transactional
     public RestRecord updateUserInfo( @RequestBody User user ) {
         int num = 0;
-        try{
+        try {
             String conditionUser = "";
             String conditionRole = "";
             String userId = user.getUserId();
@@ -122,28 +122,28 @@ public class UserApiController {
             String mailAddress = user.getMailAddress();
             String phoneNumber = user.getPhoneNumber();
             String gender = user.getGender();
-            if(!StringUtils.isEmpty( username )){
+            if ( !StringUtils.isEmpty( username ) ) {
                 conditionUser = conditionUser + ",USER_NAME='" + username + "'";
             }
-            if(!StringUtils.isEmpty( address )){
+            if ( !StringUtils.isEmpty( address ) ) {
                 conditionUser = conditionUser + ",ADDRESS='" + address + "'";
             }
-            if(!StringUtils.isEmpty( number )){
+            if ( !StringUtils.isEmpty( number ) ) {
                 conditionUser = conditionUser + ",CERTIFICATE_NUMBER='" + number + "'";
             }
-            if(!StringUtils.isEmpty( mailAddress )){
+            if ( !StringUtils.isEmpty( mailAddress ) ) {
                 conditionUser = conditionUser + ",MAIL_ADDRESS='" + mailAddress + "'";
             }
-            if(!StringUtils.isEmpty( phoneNumber )){
+            if ( !StringUtils.isEmpty( phoneNumber ) ) {
                 conditionUser = conditionUser + ",PHONE_NUMBER='" + phoneNumber + "'";
             }
-            if(!StringUtils.isEmpty( gender )){
+            if ( !StringUtils.isEmpty( gender ) ) {
                 conditionUser = conditionUser + ",GENDER='" + gender + "'";
             }
-            if(conditionUser.length()>0){
-                String sqlUser = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET " + conditionUser.substring( 1 ) + " WHERE USER_ID = " + "'"+userId+"'";
+            if ( conditionUser.length() > 0 ) {
+                String sqlUser = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET " + conditionUser.substring( 1 ) + " WHERE USER_ID = " + "'" + userId + "'";
                 Query query = entityManager.createNativeQuery( sqlUser );
-                num+=query.executeUpdate();
+                num += query.executeUpdate();
             }
 
 
@@ -151,20 +151,20 @@ public class UserApiController {
             if( ObjectUtils.isEmpty( userDetailedInfo )){
                 return new RestRecord( 200,num );
             }
-            for(Map.Entry<String,String> entry : userDetailedInfo.entrySet()){
-                if(entry.getKey().equals( "USER_ID" )||entry.getKey().equals( "IS_DELETE" )){
+            for ( Map.Entry< String, String > entry : userDetailedInfo.entrySet() ) {
+                if ( entry.getKey().equals( "USER_ID" ) || entry.getKey().equals( "IS_DELETE" ) ) {
                     continue;
                 }
                 conditionRole = conditionRole + "," + entry.getKey() + "='" + entry.getValue() + "'";
             }
             List< String > list = roleRelDao.getRoleTable( userId );
-            if ( list != null && list.size() > 0 && conditionRole.length()>0 ) {
+            if ( list != null && list.size() > 0 && conditionRole.length() > 0 ) {
                 String tableName = list.get( 0 );
-                String sqlRole = "UPDATE " + tableName + " SET " + conditionRole.substring( 1 ) + " WHERE USER_ID = " + "'"+userId+"'";
+                String sqlRole = "UPDATE " + tableName + " SET " + conditionRole.substring( 1 ) + " WHERE USER_ID = " + "'" + userId + "'";
                 Query query = entityManager.createNativeQuery( sqlRole );
-                num+=query.executeUpdate();
+                num += query.executeUpdate();
             }
-        }catch ( Exception e ){
+        } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
