@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 学校
@@ -66,4 +67,22 @@ public class SchoolController {
                              @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize) {
         return schoolService.getAll(pageNum,pageSize);
     }
+
+    /**
+     * 新增学校实体
+     *
+     * @return 新增学校实体
+     */
+    @ApiOperation( value = "新增学校实体", notes = "新增学校实体", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 409, message = MessageConstants.SCE_MSG_409, response = RestRecord.class )
+    } )
+    @PostMapping
+    @ResponseBody
+    public RestRecord saveSchool(@ApiParam(example = "{\"schoolName\":\"福建漳州市第一中学\" ,\"authorityName\":\"福建漳州市教育局\" ,\"schoolAddress\":\"福建漳州市龙岩区\" ,\"telephone\":\"18667667998\" ,\"institutionId\":\"2\" ,\"grade\":\"中小学\"}")  @RequestBody  Map map ) {
+        return schoolService.saveSchool(map);
+    }
+
+
 }

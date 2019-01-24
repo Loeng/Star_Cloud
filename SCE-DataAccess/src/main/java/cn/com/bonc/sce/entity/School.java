@@ -14,7 +14,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 学校
+ * 通知
  *
  * @author wzm
  * @version 0.1
@@ -30,28 +30,28 @@ import java.util.Date;
 public class School {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_ENTITY_SCHOOL")
-    @SequenceGenerator(name="SEQ_GEN_ENTITY_SCHOOL",allocationSize=1,initialValue=1, sequenceName="SEQ_ENTITY_SCHOOL")
+    @SequenceGenerator(name="SEQ_GEN_ENTITY_SCHOOL",allocationSize=1, sequenceName="SEQ_ENTITY_SCHOOL")
     @Column(name = "ID")
     private Integer id;
 
     @Column(name = "SCHOOL_NAME")
     private String schoolName;
 
-    @Column(name = "IS_DELETE")
-    private Integer isDelete;
-
     @Column(name = "AUTHORITY_NAME")
-    private Integer authorityName;
+    private String authorityName;
 
     @Column(name = "SCHOOL_ADDRESS")
-    private Integer schoolAddress;
+    private String schoolAddress;
 
     @Column(name = "TELEPHONE")
-    private Integer telephone;
+    private String telephone;
 
     @Column(name = "INSTITUTION_ID")
-    private Integer institutionId;
+    private String institutionId;
 
     @Column(name = "GRADE")
-    private Integer grade;
+    private String grade;
+
+    @Column(name = "IS_DELETE")
+    private Integer isDelete;
 }

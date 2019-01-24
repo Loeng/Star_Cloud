@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Map;
+
 /**
  * 学校
  *
@@ -36,4 +38,9 @@ public interface SchoolDao {
     @RequestMapping( value = "/schools", method = RequestMethod.GET )
     public RestRecord getAll(@RequestParam( "pageNum" ) Integer pageNum,
                              @RequestParam( "pageSize" ) Integer pageSize);
+
+    @RequestMapping( value = "/schools", method = RequestMethod.POST )
+    RestRecord saveSchool( Map map );
+
+
 }
