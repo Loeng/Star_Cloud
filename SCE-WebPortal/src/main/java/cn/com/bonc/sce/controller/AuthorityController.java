@@ -62,4 +62,21 @@ public class AuthorityController {
                              @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize) {
         return authorityService.getAll(pageNum,pageSize);
     }
+
+    /**
+     * 获取机构用户
+     *
+     * @return 获取机构用户
+     */
+    @ApiOperation( value = "获取机构用户", notes = "获取机构用户", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
+    } )
+    @GetMapping("/user")
+    @ResponseBody
+    public RestRecord getUser(@RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
+                             @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize) {
+        return authorityService.getUser(pageNum,pageSize);
+    }
 }

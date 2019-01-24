@@ -55,20 +55,4 @@ public class Authority {
 
     @Column(name = "TELEPHONE")
     private String telePhone;
-
-    @ManyToOne
-    @JoinColumn(name="USER_ID", referencedColumnName="USER_ID", insertable=false, updatable=false)
-    private User user;
-
-    @Transient
-    private String userId;
-
-    @Transient
-    private String loginName;
-
-    @Transient
-    private Integer loginPermissionStatus;
-
-    @Transient
-    private Integer isFirstLogin;
 }

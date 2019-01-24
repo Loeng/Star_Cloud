@@ -54,20 +54,24 @@ public class AuthorityApiController {
     public RestRecord getAll(@RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
                              @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize) {
         try {
-            RestRecord rr = authorityService.getAll(pageNum, pageSize);
-            List< Authority > list = (List< Authority > )((Map< String, Object > )rr.getData()).get( "info" );
-            for ( Authority authority : list ) {
-                User user = authority.getUser();
-                if ( user == null ) {
-                    continue;
-                }
-                authority.setUserId( user.getUserId() );
-                authority.setLoginName( user.getLoginName() );
-                authority.setIsFirstLogin( user.getIsFirstLogin() );
-                authority.setLoginPermissionStatus( user.getLoginPermissionStatus() );
-                authority.setUser( null );
-            }
             return authorityService.getAll(pageNum, pageSize);
+        } catch ( Exception e ) {
+            log.error( e.getMessage(), e );
+            return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
+        }
+    }
+
+    /**
+     * 获取机构
+     *
+     * @return 获取机构
+     */
+    @GetMapping( "/user" )
+    @ResponseBody
+    public RestRecord getUser(@RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
+                             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize) {
+        try {
+            return authorityService.getUser(pageNum, pageSize);
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

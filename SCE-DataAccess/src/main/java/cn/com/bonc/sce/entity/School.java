@@ -55,20 +55,4 @@ public class School {
 
     @Column(name = "IS_DELETE")
     private Integer isDelete;
-
-    @ManyToOne
-    @JoinColumn(name="USER_ID", referencedColumnName="USER_ID", insertable=false, updatable=false)
-    private User user;
-
-    @Transient
-    private String userId;
-
-    @Transient
-    private String loginName;
-
-    @Transient
-    private Integer loginPermissionStatus;
-
-    @Transient
-    private Integer isFirstLogin;
 }

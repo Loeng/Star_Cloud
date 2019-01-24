@@ -76,4 +76,21 @@ public class AuthorityService {
         info.put( "info", list );
         return new RestRecord( 200, info );
     }
+
+    /**
+     * 获取机构
+     *
+     * @return 获取机构
+     */
+    public RestRecord getUser(Integer pageNum, Integer pageSize) {
+        pageNum--;
+        Pageable pageable = PageRequest.of( pageNum, pageSize );
+        Page< Map<String,Object> > page;
+        page = authorityDao.getUser( pageable );
+        Map< String, Object > info = new HashMap<>();
+        List< Map<String,Object> > list = page.getContent();
+        info.put( "total", page.getTotalElements() );
+        info.put( "info", list );
+        return new RestRecord( 200, info );
+    }
 }
