@@ -1,0 +1,84 @@
+package cn.com.bonc.sce.repository;
+
+import cn.com.bonc.sce.entity.FileResourceEntity;
+import cn.com.bonc.sce.model.ExcelToUser;
+import org.mapstruct.ObjectFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+
+/**
+ * @author BTW
+ */
+@Transactional(rollbackFor = Exception.class)
+public interface FileResourceRepository extends JpaRepository< FileResourceEntity, String > {
+
+    /**
+     * 文件存储信息保存
+     * @param s
+     * @param <S>
+     * @return
+     */
+    @Override
+    < S extends FileResourceEntity > S save( S s );
+
+
+
+    /**
+     * 插入用户啊
+     * @param
+     * @return
+     */
+    @Modifying
+    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ADDRESS,ORGANIZATION_ID,SECRET,IS_FIRST_LOGIN) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,0)  " )
+    int savaAllUserInfo( String id,String userName, String gender ,String loginName
+                        ,String userType,String mailAddress,String certificateType
+                        , String certificateNumber,String phoneNumber,String address
+                        , String organizationId,String secret);
+
+    /**
+     * 插入用户密码吗
+     * @param
+     * @return
+     */
+    @Modifying
+    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD(USER_ID ,PASSWORD,IS_DELETE) VALUES " +
+            "(?1,'star123!',1)  " )
+    void saveUserPassword(String passWord);
+
+
+
+    /**
+     *@Desc: 根据文件id查询文件FILE_MAPPING_PATH
+     *@Param: resourceId
+     *@return: String
+     *@Author: lyy
+     *@date: 2018/12/27
+     */
+    @Query(value = "SELECT FILE_MAPPING_PATH FROM STARCLOUDPORTAL.SCE_FILE_RESOURCE where RESOURCE_ID =?1"
+            ,nativeQuery = true)
+    Map<String,Object> getFileResourceById(Integer resourceId);
+
+    /**
+     *@Desc: 根据文件id查询文件FILE_STORE_PATH
+     *@Param: resourceId
+     *@return: String
+     *@Author: lyy
+     *@date: 2018/12/27
+     */
+    @Query(value = "SELECT FILE_STORE_PATH FROM STARCLOUDPORTAL.SCE_FILE_RESOURCE where RESOURCE_ID =?1"
+            ,nativeQuery = true)
+    Map<String,Object> getFileStorePathById(Integer resourceId);
+
+
+
+
+}
