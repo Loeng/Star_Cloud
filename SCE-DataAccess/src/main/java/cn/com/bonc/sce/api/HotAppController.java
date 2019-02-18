@@ -12,12 +12,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 应用推荐-热门应用接口api
- * @author jc_D
  *
+ * @author jc_D
  * @version 2.0
  * @update 添加列表查询
  * @updateFrom 2018/12/26 11:20
@@ -57,7 +59,7 @@ public class HotAppController {
      * @param pageSize 每页数量
      * @return
      */
-    @GetMapping( "/{pageNum}/{pageSize}")
+    @GetMapping( "/{pageNum}/{pageSize}" )
     public RestRecord selectHotRecommendAppList( @PathVariable Integer pageNum,
                                                  @PathVariable Integer pageSize ) {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
@@ -74,9 +76,14 @@ public class HotAppController {
     @GetMapping( "/detail/{pageNum}/{pageSize}/{userId}" )
     public RestRecord selectHotAppList( @PathVariable( "pageNum" ) Integer pageNum,
                                         @PathVariable( "pageSize" ) Integer pageSize,
-                                        @PathVariable( "userId" ) String userId) {
-        Pageable pageable = PageRequest.of( pageNum-1, pageSize );
-        return new RestRecord( 200, hotAppRepository.selectHotAppList( userId, pageable ) );
+                                        @PathVariable( "userId" ) String userId ) {
+        Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
+        Page< Map< String, String > > page = hotAppRepository.selectHotAppList( userId, pageable );
+        Map< String, Object > temp = new HashMap<>( 3 );
+        temp.put( "data", page.getContent() );
+        temp.put( "totalPage", page.getTotalPages() );
+        temp.put( "totalCount", page.getTotalElements() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, temp );
     }
 
     /**
@@ -93,7 +100,7 @@ public class HotAppController {
         if ( i >= 0 ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else {
-            return new RestRecord( 500,WebMessageConstants.SCE_PORTAL_MSG_421 );
+            return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
 
     }
@@ -107,12 +114,12 @@ public class HotAppController {
      */
     @PostMapping( "/sub-one" )
     public RestRecord cancelHotRecommendAppList( @RequestParam( "appId" ) String appId,
-                                              @RequestParam( "userId" ) String userId ) {
+                                                 @RequestParam( "userId" ) String userId ) {
         Integer i = hotAppRepository.updateHotApp( appId, 0L, userId );
         if ( i >= 0 ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         } else {
-            return new RestRecord( 500,WebMessageConstants.SCE_PORTAL_MSG_421 );
+            return new RestRecord( 500, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
 
     }

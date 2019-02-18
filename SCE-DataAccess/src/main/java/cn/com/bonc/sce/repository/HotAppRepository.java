@@ -90,7 +90,7 @@ public interface HotAppRepository extends JpaRepository< AppInfoEntity, String >
                     "                    WHERE AI.IS_HOT_RECOMMEND = 1  AND AI.IS_DELETE = 1 " +
                     "                    ORDER BY AI.CREATE_TIME DESC ",
             nativeQuery = true )
-    List< Map< String, String > > selectHotAppList( @Param( value = "userId" ) String userId,
+    Page< Map< String, String > > selectHotAppList( @Param( value = "userId" ) String userId,
                                                     Pageable pageable );
 
     /**
