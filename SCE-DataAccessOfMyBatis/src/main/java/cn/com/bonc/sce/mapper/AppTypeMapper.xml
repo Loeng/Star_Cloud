@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.AppTypeMapper">
+    <resultMap id="BaseResultMap" type="cn.com.bonc.sce.bean.AppTypeBean">
+        <result column="APP_TYPE_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="appTypeId"></result>
+        <result column="APP_TYPE_NAME" jdbcType="VARCHAR" javaType="java.lang.String" property="appTypeName"></result>
+        <result column="REMARKS" jdbcType="CLOB" javaType="java.lang.String" property="remarks"></result>
+        <result column="IS_DELETE" jdbcType="INTEGER" javaType="java.lang.Long" property="isDelete"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        T.APP_TPYE_ID,
+        T.APP_TYPE_NAME,
+        T.REMARKS,
+        T.IS_DELETE
+    </sql>
+
+    <select id="selectAppTypeList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE AS T
+        WHERE T.IS_DELETE = 1
+        ORDER BY T.APP_TYPE_ID ASC
+    </select>
+
+    <insert id="insertAppTypeInfo" parameterType="cn.com.bonc.sce.bean.AppTypeBean" >
+        <selectKey keyProperty="appTypeId" resultType="java.lang.Integer" order="BEFORE" statementType="PREPARED">
+            SELECT STARCLOUDMARKET.SEQ_SCE_APP_TYPE.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO STARCLOUDMARKET.SCE_MARKET_APP_TYPE (APP_TYPE_ID,APP_TYPE_NAME,REMARKS,IS_DELETE)
+        VALUES (#{appTypeId}, #{appTypeName}, #{remarks,jdbcType=CLOB}, #{isDelete})
+    </insert>
+
+    <update id="updateAppTypeInfo">
+        UPDATE STARCLOUDMARKET.SCE_MARKET_APP_TYPE
+        SET APP_TYPE_NAME = #{appTypeName}
+        WHERE APP_TYPE_ID = #{appTypeId}
+    </update>
+
+    <update id="deleteAppTypeInfo">
+        UPDATE STARCLOUDMARKET.SCE_MARKET_APP_TYPE
+        SET IS_DELETE = 0
+        WHERE APP_TYPE_ID = #{appTypeId}
+    </update>
+
+</mapper>

@@ -23,6 +23,7 @@ logging:
     guru.springframework.controllers: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql: TRACE
+    cn.com.bonc.sce.mapper: DEBUG
 server:
   port: 10211
 
