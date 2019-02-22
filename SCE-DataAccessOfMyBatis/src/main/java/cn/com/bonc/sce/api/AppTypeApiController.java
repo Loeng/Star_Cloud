@@ -4,6 +4,7 @@ import cn.com.bonc.sce.bean.AppTypeBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.AppTypeDao;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.IdWorkerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,14 @@ public class AppTypeApiController {
 
     @Autowired
     private AppTypeDao appTypeDao;
+
+    @Autowired
+    private IdWorkerService idWorkerService;
+
+    @GetMapping( "/uid" )
+    public Long getUid() {
+        return idWorkerService.getId();
+    }
 
     @GetMapping( "/all" )
     @ResponseBody

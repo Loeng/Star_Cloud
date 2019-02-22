@@ -9,7 +9,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        T.APP_TPYE_ID,
+        T.APP_TYPE_ID,
         T.APP_TYPE_NAME,
         T.REMARKS,
         T.IS_DELETE
@@ -17,7 +17,7 @@
 
     <select id="selectAppTypeList" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
-        FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE AS T
+        FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE  T
         WHERE T.IS_DELETE = 1
         ORDER BY T.APP_TYPE_ID ASC
     </select>
