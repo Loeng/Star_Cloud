@@ -22,7 +22,7 @@ public interface UserDao extends JpaRepository< User, String > {
     // TODO 必须考虑并发修改的问题
     @Transactional
     @Modifying
-    @Query( "UPDATE User user SET user.isFirstLogin = :isFirstLogin WHERE user.userId = :userId" )
+    @Query( "UPDATE User user SET user.isFirstLogin = :isFirstLogin,user.lastLoginTimelastLoginTimelastLoginTime = sysdate WHERE user.userId = :userId" )
     public int updateUserLoginStatus( @Param( "userId" ) String userId, @Param( "isFirstLogin" ) Integer isFirstLogin );
 
     public User findUserByLoginName( String loginName );
