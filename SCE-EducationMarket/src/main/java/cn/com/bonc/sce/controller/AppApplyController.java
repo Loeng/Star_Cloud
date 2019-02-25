@@ -50,7 +50,7 @@ public class AppApplyController {
     @PostMapping
     @ResponseBody
     public RestRecord applyAppOnShelf ( @RequestBody @ApiParam( name = "appIdList", value = "申请上/下架的应用ID", required = true )  List<Map>  appIdList,
-                                        @RequestParam( "applyType" ) @ApiParam( name = "applyType", value = "请求的业务类型（4，上架，5，下架）", required = true, allowableValues = "4，5" ) Integer applyType,
+                                        @RequestParam( "applyType" ) @ApiParam( name = "applyType", value = "请求的业务类型（4，上架，5，下架）", required = true, allowableValues = "4,5" ) Integer applyType,
                                         @CurrentUserId @ApiParam( hidden = true ) String userId ) {
 
         RestRecord restRecord =   appApplyService.applyAppOnShelf( applyType,appIdList,userId );

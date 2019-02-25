@@ -123,9 +123,7 @@ public class AppManageController {
                                   @PathVariable( "uid" ) String uid ) {
         //应用info表  是否删除字段改为1
         try {
-            appIdList.forEach( id -> {
                 appInfoRepository.deleteAppInfo( appIdList, uid );
-            } );
         } catch ( Exception e ) {
             log.error( "delete appInfo fail {}", e );
             return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_422, e );
