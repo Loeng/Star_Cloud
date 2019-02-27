@@ -17,8 +17,9 @@
         <module>SCE-WebPortal</module>
         <module>SCE-Core</module>
         <module>SCE-EducationMarket</module>
-        <module>SCE-BusStation</module>
+        <!--<module>SCE-BusStation</module>-->
         <module>SCE-Gateway</module>
+        <module>SCE-DataAccessOfMyBatis</module>
     </modules>
 
     <properties>
@@ -30,6 +31,7 @@
         <hikari-connection-pool-version></hikari-connection-pool-version>
         <odbc-version>12.1.0.1-atlassian-hosted</odbc-version>
         <druid-version>1.1.12</druid-version>
+        <mybatis-version>2.0.0</mybatis-version>
         <!-- tools -->
         <lombok-version>1.18.4</lombok-version>
         <jackson-databind-version>2.9.7</jackson-databind-version>
@@ -93,6 +95,12 @@
                         <artifactId>tomcat-jdbc</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <!-- mybatis -->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-version}</version>
             </dependency>
             <!-- Oracle JDBC driver -->
             <dependency>
