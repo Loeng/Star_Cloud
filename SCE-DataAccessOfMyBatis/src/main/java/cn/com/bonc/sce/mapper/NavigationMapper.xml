@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.NavigationMapper">
+
+    <select id="getNavListByChannel" resultType="Map">
+        SELECT COLUMN_ID,COLUMN_NAME,COLUMN_URL
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+        WHERE CHANNEL_ID=#{channelId}
+        AND IS_DELETE=1
+    </select>
+    
+    <insert id="addNav" parameterType="java.util.Map" useGeneratedKeys="true">
+        <selectKey keyProperty="COLUMN_ID" resultType="Integer" order="BEFORE">
+                    select max(COLUMN_ID)+1 from STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+                </selectKey>
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+                  (COLUMN_ID,COLUMN_NAME,COLUMN_URL,CHANNEL_ID,IS_DELETE)
+        VALUES
+            (#{COLUMN_ID},#{columnName},#{columnUrl},#{channelId},1)
+    </insert>
+
+</mapper>
