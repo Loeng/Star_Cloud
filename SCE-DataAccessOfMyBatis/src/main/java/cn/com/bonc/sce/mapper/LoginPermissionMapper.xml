@@ -4,9 +4,9 @@
 
     <update id="updateLoginPermission">
         UPDATE
-        SCE_COMMON_USER
+        STARCLOUDPORTAL.SCE_COMMON_USER
         SET LOGIN_PERMISSION_STATUS = #{loginPermissionStatus}
         WHERE
-        APP_ID = #{userId}
+        USER_ID = #{userId}
     </update>
 </mapper>

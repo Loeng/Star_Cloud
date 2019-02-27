@@ -1,7 +1,6 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.mapper.LoginPermissionMapper;
-import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

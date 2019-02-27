@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.annotation.CurrentUserId;
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.LoginPermissionService;
 import io.swagger.annotations.ApiOperation;
@@ -24,10 +25,14 @@ public class LoginPermissionController {
     @PutMapping("/changePermission")
     @ResponseBody
     public RestRecord changePermission(
-            @CurrentUserId @ApiParam( hidden = true ) String userId,
-            @RequestParam( "rejectReason" ) int loginPermissionStatus ) {
+            @RequestParam ( "userId" ) String userId,
+            @RequestParam( "loginPermissionStatus" ) int loginPermissionStatus ) {
         int newStatus = (loginPermissionStatus==0) ? 1 : 0;
-        return new RestRecord(200,loginPermissionService.updateLoginPermission(userId,newStatus));
-
+        int count = loginPermissionService.updateLoginPermission(userId,newStatus);
+        if ( count == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+        } else {
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
+        }
     }
 }
