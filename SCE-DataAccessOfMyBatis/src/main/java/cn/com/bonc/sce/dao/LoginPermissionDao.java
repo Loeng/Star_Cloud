@@ -16,7 +16,7 @@ public class LoginPermissionDao {
     @Autowired( required = false )
     private LoginPermissionMapper loginPermissionMapper;
 
-    public int updateLoginPermission (String userId, Integer loginPermissionStatus){
+    public Integer updateLoginPermission (String userId, Integer loginPermissionStatus){
         return loginPermissionMapper.updateLoginPermission(userId,loginPermissionStatus);
     }
 }

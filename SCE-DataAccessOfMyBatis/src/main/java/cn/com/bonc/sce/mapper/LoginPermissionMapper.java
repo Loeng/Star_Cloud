@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface LoginPermissionMapper {
 
-    int updateLoginPermission( @Param( "userId" ) String userId,
+    Integer updateLoginPermission( @Param( "userId" ) String userId,
                            @Param( "loginPermissionStatus" ) Integer loginPermissionStatus );
 }
