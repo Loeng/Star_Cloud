@@ -28,4 +28,10 @@ public interface UserDao extends JpaRepository< User, String > {
     public User findUserByLoginName( String loginName );
 
     public User findByUserId( String userId );
+
+    @Query(value = "select school_name from STARCLOUDPORTAL.SCE_ENTITY_SCHOOL where id=:Oid",nativeQuery = true)
+    String findSchoolByOrganizationId(@Param("Oid") String Oid);
+
+    @Query(value = "SELECT grade FROM STARCLOUDPORTAL.SCE_INFO_STUDENT where user_id=:UserId",nativeQuery = true)
+    String findGradeByUserId(@Param("UserId") String UserId);
 }

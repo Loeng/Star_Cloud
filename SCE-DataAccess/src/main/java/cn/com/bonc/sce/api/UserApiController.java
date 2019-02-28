@@ -5,6 +5,7 @@ import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.dao.RoleRelDao;
 import cn.com.bonc.sce.dao.UserDao;
 import cn.com.bonc.sce.entity.Account;
+import cn.com.bonc.sce.entity.School;
 import cn.com.bonc.sce.entity.user.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -100,6 +101,17 @@ public class UserApiController {
                 query.unwrap( org.hibernate.SQLQuery.class ).setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
                 user.setUserDetailedInfo( query.getResultList() );
             }
+
+            //查询学生学校名称和学生年级
+            if(user.getUserType() == 1){
+                School school = new School();
+                school.setSchoolName(userDao.findSchoolByOrganizationId(user.getOrganizationId()));
+                school.setGrade(userDao.findGradeByUserId(userId));
+                System.out.println("年级："+school.getGrade());
+                System.out.println("userId："+userId);
+                user.setSchool(school);
+            }
+
             return new RestRecord( 200, user );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
