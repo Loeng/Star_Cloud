@@ -83,4 +83,10 @@ public class User {
     private Integer isFirstLogin;
     @Transient
     private Object userDetailedInfo;
+    @Transient
+    private Object school;
+    @Column
+    private Date birthDate;
+    @Transient
+    private Object Student;
 }
