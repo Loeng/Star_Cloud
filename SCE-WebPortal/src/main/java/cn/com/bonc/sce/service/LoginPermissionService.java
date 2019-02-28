@@ -16,7 +16,7 @@ public class LoginPermissionService {
     @Autowired
     private LoginPermissionDao loginPermissionDao;
 
-    public Integer updateLoginPermission(String userId, Integer loginPermissionStatus ) {
+    public RestRecord updateLoginPermission(String userId, Integer loginPermissionStatus ) {
         return loginPermissionDao.updateLoginPermission(userId,loginPermissionStatus);
     }
 }

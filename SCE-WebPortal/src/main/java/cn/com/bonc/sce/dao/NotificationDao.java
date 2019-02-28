@@ -61,6 +61,9 @@ public interface NotificationDao {
                                            @PathVariable( "auditStatus" ) String auditStatus,
                                            @RequestParam( "startDate" ) String startDate,
                                            @RequestParam( "endDate" ) String endDate,
+                                           @RequestParam( value = "province", required = false ) String province,
+                                           @RequestParam( value = "city", required = false ) String city,
+                                           @RequestParam( value = "district", required = false ) String district,
                                            @RequestParam( "pageNum" ) Integer pageNum,
                                            @RequestParam( "pageSize" ) Integer pageSize );
 
@@ -68,6 +71,9 @@ public interface NotificationDao {
     public RestRecord getNotificationList( @RequestParam( "type" ) Integer type,
                                            @RequestParam( "content" ) String content,
                                            @PathVariable( "auditStatus" ) String auditStatus,
+                                           @RequestParam( value = "province", required = false ) String province,
+                                           @RequestParam( value = "city", required = false ) String city,
+                                           @RequestParam( value = "district", required = false ) String district,
                                            @RequestParam( "pageNum" ) Integer pageNum,
                                            @RequestParam( "pageSize" ) Integer pageSize );
 
@@ -76,12 +82,18 @@ public interface NotificationDao {
                                            @RequestParam( "content" ) String content,
                                            @RequestParam( "startDate" ) String startDate,
                                            @RequestParam( "endDate" ) String endDate,
+                                           @RequestParam( value = "province", required = false ) String province,
+                                           @RequestParam( value = "city", required = false ) String city,
+                                           @RequestParam( value = "district", required = false ) String district,
                                            @RequestParam( "pageNum" ) Integer pageNum,
                                            @RequestParam( "pageSize" ) Integer pageSize );
 
     @RequestMapping( value = "/notifications/list/{auditStatus}", method = RequestMethod.GET )
     public RestRecord getNotificationList( @PathVariable( "auditStatus" ) String auditStatus,
                                            @RequestParam( "content" ) String content,
+                                           @RequestParam( value = "province", required = false ) String province,
+                                           @RequestParam( value = "city", required = false ) String city,
+                                           @RequestParam( value = "district", required = false ) String district,
                                            @RequestParam( "pageNum" ) Integer pageNum,
                                            @RequestParam( "pageSize" ) Integer pageSize );
 
