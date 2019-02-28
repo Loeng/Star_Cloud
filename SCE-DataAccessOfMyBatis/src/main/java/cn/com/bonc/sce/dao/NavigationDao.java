@@ -23,4 +23,8 @@ public class NavigationDao {
     public int addNav(String columnName,String columnUrl, Integer channelId){
         return navigationMapper.addNav(columnName,columnUrl,channelId);
     }
+
+    public int editNav(String columnName,String columnUrl, Integer columnId){
+        return navigationMapper.editNav(columnName,columnUrl,columnId);
+    }
 }

@@ -26,4 +26,9 @@ public class NavigationService {
     public int addNav(String columnName,String columnUrl, Integer channelId){
         return navigationDao.addNav(columnName,columnUrl,channelId);
     }
+
+    public int editNav(String columnName,String columnUrl, Integer columnId){
+        return navigationDao.editNav(columnName,columnUrl,columnId);
+    }
+
 }

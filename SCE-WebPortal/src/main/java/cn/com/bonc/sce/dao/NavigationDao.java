@@ -20,4 +20,7 @@ public interface NavigationDao {
 
     @RequestMapping( value = "/navigation/addNav", method = RequestMethod.POST )
     RestRecord addNav(@RequestBody String json);
+
+    @RequestMapping( value = "/navigation/editNav", method = RequestMethod.PUT )
+    RestRecord editNav(@RequestBody String json);
 }

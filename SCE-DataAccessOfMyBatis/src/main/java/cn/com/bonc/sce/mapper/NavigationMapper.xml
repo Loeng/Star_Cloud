@@ -18,5 +18,15 @@
         VALUES
             (#{COLUMN_ID},#{columnName},#{columnUrl},#{channelId},1)
     </insert>
+    
+    <update id="editNav" parameterType="java.util.Map">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+        <set>
+            <if test="columnName != null">COLUMN_NAME=#{columnName},</if>
+            <if test="columnUrl != null">COLUMN_URL=#{columnUrl}</if>
+        </set>
+        WHERE
+            COLUMN_ID=#{columnId}
+    </update>
 
 </mapper>

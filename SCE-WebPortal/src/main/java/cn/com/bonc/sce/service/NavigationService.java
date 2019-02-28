@@ -24,4 +24,6 @@ public class NavigationService {
     public RestRecord addNav(String json){
         return navigationDao.addNav(json);
     }
+
+    public RestRecord editNav(String json){return  navigationDao.editNav(json);}
 }

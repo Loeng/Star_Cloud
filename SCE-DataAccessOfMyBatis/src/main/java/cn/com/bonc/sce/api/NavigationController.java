@@ -40,10 +40,24 @@ public class NavigationController {
     public RestRecord addNav(@RequestBody @ApiParam( example = "{\"columnName\": \"这是导航title\",\"columnUrl\": \"这是导航链接\",\"channelId\": 5}" ) String json ){
         Map map = (Map) JSONUtils.parse(json);
         String columnName = (String) map.get("columnName");
-        System.out.println(columnName);
         String columnUrl = (String)map.get("columnUrl");
         int channelId = (int) map.get("channelId");
         if (navigationService.addNav(columnName,columnUrl,channelId) == 1){
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+        } else {
+            return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
+        }
+    }
+
+    @ApiOperation(value = "编辑导航栏", notes="获取前端编辑数据，后台写入数据库", httpMethod = "PUT")
+    @PutMapping("/editNav")
+    @ResponseBody
+    public RestRecord editNav(@RequestBody @ApiParam( example = "{\"columnName\": \"这是导航title\",\"columnUrl\": \"这是导航链接\",\"columnId\": 5}" ) String json ){
+        Map map = (Map) JSONUtils.parse(json);
+        String columnName = (String) map.get("columnName");
+        String columnUrl = (String)map.get("columnUrl");
+        int columnId = (int) map.get("columnId");
+        if (navigationService.editNav(columnName,columnUrl,columnId) == 1){
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {
             return new RestRecord( 409, MessageConstants.SCE_MSG_409 );

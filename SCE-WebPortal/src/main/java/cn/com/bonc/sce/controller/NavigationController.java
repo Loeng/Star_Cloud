@@ -33,4 +33,11 @@ public class NavigationController {
     public RestRecord addNav(@RequestBody @ApiParam( example = "{\"columnName\": \"这是导航title\",\"columnUrl\": \"这是导航链接\",\"channelId\": 5}" ) String json ){
         return navigationService.addNav(json);
     }
+
+    @ApiOperation(value = "编辑导航栏", notes="获取前端编辑数据，后台写入数据库", httpMethod = "PUT")
+    @PutMapping("/editNav")
+    @ResponseBody
+    public RestRecord editNav(@RequestBody @ApiParam( example = "{\"columnName\": \"这是导航title\",\"columnUrl\": \"这是导航链接\",\"columnId\": 3}" ) String json ){
+        return navigationService.editNav(json);
+    }
 }

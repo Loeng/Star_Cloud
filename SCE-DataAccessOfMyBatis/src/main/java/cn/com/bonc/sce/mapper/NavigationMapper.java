@@ -14,4 +14,7 @@ public interface NavigationMapper {
 
     int addNav(@Param( "columnName" ) String columnName,@Param( "columnUrl" ) String columnUrl,
                @Param("channelId") Integer channelId);
+
+    int editNav(@Param( "columnName" ) String columnName,@Param( "columnUrl" ) String columnUrl,
+               @Param("columnId") Integer columnId);
 }
