@@ -64,17 +64,17 @@ public class NotificationService {
      * @param type        通知公告类型
      * @return 分页后的通知公告列表
      */
-    public RestRecord getNotificationList( Integer type,String content,String auditStatus,String startDate,String endDate,Integer pageNum,Integer pageSize ) {
-        if(type==null) {
+    public RestRecord getNotificationList( Integer type, String content, String auditStatus, String startDate, String endDate, String province, String city, String district, Integer pageNum, Integer pageSize ) {
+        if ( type == null ) {
             if ( StringUtils.isEmpty( startDate ) ) {
-                return notificationDao.getNotificationList( auditStatus,content, pageNum, pageSize );
+                return notificationDao.getNotificationList( auditStatus, content, province, city, district, pageNum, pageSize );
             }
-            return notificationDao.getNotificationList( auditStatus,content, startDate, endDate, pageNum, pageSize );
-        }else{
+            return notificationDao.getNotificationList( auditStatus, content, startDate, endDate, province, city, district, pageNum, pageSize );
+        } else {
             if ( StringUtils.isEmpty( startDate ) ) {
-                return notificationDao.getNotificationList( type,content, auditStatus, pageNum, pageSize );
+                return notificationDao.getNotificationList( type, content, auditStatus, province, city, district, pageNum, pageSize );
             }
-            return notificationDao.getNotificationList( type,content, auditStatus, startDate, endDate, pageNum, pageSize );
+            return notificationDao.getNotificationList( type, content, auditStatus, startDate, endDate, province, city, district, pageNum, pageSize );
         }
     }
 

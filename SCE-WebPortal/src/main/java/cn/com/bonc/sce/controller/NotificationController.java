@@ -45,7 +45,7 @@ public class NotificationController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertNotification( @RequestBody @ApiParam( name = "notification", value = "公告信息", required = true ) Notification notification ,@CurrentUserId @ApiParam( hidden = true) String userId) {
+    public RestRecord insertNotification( @RequestBody @ApiParam( name = "notification", value = "公告信息", required = true ) Notification notification, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         notification.setCreateUserId( userId );
         return notificationService.insertNotification( notification );
     }
@@ -63,7 +63,7 @@ public class NotificationController {
     } )
     @DeleteMapping( "" )
     @ResponseBody
-    public RestRecord deleteNotificationByIdList( @RequestParam(value = "list") @ApiParam( name = "list", value = "待删除的公告列表", required = true ) String list ) {
+    public RestRecord deleteNotificationByIdList( @RequestParam( value = "list" ) @ApiParam( name = "list", value = "待删除的公告列表", required = true ) String list ) {
         return notificationService.deleteNotificationByIdList( list );
     }
 
@@ -81,7 +81,7 @@ public class NotificationController {
     } )
     @PutMapping
     @ResponseBody
-    public RestRecord updateNotification( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) Notification notification ,@CurrentUserId @ApiParam( hidden = true) String userId) {
+    public RestRecord updateNotification( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) Notification notification, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         notification.setUpdateUserId( userId );
         return notificationService.updateNotification( notification );
     }
@@ -96,6 +96,9 @@ public class NotificationController {
      * @param pageNum     分页页码
      * @param pageSize    分页每页条数
      * @param type        通知公告类型
+     * @param province    省
+     * @param city        市
+     * @param district    区
      * @return 分页后的通知公告列表
      */
     @ApiOperation( value = "查询通知公告列表接口", notes = "查询通知公告列表接口", httpMethod = "GET" )
@@ -105,14 +108,17 @@ public class NotificationController {
     } )
     @GetMapping( "/list/{auditStatus}" )
     @ResponseBody
-    public RestRecord getNotificationList( @RequestParam( value = "type", required = false ) @ApiParam( name = "type", value = "类型") Integer type,
-                                           @RequestParam( value = "content", required = false ) @ApiParam( name = "content", value = "内容") String content,
-                                           @PathVariable( "auditStatus" ) @ApiParam( name = "auditStatus", value = "状态") String auditStatus,
-                                           @RequestParam( value = "startDate", required = false ) @ApiParam( name = "startDate", value = "开始时间") String startDate,
-                                           @RequestParam( value = "endDate", required = false ) @ApiParam( name = "endDate", value = "结束时间") String endDate,
-                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
-                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
-        return notificationService.getNotificationList( type, content,auditStatus, startDate, endDate, pageNum, pageSize );
+    public RestRecord getNotificationList( @RequestParam( value = "type", required = false ) @ApiParam( name = "type", value = "类型" ) Integer type,
+                                           @RequestParam( value = "content", required = false ) @ApiParam( name = "content", value = "内容" ) String content,
+                                           @PathVariable( "auditStatus" ) @ApiParam( name = "auditStatus", value = "状态" ) String auditStatus,
+                                           @RequestParam( value = "startDate", required = false ) @ApiParam( name = "startDate", value = "开始时间" ) String startDate,
+                                           @RequestParam( value = "endDate", required = false ) @ApiParam( name = "endDate", value = "结束时间" ) String endDate,
+                                           @RequestParam( value = "province", required = false ) @ApiParam( name = "province", value = "省" ) String province,
+                                           @RequestParam( value = "city", required = false ) @ApiParam( name = "city", value = "市" ) String city,
+                                           @RequestParam( value = "district", required = false ) @ApiParam( name = "district", value = "区" ) String district,
+                                           @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) @ApiParam( name = "pageNum", value = "页码" ) Integer pageNum,
+                                           @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) @ApiParam( name = "pageSize", value = "数量" ) Integer pageSize ) {
+        return notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, province, city, district, pageNum, pageSize );
     }
 
     /**
@@ -128,7 +134,7 @@ public class NotificationController {
     } )
     @GetMapping( "/{notificationId}" )
     @ResponseBody
-    public RestRecord getNotification( @PathVariable( "notificationId" ) @ApiParam( name = "notificationId", value = "公告id" ,required = true) Integer notificationId ) {
+    public RestRecord getNotification( @PathVariable( "notificationId" ) @ApiParam( name = "notificationId", value = "公告id", required = true ) Integer notificationId ) {
         return notificationService.getNotification( notificationId );
     }
 }
