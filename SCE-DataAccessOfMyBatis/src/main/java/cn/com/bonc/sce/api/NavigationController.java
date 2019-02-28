@@ -1,10 +1,14 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.bean.NavigationBean;
+import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NavigationService;
 import com.alibaba.druid.support.json.JSONUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -62,5 +66,19 @@ public class NavigationController {
         } else {
             return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
         }
+    }
+
+    @ApiOperation(value = "获取学校机构列表", notes="获取查询条件，返回学校机构列表", httpMethod = "GET")
+    @GetMapping("/getSchools")
+    @ResponseBody
+    public RestRecord getSchools(@RequestParam ( "keywords" ) String keywords,
+                                 @RequestParam ( "pageNum" ) Integer pageNum,
+                                 @RequestParam ( "pageSize" ) Integer pageSize){
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<SchoolBean> schoolList = navigationService.getSchools(keywords);
+        PageInfo pageInfo = new PageInfo(schoolList);
+        return new RestRecord( 200, pageInfo );
+
     }
 }

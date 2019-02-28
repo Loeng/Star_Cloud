@@ -29,4 +29,14 @@
             COLUMN_ID=#{columnId}
     </update>
 
+    <select id="getSchools" resultType="Map">
+        SELECT ID,SCHOOL_NAME,SCHOOL_ADDRESS,DEFAULT_BANNER
+        FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL
+        WHERE 1=1
+         <if test="keywords != null and keywords!= ''" >
+             AND SCHOOL_NAME LIKE CONCAT(CONCAT('%',#{keywords}),'%')
+         </if>
+        AND IS_DELETE=1
+    </select>
+
 </mapper>

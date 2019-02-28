@@ -40,4 +40,13 @@ public class NavigationController {
     public RestRecord editNav(@RequestBody @ApiParam( example = "{\"columnName\": \"这是导航title\",\"columnUrl\": \"这是导航链接\",\"columnId\": 3}" ) String json ){
         return navigationService.editNav(json);
     }
+
+    @ApiOperation(value = "获取学校机构列表", notes="获取查询条件，返回学校机构列表", httpMethod = "GET")
+    @GetMapping("/getSchools")
+    @ResponseBody
+    public RestRecord getSchools(@RequestParam ( "keywords" ) String keywords,
+                                 @RequestParam ( "pageNum" ) Integer pageNum,
+                                 @RequestParam ( "pageSize" ) Integer pageSize ){
+        return navigationService.getSchools(keywords,pageNum,pageSize);
+    }
 }

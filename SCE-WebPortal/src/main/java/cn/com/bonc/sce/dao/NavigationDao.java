@@ -23,4 +23,9 @@ public interface NavigationDao {
 
     @RequestMapping( value = "/navigation/editNav", method = RequestMethod.PUT )
     RestRecord editNav(@RequestBody String json);
+
+    @RequestMapping( value = "/navigation/getSchools", method = RequestMethod.GET )
+    RestRecord getSchools(@RequestParam("keywords") String keywords,
+                          @RequestParam("pageNum") Integer pageNum,
+                          @RequestParam("pageSize") Integer pageSize);
 }

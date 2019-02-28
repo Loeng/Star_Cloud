@@ -25,5 +25,11 @@ public class NavigationService {
         return navigationDao.addNav(json);
     }
 
-    public RestRecord editNav(String json){return  navigationDao.editNav(json);}
+    public RestRecord editNav(String json){
+        return  navigationDao.editNav(json);
+    }
+
+    public RestRecord getSchools(String keywords, Integer pageNum, Integer pageSize){
+        return navigationDao.getSchools(keywords,pageNum,pageSize);
+    }
 }
