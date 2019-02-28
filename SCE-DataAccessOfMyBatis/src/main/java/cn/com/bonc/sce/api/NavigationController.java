@@ -78,7 +78,8 @@ public class NavigationController {
         PageHelper.startPage(pageNum, pageSize);
         List<SchoolBean> schoolList = navigationService.getSchools(keywords);
         PageInfo pageInfo = new PageInfo(schoolList);
-        return new RestRecord( 200, pageInfo );
+        List list = pageInfo.getList();
+        return new RestRecord( 200, list );
 
     }
 }
