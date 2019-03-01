@@ -3,6 +3,7 @@ package cn.com.bonc.sce.dao;
 import cn.com.bonc.sce.bean.NavigationBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.mapper.NavigationMapper;
+import cn.com.bonc.sce.model.Banner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,17 @@ public class NavigationDao {
     public List<SchoolBean> getSchools (String keywords){
         return navigationMapper.getSchools(keywords);
     }
+
+    public List<Banner> getBanners (Integer schoolId){
+        return navigationMapper.getBanners(schoolId);
+    }
+
+    public Integer editDefaultBanner (Integer schoolId, Integer newBanner){
+        return navigationMapper.editDefaultBanner(schoolId,newBanner);
+    }
+
+    public Integer delBanner (Integer bannerId){
+        return navigationMapper.delBanner(bannerId);
+    }
+
 }

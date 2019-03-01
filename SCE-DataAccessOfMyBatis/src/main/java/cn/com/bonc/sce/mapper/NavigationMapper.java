@@ -2,6 +2,7 @@ package cn.com.bonc.sce.mapper;
 
 import cn.com.bonc.sce.bean.NavigationBean;
 import cn.com.bonc.sce.bean.SchoolBean;
+import cn.com.bonc.sce.model.Banner;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,4 +21,12 @@ public interface NavigationMapper {
                @Param("columnId") Integer columnId);
 
     List<SchoolBean> getSchools(@Param("keywords") String keywords);
+
+    List<Banner> getBanners(@Param( "schoolId" ) Integer schoolId);
+
+    Integer editDefaultBanner( @Param( "schoolId" ) Integer schoolId,
+                                   @Param( "newBanner" ) Integer newBanner );
+
+    Integer delBanner( @Param( "bannerId" ) Integer bannerId );
+
 }

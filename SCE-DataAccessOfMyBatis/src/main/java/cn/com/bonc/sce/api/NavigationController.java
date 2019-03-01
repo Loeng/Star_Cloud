@@ -3,10 +3,10 @@ package cn.com.bonc.sce.api;
 import cn.com.bonc.sce.bean.NavigationBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.model.Banner;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NavigationService;
 import com.alibaba.druid.support.json.JSONUtils;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
@@ -81,5 +81,41 @@ public class NavigationController {
         List list = pageInfo.getList();
         return new RestRecord( 200, list );
 
+    }
+
+    @ApiOperation(value = "获取学校机构对应的banner", notes="根据学校id，返回学校对应banner列表", httpMethod = "GET")
+    @GetMapping("/getBanners")
+    @ResponseBody
+    public RestRecord getBanners(@RequestParam ( "schoolId" ) Integer schoolId ){
+        List<Banner> banners = navigationService.getBanners(schoolId);
+        return new RestRecord(200,banners);
+    }
+
+    @ApiOperation(value = "学校设置默认banner", notes="获取学校id和当前banner状态，修改默认banner字段", httpMethod = "PUT")
+    @PutMapping("/editDefaultBanner")
+    @ResponseBody
+    public RestRecord editDefaultBanner(
+            @RequestParam ( "schoolId" ) Integer schoolId,
+            @RequestParam( "defaultBanner" ) Integer defaultBanner) {
+        //传入页面banner值  后台转变
+        int newStatus = (defaultBanner==0) ? 1 : 0;
+        int count = navigationService.editDefaultBanner(schoolId,newStatus);
+        if ( count == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+        } else {
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
+        }
+    }
+
+    @ApiOperation(value = "删除某一学校下的banner", notes="获取学校id和bannerid，逻辑删除banner", httpMethod = "Delete")
+    @DeleteMapping("/delBanner")
+    @ResponseBody
+    public RestRecord delBanner( @RequestParam( "bannerId" ) Integer bannerId){
+        int count = navigationService.delBanner(bannerId);
+        if ( count == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+        } else {
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
+        }
     }
 }

@@ -39,4 +39,28 @@
         AND IS_DELETE=1
     </select>
 
+    <select id="getBanners" resultType="Map">
+        SELECT ID,BANNER_ORDER,IMAGE_URL,BANNER_TYPE_ID
+        FROM STARCLOUDPORTAL.SCE_PORTAL_BANNER
+        WHERE SCHOOL_ID=#{schoolId}
+        AND IS_DELETE=1
+        AND BANNER_TYPE_ID=3  /*学校banner*/
+        ORDER BY BANNER_ORDER
+    </select>
+
+    <update id="editDefaultBanner">
+        UPDATE
+        STARCLOUDPORTAL.SCE_ENTITY_SCHOOL
+        SET DEFAULT_BANNER = #{newBanner}
+        WHERE
+        ID = #{schoolId}
+    </update>
+
+    <update id="delBanner">
+        UPDATE
+        STARCLOUDPORTAL.SCE_PORTAL_BANNER
+        SET IS_DELETE=0,UPDATE_TIME=SYSDATE
+        WHERE ID=#{bannerId}
+    </update>
+
 </mapper>

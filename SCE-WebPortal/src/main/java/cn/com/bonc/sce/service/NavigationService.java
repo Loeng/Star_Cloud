@@ -32,4 +32,17 @@ public class NavigationService {
     public RestRecord getSchools(String keywords, Integer pageNum, Integer pageSize){
         return navigationDao.getSchools(keywords,pageNum,pageSize);
     }
+
+    public RestRecord getBanners(Integer schoolId){
+        return navigationDao.getBanners(schoolId);
+    }
+
+    public RestRecord editDefaultBanner(Integer schoolId,Integer defaultBanner){
+        return navigationDao.editDefaultBanner(schoolId,defaultBanner);
+    }
+
+    public RestRecord delBanner(Integer bannerId){
+        return navigationDao.delBanner(bannerId);
+    }
+
 }

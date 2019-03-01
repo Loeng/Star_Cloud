@@ -28,4 +28,15 @@ public interface NavigationDao {
     RestRecord getSchools(@RequestParam("keywords") String keywords,
                           @RequestParam("pageNum") Integer pageNum,
                           @RequestParam("pageSize") Integer pageSize);
+
+    @RequestMapping( value = "/navigation/getBanners", method = RequestMethod.GET )
+    RestRecord getBanners (@RequestParam("schoolId") Integer schoolId);
+
+    @RequestMapping( value = "/navigation/editDefaultBanner", method = RequestMethod.PUT )
+    RestRecord editDefaultBanner (@RequestParam( "schoolId" ) Integer schoolId,
+                                      @RequestParam( "defaultBanner" ) Integer defaultBanner);
+
+    @RequestMapping( value = "/navigation/delBanner", method = RequestMethod.DELETE )
+    RestRecord delBanner (@RequestParam( "bannerId" ) Integer bannerId);
+
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoginPermissionController {
 
     @Autowired
-    private LoginPermissionDao loginPermissionService;
+    private LoginPermissionDao loginPermissionDao;
 
     @ApiOperation(value = "用户登录权限控制", notes="通过接收当前登录权限状态，切换登录权限", httpMethod = "PUT")
     @PutMapping("/changePermission")
@@ -29,7 +29,7 @@ public class LoginPermissionController {
             @RequestParam ( "userId" ) String userId,
             @RequestParam( "loginPermissionStatus" ) Integer loginPermissionStatus ) {
         int newStatus = (loginPermissionStatus==0) ? 1 : 0;
-        int count = loginPermissionService.updateLoginPermission(userId,newStatus);
+        int count = loginPermissionDao.updateLoginPermission(userId,newStatus);
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {

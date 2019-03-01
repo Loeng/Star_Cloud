@@ -49,4 +49,28 @@ public class NavigationController {
                                  @RequestParam ( "pageSize" ) Integer pageSize ){
         return navigationService.getSchools(keywords,pageNum,pageSize);
     }
+
+    @ApiOperation(value = "获取学校机构对应的banner", notes="根据学校id，返回学校对应banner列表", httpMethod = "GET")
+    @GetMapping("/getBanners")
+    @ResponseBody
+    public RestRecord getBanners(@RequestParam ( "schoolId" ) Integer schoolId ){
+        return navigationService.getBanners(schoolId);
+    }
+
+    @ApiOperation(value = "学校设置默认banner", notes="获取学校id和当前banner状态，修改默认banner字段", httpMethod = "PUT")
+    @PutMapping("/editDefaultBanner")
+    @ResponseBody
+    public RestRecord editDefaultBanner(
+                @RequestParam ( "schoolId" ) Integer schoolId,
+                @RequestParam( "defaultBanner" ) Integer defaultBanner){
+        return navigationService.editDefaultBanner(schoolId,defaultBanner);
+    }
+
+    @ApiOperation(value = "删除某一学校下的banner", notes="获取bannerid，逻辑删除banner", httpMethod = "Delete")
+    @DeleteMapping("/delBanner")
+    @ResponseBody
+    public RestRecord delBanner(
+            @RequestParam( "bannerId" ) Integer bannerId){
+        return navigationService.delBanner(bannerId);
+    }
 }
