@@ -69,11 +69,11 @@ public class NavigationController {
     }
 
     @ApiOperation(value = "获取学校机构列表", notes="获取查询条件，返回学校机构列表", httpMethod = "GET")
-    @GetMapping("/getSchools")
+    @GetMapping("/getSchools/{pageNum}/{pageSize}")
     @ResponseBody
     public RestRecord getSchools(@RequestParam ( "keywords" ) String keywords,
-                                 @RequestParam ( "pageNum" ) Integer pageNum,
-                                 @RequestParam ( "pageSize" ) Integer pageSize){
+                                 @PathVariable (value = "pageNum") Integer pageNum,
+                                 @PathVariable (value = "pageSize") Integer pageSize){
 
         PageHelper.startPage(pageNum, pageSize);
         List<SchoolBean> schoolList = navigationService.getSchools(keywords);

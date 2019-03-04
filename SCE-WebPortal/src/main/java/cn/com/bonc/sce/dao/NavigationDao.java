@@ -3,10 +3,7 @@ package cn.com.bonc.sce.dao;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Charles on 2019/2/27.
@@ -24,10 +21,10 @@ public interface NavigationDao {
     @RequestMapping( value = "/navigation/editNav", method = RequestMethod.PUT )
     RestRecord editNav(@RequestBody String json);
 
-    @RequestMapping( value = "/navigation/getSchools", method = RequestMethod.GET )
+    @RequestMapping( value = "/navigation/getSchools/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord getSchools(@RequestParam("keywords") String keywords,
-                          @RequestParam("pageNum") Integer pageNum,
-                          @RequestParam("pageSize") Integer pageSize);
+                          @PathVariable(value = "pageNum") Integer pageNum,
+                          @PathVariable(value = "pageSize") Integer pageSize);
 
     @RequestMapping( value = "/navigation/getBanners", method = RequestMethod.GET )
     RestRecord getBanners (@RequestParam("schoolId") Integer schoolId);
