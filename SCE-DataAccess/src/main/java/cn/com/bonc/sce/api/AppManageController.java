@@ -3,7 +3,6 @@ package cn.com.bonc.sce.api;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
-import cn.com.bonc.sce.entity.AppNameTypeEntity;
 import cn.com.bonc.sce.entity.AppTypeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.PlatformAddModel;
@@ -124,9 +123,7 @@ public class AppManageController {
                                   @PathVariable( "uid" ) String uid ) {
         //应用info表  是否删除字段改为1
         try {
-            appIdList.forEach( id -> {
                 appInfoRepository.deleteAppInfo( appIdList, uid );
-            } );
         } catch ( Exception e ) {
             log.error( "delete appInfo fail {}", e );
             return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_422, e );
@@ -251,7 +248,7 @@ public class AppManageController {
         boolean existsType = ( appType != null && appType != 0 );
 
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-        Page<Map<String,Object>> list = null;
+        Page< Map< String, Object > > list = null;
         // 名字类型都有输入
         if ( existsName && existsType ) {
             appName = StrUtil.builder().append( "%" ).append( appName ).append( "%" ).toString();
@@ -274,7 +271,7 @@ public class AppManageController {
         }
 
         if ( null != list ) {
-            Map temp = new HashMap<>();
+            Map temp = new HashMap<>( list.getSize() );
             temp.put( "data", list.getContent() );
             temp.put( "totalPage", list.getTotalPages() );
             temp.put( "totalCount", list.getTotalElements() );
@@ -415,7 +412,7 @@ public class AppManageController {
                     sql.append( " AND V.APP_NAME LIKE '%" ).append( keyword ).append( "%'" );
                 }
                 sql.append( " AND V.APP_STATUS ='" ).append( auditStatus ).append( "' " );
-              //  sql.append( " ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
+                //  sql.append( " ORDER BY DOWNLOAD_COUNT " ).append( "desc".equalsIgnoreCase( downloadCount ) ? Sort.Direction.DESC : Sort.Direction.ASC );
                 Session session = entityManager.unwrap( org.hibernate.Session.class );
                 NativeQuery query = session.createNativeQuery( sql.toString() );
                 query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
@@ -467,7 +464,7 @@ public class AppManageController {
         Page< List< Map< String, Object > > > page;
         if ( "pt".equalsIgnoreCase( platformType ) ) {
             //平台应用
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize ,Sort.Direction.DESC,"CREATE_TIME");
+            Pageable pageable = PageRequest.of( pageNum - 1, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
             if ( appType == 0 ) {
                 //平台应用 没有分类
                 page = appInfoRepository.getAppListInfoByPlatform( userId, "pt", pageable );

@@ -129,6 +129,9 @@ public class MessageService {
             orders.add( new Sort.Order( Sort.Direction.DESC, SORT_CREATE_TIME ) );
             Pageable pageable = PageRequest.of( pageNum, pageSize, new Sort(orders) );
             Timestamp time = messageDao.getNewestTimeByUserId( userId );
+            if ( StringUtils.isEmpty( time ) ) {
+                time = messageDao.getCreateTimeByUserId( userId );
+            }
             List< Message > list;
             if ( !StringUtils.isEmpty( time ) ) {
                 list = messageDao.findByTypeInAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( typeList, time, 1, userId, time, 1 );

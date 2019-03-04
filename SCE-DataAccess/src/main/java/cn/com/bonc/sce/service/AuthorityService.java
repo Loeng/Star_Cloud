@@ -41,6 +41,9 @@ public class AuthorityService {
     private AccountDao accountDao;
 
     public RestRecord insertAuthority(Authority authority){
+        authority.setIsDelete( 1 );
+        authority = authorityDao.save( authority );
+
         User user = new User();
         String secret = Secret.generateSecret();
         String loginName = IDUtil.createID( "jg_" );
@@ -48,6 +51,9 @@ public class AuthorityService {
         user.setLoginName( loginName );
         user.setUserType( 7 );
         user.setIsDelete( 1 );
+        user.setOrganizationId( authority.getId().toString() );
+        user.setLoginPermissionStatus( 1 );
+        user.setIsFirstLogin( 0 );
         userDao.save( user );
 
         Account account = new Account();
@@ -56,8 +62,8 @@ public class AuthorityService {
         account.setIsDelete( 1 );
         accountDao.save( account );
 
-        authority.setIsDelete( 1 );
-        return new RestRecord(200, authorityDao.save( authority ));
+
+        return new RestRecord(200,authority );
     }
 
     /**

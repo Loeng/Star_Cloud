@@ -27,7 +27,6 @@ import java.util.Set;
  **/
 @Slf4j
 @Service
-
 public class AppManageService {
     @Autowired
     private FileResourceRepository fileResourceRepository;
@@ -51,9 +50,7 @@ public class AppManageService {
             return new RestRecord( 423, "您不是厂商用户，无法新增软件应用" );
         }
         //取icon
-        Integer iconId = appInfo.getAppIcon();
-        Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
-        String iconAddress = iconAd.get( "FILE_STORE_PATH" ).toString();
+        String iconAddress = getFileUrlById( appInfo.getAppIcon() );
         //1.appinfo表
         AppInfoEntity appInfoEntity = new AppInfoEntity();
         appInfoEntity.setAppIcon( iconAddress );
@@ -65,16 +62,19 @@ public class AppManageService {
         appInfoEntity.setAppNotes( appInfo.getAppNotes() );
         appInfoEntity.setCompanyId( companyId );
         //开发者信息
-        Integer idCardId = appInfo.getDeveloperIdPic();
-        Map< String, Object > idCardIdMap = fileResourceRepository.getFileStorePathById( idCardId );
-        String idCardUrl = idCardIdMap.get( "FILE_STORE_PATH" ).toString();
+        String idCardUrl = getFileUrlById( appInfo.getDeveloperIdPic() );
         appInfoEntity.setDeveloperName( appInfo.getDeveloperName() );
         appInfoEntity.setDeveloperIdNumber( appInfo.getDeveloperIdNumber() );
         appInfoEntity.setDeveloperPhone( appInfo.getDeveloperPhone() );
         appInfoEntity.setMainContact( appInfo.getMainContact() );
         appInfoEntity.setDeveloperIdPic( idCardUrl );
         appInfoEntity.setChargeMode( appInfo.getChargeMode() );
-
+        //软件凭证
+        String appCopyright = getFilesUrlById( appInfo.getAppCopyright() );
+        appInfoEntity.setAppCopyright( appCopyright );
+        //财务凭证
+        String auditVoucher = getFilesUrlById( appInfo.getAuditVoucher() );
+        appInfoEntity.setAuditVoucher( auditVoucher );
         //appinfo入库操作
         AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
         String appId = info.getAppId();
@@ -96,8 +96,7 @@ public class AppManageService {
             String version = pc.getAppVersion();
             //根据addressId获取软件存储路径
             String addressId = pc.getAddress();
-            Map< String, Object > ad = fileResourceRepository.getFileStorePathById( Integer.parseInt( addressId ) );
-            String softwareAddress = ad.get( "FILE_STORE_PATH" ).toString();
+            String softwareAddress = getFileUrlById( Integer.parseInt( addressId ) );
             //往版本表存东西
             MarketAppVersion marketAppVersion = new MarketAppVersion();
             marketAppVersion.setAppId( appId );
@@ -129,9 +128,7 @@ public class AppManageService {
         if ( companyId == null ) {
             return new RestRecord( 423, "您不是厂商用户，无法新增平台应用" );
         }
-        Integer iconId = platFormInfo.getAppIcon();
-        Map< String, Object > iconAd = fileResourceRepository.getFileStorePathById( iconId );
-        String iconAddress = iconAd.get( "FILE_STORE_PATH" ).toString();
+        String iconAddress = getFileUrlById( platFormInfo.getAppIcon() );
         //1.appinfo表
         AppInfoEntity appInfoEntity = new AppInfoEntity();
         appInfoEntity.setAppIcon( iconAddress );
@@ -144,15 +141,19 @@ public class AppManageService {
         appInfoEntity.setCompanyId( companyId );
 
         //开发者信息
-        Integer idCardId = platFormInfo.getDeveloperIdPic();
-        Map< String, Object > idCardIdMap = fileResourceRepository.getFileStorePathById( idCardId );
-        String idCardUrl = idCardIdMap.get( "FILE_STORE_PATH" ).toString();
+        String idCardUrl = getFileUrlById( platFormInfo.getDeveloperIdPic() );
         appInfoEntity.setDeveloperName( platFormInfo.getDeveloperName() );
         appInfoEntity.setDeveloperIdNumber( platFormInfo.getDeveloperIdNumber() );
         appInfoEntity.setDeveloperPhone( platFormInfo.getDeveloperPhone() );
         appInfoEntity.setMainContact( platFormInfo.getMainContact() );
         appInfoEntity.setDeveloperIdPic( idCardUrl );
         appInfoEntity.setChargeMode( platFormInfo.getChargeMode() );
+
+        //财务凭证
+        String auditVoucher = getFilesUrlById( platFormInfo.getAuditVoucher() );
+        appInfoEntity.setAuditVoucher( auditVoucher );
+
+        ////appinfo入库操作
         AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
         String appId = info.getAppId();
         //2.类型关系表
@@ -166,9 +167,7 @@ public class AppManageService {
 
         //3.版本表
         //根据addressId获取软件存储路径
-        Integer storeLocation = platFormInfo.getStoreLocation();
-        Map< String, Object > ptStoreLocation = fileResourceRepository.getFileStorePathById( storeLocation );
-        String platFormAddress = ptStoreLocation.get( "FILE_STORE_PATH" ).toString();
+        String platFormAddress = getFileUrlById( platFormInfo.getStoreLocation() );
         //往版本表存东西
         MarketAppVersion marketAppVersion = new MarketAppVersion();
         marketAppVersion.setAppId( appId );
@@ -189,7 +188,7 @@ public class AppManageService {
         String installInfo = platFormInfo.getInstallInfo();
         String newFeatures = platFormInfo.getNewFeatures();
         String md5Code = platFormInfo.getMd5Code();
-        if ( StringUtils.isNotEmpty( installInfo ) ) {
+        if ( StringUtils.isNotEmpty( newFeatures ) ) {
             marketAppVersion.setNewFeatures( newFeatures );
         }
         if ( StringUtils.isNotEmpty( installInfo ) ) {
@@ -221,5 +220,24 @@ public class AppManageService {
         }
         return StringUtils.substring( sb.toString(), 0, sb.length() - 1 );
     }
+
+    /**
+     * 根据id获取文件路径
+     *
+     * @param FileId
+     * @return
+     */
+    private String getFileUrlById( Integer FileId ) {
+        if ( FileId == null ) {
+            return null;
+        }
+        Map< String, Object > map = fileResourceRepository.getFileStorePathById( FileId );
+        if ( CollUtil.isEmpty( map ) ) {
+            return null;
+        }
+        String URL = map.get( "FILE_STORE_PATH" ) == null ? null : map.get( "FILE_STORE_PATH" ).toString();
+        return URL;
+    }
+
 
 }

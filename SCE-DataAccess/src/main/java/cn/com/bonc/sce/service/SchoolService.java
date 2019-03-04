@@ -91,10 +91,10 @@ public class SchoolService {
     public RestRecord getAll( Integer pageNum, Integer pageSize ) {
         pageNum--;
         Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC ,"CREATE_TIME" );
-        Page< List<Map > > page;
+        Page< List<Map<String,Object> > > page;
         page = schoolDao.selectAllSchool( 1,pageable);
         Map< String, Object > info = new HashMap<>();
-        List<List<Map>> list = page.getContent();
+        List<List<Map<String,Object>>> list = page.getContent();
         info.put( "total", page.getTotalElements() );
         info.put( "info", list );
         return new RestRecord( 200, info );
@@ -109,6 +109,7 @@ public class SchoolService {
         school.setTelephone(String.valueOf(map.get( "telephone" ).toString())  );
         school.setInstitutionId(Integer.valueOf( map.get("institutionId" ).toString()));
         school.setGrade( String.valueOf( map.get( "grade" ).toString() ) );
+        school.setIsDelete(1);
         //插入学校体表
         School newSchool = schoolDao.save( school );
         //生成学校用户 和  插入密码表

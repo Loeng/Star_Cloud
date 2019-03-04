@@ -72,6 +72,7 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_450 = "上传文件为空";
     String SCE_PORTAL_MSG_451 = "上传文件失败";
     String SCE_PORTAL_MSG_452 = "上传文件类型异常";
+    String SCE_PORTAL_MSG_453 = "上传文件不在解析范围内";
 
     String SCE_PORTAL_MSG_470 = "下载应用失败";
 

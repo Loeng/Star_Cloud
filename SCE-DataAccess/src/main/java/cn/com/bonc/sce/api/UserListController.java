@@ -85,6 +85,7 @@ public class UserListController {
         String account= "";
         String name = "";
         String organization_name = "";
+        String login= "";
         if (!CollectionUtils.isEmpty(condition)){
             log.info("用户列表: 学校 -> 教师 信息模糊查询，查询条件为[{}]",condition);
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
@@ -96,8 +97,11 @@ public class UserListController {
             if (null != condition.get("organization_name") && !"".equals(condition.get("organization_name")) ){
                 organization_name = condition.get("organization_name").toString();
             }
+            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
+                account = condition.get("login").toString();
+            }
         }
-        info = userInfoRepository.findTeacherByCondition(name,account,organization_name,pageable);
+        info = userInfoRepository.findTeacherByCondition(name,account,organization_name,login,pageable);
         log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
         return info;
 
@@ -161,6 +165,7 @@ public class UserListController {
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
         String account= "";
         String name = "";
+        String login = "";
         if (!CollectionUtils.isEmpty(condition)){
             log.info("用户列表: 学校 -> 家长 信息模糊查询，查询条件为[{}]",condition);
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
@@ -169,8 +174,11 @@ public class UserListController {
             if (null != condition.get("name") && !"".equals(condition.get("name")) ){
                 name = condition.get("name").toString();
             }
+            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
+                login = condition.get("login").toString();
+            }
         }
-        info =  userInfoRepository.findFamilyByCondition(name,account,pageable);
+        info =  userInfoRepository.findFamilyByCondition(name,account,login,pageable);
         log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
         return info;
     }
@@ -181,9 +189,10 @@ public class UserListController {
      */
     public Page<Map<String,Object>> selfRegistration(int pageNum, int pageSize, Map<String,Object> condition) {
         Page info =null;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
         String name = "";
         String account = "";
+        String login = "";
         if(!CollectionUtils.isEmpty(condition)){
             if (null != condition.get("account") && !"".equals(condition.get("account")) ){
                 account = condition.get("account").toString();
@@ -192,8 +201,11 @@ public class UserListController {
             if(null != condition.get("name") && !"".equals(condition.get("account"))){
                 name = condition.get("name").toString();
             }
+            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
+                login = condition.get("login").toString();
+            }
         }
-        info = userInfoRepository.findSelfRegALLByNameOrCount(name,account,pageable);
+        info = userInfoRepository.findSelfRegALLByNameOrCount(name,account,login,pageable);
         log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
         return info;
     }

@@ -11,7 +11,6 @@ import java.util.Objects;
 /**
  * Created by YueHaibo on 2018/12/12.
  */
-@ApiModel
 @Entity
 @Data
 @Table( name = "SCE_MARKET_COMPANY", schema = "STARCLOUDMARKET" )
@@ -82,7 +81,7 @@ public class CompanyInfo {
     }
 
     @Basic
-    @Column( name = "IS_DELETE", nullable = true)
+    @Column( name = "IS_DELETE", nullable = true )
     public Long getIsDelete() {
         return isDelete;
     }
@@ -107,7 +106,7 @@ public class CompanyInfo {
         return companyWebsite;
     }
 
-    public void setCompanyWebsite( String isDelete ) {
+    public void setCompanyWebsite( String companyWebsite ) {
         this.companyWebsite = companyWebsite;
     }
 
@@ -147,7 +146,7 @@ public class CompanyInfo {
         return establishingTime;
     }
 
-    public void setEstablishingTime( Date isDelete ) {
+    public void setEstablishingTime( Date establishingTime ) {
         this.establishingTime = establishingTime;
     }
 
@@ -166,12 +165,12 @@ public class CompanyInfo {
                 Objects.equals( companyAddress, that.companyAddress ) &&
                 Objects.equals( companyTaxNum, that.companyTaxNum ) &&
                 Objects.equals( remarks, that.remarks ) &&
-                Objects.equals( isDelete, that.isDelete )&&
-                Objects.equals( juridicalPerson, that.juridicalPerson )&&
-                Objects.equals( companyWebsite, that.companyWebsite )&&
-                Objects.equals( companyRegistationId, that.companyRegistationId )&&
-                Objects.equals( companyEmail, that.companyEmail )&&
-                Objects.equals( companyIntroduction, that.companyIntroduction )&&
+                Objects.equals( isDelete, that.isDelete ) &&
+                Objects.equals( juridicalPerson, that.juridicalPerson ) &&
+                Objects.equals( companyWebsite, that.companyWebsite ) &&
+                Objects.equals( companyRegistationId, that.companyRegistationId ) &&
+                Objects.equals( companyEmail, that.companyEmail ) &&
+                Objects.equals( companyIntroduction, that.companyIntroduction ) &&
                 Objects.equals( establishingTime, that.establishingTime );
     }
 
@@ -179,6 +178,6 @@ public class CompanyInfo {
     public int hashCode() {
 
         return Objects.hash( companyId, companyName, companyAddress, companyTaxNum, remarks, isDelete,
-                juridicalPerson,companyWebsite,companyRegistationId,companyEmail,companyIntroduction,establishingTime );
+                juridicalPerson, companyWebsite, companyRegistationId, companyEmail, companyIntroduction, establishingTime );
     }
 }

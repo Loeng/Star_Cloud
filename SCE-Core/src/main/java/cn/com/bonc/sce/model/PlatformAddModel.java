@@ -90,4 +90,10 @@ public class PlatformAddModel {
 
     @ApiModelProperty( name = "计费模式" )
     private String chargeMode;
+
+    @ApiModelProperty( name = "软著凭证" )
+    private Set<Integer> appCopyright;
+
+    @ApiModelProperty( name = "财务凭证" )
+    private Set<Integer> auditVoucher;
 }

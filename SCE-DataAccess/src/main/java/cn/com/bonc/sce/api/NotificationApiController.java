@@ -6,6 +6,7 @@ import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -87,6 +88,9 @@ public class NotificationApiController {
      * @param pageNum     分页页码
      * @param pageSize    分页每页条数
      * @param type        通知公告类型
+     * @param province    省
+     * @param city        市
+     * @param district    区
      * @return 分页后的通知公告列表
      */
     @GetMapping( "/list/{auditStatus}" )
@@ -96,11 +100,20 @@ public class NotificationApiController {
                                            @PathVariable( "auditStatus" ) String auditStatus,
                                            @RequestParam( value = "startDate", required = false ) String startDate,
                                            @RequestParam( value = "endDate", required = false ) String endDate,
+                                           @RequestParam( value = "province", required = false ) String province,
+                                           @RequestParam( value = "city", required = false ) String city,
+                                           @RequestParam( value = "district", required = false ) String district,
                                            @RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
-            RestRecord rr =notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, pageNum, pageSize );
-            List< Notification > list = (List< Notification >)((Map< String, Object > )rr.getData()).get( "info" );
+            RestRecord rr;
+            if ( StringUtils.isEmpty( province ) ) {
+                rr = notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, pageNum, pageSize );
+            } else {
+                //有地址筛选
+                rr = notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, province, city, district, pageNum, pageSize );
+            }
+            List< Notification > list = ( List< Notification > ) ( ( Map< String, Object > ) rr.getData() ).get( "info" );
             for ( Notification notification : list ) {
                 if ( notification.getUser() == null ) {
                     continue;
@@ -136,7 +149,7 @@ public class NotificationApiController {
                 notification.setUserName( notification.getUser().getUserName() );
                 notification.setUser( null );
             }
-            return new RestRecord( 200,notification);
+            return new RestRecord( 200, notification );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );

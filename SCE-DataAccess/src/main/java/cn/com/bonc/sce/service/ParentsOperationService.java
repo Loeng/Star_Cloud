@@ -77,7 +77,7 @@ public class ParentsOperationService {
             u.setIsDelete( 1 );
             u.setSecret( Secret.generateSecret() );
             u.setLoginPermissionStatus( 1 );
-            u.setUserType( 9 );
+            u.setUserType( 5 );
             u.setIsFirstLogin( 0 );
             User user = userParentDao.save( u );
             String parentId = user.getUserId();

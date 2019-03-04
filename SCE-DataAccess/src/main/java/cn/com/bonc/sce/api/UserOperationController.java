@@ -2,8 +2,10 @@ package cn.com.bonc.sce.api;
 
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.dao.StudentParentRelDao;
 import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.dao.UserPasswordDao;
+import cn.com.bonc.sce.entity.StudentParentRel;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.UserModel;
@@ -48,6 +50,9 @@ public class UserOperationController {
         this.userInfoRepository = userInfoRepository;
         this.userPasswordDao = userPasswordDao;
     }
+
+    @Autowired
+    StudentParentRelDao studentParentRelDao;
 
     @Autowired
     private UserPasswordDao passwordDao;
@@ -298,6 +303,31 @@ public class UserOperationController {
                     userModel.getInfoStudentModel().getClassNumber(),
                     userModel.getInfoStudentModel().getGrade(),
                     userModel.getInfoStudentModel().getRemarks() );
+
+            //创建一个家长账号与之关联
+            UserModel userModelParent = new UserModel();
+            userModelParent.setSecret( Secret.generateSecret() );
+            userModelParent.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
+            userModelParent.setCreateTime( new Date() );
+            userModelParent.setUserType(5);
+            userModelParent.setLoginName( IDUtil.createID( "jz_" ) );
+            userInfoRepository.insertUser( userModelParent.getUserId(), userModelParent.getLoginName(), userModelParent.getUserName()
+                    , userModelParent.getGender(), userModelParent.getUserType(), userModelParent.getMailAddress(), userModelParent.getCertificateType(), userModelParent.getCertificateNumber()
+                    , userModelParent.getPhoneNumber(), userModelParent.getAddress(), userModelParent.getCreateTime(), userModelParent.getOrganizationId(), userModelParent.getRemarks(), userModelParent.getSecret() );
+
+            //给家长账号创建密码
+            UserPassword passwordParent = new UserPassword();
+            passwordParent.setUserId( userModelParent.getUserId() );
+            passwordParent.setPassword( userModelParent.getPassword() == null ? "star123!" : userModelParent.getPassword() );
+            passwordDao.save( passwordParent );
+
+            //创建关联关系
+            StudentParentRel studentParentRel = new StudentParentRel();
+            studentParentRel.setIsMain(1);
+            studentParentRel.setParentUserId(userModelParent.getUserId());
+            studentParentRel.setStudentUserId(userModel.getUserId());
+            studentParentRelDao.save(studentParentRel);
+
             return new RestRecord( 251, WebMessageConstants.SCE_PORTAL_MSG_251 );
         }
 

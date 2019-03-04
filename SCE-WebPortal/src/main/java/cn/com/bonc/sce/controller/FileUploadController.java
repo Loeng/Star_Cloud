@@ -30,6 +30,9 @@ public class FileUploadController {
 
     private FileUploadService fileUploadService;
 
+    public static final String STUDENT_CODE = "1";
+    public static final String TEACHER_CODE = "2";
+
     @Autowired
     public FileUploadController( FileUploadService fileUploadService ) {
         this.fileUploadService = fileUploadService;
@@ -65,13 +68,24 @@ public class FileUploadController {
     } )
     @PostMapping( "/upload-user-info" )
     @ResponseBody
-    public RestRecord uploadParseExcel( @ModelAttribute @ApiParam( name = "file", value = "上传信息", required = true, example = "{multipartFile:'file',fileType:'document',userType:3}" ) UploadFileModel uploadFileModel ) {
+    public RestRecord uploadParseExcel( @ModelAttribute @ApiParam( name = "file", value = "上传信息", required = true, example = "{multipartFile:'file',fileType:'document',userType:2}" ) UploadFileModel uploadFileModel ) {
         if ( uploadFileModel.getFile() == null || uploadFileModel.getFile().isEmpty()
                 || uploadFileModel.getFileType().isEmpty() || uploadFileModel.getUserType().isEmpty() ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
         }
+        List< ExcelToUser > list;
 
-        List< ExcelToUser > list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
+        if ( STUDENT_CODE.equals( uploadFileModel.getUserType() ) ) {
+            //解析学生用户Excel
+            list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
+
+        } else if (TEACHER_CODE.equals( uploadFileModel.getUserType() ) ) {
+            //解析教师用户Excel
+            list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
+        }else {
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_453 );
+        }
+
 
         log.info( "解析Excel成功" );
 

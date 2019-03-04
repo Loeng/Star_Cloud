@@ -26,7 +26,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
             " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
             "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
             "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
             "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
             "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID \n" +
             " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +
@@ -41,7 +41,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
                     " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
                     "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
                     "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
                     "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
                     "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID \n" +
                     " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +
@@ -62,7 +62,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
             " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
             "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
             "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
             "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
             "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID\n" +
             " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +
@@ -77,7 +77,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
                     " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
                     "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
                     "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
                     "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
                     "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID\n" +
                     " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +
@@ -99,7 +99,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
             " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
             "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
             "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
             "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
             "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID \n" +
             " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +
@@ -114,7 +114,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
                     " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
                     "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
                     "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
                     "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
                     "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID \n" +
                     " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +
@@ -137,7 +137,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
             " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
             "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
             "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
             "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
             "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID \n" +
             " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +
@@ -152,7 +152,7 @@ public interface AppNameTypeRepository extends JpaRepository< AppInfoEntity, Str
                     " INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
                     "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
                     "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
                     "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
                     "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID \n" +
                     " LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE A5 ON A5.APP_TYPE_ID = MAIN.APP_TYPE_ID\n" +

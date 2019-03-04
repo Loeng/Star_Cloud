@@ -135,14 +135,14 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           TEMPA.CREATE_TIME CREATE_TIME " +
             "           FROM" +
             "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
-            "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+            "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE  APP_STATUS='4' AND IS_DELETE=1  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
             "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 " +
             "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
             "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
-            "           WHERE APP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)",
+            "           WHERE APP_SOURCE = :platform  AND AI.IS_DELETE=1  AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)",
             countQuery = "SELECT COUNT(AI.APP_ID) FROM " +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
                     "           INNER JOIN (" +
@@ -152,14 +152,14 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "           TEMPA.CREATE_TIME CREATE_TIME " +
                     "           FROM" +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
-                    "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+                    "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE  APP_STATUS='4' AND IS_DELETE=1  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
                     "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 " +
                     "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
                     "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
-                    "           WHERE APP_SOURCE = :platform AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)" )
+                    "           WHERE APP_SOURCE = :platform  AND AI.IS_DELETE=1  AND AI.APP_ID in (SELECT ar.APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL ar WHERE ar.APP_TYPE_ID=:typeId)" )
     Page< List< Map< String, Object > > > getAppListInfoByTypeIdandPlatform( @Param( "typeId" ) Integer typeId,
                                                                              @Param( "userId" ) String userId,
                                                                              @Param( "platform" ) String platform,
@@ -188,14 +188,14 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
             "           TEMPA.CREATE_TIME CREATE_TIME " +
             "           FROM" +
             "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
-            "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB   GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+            "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE  APP_STATUS='4' AND IS_DELETE=1   GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
             "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 " +
             "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
             "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
             "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
-            "           WHERE APP_SOURCE = :platform",
+            "           WHERE APP_SOURCE = :platform  AND AI.IS_DELETE=1 ",
             countQuery = "SELECT COUNT( AI.APP_ID) FROM " +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_INFO AI " +
                     "           INNER JOIN (" +
@@ -205,14 +205,14 @@ public interface AppInfoRepository extends JpaRepository< AppInfoEntity, String 
                     "           TEMPA.CREATE_TIME CREATE_TIME " +
                     "           FROM" +
                     "           STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC" +
-                    "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
+                    "           INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  WHERE  APP_STATUS='4' AND IS_DELETE=1  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID " +
                     "           AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 " +
                     "            ) TEMPB ON AI.APP_ID = TEMPB.APP_ID" +
                     "           LEFT JOIN ( SELECT APP_ID, COUNT( APP_ID ) AS DOWNLOAD_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_DOWNLOAD WHERE IS_DELETE = 1 GROUP BY APP_ID ) AD ON AI.APP_ID = AD.APP_ID" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN AO ON AI.APP_ID = AO.APP_ID AND AO.IS_DELETE = 1 AND AO.USER_ID = :userId" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_USER_APP_COLLECTION SUAC ON AI.APP_ID = SUAC.APP_ID AND SUAC.IS_DELETE = 1 AND SUAC.USER_ID = :userId" +
                     "           LEFT JOIN STARCLOUDMARKET.SCE_TEACHER_RECOMMEND_APP TR ON AI.APP_ID=TR.APP_ID AND TR.IS_DELETE=1 AND TR.USER_ID=:userId" +
-                    "           WHERE APP_SOURCE = :platform" )
+                    "           WHERE APP_SOURCE = :platform  AND AI.IS_DELETE=1 " )
     Page< List< Map< String, Object > > > getAppListInfoByPlatform( @Param( "userId" ) String userId,
                                                                     @Param( "platform" ) String platform,
                                                                     Pageable pageable );

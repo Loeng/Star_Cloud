@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.NavigationMapper">
+
+    <select id="getNavListByChannel" resultType="Map">
+        SELECT COLUMN_ID,COLUMN_NAME,COLUMN_URL
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+        WHERE CHANNEL_ID=#{channelId}
+        AND IS_DELETE=1
+    </select>
+    
+    <insert id="addNav" parameterType="java.util.Map" useGeneratedKeys="true">
+        <selectKey keyProperty="COLUMN_ID" resultType="Integer" order="BEFORE">
+                    select max(COLUMN_ID)+1 from STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+                </selectKey>
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+                  (COLUMN_ID,COLUMN_NAME,COLUMN_URL,CHANNEL_ID,IS_DELETE)
+        VALUES
+            (#{COLUMN_ID},#{columnName},#{columnUrl},#{channelId},1)
+    </insert>
+    
+    <update id="editNav" parameterType="java.util.Map">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+        <set>
+            <if test="columnName != null">COLUMN_NAME=#{columnName},</if>
+            <if test="columnUrl != null">COLUMN_URL=#{columnUrl}</if>
+        </set>
+        WHERE
+            COLUMN_ID=#{columnId}
+    </update>
+
+    <select id="getSchools" resultType="Map">
+        SELECT ID,SCHOOL_NAME,SCHOOL_ADDRESS,DEFAULT_BANNER
+        FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL
+        WHERE 1=1
+         <if test="keywords != null and keywords!= ''" >
+             AND SCHOOL_NAME LIKE CONCAT(CONCAT('%',#{keywords}),'%')
+         </if>
+        AND IS_DELETE=1
+    </select>
+
+    <select id="getBanners" resultType="Map">
+        SELECT ID,BANNER_ORDER,IMAGE_URL,BANNER_TYPE_ID
+        FROM STARCLOUDPORTAL.SCE_PORTAL_BANNER
+        WHERE SCHOOL_ID=#{schoolId}
+        AND IS_DELETE=1
+        AND BANNER_TYPE_ID=3  /*学校banner*/
+        ORDER BY BANNER_ORDER
+    </select>
+
+    <update id="editDefaultBanner">
+        UPDATE
+        STARCLOUDPORTAL.SCE_ENTITY_SCHOOL
+        SET DEFAULT_BANNER = #{newBanner}
+        WHERE
+        ID = #{schoolId}
+    </update>
+
+    <update id="delBanner">
+        UPDATE
+        STARCLOUDPORTAL.SCE_PORTAL_BANNER
+        SET IS_DELETE=0,UPDATE_TIME=SYSDATE
+        WHERE ID=#{bannerId}
+    </update>
+
+</mapper>

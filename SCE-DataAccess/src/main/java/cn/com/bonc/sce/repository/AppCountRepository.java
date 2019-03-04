@@ -34,7 +34,7 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
             "            INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
             "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
             "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+            "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
             "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
             "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID" +
             "            ORDER BY DOWNLOAD DESC",
@@ -47,7 +47,7 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
                     "            INNER JOIN (SELECT AVC.APP_ID, AVC.APP_STATUS, TEMPA.CREATE_TIME CREATE_TIME \n" +
                     "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVC \n" +
                     "                       INNER JOIN ( SELECT AVB.APP_ID, MAX( AVB.CREATE_TIME ) CREATE_TIME \n" +
-                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB  GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
+                    "                       FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AVB WHERE AVB.APP_STATUS='4' AND AVB.IS_DELETE = 1 GROUP BY AVB.APP_ID ) TEMPA ON AVC.APP_ID = TEMPA.APP_ID \n" +
                     "                       AND TEMPA.CREATE_TIME = AVC.CREATE_TIME WHERE  APP_STATUS='4' AND IS_DELETE=1 \n" +
                     "                       ) TEMPB ON MAIN.APP_ID = TEMPB.APP_ID ",
             nativeQuery = true )
@@ -139,7 +139,6 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
      * 查询当月下载类型占比
      *
      * @param companyId 厂商Id
-     * @param time      月份
      * @return
      */
     @Query( value = "SELECT\n" +
@@ -236,6 +235,15 @@ public interface AppCountRepository extends JpaRepository< DownloadCount, String
             "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL SMR ON SMR.APP_ID = SMA.APP_ID\n" +
             "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE SMT ON SMT.APP_TYPE_ID = SMR.APP_TYPE_ID\n" +
             "INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) SMV ON SMV.APP_ID = SMA.APP_ID\n" +
-            "ORDER BY MAIN.OPEN_COUNT DESC\n", nativeQuery = true )
+            "ORDER BY MAIN.OPEN_COUNT DESC\n",
+            countQuery = "SELECT COUNT(*)\n" +
+                    "FROM\n" +
+                    "(SELECT APP_ID,COUNT(USER_ID) AS OPEN_COUNT FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN GROUP BY APP_ID ORDER BY OPEN_COUNT DESC) MAIN\n" +
+                    "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_INFO SMA ON SMA.APP_ID = MAIN.APP_ID AND SMA.IS_DELETE=1\n" +
+                    "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL SMR ON SMR.APP_ID = SMA.APP_ID\n" +
+                    "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE SMT ON SMT.APP_TYPE_ID = SMR.APP_TYPE_ID\n" +
+                    "INNER JOIN (SELECT  APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION WHERE APP_STATUS = 4 AND IS_DELETE =1  GROUP BY APP_ID ) SMV ON SMV.APP_ID = SMA.APP_ID\n" +
+                    "ORDER BY MAIN.OPEN_COUNT DESC\n",
+            nativeQuery = true )
     Page< Map< String, Object > > getAppUseTimeRank( Pageable pageable );
 }
