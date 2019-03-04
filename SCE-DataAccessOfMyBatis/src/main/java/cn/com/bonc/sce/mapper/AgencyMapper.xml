@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.AgencyMapper">
+
+    <update id="editActivity">
+        UPDATE STARCLOUDPORTAL.SCE_ENTITY_AGENT
+        SET IS_ACTIVATE=#{isActivate}
+        WHERE ID=#{id}
+    </update>
+
+    <update id="editInfo">
+        UPDATE STARCLOUDPORTAL.SCE_ENTITY_AGENT
+        SET AGENT_NAME=#{agentName},PROVINCE=#{province},CITY=#{city},AREA=#{area}
+        WHERE ID=#{id}
+    </update>
+</mapper>
