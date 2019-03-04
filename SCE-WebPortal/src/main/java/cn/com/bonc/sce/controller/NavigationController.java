@@ -20,11 +20,11 @@ public class NavigationController {
     @Autowired
     private NavigationService navigationService;
 
-    @ApiOperation(value = "导航栏查询", notes="通过参数channel_id获取导航列表", httpMethod = "GET")
-    @GetMapping("/getNavListByChannel")
+    @ApiOperation(value = "导航栏查询", notes="通过参数channelType获取导航列表", httpMethod = "GET")
+    @GetMapping("/getChannel")
     @ResponseBody
-    public RestRecord getNavListByChannel(@RequestParam ( "channelId" ) Integer channelId){
-        return navigationService.getNavListByChannel(channelId);
+    public RestRecord getChannel(@RequestParam ( "channelType" ) Integer channelType){
+        return navigationService.getChannel(channelType);
     }
 
     @ApiOperation(value = "添加导航栏", notes="获取前端编辑数据，后台写入数据库", httpMethod = "POST")

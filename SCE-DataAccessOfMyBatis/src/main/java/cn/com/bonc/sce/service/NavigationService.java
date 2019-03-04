@@ -21,8 +21,8 @@ public class NavigationService {
     @Autowired
     private NavigationDao navigationDao;
 
-    public List<NavigationBean> getNavListByChannel(Integer channelId){
-        return navigationDao.getNavListByChannel(channelId);
+    public List<NavigationBean> getChannel(Integer channelType){
+        return navigationDao.getChannel(channelType);
     }
 
     public int addNav(String columnName,String columnUrl, Integer channelId){

@@ -18,8 +18,8 @@ public class NavigationDao {
     @Autowired( required = false )
     private NavigationMapper navigationMapper;
 
-    public List<NavigationBean> getNavListByChannel (Integer channelId){
-        return navigationMapper.getNavListByChannel(channelId);
+    public List<NavigationBean> getChannel (Integer channelType){
+        return navigationMapper.getChannel(channelType);
     }
 
     public int addNav(String columnName,String columnUrl, Integer channelId){
