@@ -34,3 +34,8 @@ logging:
     org.hibernate.type.descriptor.sql: TRACE
 server:
   port: 10210
+
+#分布式全局唯一Id生成器：workerID:机器ID  datacenterId:数据标识ID
+IdWorker:
+  workerId: 0
+  datacenterId: 2
