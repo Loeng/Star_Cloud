@@ -33,4 +33,21 @@ public class AgencyController {
     public RestRecord editInfo(@RequestBody @ApiParam( example = "{\"id\": 1743,\"AGENT_NAME\": \"测试一下代理商名称\",\"PROVINCE\": \"四川\",\"CITY\": \"成都\",\"AREA\": \"青羊区\"}" ) String json ){
         return agencyService.editInfo(json);
     }
+
+    @ApiOperation(value = "代理商代理学校列表查询", notes="通过代理商id查询代理学校列表", httpMethod = "GET")
+    @GetMapping("/getSchools/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getSchools(@RequestParam( "id" ) Integer id,
+                                 @PathVariable (value = "pageNum")Integer pageNum,
+                                 @PathVariable (value = "pageSize") Integer pageSize){
+        return agencyService.getSchools(id,pageNum,pageSize);
+    }
+
+    @ApiOperation(value = "代理商代理学校删除", notes="通过代理商id和学校id删除代理商和学校的代理关系", httpMethod = "DELETE")
+    @DeleteMapping("/delSchoolRel")
+    @ResponseBody
+    public RestRecord delSchoolRel(@RequestParam( "agentId" ) Integer agentId,
+                                 @RequestParam ("schoolId")Integer schoolId){
+        return agencyService.delSchoolRel(agentId,schoolId);
+    }
 }

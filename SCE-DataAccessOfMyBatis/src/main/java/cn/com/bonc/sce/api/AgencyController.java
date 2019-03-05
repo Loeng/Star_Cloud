@@ -1,15 +1,19 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AgencyService;
 import com.alibaba.druid.support.json.JSONUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,6 +54,34 @@ public class AgencyController {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200,1 );
         } else {
             return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
+        }
+    }
+
+    @ApiOperation(value = "代理商代理学校列表查询", notes="通过代理商id查询代理学校列表", httpMethod = "GET")
+    @GetMapping("/getSchools/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getSchools(@RequestParam( "id" ) Integer id,
+                                 @PathVariable (value = "pageNum")Integer pageNum,
+                                 @PathVariable (value = "pageSize") Integer pageSize){
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<SchoolBean> schoolList = agencyService.getSchools(id);
+        PageInfo pageInfo = new PageInfo(schoolList);
+        List list = pageInfo.getList();
+        return new RestRecord( 200, list );
+    }
+
+    @ApiOperation(value = "代理商代理学校删除", notes="通过代理商id和学校id删除代理商和学校的代理关系", httpMethod = "DELETE")
+    @DeleteMapping("/delSchoolRel")
+    @ResponseBody
+    public RestRecord delSchoolRel(@RequestParam( "agentId" ) Integer agentId,
+                                   @RequestParam ("schoolId")Integer schoolId){
+
+        int count = agencyService.delSchoolRel(agentId,schoolId);
+        if ( count == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200,1 );
+        } else {
+            return new RestRecord( 407, MessageConstants.SCE_MSG_408,0 );
         }
     }
 }

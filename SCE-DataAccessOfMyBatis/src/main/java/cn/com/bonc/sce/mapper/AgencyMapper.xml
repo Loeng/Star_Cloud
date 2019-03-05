@@ -13,4 +13,17 @@
         SET AGENT_NAME=#{agentName},PROVINCE=#{province},CITY=#{city},AREA=#{area}
         WHERE ID=#{id}
     </update>
+
+    <select id="getSchools" resultType="Map">
+        SELECT *
+        FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL
+        WHERE ID
+        IN (SELECT SCHOOL_ID FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL WHERE AGENT_ID=#{id})
+        AND IS_DELETE=1
+    </select>
+
+    <delete id="delSchoolRel">
+        DELETE FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL
+        WHERE SCHOOL_ID=#{schoolId} AND AGENT_ID=#{agentId}
+    </delete>
 </mapper>

@@ -23,4 +23,12 @@ public class AgencyService {
     public RestRecord editInfo(String json){
         return agencyDao.editInfo(json);
     }
+
+    public RestRecord getSchools(Integer id,Integer pageNum, Integer pageSize){
+        return agencyDao.getSchools(id,pageNum,pageSize);
+    }
+
+    public RestRecord delSchoolRel(Integer agentId,Integer schoolId){
+        return agencyDao.delSchoolRel(agentId,schoolId);
+    }
 }

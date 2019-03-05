@@ -3,10 +3,7 @@ package cn.com.bonc.sce.dao;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Charles on 2019/3/4.
@@ -20,4 +17,13 @@ public interface AgencyDao {
 
     @RequestMapping( value = "/agent/editInfo", method = RequestMethod.PUT )
     RestRecord editInfo(@RequestBody String json);
+
+    @RequestMapping( value = "/agent/getSchools/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getSchools(@RequestParam("id") Integer id,
+                          @PathVariable(value = "pageNum") Integer pageNum,
+                          @PathVariable(value = "pageSize") Integer pageSize);
+
+    @RequestMapping( value = "/agent/delSchoolRel", method = RequestMethod.DELETE )
+    RestRecord delSchoolRel(@RequestParam("agentId") Integer agentId,@RequestParam("schoolId") Integer schoolId);
+
 }

@@ -115,7 +115,7 @@ public class NavigationController {
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {
-            return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
+            return new RestRecord( 408, MessageConstants.SCE_MSG_408 );
         }
     }
 }
