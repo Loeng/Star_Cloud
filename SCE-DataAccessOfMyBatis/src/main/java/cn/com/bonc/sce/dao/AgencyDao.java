@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.bean.AgentBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.mapper.AgencyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,9 @@ public class AgencyDao {
 
     public int delSchoolRel(Integer agentId, Integer schoolId) {
         return agencyMapper.delSchoolRel(agentId,schoolId);
+    }
+
+    public List<AgentBean> getAgents(String agentName, Integer isActivate) {
+        return agencyMapper.getAgents(agentName,isActivate);
     }
 }

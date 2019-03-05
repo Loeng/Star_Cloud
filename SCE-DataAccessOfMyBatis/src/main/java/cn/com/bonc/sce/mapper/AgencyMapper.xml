@@ -26,4 +26,20 @@
         DELETE FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL
         WHERE SCHOOL_ID=#{schoolId} AND AGENT_ID=#{agentId}
     </delete>
+
+    <select id="getAgents" resultType="Map">
+        SELECT a.ID,a.AGENT_NAME,a.IS_ACTIVATE,GRADE,u.LOGIN_PERMISSION_STATUS
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER u,STARCLOUDPORTAL.SCE_ENTITY_AGENT a
+        WHERE 1=1
+        <if test="agentName != null and agentName!= ''" >
+            AND AGENT_NAME LIKE CONCAT(CONCAT('%',#{agentName}),'%')
+        </if>
+        <if test="isActivate != null and isActivate!=''">
+            AND IS_ACTIVATE=#{isActivate}
+        </if>
+        AND u.USER_TYPE=6
+        AND a.ID=u.ORGANIZATION_ID
+        AND u.IS_DELETE=1
+        AND a.IS_DELETE=1
+    </select>
 </mapper>

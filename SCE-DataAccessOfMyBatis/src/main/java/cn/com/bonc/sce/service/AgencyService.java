@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.bean.AgentBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.dao.AgencyDao;
 import lombok.extern.slf4j.Slf4j;
@@ -32,5 +33,9 @@ public class AgencyService {
 
     public int delSchoolRel(Integer agentId, Integer schoolId) {
         return agencyDao.delSchoolRel(agentId,schoolId);
+    }
+
+    public List<AgentBean> getAgents(String agentName,Integer isActivate){
+        return agencyDao.getAgents(agentName,isActivate);
     }
 }

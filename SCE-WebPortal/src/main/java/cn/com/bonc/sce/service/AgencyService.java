@@ -31,4 +31,8 @@ public class AgencyService {
     public RestRecord delSchoolRel(Integer agentId,Integer schoolId){
         return agencyDao.delSchoolRel(agentId,schoolId);
     }
+
+    public RestRecord getAgents(String agentName,Integer isActivate,Integer pageNum, Integer pageSize){
+        return agencyDao.getAgents(agentName,isActivate,pageNum,pageSize);
+    }
 }

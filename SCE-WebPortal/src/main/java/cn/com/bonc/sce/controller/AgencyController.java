@@ -50,4 +50,14 @@ public class AgencyController {
                                  @RequestParam ("schoolId")Integer schoolId){
         return agencyService.delSchoolRel(agentId,schoolId);
     }
+
+    @ApiOperation(value = "获取代理商列表", notes="获取查询条件，返回代理商列表", httpMethod = "GET")
+    @GetMapping("/getAgents/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getAgents(@RequestParam ( value = "agentName",required = false) String agentName,
+                                 @RequestParam(value ="isActivate",required = false ) Integer isActivate,
+                                 @PathVariable (value = "pageNum")Integer pageNum,
+                                 @PathVariable (value = "pageSize") Integer pageSize ){
+        return agencyService.getAgents(agentName,isActivate,pageNum,pageSize);
+    }
 }

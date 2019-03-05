@@ -26,4 +26,9 @@ public interface AgencyDao {
     @RequestMapping( value = "/agent/delSchoolRel", method = RequestMethod.DELETE )
     RestRecord delSchoolRel(@RequestParam("agentId") Integer agentId,@RequestParam("schoolId") Integer schoolId);
 
+    @RequestMapping( value = "/agent/getAgents/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getAgents(@RequestParam("agentName") String agentName,
+                         @RequestParam("isActivate") Integer isActivate,
+                         @PathVariable(value = "pageNum") Integer pageNum,
+                         @PathVariable(value = "pageSize") Integer pageSize);
 }

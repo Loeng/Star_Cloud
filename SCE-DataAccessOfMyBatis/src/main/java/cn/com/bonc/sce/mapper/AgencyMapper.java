@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.mapper;
 
+import cn.com.bonc.sce.bean.AgentBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +18,6 @@ public interface AgencyMapper {
     List<SchoolBean> getSchools(@Param("id") Integer id);
 
     int delSchoolRel(@Param("agentId") Integer agentId, @Param("schoolId")Integer schoolId);
+
+    List<AgentBean> getAgents(@Param("agentName")String agentName, @Param("isActivate")Integer isActivate);
 }
