@@ -4,7 +4,7 @@ package cn.com.bonc.sce.bean;
  * Created by Charles on 2019/3/5.
  */
 public class AgentBean {
-    private Integer id;
+    private long id;
     private String agentName;
     private String grade;
     private String agentArea;
@@ -22,11 +22,11 @@ public class AgentBean {
     private String area;
     private int isActivate;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -38,4 +38,8 @@ public class AgencyService {
     public List<AgentBean> getAgents(String agentName,Integer isActivate){
         return agencyDao.getAgents(agentName,isActivate);
     }
+
+    public int saveAgent(AgentBean agentBean) {
+        return agencyDao.saveAgent(agentBean);
+    }
 }

@@ -35,4 +35,8 @@ public class AgencyService {
     public RestRecord getAgents(String agentName,Integer isActivate,Integer pageNum, Integer pageSize){
         return agencyDao.getAgents(agentName,isActivate,pageNum,pageSize);
     }
+
+    public RestRecord insertInfo(String json){
+        return agencyDao.insertInfo(json);
+    }
 }

@@ -60,4 +60,11 @@ public class AgencyController {
                                  @PathVariable (value = "pageSize") Integer pageSize ){
         return agencyService.getAgents(agentName,isActivate,pageNum,pageSize);
     }
+
+    @ApiOperation(value = "新增代理商信息", notes="获取用户编辑数据，写入代理商信息，并在用户信息表插入对应数据", httpMethod = "POST")
+    @PostMapping("/insertInfo")
+    @ResponseBody
+    public RestRecord insertInfo(@RequestBody @ApiParam( example = "{\"AGENT_NAME\": \"测试一下代理商名称\",\"PROVINCE\": \"四川\",\"CITY\": \"成都\",\"AREA\": \"青羊区\"}" ) String json ){
+        return agencyService.insertInfo(json);
+    }
 }

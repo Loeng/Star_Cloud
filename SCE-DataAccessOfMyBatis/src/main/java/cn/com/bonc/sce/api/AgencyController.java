@@ -1,10 +1,16 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.AgentBean;
 import cn.com.bonc.sce.bean.SchoolBean;
+import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AgencyService;
+import cn.com.bonc.sce.service.UserService;
+import cn.com.bonc.sce.tool.IDUtil;
+import cn.com.bonc.sce.tool.IdWorker;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +34,10 @@ public class AgencyController {
 
     @Autowired
     private AgencyService agencyService;
+    @Autowired
+    private IdWorker idWorker;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value = "代理启用与禁用", notes="通过当前代理活跃状态，改变代理状态", httpMethod = "PUT")
     @PutMapping("/editActivity")
@@ -98,5 +109,47 @@ public class AgencyController {
         PageInfo pageInfo = new PageInfo(agentList);
         List list = pageInfo.getList();
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200,list );
+    }
+
+    @Transactional
+    @ApiOperation(value = "新增代理商信息", notes="获取用户编辑数据，写入代理商信息，并在用户信息表和账号密码表插入对应数据", httpMethod = "POST")
+    @PostMapping("/insertInfo")
+    @ResponseBody
+    public RestRecord insertInfo(@RequestBody @ApiParam( example = "{\"AGENT_NAME\": \"测试一下代理商名称\",\"PROVINCE\": \"四川\",\"CITY\": \"成都\",\"AREA\": \"青羊区\"}" ) String json ){
+        Map map = (Map) JSONUtils.parse(json);
+        long agentId = idWorker.nextId();
+        AgentBean agentBean = new AgentBean();
+        agentBean.setAgentName((String) map.get("AGENT_NAME"));
+        agentBean.setProvince((String) map.get("PROVINCE"));
+        agentBean.setCity((String) map.get("CITY"));
+        agentBean.setArea((String) map.get("AREA"));
+        agentBean.setIsDelete(1);
+        agentBean.setId(agentId);
+
+        UserBean user = new UserBean();
+        long userId = idWorker.nextId();
+        String secret = Secret.generateSecret();
+        String loginName = IDUtil.createID( "dl_" );
+        user.setSecret( secret );
+        user.setLoginName( loginName );
+        user.setUserType( 6 );
+        user.setIsDelete( 1 );
+        user.setUserId(userId);
+        user.setOrganizationId(agentId);
+
+        AccountBean account = new AccountBean();
+        long accountId = idWorker.nextId();
+        account.setId( accountId );
+        account.setPassword( "star123!" );
+        account.setIsDelete( 1 );
+        account.setUserId(userId);
+
+        if (agencyService.saveAgent(agentBean) == 1
+                && userService.saveUser( user )==1
+               && userService.saveAccount(account)==1){
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200,1 );
+        } else {
+            return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
+        }
     }
 }

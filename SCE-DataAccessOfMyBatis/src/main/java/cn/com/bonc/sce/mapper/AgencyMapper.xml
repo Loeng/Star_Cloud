@@ -42,4 +42,11 @@
         AND u.IS_DELETE=1
         AND a.IS_DELETE=1
     </select>
+
+    <insert id="saveAgent" parameterType="cn.com.bonc.sce.bean.AgentBean">
+        INSERT INTO
+            STARCLOUDPORTAL.SCE_ENTITY_AGENT(ID,AGENT_NAME,PROVINCE,CITY,AREA,IS_DELETE)
+        VALUES
+            (#{id},#{agentName},#{province},#{city},#{area},#{isDelete})
+    </insert>
 </mapper>

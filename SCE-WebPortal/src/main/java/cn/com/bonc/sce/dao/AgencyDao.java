@@ -31,4 +31,7 @@ public interface AgencyDao {
                          @RequestParam("isActivate") Integer isActivate,
                          @PathVariable(value = "pageNum") Integer pageNum,
                          @PathVariable(value = "pageSize") Integer pageSize);
+
+    @RequestMapping( value = "/agent/insertInfo", method = RequestMethod.POST )
+    RestRecord insertInfo(String json);
 }

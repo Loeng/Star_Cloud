@@ -36,4 +36,8 @@ public class AgencyDao {
     public List<AgentBean> getAgents(String agentName, Integer isActivate) {
         return agencyMapper.getAgents(agentName,isActivate);
     }
+
+    public int saveAgent(AgentBean agentBean) {
+        return agencyMapper.saveAgent(agentBean);
+    }
 }
