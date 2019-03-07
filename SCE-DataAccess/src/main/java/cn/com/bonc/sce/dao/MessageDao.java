@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2018/14/12 12:00
  */
 @Repository
-public interface MessageDao extends JpaRepository<Message, Integer> {
+public interface MessageDao extends JpaRepository< Message, Integer > {
     @Override
     Message save( Message message );
 
@@ -25,13 +25,14 @@ public interface MessageDao extends JpaRepository<Message, Integer> {
     @Query( "UPDATE Message m SET m.isDelete=0 WHERE m.id=?1" )
     Integer updateDeleteStatusById( Integer id );
 
-    @Query( value="SELECT CREATE_TIME FROM (SELECT CREATE_TIME FROM STARCLOUDPORTAL.SCE_COMMON_USER_INFO WHERE USER_ID=?1 ORDER BY CREATE_TIME DESC ) WHERE ROWNUM<=1",nativeQuery=true )
+    @Query( value = "SELECT CREATE_TIME FROM (SELECT CREATE_TIME FROM STARCLOUDPORTAL.SCE_COMMON_USER_INFO WHERE USER_ID=?1 ORDER BY CREATE_TIME DESC ) WHERE ROWNUM<=1", nativeQuery = true )
     Timestamp getNewestTimeByUserId( String userId );
 
-    @Query( value="SELECT CREATE_TIME FROM SCE_COMMON_USER WHERE USER_ID=?1",nativeQuery=true )
+
+    @Query( value = "SELECT CREATE_TIME FROM SCE_COMMON_USER WHERE USER_ID=?1", nativeQuery = true )
     Timestamp getCreateTimeByUserId( String userId );
 
-    List<Message> findByTypeInAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( List type, Timestamp createTime, Integer isDelete,String targetId, Timestamp createTime2, Integer isDelete2 );
+    List< Message > findByTypeInAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( List type, Timestamp createTime, Integer isDelete, String targetId, Timestamp createTime2, Integer isDelete2 );
 
-    List<Message> findByTypeInAndIsDeleteOrTargetIdAndIsDelete( List type,Integer isDelete,String targetId, Integer isDelete2 );
+    List< Message > findByTypeInAndIsDeleteOrTargetIdAndIsDelete( List type, Integer isDelete, String targetId, Integer isDelete2 );
 }
