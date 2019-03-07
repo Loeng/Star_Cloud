@@ -28,7 +28,7 @@
     </delete>
 
     <select id="getAgents" resultType="Map">
-        SELECT a.ID,a.AGENT_NAME,a.IS_ACTIVATE,GRADE,u.LOGIN_PERMISSION_STATUS,a.AGENT_AREA
+        SELECT a.ID,a.AGENT_NAME,a.IS_ACTIVATE,GRADE,u.USER_ID,u.LOGIN_PERMISSION_STATUS,a.AGENT_AREA
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u,STARCLOUDPORTAL.SCE_ENTITY_AGENT a
         WHERE 1=1
         <if test="agentName != null and agentName!= ''" >
