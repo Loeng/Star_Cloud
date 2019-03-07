@@ -42,7 +42,7 @@ public class AgencyController {
     @ApiOperation(value = "代理启用与禁用", notes="通过当前代理活跃状态，改变代理状态", httpMethod = "PUT")
     @PutMapping("/editActivity")
     @ResponseBody
-    public RestRecord editActivity(@RequestParam( "id" ) Integer id,@RequestParam( "isActivate" ) Integer isActivate){
+    public RestRecord editActivity(@RequestParam( "id" ) long id,@RequestParam( "isActivate" ) Integer isActivate){
         int newStatus = (isActivate==0) ? 1 : 0;
         if (agencyService.editActivity(id,newStatus) == 1){
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200,1 );
@@ -56,7 +56,7 @@ public class AgencyController {
     @ResponseBody
     public RestRecord editInfo(@RequestBody @ApiParam( example = "{\"id\": 1743,\"AGENT_NAME\": \"测试一下代理商名称\",\"PROVINCE\": \"四川\",\"CITY\": \"成都\",\"AREA\": \"青羊区\"}" ) String json ){
         Map map = (Map) JSONUtils.parse(json);
-        Integer id = (Integer) map.get("id");
+        long id = (long) map.get("id");
         String agentName = (String) map.get("AGENT_NAME");
         String province = (String) map.get("PROVINCE");
         String city = (String) map.get("CITY");
@@ -72,7 +72,7 @@ public class AgencyController {
     @ApiOperation(value = "代理商代理学校列表查询", notes="通过代理商id查询代理学校列表", httpMethod = "GET")
     @GetMapping("/getSchools/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getSchools(@RequestParam( "id" ) Integer id,
+    public RestRecord getSchools(@RequestParam( "id" ) long id,
                                  @PathVariable (value = "pageNum")Integer pageNum,
                                  @PathVariable (value = "pageSize") Integer pageSize){
 
@@ -85,8 +85,8 @@ public class AgencyController {
     @ApiOperation(value = "代理商代理学校删除", notes="通过代理商id和学校id删除代理商和学校的代理关系", httpMethod = "DELETE")
     @DeleteMapping("/delSchoolRel")
     @ResponseBody
-    public RestRecord delSchoolRel(@RequestParam( "agentId" ) Integer agentId,
-                                   @RequestParam ("schoolId")Integer schoolId){
+    public RestRecord delSchoolRel(@RequestParam( "agentId" ) long agentId,
+                                   @RequestParam ("schoolId")long schoolId){
         int count = agencyService.delSchoolRel(agentId,schoolId);
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200,1 );
@@ -151,6 +151,18 @@ public class AgencyController {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200,1 );
         } else {
             return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
+        }
+    }
+
+    @ApiOperation(value = "删除代理商用户", notes="通过代理商用户id，删除代理商用户", httpMethod = "DELETE")
+    @DeleteMapping("/delAgentUser")
+    @ResponseBody
+    public RestRecord delAgentUser(@RequestParam( "id" ) long id){
+        int count = agencyService.delAgentUser(id);
+        if (count==1){
+            return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
+        } else {
+          return new RestRecord(408,MessageConstants.SCE_MSG_408);
         }
     }
 }

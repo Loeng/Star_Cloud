@@ -52,4 +52,10 @@
         VALUES
             (#{id},#{agentName},#{province},#{city},#{area},#{isDelete})
     </insert>
+
+    <update id="delAgentUser">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
+        SET IS_DELETE=0
+        WHERE ORGANIZATION_ID=#{id}
+    </update>
 </mapper>

@@ -23,7 +23,7 @@ public class AgencyController {
     @ApiOperation(value = "代理商启用与禁用", notes="通过当前代理活跃状态，改变代理状态", httpMethod = "PUT")
     @PutMapping("/editActivity")
     @ResponseBody
-    public RestRecord editActivity(@RequestParam( "id" ) Integer id,@RequestParam( "isActivate" ) Integer isActivate){
+    public RestRecord editActivity(@RequestParam( "id" ) long id,@RequestParam( "isActivate" ) Integer isActivate){
         return agencyService.editActivity(id,isActivate);
     }
 
@@ -37,7 +37,7 @@ public class AgencyController {
     @ApiOperation(value = "代理商代理学校列表查询", notes="通过代理商id查询代理学校列表", httpMethod = "GET")
     @GetMapping("/getSchools/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getSchools(@RequestParam( "id" ) Integer id,
+    public RestRecord getSchools(@RequestParam( "id" ) long id,
                                  @PathVariable (value = "pageNum")Integer pageNum,
                                  @PathVariable (value = "pageSize") Integer pageSize){
         return agencyService.getSchools(id,pageNum,pageSize);
@@ -46,8 +46,8 @@ public class AgencyController {
     @ApiOperation(value = "代理商代理学校删除", notes="通过代理商id和学校id删除代理商和学校的代理关系", httpMethod = "DELETE")
     @DeleteMapping("/delSchoolRel")
     @ResponseBody
-    public RestRecord delSchoolRel(@RequestParam( "agentId" ) Integer agentId,
-                                 @RequestParam ("schoolId")Integer schoolId){
+    public RestRecord delSchoolRel(@RequestParam( "agentId" ) long agentId,
+                                 @RequestParam ("schoolId")long schoolId){
         return agencyService.delSchoolRel(agentId,schoolId);
     }
 
@@ -70,5 +70,10 @@ public class AgencyController {
         return agencyService.insertInfo(json);
     }
 
-
+    @ApiOperation(value = "删除代理商用户", notes="通过代理商用户id，删除代理商用户", httpMethod = "DELETE")
+    @DeleteMapping("/delAgentUser")
+    @ResponseBody
+    public RestRecord delAgentUser(@RequestParam( "id" ) long id){
+        return agencyService.delAgentUser(id);
+    }
 }

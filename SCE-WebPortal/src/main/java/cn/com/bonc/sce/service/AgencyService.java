@@ -16,7 +16,7 @@ public class AgencyService {
     @Autowired
     private AgencyDao agencyDao;
 
-    public RestRecord editActivity(Integer id,Integer isActivate) {
+    public RestRecord editActivity(long id,Integer isActivate) {
         return agencyDao.editActivity(id,isActivate);
     }
 
@@ -24,11 +24,11 @@ public class AgencyService {
         return agencyDao.editInfo(json);
     }
 
-    public RestRecord getSchools(Integer id,Integer pageNum, Integer pageSize){
+    public RestRecord getSchools(long id,Integer pageNum, Integer pageSize){
         return agencyDao.getSchools(id,pageNum,pageSize);
     }
 
-    public RestRecord delSchoolRel(Integer agentId,Integer schoolId){
+    public RestRecord delSchoolRel(long agentId,long schoolId){
         return agencyDao.delSchoolRel(agentId,schoolId);
     }
 
@@ -38,5 +38,9 @@ public class AgencyService {
 
     public RestRecord insertInfo(String json){
         return agencyDao.insertInfo(json);
+    }
+
+    public RestRecord delAgentUser(long id) {
+        return agencyDao.delAgentUser(id);
     }
 }

@@ -19,19 +19,19 @@ public class AgencyService {
     @Autowired
     private AgencyDao agencyDao;
 
-    public int editActivity(Integer id, Integer isActivate){
+    public int editActivity(long id, Integer isActivate){
         return agencyDao.editActivity(id,isActivate);
     }
 
-    public int editInfo(Integer id,String agentName, String province, String city, String area){
+    public int editInfo(long id,String agentName, String province, String city, String area){
         return agencyDao.editInfo(id,agentName,province,city,area);
     }
 
-    public List<SchoolBean> getSchools(Integer id){
+    public List<SchoolBean> getSchools(long id){
         return agencyDao.getSchools(id);
     }
 
-    public int delSchoolRel(Integer agentId, Integer schoolId) {
+    public int delSchoolRel(long agentId, long schoolId) {
         return agencyDao.delSchoolRel(agentId,schoolId);
     }
 
@@ -41,5 +41,9 @@ public class AgencyService {
 
     public int saveAgent(AgentBean agentBean) {
         return agencyDao.saveAgent(agentBean);
+    }
+
+    public int delAgentUser(long id) {
+        return agencyDao.delAgentUser(id);
     }
 }
