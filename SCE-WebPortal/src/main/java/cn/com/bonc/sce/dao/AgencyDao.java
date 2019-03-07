@@ -28,7 +28,9 @@ public interface AgencyDao {
 
     @RequestMapping( value = "/agent/getAgents/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord getAgents(@RequestParam("agentName") String agentName,
-                         @RequestParam("isActivate") Integer isActivate,
+                         //@RequestParam("isActivate") Integer isActivate,
+                         @RequestParam ( value = "grade",required = false) String grade,
+                         @RequestParam ( value = "agentArea",required = false) String agentArea,
                          @PathVariable(value = "pageNum") Integer pageNum,
                          @PathVariable(value = "pageSize") Integer pageSize);
 

@@ -33,8 +33,8 @@ public class AgencyDao {
         return agencyMapper.delSchoolRel(agentId,schoolId);
     }
 
-    public List<AgentBean> getAgents(String agentName, Integer isActivate) {
-        return agencyMapper.getAgents(agentName,isActivate);
+    public List<AgentBean> getAgents(String agentName, String grade,String agentArea) {
+        return agencyMapper.getAgents(agentName,grade,agentArea);
     }
 
     public int saveAgent(AgentBean agentBean) {

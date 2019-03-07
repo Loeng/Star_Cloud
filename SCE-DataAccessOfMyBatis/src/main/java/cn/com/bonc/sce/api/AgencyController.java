@@ -79,8 +79,7 @@ public class AgencyController {
         PageHelper.startPage(pageNum, pageSize);
         List<SchoolBean> schoolList = agencyService.getSchools(id);
         PageInfo pageInfo = new PageInfo(schoolList);
-        List list = pageInfo.getList();
-        return new RestRecord( 200, MessageConstants.SCE_MSG_0200,list );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200,pageInfo );
     }
 
     @ApiOperation(value = "代理商代理学校删除", notes="通过代理商id和学校id删除代理商和学校的代理关系", httpMethod = "DELETE")
@@ -100,15 +99,17 @@ public class AgencyController {
     @GetMapping("/getAgents/{pageNum}/{pageSize}")
     @ResponseBody
     public RestRecord getAgents(@RequestParam ( value = "agentName",required = false) String agentName,
-                                @RequestParam(value = "isActivate",required = false) Integer isActivate,
+                                //@RequestParam(value = "isActivate",required = false) Integer isActivate,
+                                @RequestParam ( value = "grade",required = false) String grade,
+                                @RequestParam ( value = "agentArea",required = false) String agentArea,
                                 @PathVariable (value = "pageNum")Integer pageNum,
                                 @PathVariable (value = "pageSize") Integer pageSize ){
 
         PageHelper.startPage(pageNum, pageSize);
-        List<AgentBean> agentList = agencyService.getAgents(agentName,isActivate);
+        List<AgentBean> agentList = agencyService.getAgents(agentName,grade,agentArea);
         PageInfo pageInfo = new PageInfo(agentList);
         List list = pageInfo.getList();
-        return new RestRecord( 200, MessageConstants.SCE_MSG_0200,list );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200,pageInfo );
     }
 
     @Transactional

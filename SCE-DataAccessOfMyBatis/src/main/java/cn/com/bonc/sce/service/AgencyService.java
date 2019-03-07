@@ -35,8 +35,8 @@ public class AgencyService {
         return agencyDao.delSchoolRel(agentId,schoolId);
     }
 
-    public List<AgentBean> getAgents(String agentName,Integer isActivate){
-        return agencyDao.getAgents(agentName,isActivate);
+    public List<AgentBean> getAgents(String agentName,String grade,String agentArea){
+        return agencyDao.getAgents(agentName,grade,agentArea);
     }
 
     public int saveAgent(AgentBean agentBean) {

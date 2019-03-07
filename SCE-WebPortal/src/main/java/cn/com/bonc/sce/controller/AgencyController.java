@@ -55,10 +55,12 @@ public class AgencyController {
     @GetMapping("/getAgents/{pageNum}/{pageSize}")
     @ResponseBody
     public RestRecord getAgents(@RequestParam ( value = "agentName",required = false) String agentName,
-                                 @RequestParam(value ="isActivate",required = false ) Integer isActivate,
+                                 //@RequestParam(value ="isActivate",required = false ) Integer isActivate,
+                                 @RequestParam ( value = "grade",required = false) String grade,
+                                 @RequestParam ( value = "agentArea",required = false) String agentArea,
                                  @PathVariable (value = "pageNum")Integer pageNum,
                                  @PathVariable (value = "pageSize") Integer pageSize ){
-        return agencyService.getAgents(agentName,isActivate,pageNum,pageSize);
+        return agencyService.getAgents(agentName,grade,agentArea,pageNum,pageSize);
     }
 
     @ApiOperation(value = "新增代理商信息", notes="获取用户编辑数据，写入代理商信息，并在用户信息表插入对应数据", httpMethod = "POST")
@@ -67,4 +69,6 @@ public class AgencyController {
     public RestRecord insertInfo(@RequestBody @ApiParam( example = "{\"AGENT_NAME\": \"测试一下代理商名称\",\"PROVINCE\": \"四川\",\"CITY\": \"成都\",\"AREA\": \"青羊区\"}" ) String json ){
         return agencyService.insertInfo(json);
     }
+
+
 }

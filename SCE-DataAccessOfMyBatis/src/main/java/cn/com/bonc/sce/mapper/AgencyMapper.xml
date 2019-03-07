@@ -34,8 +34,11 @@
         <if test="agentName != null and agentName!= ''" >
             AND AGENT_NAME LIKE CONCAT(CONCAT('%',#{agentName}),'%')
         </if>
-        <if test="isActivate != null and isActivate!=''">
-            AND IS_ACTIVATE=#{isActivate}
+        <if test="grade != null and grade!=''">
+            AND GRADE=#{grade}
+        </if>
+        <if test="agentArea != null and agentArea!=''" >
+            AND AGENT_AREA=#{agentArea}
         </if>
         AND u.USER_TYPE=6
         AND a.ID=u.ORGANIZATION_ID

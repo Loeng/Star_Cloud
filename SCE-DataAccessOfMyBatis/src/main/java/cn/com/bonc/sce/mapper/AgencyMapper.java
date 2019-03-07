@@ -19,7 +19,7 @@ public interface AgencyMapper {
 
     int delSchoolRel(@Param("agentId") Integer agentId, @Param("schoolId")Integer schoolId);
 
-    List<AgentBean> getAgents(@Param("agentName")String agentName, @Param("isActivate")Integer isActivate);
+    List<AgentBean> getAgents(@Param("agentName")String agentName, @Param("grade")String grade,@Param("agentArea") String agentArea);
 
     int saveAgent( AgentBean agentBean);
 }
