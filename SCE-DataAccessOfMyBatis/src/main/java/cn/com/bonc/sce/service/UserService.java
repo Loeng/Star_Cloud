@@ -24,4 +24,16 @@ public class UserService {
     public int saveAccount(AccountBean account) {
         return userDao.saveAccount(account);
     }
+
+    public int delUser(String id) {
+        return userDao.delUser(id);
+    }
+
+    public int resetPwd(String id,String pwd) {
+        return userDao.resetPwd(id,pwd);
+    }
+
+    public int updateLoginPermission(String id, int newStatus) {
+        return userDao.updateLoginPermission(id,newStatus);
+    }
 }
