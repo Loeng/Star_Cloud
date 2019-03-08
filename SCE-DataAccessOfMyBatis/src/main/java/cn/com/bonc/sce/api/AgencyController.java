@@ -56,7 +56,7 @@ public class AgencyController {
     @ResponseBody
     public RestRecord editInfo(@RequestBody @ApiParam( example = "{\"id\": 1743,\"AGENT_NAME\": \"测试一下代理商名称\",\"PROVINCE\": \"四川\",\"CITY\": \"成都\",\"AREA\": \"青羊区\"}" ) String json ){
         Map map = (Map) JSONUtils.parse(json);
-        long id = (long) map.get("id");
+        Integer id = (Integer) map.get("id");
         String agentName = (String) map.get("AGENT_NAME");
         String province = (String) map.get("PROVINCE");
         String city = (String) map.get("CITY");
@@ -154,15 +154,4 @@ public class AgencyController {
         }
     }
 
-    @ApiOperation(value = "删除代理商用户", notes="通过代理商用户id，删除代理商用户", httpMethod = "DELETE")
-    @DeleteMapping("/delAgentUser")
-    @ResponseBody
-    public RestRecord delAgentUser(@RequestParam( "id" ) long id){
-        int count = agencyService.delAgentUser(id);
-        if (count==1){
-            return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
-        } else {
-          return new RestRecord(408,MessageConstants.SCE_MSG_408);
-        }
-    }
 }

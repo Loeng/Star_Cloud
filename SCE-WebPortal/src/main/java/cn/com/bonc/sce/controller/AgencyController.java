@@ -70,10 +70,4 @@ public class AgencyController {
         return agencyService.insertInfo(json);
     }
 
-    @ApiOperation(value = "删除代理商用户", notes="通过代理商用户id，删除代理商用户", httpMethod = "DELETE")
-    @DeleteMapping("/delAgentUser")
-    @ResponseBody
-    public RestRecord delAgentUser(@RequestParam( "id" ) long id){
-        return agencyService.delAgentUser(id);
-    }
 }

@@ -41,7 +41,7 @@ public class AgencyDao {
         return agencyMapper.saveAgent(agentBean);
     }
 
-    public int delAgentUser(long id) {
+    public int delAgentUser(String id) {
         return agencyMapper.delAgentUser(id);
     }
 }

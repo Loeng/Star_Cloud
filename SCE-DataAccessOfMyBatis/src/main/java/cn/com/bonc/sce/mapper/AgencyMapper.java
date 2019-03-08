@@ -23,5 +23,5 @@ public interface AgencyMapper {
 
     int saveAgent( AgentBean agentBean);
 
-    int delAgentUser(@Param("id") long id);
+    int delAgentUser(@Param("id") String id);
 }
