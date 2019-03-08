@@ -28,7 +28,7 @@ public interface AuthorityDao {
      * @return 是否添加成功
      */
     @RequestMapping( value = "/authoritys", method = RequestMethod.POST )
-    public RestRecord insertAuthority(Authority authority);
+    public RestRecord insertAuthority( Authority authority );
 
     /**
      * 获取机构
@@ -36,8 +36,8 @@ public interface AuthorityDao {
      * @return 获取机构
      */
     @RequestMapping( value = "/authoritys", method = RequestMethod.GET )
-    public RestRecord getAll(@RequestParam( "pageNum" ) Integer pageNum,
-                             @RequestParam( "pageSize" ) Integer pageSize);
+    public RestRecord getAll( @RequestParam( "pageNum" ) Integer pageNum,
+                              @RequestParam( "pageSize" ) Integer pageSize );
 
     /**
      * 获取机构用户
@@ -45,6 +45,12 @@ public interface AuthorityDao {
      * @return 获取机构用户
      */
     @RequestMapping( value = "/authoritys/user", method = RequestMethod.GET )
-    public RestRecord getUser(@RequestParam( "pageNum" ) Integer pageNum,
-                             @RequestParam( "pageSize" ) Integer pageSize);
+    public RestRecord getUser(
+            @RequestParam( value = "edu_id", required = false ) String edu_id,
+            @RequestParam( value = "edu_name", required = false ) String edu_name,
+            @RequestParam( value = "to_login", required = false ) String to_login,
+            @RequestParam( "pageNum" ) Integer pageNum,
+            @RequestParam( "pageSize" ) Integer pageSize
+
+    );
 }

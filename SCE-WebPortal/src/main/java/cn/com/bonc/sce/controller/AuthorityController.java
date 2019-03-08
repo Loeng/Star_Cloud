@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@Api( value = "机构", tags = "机构"  )
+@Api( value = "机构", tags = "机构" )
 @ApiResponses( {
         @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ),
         @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
@@ -58,9 +58,9 @@ public class AuthorityController {
     } )
     @GetMapping
     @ResponseBody
-    public RestRecord getAll(@RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
-                             @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize) {
-        return authorityService.getAll(pageNum,pageSize);
+    public RestRecord getAll( @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) @ApiParam( name = "pageNum", value = "页码" ) Integer pageNum,
+                              @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) @ApiParam( name = "pageSize", value = "数量" ) Integer pageSize ) {
+        return authorityService.getAll( pageNum, pageSize );
     }
 
     /**
@@ -73,10 +73,14 @@ public class AuthorityController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
     } )
-    @GetMapping("/user")
+    @GetMapping( "/user" )
     @ResponseBody
-    public RestRecord getUser(@RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
-                             @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize) {
-        return authorityService.getUser(pageNum,pageSize);
+    public RestRecord getUser( @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) @ApiParam( name = "pageNum", value = "页码" ) Integer pageNum,
+                               @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) @ApiParam( name = "pageSize", value = "数量" ) Integer pageSize,
+                               @RequestParam( value = "edu_id", required = false ) @ApiParam( name = "edu_id", value = "组织编号" ) String edu_id,
+                               @RequestParam( value = "edu_name", required = false ) @ApiParam( name = "edu_name", value = "机构名称" ) String edu_name,
+                               @RequestParam( value = "to_login", required = false ) @ApiParam( name = "to_login", value = "是否允许登陆(1,允许，0不许，为空查询全部)" ) String to_login
+    ) {
+        return authorityService.getUser( edu_id, edu_name, to_login, pageNum, pageSize );
     }
 }
