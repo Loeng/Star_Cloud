@@ -2,6 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.FileUploadDao;
+import cn.com.bonc.sce.exception.ImportUserFailedException;
 import cn.com.bonc.sce.model.ExcelToUser;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.FileUploadUtil;
@@ -113,9 +114,9 @@ public class FileUploadService {
         }
     }
 
-    public RestRecord uploadUserInfo( List< ExcelToUser > list, String userType ) {
+    public RestRecord uploadUserInfo( List< ExcelToUser > list, String userType, String currentUserId ) throws ImportUserFailedException {
 
-        return fileUploadDao.uploadUserInfo( list, userType );
+        return fileUploadDao.uploadUserInfo( list, userType, currentUserId );
 
     }
 

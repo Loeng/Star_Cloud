@@ -1,7 +1,6 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.entity.FamilyInfoEntity;
-import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -31,7 +29,7 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
 
     // 查询和搜索 学校 -> 教师 的列表信息
     @Query( value = "SELECT * FROM  STARCLOUDPORTAL.v_teacher_info WHERE  NVL(USER_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%'))  AND  NVL(USER_ACCOUNT,' ')LIKE CONCAT('%',CONCAT(?2,'%'))  AND   NVL(AUTHORITY_NAME,' ')LIKE CONCAT('%',CONCAT(?3,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?4,'%'))", nativeQuery = true )
-    Page< Map< String, Object > > findTeacherByCondition( String name, String account, String organization_name,String login, Pageable pageable );
+    Page< Map< String, Object > > findTeacherByCondition( String name, String account, String organization_name, String login, Pageable pageable );
 
     // 查询和搜索 学校 -> 学生 的列表信息
     @Query( value = "SELECT * FROM STARCLOUDPORTAL.v_student_info WHERE NVL(USER_NAME,' ') LIKE CONCAT('%',CONCAT(?1,'%'))  AND NVL(USER_ACCOUNT,' ')LIKE CONCAT('%',CONCAT(?2,'%'))  AND  NVL(AUTHORITY_NAME,' ')LIKE CONCAT('%',CONCAT(?3,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?4,'%'))", nativeQuery = true )
@@ -39,7 +37,7 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
 
     // 查询和搜索 学校 -> 家长 的列表信息 // countQuery = "SELECT COUNT(*) FROM \"v_family_info\"  "
     @Query( value = "SELECT * FROM STARCLOUDPORTAL.v_family_info WHERE NVL(USER_NAME,' ') LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(USER_ACCOUNT,' ')LIKE CONCAT('%',CONCAT(?2,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%'))", nativeQuery = true )
-    Page< Map< String, Object > > findFamilyByCondition( String name, String account,String login, Pageable pageable );
+    Page< Map< String, Object > > findFamilyByCondition( String name, String account, String login, Pageable pageable );
 
     @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE IS_FIRST_LOGIN = 1", nativeQuery = true )
     Integer getUserCount();
@@ -66,7 +64,7 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
                     "FROM STARCLOUDPORTAL.SCE_COMMON_USER u LEFT JOIN STARCLOUDPORTAL.SCE_INFO_THIRD_PARTY p on p.USER_ID = u.USER_ID\n" +
                     "WHERE NVL(u.LOGIN_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(u.USER_NAME,' ')LIKE CONCAT('%',CONCAT(?2,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%')) AND u.USER_TYPE = 8",
             nativeQuery = true )
-    Page< Map > findSelfRegALLByNameOrCount( String byName, String loginName,String login, Pageable pageable );
+    Page< Map > findSelfRegALLByNameOrCount( String byName, String loginName, String login, Pageable pageable );
 
 
     /**
@@ -123,13 +121,13 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
     @Modifying
     @Query( nativeQuery = true,
             value = "INSERT INTO \"STARCLOUDPORTAL\".\"SCE_COMMON_USER\" (\"USER_ID\",\"LOGIN_NAME\",\"USER_NAME\",\"GENDER\",\"USER_TYPE\",\"MAIL_ADDRESS\",\"CERTIFICATE_TYPE\",\"CERTIFICATE_NUMBER\",\"PHONE_NUMBER\",\"ADDRESS\",\"CREATE_TIME\",\"ORGANIZATION_ID\", \"REMARKS\", \"SECRET\" )\n" +
-                    "VALUES ( :userId,:loginName,:userName,:gender,:userType,:mailAddress,:certificateType,:certificateNumber,:phoneNumber,:address,:createTime,:organizationId,:remarks,:secret)" )
+                    "VALUES ( :userId,:loginName,:userName,:gender,:userType,:mailAddress,:certificateType,:certificateNumber,:phoneNumber,:address,:createTime,TO_NUMBER(:organizationId),:remarks,:secret)" )
     int insertUser( @Param( "userId" ) String userId, @Param( "loginName" ) String loginName,
                     @Param( "userName" ) String userName, @Param( "gender" ) String gender,
-                    @Param( "userType" ) int userType, @Param( "mailAddress" ) String mailAddress,
-                    @Param( "certificateType" ) int certificateType, @Param( "certificateNumber" ) String certificateNumber,
+                    @Param( "userType" ) Integer userType, @Param( "mailAddress" ) String mailAddress,
+                    @Param( "certificateType" ) Integer certificateType, @Param( "certificateNumber" ) String certificateNumber,
                     @Param( "phoneNumber" ) String phoneNumber, @Param( "address" ) String address,
-                    @Param( "createTime" ) Date createTime, @Param( "organizationId" ) String organizationId,
+                    @Param( "createTime" ) Date createTime, @Param( "organizationId" ) Long organizationId,
                     @Param( "remarks" ) String remarks, @Param( "secret" ) String secret );
 
 
@@ -171,11 +169,11 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
 
     @Modifying
     @Query( nativeQuery = true, value = "INSERT INTO STARCLOUDPORTAL.SCE_INFO_TEACHER ( USER_ID,\"POSITION\",\"SUBJECT\",SCHOOL_AGE,REMARKS)\n" +
-            "VALUES (:userId,:position,:subject,:schoolAge,:remarks)" )
+            "VALUES (:userId,:position,:subject,to_number(:schoolAge),:remarks)" )
     int insertInfoTeacher( @Param( "userId" ) String userId,
                            @Param( "position" ) String position,
                            @Param( "subject" ) String subject,
-                           @Param( "schoolAge" ) String schoolAge,
+                           @Param( "schoolAge" ) Long schoolAge,
                            @Param( "remarks" ) String remarks );
 
 }

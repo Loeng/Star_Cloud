@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.AppMarketMapper">
+
+    <select id="selectAppCount" resultType="Map">
+        select t.app_type_name,count(tr.app_type_id) from STARCLOUDMARKET.SCE_MARKET_APP_TYPE t
+        left join STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL tr
+        on t.app_type_id = tr.app_type_id
+        group by t.app_type_name,tr.app_type_id
+    </select>
+
+</mapper>

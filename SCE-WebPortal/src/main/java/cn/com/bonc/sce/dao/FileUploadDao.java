@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.model.ExcelToUser;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -37,7 +38,7 @@ public interface FileUploadDao {
      * @return
      */
     @RequestMapping( value = "/file-upload/upload-user-info", method = RequestMethod.POST )
-    RestRecord uploadUserInfo( @RequestBody List<ExcelToUser> list,@RequestParam("userType") String userType);
+    RestRecord uploadUserInfo(@RequestBody List<ExcelToUser> list, @RequestParam("userType") String userType, @RequestParam("currentUserId") String currentUserId);
 
     /**
      * 根据id获取文件储存路径

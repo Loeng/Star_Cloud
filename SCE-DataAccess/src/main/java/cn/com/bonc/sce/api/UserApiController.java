@@ -102,13 +102,17 @@ public class UserApiController {
                 user.setUserDetailedInfo( query.getResultList() );
             }
 
-            //查询学生学校名称和学生年级
+
             if(user.getUserType() == 1){
+                //查询学生学校名称和学生年级
                 School school = new School();
                 school.setSchoolName(userDao.findSchoolByOrganizationId(user.getOrganizationId()));
                 school.setGrade(userDao.findGradeByUserId(userId));
-                System.out.println("年级："+school.getGrade());
-                System.out.println("userId："+userId);
+                user.setSchool(school);
+            }else if(user.getUserType() == 2){
+                //查询教师所在单位
+                School school = new School();
+                school.setSchoolName(userDao.findSchoolByOrganizationId(user.getOrganizationId()));
                 user.setSchool(school);
             }
 
