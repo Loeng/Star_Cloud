@@ -117,7 +117,7 @@ public class CompanyInfoApiController {
             //创建“管理员账号”
             String userId = UUID.getUUID();
             userInfoRepository.insertUser( userId, IDUtil.createID( "cj_" ), "", "", 4, "", 0, "", "",
-                    "", new Date(), companyInfo.getCompanyId().toString(), "厂商管理员", Secret.generateSecret() );
+                    "", new Date(), companyInfo.getCompanyId(), "厂商管理员", Secret.generateSecret() );
             //创建密码
             UserPassword password = new UserPassword();
             password.setUserId( userId );

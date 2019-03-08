@@ -57,7 +57,7 @@ public class AgentApiController {
             //创建“管理员账号”
             String userId = UUID.getUUID();
             userInfoRepository.insertUser( userId, IDUtil.createID( "dl_" ), "", "", 6, "", 0, "", "",
-                    "", new Date(), String.valueOf( saveAgentInfo.getAgentId() ), "代理管理员", Secret.generateSecret() );
+                    "", new Date(), saveAgentInfo.getAgentId(), "代理管理员", Secret.generateSecret() );
             //创建密码
             UserPassword password = new UserPassword();
             password.setIsDelete( 1 );
