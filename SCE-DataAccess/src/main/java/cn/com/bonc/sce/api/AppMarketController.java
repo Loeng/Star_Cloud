@@ -1,5 +1,4 @@
 package cn.com.bonc.sce.api;
-
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppMarketService;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api( value = "应用商城接口", tags = "应用商城接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @RestController
-@RequestMapping("/app-portal")
+@RequestMapping("/app-market")
 public class AppMarketController {
 
     private AppMarketService appMarketService;
@@ -32,12 +31,9 @@ public class AppMarketController {
 
     @GetMapping("/appCount")
     public RestRecord appCount(){
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.getAppCount());
-    }
-
-    @GetMapping("/userToDo")
-    public RestRecord userToDo(){
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.userToDo());
+        System.out.println("我的Mybatis");
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+//        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.getAppCount());
     }
 
 }

@@ -15,4 +15,24 @@
         VALUES
             (#{id},#{password},#{isDelete},#{userId})
     </insert>
+
+    <update id="delUser">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
+        SET IS_DELETE=0
+        WHERE USER_ID=#{id}
+    </update>
+
+    <update id="resetPwd">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
+        SET PASSWORD=#{pwd}
+        WHERE USER_ID=#{id}
+    </update>
+    
+    <update id="updateLoginPermission">
+        UPDATE
+        STARCLOUDPORTAL.SCE_COMMON_USER
+        SET LOGIN_PERMISSION_STATUS = #{newStatus}
+        WHERE
+        USER_ID = #{id}
+    </update>
 </mapper>

@@ -40,7 +40,5 @@ public class AgencyService {
         return agencyDao.insertInfo(json);
     }
 
-    public RestRecord delAgentUser(long id) {
-        return agencyDao.delAgentUser(id);
-    }
+
 }

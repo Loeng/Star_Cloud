@@ -43,7 +43,7 @@ public class AgencyService {
         return agencyDao.saveAgent(agentBean);
     }
 
-    public int delAgentUser(long id) {
+    public int delAgentUser(String id) {
         return agencyDao.delAgentUser(id);
     }
 }

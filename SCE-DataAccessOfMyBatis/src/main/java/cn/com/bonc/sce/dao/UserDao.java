@@ -22,4 +22,16 @@ public class UserDao {
     public int saveAccount(AccountBean account) {
         return userMapper.saveAccount(account);
     }
+
+    public int delUser(String id) {
+        return userMapper.delUser(id);
+    }
+
+    public int resetPwd(String id,String pwd) {
+        return userMapper.resetPwd(id,pwd);
+    }
+
+    public int updateLoginPermission(String id, int newStatus) {
+        return userMapper.updateLoginPermission(id,newStatus);
+    }
 }

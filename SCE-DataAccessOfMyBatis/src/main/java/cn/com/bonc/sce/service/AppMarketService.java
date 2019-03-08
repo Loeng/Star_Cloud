@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -14,8 +15,12 @@ public class AppMarketService {
     @Autowired
     AppMarketMapper appMarketMapper;
 
-    public Map getAppCount(){
+    public List<Map> getAppCount(){
         return appMarketMapper.selectAppCount();
+    }
+
+    public List<Map> userToDo(){
+        return appMarketMapper.selectUserToDo();
     }
 
 }

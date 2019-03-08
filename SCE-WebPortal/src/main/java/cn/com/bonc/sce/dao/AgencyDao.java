@@ -37,6 +37,4 @@ public interface AgencyDao {
     @RequestMapping( value = "/agent/insertInfo", method = RequestMethod.POST )
     RestRecord insertInfo(String json);
 
-    @RequestMapping( value = "/agent/delAgentUser", method = RequestMethod.DELETE )
-    RestRecord delAgentUser(@RequestParam("id")long id);
 }
