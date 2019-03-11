@@ -3,11 +3,26 @@
 <mapper namespace="cn.com.bonc.sce.mapper.AppMarketMapper">
 
     <select id="selectAppCount" resultType="Map">
-        select t.app_type_name,count(tr.app_type_id) as num from STARCLOUDMARKET.SCE_MARKET_APP_TYPE t
-        left join STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL tr
-        on t.app_type_id = tr.app_type_id
-        where t.is_delete = 1
-        group by t.app_type_name,tr.app_type_id
+ SELECT
+	T.APP_TYPE_NAME,
+	COUNT( TR.APP_TYPE_ID ) AS NUM
+FROM
+	STARCLOUDMARKET.SCE_MARKET_APP_TYPE T
+	LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL TR ON T.APP_TYPE_ID = TR.APP_TYPE_ID
+WHERE
+	T.IS_DELETE = 1
+	AND TR.APP_ID IN (
+	SELECT
+		AI.APP_ID
+	FROM
+		STARCLOUDMARKET.SCE_MARKET_APP_INFO AI
+		INNER JOIN ( SELECT DISTINCT APP_ID FROM STARCLOUDMARKET.SCE_MARKET_APP_VERSION AV WHERE APP_STATUS = '4' AND IS_DELETE = 1 ) AVB ON AI.APP_ID = AVB.APP_ID WHERE AI.IS_DELETE=1
+	)
+
+GROUP BY
+	T.APP_TYPE_NAME,
+	TR.APP_TYPE_ID
+
     </select>
 
     <select id="selectUserToDo" resultType="Map">
