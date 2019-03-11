@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.UserInfoMybatisMapper">
+
+    <update id="updateUserInfo" parameterType="Map">
+        UPDATE
+        STARCLOUDPORTAL.SCE_COMMON_USER
+        <set>
+            <if test="LOGIN_NAME != null and LOGIN_NAME != ''">
+                LOGIN_NAME = #{LOGIN_NAME} ,
+            </if>
+            <if test=" USER_NAME != null and USER_NAME != ''">
+                USER_NAME = #{USER_NAME} ,
+            </if>
+            <if test="PHONE_NUMBER != null and PHONE_NUMBER != ''">
+                PHONE_NUMBER = #{PHONE_NUMBER} ,
+            </if>
+            <if test=" MAIL_ADDRESS != null and MAIL_ADDRESS != ''">
+                MAIL_ADDRESS = #{MAIL_ADDRESS},
+            </if>
+            <if test=" REMARKS != null and REMARKS != ''">
+                REMARKS = #{REMARKS},
+            </if>
+            <if test=" HEAD_PORTRAIT != null and HEAD_PORTRAIT != ''">
+                HEAD_PORTRAIT = #{HEAD_PORTRAIT}
+            </if>
+        </set>
+        WHERE
+        USER_ID = #{USER_ID}
+    </update>
+
+    <update id="updatePassword" parameterType="Map">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD a
+            SET a.IS_DELETE = 0
+        WHERE
+	        a.USER_ID = (
+	            SELECT
+		              USER_ID
+	            FROM
+		              STARCLOUDPORTAL.SCE_COMMON_USER
+	            WHERE
+	                  PHONE_NUMBER = #{PHONE_NUMBER}
+	            )
+    </update>
+
+    <insert id="">
+        <selectKey keyProperty="ID" resultType="java.lang.Integer" order="BEFORE" statementType="PREPARED">
+            SELECT STARCLOUDMARKET.SEQ_GEN_COMMON_USER_PASSWORD.NEXTVAL FROM DUAL
+        </selectKey>
+        insert into STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD(USER_ID,PASSWORD,IS_DELETE,ID)
+        values((select USER_ID from STARCLOUDPORTAL.SCE_COMMON_USER where PHONE_NUMBER = #{PHONE_NUMBER}),#{PASSWORD},1,#{ID})
+    </insert>
+
+</mapper>

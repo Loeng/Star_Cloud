@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.WorkbenchMapper">
+
+    <update id="deleteAddress" parameterType="Integer">
+        UPDATE
+        STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO set IS_DELETE = 0 where ID = #{ID}
+    </update>
+
+    <select id="getAddress" parameterType="String" resultType="Map">
+        select * from STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO where USER_ID = #{USER_ID}
+    </select>
+
+    <select id="defaultTotal" parameterType="String" resultType="Integer">
+        select count(1) as total from STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO where USER_ID = #{USER_ID} and IS_DEFAULT = '1'
+    </select>
+
+    <update id="setDefault" parameterType="String">
+        update STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO set IS_DEFAULT = 0 where USER_ID = #{USER_ID}
+    </update>
+
+    <update id="updateAddress" parameterType="String">
+        update STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO
+        <set>
+            <if test="ADDRESSEE_NAME != null and ADDRESSEE_NAME != ''">ADDRESSEE_NAME = #{ADDRESSEE_NAME} ,</if>
+            <if test="PROVINCE != null and PROVINCE != ''">PROVINCE = #{PROVINCE} ,</if>
+            <if test="CITY != null and CITY != ''">CITY = #{CITY} ,</if>
+            <if test="AREA != null and AREA != ''">AREA = #{AREA} ,</if>
+            <if test="TELEPHONE_NUMBER != null and TELEPHONE_NUMBER != ''">TELEPHONE_NUMBER = #{TELEPHONE_NUMBER} ,</if>
+            <if test="POST_NUMBER != null and POST_NUMBER != ''">POST_NUMBER = #{POST_NUMBER} ,</if>
+            <if test="POST_ADDRESS != null and POST_ADDRESS != ''">POST_ADDRESS = #{POST_ADDRESS} ,</if>
+            <if test="IS_DEFAULT != null and IS_DEFAULT != ''">IS_DEFAULT = #{IS_DEFAULT}</if>
+        </set>
+        where ID = #{ID}
+    </update>
+
+    <insert id="addAddress" parameterType="Map">
+        <selectKey keyProperty="ID" resultType="java.lang.Integer" order="BEFORE" statementType="PREPARED">
+            SELECT STARCLOUDMARKET.SEQ_SCE_COMMON_USER_POST_INFO.NEXTVAL FROM DUAL
+        </selectKey>
+        insert into
+        STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO(ID,USER_ID,ADDRESSEE_NAME,PROVINCE,CITY,AREA,TELEPHONE_NUMBER,POST_NUMBER,POST_ADDRESS,IS_DEFAULT,IS_DELETE)
+        values
+        (#{ID},#{USER_ID},#{ADDRESSEE_NAME},#{PROVINCE},#{CITY},#{AREA},#{TELEPHONE_NUMBER},#{POST_NUMBER},#{POST_ADDRESS},#{IS_DEFAULT},1)
+    </insert>
+
+    <select id="getStudentBinding" parameterType="String" resultType="Map">
+        SELECT
+            sisp.ID,
+	        scu.HEAD_PORTRAIT,
+	        scu.USER_NAME,
+	        ses.SCHOOL_NAME,
+	        sis.CLASS_NUMBER,
+	        sis.GRADE
+        FROM
+	        STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL sisp
+	        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT sis ON sisp.STUDENT_USER_ID = sis.USER_ID
+	        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu ON sisp.STUDENT_USER_ID = scu.USER_ID
+	        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ses ON scu.ORGANIZATION_ID = ses.ID
+        WHERE
+	      sisp.PARENT_USER_ID = #{USER_ID}
+    </select>
+
+    <delete id="deleteStudentBinding" parameterType="Map">
+        delete from STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL where ID = #{ID}
+    </delete>
+
+    <select id="queryStudentUserId" parameterType="Map" resultType="java.lang.String">
+        SELECT
+        scu.USER_ID
+        FROM
+            STARCLOUDPORTAL.SCE_COMMON_USER scu
+            LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD scup ON scu.USER_ID = scup.USER_ID
+        WHERE
+            scu.USER_NAME = #{USER_NAME}
+            AND scu.LOGIN_NAME = #{LOGIN_NAME}
+            AND scu.CERTIFICATE_NUMBER = #{CERTIFICATE_NUMBER}
+            AND scup.PASSWORD = #{PASSWORD}
+    </select>
+
+    <select id="queryIsBinding"  resultType="java.lang.Integer">
+        select count(1) from STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL
+        where PARENT_USER_ID = #{PARENT_USER_ID} and STUDENT_USER_ID = #{STUDENT_USER_ID}
+    </select>
+
+    <insert id="addStudentBinding">
+        <selectKey keyProperty="ID" resultType="java.lang.Integer" order="BEFORE" statementType="PREPARED">
+            SELECT STARCLOUDMARKET.SEQ_GEN_INFO_STUDENT_PARENT_REL.NEXTVAL FROM DUAL
+        </selectKey>
+        insert into STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL(ID,PARENT_USER_ID,STUDENT_USER_ID,IS_MAIN)
+        values(#{ID},#{PARENT_USER_ID},#{STUDENT_USER_ID},1)
+    </insert>
+
+</mapper>
