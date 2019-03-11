@@ -15,7 +15,7 @@ public class AppMarketService {
         return appMarketDao.appCount();
     }
 
-    public RestRecord userToDo(){
-        return appMarketDao.userToDo();
+    public RestRecord userToDo(String userId){
+        return appMarketDao.userToDo(userId);
     }
 }

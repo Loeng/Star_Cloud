@@ -19,8 +19,8 @@ public class AppMarketService {
         return appMarketMapper.selectAppCount();
     }
 
-    public List<Map> userToDo(){
-        return appMarketMapper.selectUserToDo();
+    public List<Map> userToDo(String userId){
+        return appMarketMapper.selectUserToDo(userId);
     }
 
 }

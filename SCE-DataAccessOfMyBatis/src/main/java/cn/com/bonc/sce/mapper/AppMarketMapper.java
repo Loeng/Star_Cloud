@@ -10,6 +10,6 @@ public interface AppMarketMapper {
 
     List<Map> selectAppCount();
 
-    List<Map> selectUserToDo();
+    List<Map> selectUserToDo(String userId);
 
 }

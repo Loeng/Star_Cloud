@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppMarketService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class AppMarketController {
     }
 
     @GetMapping("/userToDo")
-    public RestRecord userToDo(){
-        return appMarketService.userToDo();
+    public RestRecord userToDo(@CurrentUserId String userId){
+        return appMarketService.userToDo(userId);
     }
 }

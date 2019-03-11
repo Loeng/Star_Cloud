@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppMarketService;
@@ -36,8 +37,8 @@ public class AppMarketController {
     }
 
     @GetMapping("/userToDo")
-    public RestRecord userToDo(){
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.userToDo());
+    public RestRecord userToDo(@CurrentUserId String userId){
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.userToDo(userId));
     }
 
 }
