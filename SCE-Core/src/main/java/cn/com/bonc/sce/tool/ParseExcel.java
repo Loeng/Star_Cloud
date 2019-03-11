@@ -28,8 +28,20 @@ import java.util.NoSuchElementException;
  */
 public class ParseExcel {
 
-    private  final   static Logger log = LoggerFactory.getLogger( ParseExcel.class );
+    private final static Logger log = LoggerFactory.getLogger( ParseExcel.class );
 
+    /**
+     * 功能描述：复杂导出Excel，包括文件名以及表名。创建表头
+     *
+     * @param list           导出的实体类
+     * @param title          表头名称
+     * @param sheetName      sheet表名
+     * @param pojoClass      映射的实体类
+     * @param isCreateHeader 是否创建表头
+     * @param fileName
+     * @param response
+     * @return
+     */
     public static void exportExcel( List< ? > list, String title, String sheetName, Class< ? > pojoClass, String fileName, boolean isCreateHeader, HttpServletResponse response ) {
         ExportParams exportParams = new ExportParams( title, sheetName );
         exportParams.setCreateHeadRows( isCreateHeader );
@@ -37,14 +49,43 @@ public class ParseExcel {
 
     }
 
+    /**
+     * 功能描述：复杂导出Excel，包括文件名以及表名,不创建表头
+     *
+     * @param list      导出的实体类
+     * @param title     表头名称
+     * @param sheetName sheet表名
+     * @param pojoClass 映射的实体类
+     * @param fileName
+     * @param response
+     * @return
+     */
     public static void exportExcel( List< ? > list, String title, String sheetName, Class< ? > pojoClass, String fileName, HttpServletResponse response ) {
         defaultExport( list, pojoClass, fileName, response, new ExportParams( title, sheetName ) );
     }
 
+    /**
+     * 功能描述：Map 集合导出
+     *
+     * @param list     实体集合
+     * @param fileName 导出的文件名称
+     * @param response
+     * @return
+     */
     public static void exportExcel( List< Map< String, Object > > list, String fileName, HttpServletResponse response ) {
         defaultExport( list, fileName, response );
     }
 
+    /**
+     * 功能描述：默认导出方法
+     *
+     * @param list         导出的实体集合
+     * @param fileName     导出的文件名
+     * @param pojoClass    pojo实体
+     * @param exportParams ExportParams封装实体
+     * @param response
+     * @return
+     */
     private static void defaultExport( List< ? > list, Class< ? > pojoClass, String fileName, HttpServletResponse response, ExportParams exportParams ) {
         Workbook workbook = ExcelExportUtil.exportExcel( exportParams, pojoClass, list );
         if ( workbook != null ) {
@@ -53,7 +94,15 @@ public class ParseExcel {
         downLoadExcel( fileName, response, workbook );
     }
 
-    private static void downLoadExcel( String fileName, HttpServletResponse response, Workbook workbook ) {
+    /**
+     * 功能描述：Excel导出
+     *
+     * @param fileName 文件名称
+     * @param response
+     * @param workbook Excel对象
+     * @return
+     */
+    public static void downLoadExcel( String fileName, HttpServletResponse response, Workbook workbook ) {
         try {
             response.setCharacterEncoding( "UTF-8" );
             response.setHeader( "content-Type", "application/vnd.ms-excel" );
@@ -61,7 +110,7 @@ public class ParseExcel {
                     "attachment;filename=" + URLEncoder.encode( fileName, "UTF-8" ) );
             workbook.write( response.getOutputStream() );
         } catch ( IOException e ) {
-              log.error( e.getMessage() );
+            log.error( e.getMessage() );
         }
     }
 
@@ -72,7 +121,15 @@ public class ParseExcel {
         }
         downLoadExcel( fileName, response, workbook );
     }
-
+    /**
+     * 功能描述：根据文件路径来导入Excel
+     *
+     * @param filePath   文件路径
+     * @param titleRows  表标题的行数
+     * @param headerRows 表头行数
+     * @param pojoClass  Excel实体类
+     * @return
+     */
     public static < T > List< T > importExcel( String filePath, Integer titleRows, Integer headerRows, Class< T > pojoClass ) {
         if ( StringUtils.isBlank( filePath ) ) {
             return null;
@@ -84,7 +141,7 @@ public class ParseExcel {
         try {
             list = ExcelImportUtil.importExcel( new File( filePath ), pojoClass, params );
         } catch ( NoSuchElementException e ) {
-            log.error( "模板不能为空"  );
+            log.error( "模板不能为空" );
         } catch ( Exception e ) {
             e.printStackTrace();
             log.error( e.getMessage() );
@@ -95,10 +152,11 @@ public class ParseExcel {
 
     /**
      * 针对上传文件解析
-     * @param file
-     * @param titleRows
-     * @param headerRows
-     * @param pojoClass
+     *
+     * @param file 上传的文件
+     * @param titleRows 表标题的行数
+     * @param headerRows 表头行数
+     * @param pojoClass Excel实体类
      * @param <T>
      * @return
      */

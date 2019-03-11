@@ -1,7 +1,9 @@
 package cn.com.bonc.sce.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
-import java.sql.Time;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -14,13 +16,14 @@ import java.util.Objects;
 public class DownloadCount {
     private long id;
     private String appId;
-    private Time downloadTime;
+    private Date downloadTime;
     private String userId;
     private String downloadUserIp;
     private Long isDelete = 1L;
+    private String appVersion;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // @GeneratedValue(strategy = GenerationType.AUTO)
     @Column( name = "ID", nullable = false, precision = 0 )
     public long getId() {
         return id;
@@ -42,11 +45,12 @@ public class DownloadCount {
 
     @Basic
     @Column( name = "DOWNLOAD_TIME" )
-    public Time getDownloadTime() {
+    @CreationTimestamp
+    public Date getDownloadTime() {
         return downloadTime;
     }
 
-    public void setDownloadTime( Time downloadTime ) {
+    public void setDownloadTime( Date downloadTime ) {
         this.downloadTime = downloadTime;
     }
 
@@ -80,6 +84,16 @@ public class DownloadCount {
         this.isDelete = isDelete;
     }
 
+    @Basic
+    @Column( name = "APP_VERSION" )
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion( String appVersion ) {
+        this.appVersion = appVersion;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) {
@@ -94,11 +108,12 @@ public class DownloadCount {
                 Objects.equals( downloadTime, that.downloadTime ) &&
                 Objects.equals( userId, that.userId ) &&
                 Objects.equals( downloadUserIp, that.downloadUserIp ) &&
-                Objects.equals( isDelete, that.isDelete );
+                Objects.equals( isDelete, that.isDelete ) &&
+                Objects.equals( appVersion, that.appVersion );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( id, appId, downloadTime, userId, downloadUserIp, isDelete );
+        return Objects.hash( id, appId, downloadTime, userId, downloadUserIp, isDelete, appVersion );
     }
 }
