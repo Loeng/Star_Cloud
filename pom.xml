@@ -45,7 +45,7 @@
         <!-- jwt version -->
         <jjwt-version>0.10.5</jjwt-version>
         <!-- excel -->
-        <easypoi-base-version>3.0.3</easypoi-base-version>
+        <easypoi-base-version>4.0.0</easypoi-base-version>
         <!-- aop -->
         <aspectj-weaver-version>1.5.3</aspectj-weaver-version>
         <!-- compilor -->
