@@ -47,6 +47,16 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
                         , BigDecimal organizationId, Date birthDate, String secret);
 
     /**
+     * 插入用户啊
+     * @param
+     * @return
+     */
+    @Modifying
+    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,LOGIN_NAME,USER_TYPE,ORGANIZATION_ID,SECRET) VALUES " +
+            "(?1,?2,?3,?4,?5)  " )
+    int savaAllUserInfo(String id, String loginName, String userType, String organizationId, String secret);
+
+    /**
      * 插入用户的parent
      * @param
      * @return
