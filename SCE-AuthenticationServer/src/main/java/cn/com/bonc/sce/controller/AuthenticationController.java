@@ -52,6 +52,9 @@ public class AuthenticationController {
         this.appSecretAutoManageService = singleInstanceAppSecretAutoManageService;
     }
 
+    /**
+     * #TODO 理应删除 loginType 字段，并且为每种登录方式单独创建接口。
+     */
     @ApiOperation( value = "用户登录接口", notes = "用戶名/邮箱/手机号登录都需要走此接口", httpMethod = "POST" )
     @ApiResponses( value = {
             @ApiResponse( code = 100, message = WebMessageConstants.SCE_PORTAL_MSG_100 + "样例数据：{\"msg\":\"不支持的登录类型\",\"code\":100}", response = RestRecord.class, examples = @Example( {
