@@ -5,6 +5,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.encrypt.AppSecretAutoManageService;
 import cn.com.bonc.sce.encrypt.SingleInstanceAppSecretAutoManageService;
 import cn.com.bonc.sce.encrypt.UnstandardEncryptedDataException;
+import cn.com.bonc.sce.exception.UnsupportedAuthenticationTypeException;
 import cn.com.bonc.sce.model.SSOAuthentication;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -38,12 +39,7 @@ import java.util.Map;
 @RequestMapping( "/authentication" )
 @RestController
 public class AuthenticationController {
-    /**
-     * 本系统支持的登录类型
-     */
-    private static final int AUTH_TYPE_0 = 0;
-    private static final int AUTH_TYPE_1 = 1;
-    private static final int AUTH_TYPE_2 = 2;
+
 
     private UserService userService;
     private LoginService loginService;
@@ -56,6 +52,9 @@ public class AuthenticationController {
         this.appSecretAutoManageService = singleInstanceAppSecretAutoManageService;
     }
 
+    /**
+     * #TODO 理应删除 loginType 字段，并且为每种登录方式单独创建接口。
+     */
     @ApiOperation( value = "用户登录接口", notes = "用戶名/邮箱/手机号登录都需要走此接口", httpMethod = "POST" )
     @ApiResponses( value = {
             @ApiResponse( code = 100, message = WebMessageConstants.SCE_PORTAL_MSG_100 + "样例数据：{\"msg\":\"不支持的登录类型\",\"code\":100}", response = RestRecord.class, examples = @Example( {
@@ -68,30 +67,23 @@ public class AuthenticationController {
     @PostMapping( produces = "application/json" )
     @ResponseBody
     public RestRecord login( HttpServletRequest request, @NotBlank @RequestBody @ApiParam SSOAuthentication authentication ) {
-        boolean unSupportedAuthType = false;
-        User authenticatedUser = null;
-        /*
-         * 验证数据有效性并验证用户登录
-         */
-        if ( authentication.getAuthType() == AUTH_TYPE_0 ) {
-            log.info( MessageConstants.SCE_MSG_1001, authentication.getIdentifier(), RestApiUtil.getIpAddr( request ) );
-            authenticatedUser = userService.getUserByLoginName( authentication.getIdentifier() );
-        } else if ( authentication.getAuthType() == AUTH_TYPE_1 ) {
-            unSupportedAuthType = true;
-        } else if ( authentication.getAuthType() == AUTH_TYPE_2 ) {
-            unSupportedAuthType = true;
-        } else {
-            unSupportedAuthType = true;
-            log.warn( MessageConstants.SCE_MSG_1000, request.getRemoteAddr(), authentication.getAuthType() );
-        }
+        User authenticatedUser;
 
-        if ( unSupportedAuthType ) {
+        /*
+         * 1. 判断用户的登录类型是否支持，并查找是否存在匹配的用户数据
+         */
+        try {
+            authenticatedUser = loginService.getUserInfo( authentication );
+        } catch ( UnsupportedAuthenticationTypeException e ) {
+            log.warn( MessageConstants.SCE_MSG_1000, request.getRemoteAddr(), authentication.getAuthType() );
             return new RestRecord( 100, WebMessageConstants.SCE_PORTAL_MSG_100 );
         }
+        if ( authenticatedUser != null ) {
+            log.info( MessageConstants.SCE_MSG_1001, authenticatedUser.getUserId(), RestApiUtil.getIpAddr( request ) );
+        }
 
-        Map< String, String > data;
         /*
-         * 如果匹配到用户数据，则生成 ticket
+         * 2. 检查用户的登录信息是否匹配
          */
         // 查找不到用户数据
         if ( authenticatedUser == null ) {
@@ -109,13 +101,21 @@ public class AuthenticationController {
             if ( authenticatedUser.getIsDelete() == 0 ) {
                 return new RestRecord( 104, WebMessageConstants.SCE_PORTAL_MSG_104 );
             }
-
-            data = new HashMap<>( 2 );
-            String ticket = loginService.generateTicket( authenticatedUser );
-            data.put( "ticket", ticket );
         }
 
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, data );
+        /*
+         * 3. 生成登录信息
+         */
+        Map loginResult = loginService.generateLoginResult( authenticatedUser );
+
+        /*
+         * 4. 更新用户登录状态（是否首次登录）
+         * 以 2019.03.04 的系统设计来看，所有除系统管理员外的账户类型都需要在初次登陆时进行用户数据验证。理应当用户数据校验完成
+         * 后由前台发起用户认证状态(首次登录完成、用户信息确认完成、初登陆密码修改完成等)的修改请求。故此处暂不做任何处理
+         */
+        // loginService.confirmUserFirstLogin( authenticatedUser );
+
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, loginResult );
     }
 
     /**

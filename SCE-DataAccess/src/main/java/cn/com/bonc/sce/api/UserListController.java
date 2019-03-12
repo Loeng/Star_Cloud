@@ -98,7 +98,7 @@ public class UserListController {
                 organization_name = condition.get("organization_name").toString();
             }
             if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                account = condition.get("login").toString();
+                login = condition.get("login").toString();
             }
         }
         info = userInfoRepository.findTeacherByCondition(name,account,organization_name,login,pageable);
