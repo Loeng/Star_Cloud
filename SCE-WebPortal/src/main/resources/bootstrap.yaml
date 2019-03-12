@@ -1,0 +1,39 @@
+spring.profiles.active: dev
+
+---
+spring.profiles: dev
+
+
+spring:
+  application:
+    name: sce-web-portal
+  cloud:
+    config:
+      uri: http://localhost:10100
+  servlet:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 10000Mb
+logging:
+#  file: ./logs/dev_app.log
+  pattern:
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework: INFO
+    guru.springframework.controllers: INFO
+    org.hibernate: INFO
+server:
+  port: 10300
+
+fileUpload:
+  image: img
+  soft:  soft
+  document: document
+  war: war
+  mapping:
+    image:  http://192.168.1.31:4400/img
+    soft:  http://192.168.1.31:4400/soft
+    document: http://192.168.1.31:4400/document
+    war: http://192.168.1.31:4400/war
+

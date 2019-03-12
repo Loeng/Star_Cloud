@@ -1,0 +1,19 @@
+---
+spring:
+  profiles: dev
+server:
+  port: 10103
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+# might be wrong
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 120000
+  ConnectTimeout: 30000

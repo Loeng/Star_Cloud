@@ -1,0 +1,28 @@
+spring.profiles.active: dev
+
+---
+# dev profiles
+spring:
+  profiles: dev
+  application:
+    name: sce-authentication-server
+  cloud:
+    config:
+      uri: http://localhost:10100
+logging:
+#  file: ./logs/dev_app.log
+  pattern:
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: INFO
+    guru.springframework.controllers: DEBUG
+    org.hibernate: DEBUG
+server:
+  port: 10200
+sce:
+  service:
+    secret:
+      auto-management:
+        enable: true
+        refresh-period: 1

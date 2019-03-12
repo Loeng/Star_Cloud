@@ -1,0 +1,41 @@
+spring.profiles.active: dev
+
+---
+spring.profiles: dev
+spring:
+  application:
+    name: sce-data-access
+  cloud:
+    config:
+      uri: http://localhost:10100
+  datasource:
+    url: jdbc:oracle:thin:@192.168.1.130:1521:assistantdb
+    username: STARCLOUDUSER
+    password: root123
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+     hibernate:
+       dialect: org.hibernate.dialect.Oracle10gDialect
+logging:
+  file: ./logs/dev_app.log
+  pattern:
+    console: "%date{yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework: INFO
+    guru.springframework.controllers: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+server:
+  port: 10210
+
+#分布式全局唯一Id生成器：workerID:机器ID  datacenterId:数据标识ID
+IdWorker:
+  workerId: 0
+  datacenterId: 2
