@@ -32,10 +32,20 @@ public interface AppInfoMapper {
     @Select( "SELECT count(*) FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO  A  WHERE A.IS_DELETE=1" )
     int getAppCountInfo();
 
+//    /**
+//     * pp分类信息统计
+//     */
+//    @Select( "SELECT  COUNT(a.APP_TYPE_ID) as num,b.APP_TYPE_NAME FROM  STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL a INNER  JOIN (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE   WHERE IS_DELETE='1') b " +
+//            "ON  a.APP_TYPE_ID = b.APP_TYPE_ID  GROUP BY  b.APP_TYPE_NAME,a.APP_TYPE_ID " )
+//    List< Map > getAppInfo();
+
     /**
      * pp分类信息统计
      */
-    @Select( "SELECT  COUNT(a.APP_TYPE_ID) as num,b.APP_TYPE_NAME FROM  STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL a INNER  JOIN (SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_TYPE   WHERE IS_DELETE='1') b " +
-            "ON  a.APP_TYPE_ID = b.APP_TYPE_ID  GROUP BY  b.APP_TYPE_NAME,a.APP_TYPE_ID " )
+    @Select( "select t.app_type_name,count(tr.app_type_id) as NUM from STARCLOUDMARKET.SCE_MARKET_APP_TYPE t\n" +
+            "        left join STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL tr\n" +
+            "        on t.app_type_id = tr.app_type_id\n" +
+            "        where t.is_delete = 1\n" +
+            "        group by t.app_type_name,tr.app_type_id" )
     List< Map > getAppInfo();
 }

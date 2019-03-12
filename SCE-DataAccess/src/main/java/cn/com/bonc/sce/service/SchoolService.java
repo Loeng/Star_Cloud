@@ -121,9 +121,7 @@ public class SchoolService {
         userPassword.setPassword( "star123!" );
         userPassword.setUserId( userId );
 
-        int info = fileResourceRepository.savaAllUserInfo( userId, "", "",
-                loginName, SCHOOL_CODE, "", "", "",
-                "", "",String.valueOf(newSchool.getId()) , secret );
+        int info = fileResourceRepository.savaAllUserInfo( userId, loginName, SCHOOL_CODE, String.valueOf(newSchool.getId()) , secret );
         userPasswordDao.save( userPassword );
 
         //向第一次创建的学校管理员发送一条消息

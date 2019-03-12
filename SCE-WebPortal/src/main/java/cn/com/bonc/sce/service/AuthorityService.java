@@ -26,8 +26,8 @@ public class AuthorityService {
      * @param authority 信息
      * @return 是否添加成功
      */
-    public RestRecord insertAuthority(Authority authority) {
-        return authorityDao.insertAuthority(authority);
+    public RestRecord insertAuthority( Authority authority ) {
+        return authorityDao.insertAuthority( authority );
     }
 
     /**
@@ -35,8 +35,8 @@ public class AuthorityService {
      *
      * @return 获取机构
      */
-    public RestRecord getAll(Integer pageNum,Integer pageSize) {
-        return authorityDao.getAll(pageNum,pageSize);
+    public RestRecord getAll( Integer pageNum, Integer pageSize ) {
+        return authorityDao.getAll( pageNum, pageSize );
     }
 
     /**
@@ -44,7 +44,7 @@ public class AuthorityService {
      *
      * @return 获取机构用户
      */
-    public RestRecord getUser(Integer pageNum,Integer pageSize) {
-        return authorityDao.getUser(pageNum,pageSize);
+    public RestRecord getUser( String edu_id, String edu_name, String to_login, Integer pageNum, Integer pageSize ) {
+        return authorityDao.getUser( edu_id, edu_name, to_login, pageNum, pageSize );
     }
 }

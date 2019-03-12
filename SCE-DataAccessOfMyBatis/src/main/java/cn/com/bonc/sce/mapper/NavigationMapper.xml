@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.bonc.sce.mapper.NavigationMapper">
 
-    <select id="getNavListByChannel" resultType="Map">
-        SELECT COLUMN_ID,COLUMN_NAME,COLUMN_URL
-        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
-        WHERE CHANNEL_ID=#{channelId}
+    <select id="getChannel" resultType="Map">
+        SELECT CHANNEL_ID,CHANNEL_NAME,CHANNEL_URL
+        FROM STARCLOUDPORTAL.SCE_COMMON_CHANNEL_INFO
+        WHERE CHANNEL_TYPE=#{channelType}
         AND IS_DELETE=1
     </select>
     

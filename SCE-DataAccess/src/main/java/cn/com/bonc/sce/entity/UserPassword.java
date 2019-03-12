@@ -26,7 +26,7 @@ public class UserPassword {
     private String password;
 
     @Column( name = "IS_DELETE" )
-    private Integer isDelete;
+    private Integer isDelete = 1;
 
     public UserPassword( Integer id, String userId, String password, Integer isDelete ) {
         this.id = id;

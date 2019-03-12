@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.UserMapper">
+
+    <insert id="saveUser" parameterType="cn.com.bonc.sce.bean.UserBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
+            (USER_ID,SECRET,LOGIN_NAME,USER_TYPE,IS_DELETE,ORGANIZATION_ID)
+        VALUES
+            (#{userId},#{secret},#{loginName},#{userType},#{isDelete},#{organizationId})
+    </insert>
+
+    <insert id="saveAccount" parameterType="cn.com.bonc.sce.bean.AccountBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
+            (ID,PASSWORD,IS_DELETE,USER_ID)
+        VALUES
+            (#{id},#{password},#{isDelete},#{userId})
+    </insert>
+
+    <update id="delUser">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
+        SET IS_DELETE=0
+        WHERE USER_ID=#{id}
+    </update>
+
+    <update id="resetPwd">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
+        SET PASSWORD=#{pwd}
+        WHERE USER_ID=#{id}
+    </update>
+    
+    <update id="updateLoginPermission">
+        UPDATE
+        STARCLOUDPORTAL.SCE_COMMON_USER
+        SET LOGIN_PERMISSION_STATUS = #{newStatus}
+        WHERE
+        USER_ID = #{id}
+    </update>
+</mapper>

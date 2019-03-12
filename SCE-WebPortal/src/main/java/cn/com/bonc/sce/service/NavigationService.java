@@ -17,8 +17,8 @@ public class NavigationService {
     @Autowired
     private NavigationDao navigationDao;
 
-    public RestRecord getNavListByChannel(Integer channelId){
-        return navigationDao.getNavListByChannel(channelId);
+    public RestRecord getChannel(Integer channelType){
+        return navigationDao.getChannel(channelType);
     }
 
     public RestRecord addNav(String json){

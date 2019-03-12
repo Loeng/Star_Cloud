@@ -51,15 +51,16 @@ public class AuthorityApiController {
      */
     @GetMapping( "" )
     @ResponseBody
-    public RestRecord getAll(@RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
-                             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize) {
+    public RestRecord getAll( @RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
+                              @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         try {
-            return authorityService.getAll(pageNum, pageSize);
+            return authorityService.getAll( pageNum, pageSize );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
         }
     }
+
 
     /**
      * 获取机构
@@ -68,10 +69,14 @@ public class AuthorityApiController {
      */
     @GetMapping( "/user" )
     @ResponseBody
-    public RestRecord getUser(@RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
-                             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize) {
+    public RestRecord getUserByCondition( @RequestParam( value = "pageNum", required = false, defaultValue = "0" ) Integer pageNum,
+                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
+                                          @RequestParam( value = "edu_id", required = false ) String edu_id,
+                                          @RequestParam( value = "edu_name", required = false ) String edu_name,
+                                          @RequestParam( value = "to_login", required = false ) String to_login
+    ) {
         try {
-            return authorityService.getUser(pageNum, pageSize);
+            return authorityService.getUserByCondition( edu_id, edu_name, to_login, pageNum, pageSize );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 406, MessageConstants.SCE_MSG_406, e );
