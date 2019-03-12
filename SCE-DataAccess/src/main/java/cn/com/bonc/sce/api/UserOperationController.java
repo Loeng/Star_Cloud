@@ -254,17 +254,24 @@ public class UserOperationController {
                 userModel.setLoginName( IDUtil.createID( "jyj_" ) );
                 break;
         }
+        Long ORGANIZATION_ID = null;
+        if ( StringUtils.isNotBlank( userModel.getOrganizationId() ) ) {
+            try {
+                ORGANIZATION_ID = Long.parseLong( userModel.getOrganizationId() );
+            } catch ( Exception e ) {
+                log.error( "组织id转换出错!!" );
+            }
+        }
         //插入基本信息
         userInfoRepository.insertUser( userModel.getUserId(), userModel.getLoginName(), userModel.getUserName()
                 , userModel.getGender(), userModel.getUserType(), userModel.getMailAddress(), userModel.getCertificateType(), userModel.getCertificateNumber()
-                , userModel.getPhoneNumber(), userModel.getAddress(), userModel.getCreateTime(), userModel.getOrganizationId(), userModel.getRemarks(), userModel.getSecret() );
+                , userModel.getPhoneNumber(), userModel.getAddress(), userModel.getCreateTime(), ORGANIZATION_ID, userModel.getRemarks(), userModel.getSecret() );
 
         //插入密码
         UserPassword password = new UserPassword();
         password.setUserId( userModel.getUserId() );
         password.setPassword( userModel.getPassword() == null ? "star123!" : userModel.getPassword() );
         passwordDao.save( password );
-
         //添加用户的代理商资料
         if ( userModel.getInfoAgentModel() != null ) {
             userInfoRepository.insertInfoAgent( userModel.getUserId(),
@@ -309,11 +316,11 @@ public class UserOperationController {
             userModelParent.setSecret( Secret.generateSecret() );
             userModelParent.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
             userModelParent.setCreateTime( new Date() );
-            userModelParent.setUserType(5);
+            userModelParent.setUserType( 5 );
             userModelParent.setLoginName( IDUtil.createID( "jz_" ) );
             userInfoRepository.insertUser( userModelParent.getUserId(), userModelParent.getLoginName(), userModelParent.getUserName()
                     , userModelParent.getGender(), userModelParent.getUserType(), userModelParent.getMailAddress(), userModelParent.getCertificateType(), userModelParent.getCertificateNumber()
-                    , userModelParent.getPhoneNumber(), userModelParent.getAddress(), userModelParent.getCreateTime(), userModelParent.getOrganizationId(), userModelParent.getRemarks(), userModelParent.getSecret() );
+                    , userModelParent.getPhoneNumber(), userModelParent.getAddress(), userModelParent.getCreateTime(), ORGANIZATION_ID, userModelParent.getRemarks(), userModelParent.getSecret() );
 
             //给家长账号创建密码
             UserPassword passwordParent = new UserPassword();
@@ -323,20 +330,28 @@ public class UserOperationController {
 
             //创建关联关系
             StudentParentRel studentParentRel = new StudentParentRel();
-            studentParentRel.setIsMain(1);
-            studentParentRel.setParentUserId(userModelParent.getUserId());
-            studentParentRel.setStudentUserId(userModel.getUserId());
-            studentParentRelDao.save(studentParentRel);
+            studentParentRel.setIsMain( 1 );
+            studentParentRel.setParentUserId( userModelParent.getUserId() );
+            studentParentRel.setStudentUserId( userModel.getUserId() );
+            studentParentRelDao.save( studentParentRel );
 
             return new RestRecord( 251, WebMessageConstants.SCE_PORTAL_MSG_251 );
         }
 
         //添加用户的教师资料
         if ( userModel.getInfoTeacherModel() != null ) {
+            Long SCHOOL_AGE = null;
+            if ( StringUtils.isNotBlank( userModel.getOrganizationId() ) ) {
+                try {
+                    SCHOOL_AGE = Long.parseLong( userModel.getInfoTeacherModel().getSchoolAge() );
+                } catch ( NumberFormatException e ) {
+                    log.error( "教龄字段类型转换出错!!" );
+                }
+            }
             userInfoRepository.insertInfoTeacher( userModel.getUserId(),
                     userModel.getInfoTeacherModel().getPosition(),
                     userModel.getInfoTeacherModel().getSubject(),
-                    userModel.getInfoTeacherModel().getSchoolAge(),
+                    SCHOOL_AGE,
                     userModel.getInfoTeacherModel().getRemarks() );
             return new RestRecord( 252, WebMessageConstants.SCE_PORTAL_MSG_252 );
         }
@@ -352,9 +367,9 @@ public class UserOperationController {
      * @param userId 用户ID
      * @return 用户信息
      */
-    @PutMapping("/password")
+    @PutMapping( "/password" )
     @ResponseBody
-    public RestRecord saveUserPassword( @RequestParam("userId") String userId, @RequestParam("password") String password ) {
+    public RestRecord saveUserPassword( @RequestParam( "userId" ) String userId, @RequestParam( "password" ) String password ) {
         int date = userPasswordDao.updateUserPassword( userId, password );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, date );
     }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient( value = "sce-data-mybatis" )
 public interface NavigationDao {
 
-    @RequestMapping( value = "/navigation/getNavListByChannel", method = RequestMethod.GET )
-    RestRecord getNavListByChannel (@RequestParam("channelId") Integer channelId);
+    @RequestMapping( value = "/navigation/getChannel", method = RequestMethod.GET )
+    RestRecord getChannel (@RequestParam("channelType") Integer channelType);
 
     @RequestMapping( value = "/navigation/addNav", method = RequestMethod.POST )
     RestRecord addNav(@RequestBody String json);

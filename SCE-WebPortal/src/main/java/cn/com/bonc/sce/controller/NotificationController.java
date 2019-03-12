@@ -98,7 +98,7 @@ public class NotificationController {
      * @param type        通知公告类型
      * @param province    省
      * @param city        市
-     * @param district    区
+     * @param region    区
      * @return 分页后的通知公告列表
      */
     @ApiOperation( value = "查询通知公告列表接口", notes = "查询通知公告列表接口", httpMethod = "GET" )
@@ -115,10 +115,10 @@ public class NotificationController {
                                            @RequestParam( value = "endDate", required = false ) @ApiParam( name = "endDate", value = "结束时间" ) String endDate,
                                            @RequestParam( value = "province", required = false ) @ApiParam( name = "province", value = "省" ) String province,
                                            @RequestParam( value = "city", required = false ) @ApiParam( name = "city", value = "市" ) String city,
-                                           @RequestParam( value = "district", required = false ) @ApiParam( name = "district", value = "区" ) String district,
+                                           @RequestParam( value = "region", required = false ) @ApiParam( name = "region", value = "区" ) String region,
                                            @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) @ApiParam( name = "pageNum", value = "页码" ) Integer pageNum,
                                            @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) @ApiParam( name = "pageSize", value = "数量" ) Integer pageSize ) {
-        return notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, province, city, district, pageNum, pageSize );
+        return notificationService.getNotificationList( type, content, auditStatus, startDate, endDate, province, city, region, pageNum, pageSize );
     }
 
     /**

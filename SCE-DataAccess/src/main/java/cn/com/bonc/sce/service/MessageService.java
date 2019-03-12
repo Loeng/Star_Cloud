@@ -18,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 消息
@@ -117,17 +114,17 @@ public class MessageService {
     public RestRecord getMessageByUserId( String userId, Integer id, Integer pageNum, Integer pageSize ) {
         User user = userDao.findByUserId( userId );
         Integer roleId = user.getUserType();
-        List<Integer> typeList = new ArrayList<>(  );
-        if(roleId!=0){
-            typeList.add(0);
+        List< Integer > typeList = new ArrayList<>();
+        if ( roleId != 0 ) {
+            typeList.add( 0 );
         }
-        typeList.add(roleId);
+        typeList.add( roleId );
         if ( id == null ) {
             pageNum--;
             List< Sort.Order > orders = new ArrayList<>();
             orders.add( new Sort.Order( Sort.Direction.ASC, SORT_IS_READ ) );
             orders.add( new Sort.Order( Sort.Direction.DESC, SORT_CREATE_TIME ) );
-            Pageable pageable = PageRequest.of( pageNum, pageSize, new Sort(orders) );
+            Pageable pageable = PageRequest.of( pageNum, pageSize, new Sort( orders ) );
             Timestamp time = messageDao.getNewestTimeByUserId( userId );
             if ( StringUtils.isEmpty( time ) ) {
                 time = messageDao.getCreateTimeByUserId( userId );
@@ -159,7 +156,10 @@ public class MessageService {
                 }
             }
             Map< String, Object > info = new HashMap<>();
-            Page< UserMessage > page = userMessageDao.findByUserIdAndIsDelete( userId, 1, pageable );
+            Date createTime = user.getCreateTime();
+            Timestamp timestamp = new Timestamp( createTime.getTime() );
+            Page< UserMessage > page = userMessageDao.findByUserIdAndIsDeleteAndCreateTimeAfter( userId, 1, timestamp, pageable );
+
             info.put( "total", page.getTotalElements() );
             info.put( "info", page.getContent() );
             return new RestRecord( 200, info );

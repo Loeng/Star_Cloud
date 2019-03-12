@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.exception.ImportUserFailedException;
 import cn.com.bonc.sce.model.ExcelToUser;
 import cn.com.bonc.sce.model.UploadFileModel;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -68,7 +71,7 @@ public class FileUploadController {
     } )
     @PostMapping( "/upload-user-info" )
     @ResponseBody
-    public RestRecord uploadParseExcel( @ModelAttribute @ApiParam( name = "file", value = "上传信息", required = true, example = "{multipartFile:'file',fileType:'document',userType:2}" ) UploadFileModel uploadFileModel ) {
+    public RestRecord uploadParseExcel(@ModelAttribute @ApiParam( name = "file", value = "上传信息", required = true, example = "{multipartFile:'file',fileType:'document',userType:2}" ) UploadFileModel uploadFileModel, @CurrentUserId String currentUserId) {
         if ( uploadFileModel.getFile() == null || uploadFileModel.getFile().isEmpty()
                 || uploadFileModel.getFileType().isEmpty() || uploadFileModel.getUserType().isEmpty() ) {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_450 );
@@ -83,17 +86,23 @@ public class FileUploadController {
             //解析教师用户Excel
             list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
         }else {
-            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_453 );
+            return new RestRecord( 453, WebMessageConstants.SCE_PORTAL_MSG_453 );
         }
 
-
         log.info( "解析Excel成功" );
-
-        fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType() );
-
-        log.info( "上传用户成功" );
-
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        RestRecord restRecord = null;
+        try {
+            restRecord = fileUploadService.uploadUserInfo( list, uploadFileModel.getUserType(),currentUserId );
+        }catch (Exception e){
+            e.printStackTrace();
+            try {
+                restRecord = new RestRecord(423, e.getMessage().substring(e.getMessage().indexOf("message") + 10, e.getMessage().indexOf("path") - 3));
+            }catch (Exception e1){
+                e1.printStackTrace();
+                restRecord = new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+            }
+        }
+        return restRecord;
     }
 
     /**

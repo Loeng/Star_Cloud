@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface NavigationMapper {
 
-    List<NavigationBean> getNavListByChannel(@Param( "channelId" ) Integer channelId);
+    List<NavigationBean> getChannel(@Param( "channelType" ) Integer channelType);
 
     int addNav(@Param( "columnName" ) String columnName,@Param( "columnUrl" ) String columnUrl,
                @Param("channelId") Integer channelId);

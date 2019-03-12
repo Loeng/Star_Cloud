@@ -30,11 +30,11 @@ public class NavigationController {
     @Autowired
     private NavigationService navigationService;
 
-    @ApiOperation(value = "导航栏查询", notes="通过参数channel_id获取导航列表", httpMethod = "GET")
-    @GetMapping("/getNavListByChannel")
+    @ApiOperation(value = "导航栏查询", notes="通过参数channelType获取导航列表", httpMethod = "GET")
+    @GetMapping("/getChannel")
     @ResponseBody
-    public RestRecord getNavListByChannel(@RequestParam ( "channelId" ) Integer channelId){
-        List<NavigationBean> navList = navigationService.getNavListByChannel(channelId);
+    public RestRecord getChannel(@RequestParam ( "channelType" ) Integer channelType){
+        List<NavigationBean> navList = navigationService.getChannel(channelType);
         return new RestRecord( 200, navList );
     }
 
@@ -115,7 +115,7 @@ public class NavigationController {
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {
-            return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
+            return new RestRecord( 408, MessageConstants.SCE_MSG_408 );
         }
     }
 }
