@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.service;
 
-import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.mapper.AppMarketMapper;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -11,9 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +34,7 @@ public class AppMarketService {
     @Transactional
     public RestRecord saveBacklog(String appId, String appToken, String authentication, Map<String, Object> backlog){
         // todo  验证appId 、 appToken 和 authentication
-        String userId = null;
+        String userId;
         try {
             String payloadsStr = Base64.decodeStr( authentication.split( "\\." )[ 1 ] );
             userId = JSONUtil.toBean( payloadsStr, Map.class ).get("userId").toString();
