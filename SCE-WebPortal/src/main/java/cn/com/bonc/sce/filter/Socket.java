@@ -33,19 +33,19 @@ public class Socket {
         this.session = session;
         copyOnWriteArraySet.add(this);
         log.info("有新的连接，连接id：" + session.getId());
-        log.info("websocket有新的连接，总数：" + copyOnWriteArraySet.size());
+        log.info("webSocket有新的连接，总数：" + copyOnWriteArraySet.size());
     }
 
     @OnClose
     public void onClose(){
         copyOnWriteArraySet.remove(this);
         allUser.remove(this.session.getId());
-        log.info("websocket连接断开，总数：" + copyOnWriteArraySet.size());
+        log.info("webSocket连接断开，总数：" + copyOnWriteArraySet.size());
     }
 
     @OnMessage
     public void onMessage(String message){
-        System.out.println("websocket收到客户端发来的消息：" + message);
+        System.out.println("webSocket收到客户端发来的消息：" + message);
     }
 
     @OnError
@@ -57,7 +57,7 @@ public class Socket {
 
     public void sendMessage(String message){
         for(Socket myWebSocket : copyOnWriteArraySet){
-            log.info("websocket广播消息：" + message);
+            log.info("webSocket广播消息：" + message);
             try {
                 myWebSocket.session.getBasicRemote().sendText(message);
             }catch (Exception e){

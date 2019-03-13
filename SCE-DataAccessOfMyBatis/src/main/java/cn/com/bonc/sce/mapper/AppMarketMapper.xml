@@ -41,4 +41,9 @@ GROUP BY
         where b.is_delete = 1 and b.operate_user_id = #{userId}
     </select>
 
+    <select id="insertBacklog" resultType="int">
+        insert into sce_backlog(id, content, operate_user_id, create_time, status)
+        values (#{backlogId}, #{content}, #{userId}, now(), 1)
+    </select>
+
 </mapper>

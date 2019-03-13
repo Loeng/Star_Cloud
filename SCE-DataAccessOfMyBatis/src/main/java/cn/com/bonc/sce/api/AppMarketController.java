@@ -9,9 +9,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 /**
  * app商城
@@ -39,6 +38,14 @@ public class AppMarketController {
     @GetMapping("/userToDo")
     public RestRecord userToDo(@CurrentUserId String userId){
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.userToDo(userId));
+    }
+
+    @PostMapping("/backlog")
+    public RestRecord backlog(@RequestHeader String appId,
+                              @RequestHeader String appToken,
+                              @RequestHeader String authentication,
+                              @RequestBody Map<String, Object> backlog){
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.saveBacklog(appId, appToken, authentication, backlog));
     }
 
 }
