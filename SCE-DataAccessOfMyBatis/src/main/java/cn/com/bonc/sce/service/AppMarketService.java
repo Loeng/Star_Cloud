@@ -4,8 +4,6 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.mapper.AppMarketMapper;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
-import cn.hutool.core.codec.Base64;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,26 +30,26 @@ public class AppMarketService {
     }
 
     @Transactional
-    public RestRecord saveBacklog(String appId, String appToken, String authentication, Map<String, Object> backlog){
-        // todo  验证appId 、 appToken 和 authentication
-        String userId;
-        try {
-            String payloadsStr = Base64.decodeStr( authentication.split( "\\." )[ 1 ] );
-            userId = JSONUtil.toBean( payloadsStr, Map.class ).get("userId").toString();
-        }catch (Exception e){
-            log.info("ticket验证失败");
-            return new RestRecord(420, WebMessageConstants.SCE_PORTAL_MSG_420);
+    public RestRecord saveBacklog(String appId, String appToken, String userId, Map<String, Object> backlog){
+        if(!appToken.equals(appMarketMapper.selectAppToken(appId))){
+            return new RestRecord(152, WebMessageConstants.SCE_WEB_MSG_152);
         }
-        //调用id生成器生成id
-        long backlogId = idWorker.nextId();
-
-        backlog.put("backlogId", backlogId);
+        List<String> operateUserIds = (List) backlog.get("users");
+        if(operateUserIds.size() < 1){
+            return new RestRecord(431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "users"));
+        }
+        // todo 验证authentication
         backlog.put("userId", userId);
-        appMarketMapper.insertBacklog(backlog);
-        appMarketMapper.insertBacklogItems(backlog);
-        appMarketMapper.insertBacklogType(backlog);
+        for(String operateUserId : operateUserIds){
+            //调用id生成器生成id
+            backlog.put("backlogId", idWorker.nextId());
 
-        return null;
+            backlog.put("operateUserId", operateUserId);
+            appMarketMapper.insertBacklog(backlog);
+        }
+
+
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
     }
 
 }

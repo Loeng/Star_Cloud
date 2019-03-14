@@ -27,8 +27,4 @@ public class AppMarketController {
         return appMarketService.appCount();
     }
 
-    @GetMapping("/userToDo")
-    public RestRecord userToDo(@CurrentUserId String userId){
-        return appMarketService.userToDo(userId);
-    }
 }

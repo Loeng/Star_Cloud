@@ -12,11 +12,9 @@ public interface AppMarketMapper {
 
     List<Map> selectUserToDo(String userId);
 
-    int insertBacklog(Map map);
+    void insertBacklog(Map map);
 
-    int insertBacklogItems(Map map);
-
-    int insertBacklogType(Map map);
+    String selectAppToken(String appId);
 
 
 }

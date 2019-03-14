@@ -20,16 +20,16 @@ public interface AppMarketDao {
 
     /**
      * 查询代办
-     * @param userID 用户id
+     * @param userId userId
      * @return 用户待办
      */
-    @RequestMapping(value = "/app-portal/userToDo", method = RequestMethod.GET)
-    RestRecord userToDo(@CurrentUserId String userID);
+    @RequestMapping(value = "/app-portal/backlog", method = RequestMethod.GET)
+    RestRecord userToDo(@RequestParam(value = "userId") String userId);
 
     @RequestMapping(value = "/app-portal/backlog", method = RequestMethod.POST)
     RestRecord backlog(@RequestHeader(value = "appId") String appId,
                        @RequestHeader(value = "appToken") String appToken,
-                       @RequestHeader(value = "authentication") String authentication,
+                       @RequestParam(value = "userId") String userId,
                        @RequestBody Map backlog);
 
 

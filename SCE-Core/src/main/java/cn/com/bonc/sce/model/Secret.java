@@ -2,10 +2,13 @@ package cn.com.bonc.sce.model;
 
 import cn.com.bonc.sce.tool.CryptoUtil;
 import cn.hutool.crypto.asymmetric.RSA;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Base64;
 
 /**
  * 基于 2048bit-RSA 的秘钥对
@@ -55,6 +58,19 @@ public class Secret {
 
         RSA rsa = new RSA( keyPair.getPrivate(), keyPair.getPublic() );
         return rsa.getPublicKeyBase64() + rsa.getPrivateKeyBase64();
+    }
+
+    /**
+     * 根据ECC椭圆曲线算法生成公私钥并经过Base64编码
+     * 其中编码后的公钥长度为92  私钥为124
+     * @return
+     */
+    public static String ES256GenerateSecret(){
+        KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.ES256);
+
+        String privateKeyBase64 = Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded());
+        String publicKeyBase64 = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
+        return privateKeyBase64 + publicKeyBase64;
     }
 
     public String getPrivateKeyString() {

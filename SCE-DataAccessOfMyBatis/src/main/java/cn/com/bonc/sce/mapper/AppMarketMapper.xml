@@ -33,17 +33,22 @@ GROUP BY
         b.status,
         b.remarks,
         p.pending_item_name,
-        t.todo_type from sce_pending_items p
-        inner join sce_backlog b
+        t.todo_type from STARCLOUDPORTAL.sce_pending_items p
+        inner join STARCLOUDPORTAL.sce_backlog b
         on b.id = p.pending_item_id and  b.is_delete = 1
-        inner join sce_todo_type t
+        inner join STARCLOUDPORTAL.sce_todo_type t
         on p.pending_item_type = t.id
-        where b.is_delete = 1 and b.operate_user_id = #{userId}
+        where b.is_delete = 1 and b.operate_user_id = #{param1}
     </select>
 
-    <select id="insertBacklog" resultType="int">
-        insert into sce_backlog(id, content, operate_user_id, create_time, status)
-        values (#{backlogId}, #{content}, #{userId}, now(), 1)
+    <select id="insertBacklog">
+        insert into STARCLOUDPORTAL.sce_backlog(id, content, create_user_id,operate_user_id, create_time, status, url)
+        values (#{backlogId}, #{content}, #{userId}, #{operateUserId},SYSDATE, 1, #{url})
+    </select>
+
+    <select id="selectAppToken" resultType="String">
+        SELECT APP_TOKEN FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO
+        WHERE APP_ID = #{appId}
     </select>
 
 </mapper>

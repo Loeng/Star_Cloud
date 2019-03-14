@@ -15,9 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * socket连接类
+ * 支持发送ArrayList与HashMap
+ * 支持发送String
+ */
 @Slf4j
 @Component
-@ServerEndpoint(value = "/ws/myWebSocket/{ticket}")
+@ServerEndpoint(value = "/ws/myWebSocket/{ticket}", encoders = {SocketList.class, SocketMap.class})
 public class Socket {
 
     private Session session;
@@ -97,12 +102,16 @@ public class Socket {
      * 群发消息
      * @param message 消息内容
      */
-    public void sendMessage(String message){
+    public void sendMessage(Object message){
         log.info("广播消息：" + message);
         for (String user : allUser.keySet()){
             for(Socket socket : allUser.get(user)){
                 try {
-                    socket.session.getBasicRemote().sendText(message);
+                    if(message instanceof String){
+                        socket.session.getAsyncRemote().sendText(message.toString());
+                    }else {
+                        socket.session.getAsyncRemote().sendObject(message);
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                     log.info("广播消息发送失败，连接不到该用户");
@@ -118,7 +127,7 @@ public class Socket {
      * @return 消息发送状态
      * @throws IOException
      */
-    public boolean sendMessage(String userId, String message) throws IOException {
+    public boolean sendMessage(String userId, Object message){
         if(userId == null || message == null){
             return false;
         }
@@ -127,10 +136,13 @@ public class Socket {
         for(String user : allUser.keySet()){
             if(user.equals(userId)){
                 for(Socket socket : allUser.get(user)){
-                    socket.session.getBasicRemote().sendText(message);
+                    if(message instanceof String){
+                        socket.session.getAsyncRemote().sendText(message.toString());
+                    }else {
+                        socket.session.getAsyncRemote().sendObject(message);
+                    }
                 }
                 sendSuccess = true;
-                log.info("消息发送完毕");
                 break;
             }
         }

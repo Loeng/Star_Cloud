@@ -22,12 +22,12 @@ public class BacklogController {
     private AppMarketService appMarketService;
 
     @PostMapping("/backlog")
-    public RestRecord backlog(HttpServletRequest request, @RequestBody Map<String, Object> backlog){
+    public RestRecord backlog(HttpServletRequest request, @RequestBody Map<String, Object> backlog, @CurrentUserId String userId){
         if(backlog == null || backlog.get("backlogType") == null || backlog.get("content") == null || backlog.get("url") == null || backlog.get("users") == null ||
-                request.getHeader("appId") == null || request.getHeader("appToken") == null || request.getHeader("authentication") == null){
-            return new RestRecord(WebMessageConstants.SCE_WEb_MSG_002,"必须");
+                request.getHeader("appId") == null || request.getHeader("appToken") == null){
+            return new RestRecord(431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必须"));
         }
-        return appMarketService.backlog(request, backlog);
+        return appMarketService.backlog(request, backlog, userId);
     }
 
     @GetMapping("/backlog")

@@ -35,7 +35,7 @@ public class AppMarketController {
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.getAppCount());
     }
 
-    @GetMapping("/userToDo")
+    @GetMapping("/backlog")
     public RestRecord userToDo(@CurrentUserId String userId){
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.userToDo(userId));
     }
@@ -43,9 +43,9 @@ public class AppMarketController {
     @PostMapping("/backlog")
     public RestRecord backlog(@RequestHeader String appId,
                               @RequestHeader String appToken,
-                              @RequestHeader String authentication,
+                              @CurrentUserId String userId,
                               @RequestBody Map<String, Object> backlog){
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.saveBacklog(appId, appToken, authentication, backlog));
+        return appMarketService.saveBacklog(appId, appToken, userId, backlog);
     }
 
 }
