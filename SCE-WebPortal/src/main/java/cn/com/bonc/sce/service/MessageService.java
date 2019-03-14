@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.MessageDao;
+import cn.com.bonc.sce.dao.MessageDaoforMybatis;
 import cn.com.bonc.sce.model.Message;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class MessageService {
     public MessageService( MessageDao messageDao ) {
         this.messageDao = messageDao;
     }
+
+    @Autowired
+    private MessageDaoforMybatis messageDaoforMybatis;
 
     /**
      * 添加message
@@ -95,6 +99,28 @@ public class MessageService {
      */
     public RestRecord getIsNotReadCount( String userId ) {
         return messageDao.getIsNotReadCount( userId );
+    }
+
+    /**
+     * 通知记录
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public RestRecord getMessageRecord( Integer pageNum, Integer pageSize ) {
+        return messageDaoforMybatis.getMessageRecord( pageNum, pageSize );
+    }
+
+    /**
+     * 接收情况
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public RestRecord getReceivingSituation( Integer pageNum, Integer pageSize ) {
+        return messageDaoforMybatis.getReceivingSituation( pageNum, pageSize );
     }
 }
 
