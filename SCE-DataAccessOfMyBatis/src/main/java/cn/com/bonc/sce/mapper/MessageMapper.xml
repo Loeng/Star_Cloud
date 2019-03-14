@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.MessageMapper">
+
+
+    <select id="getMessageRecord" resultType="Map">
+		SELECT
+			SCI.INFO_ID,
+			SCI.ID,
+			SCI.IS_READ,
+			SCI.USER_ID,
+			SCI.CREATE_TIME,
+			SCI.IS_DELETE,
+			SCU.USER_TYPE,
+			SCU.USER_NAME,
+			SCUR.ROLE_NAME
+		FROM
+			STARCLOUDPORTAL.SCE_COMMON_USER_INFO SCI
+			LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER SCU ON SCI.USER_ID = SCU.USER_ID
+			LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER_ROLE SCUR ON SCU.USER_TYPE = SCUR.ROLE_ID
+		WHERE
+			SCI.IS_DELETE = 1
+    </select>
+
+    <select id="getReceivingSituation" resultType="Map">
+			SELECT
+			SCI.INFORMATION_ID,
+			SCI.TARGET_USER_ID,
+			SCI.INITIATE_USER_ID,
+			SCI.CREATE_TIME,
+			SCU.USER_TYPE,
+			SCU.USER_NAME,
+			SCUR.ROLE_NAME
+		FROM
+			STARCLOUDPORTAL.SCE_COMMON_INFORMATION SCI
+			LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER SCU ON SCI.INITIATE_USER_ID = SCU.USER_ID
+			LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER_ROLE SCUR ON SCU.USER_TYPE = SCUR.ROLE_ID
+		WHERE
+			SCI.IS_DELETE = 1
+    </select>
+
+
+</mapper>
