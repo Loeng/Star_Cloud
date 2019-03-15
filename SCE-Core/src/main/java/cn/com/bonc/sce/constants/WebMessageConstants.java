@@ -71,6 +71,8 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_431 = "缺失 %s 参数";
     String SCE_PORTAL_MSG_432 = "%s，在Excel中的第 %d 行";
 
+    String SCE_PORTAL_MSG_440 = "您不是机构用户，无权进行此操作";
+
     String SCE_PORTAL_MSG_450 = "上传文件为空";
     String SCE_PORTAL_MSG_451 = "上传文件失败";
     String SCE_PORTAL_MSG_452 = "上传文件类型异常";

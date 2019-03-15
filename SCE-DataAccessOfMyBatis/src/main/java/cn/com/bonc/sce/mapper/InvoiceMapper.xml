@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.InvoiceMapper">
+    <select id="selectInvoiceInfoByOrganizationId" parameterType="java.lang.Long" resultType="Map">
+            SELECT
+                INVOICE_TITLE,
+                OPEN_TYPE,
+                INVOICE_TYPE,
+                TAX_REGISTRATION_NO,
+                DEPOSIT_BANK,
+                BANK_ACCOUNT,
+                REGISTRATION_LOCATION,
+                REGISTRATION_TELEPHONE,
+                ORGANIZATION_ID,
+                CREATE_TIME,
+                UPDATE_TIME
+            FROM
+                STARCLOUDPORTAL.SCE_INVOICE_INFO
+            WHERE
+                ORGANIZATION_ID = #{organizationId}
+                AND IS_DELETE = 1
+    </select>
+
+    <update id="updateInvoiceInfoByOrganizationId" parameterType="String">
+        UPDATE STARCLOUDPORTAL.SCE_INVOICE_INFO
+        SET
+        <if test="INVOICE_TITLE != null and INVOICE_TITLE != ''">INVOICE_TITLE = #{INVOICE_TITLE} ,</if>
+        <if test="OPEN_TYPE != null and OPEN_TYPE != ''">OPEN_TYPE = #{OPEN_TYPE} ,</if>
+        <if test="INVOICE_TYPE != null and INVOICE_TYPE != ''">INVOICE_TYPE = #{INVOICE_TYPE} ,</if>
+        <if test="TAX_REGISTRATION_NO != null and TAX_REGISTRATION_NO != ''">TAX_REGISTRATION_NO =
+            #{TAX_REGISTRATION_NO} ,
+        </if>
+        <if test="DEPOSIT_BANK != null and DEPOSIT_BANK != ''">DEPOSIT_BANK = #{DEPOSIT_BANK} ,</if>
+        <if test="BANK_ACCOUNT != null and BANK_ACCOUNT != ''">BANK_ACCOUNT = #{BANK_ACCOUNT} ,</if>
+        <if test="REGISTRATION_LOCATION != null and REGISTRATION_LOCATION != ''">REGISTRATION_LOCATION =
+            #{REGISTRATION_LOCATION} ,
+        </if>
+        <if test="REGISTRATION_TELEPHONE != null and REGISTRATION_TELEPHONE != ''">REGISTRATION_TELEPHONE =
+            #{REGISTRATION_TELEPHONE} ,
+        </if>
+        <if test="UPDATE_USER_ID != null and UPDATE_USER_ID != ''">UPDATE_USER_ID = #{UPDATE_USER_ID} ,</if>
+
+        UPDATE_TIME=sysdate,
+        UPDATE_USER_ID=#{userId}
+        WHERE
+        ORGANIZATION_ID = #{ORGANIZATION_ID}
+        AND IS_DELETE = 1
+    </update>
+
+    <select id="selectOrganizationIdByUserId" resultType="java.lang.Long">
+        SELECT ORGANIZATION_ID  FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID =#{userId}
+    </select>
+</mapper>
