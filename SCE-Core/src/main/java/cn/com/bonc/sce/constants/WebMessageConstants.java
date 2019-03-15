@@ -70,6 +70,7 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_430 = "学生与家长信息手机号不匹配";
     String SCE_PORTAL_MSG_431 = "缺失 %s 参数";
     String SCE_PORTAL_MSG_432 = "%s，在Excel中的第 %d 行";
+    String SCE_PORTAL_MSG_433 = "不支持的分页参数";
 
     String SCE_PORTAL_MSG_450 = "上传文件为空";
     String SCE_PORTAL_MSG_451 = "上传文件失败";

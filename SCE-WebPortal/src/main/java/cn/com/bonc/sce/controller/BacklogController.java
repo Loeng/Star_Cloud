@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.util.Map;
 
 @Slf4j
@@ -30,9 +31,17 @@ public class BacklogController {
         return appMarketService.backlog(request, backlog, userId);
     }
 
-    @GetMapping("/backlog")
-    public RestRecord backlog(@CurrentUserId String userId){
-        return appMarketService.userToDo(userId);
+    @GetMapping("/backlog/{pageNum}/{pageSize}")
+    public RestRecord backlog(@CurrentUserId String userId,
+                              @PathVariable String pageNum,
+                              @PathVariable String pageSize){
+        return appMarketService.userToDo(userId, pageNum, pageSize);
+    }
+
+    @PatchMapping("/backlog/{backlogId}/{status}")
+    public RestRecord backlog(@CurrentUserId String userId, @RequestHeader String appId, @RequestHeader String appToken,
+                              @PathVariable("backlogId") String backlogId, @PathVariable("status") String status){
+        return appMarketService.backlog(appId, appToken, userId, backlogId, status);
     }
 
 }

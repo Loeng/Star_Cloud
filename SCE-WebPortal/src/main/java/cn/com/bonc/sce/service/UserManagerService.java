@@ -27,4 +27,12 @@ public class UserManagerService {
     public RestRecord editLogin(String id, Integer loginPermissionStatus) {
         return userManagerDao.editLogin(id,loginPermissionStatus);
     }
+
+    public RestRecord findTeacherList(String userId, String pageNum, String pageSize){
+        return userManagerDao.findTeacherList(userId, pageNum, pageSize);
+    }
+
+    public RestRecord findTeacher(String userId, String userName){
+        return userManagerDao.findTeacher(userId, userName);
+    }
 }

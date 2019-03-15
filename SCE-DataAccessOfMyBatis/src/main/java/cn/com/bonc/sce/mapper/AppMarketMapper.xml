@@ -25,7 +25,7 @@ GROUP BY
 
     </select>
 
-    <select id="selectUserToDo" resultType="Map">
+    <!--<select id="selectUserToDo" resultType="Map">
         select b.content,
         b.create_user_id,
         b.create_time,
@@ -39,6 +39,21 @@ GROUP BY
         inner join STARCLOUDPORTAL.sce_todo_type t
         on p.pending_item_type = t.id
         where b.is_delete = 1 and b.operate_user_id = #{param1}
+    </select>-->
+
+    <select id="selectUserToDo" resultType="Map">
+        select b.content,
+        b.create_user_id,
+        b.create_time,
+        b.update_time,
+        b.status,
+        b.remarks from  STARCLOUDPORTAL.sce_backlog b
+        where b.is_delete = 1 and b.operate_user_id = #{param1}
+    </select>
+
+    <select id="selectUserToDoCount" resultType="int">
+        select count(*) from  STARCLOUDPORTAL.sce_backlog b
+        where b.is_delete = 1 and b.operate_user_id = #{param1}
     </select>
 
     <select id="insertBacklog">
@@ -50,5 +65,11 @@ GROUP BY
         SELECT APP_TOKEN FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO
         WHERE APP_ID = #{appId}
     </select>
+
+    <update id="updateBacklog">
+        update STARCLOUDPORTAL.sce_backlog
+        set status = #{status}
+        where id = #{backlogId}
+    </update>
 
 </mapper>

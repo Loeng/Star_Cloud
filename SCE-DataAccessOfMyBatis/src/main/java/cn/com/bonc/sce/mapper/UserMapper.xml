@@ -35,4 +35,18 @@
         WHERE
         USER_ID = #{id}
     </update>
+
+    <select id="selectTeacherList" resultType="Map">
+        select u.user_name,u.login_name,gender,u.CERTIFICATE_NUMBER,t.teach_time,t.position,u.phone_number
+        from STARCLOUDPORTAL.SCE_COMMON_USER u
+        left join STARCLOUDPORTAL.SCE_INFO_TEACHER t
+        on u.user_id = t.user_id
+        where u.is_delete=1 and t.is_delete=1
+        and u.organization_id = #{organizationId}
+    </select>
+
+    <select id="selectOrganizationId" resultType="BigDecimal">
+        select ORGANIZATION_ID from STARCLOUDPORTAL.SCE_COMMON_USER
+        where user_id = #{userId}
+    </select>
 </mapper>
