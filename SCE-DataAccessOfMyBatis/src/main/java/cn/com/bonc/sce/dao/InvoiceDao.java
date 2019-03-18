@@ -16,6 +16,11 @@ public class InvoiceDao {
         return invoiceMapper.selectInvoiceInfoByOrganizationId( organizationId );
     }
 
+    public List< Map > selectInvoiceHistory( String userId ) {
+        return invoiceMapper.selectInvoiceHistory( userId );
+    }
+
+
     public int updateInvoiceInfoByOrganizationId( Map< String, Object > invoiceInfo ) {
         return invoiceMapper.updateInvoiceInfoByOrganizationId( invoiceInfo );
     }

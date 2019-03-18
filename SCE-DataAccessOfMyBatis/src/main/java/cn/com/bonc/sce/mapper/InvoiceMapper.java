@@ -10,7 +10,10 @@ public interface InvoiceMapper {
 
     List< Map > selectInvoiceInfoByOrganizationId( Long organizationId );
 
+    List< Map > selectInvoiceHistory( String userId );
+
     int updateInvoiceInfoByOrganizationId( Map< String, Object > invoiceInfo );
 
     Long selectOrganizationIdByUserId( String userId );
+
 }

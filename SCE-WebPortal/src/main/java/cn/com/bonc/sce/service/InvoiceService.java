@@ -27,4 +27,8 @@ public class InvoiceService {
     public RestRecord updateInvoiceInfoByOrganizationId( Map< String, Object > invoiceInfo, String userId ) {
         return invoiceDao.updateInvoiceInfo( invoiceInfo, userId );
     }
+
+    public RestRecord selectInvoiceHistory( String userId ) {
+        return invoiceDao.selectInvoiceHistory(userId);
+    }
 }

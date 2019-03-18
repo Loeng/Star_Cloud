@@ -20,6 +20,9 @@ public interface InvoiceDao {
     @RequestMapping( value = "/invoice/info/{userId}", method = RequestMethod.GET )
     public RestRecord getInvoiceInfo( @PathVariable( "userId" ) String userId );
 
+    @RequestMapping( value = "/invoice/info-history/{userId}", method = RequestMethod.GET )
+    public RestRecord selectInvoiceHistory( @PathVariable( "userId" ) String userId );
+
     @RequestMapping( value = "/invoice/update/{userId}", method = RequestMethod.PUT )
     public RestRecord updateInvoiceInfo( @RequestBody Map< String, Object > invoiceInfo,
                                          @PathVariable( "userId" ) String userId );
