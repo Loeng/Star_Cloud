@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 
-/**1
+/**
+ * 1
+ *
  * @author Leucippus
  * @version 0.1
  * @since 2018/12/11 7:50
@@ -29,9 +31,16 @@ public interface UserDao extends JpaRepository< User, String > {
 
     public User findByUserId( String userId );
 
-    @Query(value = "select school_name from STARCLOUDPORTAL.SCE_ENTITY_SCHOOL where id=:Oid",nativeQuery = true)
-    String findSchoolByOrganizationId(@Param("Oid") String Oid);
+    @Query( value = "select school_name from STARCLOUDPORTAL.SCE_ENTITY_SCHOOL where id=:Oid", nativeQuery = true )
+    String findSchoolByOrganizationId( @Param( "Oid" ) String Oid );
 
-    @Query(value = "SELECT grade FROM STARCLOUDPORTAL.SCE_INFO_STUDENT where user_id=:UserId",nativeQuery = true)
-    String findGradeByUserId(@Param("UserId") String UserId);
+    @Query( value = "SELECT grade FROM STARCLOUDPORTAL.SCE_INFO_STUDENT where user_id=:UserId", nativeQuery = true )
+    String findGradeByUserId( @Param( "UserId" ) String UserId );
+
+    @Transactional
+    @Modifying
+    @Query( value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET LAST_LOGIN_TIME = LOGIN_TIME ,LOGIN_TIME=SYSDATE,LOGIN_COUNTS=NVL(LOGIN_COUNTS,0)+1 WHERE USER_ID = :userId", nativeQuery = true )
+    public int updateUserLoginTimeAndCounts( @Param( "userId" ) String userId );
+
+
 }

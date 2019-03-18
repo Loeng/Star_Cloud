@@ -30,7 +30,6 @@ public class UserService {
      * 根据用户的 登录id 获取用户信息
      *
      * @param loginName 登录id
-     *
      * @return 用户数据
      */
     public User getUserByLoginName( String loginName ) {
@@ -86,14 +85,24 @@ public class UserService {
      *
      * @param userId     用户Id
      * @param allCorrect 用户数据是否完整/正确
-     *
      * @return
      */
     public int changeUserInfoIntegrityAndAccuracyStatus( String userId, boolean allCorrect ) {
-        return userDao.changeUserInfoIntegrityAndAccuracyStatus( userId, allCorrect).getCode();
+        return userDao.changeUserInfoIntegrityAndAccuracyStatus( userId, allCorrect ).getCode();
     }
 
     public RestRecord updatePasswordById( String userId, String passWord ) {
-        return userDao.updatePasswordById( userId, passWord);
+        return userDao.updatePasswordById( userId, passWord );
     }
+
+    /**
+     * 更新用户【登陆时间】和【登陆次数】
+     * @param userId
+     * @return
+     */
+    public RestRecord updateUserLoginTimeAndCounts( String userId ) {
+        return userDao.updateUserLoginTimeAndCounts( userId );
+    }
+
+
 }

@@ -115,6 +115,8 @@ public class AuthenticationController {
          */
         // loginService.confirmUserFirstLogin( authenticatedUser );
 
+        //6.记录用户本次登陆时间，上次登陆时间，登陆次数
+        userService.updateUserLoginTimeAndCounts(authenticatedUser.getUserId());
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, loginResult );
     }
 

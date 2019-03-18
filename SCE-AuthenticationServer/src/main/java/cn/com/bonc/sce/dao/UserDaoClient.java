@@ -17,7 +17,6 @@ public interface UserDaoClient {
      * 根据用户 id 获取用户详细信息
      *
      * @param userId 用户id
-     *
      * @return 用户的详细数据
      */
     @RequestMapping( value = "/users/{userId}", method = RequestMethod.GET )
@@ -27,7 +26,6 @@ public interface UserDaoClient {
      * 根据用户的 登录id 获取用户信息
      *
      * @param loginName 登录的账号信息
-     *
      * @return 用户数据
      */
     @RequestMapping( value = "/users/login-name-is/", method = RequestMethod.POST )
@@ -37,7 +35,6 @@ public interface UserDaoClient {
      * 获取用户详细信息
      *
      * @param userId userId
-     *
      * @return 获取用户
      */
     @RequestMapping( value = "/users/{userId}/info/correction", method = RequestMethod.POST )
@@ -52,15 +49,24 @@ public interface UserDaoClient {
     public RestRecord updateUserInfo( User user );
 
     /**
+     * 用户登陆后
+     * 更新用户【登陆时间】和【登陆次数】
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/users/login-time-counts/{userId}", method = RequestMethod.POST )
+    public RestRecord updateUserLoginTimeAndCounts( @PathVariable( "userId" ) String userId );
+
+    /**
      * 获取用户详细信息
      *
      * @param userId userId
-     *
      * @return 获取用户
      */
     @RequestMapping( value = "/users/detailed/{userId}", method = RequestMethod.GET )
     public RestRecord getUserInfo( @PathVariable( "userId" ) String userId );
 
     @RequestMapping( value = "/user-info/password", method = RequestMethod.PUT )
-    RestRecord updatePasswordById( @RequestParam("userId")  String userId, @RequestParam("password")  String password );
+    RestRecord updatePasswordById( @RequestParam( "userId" ) String userId, @RequestParam( "password" ) String password );
 }
