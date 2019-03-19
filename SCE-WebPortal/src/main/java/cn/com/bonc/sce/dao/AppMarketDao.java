@@ -35,9 +35,7 @@ public interface AppMarketDao {
                        @RequestBody Map backlog);
 
     @RequestMapping(value = "/app-portal/backlog", method = RequestMethod.PUT)
-    RestRecord backlog_patch(@RequestHeader("appId") String appId,
-                       @RequestHeader("appToken") String appToken,
-                       @RequestHeader("userId") String userId,
-                       @RequestBody Map map);
+    RestRecord backlog_patch(@RequestHeader("userId") String userId,
+                             @RequestBody Map map);
 
 }

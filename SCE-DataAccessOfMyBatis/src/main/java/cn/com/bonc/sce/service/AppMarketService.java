@@ -5,13 +5,11 @@ import cn.com.bonc.sce.mapper.AppMarketMapper;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,12 +37,6 @@ public class AppMarketService {
             return new RestRecord(433, WebMessageConstants.SCE_PORTAL_MSG_433);
         }
         RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
-//        List list = appMarketMapper.selectUserToDo(userId);
-//        PageInfo<List> pageInfo = new PageInfo<List>(list);
-//        restRecord.setData(list);
-//        System.out.println("list:");
-//        System.out.println(list);
-//        restRecord.setTotal(pageInfo.getTotal());
         List list = appMarketMapper.selectUserToDo(userId);
         restRecord.setData(list);
         restRecord.setTotal(appMarketMapper.selectUserToDoCount(userId));
@@ -52,15 +44,11 @@ public class AppMarketService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public RestRecord saveBacklog(String appId, String appToken, String userId, Map<String, Object> backlog){
-        if(!appToken.equals(appMarketMapper.selectAppToken(appId))){
-            return new RestRecord(152, WebMessageConstants.SCE_WEB_MSG_152);
-        }
+    public RestRecord saveBacklog(String userId, Map<String, Object> backlog){
         List<String> operateUserIds = (List) backlog.get("users");
         if(operateUserIds.size() < 1){
             return new RestRecord(431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "users"));
         }
-        // todo 验证authentication
         List<Map> result = new ArrayList<>();
         backlog.put("userId", userId);
         for(String operateUserId : operateUserIds){
@@ -79,12 +67,13 @@ public class AppMarketService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public RestRecord changeBacklog(String appId, String appToken, String userId, Map map){
-        if(!appToken.equals(appMarketMapper.selectAppToken(appId))){
-            return new RestRecord(152, WebMessageConstants.SCE_WEB_MSG_152);
-        }
+    public RestRecord changeBacklog(String userId, Map map){
         appMarketMapper.updateBacklog(map);
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+    public String findAppToken(String appId){
+        return appMarketMapper.selectAppToken(appId);
     }
 
 }

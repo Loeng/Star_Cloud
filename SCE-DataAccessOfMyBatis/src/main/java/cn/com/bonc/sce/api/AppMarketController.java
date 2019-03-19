@@ -52,11 +52,9 @@ public class AppMarketController {
     }
 
     @PutMapping("/backlog")
-    public RestRecord backlog_patch(@RequestHeader String appId,
-                              @RequestHeader String appToken,
-                              @RequestHeader String userId,
-                              @RequestBody Map map){
-        return appMarketService.changeBacklog(appId, appToken, userId, map);
+    public RestRecord backlog_patch(@RequestHeader String userId,
+                                    @RequestBody Map map){
+        return appMarketService.changeBacklog(userId, map);
     }
 
 }

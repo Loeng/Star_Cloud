@@ -23,7 +23,7 @@ public class BacklogController {
     private AppMarketService appMarketService;
 
     @PostMapping("/backlog")
-    public RestRecord backlog(HttpServletRequest request, @RequestBody Map<String, Object> backlog, @CurrentUserId String userId){
+    public RestRecord backlog(@RequestBody Map<String, Object> backlog, @CurrentUserId String userId){
         if(backlog == null || backlog.get("backlogType") == null || backlog.get("content") == null || backlog.get("url") == null || backlog.get("users") == null){
             return new RestRecord(431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必须"));
         }
@@ -38,9 +38,10 @@ public class BacklogController {
     }
 
     @PatchMapping("/backlog/{backlogId}/{status}")
-    public RestRecord backlog(@CurrentUserId String userId, @RequestHeader String appId, @RequestHeader String appToken,
-                              @PathVariable("backlogId") String backlogId, @PathVariable("status") String status){
-        return appMarketService.backlog(appId, appToken, userId, backlogId, status);
+    public RestRecord backlog_patch(@CurrentUserId String userId,
+                              @PathVariable("backlogId") String backlogId,
+                              @PathVariable("status") String status){
+        return appMarketService.backlog_patch(userId, backlogId, status);
     }
 
 }

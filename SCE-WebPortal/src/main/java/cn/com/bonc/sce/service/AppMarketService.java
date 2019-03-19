@@ -25,19 +25,19 @@ public class AppMarketService {
         return appMarketDao.userToDo(userId, pageNum, pageSize);
     }
 
-    public RestRecord backlog(HttpServletRequest request, Map<String, Object> backlog, String userId){
-        RestRecord restRecord = appMarketDao.backlog(request.getHeader("appId"), request.getHeader("appToken"), userId, backlog);
+    public RestRecord backlog(Map<String, Object> backlog, String userId){
+        RestRecord restRecord = appMarketDao.backlog(userId, backlog);
 //        for(String operateUserId : (List<String>) backlog.get("users")){
 //            socket.sendMessage(operateUserId, backlog.get("content"));
 //        }
         return restRecord;
     }
 
-    public RestRecord backlog(String appId, String appToken, String userId, String backlogId, String status){
+    public RestRecord backlog_patch(String userId, String backlogId, String status){
         Map map = new HashMap();
         map.put("backlogId", backlogId);
         map.put("status", status);
-        return appMarketDao.backlog_patch(appId, appToken, userId, map);
+        return appMarketDao.backlog_patch(userId, map);
     }
 
 }
