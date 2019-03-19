@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public class LoginService {
      *
      * @return 字符串形式的 jwt ticket
      */
-    public String generateTicket( User authenticatedUser ) {
+    public String generateTicket(User authenticatedUser, Date expirationDate) {
         Map< String, Object > claims = new HashMap<>( 2 );
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
@@ -61,7 +62,7 @@ public class LoginService {
         claims.put( "ruleCode", roleCodes[ authenticatedUser.getUserType() ] );
         claims.put( "isFirstLogin", authenticatedUser.getIsFirstLogin() );
 
-        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey() );
+        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey(), expirationDate );
     }
 
     /**
@@ -106,11 +107,10 @@ public class LoginService {
      *
      * @return 登录信息
      */
-    public Map< String, String > generateLoginResult( User authenticatedUser ) {
+    public Map< String, String > generateLoginResult( User authenticatedUser, Date expirationDate ) {
         Map< String, String > data = new HashMap<>( 2 );
-        String ticket = generateTicket( authenticatedUser );
+        String ticket = generateTicket( authenticatedUser, expirationDate );
         data.put( "ticket", ticket );
-
         return data;
     }
 }

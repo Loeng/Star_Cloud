@@ -41,11 +41,14 @@ public class AppMarketController {
     }
 
     @PostMapping("/backlog")
-    public RestRecord backlog(@RequestHeader String appId,
-                              @RequestHeader String appToken,
-                              @CurrentUserId String userId,
+    public RestRecord backlog(@CurrentUserId String userId,
                               @RequestBody Map<String, Object> backlog){
-        return appMarketService.saveBacklog(appId, appToken, userId, backlog);
+        return appMarketService.saveBacklog(userId, backlog);
+    }
+
+    @GetMapping("/app-token")
+    public String getAppToken(@RequestParam String appId){
+        return appMarketService.findAppToken(appId);
     }
 
 }

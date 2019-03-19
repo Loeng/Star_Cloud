@@ -112,7 +112,7 @@ public class UserOperationController {
         Date CREATE_TIME = new Date();
         String ORGANIZATION_ID = "";
         String PASSWORD = "";
-        String SECRET = Secret.generateSecret();
+        String SECRET = Secret.ES256GenerateSecret();
         if ( StringUtils.isNotBlank( userInfo.get( "LOGIN_NAME" ) + "" ) ) {
             LOGIN_NAME = userInfo.get( "LOGIN_NAME" ) + "";
         }
@@ -229,7 +229,7 @@ public class UserOperationController {
     @ResponseBody
     public RestRecord insertUser( @RequestBody UserModel userModel ) {
 //        1	学生;2	教师;3	学校;4	厂家;5	家长;6	代理商;7	机构
-        userModel.setSecret( Secret.generateSecret() );
+        userModel.setSecret( Secret.ES256GenerateSecret() );
         userModel.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
         userModel.setCreateTime( new Date() );
         int flag = userModel.getUserType();
@@ -315,7 +315,7 @@ public class UserOperationController {
 
             //创建一个家长账号与之关联
             UserModel userModelParent = new UserModel();
-            userModelParent.setSecret( Secret.generateSecret() );
+            userModelParent.setSecret( Secret.ES256GenerateSecret() );
             userModelParent.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
             userModelParent.setCreateTime( new Date() );
             userModelParent.setUserType( 5 );

@@ -30,15 +30,11 @@ public class AppMarketService {
     }
 
     @Transactional
-    public RestRecord saveBacklog(String appId, String appToken, String userId, Map<String, Object> backlog){
-        if(!appToken.equals(appMarketMapper.selectAppToken(appId))){
-            return new RestRecord(152, WebMessageConstants.SCE_WEB_MSG_152);
-        }
+    public RestRecord saveBacklog(String userId, Map<String, Object> backlog){
         List<String> operateUserIds = (List) backlog.get("users");
         if(operateUserIds.size() < 1){
             return new RestRecord(431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "users"));
         }
-        // todo 验证authentication
         backlog.put("userId", userId);
         for(String operateUserId : operateUserIds){
             //调用id生成器生成id
@@ -50,6 +46,10 @@ public class AppMarketService {
 
 
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+    public String findAppToken(String appId){
+        return appMarketMapper.selectAppToken(appId);
     }
 
 }

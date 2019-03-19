@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
+import cn.com.bonc.sce.constants.DateConstants;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.encrypt.AppSecretAutoManageService;
@@ -9,6 +11,7 @@ import cn.com.bonc.sce.exception.UnsupportedAuthenticationTypeException;
 import cn.com.bonc.sce.model.SSOAuthentication;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AuthenticationService;
 import cn.com.bonc.sce.service.LoginService;
 import cn.com.bonc.sce.service.UserService;
 import cn.com.bonc.sce.tool.RestApiUtil;
@@ -16,16 +19,19 @@ import cn.com.bonc.sce.utils.GeneratorVerifyCode;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,16 +46,23 @@ import java.util.Map;
 @RestController
 public class AuthenticationController {
 
+    @Value("{sce.appId}")
+    private String appId;
+
+    @Value("{sce.appToken}")
+    private String appToken;
 
     private UserService userService;
     private LoginService loginService;
     private AppSecretAutoManageService appSecretAutoManageService;
+    private AuthenticationService authenticationService;
 
     @Autowired
-    public AuthenticationController( UserService userService, LoginService loginService, SingleInstanceAppSecretAutoManageService singleInstanceAppSecretAutoManageService ) {
+    public AuthenticationController( UserService userService, LoginService loginService, SingleInstanceAppSecretAutoManageService singleInstanceAppSecretAutoManageService, AuthenticationService authenticationService ) {
         this.userService = userService;
         this.loginService = loginService;
         this.appSecretAutoManageService = singleInstanceAppSecretAutoManageService;
+        this.authenticationService = authenticationService;
     }
 
     /**
@@ -70,7 +83,20 @@ public class AuthenticationController {
         User authenticatedUser;
 
         /*
-         * 1. 判断用户的登录类型是否支持，并查找是否存在匹配的用户数据
+         * 1. 检查应用Id与应用Token
+         */
+        if( authentication.getAppId() == null || authentication.getAppToken() == null ){
+            authentication.setAppId( this.appId );
+            authentication.setAppToken( this.appToken );
+        }else {
+            if( !authentication.getAppToken().equals(authenticationService.getAppToken(authentication.getAppId()))){
+                log.info("应用Id或应用Token无效");
+                return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152);
+            }
+        }
+
+        /*
+         * 2. 判断用户的登录类型是否支持，并查找是否存在匹配的用户数据
          */
         try {
             authenticatedUser = loginService.getUserInfo( authentication );
@@ -83,7 +109,7 @@ public class AuthenticationController {
         }
 
         /*
-         * 2. 检查用户的登录信息是否匹配
+         * 3. 检查用户的登录信息是否匹配
          */
         // 查找不到用户数据
         if ( authenticatedUser == null ) {
@@ -104,12 +130,12 @@ public class AuthenticationController {
         }
 
         /*
-         * 3. 生成登录信息
+         * 4. 生成登录信息
          */
-        Map loginResult = loginService.generateLoginResult( authenticatedUser );
+        Map loginResult = loginService.generateLoginResult( authenticatedUser, new Date( System.currentTimeMillis() + DateConstants.THIRTY_MINUTE ) );
 
         /*
-         * 4. 更新用户登录状态（是否首次登录）
+         * 5. 更新用户登录状态（是否首次登录）
          * 以 2019.03.04 的系统设计来看，所有除系统管理员外的账户类型都需要在初次登陆时进行用户数据验证。理应当用户数据校验完成
          * 后由前台发起用户认证状态(首次登录完成、用户信息确认完成、初登陆密码修改完成等)的修改请求。故此处暂不做任何处理
          */
@@ -192,4 +218,59 @@ public class AuthenticationController {
         }
 
     }
+
+    /**
+     * 长期 ticket 换取30秒 temp_token 接口 （同时更新ticket时间）
+     * @param userId 用户id
+     * @param response response.header 存放ticket
+     * @return RestRecord
+     */
+    @GetMapping( "/temp_token" )
+    public RestRecord temp_token(@CurrentUserId String userId, HttpServletResponse response){
+        if(userId.equals("")){
+            return new RestRecord(150, WebMessageConstants.SCE_WEB_MSG_150);
+        }
+        User user = userService.getUserByUserId(userId);
+        String temp_token = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ) );
+        response.addHeader("temp_token", temp_token);
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ) );
+        response.addHeader("authentication", ticket);
+        System.out.println("temp_token = " + ticket);
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+    /**
+     * 临时token(30秒)换取正式ticket(3分钟)接口
+     * @param userId 用户id
+     * @return RestRecord
+     */
+    @GetMapping( "/ticket" )
+    public RestRecord ticket(@CurrentUserId String userId, HttpServletResponse response){
+        if(userId.equals("")){
+            return new RestRecord(150, WebMessageConstants.SCE_WEB_MSG_150);
+        }
+        User user = userService.getUserByUserId(userId);
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ) );
+        response.addHeader("authentication", ticket);
+        System.out.println("ticket = " + ticket);
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+    /**
+     * 旧的ticket换取新的ticket
+     * @return RestRecord
+     */
+    @GetMapping( "/refresh" )
+    public RestRecord refresh(@CurrentUserId String userId, HttpServletResponse response){
+        if(userId.equals("")){
+            return new RestRecord(150, WebMessageConstants.SCE_WEB_MSG_150);
+        }
+        User user = userService.getUserByUserId(userId);
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ) );
+        response.addHeader("authentication", ticket);
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
+
 }

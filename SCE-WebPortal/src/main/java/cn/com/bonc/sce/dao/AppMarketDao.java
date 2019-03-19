@@ -27,9 +27,7 @@ public interface AppMarketDao {
     RestRecord userToDo(@RequestParam(value = "userId") String userId);
 
     @RequestMapping(value = "/app-portal/backlog", method = RequestMethod.POST)
-    RestRecord backlog(@RequestHeader(value = "appId") String appId,
-                       @RequestHeader(value = "appToken") String appToken,
-                       @RequestParam(value = "userId") String userId,
+    RestRecord backlog(@RequestParam(value = "userId") String userId,
                        @RequestBody Map backlog);
 
 

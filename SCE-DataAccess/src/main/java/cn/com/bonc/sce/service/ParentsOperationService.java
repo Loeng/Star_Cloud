@@ -75,7 +75,7 @@ public class ParentsOperationService {
             u.setCertificateNumber( parentsInfo.getParentNum() );
             u.setCertificateType( "1" );
             u.setIsDelete( 1 );
-            u.setSecret( Secret.generateSecret() );
+            u.setSecret( Secret.ES256GenerateSecret() );
             u.setLoginPermissionStatus( 1 );
             u.setUserType( 5 );
             u.setIsFirstLogin( 0 );
@@ -132,7 +132,7 @@ public class ParentsOperationService {
         u.setCertificateNumber( info.getParentNum() );
         u.setCertificateType( "1" );
         u.setIsDelete( 1 );
-        u.setSecret( Secret.generateSecret() );
+        u.setSecret( Secret.ES256GenerateSecret() );
         u.setLoginPermissionStatus( 1 );
         u.setUserType( 8 );
         u.setIsFirstLogin( 0 );

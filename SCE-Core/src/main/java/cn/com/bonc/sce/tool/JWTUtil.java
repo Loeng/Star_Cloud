@@ -49,6 +49,14 @@ public class JWTUtil {
                 .compact();
     }
 
+    public static String generateTicketWithSecret( Map< String, Object > claims, Key secret, Date expirationDate ) {
+        return defaultBuilder()
+                .addClaims( claims )
+                .setExpiration( expirationDate )
+                .signWith( secret )
+                .compact();
+    }
+
     public static String generateTicketWithSecret( Key secret ) {
         return defaultBuilder().signWith( secret ).compact();
     }

@@ -135,7 +135,7 @@ public class FileUploadApiController {
                     }
 
                     UserPassword userPassword = new UserPassword();
-                    String secret = Secret.generateSecret();
+                    String secret = Secret.ES256GenerateSecret();
                     String loginName = IDUtil.createID( pre );
                     String userId = UUID.getUUID();
                     userPassword.setIsDelete( 1 );
@@ -179,7 +179,7 @@ public class FileUploadApiController {
 
                     //生成学生用户，并自动生成家长用户关联学生
                     UserPassword userPassword = new UserPassword();
-                    String secret = Secret.generateSecret();
+                    String secret = Secret.ES256GenerateSecret();
                     String loginName = IDUtil.createID( pre );
                     String studentId = UUID.getUUID();
                     userPassword.setIsDelete( 1 );
@@ -193,7 +193,7 @@ public class FileUploadApiController {
 
                     //生成家长用户，并关联学生
                     UserPassword parentPassword = new UserPassword();
-                    String secretParent = Secret.generateSecret();
+                    String secretParent = Secret.ES256GenerateSecret();
                     String loginParentName = IDUtil.createID( "zj_" );
                     String parentId = UUID.getUUID();
                     parentPassword.setIsDelete( 1 );
@@ -253,7 +253,7 @@ public class FileUploadApiController {
 
                     //插入家长用户
                     UserPassword userPassword = new UserPassword();
-                    String secret = Secret.generateSecret();
+                    String secret = Secret.ES256GenerateSecret();
                     String loginName = IDUtil.createID( pre );
                     String parentId = UUID.getUUID();
                     userPassword.setIsDelete( 1 );

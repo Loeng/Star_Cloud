@@ -65,7 +65,7 @@ public class SchoolService {
      */
     public RestRecord insertSchool(School school){
         User user = new User();
-        String secret = Secret.generateSecret();
+        String secret = Secret.ES256GenerateSecret();
         String loginName = IDUtil.createID( "xx_" );
         user.setSecret( secret );
         user.setLoginName( loginName );
@@ -114,7 +114,7 @@ public class SchoolService {
         School newSchool = schoolDao.save( school );
         //生成学校用户 和  插入密码表
         UserPassword userPassword = new UserPassword();
-        String secret = Secret.generateSecret();
+        String secret = Secret.ES256GenerateSecret();
         String loginName = IDUtil.createID( "xx_" );
         String userId = UUID.getUUID();
         userPassword.setIsDelete( 1 );

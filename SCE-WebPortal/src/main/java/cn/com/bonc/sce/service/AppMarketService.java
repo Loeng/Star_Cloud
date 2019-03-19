@@ -28,8 +28,8 @@ public class AppMarketService {
         return appMarketDao.userToDo(userId);
     }
 
-    public RestRecord backlog(HttpServletRequest request, Map<String, Object> backlog, String userId){
-        RestRecord restRecord = appMarketDao.backlog(request.getHeader("appId"), request.getHeader("appToken"), userId, backlog);
+    public RestRecord backlog(Map<String, Object> backlog, String userId){
+        RestRecord restRecord = appMarketDao.backlog(userId, backlog);
         for(String operateUserId : (List<String>) backlog.get("users")){
             socket.sendMessage(operateUserId, backlog.get("content"));
         }

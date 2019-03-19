@@ -26,3 +26,7 @@ sce:
       auto-management:
         enable: true
         refresh-period: 1
+  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEXlDUv4MKcEziSW0fFB1lOo5WUhG3AxkrP00PZwfVPmvf8wxnl4h8bUBIJ951FRXb0SqgSnv+Ew+GtJ0t+lskwQ==
+  privateKey: MEECAQAwEwYHKoZIzj0CAQYIKoZIzj0DAQcEJzAlAgEBBCDK1UOPy+ImsMFnqF9C9uHsaC/0f5hKM84+wpzlw6Ha0w==
+  appId: E2B8B159461741CE9FFE6A438CC5B9CD
+  appToken: 85F2F1EBE10D4B8D88D21994893867E3
