@@ -21,6 +21,8 @@ public class RestRecord implements Serializable {
     private String msg;
     @ApiModelProperty( example = "{\"username\": \"RGM79\"}", notes = "数据", position = 3 )
     private Object data;
+    @ApiModelProperty( example = "{\"总数据条数\": \"100\"}", notes = "附带数据", position = 4 )
+    private long total;
 
     public String getMsg() {
         return msg;
@@ -110,6 +112,14 @@ public class RestRecord implements Serializable {
 
     public static RestRecord success() {
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+    }
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
     }
 
     @Override

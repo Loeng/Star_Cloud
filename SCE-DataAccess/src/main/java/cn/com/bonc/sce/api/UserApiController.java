@@ -103,17 +103,17 @@ public class UserApiController {
             }
 
 
-            if(user.getUserType() == 1){
+            if ( user.getUserType() == 1 ) {
                 //查询学生学校名称和学生年级
                 School school = new School();
-                school.setSchoolName(userDao.findSchoolByOrganizationId(user.getOrganizationId()));
-                school.setGrade(userDao.findGradeByUserId(userId));
-                user.setSchool(school);
-            }else if(user.getUserType() == 2){
+                school.setSchoolName( userDao.findSchoolByOrganizationId( user.getOrganizationId() ) );
+                school.setGrade( userDao.findGradeByUserId( userId ) );
+                user.setSchool( school );
+            } else if ( user.getUserType() == 2 ) {
                 //查询教师所在单位
                 School school = new School();
-                school.setSchoolName(userDao.findSchoolByOrganizationId(user.getOrganizationId()));
-                user.setSchool(school);
+                school.setSchoolName( userDao.findSchoolByOrganizationId( user.getOrganizationId() ) );
+                user.setSchool( school );
             }
 
             return new RestRecord( 200, user );
@@ -163,9 +163,9 @@ public class UserApiController {
             }
 
 
-            Map<String,String> userDetailedInfo = ( Map<String,String> )user.getUserDetailedInfo();
-            if( ObjectUtils.isEmpty( userDetailedInfo )){
-                return new RestRecord( 200,num );
+            Map< String, String > userDetailedInfo = ( Map< String, String > ) user.getUserDetailedInfo();
+            if ( ObjectUtils.isEmpty( userDetailedInfo ) ) {
+                return new RestRecord( 200, num );
             }
             for ( Map.Entry< String, String > entry : userDetailedInfo.entrySet() ) {
                 if ( entry.getKey().equals( "USER_ID" ) || entry.getKey().equals( "IS_DELETE" ) ) {
@@ -184,6 +184,21 @@ public class UserApiController {
             log.error( e.getMessage(), e );
             return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );
         }
-        return new RestRecord( 200,num );
+        return new RestRecord( 200, num );
     }
+
+    /**
+     * 用户登陆后
+     * 更新用户【登陆时间】和【登陆次数】
+     *
+     * @param userId
+     * @return
+     */
+    @PostMapping( "/login-time-counts/{userId}" )
+    @ResponseBody
+    @Transactional
+    public RestRecord updateUserLoginTimeAndCounts( @PathVariable( "userId" ) String userId ) {
+        return new RestRecord( 200, userDao.updateUserLoginTimeAndCounts( userId ) );
+    }
+
 }

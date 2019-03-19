@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import cn.com.bonc.sce.service.UserManagerService;
@@ -39,6 +40,16 @@ public class UserManagerController {
     public RestRecord editLogin(@RequestParam( "id" ) String id,
                                 @RequestParam( "loginPermissionStatus" ) Integer loginPermissionStatus){
         return userManagerService.editLogin(id,loginPermissionStatus);
+    }
+
+    @GetMapping("/teacher-list/{pageNum}/{pageSize}")
+    public RestRecord findTeacherList(@CurrentUserId String userId, @PathVariable String pageNum, @PathVariable String pageSize){
+        return userManagerService.findTeacherList(userId, pageNum, pageSize);
+    }
+
+    @GetMapping("/teacher/{userName}")
+    public RestRecord findTeacher(@CurrentUserId String userId, @PathVariable String userName){
+        return userManagerService.findTeacher(userId, userName);
     }
 
 }
