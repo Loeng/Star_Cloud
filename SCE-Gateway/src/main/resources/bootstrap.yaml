@@ -1,3 +1,6 @@
+sce:
+  server:
+    https: true
 spring:
   profiles:
     active: dev
@@ -49,6 +52,12 @@ spring:
             - StripPrefix=1
 server:
   port: 10101
+  ssl:
+    enabled: ${sce.server.https}
+    key-alias: scg
+    key-store-password: 123456
+    key-store: classpath:sce.keystore
+#    key-store-type: PKCS12
 logging:
 #  file: ./logs/dev_app.log
   pattern:
