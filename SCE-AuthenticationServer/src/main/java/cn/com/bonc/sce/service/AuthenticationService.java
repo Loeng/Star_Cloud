@@ -7,6 +7,7 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.json.JSONUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class AuthenticationService {
     /**
      * 验证JWT
      * 如果是用户的JWT，则需要在payload中加入userId
-     * 如果不是用户的JWT，则需要在payload中加入appId与appToken
+     * 如果不是用户的JWT，则需要在payload中加入appId
      * @param ticket 凭证
      * @return JWT中的body(Claims类型)
      */
@@ -52,17 +53,17 @@ public class AuthenticationService {
         Object userId = payloadsMap.get( "userId" );
         PublicKey publicKey;
         if(userId == null){
-            //验证appId与appToken
-            String appId = payloadsMap.get( "appId" ).toString();
-            String appToken = payloadsMap.get( "appToken" ).toString();
-            if( appId == null || appToken == null ){
-                log.warn( "JWT认证失败->不存在的appId或appToken" );
-                return null;
-            }
-            if( !appDaoClient.getAppToken( appId ).equals( appToken ) ){
-                log.warn( "JWT认证失败->appId与appToken不匹配" );
-                return null;
-            }
+            //不需要验证appId与appToken，JWT本身验证成功就证明为平台颁发的凭证，因此注释掉appId与appToken的验证
+//            String appId = payloadsMap.get( "appId" ).toString();
+//            String appToken = payloadsMap.get( "appToken" ).toString();
+//            if( appId == null || appToken == null ){
+//                log.warn( "JWT认证失败->不存在的appId或appToken" );
+//                return null;
+//            }
+//            if( !appDaoClient.getAppToken( appId ).equals( appToken ) ){
+//                log.warn( "JWT认证失败->appId与appToken不匹配" );
+//                return null;
+//            }
             publicKey = SecureUtil.generatePublicKey( "EC", Base64.decode( this.publicKey ) );
         }else {
             User user = userDao.getUserById( userId.toString() );
@@ -70,7 +71,9 @@ public class AuthenticationService {
         }
         try {
             claims = Jwts.parser().setSigningKey( publicKey ).parseClaimsJws( ticket ).getBody();
-        }catch (Exception e){
+        }catch ( ExpiredJwtException e ){
+            log.warn( "JWT认证失败->JWT超时" );
+        }catch ( Exception e ){
             e.printStackTrace();
             log.warn( "JWT认证失败->{}", e.getMessage());
         }

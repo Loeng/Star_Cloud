@@ -23,12 +23,13 @@ import cn.com.bonc.sce.tool.UserPropertiesUtil;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,23 +98,23 @@ public class FileUploadApiController {
 
     /**
      * 批量上传Excel解析用户数据
-     *
+     * 不能出现脏读（一边插入一边查询身份证是否被使用）
      * @return 返回是否成功
      */
     @PostMapping( "/upload-user-info" )
     @ResponseBody
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional( isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED )
     public RestRecord uploadParseExcel(@RequestBody List< ExcelToUser > list, @RequestParam( "userType" ) String userType, @CurrentUserId String currentUserId) throws ImportUserFailedException{
 
         //通过用户id查询所属学校id
-        BigDecimal orgazizationId = fileResourceRepository.selectOrganizationId(currentUserId);
+        BigDecimal organizationId = fileResourceRepository.selectOrganizationId(currentUserId);
 
         ExcelToUser excelToUser;
-        int i = -1;
+        int i = 0;
         try {
             if ( TEACHER_PRE.equals( userType ) ) {
                 String pre = "js_";
-                for ( i = 0; i < list.size(); i++ ) {
+                for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
                     if(excelToUser.getUserName() == null){
                         continue;
@@ -144,7 +145,7 @@ public class FileUploadApiController {
                     userPassword.setUserId( userId );
                     fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
                             loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(), excelToUser.getAddress(), orgazizationId,
+                            excelToUser.getPhoneNumber(), excelToUser.getAddress(), organizationId,
                             UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret );
                     userPasswordDao.save( userPassword );
 
@@ -156,13 +157,13 @@ public class FileUploadApiController {
                         schoolDate = UserPropertiesUtil.getDateByExcelDate(schoolTime);
                     }
                     //插入数据到教师表
-                    fileResourceRepository.saveTeacher(userId, orgazizationId.toString(), excelToUser.getPosition(), excelToUser.getSubject(), excelToUser.getSchoolAge(),
+                    fileResourceRepository.saveTeacher(userId, organizationId.toString(), excelToUser.getPosition(), excelToUser.getSubject(), excelToUser.getSchoolAge(),
                             excelToUser.getNameSpell(), excelToUser.getNationCode(), excelToUser.getPoliticsStatus(), excelToUser.getWorkNumber(), excelToUser.getMarriAgeCode(),
                             excelToUser.getBirthPlace(), excelToUser.getAccountAreaCode(), schoolDate);
                 }
             } else if ( STUDENT_PRE.equals( userType ) ) {
                 String pre = "xs_";
-                for (i = 0; i < list.size(); i++ ) {
+                for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
                     if(excelToUser.getUserName() == null){
                         continue;
@@ -194,7 +195,7 @@ public class FileUploadApiController {
                     userPassword.setUserId( studentId );
                     fileResourceRepository.savaAllUserInfo( studentId, excelToUser.getUserName(), excelToUser.getGender(),
                             loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(), excelToUser.getAddress(), orgazizationId,
+                            excelToUser.getPhoneNumber(), excelToUser.getAddress(), organizationId,
                             UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret );
                     userPasswordDao.save( userPassword );
 
@@ -238,7 +239,7 @@ public class FileUploadApiController {
                 }
             }else if( PARENT_CODE.equals( userType )){
                 String pre = "jz_";
-                for (i = 0; i < list.size(); i++ ) {
+                for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
                     if(excelToUser.getUserName() == null){
                         continue;

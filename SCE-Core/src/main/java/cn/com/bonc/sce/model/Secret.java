@@ -110,18 +110,17 @@ public class Secret {
     }
 
     public static void main( String[] args ) {
-        String key = ES256GenerateSecret();
-        String privateKey = key.substring(124);
-        String publicKey = key.substring(0,124);
-        Map map = new HashMap();
-        map.put("aa","11");
-        PrivateKey privateKeyObj = SecureUtil.generatePrivateKey("EC", Base64.decode(privateKey));
-        PublicKey publicKeyObj = SecureUtil.generatePublicKey("EC", Base64.decode(publicKey));
-        KeyPair keyPair = new KeyPair(publicKeyObj, privateKeyObj);
-
-        String jwt = JWTUtil.generateTicketWithSecret( map, keyPair.getPrivate(), new Date(System.currentTimeMillis() + 60000));
-        PublicKey publicKey1 = SecureUtil.generatePublicKey("EC", Base64.decode(publicKey));
-        Claims claims = Jwts.parser().setSigningKey(publicKey1).parseClaimsJws(jwt).getBody();
-        System.out.println(claims);
+//        String key = ES256GenerateSecret();
+//        String privateKey = key.substring(124);
+//        String publicKey = key.substring(0,124);
+//        Map map = new HashMap();
+//        map.put("aa","11");
+//        PrivateKey privateKeyObj = SecureUtil.generatePrivateKey("EC", Base64.decode(privateKey));
+//        PublicKey publicKeyObj = SecureUtil.generatePublicKey("EC", Base64.decode(publicKey));
+//        KeyPair keyPair = new KeyPair(publicKeyObj, privateKeyObj);
+//
+//        String jwt = JWTUtil.generateTicketWithSecret( map, keyPair.getPrivate(), new Date(System.currentTimeMillis() + 1000));
+//        Claims claims = Jwts.parser().setSigningKey(keyPair.getPublic()).parseClaimsJws(jwt).getBody();
+//        System.out.println(claims);
     }
 }
