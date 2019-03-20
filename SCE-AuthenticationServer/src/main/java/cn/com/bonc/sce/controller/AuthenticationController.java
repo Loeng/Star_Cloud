@@ -86,6 +86,7 @@ public class AuthenticationController {
          * 1. 检查应用Id与应用Token
          */
         if( authentication.getAppId() == null || authentication.getAppToken() == null ){
+            //默认平台登陆
             authentication.setAppId( this.appId );
             authentication.setAppToken( this.appToken );
         }else {
@@ -228,17 +229,16 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/temp_token" )
-    public RestRecord temp_token(@CurrentUserId String userId, HttpServletResponse response){
+    public RestRecord temp_token( @CurrentUserId String userId, HttpServletResponse response ){
         if(userId.equals("")){
-            return new RestRecord(150, WebMessageConstants.SCE_WEB_MSG_150);
+            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByUserId( userId );
         String temp_token = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ) );
-        response.addHeader("temp_token", temp_token);
+        response.addHeader( "temp_token", temp_token );
         String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ) );
-        response.addHeader("authentication", ticket);
-        System.out.println("temp_token = " + ticket);
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+        response.addHeader( "authentication", ticket );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -247,15 +247,14 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/ticket" )
-    public RestRecord ticket(@CurrentUserId String userId, HttpServletResponse response){
-        if(userId.equals("")){
-            return new RestRecord(150, WebMessageConstants.SCE_WEB_MSG_150);
+    public RestRecord ticket( @CurrentUserId String userId, HttpServletResponse response ){
+        if( userId.equals("") ){
+            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByUserId( userId );
         String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ) );
-        response.addHeader("authentication", ticket);
-        System.out.println("ticket = " + ticket);
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+        response.addHeader( "authentication", ticket );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     /**
@@ -263,14 +262,15 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/refresh" )
-    public RestRecord refresh(@CurrentUserId String userId, HttpServletResponse response){
+    public RestRecord refresh( @CurrentUserId String userId, HttpServletResponse response ){
         if(userId.equals("")){
-            return new RestRecord(150, WebMessageConstants.SCE_WEB_MSG_150);
+            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByUserId( userId );
         String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ) );
-        response.addHeader("authentication", ticket);
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+        response.addHeader( "authentication", ticket );
+        log.info( "用户ID：{}，换取了ticket", userId );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
 

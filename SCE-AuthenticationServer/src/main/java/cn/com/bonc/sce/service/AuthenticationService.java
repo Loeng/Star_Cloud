@@ -28,11 +28,11 @@ public class AuthenticationService {
 
     AppDaoClient appDaoClient;
 
-    @Value("{sce.publicKey}")
+    @Value( "{sce.publicKey}" )
     String publicKey;
 
     @Autowired
-    public AuthenticationService(UserDaoClient userDao, AppDaoClient appDaoClient){
+    public AuthenticationService( UserDaoClient userDao, AppDaoClient appDaoClient ){
         this.userDao = userDao;
         this.appDaoClient = appDaoClient;
     }
@@ -41,37 +41,38 @@ public class AuthenticationService {
     /**
      * 验证JWT
      * 如果是用户的JWT，则需要在payload中加入userId
+     * 如果不是用户的JWT，则需要在payload中加入appId与appToken
      * @param ticket 凭证
-     * @return JWT中的body(Map类型)
+     * @return JWT中的body(Claims类型)
      */
-    public Claims validateJWT(String ticket){
+    public Claims validateJWT( String ticket ){
         String payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
         Map payloadsMap = JSONUtil.toBean( payloadsStr, Map.class );
         Claims claims = null;
-        Object userId = payloadsMap.get("userId");
+        Object userId = payloadsMap.get( "userId" );
         PublicKey publicKey;
         if(userId == null){
             //验证appId与appToken
-            String appId = payloadsMap.get("appId").toString();
-            String appToken = payloadsMap.get("appToken").toString();
-            if(appId == null || appToken == null){
-                log.warn("JWT认证失败->不存在的appId或appToken");
+            String appId = payloadsMap.get( "appId" ).toString();
+            String appToken = payloadsMap.get( "appToken" ).toString();
+            if( appId == null || appToken == null ){
+                log.warn( "JWT认证失败->不存在的appId或appToken" );
                 return null;
             }
-            if(!appDaoClient.getAppToken(appId).equals(appToken)){
-                log.warn("JWT认证失败->appId与appToken不匹配");
+            if( !appDaoClient.getAppToken( appId ).equals( appToken ) ){
+                log.warn( "JWT认证失败->appId与appToken不匹配" );
                 return null;
             }
-            publicKey = SecureUtil.generatePublicKey("EC", Base64.decode(this.publicKey));
+            publicKey = SecureUtil.generatePublicKey( "EC", Base64.decode( this.publicKey ) );
         }else {
-            User user = userDao.getUserById(userId.toString());
+            User user = userDao.getUserById( userId.toString() );
             publicKey = user.getSecretKeyPair().getPublicKey();
         }
         try {
-            claims = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(ticket).getBody();
+            claims = Jwts.parser().setSigningKey( publicKey ).parseClaimsJws( ticket ).getBody();
         }catch (Exception e){
             e.printStackTrace();
-            log.warn("JWT认证失败");
+            log.warn( "JWT认证失败->{}", e.getMessage());
         }
         return claims;
     }

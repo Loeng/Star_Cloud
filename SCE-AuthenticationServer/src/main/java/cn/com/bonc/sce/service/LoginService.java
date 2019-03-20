@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.PrivateKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +64,19 @@ public class LoginService {
         claims.put( "isFirstLogin", authenticatedUser.getIsFirstLogin() );
 
         return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey(), expirationDate );
+    }
+
+    /**
+     * 平台与应用间通信所使用的JWT
+     * @param claims payload内容
+     * @param expirationDate 过期时间
+     * @return ticket
+     */
+    public String generateTicket( Map<String, Object> claims, PrivateKey privateKey, Date expirationDate ){
+        claims.put( "iss", "SCE-SSO" );
+        claims.put( "aud", "SCE-Application" );
+
+        return JWTUtil.generateTicketWithSecret( claims, privateKey, expirationDate );
     }
 
     /**

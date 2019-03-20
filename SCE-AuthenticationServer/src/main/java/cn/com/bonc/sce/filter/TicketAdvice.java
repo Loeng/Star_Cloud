@@ -38,11 +38,9 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
         String ticket =  webRequest.getHeader( "authentication" );
-        String payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
 
         //验证JWT
         Claims claims = service.validateJWT( ticket );
-
 
         if( parameter.hasParameterAnnotation( Payloads.class )){
             return claims;
