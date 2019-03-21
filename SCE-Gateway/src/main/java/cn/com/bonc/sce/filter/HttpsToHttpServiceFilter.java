@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.filter;
 
+import cn.com.bonc.sce.constant.MessageConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -29,7 +30,7 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 public class HttpsToHttpServiceFilter implements GlobalFilter, Ordered {
 
     {
-        log.info( "启用 HTTPS TO HTTP 转换拦截器" );
+        log.info( MessageConstants.HTTPS_TO_HTTP_TRANSFER_FILTER_ENABLED.getMessage() );
     }
 
     @Override

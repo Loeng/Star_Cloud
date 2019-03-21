@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.config;
 
+import cn.com.bonc.sce.constant.MessageConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +20,7 @@ import reactor.core.publisher.Mono;
  * @version 0.1
  * @since 2018/12/24 21:09
  */
+@Slf4j
 @Configuration
 public class CorsConfiguration {
 
@@ -42,6 +45,7 @@ public class CorsConfiguration {
                     return Mono.empty();
                 }
             }
+            log.info( MessageConstants.CORS_ALL_ALLOW_ENABLED.getMessage() );
             return chain.filter( ctx );
         };
     }
