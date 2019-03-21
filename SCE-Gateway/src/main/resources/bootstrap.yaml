@@ -1,7 +1,7 @@
 sce:
   server:
     # 用以开启 HTTPS-SSL 访问，具体的配置需要到 server.ssl 项中进行配置
-    https: true
+    https: false
 spring:
   profiles:
     active: dev
