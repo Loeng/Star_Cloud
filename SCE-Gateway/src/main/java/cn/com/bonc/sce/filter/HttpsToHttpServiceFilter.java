@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.filter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -17,13 +18,19 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
  * 当 Gateway 开启了 HTTPS 访问控制以后，Gateway 接收到发来的 HTTPS 请求后其转发给后台的请求也会同样使用 HTTPS，如果项目
  * 中的微服务没有启用 SSL，则请求就会报错中断，故此 filter 会在 Gateway 转发 HTTPS 请求给后台微服务之前将请求转化为 HTTP
  * 请求。
+ *
  * @author JoeTH
  * @version 1.1
  * @since 2019/3/20 16:39
  */
-@ConditionalOnProperty(name = "sce.server.https.true")
+@ConditionalOnProperty( name = "sce.server.https", havingValue = "true" )
 @Component
+@Slf4j
 public class HttpsToHttpServiceFilter implements GlobalFilter, Ordered {
+
+    {
+        log.info( "启用 HTTPS TO HTTP 转换拦截器" );
+    }
 
     @Override
     public Mono< Void > filter( ServerWebExchange exchange, GatewayFilterChain chain ) {
