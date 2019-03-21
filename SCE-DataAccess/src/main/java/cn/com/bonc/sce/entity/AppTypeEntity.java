@@ -28,7 +28,7 @@ public class AppTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column( name = "APP_TYPE_ID" )
-    private Integer appTypeId;
+    private Long appTypeId;
     @JsonIgnoreProperties(value = { "appTypes" })
     @ManyToMany(mappedBy = "appTypes")
     private Set< AppInfoEntity > appInfo = new HashSet<>();

@@ -1,7 +1,3 @@
-sce:
-  server:
-    # 用以开启 HTTPS-SSL 访问，具体的配置需要到 server.ssl 项中进行配置
-    https: false
 spring:
   profiles:
     active: dev
@@ -53,12 +49,6 @@ spring:
             - StripPrefix=1
 server:
   port: 10101
-  ssl:
-    enabled: ${sce.server.https}
-    key-alias: nebula
-    key-store-password: nebula123
-    key-store: classpath:sce.keystore
-    key-store-type: PKCS12
 logging:
 #  file: ./logs/dev_app.log
   pattern:

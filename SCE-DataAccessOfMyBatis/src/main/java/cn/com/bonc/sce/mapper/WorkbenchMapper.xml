@@ -8,7 +8,7 @@
     </update>
 
     <select id="getAddress" parameterType="String" resultType="Map">
-        select * from STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO where USER_ID = #{USER_ID}
+        select * from STARCLOUDPORTAL.SCE_COMMON_USER_POST_INFO where USER_ID = #{USER_ID} and IS_DELETE = 1
     </select>
 
     <select id="defaultTotal" parameterType="String" resultType="Integer">

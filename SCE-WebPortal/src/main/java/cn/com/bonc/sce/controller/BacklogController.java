@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.util.Map;
 
 @Slf4j
@@ -22,17 +23,25 @@ public class BacklogController {
     private AppMarketService appMarketService;
 
     @PostMapping("/backlog")
-    public RestRecord backlog(HttpServletRequest request, @RequestBody Map<String, Object> backlog){
-        if(backlog == null || backlog.get("backlogType") == null || backlog.get("content") == null || backlog.get("url") == null || backlog.get("users") == null ||
-        request.getHeader("appId") == null || request.getHeader("appToken") == null || request.getHeader("authentication") == null){
-            return new RestRecord(WebMessageConstants.SCE_WEb_MSG_002,"必须");
+    public RestRecord backlog( @RequestBody Map< String, Object > backlog, @CurrentUserId String userId ) {
+        if ( backlog == null || backlog.get( "backlogType" ) == null || backlog.get( "content" ) == null || backlog.get( "url" ) == null || backlog.get( "users" ) == null ) {
+            return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必须" ) );
         }
-        return appMarketService.backlog(request, backlog);
+        return appMarketService.backlog( backlog, userId );
     }
 
-    @GetMapping("/backlog")
-    public RestRecord backlog(@CurrentUserId String userId){
-        return appMarketService.userToDo(userId);
+    @GetMapping( "/backlog/{pageNum}/{pageSize}" )
+    public RestRecord backlog( @CurrentUserId String userId,
+                               @PathVariable String pageNum,
+                               @PathVariable String pageSize ) {
+        return appMarketService.userToDo( userId, pageNum, pageSize );
+    }
+
+    @PatchMapping( "/backlog/{backlogId}/{status}" )
+    public RestRecord backlog_patch( @CurrentUserId String userId,
+                                     @PathVariable( "backlogId" ) String backlogId,
+                                     @PathVariable( "status" ) String status ) {
+        return appMarketService.backlog_patch( userId, backlogId, status );
     }
 
 }

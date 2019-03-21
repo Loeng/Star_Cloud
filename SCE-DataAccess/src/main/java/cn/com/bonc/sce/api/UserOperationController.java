@@ -112,7 +112,7 @@ public class UserOperationController {
         Date CREATE_TIME = new Date();
         String ORGANIZATION_ID = "";
         String PASSWORD = "";
-        String SECRET = Secret.generateSecret();
+        String SECRET = Secret.ES256GenerateSecret();
         if ( StringUtils.isNotBlank( userInfo.get( "LOGIN_NAME" ) + "" ) ) {
             LOGIN_NAME = userInfo.get( "LOGIN_NAME" ) + "";
         }
@@ -147,7 +147,9 @@ public class UserOperationController {
         password.setPassword( PASSWORD );
         password.setIsDelete( IS_DELETE );
 
-        userInfoRepository.addCommonUser( USER_ID, LOGIN_NAME, USER_NAME, GENDER, USER_TYPE, MAIL_ADDRESS, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, PHONE_NUMBER, ADDRESS, CREATE_TIME, ORGANIZATION_ID, LOGIN_PERMISSION_STATUS, IS_DELETE, SECRET );
+        Long organizationId = Long.valueOf( ORGANIZATION_ID );
+
+        userInfoRepository.addCommonUser( USER_ID, LOGIN_NAME, USER_NAME, GENDER, USER_TYPE, MAIL_ADDRESS, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, PHONE_NUMBER, ADDRESS, CREATE_TIME, organizationId, LOGIN_PERMISSION_STATUS, IS_DELETE, SECRET );
         passwordDao.save( password );
         log.info( "插入用户基本信息[{}]成功，用户类型为[{}]", userInfo, USER_TYPE == 1 ? "学生" : "教师" );
     }
@@ -227,7 +229,7 @@ public class UserOperationController {
     @ResponseBody
     public RestRecord insertUser( @RequestBody UserModel userModel ) {
 //        1	学生;2	教师;3	学校;4	厂家;5	家长;6	代理商;7	机构
-        userModel.setSecret( Secret.generateSecret() );
+        userModel.setSecret( Secret.ES256GenerateSecret() );
         userModel.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
         userModel.setCreateTime( new Date() );
         int flag = userModel.getUserType();
@@ -313,7 +315,7 @@ public class UserOperationController {
 
             //创建一个家长账号与之关联
             UserModel userModelParent = new UserModel();
-            userModelParent.setSecret( Secret.generateSecret() );
+            userModelParent.setSecret( Secret.ES256GenerateSecret() );
             userModelParent.setUserId( UUID.randomUUID().toString().replaceAll( "-", "" ) );
             userModelParent.setCreateTime( new Date() );
             userModelParent.setUserType( 5 );

@@ -24,12 +24,12 @@ import java.util.*;
  **/
 @Slf4j
 @RestController
-@RequestMapping("/user-list")
+@RequestMapping( "/user-list" )
 public class UserListController {
 
 
-     @Autowired
-     private UserInfoRepository userInfoRepository;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     /**
      * 根据角色id查询用户信息
@@ -41,98 +41,99 @@ public class UserListController {
      */
     @PostMapping( "/role/{roleId}/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getUserInfoByRole( @PathVariable("roleId") Integer roleId,
+    public RestRecord getUserInfoByRole( @PathVariable( "roleId" ) Integer roleId,
                                          @PathVariable( "pageNum" ) Integer pageNum,
                                          @PathVariable( "pageSize" ) Integer pageSize,
-                                         @RequestBody( required = false) Map<String,Object> condition) {
+                                         @RequestBody( required = false ) Map< String, Object > condition ) {
 
         // 此处在具体的角色ID确定下来之后更改分支走的方法
         Page page = null;
         pageNum = pageNum - 1;
         switch ( roleId ) {
             case 1:
-                page = student(pageNum,pageSize,condition);  // 学生
+                page = student( pageNum, pageSize, condition );  // 学生
                 break;
             case 2:
-                page = teacher(pageNum,pageSize,condition); // 教师
+                page = teacher( pageNum, pageSize, condition ); // 教师
                 break;
             case 3:
                 break;
             case 4:
-                page = manufacturer(pageNum,pageSize,condition); // 厂商
+                page = manufacturer( pageNum, pageSize, condition ); // 厂商
                 break;
             case 5:
-                page = family(pageNum,pageSize,condition); // 家长
+                page = family( pageNum, pageSize, condition ); // 家长
                 break;
             case 6:
                 // 代理商
                 break;
             case 7:
-                page = organization(pageNum,pageSize,condition);// 机构
+                page = organization( pageNum, pageSize, condition );// 机构
                 break;
             case 8:
-                page = selfRegistration(pageNum,pageSize,condition);//自注冊
+                page = selfRegistration( pageNum, pageSize, condition );//自注冊
                 break;
-
+            default:
+                break;
         }
-        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,page);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, page );
     }
 
     // 查询 学校 -》 教师信息
-    public Page<Map<String,Object>> teacher(int pageNum, int pageSize, Map<String,Object> condition){
+    public Page< Map< String, Object > > teacher( int pageNum, int pageSize, Map< String, Object > condition ) {
         Page info;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
-        String account= "";
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
+        String account = "";
         String name = "";
         String organization_name = "";
-        String login= "";
-        if (!CollectionUtils.isEmpty(condition)){
-            log.info("用户列表: 学校 -> 教师 信息模糊查询，查询条件为[{}]",condition);
-            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
-                account = condition.get("account").toString();
+        String login = "";
+        if ( !CollectionUtils.isEmpty( condition ) ) {
+            log.info( "用户列表: 学校 -> 教师 信息模糊查询，查询条件为[{}]", condition );
+            if ( null != condition.get( "account" ) && !"".equals( condition.get( "account" ) ) ) {
+                account = condition.get( "account" ).toString();
             }
-            if (null != condition.get("name") && !"".equals(condition.get("name")) ){
-                name = condition.get("name").toString();
+            if ( null != condition.get( "name" ) && !"".equals( condition.get( "name" ) ) ) {
+                name = condition.get( "name" ).toString();
             }
-            if (null != condition.get("organization_name") && !"".equals(condition.get("organization_name")) ){
-                organization_name = condition.get("organization_name").toString();
+            if ( null != condition.get( "organization_name" ) && !"".equals( condition.get( "organization_name" ) ) ) {
+                organization_name = condition.get( "organization_name" ).toString();
             }
-            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                login = condition.get("login").toString();
+            if ( null != condition.get( "login" ) && !"".equals( condition.get( "login" ) ) ) {
+                login = condition.get( "login" ).toString();
             }
         }
-        info = userInfoRepository.findTeacherByCondition(name,account,organization_name,login,pageable);
-        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        info = userInfoRepository.findTeacherByCondition( name, account, organization_name, login, pageable );
+        log.info( "一共查询到[{}]条符合条件的信息", info.getTotalElements() );
         return info;
 
     }
 
     // 查询 学校 -》 学生信息
-    public Page<Map<String,Object>> student(int pageNum, int pageSize, Map<String,Object> condition){
+    public Page< Map< String, Object > > student( int pageNum, int pageSize, Map< String, Object > condition ) {
         Page info;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
-        String account= "";
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
+        String account = "";
         String name = "";
         String organization_name = "";
         String login = "";
-        if (!CollectionUtils.isEmpty(condition)){
-            log.info("用户列表: 学校 -> 学生 信息模糊查询，查询条件为[{}]",condition);
-            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
-                account = condition.get("account").toString();
+        if ( !CollectionUtils.isEmpty( condition ) ) {
+            log.info( "用户列表: 学校 -> 学生 信息模糊查询，查询条件为[{}]", condition );
+            if ( null != condition.get( "account" ) && !"".equals( condition.get( "account" ) ) ) {
+                account = condition.get( "account" ).toString();
             }
-            if (null != condition.get("name") && !"".equals(condition.get("name")) ){
-                name = condition.get("name").toString();
+            if ( null != condition.get( "name" ) && !"".equals( condition.get( "name" ) ) ) {
+                name = condition.get( "name" ).toString();
             }
 
-            if (null != condition.get("organization_name") && !"".equals(condition.get("organization_name")) ){
-                organization_name = condition.get("organization_name").toString();
+            if ( null != condition.get( "organization_name" ) && !"".equals( condition.get( "organization_name" ) ) ) {
+                organization_name = condition.get( "organization_name" ).toString();
             }
-            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                login = condition.get("login").toString();
+            if ( null != condition.get( "login" ) && !"".equals( condition.get( "login" ) ) ) {
+                login = condition.get( "login" ).toString();
             }
         }
-        info =  userInfoRepository.findSchoolByCondition(name,account,organization_name,login,pageable);
-        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        info = userInfoRepository.findSchoolByCondition( name, account, organization_name, login, pageable );
+        log.info( "一共查询到[{}]条符合条件的信息", info.getTotalElements() );
         return info;
     }
 
@@ -140,11 +141,16 @@ public class UserListController {
     @ResponseBody
     public RestRecord getUserInfoByRole() {
         try {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set( Calendar.DAY_OF_YEAR, calendar.get( Calendar.DAY_OF_YEAR ) - 7 );
-            Date time = calendar.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.set( Calendar.DAY_OF_WEEK, Calendar.MONDAY );
+            cal.set( Calendar.HOUR_OF_DAY, 0 );
+            cal.set( Calendar.MINUTE, 0 );
+            cal.set( Calendar.SECOND, 0 );
+
+            Date time = cal.getTime();
+            //已开通用户数(IS_FIRST_LOGIN =1)
             Integer userCount = userInfoRepository.getUserCount();
-            List<Map<String,Object>> roleCount = userInfoRepository.getRoleCount();
+            List< Map< String, Object > > roleCount = userInfoRepository.getRoleCount();
             Integer activeCount = userInfoRepository.getActiveCount( time );
             Float activeProportion = activeCount.floatValue() / userCount;
             Map< String, Object > result = new HashMap<>();
@@ -152,118 +158,119 @@ public class UserListController {
             result.put( "roleCount", roleCount );
             result.put( "activeCount", activeCount );
             result.put( "activeProportion", activeProportion );
-            return new RestRecord( 200,result );
-        }catch ( Exception e ){
-            return new RestRecord( 420,WebMessageConstants.SCE_PORTAL_MSG_420 );
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
+        } catch ( Exception e ) {
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
         }
     }
 
     // 查询 学校 -》 家长信息
 
-    public Page<Map<String,Object>> family(int pageNum, int pageSize, Map<String,Object> condition){
+    public Page< Map< String, Object > > family( int pageNum, int pageSize, Map< String, Object > condition ) {
         Page info;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
-        String account= "";
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
+        String account = "";
         String name = "";
         String login = "";
-        if (!CollectionUtils.isEmpty(condition)){
-            log.info("用户列表: 学校 -> 家长 信息模糊查询，查询条件为[{}]",condition);
-            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
-                account = condition.get("account").toString();
+        if ( !CollectionUtils.isEmpty( condition ) ) {
+            log.info( "用户列表: 学校 -> 家长 信息模糊查询，查询条件为[{}]", condition );
+            if ( null != condition.get( "account" ) && !"".equals( condition.get( "account" ) ) ) {
+                account = condition.get( "account" ).toString();
             }
-            if (null != condition.get("name") && !"".equals(condition.get("name")) ){
-                name = condition.get("name").toString();
+            if ( null != condition.get( "name" ) && !"".equals( condition.get( "name" ) ) ) {
+                name = condition.get( "name" ).toString();
             }
-            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                login = condition.get("login").toString();
+            if ( null != condition.get( "login" ) && !"".equals( condition.get( "login" ) ) ) {
+                login = condition.get( "login" ).toString();
             }
         }
-        info =  userInfoRepository.findFamilyByCondition(name,account,login,pageable);
-        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        info = userInfoRepository.findFamilyByCondition( name, account, login, pageable );
+        log.info( "一共查询到[{}]条符合条件的信息", info.getTotalElements() );
         return info;
     }
+
     /**
-     *@Author : lyy
-     *@Desc :查询自注册信息
-     *@Date : 15:01 2018/12/26
+     * @Author : lyy
+     * @Desc :查询自注册信息
+     * @Date : 15:01 2018/12/26
      */
-    public Page<Map<String,Object>> selfRegistration(int pageNum, int pageSize, Map<String,Object> condition) {
-        Page info =null;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME");
+    public Page< Map< String, Object > > selfRegistration( int pageNum, int pageSize, Map< String, Object > condition ) {
+        Page info = null;
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "CREATE_TIME" );
         String name = "";
         String account = "";
         String login = "";
-        if(!CollectionUtils.isEmpty(condition)){
-            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
-                account = condition.get("account").toString();
+        if ( !CollectionUtils.isEmpty( condition ) ) {
+            if ( null != condition.get( "account" ) && !"".equals( condition.get( "account" ) ) ) {
+                account = condition.get( "account" ).toString();
             }
 
-            if(null != condition.get("name") && !"".equals(condition.get("account"))){
-                name = condition.get("name").toString();
+            if ( null != condition.get( "name" ) && !"".equals( condition.get( "account" ) ) ) {
+                name = condition.get( "name" ).toString();
             }
-            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                login = condition.get("login").toString();
+            if ( null != condition.get( "login" ) && !"".equals( condition.get( "login" ) ) ) {
+                login = condition.get( "login" ).toString();
             }
         }
-        info = userInfoRepository.findSelfRegALLByNameOrCount(name,account,login,pageable);
-        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        info = userInfoRepository.findSelfRegALLByNameOrCount( name, account, login, pageable );
+        log.info( "一共查询到[{}]条符合条件的信息", info.getTotalElements() );
         return info;
     }
 
 
     /**
-     *@Author : lyy
-     *@Desc : 查询机构信息
-     *@Date : 15:04 2018/12/26
+     * @Author : lyy
+     * @Desc : 查询机构信息
+     * @Date : 15:04 2018/12/26
      */
-    public Page<Map<String,Object>>  organization(int pageNum, int pageSize, Map<String,Object> condition) {
-        Page info =null;
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.Direction.DESC, "USER_ID");
+    public Page< Map< String, Object > > organization( int pageNum, int pageSize, Map< String, Object > condition ) {
+        Page info = null;
+        Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "USER_ID" );
         String loginName = "";
         String organizationName = "";
-        String status ="";
-        if(!CollectionUtils.isEmpty(condition)){
+        String status = "";
+        if ( !CollectionUtils.isEmpty( condition ) ) {
             //模糊查询
-            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
-                loginName = condition.get("account").toString();
+            if ( null != condition.get( "account" ) && !"".equals( condition.get( "account" ) ) ) {
+                loginName = condition.get( "account" ).toString();
             }
-            if (null != condition.get("organizationName") && !"".equals(condition.get("organizationName")) ){
-                organizationName = condition.get("organizationName").toString();
+            if ( null != condition.get( "organizationName" ) && !"".equals( condition.get( "organizationName" ) ) ) {
+                organizationName = condition.get( "organizationName" ).toString();
             }
-            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                status = condition.get("login").toString();
+            if ( null != condition.get( "login" ) && !"".equals( condition.get( "login" ) ) ) {
+                status = condition.get( "login" ).toString();
             }
         }
-        info = userInfoRepository.findByOrganizationLike(loginName,organizationName,status,pageable);
-        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        info = userInfoRepository.findByOrganizationLike( loginName, organizationName, status, pageable );
+        log.info( "一共查询到[{}]条符合条件的信息", info.getTotalElements() );
 
         return info;
     }
 
     /**
-     *@Author : lyy
-     *@Desc：查询 厂商信息   :
-     *@Date : 15:22 2018/12/26
+     * @Author : lyy
+     * @Desc：查询 厂商信息   :
+     * @Date : 15:22 2018/12/26
      */
-    public Page<Map<String,Object>>  manufacturer(int pageNum, int pageSize, Map<String,Object> condition) {
+    public Page< Map< String, Object > > manufacturer( int pageNum, int pageSize, Map< String, Object > condition ) {
         Page info = null;
         Pageable pageable = PageRequest.of( pageNum, pageSize, Sort.Direction.DESC, "USER_ID" );
         String ManufacturerName = "";
         String loginName = "";
         String status = "";
-        if(!CollectionUtils.isEmpty(condition)){
-            if (null != condition.get("account") && !"".equals(condition.get("account")) ){
-                loginName = condition.get("account").toString();
+        if ( !CollectionUtils.isEmpty( condition ) ) {
+            if ( null != condition.get( "account" ) && !"".equals( condition.get( "account" ) ) ) {
+                loginName = condition.get( "account" ).toString();
             }
-            if (null != condition.get("manufacturerName") && !"".equals(condition.get("manufacturerName")) ){
-                ManufacturerName = condition.get("manufacturerName").toString();
+            if ( null != condition.get( "manufacturerName" ) && !"".equals( condition.get( "manufacturerName" ) ) ) {
+                ManufacturerName = condition.get( "manufacturerName" ).toString();
             }
-            if (null != condition.get("login") && !"".equals(condition.get("login")) ){
-                status = condition.get("login").toString();
+            if ( null != condition.get( "login" ) && !"".equals( condition.get( "login" ) ) ) {
+                status = condition.get( "login" ).toString();
             }
         }
-        info = userInfoRepository.findByManufacturerLike(loginName,ManufacturerName,status,pageable);
-        log.info("一共查询到[{}]条符合条件的信息",info.getTotalElements());
+        info = userInfoRepository.findByManufacturerLike( loginName, ManufacturerName, status, pageable );
+        log.info( "一共查询到[{}]条符合条件的信息", info.getTotalElements() );
         return info;
     }
 

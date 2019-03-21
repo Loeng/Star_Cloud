@@ -1,4 +1,4 @@
-# data-access
+# data-mybatis
 spring:
   profiles: dev
 eureka:

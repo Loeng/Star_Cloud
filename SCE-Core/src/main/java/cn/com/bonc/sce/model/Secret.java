@@ -1,11 +1,19 @@
 package cn.com.bonc.sce.model;
 
 import cn.com.bonc.sce.tool.CryptoUtil;
+import cn.com.bonc.sce.tool.JWTUtil;
+import cn.hutool.core.codec.Base64;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.RSA;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 基于 2048bit-RSA 的秘钥对
@@ -20,11 +28,21 @@ public class Secret {
 
     public Secret( String secret ) {
         int length = secret.length();
-        String publicKey = secret.substring( 0, 392 );
-        String privateKey = secret.substring( 392, length );
+        if ( length > 216 ) {
+            String publicKey = secret.substring( 0, 392 );
+            String privateKey = secret.substring( 392, length );
 
-        RSA rsa = new RSA( privateKey, publicKey );
-        this.keyPair = new KeyPair( rsa.getPublicKey(), rsa.getPrivateKey() );
+            RSA rsa = new RSA( privateKey, publicKey );
+            this.keyPair = new KeyPair( rsa.getPublicKey(), rsa.getPrivateKey() );
+        } else {
+            String publicKey = secret.substring( 0, 124 );
+            String privateKey = secret.substring( 124, length );
+
+            PrivateKey privateKeyObj = SecureUtil.generatePrivateKey( "EC", Base64.decode( privateKey ) );
+            PublicKey publicKeyObj = SecureUtil.generatePublicKey( "EC", Base64.decode( publicKey ) );
+            this.keyPair = new KeyPair( publicKeyObj, privateKeyObj );
+        }
+
     }
 
     public Secret() {
@@ -57,6 +75,20 @@ public class Secret {
         return rsa.getPublicKeyBase64() + rsa.getPrivateKeyBase64();
     }
 
+    /**
+     * 根据ECC椭圆曲线算法生成公私钥并经过Base64编码
+     * 其中编码后的公钥长度为124  私钥为92  共216字符
+     *
+     * @return a secret buries secrets
+     */
+    public static String ES256GenerateSecret() {
+        KeyPair keyPair = Keys.keyPairFor( SignatureAlgorithm.ES256 );
+        String publicKey = Base64.encode( keyPair.getPublic().getEncoded() );
+        String privateKry = Base64.encode( keyPair.getPrivate().getEncoded() );
+
+        return publicKey + privateKry;
+    }
+
     public String getPrivateKeyString() {
         if ( this.keyPair != null ) {
             return new RSA( getPrivateKey(), getPublicKey() ).getPrivateKeyBase64();
@@ -80,6 +112,17 @@ public class Secret {
     }
 
     public static void main( String[] args ) {
-
+//        String key = ES256GenerateSecret();
+//        String privateKey = key.substring(124);
+//        String publicKey = key.substring(0,124);
+//        Map map = new HashMap();
+//        map.put("aa","11");
+//        PrivateKey privateKeyObj = SecureUtil.generatePrivateKey("EC", Base64.decode(privateKey));
+//        PublicKey publicKeyObj = SecureUtil.generatePublicKey("EC", Base64.decode(publicKey));
+//        KeyPair keyPair = new KeyPair(publicKeyObj, privateKeyObj);
+//
+//        String jwt = JWTUtil.generateTicketWithSecret( map, keyPair.getPrivate(), new Date(System.currentTimeMillis() + 1000));
+//        Claims claims = Jwts.parser().setSigningKey(keyPair.getPublic()).parseClaimsJws(jwt).getBody();
+//        System.out.println(claims);
     }
 }

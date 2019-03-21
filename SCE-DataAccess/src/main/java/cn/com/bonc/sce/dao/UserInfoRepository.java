@@ -39,16 +39,16 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
     @Query( value = "SELECT * FROM STARCLOUDPORTAL.v_family_info WHERE NVL(USER_NAME,' ') LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(USER_ACCOUNT,' ')LIKE CONCAT('%',CONCAT(?2,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%'))", nativeQuery = true )
     Page< Map< String, Object > > findFamilyByCondition( String name, String account, String login, Pageable pageable );
 
-    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE IS_FIRST_LOGIN = 1", nativeQuery = true )
+    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE IS_FIRST_LOGIN = 1 AND IS_DELETE=1 ", nativeQuery = true )
     Integer getUserCount();
 
-    @Query( value = "SELECT A.ROLE_ID,A.ROLE_NAME,(CASE B.COUNT WHEN NULL THEN 0 ELSE B.COUNT END) COUNT FROM STARCLOUDPORTAL.SCE_COMMON_USER_ROLE A\n" +
-            "LEFT JOIN (SELECT USER_TYPE,COUNT(*) COUNT FROM STARCLOUDPORTAL.SCE_COMMON_USER GROUP BY USER_TYPE) B\n" +
-            "ON A.ROLE_ID=B.USER_TYPE", nativeQuery = true )
+    @Query( value = "SELECT A.ROLE_ID,A.ROLE_NAME,NVL(B.COUNT, 0) COUNT FROM STARCLOUDPORTAL.SCE_COMMON_USER_ROLE A " +
+            "LEFT JOIN ( SELECT USER_TYPE, COUNT( * ) COUNT FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE IS_FIRST_LOGIN = 1 AND IS_DELETE=1 GROUP BY USER_TYPE ) B " +
+            "ON A.ROLE_ID = B.USER_TYPE", nativeQuery = true )
     List< Map< String, Object > > getRoleCount();
 
     @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER " +
-            "WHERE IS_FIRST_LOGIN = 1 AND LAST_LOGIN_TIME > ?1", nativeQuery = true )
+            "WHERE IS_FIRST_LOGIN = 1 AND LOGIN_TIME > ?1", nativeQuery = true )
     Integer getActiveCount( Date lastLoginTime );
 
 
@@ -112,7 +112,7 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
     @Query( value = "INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,NULL ,NULL ,0,?12,?13,NULL ,?14,?15,0,0)",
             nativeQuery = true )
     @Modifying
-    int addCommonUser( String user_id, String login_name, String user_name, String gender, int user_type, String mail_address, int certificate_type, String certificate_number, String phone_number, String address, Date create_time, String organization_id, Integer loginPermissionStatus, Integer isDelete, String secret );
+    int addCommonUser( String user_id, String login_name, String user_name, String gender, int user_type, String mail_address, int certificate_type, String certificate_number, String phone_number, String address, Date create_time, Long organization_id, Integer loginPermissionStatus, Integer isDelete, String secret );
 
 
     /**

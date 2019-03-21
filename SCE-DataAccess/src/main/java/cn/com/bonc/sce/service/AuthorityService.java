@@ -54,7 +54,7 @@ public class AuthorityService {
         authority = authorityDao.save( authority );
 
         User user = new User();
-        String secret = Secret.generateSecret();
+        String secret = Secret.ES256GenerateSecret();
         String loginName = IDUtil.createID( "jg_" );
         user.setSecret( secret );
         user.setLoginName( loginName );

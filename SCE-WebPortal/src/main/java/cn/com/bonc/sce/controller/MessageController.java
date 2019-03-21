@@ -43,16 +43,17 @@ public class MessageController {
     } )
     @PostMapping
     @ResponseBody
-    public RestRecord insertMessage( @RequestBody @ApiParam( name = "message", value = "信息", required = true )Message message,@CurrentUserId String userId ) {
+    public RestRecord insertMessage( @RequestBody @ApiParam( name = "message", value = "信息", required = true ) Message message, @CurrentUserId String userId ) {
         message.setSourceId( userId );
-        if(message.getContent().length()>200){
-            return new RestRecord(409,MessageConstants.SCE_MSG_409);
+        if ( message.getContent().length() > 200 ) {
+            return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
         }
         return messageService.insertMessage( message );
     }
 
     /**
      * 添加公告
+     *
      * @param message 信息
      * @return 是否添加成功
      */
@@ -63,7 +64,7 @@ public class MessageController {
     } )
     @PostMapping( "/announcements" )
     @ResponseBody
-    public RestRecord insertAnnouncement( @RequestBody @ApiParam( name = "message", value = "信息", required = true )Message message ) {
+    public RestRecord insertAnnouncement( @RequestBody @ApiParam( name = "message", value = "信息", required = true ) Message message ) {
         return messageService.insertAnnouncement( message );
     }
 
@@ -86,6 +87,7 @@ public class MessageController {
 
     /**
      * 通过id删除公告
+     *
      * @param announcementId id
      * @return 删除是否成功
      */
@@ -96,7 +98,7 @@ public class MessageController {
     } )
     @DeleteMapping( "/announcements/{announcementId}" )
     @ResponseBody
-    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) @ApiParam( name = "announcementId", value = "公告id", required = true )Integer announcementId ) {
+    public RestRecord deleteAnnouncementById( @PathVariable( "announcementId" ) @ApiParam( name = "announcementId", value = "公告id", required = true ) Integer announcementId ) {
         return messageService.deleteAnnouncementById( announcementId );
     }
 
@@ -120,8 +122,8 @@ public class MessageController {
     /**
      * 获取message数据
      *
-     * @param userId userId
-     * @param pageNum 页码
+     * @param userId   userId
+     * @param pageNum  页码
      * @param pageSize 每页条数
      * @return message数据
      */
@@ -133,11 +135,11 @@ public class MessageController {
     } )
     @GetMapping
     @ResponseBody
-    public RestRecord getMessageByUserId( @CurrentUserId @ApiParam( hidden = true) String userId,
-                                          @RequestParam( value = "id", required = false) @ApiParam( name = "id", value = "id")Integer id,
-                                          @RequestParam( value = "pageNum", required = false, defaultValue = "1"  ) @ApiParam( name = "pageNum", value = "页码")Integer pageNum,
-                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10"  ) @ApiParam( name = "pageSize", value = "数量")Integer pageSize ) {
-        return messageService.getMessageByUserId( userId,id,pageNum,pageSize );
+    public RestRecord getMessageByUserId( @CurrentUserId @ApiParam( hidden = true ) String userId,
+                                          @RequestParam( value = "id", required = false ) @ApiParam( name = "id", value = "id" ) Integer id,
+                                          @RequestParam( value = "pageNum", required = false, defaultValue = "1" ) @ApiParam( name = "pageNum", value = "页码" ) Integer pageNum,
+                                          @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) @ApiParam( name = "pageSize", value = "数量" ) Integer pageSize ) {
+        return messageService.getMessageByUserId( userId, id, pageNum, pageSize );
     }
 
     /**
@@ -154,8 +156,52 @@ public class MessageController {
     } )
     @GetMapping( "/count" )
     @ResponseBody
-    public RestRecord getIsNotReadCount( @CurrentUserId @ApiParam( hidden = true) String userId ) {
+    public RestRecord getIsNotReadCount( @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return messageService.getIsNotReadCount( userId );
+    }
+
+
+    /**
+     * 通知记录
+     *
+     * @param pageNum
+     * @param pageSize
+     *
+     * @return
+     */
+    @GetMapping( "/recode/{pageNum}/{pageSize}" )
+    @ApiOperation( value = "后台消息管理-查询通知记录", notes = "后台消息管理-查询通知记录", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
+    } )
+    public RestRecord getMessageRecord(
+            @PathVariable( value = "pageNum" ) Integer pageNum,
+            @PathVariable( value = "pageSize" ) Integer pageSize
+    ) {
+        return messageService.getMessageRecord( pageNum, pageSize );
+    }
+
+    /**
+     * 接收情况
+     *
+     * @param pageNum
+     * @param pageSize
+     *
+     * @return
+     */
+
+    @ApiOperation( value = "后台消息管理-查询接收情况", notes = "后台消息管理-查询接收情况", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 406, message = MessageConstants.SCE_MSG_406, response = RestRecord.class )
+    } )
+    @GetMapping( "/receiving-situation/{pageNum}/{pageSize}" )
+    public RestRecord getReceivingSituation(
+            @PathVariable( value = "pageNum" ) Integer pageNum,
+            @PathVariable( value = "pageSize" ) Integer pageSize
+    ) {
+        return messageService.getReceivingSituation( pageNum, pageSize );
     }
 }
 

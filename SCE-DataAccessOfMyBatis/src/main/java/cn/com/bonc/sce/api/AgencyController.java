@@ -129,7 +129,7 @@ public class AgencyController {
 
         UserBean user = new UserBean();
         long userId = idWorker.nextId();
-        String secret = Secret.generateSecret();
+        String secret = Secret.ES256GenerateSecret();
         String loginName = IDUtil.createID( "dl_" );
         user.setSecret( secret );
         user.setLoginName( loginName );

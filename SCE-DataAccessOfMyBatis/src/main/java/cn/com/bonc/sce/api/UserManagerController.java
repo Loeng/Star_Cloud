@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserService;
@@ -56,5 +57,17 @@ public class UserManagerController {
         } else {
             return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
         }
+    }
+
+    @GetMapping( "/teacher-list/{pageNum}/{pageSize}" )
+    public RestRecord findTeacherList( @CurrentUserId String userId,
+                                       @PathVariable( value = "pageNum" ) String pageNum,
+                                       @PathVariable( value = "pageSize" ) String pageSize ) {
+        return userService.findTeacherList( userId, pageNum, pageSize );
+    }
+
+    @GetMapping( "/teacher/{userName}" )
+    public RestRecord findTeacher( @CurrentUserId String userId, @PathVariable String userName ) {
+        return userService.findTeacher();
     }
 }

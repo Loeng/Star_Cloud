@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.PrivateKey;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +51,7 @@ public class LoginService {
      *
      * @return 字符串形式的 jwt ticket
      */
-    public String generateTicket( User authenticatedUser ) {
+    public String generateTicket( User authenticatedUser, Date expirationDate ) {
         Map< String, Object > claims = new HashMap<>( 2 );
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
@@ -61,7 +63,22 @@ public class LoginService {
         claims.put( "ruleCode", roleCodes[ authenticatedUser.getUserType() ] );
         claims.put( "isFirstLogin", authenticatedUser.getIsFirstLogin() );
 
-        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey() );
+        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey(), expirationDate );
+    }
+
+    /**
+     * 平台与应用间通信所使用的JWT
+     *
+     * @param claims         payload内容
+     * @param expirationDate 过期时间
+     *
+     * @return ticket
+     */
+    public String generateTicket( Map< String, Object > claims, PrivateKey privateKey, Date expirationDate ) {
+        claims.put( "iss", "SCE-SSO" );
+        claims.put( "aud", "SCE-Application" );
+
+        return JWTUtil.generateTicketWithSecret( claims, privateKey, expirationDate );
     }
 
     /**
@@ -106,11 +123,10 @@ public class LoginService {
      *
      * @return 登录信息
      */
-    public Map< String, String > generateLoginResult( User authenticatedUser ) {
+    public Map< String, String > generateLoginResult( User authenticatedUser, Date expirationDate ) {
         Map< String, String > data = new HashMap<>( 2 );
-        String ticket = generateTicket( authenticatedUser );
+        String ticket = generateTicket( authenticatedUser, expirationDate );
         data.put( "ticket", ticket );
-
         return data;
     }
 }
