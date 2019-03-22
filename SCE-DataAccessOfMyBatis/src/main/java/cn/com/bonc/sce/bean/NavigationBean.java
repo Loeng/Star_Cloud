@@ -6,61 +6,46 @@ package cn.com.bonc.sce.bean;
  * 导航栏bean
  */
 public class NavigationBean {
-    private Integer columnId;
-    private Integer parentColumnId;
-    private Integer channelId;
-    private String columnName;
-    private String columnStatus;
+
+    private String channelId;
+    private String parentChannelId;
+    private String channelName;
+    private String channelStatus;
     private String remarks;
     private Integer isDeleted;
-    private String columnUrl;
+    private String channelUrl;
+    private String channelType;
 
-    public String getColumnUrl() {
-        return columnUrl;
-    }
-
-    public void setColumnUrl(String columnUrl) {
-        this.columnUrl = columnUrl;
-    }
-
-    public Integer getColumnId() {
-        return columnId;
-    }
-
-    public void setColumnId(Integer columnId) {
-        this.columnId = columnId;
-    }
-
-    public Integer getParentColumnId() {
-        return parentColumnId;
-    }
-
-    public void setParentColumnId(Integer parentColumnId) {
-        this.parentColumnId = parentColumnId;
-    }
-
-    public Integer getChannelId() {
+    public String getChannelId() {
         return channelId;
     }
 
-    public void setChannelId(Integer channelId) {
+    public void setChannelId(String channelId) {
         this.channelId = channelId;
     }
 
-    public String getColumnName() {
-        return columnName;
+    public String getParentChannelId() {
+        return parentChannelId;
     }
 
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setParentChannelId(String parentChannelId) {
+        this.parentChannelId = parentChannelId;
     }
 
-    public String getColumnStatus() {
-        return columnStatus;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setColumnStatus(String columnStatus) {
-        this.columnStatus = columnStatus;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    public String getChannelStatus() {
+        return channelStatus;
+    }
+
+    public void setChannelStatus(String channelStatus) {
+        this.channelStatus = channelStatus;
     }
 
     public String getRemarks() {
@@ -77,5 +62,21 @@ public class NavigationBean {
 
     public void setIsDeleted(Integer isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getChannelUrl() {
+        return channelUrl;
+    }
+
+    public void setChannelUrl(String channelUrl) {
+        this.channelUrl = channelUrl;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 }
