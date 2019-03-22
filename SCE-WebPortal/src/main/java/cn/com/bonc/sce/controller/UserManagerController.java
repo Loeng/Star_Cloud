@@ -1,13 +1,24 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.annotation.CurrentUserId;
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import cn.com.bonc.sce.service.UserManagerService;
+import cn.com.bonc.sce.tool.ParseExcel;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Charles on 2019/3/8.
@@ -42,14 +53,64 @@ public class UserManagerController {
         return userManagerService.editLogin(id,loginPermissionStatus);
     }
 
-    @GetMapping( "/teacher-list/{pageNum}/{pageSize}" )
-    public RestRecord findTeacherList( @CurrentUserId String userId, @PathVariable String pageNum, @PathVariable String pageSize ) {
-        return userManagerService.findTeacherList( userId, pageNum, pageSize );
+    @ApiOperation(value = "教育机构下学校列表查询", notes="通过教育机构id查询学校列表", httpMethod = "GET")
+    @GetMapping("/getSchools4edu/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getSchools4edu(@RequestParam( "id" ) long id,
+                                     @PathVariable (value = "pageNum")Integer pageNum,
+                                     @PathVariable (value = "pageSize") Integer pageSize){
+        return userManagerService.getSchools4edu(id,pageNum,pageSize);
     }
 
-    @GetMapping( "/teacher/{userName}" )
-    public RestRecord findTeacher( @CurrentUserId String userId, @PathVariable String userName ) {
-        return userManagerService.findTeacher( userId, userName );
+    @ApiOperation(value = "教育机构下学校删除", notes="通过教育机构id和学校id删除学校", httpMethod = "DELETE")
+    @DeleteMapping("/delSchools4edu")
+    @ResponseBody
+    public RestRecord delSchools4edu(@RequestParam( "id" ) long id,
+                                     @RequestParam("institutionId") long institutionId){
+        return userManagerService.delSchools4edu(id,institutionId);
     }
 
+    @ApiOperation(value = "教育机构列表", notes="通过条件获取教育机构列表", httpMethod = "POST")
+    @PostMapping("/getInstitutionList/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getInstitutions(@RequestBody @ApiParam( example = "{\"id\": 1743,\"institutionName\": \"教育机构名称\",\"loginPermissionStatus\": 1}" ) String json,
+                                      @PathVariable (value = "pageNum")Integer pageNum,
+                                      @PathVariable (value = "pageSize") Integer pageSize){
+        return userManagerService.getInstitutionList(json,pageNum,pageSize);
+    }
+
+    @ApiOperation(value = "教育机构下Excel导出", notes="教育机构下的数据导出为Excel", httpMethod = "GET")
+    @GetMapping("/exportExcel")
+    @ResponseBody
+    public void exportExcel(@RequestParam("id") String id,
+                            @RequestParam("institutionName") String institutionName,
+                            @RequestParam("loginPermissionStatus") String loginPermissionStatus,
+                            HttpServletResponse httpServletResponse){
+
+        List<Map> info = userManagerService.getInstitutions(id,institutionName,loginPermissionStatus);
+        System.out.println(info.size() + ""+info.get(0));
+        try {
+            List<ExcelExportEntity> entity = new ArrayList<>();
+            entity.add( new ExcelExportEntity( "账号", "LOGIN_NAME" ) );
+            entity.add( new ExcelExportEntity( "允许登录","LOGIN_PERMISSION_STATUS"));
+            //entity.add( new ExcelExportEntity( "状态", "isFirstLogin" ) );
+            entity.add( new ExcelExportEntity( "机构名称", "INSTITUTION_NAME" ) );
+            entity.add( new ExcelExportEntity( "组织编号", "ID" ) );
+
+            Workbook workbook = null;
+            ExportParams exportParms = new ExportParams( "标题", "Sheet1" );
+
+            //不固定表头
+            exportParms.setFixedTitle( false );
+            //导出
+            workbook = ExcelExportUtil.exportBigExcel( exportParms, entity, info );
+            ExcelExportUtil.closeExportBigExcel();
+            //下载
+            ParseExcel.downLoadExcel( "教育机构信息.xlsx", httpServletResponse, workbook );
+
+            //return new RestRecord(200, MessageConstants.SCE_MSG_0200);
+        } catch (Exception e){
+            //return new RestRecord(406, MessageConstants.SCE_MSG_406);
+        }
+    }
 }

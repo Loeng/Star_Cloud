@@ -1,13 +1,19 @@
 package cn.com.bonc.sce.api;
 
-import cn.com.bonc.sce.annotation.CurrentUserId;
+import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserService;
+import com.alibaba.druid.support.json.JSONUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Charles on 2019/3/8.
@@ -59,15 +65,55 @@ public class UserManagerController {
         }
     }
 
-    @GetMapping( "/teacher-list/{pageNum}/{pageSize}" )
-    public RestRecord findTeacherList( @CurrentUserId String userId,
-                                       @PathVariable( value = "pageNum" ) String pageNum,
-                                       @PathVariable( value = "pageSize" ) String pageSize ) {
-        return userService.findTeacherList( userId, pageNum, pageSize );
+    @ApiOperation(value = "教育机构下学校列表查询", notes="通过教育机构id查询学校列表", httpMethod = "GET")
+    @GetMapping("/getSchools4edu/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getSchools4edu(@RequestParam( "id" ) long id,
+                                     @PathVariable (value = "pageNum")Integer pageNum,
+                                     @PathVariable (value = "pageSize") Integer pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        List<SchoolBean> schoolList = userService.getSchools4edu(id);
+        PageInfo pageInfo = new PageInfo(schoolList);
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200,pageInfo );
     }
 
-    @GetMapping( "/teacher/{userName}" )
-    public RestRecord findTeacher( @CurrentUserId String userId, @PathVariable String userName ) {
-        return userService.findTeacher();
+    @ApiOperation(value = "教育机构下学校删除", notes="通过教育机构id和学校id删除学校", httpMethod = "DELETE")
+    @DeleteMapping("/delSchools4edu")
+    @ResponseBody
+    public RestRecord delSchools4edu(@RequestParam( "id" ) long id,
+                                     @RequestParam("institutionId") long institutionId){
+        int count = userService.delSchools4edu(id,institutionId);
+        if (count==1){
+            return new RestRecord(200, MessageConstants.SCE_MSG_0200,1);
+        } else {
+            return new RestRecord(408,MessageConstants.SCE_MSG_408);
+        }
+    }
+
+    @ApiOperation(value = "获取教育机构下列表", notes="获取教育机构下列表", httpMethod = "POST")
+    @PostMapping("/getInstitutionList/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getInstitutionList(@RequestBody String json,
+                                         @PathVariable (value = "pageNum")Integer pageNum,
+                                         @PathVariable (value = "pageSize") Integer pageSize){
+        Map map = (Map) JSONUtils.parse(json);
+        String id = (String) map.get("id");
+        String institutionName = (String) map.get("institutionName");
+        String loginPermissionStatus = (String) map.get("loginPermissionStatus");
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map> list = userService.getInstitutions(id,institutionName,loginPermissionStatus);
+        PageInfo pageInfo = new PageInfo(list);
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200,pageInfo );
+    }
+
+    @ApiOperation(value = "获取教育机构下列表", notes="获取教育机构下列表", httpMethod = "GET")
+    @GetMapping("/getInstitutions")
+    @ResponseBody
+    public List<Map> getInstitutions(@RequestParam("id") String id,
+                                     @RequestParam("institutionName") String institutionName,
+                                     @RequestParam("loginPermissionStatus") String loginPermissionStatus){
+        List<Map> list = userService.getInstitutions(id,institutionName,loginPermissionStatus);
+        return list;
     }
 }

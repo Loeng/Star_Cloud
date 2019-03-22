@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Charles on 2019/3/8.
  */
@@ -28,11 +31,19 @@ public class UserManagerService {
         return userManagerDao.editLogin(id,loginPermissionStatus);
     }
 
-    public RestRecord findTeacherList( String userId, String pageNum, String pageSize ) {
-        return userManagerDao.findTeacherList( userId, pageNum, pageSize );
+    public RestRecord getSchools4edu(long id, Integer pageNum, Integer pageSize) {
+        return userManagerDao.getSchools4edu(id,pageNum,pageSize);
     }
 
-    public RestRecord findTeacher( String userId, String userName ) {
-        return userManagerDao.findTeacher( userId, userName );
+    public RestRecord delSchools4edu(long id, long institutionId) {
+        return userManagerDao.delSchools4edu(id,institutionId);
+    }
+
+    public RestRecord getInstitutionList(String json,Integer pageNum, Integer pageSize) {
+        return userManagerDao.getInstitutionList(json,pageNum,pageSize);
+    }
+
+    public List<Map> getInstitutions(String id, String institutionName, String loginPermissionStatus) {
+        return userManagerDao.getInstitutions(id,institutionName,loginPermissionStatus);
     }
 }
