@@ -4,7 +4,7 @@ package cn.com.bonc.sce.bean;
  * Created by Charles on 2019/2/28.
  */
 public class SchoolBean {
-    private int id;
+    private long id;
     private String schoolName;
     private int isDeleted;
     private String authorityName;
@@ -14,7 +14,7 @@ public class SchoolBean {
     private String grade;
     private int defaultBanner;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
