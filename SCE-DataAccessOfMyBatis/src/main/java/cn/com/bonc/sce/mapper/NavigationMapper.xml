@@ -8,34 +8,31 @@
         WHERE CHANNEL_TYPE=#{channelType}
         AND IS_DELETE=1
     </select>
-    
-    <insert id="addNav" parameterType="java.util.Map" useGeneratedKeys="true">
-        <selectKey keyProperty="COLUMN_ID" resultType="Integer" order="BEFORE">
-                    select max(COLUMN_ID)+1 from STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
-                </selectKey>
-        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
-                  (COLUMN_ID,COLUMN_NAME,COLUMN_URL,CHANNEL_ID,IS_DELETE)
+
+    <insert id="addChannel" parameterType="java.util.Map" useGeneratedKeys="true">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_CHANNEL_INFO
+        (CHANNEL_ID,CHANNEL_NAME,CHANNEL_URL,CHANNEL_TYPE,IS_DELETE)
         VALUES
-            (#{COLUMN_ID},#{columnName},#{columnUrl},#{channelId},1)
+        (#{channelId},#{channelName},#{channelUrl},#{channelType},#{isDeleted})
     </insert>
-    
-    <update id="editNav" parameterType="java.util.Map">
-        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_INFO
+
+    <update id="editChannel" parameterType="java.util.Map">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_CHANNEL_INFO
         <set>
-            <if test="columnName != null">COLUMN_NAME=#{columnName},</if>
-            <if test="columnUrl != null">COLUMN_URL=#{columnUrl}</if>
+            <if test="channelName != null">CHANNEL_NAME=#{channelName},</if>
+            <if test="channelUrl != null">CHANNEL_URL=#{channelUrl}</if>
         </set>
         WHERE
-            COLUMN_ID=#{columnId}
+        CHANNEL_ID=#{channelId}
     </update>
 
     <select id="getSchools" resultType="Map">
         SELECT ID,SCHOOL_NAME,SCHOOL_ADDRESS,DEFAULT_BANNER
         FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL
         WHERE 1=1
-         <if test="keywords != null and keywords!= ''" >
-             AND SCHOOL_NAME LIKE CONCAT(CONCAT('%',#{keywords}),'%')
-         </if>
+        <if test="keywords != null and keywords!= ''" >
+            AND SCHOOL_NAME LIKE CONCAT(CONCAT('%',#{keywords}),'%')
+        </if>
         AND IS_DELETE=1
     </select>
 
@@ -63,4 +60,9 @@
         WHERE ID=#{bannerId}
     </update>
 
+    <update id="delChannel">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_CHANNEL_INFO
+        SET IS_DELETE=0
+        WHERE CHANNEL_ID=#{channelId}
+    </update>
 </mapper>

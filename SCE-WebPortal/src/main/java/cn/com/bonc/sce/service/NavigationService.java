@@ -21,12 +21,12 @@ public class NavigationService {
         return navigationDao.getChannel(channelType);
     }
 
-    public RestRecord addNav(String json){
-        return navigationDao.addNav(json);
+    public RestRecord addChannel(String json){
+        return navigationDao.addChannel(json);
     }
 
-    public RestRecord editNav(String json){
-        return  navigationDao.editNav(json);
+    public RestRecord editChannel(String json){
+        return  navigationDao.editChannel(json);
     }
 
     public RestRecord getSchools(String keywords, Integer pageNum, Integer pageSize){
@@ -45,4 +45,7 @@ public class NavigationService {
         return navigationDao.delBanner(bannerId);
     }
 
+    public RestRecord delChannel(String channelId) {
+        return navigationDao.delChannel(channelId);
+    }
 }
