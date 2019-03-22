@@ -47,7 +47,7 @@ public class AgencyController {
     @DeleteMapping("/delSchoolRel")
     @ResponseBody
     public RestRecord delSchoolRel(@RequestParam( "agentId" ) long agentId,
-                                 @RequestParam ("schoolId")long schoolId){
+                                   @RequestParam ("schoolId")long schoolId){
         return agencyService.delSchoolRel(agentId,schoolId);
     }
 
@@ -55,11 +55,11 @@ public class AgencyController {
     @GetMapping("/getAgents/{pageNum}/{pageSize}")
     @ResponseBody
     public RestRecord getAgents(@RequestParam ( value = "agentName",required = false) String agentName,
-                                 //@RequestParam(value ="isActivate",required = false ) Integer isActivate,
-                                 @RequestParam ( value = "grade",required = false) String grade,
-                                 @RequestParam ( value = "agentArea",required = false) String agentArea,
-                                 @PathVariable (value = "pageNum")Integer pageNum,
-                                 @PathVariable (value = "pageSize") Integer pageSize ){
+                                //@RequestParam(value ="isActivate",required = false ) Integer isActivate,
+                                @RequestParam ( value = "grade",required = false) String grade,
+                                @RequestParam ( value = "agentArea",required = false) String agentArea,
+                                @PathVariable (value = "pageNum")Integer pageNum,
+                                @PathVariable (value = "pageSize") Integer pageSize ){
         return agencyService.getAgents(agentName,grade,agentArea,pageNum,pageSize);
     }
 
@@ -68,6 +68,13 @@ public class AgencyController {
     @ResponseBody
     public RestRecord insertInfo(@RequestBody @ApiParam( example = "{\"AGENT_NAME\": \"测试一下代理商名称\",\"PROVINCE\": \"四川\",\"CITY\": \"成都\",\"AREA\": \"青羊区\"}" ) String json ){
         return agencyService.insertInfo(json);
+    }
+
+    @ApiOperation(value = "个人中心代理商信息获取", notes="获取代理商详细数据", httpMethod = "POST")
+    @PostMapping("/getInfo")
+    @ResponseBody
+    public RestRecord getInfo(@RequestParam ("id") long id){
+        return agencyService.getInfo(id);
     }
 
 }

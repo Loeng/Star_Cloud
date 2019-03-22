@@ -40,5 +40,7 @@ public class AgencyService {
         return agencyDao.insertInfo(json);
     }
 
-
+    public RestRecord getInfo(long id) {
+        return agencyDao.getInfo(id);
+    }
 }
