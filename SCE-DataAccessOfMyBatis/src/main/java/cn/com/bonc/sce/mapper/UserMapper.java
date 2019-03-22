@@ -13,17 +13,24 @@ import java.util.Map;
  */
 public interface UserMapper {
 
-    int saveUser(UserBean userBean);
+    int saveUser( UserBean userBean );
 
-    int saveAccount(AccountBean account);
+    int saveUserSelective( UserBean userBean );
 
-    int delUser(@Param("id")String id);
+    int updateUserByUserIdSelective( UserBean userBean );
 
-    int resetPwd(@Param("id")String id, @Param("pwd")String pwd);
+    int saveAccount( AccountBean account );
 
-    int updateLoginPermission(@Param("id")String id, @Param("newStatus")int newStatus);
+    int delUser( @Param( "id" ) String id );
+
+    int resetPwd( @Param( "id" ) String id, @Param( "pwd" ) String pwd );
+
+    int updateLoginPermission( @Param( "id" ) String id, @Param( "newStatus" ) int newStatus );
 
     List< Map > selectTeacherList( @Param( "organizationId" ) BigDecimal organizationId );
 
     BigDecimal selectOrganizationId( @Param( "userId" ) String userId );
+
+    String selectUserIdByLoginName( String LOGIN_NAME );
+
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.SchoolStudentListMapper">
+    <!--根据组织id查询及其它条件查询学生列表-->
+    <select id="getStudentListByOrganizationId" parameterType="java.lang.String" resultType="Map">
+        SELECT
+        SCU.USER_ID,
+        SCU.USER_NAME,
+        SCU.LOGIN_NAME,
+        SCU.GENDER,
+        SCU.CERTIFICATE_NUMBER,
+        SCU.PHONE_NUMBER,
+        SCU.CREATE_TIME,
+        SIS.GRADE,
+        SIS.CLASS_NUMBER,
+        S.USER_NAME AS PARENT_NAME,
+        S.LOGIN_NAME AS PARENT_LOGIN_NAME
+        FROM
+        ( SELECT * FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_TYPE = 1 AND IS_DELETE = 1 AND ORGANIZATION_ID =
+        #{ORGANIZATION_ID} ) SCU
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT SIS ON SCU.USER_ID = SIS.USER_ID
+        LEFT JOIN (
+        SELECT
+        SPR.STUDENT_USER_ID,
+        SCU1.USER_NAME,
+        SCU1.LOGIN_NAME
+        FROM
+        STARCLOUDPORTAL.SCE_COMMON_USER SCU1
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL SPR ON SCU1.USER_ID = SPR.PARENT_USER_ID
+        AND SPR.IS_MAIN = 1
+        ) S ON SCU.USER_ID = S.STUDENT_USER_ID
+        <where>
+            <if test="USER_NAME != null and USER_NAME != ''">
+                AND SCU.USER_NAME LIKE CONCAT(CONCAT('%',#{USER_NAME}),'%')
+            </if>
+        </where>
+        ORDER BY  SCU.CREATE_TIME DESC
+    </select>
+
+    <!--保存学生资料-->
+    <insert id="saveStudent">
+        INSERT INTO STARCLOUDPORTAL.SCE_INFO_STUDENT
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+            <if test="USER_ID != null">
+                USER_ID,
+            </if>
+            <if test="GRADE != null">
+                GRADE,
+            </if>
+            <if test="CLASS_NUMBER != null">
+                CLASS_NUMBER,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="USER_ID != null">
+               #{USER_ID},
+            </if>
+            <if test="GRADE != null">
+                #{GRADE},
+            </if>
+            <if test="CLASS_NUMBER != null">
+                #{CLASS_NUMBER},
+            </if>
+
+        </trim>
+    </insert>
+
+    <!--编辑学生资料信息-->
+    <update id="editStudent">
+        UPDATE STARCLOUDPORTAL.SCE_INFO_STUDENT
+        <set>
+            <if test="GRADE != null">
+                GRADE=#{GRADE},
+            </if>
+            <if test="CLASS_NUMBER != null">
+                CLASS_NUMBER=#{CLASS_NUMBER},
+            </if>
+        </set>
+        WHERE USER_ID=#{USER_ID}
+    </update>
+
+    <!-- 删除学生 -->
+    <update id="deleteStudent" parameterType="java.lang.String">
+          BEGIN
+          UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET IS_DELETE = 0 WHERE USER_ID =#{userId};
+          UPDATE STARCLOUDPORTAL.SCE_INFO_STUDENT SET IS_DELETE = 0 WHERE USER_ID =#{userId};
+          END;
+    </update>
+
+    <!-- 根据用户id查询组织id-->
+    <select id="selectOrganizationIdByUserId" resultType="java.lang.Long">
+          SELECT ORGANIZATION_ID  FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID =#{userId}
+    </select>
+</mapper>
