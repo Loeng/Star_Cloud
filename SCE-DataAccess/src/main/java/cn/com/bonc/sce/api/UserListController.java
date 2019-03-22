@@ -10,9 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Sort;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -153,11 +153,12 @@ public class UserListController {
             List< Map< String, Object > > roleCount = userInfoRepository.getRoleCount();
             Integer activeCount = userInfoRepository.getActiveCount( time );
             Float activeProportion = activeCount.floatValue() / userCount;
+            DecimalFormat df = new DecimalFormat( "#.##%" );
             Map< String, Object > result = new HashMap<>();
             result.put( "userCount", userCount );
             result.put( "roleCount", roleCount );
             result.put( "activeCount", activeCount );
-            result.put( "activeProportion", activeProportion );
+            result.put( "activeProportion", df.format( activeProportion ) );
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
         } catch ( Exception e ) {
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
