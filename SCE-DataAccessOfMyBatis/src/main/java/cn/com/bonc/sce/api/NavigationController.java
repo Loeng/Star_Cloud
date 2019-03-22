@@ -103,7 +103,7 @@ public class NavigationController {
     @ApiOperation(value = "获取学校机构对应的banner", notes="根据学校id，返回学校对应banner列表", httpMethod = "GET")
     @GetMapping("/getBanners")
     @ResponseBody
-    public RestRecord getBanners(@RequestParam ( "schoolId" ) Integer schoolId ){
+    public RestRecord getBanners(@RequestParam ( "schoolId" ) long schoolId ){
         List<Banner> banners = navigationService.getBanners(schoolId);
         return new RestRecord(200,banners);
     }
@@ -112,7 +112,7 @@ public class NavigationController {
     @PutMapping("/editDefaultBanner")
     @ResponseBody
     public RestRecord editDefaultBanner(
-            @RequestParam ( "schoolId" ) Integer schoolId,
+            @RequestParam ( "schoolId" ) long schoolId,
             @RequestParam( "defaultBanner" ) Integer defaultBanner) {
         //传入页面banner值  后台转变
         int newStatus = (defaultBanner==0) ? 1 : 0;
@@ -127,7 +127,7 @@ public class NavigationController {
     @ApiOperation(value = "删除某一学校下的banner", notes="获取学校id和bannerid，逻辑删除banner", httpMethod = "Delete")
     @DeleteMapping("/delBanner")
     @ResponseBody
-    public RestRecord delBanner( @RequestParam( "bannerId" ) Integer bannerId){
+    public RestRecord delBanner( @RequestParam( "bannerId" ) long bannerId){
         int count = navigationService.delBanner(bannerId);
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );

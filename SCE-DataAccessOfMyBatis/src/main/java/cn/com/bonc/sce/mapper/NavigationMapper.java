@@ -22,12 +22,12 @@ public interface NavigationMapper {
 
     List<SchoolBean> getSchools(@Param("keywords") String keywords);
 
-    List<Banner> getBanners(@Param( "schoolId" ) Integer schoolId);
+    List<Banner> getBanners(@Param( "schoolId" ) long schoolId);
 
-    Integer editDefaultBanner( @Param( "schoolId" ) Integer schoolId,
+    Integer editDefaultBanner( @Param( "schoolId" ) long schoolId,
                                @Param( "newBanner" ) Integer newBanner );
 
-    Integer delBanner( @Param( "bannerId" ) Integer bannerId );
+    Integer delBanner( @Param( "bannerId" ) long bannerId );
 
     Integer delChannel(@Param( "channelId" )String channelId);
 }

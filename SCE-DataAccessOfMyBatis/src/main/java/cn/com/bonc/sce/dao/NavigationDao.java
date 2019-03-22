@@ -34,15 +34,15 @@ public class NavigationDao {
         return navigationMapper.getSchools(keywords);
     }
 
-    public List<Banner> getBanners (Integer schoolId){
+    public List<Banner> getBanners (long schoolId){
         return navigationMapper.getBanners(schoolId);
     }
 
-    public Integer editDefaultBanner (Integer schoolId, Integer newBanner){
+    public Integer editDefaultBanner (long schoolId, Integer newBanner){
         return navigationMapper.editDefaultBanner(schoolId,newBanner);
     }
 
-    public Integer delBanner (Integer bannerId){
+    public Integer delBanner (long bannerId){
         return navigationMapper.delBanner(bannerId);
     }
 

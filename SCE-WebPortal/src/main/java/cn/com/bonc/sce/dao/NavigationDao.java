@@ -27,14 +27,14 @@ public interface NavigationDao {
                           @PathVariable(value = "pageSize") Integer pageSize);
 
     @RequestMapping( value = "/navigation/getBanners", method = RequestMethod.GET )
-    RestRecord getBanners (@RequestParam("schoolId") Integer schoolId);
+    RestRecord getBanners (@RequestParam("schoolId") long schoolId);
 
     @RequestMapping( value = "/navigation/editDefaultBanner", method = RequestMethod.PUT )
-    RestRecord editDefaultBanner (@RequestParam( "schoolId" ) Integer schoolId,
+    RestRecord editDefaultBanner (@RequestParam( "schoolId" ) long schoolId,
                                   @RequestParam( "defaultBanner" ) Integer defaultBanner);
 
     @RequestMapping( value = "/navigation/delBanner", method = RequestMethod.DELETE )
-    RestRecord delBanner (@RequestParam( "bannerId" ) Integer bannerId);
+    RestRecord delBanner (@RequestParam( "bannerId" ) long bannerId);
 
     @RequestMapping( value = "/navigation/delChannel", method = RequestMethod.DELETE )
     RestRecord delChannel(@RequestParam( "channelId" ) String channelId);
