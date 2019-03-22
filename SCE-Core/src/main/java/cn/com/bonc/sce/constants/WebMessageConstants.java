@@ -31,6 +31,8 @@ public interface WebMessageConstants {
     String SCE_WEB_MSG_151 = "缺少应用 ID 或 TOKEN 信息";
     String SCE_WEB_MSG_152 = "应用 ID 或 TOKEN 无效";
     String SCE_WEB_MSG_153 = "找不到用户";
+    String SCE_WEB_MSG_154 = "系统中已有该账号";
+    String SCE_WEB_MSG_155 = "账号不能为空";
 
 
     String SCE_PORTAL_MSG_110 = "没有关联的厂商";

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  * @since 2018/14/12 12:00
  */
 @Repository
-public interface AccountDao extends JpaRepository<Account, Integer> {
+public interface AccountDao extends JpaRepository<Account, Long> {
 
     Account getAccountByUserIdAndPassword( String userId, String password );
 

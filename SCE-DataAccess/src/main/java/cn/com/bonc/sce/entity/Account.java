@@ -32,7 +32,7 @@ public class Account  implements Serializable {
 //    @SequenceGenerator( name = "SEQ_GEN_COMMON_USER_PASSWORD", allocationSize = 1, initialValue = 1, sequenceName = "SEQ_COMMON_USER_PASSWORD" )
     @GeneratedValue
     @Column( name = "ID" )
-    private Integer id;
+    private Long id;
 
     @Column( name = "USER_ID" )
     private String userId;
