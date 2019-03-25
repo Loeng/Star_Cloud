@@ -14,6 +14,9 @@ public interface InvoiceMapper {
 
     int updateInvoiceInfoByOrganizationId( Map< String, Object > invoiceInfo );
 
+    int insertInvoiceSelective( Map< String, Object > invoiceInfo );
+
+
     Long selectOrganizationIdByUserId( String userId );
 
 }

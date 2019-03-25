@@ -21,6 +21,98 @@
                 AND IS_DELETE = 1
     </select>
 
+    <insert id="insertInvoiceSelective" parameterType="Map">
+        insert into STARCLOUDPORTAL.SCE_INVOICE_INFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ID != null">
+                ID,
+            </if>
+            <if test="INVOICE_TITLE != null">
+                INVOICE_TITLE,
+            </if>
+            <if test="OPEN_TYPE != null">
+                OPEN_TYPE,
+            </if>
+            <if test="INVOICE_TYPE != null">
+                INVOICE_TYPE,
+            </if>
+            <if test="TAX_REGISTRATION_NO != null">
+                TAX_REGISTRATION_NO,
+            </if>
+            <if test="DEPOSIT_BANK != null">
+                DEPOSIT_BANK,
+            </if>
+            <if test="BANK_ACCOUNT != null">
+                BANK_ACCOUNT,
+            </if>
+            <if test="REGISTRATION_LOCATION != null">
+                REGISTRATION_LOCATION,
+            </if>
+            <if test="REGISTRATION_TELEPHONE != null">
+                REGISTRATION_TELEPHONE,
+            </if>
+            <if test="ORGANIZATION_ID != null">
+                ORGANIZATION_ID,
+            </if>
+            <if test="CREATE_TIME != null">
+                CREATE_TIME,
+            </if>
+            <if test="UPDATE_TIME != null">
+                UPDATE_TIME,
+            </if>
+            <if test="IS_DELETE != null">
+                IS_DELETE,
+            </if>
+            <if test="UPDATE_USER_ID != null">
+                UPDATE_USER_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ID != null">
+                #{ID},
+            </if>
+            <if test="INVOICE_TITLE != null">
+                #{INVOICE_TITLE,jdbcType=VARCHAR},
+            </if>
+            <if test="OPEN_TYPE != null">
+                #{OPEN_TYPE,jdbcType=VARCHAR},
+            </if>
+            <if test="INVOICE_TYPE != null">
+                #{INVOICE_TYPE,jdbcType=VARCHAR},
+            </if>
+            <if test="TAX_REGISTRATION_NO != null">
+                #{TAX_REGISTRATION_NO,jdbcType=VARCHAR},
+            </if>
+            <if test="DEPOSIT_BANK != null">
+                #{DEPOSIT_BANK,jdbcType=VARCHAR},
+            </if>
+            <if test="BANK_ACCOUNT != null">
+                #{BANK_ACCOUNT,jdbcType=VARCHAR},
+            </if>
+            <if test="REGISTRATION_LOCATION != null">
+                #{REGISTRATION_LOCATION,jdbcType=VARCHAR},
+            </if>
+            <if test="REGISTRATION_TELEPHONE != null">
+                #{REGISTRATION_TELEPHONE,jdbcType=VARCHAR},
+            </if>
+            <if test="ORGANIZATION_ID != null">
+                #{ORGANIZATION_ID,jdbcType=DECIMAL},
+            </if>
+            <if test="CREATE_TIME != null">
+                #{CREATE_TIME,jdbcType=DATE},
+            </if>
+            <if test="UPDATE_TIME != null">
+                #{UPDATE_TIME,jdbcType=DATE},
+            </if>
+            <if test="IS_DELETE != null">
+                #{IS_DELETE,jdbcType=DECIMAL},
+            </if>
+            <if test="UPDATE_USER_ID != null">
+                #{UPDATE_USER_ID,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
     <select id="selectInvoiceHistory" parameterType="String" resultType="Map">
             SELECT
                 SIPI.INVOICE_ID,
@@ -58,8 +150,7 @@
         </if>
         <if test="UPDATE_USER_ID != null and UPDATE_USER_ID != ''">UPDATE_USER_ID = #{UPDATE_USER_ID} ,</if>
 
-        UPDATE_TIME=sysdate,
-        UPDATE_USER_ID=#{userId}
+        UPDATE_TIME=sysdate
         WHERE
         ORGANIZATION_ID = #{ORGANIZATION_ID}
         AND IS_DELETE = 1

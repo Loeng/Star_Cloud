@@ -25,7 +25,7 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @ApiOperation( value = "发票管理-查看发票信息", notes = "发票管理-查看发票信息", httpMethod = "GET" )
+    @ApiOperation( value = "发票管理-查看发票资质信息", notes = "发票管理-查看发票资质信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
@@ -42,22 +42,17 @@ public class InvoiceController {
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-    } )
     @GetMapping( "/info-history" )
     @ResponseBody
     public RestRecord selectInvoiceHistory( @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.selectInvoiceHistory( userId ) );
     }
 
-    @ApiOperation( value = "发票管理-修改发票信息", notes = "发票管理-修改发票信息", httpMethod = "PUT" )
+    @ApiOperation( value = "发票管理-修改或者新增发票资质信息", notes = "发票管理-修改或者新增发票资质信息", httpMethod = "PUT" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
-    @ApiResponses( {
-            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
-    } )
+
     @PutMapping( "/update" )
     @ResponseBody
     public RestRecord updateInvoiceInfo( @RequestBody @ApiParam( "{\n" +
