@@ -67,4 +67,227 @@
         </if>
         AND u.USER_TYPE=7
     </select>
+
+    <select id="selectUserIdByLoginName" resultType="String">
+        select USER_ID from STARCLOUDPORTAL.SCE_COMMON_USER WHERE LOGIN_NAME = #{LOGIN_NAME}
+    </select>
+
+    <insert id="saveUserSelective" parameterType="cn.com.bonc.sce.bean.UserBean">
+        insert into STARCLOUDPORTAL.SCE_COMMON_USER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="loginName != null">
+                LOGIN_NAME,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="gender != null">
+                GENDER,
+            </if>
+            <if test="userType != null">
+                USER_TYPE,
+            </if>
+            <if test="mailAddress != null">
+                MAIL_ADDRESS,
+            </if>
+            <if test="certificateType != null">
+                CERTIFICATE_TYPE,
+            </if>
+            <if test="certificateNumber != null">
+                CERTIFICATE_NUMBER,
+            </if>
+            <if test="phoneNumber != null">
+                PHONE_NUMBER,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="loginTime != null">
+                LOGIN_TIME,
+            </if>
+            <if test="lastLoginTime != null">
+                LAST_LOGIN_TIME,
+            </if>
+            <if test="loginCounts != null">
+                LOGIN_COUNTS,
+            </if>
+            <if test="organizationId != null">
+                ORGANIZATION_ID,
+            </if>
+            <if test="loginPermissionStatus != null">
+                LOGIN_PERMISSION_STATUS,
+            </if>
+            <if test="isDelete != null">
+                IS_DELETE,
+            </if>
+            <if test="secret != null">
+                SECRET,
+            </if>
+            <if test="loginTime != null">
+                LOGINTIMES,
+            </if>
+            <if test="isFirstLogin != null">
+                IS_FIRST_LOGIN,
+            </if>
+            <if test="headPortrait != null">
+                HEAD_PORTRAIT,
+            </if>
+            <if test="birthday != null">
+                BIRTHDATE,
+            </if>
+            <if test="remarks != null">
+                REMARKS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                #{userType,jdbcType=DECIMAL},
+            </if>
+            <if test="mailAddress != null">
+                #{mailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="certificateType != null">
+                #{certificateType,jdbcType=DECIMAL},
+            </if>
+            <if test="certificateNumber != null">
+                #{certificateNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=DATE},
+            </if>
+            <if test="loginTime != null">
+                #{loginTime,jdbcType=DATE},
+            </if>
+            <if test="lastLoginTime != null">
+                #{lastLoginTime,jdbcType=DATE},
+            </if>
+            <if test="loginCounts != null">
+                #{loginCounts,jdbcType=DECIMAL},
+            </if>
+            <if test="organizationId != null">
+                #{organizationId,jdbcType=DECIMAL},
+            </if>
+            <if test="loginPermissionStatus != null">
+                #{loginPermissionStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=DECIMAL},
+            </if>
+            <if test="secret != null">
+                #{secret,jdbcType=VARCHAR},
+            </if>
+            <if test="loginTime != null">
+                #{loginTime,jdbcType=DECIMAL},
+            </if>
+            <if test="isFirstLogin != null">
+                #{isFirstLogin,jdbcType=DECIMAL},
+            </if>
+            <if test="headPortrait != null">
+                #{headPortrait,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=CLOB},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateUserByUserIdSelective" parameterType="cn.com.bonc.sce.bean.UserBean">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
+        <set>
+
+            <if test="loginName != null">
+                LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                GENDER = #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                USER_TYPE =  #{userType,jdbcType=DECIMAL},
+            </if>
+            <if test="mailAddress != null">
+                MAIL_ADDRESS = #{mailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="certificateType != null">
+                CERTIFICATE_TYPE =   #{certificateType,jdbcType=DECIMAL},
+            </if>
+            <if test="certificateNumber != null">
+                CERTIFICATE_NUMBER = #{certificateNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneNumber != null">
+                PHONE_NUMBER =  #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                ADDRESS =  #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=DATE},
+            </if>
+            <if test="loginTime != null">
+                LOGIN_TIME = #{loginTime,jdbcType=DATE},
+            </if>
+            <if test="lastLoginTime != null">
+                LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=DATE},
+            </if>
+            <if test="loginCounts != null">
+                LOGIN_COUNTS =   #{loginCounts,jdbcType=DECIMAL},
+            </if>
+            <if test="organizationId != null">
+                ORGANIZATION_ID =   #{organizationId,jdbcType=DECIMAL},
+            </if>
+            <if test="loginPermissionStatus != null">
+                LOGIN_PERMISSION_STATUS = #{loginPermissionStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="isDelete != null">
+                IS_DELETE =  #{isDelete,jdbcType=DECIMAL},
+            </if>
+            <if test="secret != null">
+                SECRET =  #{secret,jdbcType=VARCHAR},
+            </if>
+            <if test="loginTime != null">
+                LOGINTIMES = #{loginTime,jdbcType=DECIMAL},
+            </if>
+            <if test="isFirstLogin != null">
+                IS_FIRST_LOGIN =  #{isFirstLogin,jdbcType=DECIMAL},
+            </if>
+            <if test="headPortrait != null">
+                HEAD_PORTRAIT =   #{headPortrait,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                BIRTHDATE =   #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remarks != null">
+                REMARKS = #{remarks,jdbcType=CLOB},
+            </if>
+        </set>
+        where USER_ID = #{stringUserId,jdbcType=VARCHAR}
+    </update>
 </mapper>

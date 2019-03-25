@@ -28,4 +28,10 @@ public interface UserMapper {
     int delSchools4edu(@Param("id") long id, @Param("institutionId") long institutionId);
 
     List<Map> getInstitutions(@Param("id") String id, @Param("institutionName") String institutionName, @Param("loginPermissionStatus") String loginPermissionStatus);
+
+    String selectUserIdByLoginName( String LOGIN_NAME );
+
+    int saveUserSelective( UserBean userBean );
+
+    int updateUserByUserIdSelective( UserBean userBean );
 }
