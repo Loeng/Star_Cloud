@@ -18,6 +18,11 @@
             (#{id},#{password},#{isDelete},#{userId})
     </insert>
 
+    <select id="isExist" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM STARCLOUDPORTAL.SCE_COMMON_USER
+        WHERE LOGIN_NAME=#{loginName}
+    </select>
+
     <update id="delUser">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
         SET IS_DELETE=0

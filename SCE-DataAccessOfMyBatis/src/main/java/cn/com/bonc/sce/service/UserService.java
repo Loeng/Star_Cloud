@@ -52,4 +52,8 @@ public class UserService {
     public List<Map> getInstitutions(String id, String institutionName, String loginPermissionStatus) {
         return userDao.getInstitutions(id,institutionName,loginPermissionStatus);
     }
+
+    public int isExist(String loginName) {
+        return userDao.isExist(loginName);
+    }
 }

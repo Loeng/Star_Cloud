@@ -34,4 +34,6 @@ public interface UserMapper {
     int saveUserSelective( UserBean userBean );
 
     int updateUserByUserIdSelective( UserBean userBean );
+
+    int isExist(@Param("loginName") String loginName);
 }

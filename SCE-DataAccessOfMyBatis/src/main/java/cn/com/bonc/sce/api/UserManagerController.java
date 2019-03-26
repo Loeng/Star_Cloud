@@ -149,6 +149,10 @@ public class UserManagerController {
         user.setIsDelete( 1 );
         user.setUserId(userId);
 
+        if (userService.isExist(loginName) > 0){
+            return new RestRecord(1022,MessageConstants.SCE_MSG_1022);
+        }
+
         AccountBean account = new AccountBean();
         long accountId = idWorker.nextId();
         account.setId( accountId );

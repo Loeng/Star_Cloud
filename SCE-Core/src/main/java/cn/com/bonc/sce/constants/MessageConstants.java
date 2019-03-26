@@ -54,6 +54,8 @@ public interface MessageConstants {
     String SCE_MSG_1020 = "修改用户状态时找不到用户数据， userId: [{}]; changeStatus: [{}]";
     String SCE_MSG_1021 = "修改用户登录状态，是否第一次登录： {}， userId: [{}]";
 
+    String SCE_MSG_1022 = "登录名已存在";
+
     /**
      * 加密错误
      */

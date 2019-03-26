@@ -50,4 +50,8 @@ public class UserDao {
     public List<Map> getInstitutions(String id, String institutionName, String loginPermissionStatus) {
         return userMapper.getInstitutions(id,institutionName,loginPermissionStatus);
     }
+
+    public int isExist(String loginName) {
+        return userMapper.isExist(loginName);
+    }
 }
