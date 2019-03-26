@@ -113,4 +113,11 @@ public class UserManagerController {
             //return new RestRecord(406, MessageConstants.SCE_MSG_406);
         }
     }
+
+    @ApiOperation(value = "用户注册", notes="用户注册", httpMethod = "POST")
+    @PostMapping("/register")
+    @ResponseBody
+    public RestRecord register(@RequestBody @ApiParam( example = "" ) String json ){
+        return userManagerService.register(json);
+    }
 }

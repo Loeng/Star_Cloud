@@ -46,4 +46,8 @@ public class UserManagerService {
     public List<Map> getInstitutions(String id, String institutionName, String loginPermissionStatus) {
         return userManagerDao.getInstitutions(id,institutionName,loginPermissionStatus);
     }
+
+    public RestRecord register(String json) {
+        return userManagerDao.register(json);
+    }
 }

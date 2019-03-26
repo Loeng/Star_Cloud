@@ -35,4 +35,7 @@ public interface UserManagerDao {
 
     @RequestMapping( value = "/userManager/getInstitutions", method = RequestMethod.GET )
     List<Map> getInstitutions(@RequestParam("id")String id, @RequestParam("institutionName")String institutionName, @RequestParam("loginPermissionStatus") String loginPermissionStatus);
+
+    @RequestMapping( value = "/userManager/register", method = RequestMethod.POST )
+    RestRecord register(@RequestBody String json);
 }
