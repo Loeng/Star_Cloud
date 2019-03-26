@@ -38,6 +38,20 @@ public class InvoiceController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.selectInvoiceInfoByOrganizationId( userId ) );
     }
 
+
+    @ApiOperation( value = "发票管理-查看收票地址信息", notes = "发票管理-查看收票地址信息", httpMethod = "GET" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+    } )
+    @GetMapping( "/address" )
+    @ResponseBody
+    public RestRecord getInvoiceAddress( @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.selectInvoiceAddressByOrganizationId( userId ) );
+    }
+
     @ApiOperation( value = "发票管理-查看历史信息", notes = "发票管理-查看历史信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
@@ -52,7 +66,6 @@ public class InvoiceController {
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
-
     @PutMapping( "/update" )
     @ResponseBody
     public RestRecord updateInvoiceInfo( @RequestBody @ApiParam( "{\n" +
@@ -66,5 +79,16 @@ public class InvoiceController {
             "    \"REGISTRATION_TELEPHONE\": \"注册固定电话\"\n" +
             "}" ) Map< String, Object > invoiceInfo, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.updateInvoiceInfoByOrganizationId( invoiceInfo, userId ) );
+    }
+
+    @ApiOperation( value = "发票管理-修改或者新增收票地址信息", notes = "发票管理-修改或者新增收票地址信息", httpMethod = "PUT" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @PutMapping( "/update-address" )
+    @ResponseBody
+    public RestRecord updateInvoiceAddress( @RequestBody @ApiParam( "{\"NAME\":\"BeJson\",\"POST_ADDRESS\":\"光华中心128号\",\"TELEPHONE_NUMBER\":10086,\"PROVINCE\":\"四川省\",\"CITY\":\"成都市\",\"AREA\":\"青羊区\"}" )
+                                                        Map< String, Object > invoiceInfo, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.updateInvoiceAddressByOrganizationId( invoiceInfo, userId ) );
     }
 }

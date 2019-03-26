@@ -62,4 +62,36 @@ public class InvoiceDao {
     public Long selectOrganizationIdByUserId( String userId ) {
         return invoiceMapper.selectOrganizationIdByUserId( userId );
     }
+
+
+    /**
+     * 查询收票地址信息
+     *
+     * @param organizationId
+     * @return
+     */
+    public List< Map > selectInvoiceAddress( Long organizationId ) {
+        return invoiceMapper.selectInvoiceAddress( organizationId );
+    }
+
+
+    /**
+     * 修改收票地址信息
+     *
+     * @param invoiceInfo
+     * @return
+     */
+    public int updateInvoiceAddressByOrganizationId( Map< String, Object > invoiceInfo ) {
+        return invoiceMapper.updateInvoiceAddressByOrganizationId( invoiceInfo );
+    }
+
+    /**
+     * 新增收票地址信息
+     *
+     * @param invoiceInfo
+     * @return
+     */
+    public int insertInvoiceAddressSelective( Map< String, Object > invoiceInfo ) {
+        return invoiceMapper.insertInvoiceAddressSelective( invoiceInfo );
+    }
 }

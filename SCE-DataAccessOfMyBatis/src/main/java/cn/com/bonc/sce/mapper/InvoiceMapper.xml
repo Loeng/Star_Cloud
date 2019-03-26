@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.bonc.sce.mapper.InvoiceMapper">
+    <!--查询发票资质-->
     <select id="selectInvoiceInfoByOrganizationId" parameterType="java.lang.Long" resultType="Map">
             SELECT
                 INVOICE_TITLE,
@@ -20,7 +21,7 @@
                 ORGANIZATION_ID = #{organizationId}
                 AND IS_DELETE = 1
     </select>
-
+    <!--新增发票资质信息-->
     <insert id="insertInvoiceSelective" parameterType="Map">
         insert into STARCLOUDPORTAL.SCE_INVOICE_INFO
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -112,7 +113,7 @@
             </if>
         </trim>
     </insert>
-
+    <!-- 查询开票历史-->
     <select id="selectInvoiceHistory" parameterType="String" resultType="Map">
             SELECT
                 SIPI.INVOICE_ID,
@@ -130,7 +131,7 @@
             ORDER BY
                 SIPI.APPLY_TIME
     </select>
-
+    <!--修改发票资质信息-->
     <update id="updateInvoiceInfoByOrganizationId" parameterType="String">
         UPDATE STARCLOUDPORTAL.SCE_INVOICE_INFO
         SET
@@ -159,4 +160,61 @@
     <select id="selectOrganizationIdByUserId" resultType="java.lang.Long">
         SELECT ORGANIZATION_ID  FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID =#{userId}
     </select>
+    <!-- 查询发票收票地址信息-->
+    <select id="selectInvoiceAddress" parameterType="java.lang.Long" resultType="Map">
+            SELECT
+                NAME,
+                TELEPHONE_NUMBER,
+                POST_ADDRESS,
+                PROVINCE,
+                CITY,
+                AREA,
+                ORGANIZATION_ID
+            FROM
+                STARCLOUDPORTAL.SCE_INVOICE_ADDRESS
+            WHERE
+                ORGANIZATION_ID = #{organizationId}
+                AND IS_DELETE = 1
+    </select>
+
+    <!--插入收票地址-->
+    <insert id="insertInvoiceAddressSelective" parameterType="Map">
+        insert into STARCLOUDPORTAL.SCE_INVOICE_ADDRESS
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ID != null">ID,</if>
+            <if test="ORGANIZATION_ID != null">ORGANIZATION_ID,</if>
+            <if test="NAME != null">NAME,</if>
+            <if test="POST_ADDRESS != null">POST_ADDRESS,</if>
+            <if test="TELEPHONE_NUMBER != null">TELEPHONE_NUMBER,</if>
+            <if test="IS_DELETE != null">IS_DELETE,</if>
+            <if test="PROVINCE != null">PROVINCE,</if>
+            <if test="CITY != null">CITY,</if>
+            <if test="AREA != null">AREA</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ID != null">#{ID},</if>
+            <if test="ORGANIZATION_ID != null">#{ORGANIZATION_ID},</if>
+            <if test="NAME != null">#{NAME},</if>
+            <if test="POST_ADDRESS != null">#{POST_ADDRESS},</if>
+            <if test="TELEPHONE_NUMBER != null">#{TELEPHONE_NUMBER},</if>
+            <if test="IS_DELETE != null">#{IS_DELETE},</if>
+            <if test="PROVINCE != null">#{PROVINCE},</if>
+            <if test="CITY != null">#{CITY},</if>
+            <if test="AREA != null">#{AREA}</if>
+        </trim>
+    </insert>
+    <!--修改收票地址-->
+    <update id="updateInvoiceAddressByOrganizationId" parameterType="String">
+        UPDATE STARCLOUDPORTAL.SCE_INVOICE_ADDRESS
+        SET
+        <if test="NAME != null and NAME != ''">NAME = #{NAME} ,</if>
+        <if test="POST_ADDRESS != null and POST_ADDRESS != ''">POST_ADDRESS = #{POST_ADDRESS} ,</if>
+        <if test="TELEPHONE_NUMBER != null and TELEPHONE_NUMBER != ''">TELEPHONE_NUMBER = #{TELEPHONE_NUMBER} ,</if>
+        <if test="PROVINCE != null and PROVINCE != ''">PROVINCE = #{PROVINCE} ,</if>
+        <if test="CITY != null and CITY != ''">CITY = #{CITY} ,</if>
+        <if test="AREA != null and AREA != ''">AREA = #{AREA} </if>
+        WHERE
+        ORGANIZATION_ID = #{ORGANIZATION_ID}
+        AND IS_DELETE = 1
+    </update>
 </mapper>
