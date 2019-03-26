@@ -117,7 +117,9 @@ public class UserManagerController {
     @ApiOperation(value = "用户注册", notes="用户注册", httpMethod = "POST")
     @PostMapping("/register")
     @ResponseBody
-    public RestRecord register(@RequestBody @ApiParam( example = "" ) String json ){
+    public RestRecord register(@RequestBody @ApiParam( example = "{\"loginName\": \"测试张\",\"secret\": \"123456\",\"phoneNumber\": \"12345678901\",\"userType\": 1,\"userName\": \"测试张\"}" ) String json ){
         return userManagerService.register(json);
     }
+
+    
 }

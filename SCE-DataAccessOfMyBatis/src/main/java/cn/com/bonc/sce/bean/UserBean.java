@@ -37,8 +37,7 @@ public class UserBean {
     private String headPortrait;
     private Date birthday;
     private Map<String,String> userDetailedInfo;
-
-
+    private Integer accountStatus;
 
     public long getUserId() {
         return userId;
@@ -246,5 +245,13 @@ public class UserBean {
 
     public void setUserDetailedInfo(Map<String, String> userDetailedInfo) {
         this.userDetailedInfo = userDetailedInfo;
+    }
+
+    public Integer getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(Integer accountStatus) {
+        this.accountStatus = accountStatus;
     }
 }

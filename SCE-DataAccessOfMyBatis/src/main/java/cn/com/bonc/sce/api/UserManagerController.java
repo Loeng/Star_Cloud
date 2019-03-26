@@ -148,6 +148,7 @@ public class UserManagerController {
         user.setUserName(userName);
         user.setIsDelete( 1 );
         user.setUserId(userId);
+        user.setAccountStatus(0);
 
         if (userService.isExist(loginName) > 0){
             return new RestRecord(1022,MessageConstants.SCE_MSG_1022);
