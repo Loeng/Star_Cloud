@@ -115,21 +115,34 @@
     </insert>
     <!-- 查询开票历史-->
     <select id="selectInvoiceHistory" parameterType="String" resultType="Map">
-            SELECT
-                SIPI.INVOICE_ID,
-                SIPI.APPLY_TIME,
-                SIPI.APPLY_USER_ID,
-                SIPI.INVOICE_AMOUNT,
-                SIPI.INVOICE_STATUS,
-                SII.INVOICE_TITLE
-            FROM
-                STARCLOUDPORTAL.SCE_INVOICE_POST_INFO SIPI
-                LEFT JOIN STARCLOUDPORTAL.SCE_INVOICE_INFO SII ON SIPI.INVOICE_ID = SII.ID
-            WHERE
-                SIPI.IS_DELETE = 1
-                AND SIPI.APPLY_USER_ID = #{USER_ID}
-            ORDER BY
-                SIPI.APPLY_TIME
+        SELECT ORDER_NO, D.ID, D.APPLY_TIME, D.APPLY_USER_ID, D.INVOICE_AMOUNT, D.INVOICE_STATUS
+        , D.IS_DELETE, D.RECIPIENTS, D.POST_ADDRESS, D.TELEPHONE_NUMBER, D.PROVINCE
+        , D.CITY, D.AREA, D.INVOICE_TITLE, D.OPEN_TYPE, D.INVOICE_CONTENT
+        , D.TAX_REGISTRATION_NO, D.DEPOSIT_BANK, D.BANK_ACCOUNT, D.REGISTRATION_LOCATION, D.REGISTRATION_TELEPHONE
+        , D.INVOICE_CODE, D.INVOICE_NO, D.EXPRESS_COMPANY, D.COURIER_NUMBER
+        FROM STARCLOUDPORTAL.SCE_ORDER_INVOICE_INFO D
+        INNER JOIN (
+        SELECT WMSYS.WM_CONCAT(C.ORDER_ID) AS ORDER_NO, B.ID
+        FROM STARCLOUDPORTAL.SCE_ORDER_INVOICE_REL A
+        LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INVOICE_INFO B ON A.ORDER_INVOICE_ID = B.ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INFO C ON A.ORDER_ID = C.ORDER_ID
+        GROUP BY B.ID
+        ) E ON D.ID = E.ID
+        <where>
+            <if test="INVOICE_STATUS != null and INVOICE_STATUS != '' ">
+             AND   D.INVOICE_STATUS = #{INVOICE_STATUS}
+            </if>
+            <if test="ORDER_NO != null and ORDER_NO != '' ">
+                AND  ORDER_NO LIKE CONCAT(CONCAT('%',#{ORDER_NO}),'%')
+            </if>
+            <if test="OPEN_TYPE != null and OPEN_TYPE != '' ">
+                AND   D.OPEN_TYPE = #{OPEN_TYPE}
+            </if>
+            <if test="INVOICE_CONTENT != null and INVOICE_CONTENT != '' ">
+                AND  D.INVOICE_CONTENT = #{INVOICE_CONTENT}
+            </if>
+        </where>
+        ORDER BY D.APPLY_TIME DESC
     </select>
     <!--修改发票资质信息-->
     <update id="updateInvoiceInfoByOrganizationId" parameterType="String">
@@ -163,7 +176,7 @@
     <!-- 查询发票收票地址信息-->
     <select id="selectInvoiceAddress" parameterType="java.lang.Long" resultType="Map">
             SELECT
-                NAME,
+                RECIPIENTS,
                 TELEPHONE_NUMBER,
                 POST_ADDRESS,
                 PROVINCE,
@@ -183,7 +196,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="ID != null">ID,</if>
             <if test="ORGANIZATION_ID != null">ORGANIZATION_ID,</if>
-            <if test="NAME != null">NAME,</if>
+            <if test="RECIPIENTS != null">RECIPIENTS,</if>
             <if test="POST_ADDRESS != null">POST_ADDRESS,</if>
             <if test="TELEPHONE_NUMBER != null">TELEPHONE_NUMBER,</if>
             <if test="IS_DELETE != null">IS_DELETE,</if>
@@ -194,7 +207,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="ID != null">#{ID},</if>
             <if test="ORGANIZATION_ID != null">#{ORGANIZATION_ID},</if>
-            <if test="NAME != null">#{NAME},</if>
+            <if test="RECIPIENTS != null">#{RECIPIENTS},</if>
             <if test="POST_ADDRESS != null">#{POST_ADDRESS},</if>
             <if test="TELEPHONE_NUMBER != null">#{TELEPHONE_NUMBER},</if>
             <if test="IS_DELETE != null">#{IS_DELETE},</if>
@@ -207,12 +220,12 @@
     <update id="updateInvoiceAddressByOrganizationId" parameterType="String">
         UPDATE STARCLOUDPORTAL.SCE_INVOICE_ADDRESS
         SET
-        <if test="NAME != null and NAME != ''">NAME = #{NAME} ,</if>
+        <if test="RECIPIENTS != null and RECIPIENTS != ''">RECIPIENTS = #{RECIPIENTS} ,</if>
         <if test="POST_ADDRESS != null and POST_ADDRESS != ''">POST_ADDRESS = #{POST_ADDRESS} ,</if>
         <if test="TELEPHONE_NUMBER != null and TELEPHONE_NUMBER != ''">TELEPHONE_NUMBER = #{TELEPHONE_NUMBER} ,</if>
         <if test="PROVINCE != null and PROVINCE != ''">PROVINCE = #{PROVINCE} ,</if>
         <if test="CITY != null and CITY != ''">CITY = #{CITY} ,</if>
-        <if test="AREA != null and AREA != ''">AREA = #{AREA} </if>
+        <if test="AREA != null and AREA != ''">AREA = #{AREA}</if>
         WHERE
         ORGANIZATION_ID = #{ORGANIZATION_ID}
         AND IS_DELETE = 1

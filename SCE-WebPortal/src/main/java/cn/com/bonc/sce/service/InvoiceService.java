@@ -36,7 +36,7 @@ public class InvoiceService {
         return invoiceDao.updateInvoiceAddress( invoiceInfo, userId );
     }
 
-    public RestRecord selectInvoiceHistory( String userId ) {
-        return invoiceDao.selectInvoiceHistory( userId );
+    public RestRecord selectInvoiceHistory( String userId, Integer pageNum, Integer pageSize, Map map ) {
+        return invoiceDao.selectInvoiceHistory( userId, pageNum, pageSize, map );
     }
 }

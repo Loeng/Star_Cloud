@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 发票管理
  */
-@Api( value = "发票管理相关接口相关接口", tags = "发票管理相关接口相关接口" )
+@Api( value = "发票管理接口", tags = "发票管理接口" )
 @ApiResponses( { @ApiResponse( code = 500, message = "服务器内部错误", response = RestRecord.class ) } )
 @Slf4j
 @RestController
@@ -25,7 +25,7 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @ApiOperation( value = "发票管理-查看发票资质信息", notes = "发票管理-查看发票资质信息", httpMethod = "GET" )
+    @ApiOperation( value = "查看发票资质信息", notes = "查看发票资质信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
@@ -39,7 +39,7 @@ public class InvoiceController {
     }
 
 
-    @ApiOperation( value = "发票管理-查看收票地址信息", notes = "发票管理-查看收票地址信息", httpMethod = "GET" )
+    @ApiOperation( value = "查看收票地址信息", notes = "查看收票地址信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
@@ -52,17 +52,20 @@ public class InvoiceController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.selectInvoiceAddressByOrganizationId( userId ) );
     }
 
-    @ApiOperation( value = "发票管理-查看历史信息", notes = "发票管理-查看历史信息", httpMethod = "GET" )
+    @ApiOperation( value = "查看历史信息", notes = "-查看历史信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
-    @GetMapping( "/info-history" )
+    @GetMapping( "/info-history/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord selectInvoiceHistory( @CurrentUserId @ApiParam( hidden = true ) String userId ) {
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.selectInvoiceHistory( userId ) );
+    public RestRecord selectInvoiceHistory( @CurrentUserId @ApiParam( hidden = true ) String userId,
+                                            @PathVariable( "pageNum" ) Integer pageNum,
+                                            @PathVariable( "pageSize" ) Integer pageSize,
+                                            @RequestParam Map map ) {
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.selectInvoiceHistory( userId, pageNum, pageSize, map ) );
     }
 
-    @ApiOperation( value = "发票管理-修改或者新增发票资质信息", notes = "发票管理-修改或者新增发票资质信息", httpMethod = "PUT" )
+    @ApiOperation( value = "修改或者新增发票资质信息", notes = "修改或者新增发票资质信息", httpMethod = "PUT" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
@@ -81,14 +84,14 @@ public class InvoiceController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.updateInvoiceInfoByOrganizationId( invoiceInfo, userId ) );
     }
 
-    @ApiOperation( value = "发票管理-修改或者新增收票地址信息", notes = "发票管理-修改或者新增收票地址信息", httpMethod = "PUT" )
+    @ApiOperation( value = "修改或者新增收票地址信息", notes = "修改或者新增收票地址信息", httpMethod = "PUT" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @PutMapping( "/update-address" )
     @ResponseBody
-    public RestRecord updateInvoiceAddress( @RequestBody @ApiParam( "{\"NAME\":\"BeJson\",\"POST_ADDRESS\":\"光华中心128号\",\"TELEPHONE_NUMBER\":10086,\"PROVINCE\":\"四川省\",\"CITY\":\"成都市\",\"AREA\":\"青羊区\"}" )
-                                                        Map< String, Object > invoiceInfo, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+    public RestRecord updateInvoiceAddress( @RequestBody @ApiParam( "{\"RECIPIENTS\":\"BeJson\",\"POST_ADDRESS\":\"光华中心128号\",\"TELEPHONE_NUMBER\":10086,\"PROVINCE\":\"四川省\",\"CITY\":\"成都市\",\"AREA\":\"青羊区\"}" )
+                                                    Map< String, Object > invoiceInfo, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceService.updateInvoiceAddressByOrganizationId( invoiceInfo, userId ) );
     }
 }

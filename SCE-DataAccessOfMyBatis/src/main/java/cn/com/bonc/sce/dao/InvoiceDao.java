@@ -25,11 +25,11 @@ public class InvoiceDao {
     /**
      * 查询开票历史记录
      *
-     * @param userId
+     * @param map
      * @return
      */
-    public List< Map > selectInvoiceHistory( String userId ) {
-        return invoiceMapper.selectInvoiceHistory( userId );
+    public List< Map > selectInvoiceHistory( Map map ) {
+        return invoiceMapper.selectInvoiceHistory( map );
     }
 
     /**
