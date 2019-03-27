@@ -191,4 +191,17 @@ public class UserManagerController {
             return new RestRecord(407,MessageConstants.SCE_MSG_407);
         }
     }
+
+    @ApiOperation(value = "通过用户名和输入的身份证信息在后台验证", notes="验证身份证信息是否正确", httpMethod = "GET")
+    @GetMapping("/testCertificate")
+    @ResponseBody
+    public RestRecord testCertificate(@RequestParam( "loginName" ) String loginName,
+                                      @RequestParam("certificate") String certificate){
+        String tempCer = userService.testCertificate(loginName);
+        if (tempCer.equals(certificate)){
+            return new RestRecord(200,MessageConstants.SCE_MSG_0200);
+        } else {
+            return new RestRecord(1010,"身份证验证失败");
+        }
+    }
 }

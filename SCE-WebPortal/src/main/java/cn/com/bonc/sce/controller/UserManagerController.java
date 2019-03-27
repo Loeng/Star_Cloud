@@ -134,4 +134,12 @@ public class UserManagerController {
                                      @RequestParam("password") String password){
         return userManagerService.updatePwdByName(loginName,password);
     }
+
+    @ApiOperation(value = "通过用户名和输入的身份证信息在后台验证", notes="验证身份证信息是否正确", httpMethod = "GET")
+    @GetMapping("/testCertificate")
+    @ResponseBody
+    public RestRecord testCertificate(@RequestParam( "loginName" ) String loginName,
+                                      @RequestParam("certificate") String certificate){
+        return userManagerService.testCertificcate(loginName,certificate);
+    }
 }

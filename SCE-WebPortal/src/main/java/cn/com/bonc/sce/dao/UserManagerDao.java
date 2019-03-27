@@ -44,4 +44,8 @@ public interface UserManagerDao {
 
     @RequestMapping( value = "/userManager/updatePwdByName", method = RequestMethod.PUT )
     RestRecord updatePwdByName(@RequestParam("loginName") String loginName, @RequestParam("password") String password);
+
+    @RequestMapping( value = "/userManager/testCertificate", method = RequestMethod.GET )
+    RestRecord testCertificate(@RequestParam("loginName") String loginName, @RequestParam("certificate") String certificate);
+
 }
