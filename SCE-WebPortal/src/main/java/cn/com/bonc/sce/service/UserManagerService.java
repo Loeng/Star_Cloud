@@ -50,4 +50,8 @@ public class UserManagerService {
     public RestRecord register(String json) {
         return userManagerDao.register(json);
     }
+
+    public RestRecord getPhone(String loginName) {
+        return userManagerDao.getPhone(loginName);
+    }
 }

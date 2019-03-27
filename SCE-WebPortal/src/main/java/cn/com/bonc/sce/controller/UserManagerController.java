@@ -121,5 +121,10 @@ public class UserManagerController {
         return userManagerService.register(json);
     }
 
-    
+    @ApiOperation(value = "通过用户名获取电话号码", notes="忘记密码时的身份认证", httpMethod = "GET")
+    @GetMapping("/getPhone")
+    @ResponseBody
+    public RestRecord getPhone(@RequestParam( "loginName" ) String loginName){
+        return userManagerService.getPhone(loginName);
+    }
 }

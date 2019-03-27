@@ -167,4 +167,16 @@ public class UserManagerController {
             return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
         }
     }
+
+    @ApiOperation(value = "通过用户名获取电话号码", notes="忘记密码时的身份认证", httpMethod = "GET")
+    @GetMapping("/getPhone")
+    @ResponseBody
+    public RestRecord getPhone(@RequestParam( "loginName" ) String loginName){
+        String phone = userService.getPhone(loginName);
+        if (phone!=null){
+            return new RestRecord(200,MessageConstants.SCE_MSG_0200,phone);
+        } else {
+            return new RestRecord(406,MessageConstants.SCE_MSG_406);
+        }
+    }
 }

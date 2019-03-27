@@ -38,4 +38,7 @@ public interface UserManagerDao {
 
     @RequestMapping( value = "/userManager/register", method = RequestMethod.POST )
     RestRecord register(@RequestBody String json);
+
+    @RequestMapping( value = "/userManager/getPhone", method = RequestMethod.GET )
+    RestRecord getPhone(@RequestParam("loginName") String loginName);
 }

@@ -56,4 +56,8 @@ public class UserService {
     public int isExist(String loginName) {
         return userDao.isExist(loginName);
     }
+
+    public String getPhone(String loginName) {
+        return userDao.getPhone(loginName);
+    }
 }
