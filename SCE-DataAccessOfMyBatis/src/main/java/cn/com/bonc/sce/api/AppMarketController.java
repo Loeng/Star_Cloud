@@ -51,6 +51,11 @@ public class AppMarketController {
         return appMarketService.findAppToken(appId);
     }
 
+    @GetMapping("/appInfo")
+    public Map<String, Object> getAppInfoById(@RequestParam String appId){
+        return appMarketService.getAppInfoById( appId );
+    }
+
     @PutMapping("/backlog")
     public RestRecord backlog_patch(@RequestHeader String userId,
                                     @RequestBody Map map){

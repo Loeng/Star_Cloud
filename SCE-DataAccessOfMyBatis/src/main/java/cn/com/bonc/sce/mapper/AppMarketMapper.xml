@@ -68,8 +68,13 @@ GROUP BY
 
     <update id="updateBacklog">
         update STARCLOUDPORTAL.sce_backlog
-        set status = #{status}
+        set status = #{status}, UPDATE_TIME = SYSDATE
         where id = #{backlogId}
     </update>
+
+    <select id="getAppInfoById" resultType="Map">
+        SELECT * FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO
+        WHERE APP_ID = #{appId}
+    </select>
 
 </mapper>

@@ -35,6 +35,7 @@ public class FileUploadController {
 
     public static final String STUDENT_CODE = "1";
     public static final String TEACHER_CODE = "2";
+    public static final String PARENT_CODE = "5";
 
     @Autowired
     public FileUploadController( FileUploadService fileUploadService ) {
@@ -81,9 +82,11 @@ public class FileUploadController {
         if ( STUDENT_CODE.equals( uploadFileModel.getUserType() ) ) {
             //解析学生用户Excel
             list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
-
         } else if (TEACHER_CODE.equals( uploadFileModel.getUserType() ) ) {
             //解析教师用户Excel
+            list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
+        }else if(PARENT_CODE.equals( uploadFileModel.getUserType() )){
+            //解析家长用户Excel
             list = ParseExcel.importExcel( uploadFileModel.getFile(), 1, 1, ExcelToUser.class );
         }else {
             return new RestRecord( 453, WebMessageConstants.SCE_PORTAL_MSG_453 );

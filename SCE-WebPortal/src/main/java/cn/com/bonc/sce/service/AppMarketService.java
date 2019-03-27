@@ -33,10 +33,7 @@ public class AppMarketService {
         return restRecord;
     }
 
-    public RestRecord backlog_patch(String userId, String backlogId, String status){
-        Map map = new HashMap();
-        map.put("backlogId", backlogId);
-        map.put("status", status);
+    public RestRecord backlog_patch(String userId, Map map){
         return appMarketDao.backlog_patch(userId, map);
     }
 

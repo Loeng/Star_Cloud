@@ -6,10 +6,13 @@ import cn.com.bonc.sce.exception.UnsupportedAuthenticationTypeException;
 import cn.com.bonc.sce.model.SSOAuthentication;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.tool.JWTUtil;
+import cn.com.bonc.sce.tool.MD5Util;
+import cn.com.bonc.sce.tool.RestApiUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.PrivateKey;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,7 +54,7 @@ public class LoginService {
      *
      * @return 字符串形式的 jwt ticket
      */
-    public String generateTicket(User authenticatedUser, Date expirationDate) {
+    public String generateTicket(User authenticatedUser, Date expirationDate, HttpServletRequest request) {
         Map< String, Object > claims = new HashMap<>( 2 );
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
@@ -63,6 +66,15 @@ public class LoginService {
         claims.put( "ruleCode", roleCodes[ authenticatedUser.getUserType() ] );
         claims.put( "isFirstLogin", authenticatedUser.getIsFirstLogin() );
 
+        // todo 此处需将用户地址单向加密并保存至JWT  防止JWT被窃取后使用
+        // ip地址
+        String ip = RestApiUtil.getIpAddr( request );
+//        claims.put( "IPAdd", MD5Util.getMd5String( ip ) );
+        log.info( "生成JWT，用户名：{}，用户IP：{}", authenticatedUser.getLoginName(), ip );
+
+        // user-Agent
+//        String userAgent = request.getHeader( "User-Agent" );
+//        claims.put( "" );
         return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey(), expirationDate );
     }
 
@@ -121,9 +133,9 @@ public class LoginService {
      *
      * @return 登录信息
      */
-    public Map< String, String > generateLoginResult( User authenticatedUser, Date expirationDate ) {
-        Map< String, String > data = new HashMap<>( 2 );
-        String ticket = generateTicket( authenticatedUser, expirationDate );
+    public Map< String, Object > generateLoginResult(User authenticatedUser, Date expirationDate, HttpServletRequest request) {
+        Map< String, Object > data = new HashMap<>( 2 );
+        String ticket = generateTicket( authenticatedUser, expirationDate, request );
         data.put( "ticket", ticket );
         return data;
     }

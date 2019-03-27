@@ -20,4 +20,6 @@ public interface AppMarketMapper {
 
     void updateBacklog(Map map);
 
+    Map<String, Object> getAppInfoById(String appId);
+
 }

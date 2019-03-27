@@ -26,7 +26,6 @@ import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -46,10 +45,10 @@ import java.util.Map;
 @RestController
 public class AuthenticationController {
 
-    @Value("{sce.appId}")
+    @Value( "${sce.appId}" )
     private String appId;
 
-    @Value("{sce.appToken}")
+    @Value( "${sce.appToken}" )
     private String appToken;
 
     private UserService userService;
@@ -77,7 +76,7 @@ public class AuthenticationController {
             } ) ),
             @ApiResponse( code = 100, message = WebMessageConstants.SCE_PORTAL_MSG_101 + "样例数据：{\"msg\":\"" + WebMessageConstants.SCE_PORTAL_MSG_101 + "\",\"code\":101}" )
     } )
-    @PostMapping( produces = "application/json" )
+    @PostMapping( /*value = "/login",*/ produces = "application/json" )
     @ResponseBody
     public RestRecord login( HttpServletRequest request, @NotBlank @RequestBody @ApiParam SSOAuthentication authentication ) {
         User authenticatedUser;
@@ -86,13 +85,11 @@ public class AuthenticationController {
          * 1. 检查应用Id与应用Token
          */
         if( authentication.getAppId() == null || authentication.getAppToken() == null ){
-            //默认平台登陆
-            authentication.setAppId( this.appId );
-            authentication.setAppToken( this.appToken );
+            // 默认平台登陆
         }else {
-            if( !authentication.getAppToken().equals(authenticationService.getAppToken(authentication.getAppId()))){
-                log.info("应用Id或应用Token无效");
-                return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152);
+            if( !authentication.getAppToken().equals( authenticationService.getAppToken( authentication.getAppId() ) ) ){
+                log.info( "应用Id或应用Token无效" );
+                return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
             }
         }
 
@@ -133,7 +130,7 @@ public class AuthenticationController {
         /*
          * 4. 生成登录信息
          */
-        Map loginResult = loginService.generateLoginResult( authenticatedUser, new Date( System.currentTimeMillis() + DateConstants.THIRTY_MINUTE ) );
+        Map loginResult = loginService.generateLoginResult( authenticatedUser, new Date( System.currentTimeMillis() + DateConstants.SEVEN_DAY ), request );
 
         /*
          * 5. 更新用户登录状态（是否首次登录）
@@ -225,20 +222,43 @@ public class AuthenticationController {
     /**
      * 长期 ticket 换取30秒 temp_token 接口 （同时更新ticket时间）
      * @param userId 用户id
-     * @param response response.header 存放ticket
      * @return RestRecord
      */
-    @GetMapping( "/temp_token" )
-    public RestRecord temp_token( @CurrentUserId String userId, HttpServletResponse response ){
-        if(userId.equals("")){
+    @PostMapping( "/temp_token" )
+    public RestRecord temp_token( @CurrentUserId String userId,
+                                  @RequestParam( value = "appId", required = false) String appId,
+                                  @RequestParam( value = "appToken", required = false) String appToken,
+                                  HttpServletRequest request){
+        if( userId.equals( "" ) ){
             return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
+        Map<String, Object> result = new HashMap<>(  6 );
+        Map<String, Object> ppInfo = null;
+        if( appId == null || appToken == null ){
+            // 默认平台登陆
+            ppInfo = authenticationService.getAppInfoById( this.appId );
+            result.put( "starCloud", true );
+        }else {
+            ppInfo = authenticationService.getAppInfoById( appId );
+            if(( ppInfo == null || ppInfo.get( "APP_TOKEN" ) == null || !ppInfo.get( "APP_TOKEN" ).equals( appToken ) )){
+                log.warn( "应用ID或Token无效（ID：{}，Token：{}）", appId, appToken );
+                return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
+            }
+            result.put( "starCloud", false );
+        }
+        if(ppInfo.get( "APP_LINK" ) != null){
+            result.put( "APP_LINK", ppInfo.get( "APP_LINK" ) );
+        }else {
+            result.put( "APP_LINK", "" );
+        }
+
         User user = userService.getUserByUserId( userId );
-        String temp_token = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ) );
-        response.addHeader( "temp_token", temp_token );
-        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ) );
-        response.addHeader( "authentication", ticket );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        String temp_token = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ), request );
+        result.put( "temp_token", temp_token );
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.SEVEN_DAY ), request );
+        result.put( "authentication", ticket );
+        result.put( "userId", userId );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
     }
 
     /**
@@ -247,14 +267,15 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/ticket" )
-    public RestRecord ticket( @CurrentUserId String userId, HttpServletResponse response ){
-        if( userId.equals("") ){
+    public RestRecord ticket( @CurrentUserId String userId, HttpServletRequest request ){
+        if( userId.equals( "" ) ){
             return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
         User user = userService.getUserByUserId( userId );
-        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ) );
-        response.addHeader( "authentication", ticket );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request );
+        Map<String, String> result = new HashMap<>( 1 );
+        result.put( "authentication", ticket );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
     }
 
     /**
@@ -262,17 +283,45 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/refresh" )
-    public RestRecord refresh( @CurrentUserId String userId, HttpServletResponse response ){
-        if(userId.equals("")){
+    public RestRecord refresh( @CurrentUserId String userId, HttpServletRequest request ){
+        if(userId.equals( "" )){
             return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
         User user = userService.getUserByUserId( userId );
-        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ) );
-        response.addHeader( "authentication", ticket );
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request );
+        Map<String, String> result = new HashMap<>(1);
+        result.put( "authentication", ticket );
         log.info( "用户ID：{}，换取了ticket", userId );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
     }
 
+    /**
+     * 获取平台appId与appToken
+     * @return Map
+     */
+    @GetMapping("/appIT")
+    public RestRecord getAppIdAndToken(){
+        // todo 此处应拦截掉一些不合法请求
+        Map<String, String> app = new HashMap<>(2);
+        app.put( "appId", this.appId );
+        app.put( "appToken", this.appToken );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, app );
+    }
 
+    /**
+     * 平台登出  用户登录状态不由后端保存，因此此处只判断userId与appId是否存在
+     */
+    @PostMapping("/loginOut")
+    public RestRecord loginOut(@RequestBody Map map){
+        Object userId = map.get( "userId" );
+        Object appId = map.get( "appId" );
+        if( userId == null || appId == null ){
+            return new RestRecord( 431, WebMessageConstants.SCE_PORTAL_MSG_431 );
+        }
+        if( userService.getUserByUserId(userId.toString()) == null || authenticationService.getAppToken(appId.toString()) == null ){
+            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
 
 }

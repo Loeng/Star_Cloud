@@ -15,6 +15,7 @@ public interface DateConstants {
     long ONE_HOUR = 60L * 60 * 1000;
 
     long ONE_DAY = 24 * 60L * 60 * 1000;
+    long SEVEN_DAY = 7L * 24 * 60L * 60 * 1000;
 
 
 

@@ -37,11 +37,10 @@ public class BacklogController {
         return appMarketService.userToDo(userId, pageNum, pageSize);
     }
 
-    @PatchMapping("/backlog/{backlogId}/{status}")
+    @PatchMapping("/backlog")
     public RestRecord backlog_patch(@CurrentUserId String userId,
-                              @PathVariable("backlogId") String backlogId,
-                              @PathVariable("status") String status){
-        return appMarketService.backlog_patch(userId, backlogId, status);
+                                    @RequestBody Map<String, String> map){
+        return appMarketService.backlog_patch(userId,map);
     }
 
 }

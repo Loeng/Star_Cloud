@@ -43,7 +43,7 @@ public class AppMarketService {
         return restRecord;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional()
     public RestRecord saveBacklog(String userId, Map<String, Object> backlog){
         List<String> operateUserIds = (List) backlog.get("users");
         if(operateUserIds.size() < 1){
@@ -53,7 +53,7 @@ public class AppMarketService {
         backlog.put("userId", userId);
         for(String operateUserId : operateUserIds){
             //调用id生成器生成id
-            Map<String, Object> map = new HashMap();
+            Map<String, Object> map = new HashMap<>();
             long backlogId = idWorker.nextId();
             backlog.put("backlogId", backlogId);
             backlog.put("operateUserId", operateUserId);
@@ -66,14 +66,23 @@ public class AppMarketService {
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, result);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public RestRecord changeBacklog(String userId, Map map){
+        Object backlogId = map.get("backlogId");
+        Object status = map.get("status");
+        if( backlogId == null || status == null ){
+            return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必须" ) );
+        }
         appMarketMapper.updateBacklog(map);
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
     }
 
     public String findAppToken(String appId){
         return appMarketMapper.selectAppToken(appId);
+    }
+
+    public Map<String, Object> getAppInfoById( String appId ){
+        return appMarketMapper.getAppInfoById( appId );
     }
 
 }

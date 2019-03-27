@@ -74,7 +74,7 @@ public class JWTUtil {
                 .setHeader( defaultHeader )
                 // .setIssuer( "base" )
                 // 一分钟过期
-                .setExpiration( new Date( System.currentTimeMillis() + DateConstants.ONE_MINUTE ) )
+//                .setExpiration( new Date( System.currentTimeMillis() + DateConstants.ONE_MINUTE ) )
                 .setSubject( "login" )
                 // .setAudience( "sce-application" )
                 .setNotBefore( new Date() )

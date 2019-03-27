@@ -3,7 +3,6 @@ package cn.com.bonc.sce.filter;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.service.AuthenticationService;
-import cn.hutool.core.codec.Base64;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -37,10 +36,8 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
-        String ticket =  webRequest.getHeader( "authentication" );
-
         //验证JWT
-        Claims claims = service.validateJWT( ticket );
+        Claims claims = service.validateJWT( webRequest );
 
         if( parameter.hasParameterAnnotation( Payloads.class )){
             return claims;
