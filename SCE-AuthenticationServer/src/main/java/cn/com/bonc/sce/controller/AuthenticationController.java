@@ -250,12 +250,11 @@ public class AuthenticationController {
             }
             result.put( "starCloud", false );
         }
-        if(ppInfo.get( "APP_LINK" ) != null){
+        try {
             result.put( "APP_LINK", ppInfo.get( "APP_LINK" ) );
-        }else {
+        }catch (NullPointerException e){
             result.put( "APP_LINK", "" );
         }
-
         User user = userService.getUserByUserId( userId );
         String temp_token = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ), request );
         result.put( "temp_token", temp_token );

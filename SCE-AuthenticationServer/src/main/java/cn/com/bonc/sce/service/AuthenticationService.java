@@ -107,7 +107,6 @@ public class AuthenticationService {
 //            log.warn( "JWT认证失败 -> IP地址不匹配，当前提交ip地址={}", ip );
 //            return null;
 //        }
-        System.out.println(claims.toString());
         return claims;
     }
 
