@@ -222,10 +222,10 @@ public class AuthenticationController {
 
     /**
      * 长期 ticket 换取30秒 temp_token 接口 （同时更新ticket时间）
-     *
-     * @param userId   用户id
-     * @param response response.header 存放ticket
-     *
+     * @param userId 用户id
+     * @param appId appId
+     * @param appToken appToken
+     * @param request  request
      * @return RestRecord
      */
     @PostMapping( "/temp_token" )
@@ -273,7 +273,7 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/ticket" )
-    public RestRecord ticket( @CurrentUserId String userId, HttpServletResponse response ) {
+    public RestRecord ticket( @CurrentUserId String userId, HttpServletRequest request ) {
         if ( userId.equals( "" ) ) {
             return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
