@@ -134,14 +134,13 @@ public class UserManagerController {
     public RestRecord register(@RequestBody @ApiParam( example = "{\"loginName\": \"测试张\",\"secret\": \"123456\",\"phoneNumber\": \"12345678901\",\"userType\": 1,\"userName\": \"测试张\"}" ) String json ){
         Map map = (Map) JSONUtils.parse(json);
         String loginName = (String) map.get("loginName");
-        String secret = (String) map.get("secret");
+        String password = (String) map.get("password");
         String phoneNumber = (String) map.get("phoneNumber");
         Integer userType = (Integer) map.get("userType");
         String userName = (String) map.get("userName");
 
         UserBean user = new UserBean();
         Long userId = idWorker.nextId();
-        user.setSecret( secret );
         user.setLoginName( loginName );
         user.setUserType( userType );
         user.setPhoneNumber(phoneNumber);
@@ -157,7 +156,7 @@ public class UserManagerController {
         AccountBean account = new AccountBean();
         long accountId = idWorker.nextId();
         account.setId( accountId );
-        account.setPassword( secret );
+        account.setPassword( password );
         account.setIsDelete( 1 );
         account.setUserId(userId);
 
@@ -177,6 +176,19 @@ public class UserManagerController {
             return new RestRecord(200,MessageConstants.SCE_MSG_0200,phone);
         } else {
             return new RestRecord(406,MessageConstants.SCE_MSG_406);
+        }
+    }
+
+    @ApiOperation(value = "通过用户名修改密码", notes="重设密码", httpMethod = "PUT")
+    @PutMapping("/updatePwdByName")
+    @ResponseBody
+    public RestRecord updatePwdByName(@RequestParam( "loginName" ) String loginName,
+                                     @RequestParam("password") String password){
+        int count = userService.updatePwdByName(loginName,password);
+        if (count==1){
+            return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
+        } else {
+            return new RestRecord(407,MessageConstants.SCE_MSG_407);
         }
     }
 }

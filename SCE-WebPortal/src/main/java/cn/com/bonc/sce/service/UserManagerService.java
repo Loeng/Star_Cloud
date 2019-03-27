@@ -54,4 +54,8 @@ public class UserManagerService {
     public RestRecord getPhone(String loginName) {
         return userManagerDao.getPhone(loginName);
     }
+
+    public RestRecord updatePwdByName(String loginName, String password) {
+        return userManagerDao.updatePwdByName(loginName,password);
+    }
 }

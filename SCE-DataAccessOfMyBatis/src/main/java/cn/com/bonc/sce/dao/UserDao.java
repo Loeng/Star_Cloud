@@ -58,4 +58,8 @@ public class UserDao {
     public String getPhone(String loginName) {
         return userMapper.getPhone(loginName);
     }
+
+    public int updatePwdByName(String loginName, String password) {
+        return userMapper.updatePwdByName(loginName,password);
+    }
 }

@@ -3,7 +3,6 @@ package cn.com.bonc.sce.controller;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
-import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import cn.com.bonc.sce.service.UserManagerService;
@@ -126,5 +125,13 @@ public class UserManagerController {
     @ResponseBody
     public RestRecord getPhone(@RequestParam( "loginName" ) String loginName){
         return userManagerService.getPhone(loginName);
+    }
+
+    @ApiOperation(value = "通过用户名修改密码", notes="重设密码", httpMethod = "PUT")
+    @PutMapping("/updatePwdByName")
+    @ResponseBody
+    public RestRecord updatePwdByName(@RequestParam( "loginName" ) String loginName,
+                                     @RequestParam("password") String password){
+        return userManagerService.updatePwdByName(loginName,password);
     }
 }

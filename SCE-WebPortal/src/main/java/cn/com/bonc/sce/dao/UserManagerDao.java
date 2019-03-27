@@ -41,4 +41,7 @@ public interface UserManagerDao {
 
     @RequestMapping( value = "/userManager/getPhone", method = RequestMethod.GET )
     RestRecord getPhone(@RequestParam("loginName") String loginName);
+
+    @RequestMapping( value = "/userManager/updatePwdByName", method = RequestMethod.PUT )
+    RestRecord updatePwdByName(@RequestParam("loginName") String loginName, @RequestParam("password") String password);
 }

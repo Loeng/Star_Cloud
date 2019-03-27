@@ -60,4 +60,8 @@ public class UserService {
     public String getPhone(String loginName) {
         return userDao.getPhone(loginName);
     }
+
+    public int updatePwdByName(String loginName, String password) {
+        return userDao.updatePwdByName(loginName,password);
+    }
 }
