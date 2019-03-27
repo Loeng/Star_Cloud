@@ -29,41 +29,41 @@ public class AppMarketService {
         return appMarketMapper.selectAppCount();
     }
 
-    public RestRecord userToDo(String userId, String pageNum, String pageSize){
+    public RestRecord userToDo( String userId, String pageNum, String pageSize ) {
         try {
-            PageHelper.startPage(Integer.parseInt(pageNum), Integer.parseInt(pageSize));
-        }catch (NumberFormatException e){
-            log.warn("不支持的分页参数");
-            return new RestRecord(433, WebMessageConstants.SCE_PORTAL_MSG_433);
+            PageHelper.startPage( Integer.parseInt( pageNum ), Integer.parseInt( pageSize ) );
+        } catch ( NumberFormatException e ) {
+            log.warn( "不支持的分页参数" );
+            return new RestRecord( 433, WebMessageConstants.SCE_PORTAL_MSG_433 );
         }
-        RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
-        List list = appMarketMapper.selectUserToDo(userId);
-        restRecord.setData(list);
-        restRecord.setTotal(appMarketMapper.selectUserToDoCount(userId));
+        RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        List list = appMarketMapper.selectUserToDo( userId );
+        restRecord.setData( list );
+        restRecord.setTotal( appMarketMapper.selectUserToDoCount( userId ) );
         return restRecord;
     }
 
-    @Transactional()
-    public RestRecord saveBacklog(String userId, Map<String, Object> backlog){
-        List<String> operateUserIds = (List) backlog.get("users");
-        if(operateUserIds.size() < 1){
-            return new RestRecord(431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "users"));
+    @Transactional( rollbackFor = Exception.class )
+    public RestRecord saveBacklog( String userId, Map< String, Object > backlog ) {
+        List< String > operateUserIds = ( List ) backlog.get( "users" );
+        if ( operateUserIds.size() < 1 ) {
+            return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "users" ) );
         }
-        List<Map> result = new ArrayList<>();
-        backlog.put("userId", userId);
-        for(String operateUserId : operateUserIds){
+        List< Map > result = new ArrayList<>();
+        backlog.put( "userId", userId );
+        for ( String operateUserId : operateUserIds ) {
             //调用id生成器生成id
             Map<String, Object> map = new HashMap<>();
             long backlogId = idWorker.nextId();
-            backlog.put("backlogId", backlogId);
-            backlog.put("operateUserId", operateUserId);
-            map.put("backlogId", backlogId);
-            map.put("operateUserId", operateUserId);
-            result.add(map);
-            appMarketMapper.insertBacklog(backlog);
+            backlog.put( "backlogId", backlogId );
+            backlog.put( "operateUserId", operateUserId );
+            map.put( "backlogId", backlogId );
+            map.put( "operateUserId", operateUserId );
+            result.add( map );
+            appMarketMapper.insertBacklog( backlog );
         }
 
-        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, result);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
     }
 
     @Transactional
@@ -77,8 +77,8 @@ public class AppMarketService {
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
     }
 
-    public String findAppToken(String appId){
-        return appMarketMapper.selectAppToken(appId);
+    public String findAppToken( String appId ) {
+        return appMarketMapper.selectAppToken( appId );
     }
 
     public Map<String, Object> getAppInfoById( String appId ){

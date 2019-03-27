@@ -25,6 +25,7 @@ public interface MessageDaoforMybatis {
      *
      * @param pageNum
      * @param pageSize
+     *
      * @return
      */
     @RequestMapping( value = "/message/recode/{pageNum}/{pageSize}", method = RequestMethod.GET )
@@ -38,6 +39,7 @@ public interface MessageDaoforMybatis {
      *
      * @param pageNum
      * @param pageSize
+     *
      * @return
      */
     @RequestMapping( value = "/message/receiving-situation/{pageNum}/{pageSize}", method = RequestMethod.GET )

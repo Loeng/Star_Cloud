@@ -1,10 +1,10 @@
 package cn.com.bonc.sce.mapper;
 
 import cn.com.bonc.sce.bean.AccountBean;
+import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.bean.UserBean;
 import org.apache.ibatis.annotations.Param;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,21 @@ public interface UserMapper {
 
     int updateLoginPermission(@Param("id")String id, @Param("newStatus")int newStatus);
 
-    List<Map> selectTeacherList(@Param("organizationId") BigDecimal organizationId);
+    List<SchoolBean> getSchools4edu(@Param("id") long id);
 
-    BigDecimal selectOrganizationId(@Param("userId") String userId);
+    int delSchools4edu(@Param("id") long id, @Param("institutionId") long institutionId);
+
+    List<Map> getInstitutions(@Param("id") String id, @Param("institutionName") String institutionName, @Param("loginPermissionStatus") String loginPermissionStatus);
+
+    String selectUserIdByLoginName( String LOGIN_NAME );
+
+    int saveUserSelective( UserBean userBean );
+
+    int updateUserByUserIdSelective( UserBean userBean );
+
+    int isExist(@Param("loginName") String loginName);
+
+    String getPhone(@Param("loginName") String loginName);
+
+    int updatePwdByName(@Param("loginName") String loginName, @Param("password") String password);
 }

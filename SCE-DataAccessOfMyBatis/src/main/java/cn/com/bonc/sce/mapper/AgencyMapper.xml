@@ -28,8 +28,10 @@
     </delete>
 
     <select id="getAgents" resultType="Map">
-        SELECT a.ID,a.AGENT_NAME,a.IS_ACTIVATE,GRADE,u.USER_ID,u.LOGIN_PERMISSION_STATUS,a.AGENT_AREA
-        FROM STARCLOUDPORTAL.SCE_COMMON_USER u,STARCLOUDPORTAL.SCE_ENTITY_AGENT a
+        SELECT a.ID,a.AGENT_NAME,a.IS_ACTIVATE,u.LOGIN_NAME,GRADE,u.USER_ID,u.LOGIN_PERMISSION_STATUS,a.AGENT_AREA
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER u,
+        STARCLOUDPORTAL.SCE_ENTITY_AGENT a,
+        STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD p
         WHERE 1=1
         <if test="agentName != null and agentName!= ''" >
             AND AGENT_NAME LIKE CONCAT(CONCAT('%',#{agentName}),'%')
@@ -44,13 +46,20 @@
         AND a.ID=u.ORGANIZATION_ID
         AND u.IS_DELETE=1
         AND a.IS_DELETE=1
+        AND p.USER_ID=u.USER_ID
     </select>
 
     <insert id="saveAgent" parameterType="cn.com.bonc.sce.bean.AgentBean">
         INSERT INTO
-            STARCLOUDPORTAL.SCE_ENTITY_AGENT(ID,AGENT_NAME,PROVINCE,CITY,AREA,IS_DELETE)
+        STARCLOUDPORTAL.SCE_ENTITY_AGENT(ID,AGENT_NAME,PROVINCE,CITY,AREA,IS_DELETE)
         VALUES
-            (#{id},#{agentName},#{province},#{city},#{area},#{isDelete})
+        (#{id},#{agentName},#{province},#{city},#{area},#{isDelete})
     </insert>
 
+    <select id="getInfo" resultType="cn.com.bonc.sce.bean.AgentBean">
+        SELECT ID, AGENT_NAME AS agentName,PROVINCE AS province, CITY AS city, AREA AS area
+        FROM STARCLOUDPORTAL.SCE_ENTITY_AGENT
+        WHERE  ID=#{id}
+        AND IS_DELETE=1
+    </select>
 </mapper>

@@ -22,28 +22,31 @@ public class NavigationDao {
         return navigationMapper.getChannel(channelType);
     }
 
-    public int addNav(String columnName,String columnUrl, Integer channelId){
-        return navigationMapper.addNav(columnName,columnUrl,channelId);
+    public int addChannel(String channelName,String channelUrl,long channelId,int channelType,int isDelete){
+        return navigationMapper.addChannel(channelName,channelUrl,channelId,channelType,isDelete);
     }
 
-    public int editNav(String columnName,String columnUrl, Integer columnId){
-        return navigationMapper.editNav(columnName,columnUrl,columnId);
+    public int editChannel(String channelName,String channelUrl, String channelId){
+        return navigationMapper.editChannel(channelName,channelUrl,channelId);
     }
 
     public List<SchoolBean> getSchools (String keywords){
         return navigationMapper.getSchools(keywords);
     }
 
-    public List<Banner> getBanners (Integer schoolId){
+    public List<Banner> getBanners (long schoolId){
         return navigationMapper.getBanners(schoolId);
     }
 
-    public Integer editDefaultBanner (Integer schoolId, Integer newBanner){
+    public Integer editDefaultBanner (long schoolId, Integer newBanner){
         return navigationMapper.editDefaultBanner(schoolId,newBanner);
     }
 
-    public Integer delBanner (Integer bannerId){
+    public Integer delBanner (long bannerId){
         return navigationMapper.delBanner(bannerId);
     }
 
+    public Integer delChannel(String channelId) {
+        return navigationMapper.delChannel(channelId);
+    }
 }

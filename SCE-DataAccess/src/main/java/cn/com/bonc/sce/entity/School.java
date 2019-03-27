@@ -50,6 +50,9 @@ public class School {
     @Column(name = "INSTITUTION_ID")
     private Integer institutionId;
 
+    @Column(name = "Institution_NAME")
+    private String institutionName;
+
     @Column(name = "GRADE")
     private String grade;
 

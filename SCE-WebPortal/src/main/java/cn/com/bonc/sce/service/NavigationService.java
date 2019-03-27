@@ -21,28 +21,31 @@ public class NavigationService {
         return navigationDao.getChannel(channelType);
     }
 
-    public RestRecord addNav(String json){
-        return navigationDao.addNav(json);
+    public RestRecord addChannel(String json){
+        return navigationDao.addChannel(json);
     }
 
-    public RestRecord editNav(String json){
-        return  navigationDao.editNav(json);
+    public RestRecord editChannel(String json){
+        return  navigationDao.editChannel(json);
     }
 
     public RestRecord getSchools(String keywords, Integer pageNum, Integer pageSize){
         return navigationDao.getSchools(keywords,pageNum,pageSize);
     }
 
-    public RestRecord getBanners(Integer schoolId){
+    public RestRecord getBanners(long schoolId){
         return navigationDao.getBanners(schoolId);
     }
 
-    public RestRecord editDefaultBanner(Integer schoolId,Integer defaultBanner){
+    public RestRecord editDefaultBanner(long schoolId, Integer defaultBanner){
         return navigationDao.editDefaultBanner(schoolId,defaultBanner);
     }
 
-    public RestRecord delBanner(Integer bannerId){
+    public RestRecord delBanner(long bannerId){
         return navigationDao.delBanner(bannerId);
     }
 
+    public RestRecord delChannel(String channelId) {
+        return navigationDao.delChannel(channelId);
+    }
 }

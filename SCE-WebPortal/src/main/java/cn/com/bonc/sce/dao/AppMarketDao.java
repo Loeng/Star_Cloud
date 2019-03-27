@@ -25,17 +25,17 @@ public interface AppMarketDao {
      * @param pageSize pageSize
      * @return 用户待办
      */
-    @RequestMapping(value = "/app-portal/backlog/{pageNum}/{pageSize}", method = RequestMethod.GET)
-    RestRecord userToDo(@RequestParam(value = "userId") String userId,
-                        @PathVariable("pageNum") String pageNum,
-                        @PathVariable("pageSize") String pageSize);
+    @RequestMapping( value = "/app-portal/backlog/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord userToDo( @RequestParam( value = "userId" ) String userId,
+                         @PathVariable( "pageNum" ) String pageNum,
+                         @PathVariable( "pageSize" ) String pageSize );
 
     @RequestMapping(value = "/app-portal/backlog", method = RequestMethod.POST)
-    RestRecord backlog(@RequestParam(value = "userId") String userId,
-                       @RequestBody Map backlog);
+    RestRecord backlog( @RequestParam( value = "userId" ) String userId,
+                        @RequestBody Map backlog );
 
-    @RequestMapping(value = "/app-portal/backlog", method = RequestMethod.PUT)
-    RestRecord backlog_patch(@RequestHeader("userId") String userId,
-                             @RequestBody Map map);
+    @RequestMapping( value = "/app-portal/backlog", method = RequestMethod.PUT )
+    RestRecord backlog_patch( @RequestHeader( "userId" ) String userId,
+                              @RequestBody Map map );
 
 }

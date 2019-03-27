@@ -31,9 +31,9 @@ public class SSOAuthentication {
     @ApiModelProperty( name = "需要和身份令牌一同传递的身份信息", example = "&extra0=IPhoneX&extra1=red", required = false , position = 5)
     private String extraInfo;
     @NonNull
-    @ApiModelProperty( name = "应用Id", example = "7467E9F0896A46ACA4E6C48DEF1A0C74", required = false , position = 6)
+    @ApiModelProperty( name = "应用Id", example = "7467E9F0896A46ACA4E6C48DEF1A0C74", required = false, position = 6 )
     private String appId;
     @NonNull
-    @ApiModelProperty( name = "应用Token", example = "A91C241E90B347C9AEA4C2825A7579C9", required = false , position = 7)
+    @ApiModelProperty( name = "应用Token", example = "A91C241E90B347C9AEA4C2825A7579C9", required = false, position = 7 )
     private String appToken;
 }

@@ -4,6 +4,7 @@ import cn.com.bonc.sce.bean.NavigationBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.dao.NavigationDao;
 import cn.com.bonc.sce.model.Banner;
+import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,28 +26,31 @@ public class NavigationService {
         return navigationDao.getChannel(channelType);
     }
 
-    public int addNav(String columnName,String columnUrl, Integer channelId){
-        return navigationDao.addNav(columnName,columnUrl,channelId);
+    public int addChannel(String channelName,String channelUrl,long channelId,int channelType,int isDelete){
+        return navigationDao.addChannel(channelName,channelUrl,channelId,channelType,isDelete);
     }
 
-    public int editNav(String columnName,String columnUrl, Integer columnId){
-        return navigationDao.editNav(columnName,columnUrl,columnId);
+    public int editChannel(String channelName,String channelUrl, String channelId){
+        return navigationDao.editChannel(channelName,channelUrl,channelId);
     }
 
     public List<SchoolBean> getSchools(String keywords){
         return navigationDao.getSchools(keywords);
     }
 
-    public List<Banner> getBanners(Integer schoolId){
+    public List<Banner> getBanners(long schoolId){
         return navigationDao.getBanners(schoolId);
     }
 
-    public Integer editDefaultBanner(Integer schoolId, Integer newBanner) {
+    public Integer editDefaultBanner(long schoolId, Integer newBanner) {
         return navigationDao.editDefaultBanner(schoolId,newBanner);
     }
 
-    public Integer delBanner(Integer bannerId) {
+    public Integer delBanner(long bannerId) {
         return navigationDao.delBanner(bannerId);
     }
 
+    public Integer delChannel(String channelId) {
+        return navigationDao.delChannel(channelId);
+    }
 }

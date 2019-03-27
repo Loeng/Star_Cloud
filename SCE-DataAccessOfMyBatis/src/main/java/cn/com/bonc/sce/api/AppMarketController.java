@@ -35,20 +35,20 @@ public class AppMarketController {
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketService.getAppCount());
     }
 
-    @GetMapping("/backlog/{pageNum}/{pageSize}")
-    public RestRecord userToDo(@CurrentUserId String userId, @PathVariable String pageNum, @PathVariable String pageSize){
-        return appMarketService.userToDo(userId, pageNum, pageSize);
+    @GetMapping( "/backlog/{pageNum}/{pageSize}" )
+    public RestRecord userToDo( @CurrentUserId String userId, @PathVariable String pageNum, @PathVariable String pageSize ) {
+        return appMarketService.userToDo( userId, pageNum, pageSize );
     }
 
     @PostMapping("/backlog")
-    public RestRecord backlog(@CurrentUserId String userId,
-                              @RequestBody Map<String, Object> backlog){
-        return appMarketService.saveBacklog(userId, backlog);
+    public RestRecord backlog( @CurrentUserId String userId,
+                               @RequestBody Map< String, Object > backlog ) {
+        return appMarketService.saveBacklog( userId, backlog );
     }
 
-    @GetMapping("/app-token")
-    public String getAppToken(@RequestParam String appId){
-        return appMarketService.findAppToken(appId);
+    @GetMapping( "/app-token" )
+    public String getAppToken( @RequestParam String appId ) {
+        return appMarketService.findAppToken( appId );
     }
 
     @GetMapping("/appInfo")

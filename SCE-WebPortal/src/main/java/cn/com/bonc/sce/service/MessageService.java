@@ -106,6 +106,7 @@ public class MessageService {
      *
      * @param pageNum
      * @param pageSize
+     *
      * @return
      */
     public RestRecord getMessageRecord( Integer pageNum, Integer pageSize ) {
@@ -117,6 +118,7 @@ public class MessageService {
      *
      * @param pageNum
      * @param pageSize
+     *
      * @return
      */
     public RestRecord getReceivingSituation( Integer pageNum, Integer pageSize ) {

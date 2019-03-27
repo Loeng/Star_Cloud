@@ -5,6 +5,7 @@ import cn.com.bonc.sce.bean.SchoolBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Charles on 2019/3/4.
@@ -24,4 +25,7 @@ public interface AgencyMapper {
     int saveAgent( AgentBean agentBean);
 
     int delAgentUser(@Param("id") String id);
+
+    AgentBean getInfo(@Param("id") long id);
+
 }

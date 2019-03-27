@@ -21,12 +21,12 @@ public class AppMarketService {
         return appMarketDao.appCount();
     }
 
-    public RestRecord userToDo(String userId, String pageNum, String pageSize){
-        return appMarketDao.userToDo(userId, pageNum, pageSize);
+    public RestRecord userToDo( String userId, String pageNum, String pageSize ) {
+        return appMarketDao.userToDo( userId, pageNum, pageSize );
     }
 
-    public RestRecord backlog(Map<String, Object> backlog, String userId){
-        RestRecord restRecord = appMarketDao.backlog(userId, backlog);
+    public RestRecord backlog( Map< String, Object > backlog, String userId ) {
+        RestRecord restRecord = appMarketDao.backlog( userId, backlog );
 //        for(String operateUserId : (List<String>) backlog.get("users")){
 //            socket.sendMessage(operateUserId, backlog.get("content"));
 //        }

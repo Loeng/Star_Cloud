@@ -24,11 +24,19 @@ public class InvoiceService {
         return invoiceDao.getInvoiceInfo( userId );
     }
 
+    public RestRecord selectInvoiceAddressByOrganizationId( String userId ) {
+        return invoiceDao.getInvoiceAddress( userId );
+    }
+
     public RestRecord updateInvoiceInfoByOrganizationId( Map< String, Object > invoiceInfo, String userId ) {
         return invoiceDao.updateInvoiceInfo( invoiceInfo, userId );
     }
 
+    public RestRecord updateInvoiceAddressByOrganizationId( Map< String, Object > invoiceInfo, String userId ) {
+        return invoiceDao.updateInvoiceAddress( invoiceInfo, userId );
+    }
+
     public RestRecord selectInvoiceHistory( String userId ) {
-        return invoiceDao.selectInvoiceHistory(userId);
+        return invoiceDao.selectInvoiceHistory( userId );
     }
 }

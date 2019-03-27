@@ -14,19 +14,20 @@ public interface NavigationMapper {
 
     List<NavigationBean> getChannel(@Param( "channelType" ) Integer channelType);
 
-    int addNav(@Param( "columnName" ) String columnName,@Param( "columnUrl" ) String columnUrl,
-               @Param("channelId") Integer channelId);
+    int addChannel(@Param( "channelName" ) String channelName,@Param( "channelUrl" ) String channelUrl,
+                   @Param("channelId") long channelId,@Param("channelType") int channelType,@Param("isDeleted") int isDeleted);
 
-    int editNav(@Param( "columnName" ) String columnName,@Param( "columnUrl" ) String columnUrl,
-               @Param("columnId") Integer columnId);
+    int editChannel(@Param( "channelName" ) String channelName,@Param( "channelUrl" ) String channelUrl,
+                    @Param("channelId") String channelId);
 
     List<SchoolBean> getSchools(@Param("keywords") String keywords);
 
-    List<Banner> getBanners(@Param( "schoolId" ) Integer schoolId);
+    List<Banner> getBanners(@Param( "schoolId" ) long schoolId);
 
-    Integer editDefaultBanner( @Param( "schoolId" ) Integer schoolId,
-                                   @Param( "newBanner" ) Integer newBanner );
+    Integer editDefaultBanner( @Param( "schoolId" ) long schoolId,
+                               @Param( "newBanner" ) Integer newBanner );
 
-    Integer delBanner( @Param( "bannerId" ) Integer bannerId );
+    Integer delBanner( @Param( "bannerId" ) long bannerId );
 
+    Integer delChannel(@Param( "channelId" )String channelId);
 }

@@ -18,5 +18,4 @@ public interface DateConstants {
     long SEVEN_DAY = 7L * 24 * 60L * 60 * 1000;
 
 
-
 }

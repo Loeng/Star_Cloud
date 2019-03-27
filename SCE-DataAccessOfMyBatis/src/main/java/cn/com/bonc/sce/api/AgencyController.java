@@ -108,7 +108,6 @@ public class AgencyController {
         PageHelper.startPage(pageNum, pageSize);
         List<AgentBean> agentList = agencyService.getAgents(agentName,grade,agentArea);
         PageInfo pageInfo = new PageInfo(agentList);
-        List list = pageInfo.getList();
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200,pageInfo );
     }
 
@@ -129,7 +128,7 @@ public class AgencyController {
 
         UserBean user = new UserBean();
         long userId = idWorker.nextId();
-        String secret = Secret.ES256GenerateSecret();
+        String secret = Secret.generateSecret();
         String loginName = IDUtil.createID( "dl_" );
         user.setSecret( secret );
         user.setLoginName( loginName );
@@ -147,11 +146,17 @@ public class AgencyController {
 
         if (agencyService.saveAgent(agentBean) == 1
                 && userService.saveUser( user )==1
-               && userService.saveAccount(account)==1){
+                && userService.saveAccount(account)==1){
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200,1 );
         } else {
             return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
         }
     }
 
+    @ApiOperation(value = "个人中心代理商信息获取", notes="通过代理商id代理商信息", httpMethod = "POST")
+    @PostMapping("/getInfo")
+    @ResponseBody
+    public RestRecord getInfo(@RequestParam( "id" ) long id){
+        return new RestRecord(200,MessageConstants.SCE_MSG_0200,agencyService.getInfo(id));
+    }
 }

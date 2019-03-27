@@ -37,4 +37,6 @@ public interface AgencyDao {
     @RequestMapping( value = "/agent/insertInfo", method = RequestMethod.POST )
     RestRecord insertInfo(String json);
 
+    @RequestMapping( value = "/agent/getInfo", method = RequestMethod.POST)
+    RestRecord getInfo(@RequestParam(value = "id") long id);
 }

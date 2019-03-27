@@ -39,7 +39,7 @@ public class AuthenticationService {
     String publicKey;
 
     @Autowired
-    public AuthenticationService( UserDaoClient userDao, AppDaoClient appDaoClient ){
+    public AuthenticationService( UserDaoClient userDao, AppDaoClient appDaoClient ) {
         this.userDao = userDao;
         this.appDaoClient = appDaoClient;
     }
@@ -92,7 +92,7 @@ public class AuthenticationService {
                 return null;
             }
             publicKey = SecureUtil.generatePublicKey( "EC", Base64.decode( this.publicKey ) );
-        }else {
+        } else {
             User user = userDao.getUserById( userId.toString() );
             publicKey = user.getSecretKeyPair().getPublicKey();
         }
@@ -111,7 +111,7 @@ public class AuthenticationService {
         return claims;
     }
 
-    public String getAppToken( String appId ){
+    public String getAppToken( String appId ) {
         return appDaoClient.getAppToken( appId );
     }
 

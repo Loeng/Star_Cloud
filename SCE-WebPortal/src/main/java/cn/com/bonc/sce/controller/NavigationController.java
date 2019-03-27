@@ -28,17 +28,25 @@ public class NavigationController {
     }
 
     @ApiOperation(value = "添加导航栏", notes="获取前端编辑数据，后台写入数据库", httpMethod = "POST")
-    @PostMapping("/addNav")
+    @PostMapping("/addChannel")
     @ResponseBody
-    public RestRecord addNav(@RequestBody @ApiParam( example = "{\"columnName\": \"这是导航title\",\"columnUrl\": \"这是导航链接\",\"channelId\": 5}" ) String json ){
-        return navigationService.addNav(json);
+    public RestRecord addNav(@RequestBody @ApiParam(example = "{\"channelName\": \"这是导航title\",\"channelUrl\": \"这是导航链接\",\"channelType\": 0或1}") String json ){
+        return navigationService.addChannel(json);
     }
 
     @ApiOperation(value = "编辑导航栏", notes="获取前端编辑数据，后台写入数据库", httpMethod = "PUT")
-    @PutMapping("/editNav")
+    @PutMapping("/editChannel")
     @ResponseBody
-    public RestRecord editNav(@RequestBody @ApiParam( example = "{\"columnName\": \"这是导航title\",\"columnUrl\": \"这是导航链接\",\"columnId\": 3}" ) String json ){
-        return navigationService.editNav(json);
+    public RestRecord editChannel(@RequestBody @ApiParam( example = "{\"channelName\": \"这是导航title\",\"channelUrl\": \"这是导航链接\",\"channelId\": 3}" ) String json ){
+        return navigationService.editChannel(json);
+    }
+
+    @ApiOperation(value = "删除导航栏", notes="获取channelId，删除导航栏", httpMethod = "Delete")
+    @DeleteMapping("/delChannel")
+    @ResponseBody
+    public RestRecord delChannel(
+            @RequestParam( "channelId" ) String channelId){
+        return navigationService.delChannel(channelId);
     }
 
     @ApiOperation(value = "获取学校机构列表", notes="获取查询条件，返回学校机构列表", httpMethod = "GET")
@@ -53,7 +61,7 @@ public class NavigationController {
     @ApiOperation(value = "获取学校机构对应的banner", notes="根据学校id，返回学校对应banner列表", httpMethod = "GET")
     @GetMapping("/getBanners")
     @ResponseBody
-    public RestRecord getBanners(@RequestParam ( "schoolId" ) Integer schoolId ){
+    public RestRecord getBanners(@RequestParam ( "schoolId" ) long schoolId ){
         return navigationService.getBanners(schoolId);
     }
 
@@ -61,8 +69,8 @@ public class NavigationController {
     @PutMapping("/editDefaultBanner")
     @ResponseBody
     public RestRecord editDefaultBanner(
-                @RequestParam ( "schoolId" ) Integer schoolId,
-                @RequestParam( "defaultBanner" ) Integer defaultBanner){
+            @RequestParam ( "schoolId" ) long schoolId,
+            @RequestParam( "defaultBanner" ) Integer defaultBanner){
         return navigationService.editDefaultBanner(schoolId,defaultBanner);
     }
 
@@ -70,7 +78,7 @@ public class NavigationController {
     @DeleteMapping("/delBanner")
     @ResponseBody
     public RestRecord delBanner(
-            @RequestParam( "bannerId" ) Integer bannerId){
+            @RequestParam( "bannerId" ) long bannerId){
         return navigationService.delBanner(bannerId);
     }
 }

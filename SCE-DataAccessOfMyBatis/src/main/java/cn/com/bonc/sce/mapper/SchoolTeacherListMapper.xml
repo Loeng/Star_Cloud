@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.SchoolTeacherListMapper">
+    <!--根据组织id查询及其它条件查询教师列表-->
+    <select id="getTeacherListByOrganizationId" parameterType="java.lang.String" resultType="Map">
+        SELECT
+        SCU.USER_ID,
+        SCU.USER_NAME,
+        SCU.LOGIN_NAME,
+        SCU.GENDER,
+        SCU.CERTIFICATE_NUMBER,
+        SCU.PHONE_NUMBER,
+        SCU.CREATE_TIME,
+        SIT.POSITION,
+        SIT.TEACH_TIME
+        FROM
+        ( SELECT * FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_TYPE = 2 AND IS_DELETE = 1 AND ORGANIZATION_ID =
+        #{ORGANIZATION_ID} ) SCU
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER SIT ON SCU.USER_ID = SIT.USER_ID
+        <where>
+            <if test="USER_NAME != null and USER_NAME != ''">
+                AND SCU.USER_NAME LIKE CONCAT(CONCAT('%',#{USER_NAME}),'%')
+            </if>
+        </where>
+        ORDER BY  SCU.CREATE_TIME DESC
+    </select>
+
+    <!--新增教师-->
+    <insert id="saveTeacher">
+        INSERT INTO STARCLOUDPORTAL.SCE_INFO_TEACHER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="USER_ID != null">
+                USER_ID,
+            </if>
+            <if test="POSITION != null">
+                POSITION,
+            </if>
+            <if test="TEACH_TIME != null">
+                TEACH_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="USER_ID != null">
+                #{USER_ID},
+            </if>
+            <if test="POSITION != null">
+                #{POSITION},
+            </if>
+            <if test="TEACH_TIME != null">
+                #{TEACH_TIME,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+
+    <!--编辑教师信息-->
+    <update id="editTeacher">
+        UPDATE STARCLOUDPORTAL.SCE_INFO_TEACHER
+        <set>
+            <if test="POSITION != null">
+                POSITION=#{POSITION},
+            </if>
+            <if test="TEACH_TIME != null">
+                TEACH_TIME=#{TEACH_TIME,jdbcType=DATE},
+            </if>
+        </set>
+        WHERE USER_ID=#{USER_ID}
+    </update>
+
+    <!-- 删除教师 -->
+    <update id="deleteTeacher" parameterType="java.lang.String">
+          BEGIN
+          UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET IS_DELETE = 0 WHERE USER_ID =#{userId};
+          UPDATE STARCLOUDPORTAL.SCE_INFO_TEACHER SET IS_DELETE = 0 WHERE USER_ID =#{userId};
+          END;
+    </update>
+    <!-- 根据用户id查询组织id-->
+    <select id="selectOrganizationIdByUserId" resultType="java.lang.Long">
+          SELECT ORGANIZATION_ID  FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID =#{userId}
+    </select>
+</mapper>

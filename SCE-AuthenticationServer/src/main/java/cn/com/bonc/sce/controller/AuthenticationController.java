@@ -26,6 +26,7 @@ import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -45,10 +46,10 @@ import java.util.Map;
 @RestController
 public class AuthenticationController {
 
-    @Value( "${sce.appId}" )
+    @Value("{sce.appId}")
     private String appId;
 
-    @Value( "${sce.appToken}" )
+    @Value("{sce.appToken}")
     private String appToken;
 
     private UserService userService;
@@ -76,7 +77,7 @@ public class AuthenticationController {
             } ) ),
             @ApiResponse( code = 100, message = WebMessageConstants.SCE_PORTAL_MSG_101 + "样例数据：{\"msg\":\"" + WebMessageConstants.SCE_PORTAL_MSG_101 + "\",\"code\":101}" )
     } )
-    @PostMapping( /*value = "/login",*/ produces = "application/json" )
+    @PostMapping( produces = "application/json" )
     @ResponseBody
     public RestRecord login( HttpServletRequest request, @NotBlank @RequestBody @ApiParam SSOAuthentication authentication ) {
         User authenticatedUser;
@@ -140,7 +141,7 @@ public class AuthenticationController {
         // loginService.confirmUserFirstLogin( authenticatedUser );
 
         //6.记录用户本次登陆时间，上次登陆时间，登陆次数
-        userService.updateUserLoginTimeAndCounts(authenticatedUser.getUserId());
+        userService.updateUserLoginTimeAndCounts( authenticatedUser.getUserId() );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, loginResult );
     }
 
@@ -221,7 +222,10 @@ public class AuthenticationController {
 
     /**
      * 长期 ticket 换取30秒 temp_token 接口 （同时更新ticket时间）
-     * @param userId 用户id
+     *
+     * @param userId   用户id
+     * @param response response.header 存放ticket
+     *
      * @return RestRecord
      */
     @PostMapping( "/temp_token" )
@@ -263,12 +267,14 @@ public class AuthenticationController {
 
     /**
      * 临时token(30秒)换取正式ticket(3分钟)接口
+     *
      * @param userId 用户id
+     *
      * @return RestRecord
      */
     @GetMapping( "/ticket" )
-    public RestRecord ticket( @CurrentUserId String userId, HttpServletRequest request ){
-        if( userId.equals( "" ) ){
+    public RestRecord ticket( @CurrentUserId String userId, HttpServletResponse response ) {
+        if ( userId.equals( "" ) ) {
             return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
         }
         User user = userService.getUserByUserId( userId );
@@ -280,6 +286,7 @@ public class AuthenticationController {
 
     /**
      * 旧的ticket换取新的ticket
+     *
      * @return RestRecord
      */
     @GetMapping( "/refresh" )

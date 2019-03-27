@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public class UserBean {
     private long userId;
+    //SCE_COMMON_USER 表中的 USER_ID 是varchar2类型，用long类型的userId执行插入会报错（无效的数字类型）
+    private String stringUserId;
     private String loginName;
     private String userName;
     private String gender;
@@ -24,17 +26,18 @@ public class UserBean {
     private String loginTime;
     private String lastLoginTime;
     private Long loginCounts;
-    private long organizationId;
+    private Long organizationId;
     private Integer loginPermissionStatus;
     private String remarks;
     private Integer isDelete;
     private Account account;
     private String secret;
     private Secret secretKeyPair;
-    private int isFirstLogin;
+    private Integer isFirstLogin=0;
     private String headPortrait;
     private Date birthday;
     private Map<String,String> userDetailedInfo;
+    private Integer accountStatus;
 
     public long getUserId() {
         return userId;
@@ -42,6 +45,14 @@ public class UserBean {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getStringUserId() {
+        return stringUserId;
+    }
+
+    public void setStringUserId( String stringUserId ) {
+        this.stringUserId = stringUserId;
     }
 
     public String getLoginName() {
@@ -148,11 +159,11 @@ public class UserBean {
         this.loginCounts = loginCounts;
     }
 
-    public long getOrganizationId() {
+    public Long getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(long organizationId) {
+    public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
     }
 
@@ -204,11 +215,11 @@ public class UserBean {
         this.secretKeyPair = secretKeyPair;
     }
 
-    public int getIsFirstLogin() {
+    public Integer getIsFirstLogin() {
         return isFirstLogin;
     }
 
-    public void setIsFirstLogin(int isFirstLogin) {
+    public void setIsFirstLogin(Integer isFirstLogin) {
         this.isFirstLogin = isFirstLogin;
     }
 
@@ -234,5 +245,13 @@ public class UserBean {
 
     public void setUserDetailedInfo(Map<String, String> userDetailedInfo) {
         this.userDetailedInfo = userDetailedInfo;
+    }
+
+    public Integer getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(Integer accountStatus) {
+        this.accountStatus = accountStatus;
     }
 }

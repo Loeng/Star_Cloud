@@ -9,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
 import java.security.*;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,19 +28,19 @@ public class Secret {
 
     public Secret( String secret ) {
         int length = secret.length();
-        if( length > 216 ){
+        if ( length > 216 ) {
             String publicKey = secret.substring( 0, 392 );
             String privateKey = secret.substring( 392, length );
 
             RSA rsa = new RSA( privateKey, publicKey );
             this.keyPair = new KeyPair( rsa.getPublicKey(), rsa.getPrivateKey() );
-        }else {
+        } else {
             String publicKey = secret.substring( 0, 124 );
             String privateKey = secret.substring( 124, length );
 
-            PrivateKey privateKeyObj = SecureUtil.generatePrivateKey("EC", Base64.decode(privateKey));
-            PublicKey publicKeyObj = SecureUtil.generatePublicKey("EC", Base64.decode(publicKey));
-            this.keyPair = new KeyPair(publicKeyObj, privateKeyObj);
+            PrivateKey privateKeyObj = SecureUtil.generatePrivateKey( "EC", Base64.decode( privateKey ) );
+            PublicKey publicKeyObj = SecureUtil.generatePublicKey( "EC", Base64.decode( publicKey ) );
+            this.keyPair = new KeyPair( publicKeyObj, privateKeyObj );
         }
 
     }
@@ -77,12 +78,13 @@ public class Secret {
     /**
      * 根据ECC椭圆曲线算法生成公私钥并经过Base64编码
      * 其中编码后的公钥长度为124  私钥为92  共216字符
+     *
      * @return a secret buries secrets
      */
-    public static String ES256GenerateSecret(){
-        KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.ES256);
-        String publicKey = Base64.encode(keyPair.getPublic().getEncoded());
-        String privateKry = Base64.encode(keyPair.getPrivate().getEncoded());
+    public static String ES256GenerateSecret() {
+        KeyPair keyPair = Keys.keyPairFor( SignatureAlgorithm.ES256 );
+        String publicKey = Base64.encode( keyPair.getPublic().getEncoded() );
+        String privateKry = Base64.encode( keyPair.getPrivate().getEncoded() );
 
         return publicKey + privateKry;
     }

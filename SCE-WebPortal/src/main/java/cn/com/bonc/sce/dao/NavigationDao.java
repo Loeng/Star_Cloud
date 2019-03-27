@@ -15,11 +15,11 @@ public interface NavigationDao {
     @RequestMapping( value = "/navigation/getChannel", method = RequestMethod.GET )
     RestRecord getChannel (@RequestParam("channelType") Integer channelType);
 
-    @RequestMapping( value = "/navigation/addNav", method = RequestMethod.POST )
-    RestRecord addNav(@RequestBody String json);
+    @RequestMapping( value = "/navigation/addChannel", method = RequestMethod.POST )
+    RestRecord addChannel(@RequestBody String json);
 
-    @RequestMapping( value = "/navigation/editNav", method = RequestMethod.PUT )
-    RestRecord editNav(@RequestBody String json);
+    @RequestMapping( value = "/navigation/editChannel", method = RequestMethod.PUT )
+    RestRecord editChannel(@RequestBody String json);
 
     @RequestMapping( value = "/navigation/getSchools/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord getSchools(@RequestParam("keywords") String keywords,
@@ -27,13 +27,15 @@ public interface NavigationDao {
                           @PathVariable(value = "pageSize") Integer pageSize);
 
     @RequestMapping( value = "/navigation/getBanners", method = RequestMethod.GET )
-    RestRecord getBanners (@RequestParam("schoolId") Integer schoolId);
+    RestRecord getBanners (@RequestParam("schoolId") long schoolId);
 
     @RequestMapping( value = "/navigation/editDefaultBanner", method = RequestMethod.PUT )
-    RestRecord editDefaultBanner (@RequestParam( "schoolId" ) Integer schoolId,
-                                      @RequestParam( "defaultBanner" ) Integer defaultBanner);
+    RestRecord editDefaultBanner (@RequestParam( "schoolId" ) long schoolId,
+                                  @RequestParam( "defaultBanner" ) Integer defaultBanner);
 
     @RequestMapping( value = "/navigation/delBanner", method = RequestMethod.DELETE )
-    RestRecord delBanner (@RequestParam( "bannerId" ) Integer bannerId);
+    RestRecord delBanner (@RequestParam( "bannerId" ) long bannerId);
 
+    @RequestMapping( value = "/navigation/delChannel", method = RequestMethod.DELETE )
+    RestRecord delChannel(@RequestParam( "channelId" ) String channelId);
 }

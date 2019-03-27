@@ -118,7 +118,7 @@ public class RestRecord implements Serializable {
         return total;
     }
 
-    public void setTotal(long total) {
+    public void setTotal( long total ) {
         this.total = total;
     }
 

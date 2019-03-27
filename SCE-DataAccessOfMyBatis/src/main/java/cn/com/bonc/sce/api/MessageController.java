@@ -34,6 +34,7 @@ public class MessageController {
      *
      * @param pageNum
      * @param pageSize
+     *
      * @return
      */
     @GetMapping( "/recode/{pageNum}/{pageSize}" )
@@ -52,6 +53,7 @@ public class MessageController {
      *
      * @param pageNum
      * @param pageSize
+     *
      * @return
      */
     @GetMapping( "/receiving-situation/{pageNum}/{pageSize}" )

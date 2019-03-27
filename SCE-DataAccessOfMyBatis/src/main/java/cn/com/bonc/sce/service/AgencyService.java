@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Charles on 2019/3/4.
@@ -45,5 +46,9 @@ public class AgencyService {
 
     public int delAgentUser(String id) {
         return agencyDao.delAgentUser(id);
+    }
+
+    public AgentBean getInfo(long id) {
+        return agencyDao.getInfo(id);
     }
 }
