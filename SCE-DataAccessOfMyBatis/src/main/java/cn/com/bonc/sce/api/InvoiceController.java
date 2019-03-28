@@ -5,6 +5,8 @@ import cn.com.bonc.sce.dao.InvoiceDao;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
 import cn.hutool.core.collection.CollectionUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,14 +47,21 @@ public class InvoiceController {
     }
 
     /**
-     * 开票记录
+     * 开票列表
      *
      * @param userId
      * @return
      */
-    @GetMapping( "/info-history/{userId}" )
-    public RestRecord selectInvoiceHistory( @PathVariable( "userId" ) String userId ) {
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, invoiceDao.selectInvoiceHistory( userId ) );
+    @GetMapping( "/info-history/{userId}/{pageNum}/{pageSize}" )
+    public RestRecord selectInvoiceHistory( @PathVariable( "userId" ) String userId,
+                                            @PathVariable( "pageNum" ) Integer pageNum,
+                                            @PathVariable( "pageSize" ) Integer pageSize,
+                                            @RequestParam Map< String, Object > map ) {
+        PageHelper.startPage( pageNum, pageSize );
+        List< Map > data = invoiceDao.selectInvoiceHistory( map );
+        PageInfo pageInfo = new PageInfo( data );
+
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, pageInfo );
     }
 
     /**

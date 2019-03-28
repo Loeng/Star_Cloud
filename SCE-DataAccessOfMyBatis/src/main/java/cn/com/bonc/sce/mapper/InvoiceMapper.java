@@ -12,7 +12,7 @@ public interface InvoiceMapper {
 
     List< Map > selectInvoiceAddress( Long organizationId );
 
-    List< Map > selectInvoiceHistory( String userId );
+    List< Map > selectInvoiceHistory( Map map );
 
     int updateInvoiceInfoByOrganizationId( Map< String, Object > invoiceInfo );
 

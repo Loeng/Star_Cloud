@@ -59,10 +59,10 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
      */
     @Query( value = "SELECT u.USER_ID,u.LOGIN_NAME,u.PHONE_NUMBER,u.CERTIFICATE_NUMBER,u.USER_TYPE,u.USER_NAME,u.GENDER,u.ADDRESS,u.LOGIN_PERMISSION_STATUS\n" +
             "FROM STARCLOUDPORTAL.SCE_COMMON_USER u LEFT JOIN STARCLOUDPORTAL.SCE_INFO_THIRD_PARTY p on p.USER_ID = u.USER_ID\n" +
-            "WHERE NVL(u.LOGIN_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(u.USER_NAME,' ')LIKE CONCAT('%',CONCAT(?2,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%')) AND u.USER_TYPE = 8",
+            "WHERE NVL(u.LOGIN_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(u.USER_NAME,' ')LIKE CONCAT('%',CONCAT(?2,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%')) AND u.USER_TYPE = 8 AND u.IS_DELETE=1",
             countQuery = "SELECT count(*)\n" +
                     "FROM STARCLOUDPORTAL.SCE_COMMON_USER u LEFT JOIN STARCLOUDPORTAL.SCE_INFO_THIRD_PARTY p on p.USER_ID = u.USER_ID\n" +
-                    "WHERE NVL(u.LOGIN_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(u.USER_NAME,' ')LIKE CONCAT('%',CONCAT(?2,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%')) AND u.USER_TYPE = 8",
+                    "WHERE NVL(u.LOGIN_NAME,' ')LIKE CONCAT('%',CONCAT(?1,'%')) AND NVL(u.USER_NAME,' ')LIKE CONCAT('%',CONCAT(?2,'%')) AND  NVL(TO_CHAR(LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%')) AND u.USER_TYPE = 8 AND u.IS_DELETE=1",
             nativeQuery = true )
     Page< Map > findSelfRegALLByNameOrCount( String byName, String loginName, String login, Pageable pageable );
 

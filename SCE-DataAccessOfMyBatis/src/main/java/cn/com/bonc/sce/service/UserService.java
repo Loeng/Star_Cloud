@@ -64,4 +64,8 @@ public class UserService {
     public int updatePwdByName(String loginName, String password) {
         return userDao.updatePwdByName(loginName,password);
     }
+
+    public String testCertificate(String loginName) {
+        return userDao.testCertificate(loginName);
+    }
 }

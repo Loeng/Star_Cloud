@@ -62,4 +62,8 @@ public class UserDao {
     public int updatePwdByName(String loginName, String password) {
         return userMapper.updatePwdByName(loginName,password);
     }
+
+    public String testCertificate(String loginName) {
+        return userMapper.testCertificate(loginName);
+    }
 }

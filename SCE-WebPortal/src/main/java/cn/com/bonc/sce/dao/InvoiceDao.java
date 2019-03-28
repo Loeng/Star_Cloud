@@ -23,8 +23,12 @@ public interface InvoiceDao {
     @RequestMapping( value = "/invoice/address/{userId}", method = RequestMethod.GET )
     public RestRecord getInvoiceAddress( @PathVariable( "userId" ) String userId );
 
-    @RequestMapping( value = "/invoice/info-history/{userId}", method = RequestMethod.GET )
-    public RestRecord selectInvoiceHistory( @PathVariable( "userId" ) String userId );
+    @RequestMapping( value = "/invoice/info-history/{userId}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    public RestRecord selectInvoiceHistory( @PathVariable( "userId" ) String userId,
+                                            @PathVariable( "pageNum" ) Integer pageNum,
+                                            @PathVariable( "pageSize" ) Integer pageSize,
+                                            @RequestParam Map< String, Object > map
+    );
 
     @RequestMapping( value = "/invoice/update/{userId}", method = RequestMethod.PUT )
     public RestRecord updateInvoiceInfo( @RequestBody Map< String, Object > invoiceInfo,

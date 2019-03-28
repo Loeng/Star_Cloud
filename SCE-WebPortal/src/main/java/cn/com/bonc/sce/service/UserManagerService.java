@@ -58,4 +58,8 @@ public class UserManagerService {
     public RestRecord updatePwdByName(String loginName, String password) {
         return userManagerDao.updatePwdByName(loginName,password);
     }
+
+    public RestRecord testCertificcate(String loginName, String certificate) {
+        return userManagerDao.testCertificate(loginName,certificate);
+    }
 }
