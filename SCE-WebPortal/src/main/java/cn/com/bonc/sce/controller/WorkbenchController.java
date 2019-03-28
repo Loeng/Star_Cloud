@@ -22,29 +22,32 @@ public class WorkbenchController {
 
     /**
      * 删除地址
+     *
      * @param ID
      * @return
      */
     @PutMapping("/deleteAddress/{ID}")
     @ResponseBody
-    public RestRecord deleteAddress(@PathVariable( "ID" ) Integer ID) {
+    public RestRecord deleteAddress(@PathVariable("ID") Integer ID) {
         return workbenchService.deleteAddress(ID);
     }
 
     /**
      * 获取账号下工作台-地址管理的地址
+     *
      * @param USER_ID
      * @return
      */
     @GetMapping("/getAddress/{USER_ID}")
     @ResponseBody
-    public RestRecord getAddress(@PathVariable( "USER_ID" ) String USER_ID) {
+    public RestRecord getAddress(@PathVariable("USER_ID") String USER_ID) {
         return workbenchService.getAddress(USER_ID);
     }
 
 
     /**
      * 更新地址
+     *
      * @param addressInfo
      * @return
      */
@@ -56,6 +59,7 @@ public class WorkbenchController {
 
     /**
      * 添加地址
+     *
      * @param addressInfo
      * @return
      */
@@ -67,30 +71,66 @@ public class WorkbenchController {
 
     /**
      * 获取个人中心-学生绑定列表
+     *
      * @param USER_ID
      * @return
      */
     @GetMapping("/getStudentBinding/{USER_ID}")
     @ResponseBody
-    public RestRecord getStudentBinding(@PathVariable( "USER_ID" ) String USER_ID){
+    public RestRecord getStudentBinding(@PathVariable("USER_ID") String USER_ID) {
         return workbenchService.getStudentBinding(USER_ID);
     }
 
     /**
      * 删除学生绑定
+     *
      * @param ID
      * @return
      */
     @DeleteMapping("/deleteStudentBinding/{ID}")
     @ResponseBody
-    public RestRecord deleteStudentBinding(@PathVariable( "ID" ) Integer ID){
+    public RestRecord deleteStudentBinding(@PathVariable("ID") Integer ID) {
         return workbenchService.deleteStudentBinding(ID);
     }
 
+    /**
+     * 增加学生绑定
+     *
+     * @param info
+     * @return
+     */
     @PostMapping("/addStudentBinding")
     @ResponseBody
-    public RestRecord addStudentBinding(@RequestBody Map<String, Object> info){
+    public RestRecord addStudentBinding(@RequestBody Map<String, Object> info) {
         return workbenchService.addStudentBinding(info);
+    }
+
+    /**
+     * 获得组织管理
+     *
+     * @param info
+     * @return
+     */
+    @GetMapping("/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getOrganization(@PathVariable("USER_ID") String USER_ID,
+                                      @PathVariable("LOGIN_NAME") String LOGIN_NAME,
+                                      @PathVariable("USER_NAME") String USER_NAME,
+                                      @PathVariable (value = "pageNum")Integer pageNum,
+                                      @PathVariable (value = "pageSize") Integer pageSize) {
+        return workbenchService.getOrganization(USER_ID,LOGIN_NAME,USER_NAME,pageNum,pageSize);
+    }
+
+    /**
+     * 组织管理-增加账号
+     *
+     * @param info
+     * @return
+     */
+    @PostMapping("/addOrganization")
+    @ResponseBody
+    public RestRecord addOrganization(@RequestBody Map<String, Object> info) {
+        return workbenchService.addOrganization(info);
     }
 
 }

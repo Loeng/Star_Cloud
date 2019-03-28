@@ -24,11 +24,11 @@ public class WorkbenchService {
         return workbenchDao.getAddress(USER_ID);
     }
 
-    public RestRecord updateAddress(Map< String, Object > addressInfo) {
+    public RestRecord updateAddress(Map<String, Object> addressInfo) {
         return workbenchDao.updateAddress(addressInfo);
     }
 
-    public RestRecord addAddress(Map< String, Object > addressInfo) {
+    public RestRecord addAddress(Map<String, Object> addressInfo) {
         return workbenchDao.addAddress(addressInfo);
     }
 
@@ -40,8 +40,16 @@ public class WorkbenchService {
         return workbenchDao.deleteStudentBinding(ID);
     }
 
-    public RestRecord addStudentBinding(Map< String, Object > info) {
+    public RestRecord addStudentBinding(Map<String, Object> info) {
         return workbenchDao.addStudentBinding(info);
+    }
+
+    public RestRecord getOrganization(String USER_ID, String LOGIN_NAME, String USER_NAME, Integer pageNum, Integer pageSize) {
+        return workbenchDao.getOrganization(USER_ID, LOGIN_NAME, USER_NAME, pageNum, pageSize);
+    }
+
+    public RestRecord addOrganization(Map<String, Object> info) {
+        return workbenchDao.addOrganization(info);
     }
 
 }
