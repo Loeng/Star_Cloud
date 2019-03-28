@@ -38,4 +38,7 @@ public interface AppMarketDao {
     RestRecord backlog_patch( @RequestHeader( "userId" ) String userId,
                               @RequestBody Map map );
 
+    @RequestMapping(value = "/app-portal/app-token", method = RequestMethod.GET)
+    String getAppToken(@RequestParam("appId") String appId);
+
 }

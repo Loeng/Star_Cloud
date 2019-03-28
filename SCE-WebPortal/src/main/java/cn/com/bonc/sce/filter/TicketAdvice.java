@@ -2,8 +2,11 @@ package cn.com.bonc.sce.filter;
 
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.annotation.Payloads;
+import cn.com.bonc.sce.service.AuthenticationService;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.json.JSONUtil;
+import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -21,6 +24,9 @@ import java.util.Map;
 @Component
 public class TicketAdvice implements HandlerMethodArgumentResolver {
 
+    @Autowired
+    AuthenticationService authenticationService;
+
     @Override
     public boolean supportsParameter( MethodParameter parameter ) {
 
@@ -32,13 +38,17 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
-        String ticket = webRequest.getHeader( "authentication" );
-        String payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
+        //验证JWT
+        Claims claims = authenticationService.validateJWT( webRequest );
 
         if ( parameter.hasParameterAnnotation( Payloads.class ) ) {
-            return payloadsStr;
+            return claims;
         } else if ( parameter.hasParameterAnnotation( CurrentUserId.class ) ) {
-            return JSONUtil.toBean( payloadsStr, Map.class ).get( "userId" );
+            if ( claims == null ) {
+                return "";
+            } else {
+                return claims.get("userId");
+            }
         }
         return "";
     }

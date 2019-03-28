@@ -3,6 +3,7 @@ package cn.com.bonc.sce.service;
 import cn.com.bonc.sce.dao.AppDaoClient;
 import cn.com.bonc.sce.dao.UserDaoClient;
 import cn.com.bonc.sce.model.User;
+import cn.com.bonc.sce.tool.JWTUtil;
 import cn.com.bonc.sce.tool.MD5Util;
 import cn.com.bonc.sce.tool.RestApiUtil;
 import cn.hutool.core.codec.Base64;
@@ -56,19 +57,8 @@ public class AuthenticationService {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String ip = RestApiUtil.getIpAddr( request );
         String ticket = webRequest.getHeader( "authentication" );
-        String payloadsStr = null;
-        Map payloadsMap = null;
-        try{
-            payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
-            payloadsMap = JSONUtil.toBean( payloadsStr, Map.class );
-        }catch ( NullPointerException e ){
-            log.warn( "JWT认证失败 -> 参数authentication缺失" );
-        }catch ( IndexOutOfBoundsException e ){
-            log.warn( "JWT认证失败 -> 参数authentication不合法" );
-        }catch ( Exception e ){
-            log.warn( "JWT认证失败 -> 参数authentication解析失败：" + e.getMessage() );
-        }
-        if( payloadsStr == null || payloadsMap == null ){
+        Map payloadsMap = JWTUtil.parseJWT( ticket );
+        if( payloadsMap == null ){
             return null;
         }
         Claims claims = null;

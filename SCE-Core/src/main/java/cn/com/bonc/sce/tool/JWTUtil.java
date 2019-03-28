@@ -2,6 +2,7 @@ package cn.com.bonc.sce.tool;
 
 import cn.com.bonc.sce.constants.DateConstants;
 import cn.hutool.core.codec.Base64;
+import cn.hutool.json.JSONUtil;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +86,21 @@ public class JWTUtil {
 
     public static String readJWTClaim( String claim ) {
         return Base64.decodeStr( claim );
+    }
+
+    public static Map parseJWT(String ticket){
+        Map payloadsMap = null;
+        try{
+            String payloadsStr = Base64.decodeStr( ticket.split( "\\." )[ 1 ] );
+            payloadsMap = JSONUtil.toBean( payloadsStr, Map.class );
+        }catch ( NullPointerException e ){
+            log.warn( "JWT认证失败 -> 参数authentication缺失" );
+        }catch ( IndexOutOfBoundsException e ){
+            log.warn( "JWT认证失败 -> 参数authentication不合法" );
+        }catch ( Exception e ){
+            log.warn( "JWT认证失败 -> 参数authentication解析失败：" + e.getMessage() );
+        }
+        return payloadsMap;
     }
 
     public static void main( String[] args ) throws InvalidKeyException, NoSuchAlgorithmException {

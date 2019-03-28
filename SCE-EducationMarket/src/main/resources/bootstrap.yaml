@@ -19,3 +19,6 @@ logging:
     org.hibernate: INFO
 server:
   port: 10301
+
+sce:
+  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEXlDUv4MKcEziSW0fFB1lOo5WUhG3AxkrP00PZwfVPmvf8wxnl4h8bUBIJ951FRXb0SqgSnv+Ew+GtJ0t+lskwQ==

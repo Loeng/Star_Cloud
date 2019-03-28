@@ -37,3 +37,5 @@ fileUpload:
     document: http://192.168.1.31:4400/document
     war: http://192.168.1.31:4400/war
 
+sce:
+  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEXlDUv4MKcEziSW0fFB1lOo5WUhG3AxkrP00PZwfVPmvf8wxnl4h8bUBIJ951FRXb0SqgSnv+Ew+GtJ0t+lskwQ==
