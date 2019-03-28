@@ -23,4 +23,7 @@ public interface ParentDao {
 
     @RequestMapping( value = "/parent/unbind", method = RequestMethod.DELETE)
     RestRecord unbind(@RequestParam("parentId")String parentId, @RequestParam("studentId")String studentId);
+
+    @RequestMapping( value = "/parent/getParentList", method = RequestMethod.GET )
+    RestRecord getParentList(@RequestParam("id") String id);
 }

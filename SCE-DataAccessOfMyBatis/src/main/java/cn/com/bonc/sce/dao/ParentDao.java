@@ -27,4 +27,8 @@ public class ParentDao {
     public int unbind(String parentId, String studentId) {
         return parentMapper.unbind(parentId,studentId);
     }
+
+    public List<Map> getParentList(String id) {
+        return parentMapper.getParentList(id);
+    }
 }

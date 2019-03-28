@@ -30,4 +30,8 @@ public class ParentService {
     public int unbind(String parentId, String studentId) {
         return parentDao.unbind(parentId,studentId);
     }
+
+    public List<Map> getParentList(String id) {
+        return parentDao.getParentList(id);
+    }
 }

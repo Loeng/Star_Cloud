@@ -78,4 +78,12 @@ public class ParentController {
             return new RestRecord(408,MessageConstants.SCE_MSG_408,0);
         }
     }
+
+    @ApiOperation(value = "获取学生对应的家长列表", notes="获取学生对应的家长列表", httpMethod = "GET")
+    @GetMapping("/getParentList")
+    @ResponseBody
+    public RestRecord getParentList(@RequestParam( "id" ) String id){
+        return new RestRecord(200,MessageConstants.SCE_MSG_0200,parentService.getParentList(id));
+    }
+
 }

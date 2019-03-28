@@ -46,4 +46,12 @@ public class ParentController {
     public RestRecord unbind(@RequestParam( "parentId" )String parentId,@RequestParam( "studentId" )String studentId){
         return parentService.unbind(parentId,studentId);
     }
+
+    @ApiOperation(value = "获取学生对应的家长列表", notes="获取学生对应的家长列表", httpMethod = "GET")
+    @GetMapping("/getParentList")
+    @ResponseBody
+    public RestRecord getParentList(@RequestParam( "id" ) String id){
+        return parentService.getParentList(id);
+    }
+
 }

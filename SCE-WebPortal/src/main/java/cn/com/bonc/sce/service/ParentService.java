@@ -27,4 +27,8 @@ public class ParentService {
     public RestRecord unbind(String parentId, String studentId) {
         return parentDao.unbind(parentId,studentId);
     }
+
+    public RestRecord getParentList(String id) {
+        return parentDao.getParentList(id);
+    }
 }
