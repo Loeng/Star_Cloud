@@ -26,4 +26,8 @@ public class ParentService {
     public int bindStudent(Long id, String applyUserId, String targetUserId, Integer applyType, String bindUserId, String relationship) {
         return parentDao.bindStudent(id,applyUserId,targetUserId,applyType,bindUserId,relationship);
     }
+
+    public int unbind(String parentId, String studentId) {
+        return parentDao.unbind(parentId,studentId);
+    }
 }

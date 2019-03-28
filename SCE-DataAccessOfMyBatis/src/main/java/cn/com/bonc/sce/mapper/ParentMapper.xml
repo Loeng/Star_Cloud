@@ -18,4 +18,10 @@
               APPLY_TYPE,IS_DELETE,BINDING_USER_ID)
         VALUES (#{id},#{applyUserId},#{relationship},#{targetUserId},#{applyType},1,#{bindUserId})
     </insert>
+
+    <delete id="unbind">
+        DELETE FROM STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL
+        WHERE PARENT_USER_ID=#{parentId}
+        AND STUDENT_USER_ID=#{studentId}
+    </delete>
 </mapper>

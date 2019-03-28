@@ -30,7 +30,20 @@ public class ParentController {
     @ApiOperation(value = "绑定学生", notes="获取绑定信息，请求绑定", httpMethod = "POST")
     @PostMapping("/bindStudent")
     @ResponseBody
-    public RestRecord bindStudent(@RequestBody @ApiParam( example = "{\"applyUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\",\"relationship\": \"父子\",\"targetUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\",\"applyType\":0,\"bindUserId\":\"c0190f3e1ae54dc890a4a2afee10f527\"}" ) String json){
+    public RestRecord bindStudent(@RequestBody @ApiParam( example = "{\n" +
+            "\t\"applyUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\",\n" +
+            "\t\"relationship\": \"父子\",\n" +
+            "\t\"phone\": \"55555555555\",\n" +
+            "\t\"applyType\": 0,\n" +
+            "\t\"bindUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\"\n" +
+            "}" ) String json){
         return parentService.bindStudent(json);
+    }
+
+    @ApiOperation(value = "解除家长和学生的绑定关系", notes="解除家长和学生的绑定关系", httpMethod = "DELETE")
+    @DeleteMapping("/unbind")
+    @ResponseBody
+    public RestRecord unbind(@RequestParam( "parentId" )String parentId,@RequestParam( "studentId" )String studentId){
+        return parentService.unbind(parentId,studentId);
     }
 }

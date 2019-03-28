@@ -23,4 +23,8 @@ public class ParentDao {
     public int bindStudent(Long id, String applyUserId, String targetUserId, Integer applyType, String bindUserId, String relationship) {
         return parentMapper.bindStudent(id,applyUserId,targetUserId,applyType,bindUserId,relationship);
     }
+
+    public int unbind(String parentId, String studentId) {
+        return parentMapper.unbind(parentId,studentId);
+    }
 }

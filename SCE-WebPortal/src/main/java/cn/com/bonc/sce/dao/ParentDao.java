@@ -20,4 +20,7 @@ public interface ParentDao {
 
     @RequestMapping( value = "/parent/bindStudent", method = RequestMethod.POST)
     RestRecord bindStudent(@RequestBody String json);
+
+    @RequestMapping( value = "/parent/unbind", method = RequestMethod.DELETE)
+    RestRecord unbind(@RequestParam("parentId")String parentId, @RequestParam("studentId")String studentId);
 }

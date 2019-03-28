@@ -67,4 +67,15 @@ public class ParentController {
             return new RestRecord(409,MessageConstants.SCE_MSG_409,0);
         }
     }
+
+    @ApiOperation(value = "解除家长和学生的绑定关系", notes="解除家长和学生的绑定关系", httpMethod = "DELETE")
+    @DeleteMapping("/unbind")
+    @ResponseBody
+    public RestRecord unbind(@RequestParam( "parentId" )String parentId,@RequestParam( "studentId" )String studentId){
+        if (parentService.unbind(parentId,studentId)==1){
+            return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
+        }else {
+            return new RestRecord(408,MessageConstants.SCE_MSG_408,0);
+        }
+    }
 }

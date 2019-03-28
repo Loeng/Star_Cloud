@@ -15,4 +15,6 @@ public interface ParentMapper {
     int bindStudent(@Param("id") Long id, @Param("applyUserId") String applyUserId,
                     @Param("targetUserId")String targetUserId, @Param("applyType")Integer applyType,
                     @Param("bindUserId")String bindUserId, @Param("relationship")String relationship);
+
+    int unbind(@Param("parentId") String parentId, @Param("studentId") String studentId);
 }

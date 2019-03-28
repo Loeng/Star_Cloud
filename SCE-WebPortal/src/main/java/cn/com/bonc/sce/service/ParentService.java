@@ -23,4 +23,8 @@ public class ParentService {
     public RestRecord bindStudent(String json) {
         return parentDao.bindStudent(json);
     }
+
+    public RestRecord unbind(String parentId, String studentId) {
+        return parentDao.unbind(parentId,studentId);
+    }
 }
