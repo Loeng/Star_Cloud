@@ -1,16 +1,13 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppMarketDao;
-import cn.com.bonc.sce.dao.FeignUserDao;
+import cn.com.bonc.sce.dao.AuthenticationDao;
 import cn.com.bonc.sce.exception.InvalidTokenException;
 import cn.com.bonc.sce.model.User;
-import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.JWTUtil;
-import cn.com.bonc.sce.tool.MD5Util;
 import cn.com.bonc.sce.tool.RestApiUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.json.JSONUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -24,26 +21,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.PublicKey;
 import java.util.Map;
 
-/**
- * @author Leucippus
- * @version 0.1
- * @since 2018/12/15 19:20
- */
 @Slf4j
 @Service
 public class AuthenticationService {
 
-    private FeignUserDao userDao;
-    private AppMarketDao appMarketDao;
-
-    @Autowired
-    public AuthenticationService( FeignUserDao userDao, AppMarketDao appMarketDao ) {
-        this.userDao = userDao;
-        this.appMarketDao = appMarketDao;
-    }
+    AppMarketDao appMarketDao;
+    AuthenticationDao authenticationDao;
 
     @Value( "${sce.publicKey}" )
     String publicKey;
+
+    @Autowired
+    public AuthenticationService( AppMarketDao appMarketDao, AuthenticationDao authenticationDao ){
+        this.appMarketDao = appMarketDao;
+        this.authenticationDao = authenticationDao;
+    }
 
     /**
      * 验证JWT
@@ -58,12 +50,11 @@ public class AuthenticationService {
         String userAgent = request.getHeader( "User-Agent" );
         String ticket = webRequest.getHeader( "authentication" );
         Map payloadsMap = JWTUtil.parseJWT( ticket );
-        Claims claims;
+        Claims claims = null;
         Object userId = payloadsMap.get( "userId" );
         PublicKey publicKey;
-        if( userId == null ){
+        if(userId == null){
             //appId与appToken的验证
-            log.info("");
             String payloadAppId = payloadsMap.get( "appId" ).toString();
             String headerAppId = webRequest.getHeader( "appId" );
             String headerAppToken = webRequest.getHeader( "appToken" );
@@ -73,12 +64,13 @@ public class AuthenticationService {
             if( !headerAppId.equals( payloadAppId ) ){
                 throw new InvalidTokenException( "JWT认证失败 -> appId不存在" );
             }
-            if( !appMarketDao.getAppToken( headerAppId ).equals( headerAppToken ) ){
+            if( !authenticationDao.getAppToken( headerAppId ).equals( headerAppToken ) ){
                 throw new InvalidTokenException( "JWT认证失败 -> appId与appToken不匹配" );
             }
             publicKey = SecureUtil.generatePublicKey( "EC", Base64.decode( this.publicKey ) );
+            log.info("");
         } else {
-            User user = userDao.getUserById( userId.toString() );
+            User user = appMarketDao.getUserById( userId.toString() );
             publicKey = user.getSecretKeyPair().getPublicKey();
         }
         try {
@@ -95,8 +87,5 @@ public class AuthenticationService {
     }
 
 
-    public RestRecord checkUserIdentityByEmail( String email, String password) {
-//        return userDao.getUserById( "11" );
-        return null;
-    }
+
 }

@@ -2,13 +2,13 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.AppDaoClient;
 import cn.com.bonc.sce.dao.UserDaoClient;
+import cn.com.bonc.sce.exception.InvalidTokenException;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.tool.JWTUtil;
 import cn.com.bonc.sce.tool.MD5Util;
 import cn.com.bonc.sce.tool.RestApiUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.json.JSONUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +20,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.PublicKey;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,14 +52,12 @@ public class AuthenticationService {
      * @param webRequest Request参数payload
      * @return JWT中的body(Claims类型)
      */
-    public Claims validateJWT(NativeWebRequest webRequest){
+    public Claims validateJWT(NativeWebRequest webRequest) throws InvalidTokenException {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String ip = RestApiUtil.getIpAddr( request );
+        String userAgent = request.getHeader( "User-Agent" );
         String ticket = webRequest.getHeader( "authentication" );
         Map payloadsMap = JWTUtil.parseJWT( ticket );
-        if( payloadsMap == null ){
-            return null;
-        }
         Claims claims = null;
         Object userId = payloadsMap.get( "userId" );
         PublicKey publicKey;
@@ -70,16 +67,13 @@ public class AuthenticationService {
             String headerAppId = webRequest.getHeader( "appId" );
             String headerAppToken = webRequest.getHeader( "appToken" );
             if( headerAppId == null || headerAppToken == null ){
-                log.warn( "JWT认证失败 -> appId或appToken为空" );
-                return null;
+                throw new InvalidTokenException( "JWT认证失败 -> appId或appToken为空" );
             }
             if( !headerAppId.equals( payloadAppId ) ){
-                log.warn( "JWT认证失败 -> appId不存在" );
-                return null;
+                throw new InvalidTokenException( "JWT认证失败 -> appId不存在" );
             }
             if( !appDaoClient.getAppToken( headerAppId ).equals( headerAppToken ) ){
-                log.warn( "JWT认证失败 -> appId与appToken不匹配" );
-                return null;
+                throw new InvalidTokenException( "JWT认证失败 -> appId与appToken不匹配" );
             }
             publicKey = SecureUtil.generatePublicKey( "EC", Base64.decode( this.publicKey ) );
         } else {
@@ -89,13 +83,12 @@ public class AuthenticationService {
         try {
             claims = Jwts.parser().setSigningKey( publicKey ).parseClaimsJws( ticket ).getBody();
         }catch ( ExpiredJwtException e ){
-            log.warn( "JWT认证失败 -> 该JWT已超时" );
+            throw new InvalidTokenException( "JWT认证失败 -> 该JWT已超时" );
         }catch ( Exception e ){
-            log.warn( "JWT认证失败 -> {}", e.getMessage());
+            throw new InvalidTokenException( "JWT认证失败 -> " + e.getMessage() );
         }
-//        if( claims != null && userId != null && !MD5Util.getMd5String( ip ).equals( claims.get("IPAdd") ) ){
-//            log.warn( "JWT认证失败 -> IP地址不匹配，当前提交ip地址={}", ip );
-//            return null;
+//        if( claims != null && userId != null && !MD5Util.getMd5String( userAgent ).equals( claims.get( "IPAdd" ) ) ){
+//            throw new InvalidTokenException( "JWT认证失败 -> IP地址不匹配，当前提交ip地址=" + ip + "，userAgent=" + userAgent );
 //        }
         return claims;
     }
@@ -106,6 +99,10 @@ public class AuthenticationService {
 
     public Map<String, Object> getAppInfoById(String appId){
         return appDaoClient.getAppInfoById( appId );
+    }
+
+    public int getUserAppAuth( String userId, String appId ){
+        return appDaoClient.getUserAppAuth( userId, appId );
     }
 
 }

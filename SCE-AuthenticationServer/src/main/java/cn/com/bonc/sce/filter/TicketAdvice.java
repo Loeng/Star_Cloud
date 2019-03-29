@@ -42,9 +42,6 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
         if( parameter.hasParameterAnnotation( Payloads.class )){
             return claims;
         }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
-            if ( claims == null ) {
-                return "";
-            }
             return claims.get( "userId" );
         }
         return "";

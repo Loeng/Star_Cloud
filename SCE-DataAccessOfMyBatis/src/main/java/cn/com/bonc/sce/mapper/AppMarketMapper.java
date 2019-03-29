@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,5 +22,7 @@ public interface AppMarketMapper {
     void updateBacklog( Map map );
 
     Map<String, Object> getAppInfoById(String appId);
+
+    int selectUserAppAuth( @Param( "userId" ) String userId, @Param( "appId" ) String appId );
 
 }

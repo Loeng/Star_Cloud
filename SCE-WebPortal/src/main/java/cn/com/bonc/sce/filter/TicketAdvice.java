@@ -41,14 +41,10 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
         //验证JWT
         Claims claims = authenticationService.validateJWT( webRequest );
 
-        if ( parameter.hasParameterAnnotation( Payloads.class ) ) {
+        if( parameter.hasParameterAnnotation( Payloads.class )){
             return claims;
-        } else if ( parameter.hasParameterAnnotation( CurrentUserId.class ) ) {
-            if ( claims == null ) {
-                return "";
-            } else {
-                return claims.get("userId");
-            }
+        }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
+            return claims.get( "userId" );
         }
         return "";
     }

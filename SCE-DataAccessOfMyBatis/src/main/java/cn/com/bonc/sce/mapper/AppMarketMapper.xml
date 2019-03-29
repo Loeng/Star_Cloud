@@ -77,4 +77,10 @@ GROUP BY
         WHERE APP_ID = #{appId}
     </select>
 
+    <select id="selectUserAppAuth" resultType="int" >
+        SELECT count(1)
+        FROM STARCLOUDMARKET.SCE_MARKET_APP_OPEN
+        WHERE APP_ID = #{appId} AND USER_ID = #{userId}
+    </select>
+
 </mapper>

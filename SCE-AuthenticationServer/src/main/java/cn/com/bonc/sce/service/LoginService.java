@@ -70,11 +70,15 @@ public class LoginService {
         // ip地址
         String ip = RestApiUtil.getIpAddr( request );
 //        claims.put( "IPAdd", MD5Util.getMd5String( ip ) );
-        log.info( "生成JWT，用户名：{}，用户IP：{}", authenticatedUser.getLoginName(), ip );
-
         // user-Agent
-//        String userAgent = request.getHeader( "User-Agent" );
-//        claims.put( "" );
+        String userAgent = request.getHeader( "User-Agent" );
+        if( userAgent == null ){
+            log.warn( "请求中缺少User-Agent" );
+            throw new NullPointerException();
+        }
+        claims.put( "IPAdd", MD5Util.getMd5String( userAgent ) );
+
+        log.info( "生成JWT，用户名：{}，用户IP：{}，userAgent={}", authenticatedUser.getLoginName(), ip, userAgent );
         return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey(), expirationDate );
     }
 

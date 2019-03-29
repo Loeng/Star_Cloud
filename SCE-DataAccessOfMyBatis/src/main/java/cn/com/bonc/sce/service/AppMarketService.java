@@ -85,4 +85,8 @@ public class AppMarketService {
         return appMarketMapper.getAppInfoById( appId );
     }
 
+    public int getUserAppAuth( String userId, String appId ){
+        return appMarketMapper.selectUserAppAuth( userId, appId );
+    }
+
 }

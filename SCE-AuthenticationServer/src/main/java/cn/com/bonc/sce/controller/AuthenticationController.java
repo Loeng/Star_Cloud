@@ -83,19 +83,7 @@ public class AuthenticationController {
         User authenticatedUser;
 
         /*
-         * 1. 检查应用Id与应用Token
-         */
-        if( authentication.getAppId() == null || authentication.getAppToken() == null ){
-            // 默认平台登陆
-        }else {
-            if( !authentication.getAppToken().equals( authenticationService.getAppToken( authentication.getAppId() ) ) ){
-                log.info( "应用Id或应用Token无效" );
-                return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
-            }
-        }
-
-        /*
-         * 2. 判断用户的登录类型是否支持，并查找是否存在匹配的用户数据
+         * 1. 判断用户的登录类型是否支持，并查找是否存在匹配的用户数据
          */
         try {
             authenticatedUser = loginService.getUserInfo( authentication );
@@ -108,7 +96,7 @@ public class AuthenticationController {
         }
 
         /*
-         * 3. 检查用户的登录信息是否匹配
+         * 2. 检查用户的登录信息是否匹配
          */
         // 查找不到用户数据
         if ( authenticatedUser == null ) {
@@ -129,18 +117,24 @@ public class AuthenticationController {
         }
 
         /*
-         * 4. 生成登录信息
+         * 3. 生成登录信息
          */
-        Map loginResult = loginService.generateLoginResult( authenticatedUser, new Date( System.currentTimeMillis() + DateConstants.SEVEN_DAY ), request );
+        Map loginResult;
+        try {
+            loginResult = loginService.generateLoginResult( authenticatedUser, new Date( System.currentTimeMillis() + DateConstants.SEVEN_DAY ), request );
+        } catch ( NullPointerException e ){
+            return new RestRecord( 100, WebMessageConstants.SCE_PORTAL_MSG_100 );
+        }
+
 
         /*
-         * 5. 更新用户登录状态（是否首次登录）
+         * 4. 更新用户登录状态（是否首次登录）
          * 以 2019.03.04 的系统设计来看，所有除系统管理员外的账户类型都需要在初次登陆时进行用户数据验证。理应当用户数据校验完成
          * 后由前台发起用户认证状态(首次登录完成、用户信息确认完成、初登陆密码修改完成等)的修改请求。故此处暂不做任何处理
          */
         // loginService.confirmUserFirstLogin( authenticatedUser );
 
-        //6.记录用户本次登陆时间，上次登陆时间，登陆次数
+        //5.记录用户本次登陆时间，上次登陆时间，登陆次数
         userService.updateUserLoginTimeAndCounts( authenticatedUser.getUserId() );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, loginResult );
     }
@@ -231,10 +225,11 @@ public class AuthenticationController {
     @PostMapping( "/temp_token" )
     public RestRecord temp_token( @CurrentUserId String userId,
                                   @RequestParam( value = "appId", required = false) String appId,
-                                  @RequestParam( value = "appToken", required = false) String appToken,
+                                  @RequestParam( value = "token", required = false) String appToken,
+                                  @RequestParam( value = "userId", required = false) String userID,
                                   HttpServletRequest request){
-        if( userId.equals( "" ) ){
-            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
+        if( !userID.equals( userId ) ){
+            return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
         }
         Map<String, Object> result = new HashMap<>(  6 );
         Map<String, Object> ppInfo = null;
@@ -244,11 +239,16 @@ public class AuthenticationController {
             result.put( "starCloud", true );
         }else {
             ppInfo = authenticationService.getAppInfoById( appId );
-            if(( ppInfo == null || ppInfo.get( "APP_TOKEN" ) == null || !ppInfo.get( "APP_TOKEN" ).equals( appToken ) )){
+            if( ppInfo == null || ppInfo.get( "APP_TOKEN" ) == null || !ppInfo.get( "APP_TOKEN" ).equals( appToken ) ){
                 log.warn( "应用ID或Token无效（ID：{}，Token：{}）", appId, appToken );
                 return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
             }
-            result.put( "starCloud", false );
+            if( authenticationService.getUserAppAuth( userId, appId ) < 1 ){
+                // 用户没有开通该应用，则默认跳转到平台
+                result.put( "starCloud", true );
+            } else {
+                result.put( "starCloud", false );
+            }
         }
         try {
             result.put( "APP_LINK", ppInfo.get( "APP_LINK" ) );
@@ -273,9 +273,6 @@ public class AuthenticationController {
      */
     @GetMapping( "/ticket" )
     public RestRecord ticket( @CurrentUserId String userId, HttpServletRequest request ) {
-        if ( userId.equals( "" ) ) {
-            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
-        }
         User user = userService.getUserByUserId( userId );
         String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request );
         Map<String, String> result = new HashMap<>( 1 );
@@ -290,9 +287,6 @@ public class AuthenticationController {
      */
     @GetMapping( "/refresh" )
     public RestRecord refresh( @CurrentUserId String userId, HttpServletRequest request ){
-        if(userId.equals( "" )){
-            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
-        }
         User user = userService.getUserByUserId( userId );
         String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request );
         Map<String, String> result = new HashMap<>(1);
