@@ -86,4 +86,11 @@ public class ParentController {
         return new RestRecord(200,MessageConstants.SCE_MSG_0200,parentService.getParentList(id));
     }
 
+    @ApiOperation(value = "获取申请列表", notes="获取申请列表", httpMethod = "GET")
+    @GetMapping("/getApplyList")
+    @ResponseBody
+    public RestRecord getApplyList(@RequestParam( "id" ) String id){
+        return new RestRecord(200,MessageConstants.SCE_MSG_0200,parentService.getApplyList(id));
+    }
+
 }

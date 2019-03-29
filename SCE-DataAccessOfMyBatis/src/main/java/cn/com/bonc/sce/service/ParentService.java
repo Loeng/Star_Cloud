@@ -34,4 +34,8 @@ public class ParentService {
     public List<Map> getParentList(String id) {
         return parentDao.getParentList(id);
     }
+
+    public List<Map> getApplyList(String id) {
+        return parentDao.getApplyList(id);
+    }
 }

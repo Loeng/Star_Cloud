@@ -26,4 +26,7 @@ public interface ParentDao {
 
     @RequestMapping( value = "/parent/getParentList", method = RequestMethod.GET )
     RestRecord getParentList(@RequestParam("id") String id);
+
+    @RequestMapping( value = "/parent/getApplyList", method = RequestMethod.GET )
+    RestRecord getApplyList(@RequestParam("id") String id);
 }

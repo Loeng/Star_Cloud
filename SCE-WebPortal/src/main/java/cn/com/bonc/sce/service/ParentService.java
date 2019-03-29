@@ -31,4 +31,8 @@ public class ParentService {
     public RestRecord getParentList(String id) {
         return parentDao.getParentList(id);
     }
+
+    public RestRecord getApplyList(String id) {
+        return parentDao.getApplyList(id);
+    }
 }

@@ -31,4 +31,8 @@ public class ParentDao {
     public List<Map> getParentList(String id) {
         return parentMapper.getParentList(id);
     }
+
+    public List<Map> getApplyList(String id) {
+        return parentMapper.getApplyList(id);
+    }
 }

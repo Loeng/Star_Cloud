@@ -19,4 +19,6 @@ public interface ParentMapper {
     int unbind(@Param("parentId") String parentId, @Param("studentId") String studentId);
 
     List<Map> getParentList(@Param("id") String id);
+
+    List<Map> getApplyList(@Param("id") String id);
 }

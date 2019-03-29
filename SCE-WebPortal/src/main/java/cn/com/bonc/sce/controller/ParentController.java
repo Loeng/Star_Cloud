@@ -54,4 +54,11 @@ public class ParentController {
         return parentService.getParentList(id);
     }
 
+    @ApiOperation(value = "获取申请列表", notes="获取申请列表", httpMethod = "GET")
+    @GetMapping("/getApplyList")
+    @ResponseBody
+    public RestRecord getApplyList(@RequestParam( "id" ) String id){
+        return parentService.getApplyList(id);
+    }
+
 }
