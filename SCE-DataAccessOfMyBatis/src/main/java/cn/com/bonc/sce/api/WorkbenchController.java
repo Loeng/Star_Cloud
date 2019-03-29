@@ -1,11 +1,20 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.bean.AccountBean;
+import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.WorkbenchDao;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IdWorker;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -15,6 +24,9 @@ public class WorkbenchController {
 
     @Autowired
     private WorkbenchDao workbenchDao;
+
+    @Autowired
+    private IdWorker idWorker;
 
     @PutMapping("/deleteAddress/{ID}")
     @ResponseBody
@@ -70,10 +82,49 @@ public class WorkbenchController {
         }
         //查询学生是否已经被绑定
         int isBinding = workbenchDao.queryIsBinding(info.get("USER_ID").toString(), STU_USER_ID);
-        if(isBinding != 0){
+        if (isBinding != 0) {
             return new RestRecord("学生不能被同一个账号重复绑定", 0);
         }
-        return new RestRecord(200, workbenchDao.addStudentBinding(info.get("USER_ID").toString(),STU_USER_ID));
+        return new RestRecord(200, workbenchDao.addStudentBinding(info.get("USER_ID").toString(), STU_USER_ID));
+    }
+
+    @GetMapping("/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getOrganization(@PathVariable("USER_ID") String USER_ID,
+                                      @PathVariable("LOGIN_NAME") String LOGIN_NAME,
+                                      @PathVariable("USER_NAME") String USER_NAME,
+                                      @PathVariable(value = "pageNum") Integer pageNum,
+                                      @PathVariable(value = "pageSize") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List schoolList = workbenchDao.getOrganization(USER_ID, LOGIN_NAME, USER_NAME);
+        PageInfo pageInfo = new PageInfo(schoolList);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200, pageInfo);
+    }
+
+    @PostMapping("/addOrganization")
+    @ResponseBody
+    @Transactional
+    public RestRecord addOrganization(@RequestBody Map<String, Object> info) {
+        String USER_ID = workbenchDao.queryUserId(info);
+        if(USER_ID != null ){
+            return new RestRecord("账号已经存在", 0);
+        }
+        UserBean user = new UserBean();
+        long userId = idWorker.nextId();
+        String secret = Secret.generateSecret();
+
+        user.setUserId( userId );
+        user.setSecret( secret );
+        user.setUserType( workbenchDao.queryUserType(info));//查询操作人员的usertype，创建的用户和他一致
+        user.setOrganizationId(workbenchDao.queryOrganizationId(info));
+        user.setUserName(info.get("USER_NAME").toString());
+        user.setPhoneNumber(info.get("PHONE_NUMBER").toString());
+        user.setLoginName(info.get("LOGIN_NAME").toString());
+
+        workbenchDao.addOrganization(user);
+        AccountBean account = new AccountBean( idWorker.nextId(), info.get( "PASSWORD" ).toString(), 1, userId );
+
+        return new RestRecord(200, workbenchDao.saveAccount(account));
     }
 
 }

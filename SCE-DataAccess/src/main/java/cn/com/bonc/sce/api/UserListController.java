@@ -153,12 +153,12 @@ public class UserListController {
             List< Map< String, Object > > roleCount = userInfoRepository.getRoleCount();
             Integer activeCount = userInfoRepository.getActiveCount( time );
             Float activeProportion = activeCount.floatValue() / userCount;
-            DecimalFormat df = new DecimalFormat( "#.##%" );
+            DecimalFormat df = new DecimalFormat( "#.##" );
             Map< String, Object > result = new HashMap<>();
             result.put( "userCount", userCount );
             result.put( "roleCount", roleCount );
             result.put( "activeCount", activeCount );
-            result.put( "activeProportion", df.format( activeProportion ) );
+            result.put( "activeProportion", Double.valueOf( df.format( activeProportion ) ) );
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
         } catch ( Exception e ) {
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );

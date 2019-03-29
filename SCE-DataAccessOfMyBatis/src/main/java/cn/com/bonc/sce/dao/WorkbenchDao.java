@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.bean.AccountBean;
+import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.mapper.WorkbenchMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -55,6 +57,30 @@ public class WorkbenchDao {
 
     public int addStudentBinding(String PARENT_USER_ID, String STU_USER_ID) {
         return workbenchMapper.addStudentBinding(PARENT_USER_ID, STU_USER_ID);
+    }
+
+    public List<Map> getOrganization(String USER_ID, String LOGIN_NAME, String USER_NAME) {
+        return workbenchMapper.getOrganization(USER_ID, LOGIN_NAME, USER_NAME);
+    }
+
+    public String queryUserId(Map<String, Object> info) {
+        return workbenchMapper.queryUserId(info);
+    }
+
+    public int queryUserType(Map<String, Object> info) {
+        return workbenchMapper.queryUserType(info);
+    }
+
+    public long queryOrganizationId(Map<String, Object> info) {
+        return workbenchMapper.queryOrganizationId(info);
+    }
+
+    public int addOrganization(UserBean userBean) {
+        return workbenchMapper.addOrganization(userBean);
+    }
+
+    public int saveAccount(AccountBean account) {
+        return workbenchMapper.saveAccount(account);
     }
 
 }

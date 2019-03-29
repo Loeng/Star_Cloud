@@ -68,4 +68,9 @@ public class UserService {
     public String testCertificate(String loginName) {
         return userDao.testCertificate(loginName);
     }
+
+    public String getIdByPhone(String phone){
+        return userDao.getIdByPhone(phone);
+    }
+
 }

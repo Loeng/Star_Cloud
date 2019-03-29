@@ -4,11 +4,15 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.AppInfoEntity;
 import cn.com.bonc.sce.entity.AppTypeRelEntity;
 import cn.com.bonc.sce.entity.MarketAppVersion;
+import cn.com.bonc.sce.entity.PriceModeEntity;
 import cn.com.bonc.sce.model.AppAddModel;
 import cn.com.bonc.sce.model.AppTypeMode;
 import cn.com.bonc.sce.model.PlatformAddModel;
+import cn.com.bonc.sce.model.PriceModeModel;
 import cn.com.bonc.sce.repository.*;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IdWorker;
+import cn.com.bonc.sce.utils.ClassCopyUtil;
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author jc_D
@@ -28,6 +33,10 @@ import java.util.Set;
 @Slf4j
 @Service
 public class AppManageService {
+
+    @Autowired
+    private IdWorker idWorker;
+
     @Autowired
     private FileResourceRepository fileResourceRepository;
 
@@ -41,6 +50,9 @@ public class AppManageService {
 
     @Autowired
     private CompanyInfoRepository companyInfoRepository;
+
+    @Autowired
+    PriceModeRepository priceModeRepository;
 
     @Transactional( rollbackFor = Exception.class )
     public RestRecord addAppInfo( AppAddModel appInfo, String uid ) {
@@ -121,7 +133,7 @@ public class AppManageService {
     }
 
     @Transactional( rollbackFor = Exception.class )
-    public RestRecord addPlatFormInfo( PlatformAddModel platFormInfo, String uid ) {
+    public RestRecord addPlatFormInfo( PlatformAddModel platFormInfo, String uid ) throws Exception {
         //根据uid查companyId
         Long companyId = companyInfoRepository.getCompanyIdByUid( uid );
         //取icon
@@ -129,7 +141,7 @@ public class AppManageService {
             return new RestRecord( 423, "您不是厂商用户，无法新增平台应用" );
         }
         String iconAddress = getFileUrlById( platFormInfo.getAppIcon() );
-        //1.appinfo表
+        //1、appinfo表
         AppInfoEntity appInfoEntity = new AppInfoEntity();
         appInfoEntity.setAppIcon( iconAddress );
         appInfoEntity.setAppName( platFormInfo.getAppName() );
@@ -139,21 +151,14 @@ public class AppManageService {
         appInfoEntity.setAppSource( "pt" );
         appInfoEntity.setAppNotes( platFormInfo.getAppNotes() );
         appInfoEntity.setCompanyId( companyId );
-
-        //开发者信息
-        String idCardUrl = getFileUrlById( platFormInfo.getDeveloperIdPic() );
-        appInfoEntity.setDeveloperName( platFormInfo.getDeveloperName() );
-        appInfoEntity.setDeveloperIdNumber( platFormInfo.getDeveloperIdNumber() );
-        appInfoEntity.setDeveloperPhone( platFormInfo.getDeveloperPhone() );
-        appInfoEntity.setMainContact( platFormInfo.getMainContact() );
-        appInfoEntity.setDeveloperIdPic( idCardUrl );
-        appInfoEntity.setChargeMode( platFormInfo.getChargeMode() );
-
-        //财务凭证
+        //财务凭证(文件路径)
         String auditVoucher = getFilesUrlById( platFormInfo.getAuditVoucher() );
         appInfoEntity.setAuditVoucher( auditVoucher );
+        //合同文件(文件路径)
+        String contractFile = getFilesUrlById( platFormInfo.getContractFile() );
+        appInfoEntity.setContractFile( contractFile );
 
-        ////appinfo入库操作
+        //appinfo入库操作
         AppInfoEntity info = appInfoRepository.saveAndFlush( appInfoEntity );
         String appId = info.getAppId();
         //2.类型关系表
@@ -174,30 +179,32 @@ public class AppManageService {
         // marketAppVersion.setAppDownloadAddress( platFormAddress );
         marketAppVersion.setAppVersion( platFormInfo.getAppVersion() );
         marketAppVersion.setVersionInfo( platFormInfo.getAppNotes() );
-        marketAppVersion.setPackageName( platFormInfo.getPackageName() );
         marketAppVersion.setAppStatus( "1" );
         marketAppVersion.setAppPcPic( pcUrl );
         marketAppVersion.setCreateTime( new Date() );
         marketAppVersion.setIsDelete( 1L );
         marketAppVersion.setCreateUserId( uid );
-        marketAppVersion.setIndexUrl( platFormInfo.getIndexUrl() );
-
-        marketAppVersion.setTokenAddress( platFormInfo.getTokenAddress() );
         marketAppVersion.setStoreLocation( platFormAddress );
-        marketAppVersion.setTestUrl( platFormInfo.getTestUrl() );
-        String installInfo = platFormInfo.getInstallInfo();
         String newFeatures = platFormInfo.getNewFeatures();
-        String md5Code = platFormInfo.getMd5Code();
         if ( StringUtils.isNotEmpty( newFeatures ) ) {
             marketAppVersion.setNewFeatures( newFeatures );
         }
-        if ( StringUtils.isNotEmpty( installInfo ) ) {
-            marketAppVersion.setInstallInfo( installInfo );
-        }
-        if ( StringUtils.isNotEmpty( md5Code ) ) {
-            marketAppVersion.setMd5Code( md5Code );
-        }
+        marketAppVersion.setCompanyRatio( platFormInfo.getCompanyRatio() );
+        marketAppVersion.setPlatformRatio( platFormInfo.getPlatformRatio() );
         marketAppVersionRepository.saveAndFlush( marketAppVersion );
+
+        //存储 价格与计费模式相关信息
+        for ( PriceModeModel priceModeModel : platFormInfo.getPriceModeModel() ) {
+            PriceModeEntity priceModeEntity = new PriceModeEntity();
+            priceModeEntity.setId( String.valueOf( idWorker.nextId() ) );
+            priceModeEntity.setAppId( appId );
+            priceModeEntity.setAppVersion( platFormInfo.getAppVersion() );
+            priceModeEntity.setIsDelete( 1 );
+            ClassCopyUtil.Copy( priceModeModel, priceModeEntity );
+            priceModeRepository.save( priceModeEntity );
+        }
+
+
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appId );
     }
 

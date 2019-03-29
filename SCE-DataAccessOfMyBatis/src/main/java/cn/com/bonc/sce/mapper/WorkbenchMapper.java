@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.mapper;
 
+import cn.com.bonc.sce.bean.AccountBean;
+import cn.com.bonc.sce.bean.UserBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,8 +27,20 @@ public interface WorkbenchMapper {
 
     String queryStudentUserId(Map<String, Object> info);
 
-    int queryIsBinding(@Param("PARENT_USER_ID") String PARENT_USER_ID , @Param("STUDENT_USER_ID") String STU_USER_ID);
+    int queryIsBinding(@Param("PARENT_USER_ID") String PARENT_USER_ID, @Param("STUDENT_USER_ID") String STU_USER_ID);
 
-    int addStudentBinding(@Param("PARENT_USER_ID") String PARENT_USER_ID , @Param("STUDENT_USER_ID") String STU_USER_ID);
+    int addStudentBinding(@Param("PARENT_USER_ID") String PARENT_USER_ID, @Param("STUDENT_USER_ID") String STU_USER_ID);
+
+    List<Map> getOrganization(@Param("USER_ID") String USER_ID, @Param("LOGIN_NAME") String LOGIN_NAME,@Param("USER_NAME") String USER_NAME);
+
+    String queryUserId(Map<String, Object> info);
+
+    int queryUserType(Map<String, Object> info);
+
+    long queryOrganizationId(Map<String, Object> info);
+
+    int addOrganization(UserBean userBean);
+
+    int saveAccount(AccountBean account);
 
 }

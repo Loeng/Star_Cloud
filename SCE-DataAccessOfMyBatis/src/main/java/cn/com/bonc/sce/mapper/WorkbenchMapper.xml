@@ -78,7 +78,7 @@
             AND scup.PASSWORD = #{PASSWORD}
     </select>
 
-    <select id="queryIsBinding"  resultType="java.lang.Integer">
+    <select id="queryIsBinding" resultType="java.lang.Integer">
         select count(1) from STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL
         where PARENT_USER_ID = #{PARENT_USER_ID} and STUDENT_USER_ID = #{STUDENT_USER_ID}
     </select>
@@ -89,6 +89,46 @@
         </selectKey>
         insert into STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL(ID,PARENT_USER_ID,STUDENT_USER_ID,IS_MAIN)
         values(#{ID},#{PARENT_USER_ID},#{STUDENT_USER_ID},1)
+    </insert>
+
+    <select id="getOrganization" parameterType="String" resultType="Map">
+        select LOGIN_NAME , USER_NAME , PHONE_NUMBER , ISADMINISTRATORS , CREATE_TIME from
+        STARCLOUDPORTAL.SCE_COMMON_USER
+        where ORGANIZATION_ID = (select ORGANIZATION_ID from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{USER_ID})
+        and IS_DELETE = 1
+        <if test="LOGIN_NAME != null and LOGIN_NAME != 'null' and  LOGIN_NAME !='' ">
+            and LOGIN_NAME like CONCAT('%',CONCAT(#{LOGIN_NAME},'%'))
+        </if>
+        <if test="USER_NAME != null and USER_NAME != 'null' and  USER_NAME !='' ">
+            and USER_NAME like CONCAT('%',CONCAT(#{USER_NAME},'%'))
+        </if>
+    </select>
+
+    <select id="queryUserId" parameterType="Map" resultType="java.lang.String">
+        SELECT LOGIN_NAME from STARCLOUDPORTAL.SCE_COMMON_USER where LOGIN_NAME = #{LOGIN_NAME}
+    </select>
+
+    <select id="queryOrganizationId" parameterType="Map" resultType="java.lang.Long">
+        SELECT ORGANIZATION_ID from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{USER_ID}
+    </select>
+
+    <select id="queryUserType" parameterType="Map" resultType="java.lang.Integer">
+        select USER_TYPE from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{USER_ID}
+    </select>
+
+    <insert id="addOrganization" parameterType="cn.com.bonc.sce.bean.UserBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
+            (USER_ID,SECRET,LOGIN_NAME,USER_TYPE,PHONE_NUMBER,USER_NAME)
+        VALUES
+            (#{userId,jdbcType=BIGINT},#{secret,jdbcType=VARCHAR},#{loginName,jdbcType=VARCHAR},
+            #{userType,jdbcType=INTEGER},#{phoneNumber,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="saveAccount" parameterType="cn.com.bonc.sce.bean.AccountBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
+        (ID,PASSWORD,IS_DELETE,USER_ID)
+        VALUES
+        (#{id},#{password},#{isDelete},#{userId})
     </insert>
 
 </mapper>

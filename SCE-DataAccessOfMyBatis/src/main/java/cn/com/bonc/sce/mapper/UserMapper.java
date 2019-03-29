@@ -42,4 +42,6 @@ public interface UserMapper {
     int updatePwdByName(@Param("loginName") String loginName, @Param("password") String password);
 
     String testCertificate(@Param("loginName") String loginName);
+
+    String getIdByPhone(@Param("phone") String phone);
 }

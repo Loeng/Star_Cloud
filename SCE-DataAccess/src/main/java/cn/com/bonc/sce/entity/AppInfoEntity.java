@@ -27,15 +27,15 @@ import java.util.Set;
 @Table( name = "SCE_MARKET_APP_INFO", schema = "STARCLOUDMARKET" )
 public class AppInfoEntity {
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @GeneratedValue( generator = "system-uuid" )
+    @GenericGenerator( name = "system-uuid", strategy = "uuid" )
     @Column( name = "APP_ID" )
     private String appId;
 
-    @JsonIgnoreProperties(value = { "appInfo" })
+    @JsonIgnoreProperties( value = { "appInfo" } )
     @ManyToMany
     @JoinTable( schema = "STARCLOUDMARKET", name = "SCE_MARKET_APP_APPTYPE_REL", joinColumns = @JoinColumn( name = "APP_ID" ),
-            inverseJoinColumns = @JoinColumn( name = "APP_TYPE_ID" ))
+            inverseJoinColumns = @JoinColumn( name = "APP_TYPE_ID" ) )
     private Set< AppTypeEntity > appTypes = new HashSet<>();
 
     @Column( name = "APP_NAME" )
@@ -109,6 +109,12 @@ public class AppInfoEntity {
 
     @Column( name = "CHARGE_MODE" )
     private String chargeMode;
+
+    @Column( name = "APP_TOKEN" )
+    private String appToken;
+
+    @Column( name = "CONTRACT_FILE" )
+    private String contractFile;
 
 /*    @Override
     public String toString() {

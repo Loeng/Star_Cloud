@@ -66,4 +66,8 @@ public class UserDao {
     public String testCertificate(String loginName) {
         return userMapper.testCertificate(loginName);
     }
+
+    public String getIdByPhone(String phone) {
+        return userMapper.getIdByPhone(phone);
+    }
 }
