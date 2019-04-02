@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.bonc.sce.mapper.StudentMapper">
+    <select id="getParents" resultType="Map">
+        SELECT PARENT_USER_ID,IS_MAIN,RELATIONSHIP,USER_NAME
+        FROM STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL r
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER u ON r.PARENT_USER_ID=u.USER_ID AND u.IS_DELETE=1
+        WHERE STUDENT_USER_ID=#{id}
+    </select>
 
+    <select id="getApplyList" resultType="Map">
+        SELECT b.ID,USER_NAME,RELATIONSHIP,APPLY_USER_ID
+        FROM STARCLOUDPORTAL.SCE_BINDING_APPLY b
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER u ON b.APPLY_USER_ID=u.USER_ID AND u.IS_DELETE=1
+        WHERE TARGET_USER_ID=#{id}
+        AND b.IS_DELETE=1
+        AND b.APPLY_RESULT=0
+    </select>
+
+    <update id="audit">
+        UPDATE STARCLOUDPORTAL.SCE_BINDING_APPLY
+        SET APPLY_RESULT=#{applyResult},
+        <if test="applyResult != null">
+            REJECT_REASON=#{rejectReason}
+        </if>
+        WHERE ID = #{id}
+    </update>
+
+    <insert id="addRelation">
+        INSERT INTO STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL(ID,PARENT_USER_ID,STUDENT_USER_ID,RELATIONSHIP)
+        VALUES (#{id},#{applyUserId},#{bindUserId},#{relationship})
+    </insert>
 </mapper>
