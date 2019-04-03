@@ -44,4 +44,11 @@ public interface UserMapper {
     String testCertificate(@Param("loginName") String loginName);
 
     String getIdByPhone(@Param("phone") String phone);
+
+    List<Map> getTeachers(@Param("organizationId")long organizationId,
+                          @Param("userName")String userName, @Param("loginName")String loginName,
+                          @Param("gender")String gender, @Param("position")String position,
+                          @Param("accountStatus")Integer accountStatus);
+
+    int delTeacher(@Param("id") String id);
 }

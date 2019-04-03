@@ -62,4 +62,12 @@ public class UserManagerService {
     public RestRecord testCertificcate(String loginName, String certificate) {
         return userManagerDao.testCertificate(loginName,certificate);
     }
+
+    public RestRecord getTeachers(long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus, Integer pageNum, Integer pageSize) {
+        return userManagerDao.getTeachers(organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
+    }
+
+    public RestRecord delTeacher(String id) {
+        return userManagerDao.delTeacher(id);
+    }
 }

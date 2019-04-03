@@ -70,4 +70,12 @@ public class UserDao {
     public String getIdByPhone(String phone) {
         return userMapper.getIdByPhone(phone);
     }
+
+    public List<Map> getTeachers(long organizationId,String userName, String loginName, String gender, String position, Integer accountStatus) {
+        return userMapper.getTeachers(organizationId,userName,loginName,gender,position,accountStatus);
+    }
+
+    public int delTeacher(String id) {
+        return userMapper.delTeacher(id);
+    }
 }

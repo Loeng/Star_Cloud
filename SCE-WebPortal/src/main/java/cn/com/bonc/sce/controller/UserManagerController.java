@@ -142,4 +142,31 @@ public class UserManagerController {
                                       @RequestParam("certificate") String certificate){
         return userManagerService.testCertificcate(loginName,certificate);
     }
+
+    @ApiOperation(value = "获取在职教师列表", notes="获取查询条件，返回在职教师列表", httpMethod = "GET")
+    @GetMapping("/getTeachers/{pageNum}/{pageSize}")
+    @ResponseBody
+    /**
+     * gender:1 男 ，0 女， null 全部
+     * position：null 全部
+     * accountStatus：0 未激活，1 已激活，null 全部
+     */
+    public RestRecord getTeachers(@RequestParam ( value = "organizationId") long organizationId,
+                                @RequestParam ( value = "userName",required = false) String userName,
+                                @RequestParam(value ="loginName",required = false ) String loginName,
+                                @RequestParam ( value = "gender",required = false) String gender,
+                                @RequestParam ( value = "position",required = false) String position,
+                                @RequestParam ( value = "accountStatus",required = false) Integer accountStatus,
+                                @PathVariable (value = "pageNum")Integer pageNum,
+                                @PathVariable (value = "pageSize") Integer pageSize ){
+        return userManagerService.getTeachers(organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
+    }
+
+    @ApiOperation(value = "删除教师", notes="通过用户id，删除用户", httpMethod = "DELETE")
+    @DeleteMapping("/delTeacher")
+    @ResponseBody
+    public RestRecord delTeacher(@RequestParam( "id" ) String id){
+        return userManagerService.delTeacher(id);
+    }
+
 }
