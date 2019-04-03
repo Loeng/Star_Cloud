@@ -12,6 +12,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Leucippus
  * @version 0.1
@@ -26,24 +30,22 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter( MethodParameter parameter ) {
-
-
-        if( parameter.hasParameterAnnotation( Payloads.class ) || parameter.hasParameterAnnotation( CurrentUserId.class )){
-            return  true;
-        }
-        return false;
+        return ( parameter.hasParameterAnnotation( Payloads.class ) || parameter.hasParameterAnnotation( CurrentUserId.class ));
     }
 
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
         //验证JWT
         Claims claims = service.validateJWT( webRequest );
+        List<Map<String, Object>> result = new ArrayList<>();
 
+        result.add(claims);
         if( parameter.hasParameterAnnotation( Payloads.class )){
-            return claims;
+            return result;
         }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
             return claims.get( "userId" );
         }
         return "";
     }
+
 }

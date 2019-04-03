@@ -25,4 +25,8 @@ public interface AppMarketMapper {
 
     int selectUserAppAuth( @Param( "userId" ) String userId, @Param( "appId" ) String appId );
 
+    List<Map> selectUserToApp( @Param( "appId" ) String appId, @Param( "users" ) List users, @Param( "userTypes" ) List userTypes );
+
+
+
 }

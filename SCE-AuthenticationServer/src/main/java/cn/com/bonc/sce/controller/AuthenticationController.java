@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.controller;
 
 import cn.com.bonc.sce.annotation.CurrentUserId;
+import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.constants.DateConstants;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
@@ -26,13 +27,13 @@ import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +46,10 @@ import java.util.Map;
 @RequestMapping( "/authentication" )
 @RestController
 public class AuthenticationController {
+
+    public static final String LOGIN = "login";
+    private static final String TEMP_TOKEN = "temp_token";
+    private static final String REFRESH = "refresh";
 
     @Value("{sce.appId}")
     private String appId;
@@ -216,22 +221,24 @@ public class AuthenticationController {
 
     /**
      * 长期 ticket 换取30秒 temp_token 接口 （同时更新ticket时间）
-     * @param userId 用户id
+     * @param claims payload
      * @param appId appId
      * @param appToken appToken
      * @param request  request
      * @return RestRecord
      */
     @PostMapping( "/temp_token" )
-    public RestRecord temp_token( @CurrentUserId String userId,
-                                  @RequestParam( value = "appId", required = false) String appId,
-                                  @RequestParam( value = "token", required = false) String appToken,
-                                  @RequestParam( value = "userId", required = false) String userID,
-                                  HttpServletRequest request){
-        if( !userID.equals( userId ) ){
+    public RestRecord temp_token(@Payloads List<Map> claims,
+                                 @RequestParam( value = "appId", required = false) String appId,
+                                 @RequestParam( value = "token", required = false) String appToken,
+                                 @RequestParam( value = "userId" ) String userID,
+                                 HttpServletRequest request){
+        String userId = claims.get(0).get("userId").toString();
+        String subject = claims.get(0).get("sub").toString();
+        if( !userID.equals( userId ) || !subject.equals( LOGIN ) ){
             return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
         }
-        Map<String, Object> result = new HashMap<>(  6 );
+        Map<String, Object> result = new HashMap<>( 6 );
         Map<String, Object> ppInfo = null;
         if( appId == null || appToken == null ){
             // 默认平台登陆
@@ -256,9 +263,9 @@ public class AuthenticationController {
             result.put( "APP_LINK", "" );
         }
         User user = userService.getUserByUserId( userId );
-        String temp_token = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ), request );
+        String temp_token = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THIRTY_SECOND ), request, TEMP_TOKEN );
         result.put( "temp_token", temp_token );
-        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.SEVEN_DAY ), request );
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.SEVEN_DAY ), request, LOGIN );
         result.put( "authentication", ticket );
         result.put( "userId", userId );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
@@ -272,10 +279,11 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/ticket" )
-    public RestRecord ticket( @CurrentUserId String userId, HttpServletRequest request ) {
+    public RestRecord ticket( @CurrentUserId String userId,
+                              HttpServletRequest request ) {
         User user = userService.getUserByUserId( userId );
-        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request );
-        Map<String, String> result = new HashMap<>( 1 );
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request, REFRESH );
+        Map<String, String> result = new HashMap<>( 2 );
         result.put( "authentication", ticket );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
     }
@@ -288,8 +296,8 @@ public class AuthenticationController {
     @GetMapping( "/refresh" )
     public RestRecord refresh( @CurrentUserId String userId, HttpServletRequest request ){
         User user = userService.getUserByUserId( userId );
-        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request );
-        Map<String, String> result = new HashMap<>(1);
+        String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request, REFRESH );
+        Map<String, String> result = new HashMap<>( 2 );
         result.put( "authentication", ticket );
         log.info( "用户ID：{}，换取了ticket", userId );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );
@@ -302,7 +310,7 @@ public class AuthenticationController {
     @GetMapping("/appIT")
     public RestRecord getAppIdAndToken(){
         // todo 此处应拦截掉一些不合法请求
-        Map<String, String> app = new HashMap<>(2);
+        Map< String, String > app = new HashMap<>( 2 );
         app.put( "appId", this.appId );
         app.put( "appToken", this.appToken );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, app );

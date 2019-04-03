@@ -115,7 +115,10 @@ public class UserApiController {
                 school.setSchoolName( userDao.findSchoolByOrganizationId( user.getOrganizationId() ) );
                 user.setSchool( school );
             }
-
+            user.setSecret( null );
+            Account account = user.getAccount();
+            account.setPassword(null);
+            user.setAccount(account);
             return new RestRecord( 200, user );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );

@@ -12,8 +12,8 @@ import java.util.Properties;
 public class KafkaProducer {
 
     private static Producer producer;
-    private static final String ZK_ADDRESS = "192.168.1.23:2181";
-    private static final String KAFKA_ADDRESS = "192.168.1.23:9092";
+    private static final String ZK_ADDRESS = "f192x88923.iok.la:2181";
+    private static final String KAFKA_ADDRESS = "f192x88923.iok.la:9092";
     private static final String TOPIC = "mytopic";
 
     static {

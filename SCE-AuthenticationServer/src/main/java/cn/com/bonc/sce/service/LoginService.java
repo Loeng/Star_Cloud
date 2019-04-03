@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.controller.AuthenticationController;
 import cn.com.bonc.sce.dao.LoginHistoryDaoClient;
 import cn.com.bonc.sce.dao.UserDaoClient;
 import cn.com.bonc.sce.exception.UnsupportedAuthenticationTypeException;
@@ -54,18 +55,22 @@ public class LoginService {
      *
      * @return 字符串形式的 jwt ticket
      */
-    public String generateTicket(User authenticatedUser, Date expirationDate, HttpServletRequest request) {
+    public String generateTicket( User authenticatedUser, Date expirationDate, HttpServletRequest request, String subject ) {
         Map< String, Object > claims = new HashMap<>( 2 );
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
         claims.put( "userType", authenticatedUser.getUserType() );
+        if( subject != null ){
+            claims.put( "subject", subject );
+        } else {
+            claims.put( "subject", AuthenticationController.LOGIN );
+        }
         // 签发人
         claims.put( "iss", "SCE-SSO" );
         // 受众
         claims.put( "aud", "SCE-Application" );
         claims.put( "ruleCode", roleCodes[ authenticatedUser.getUserType() ] );
         claims.put( "isFirstLogin", authenticatedUser.getIsFirstLogin() );
-
         // todo 此处需将用户地址单向加密并保存至JWT  防止JWT被窃取后使用
         // ip地址
         String ip = RestApiUtil.getIpAddr( request );
@@ -141,7 +146,7 @@ public class LoginService {
      */
     public Map< String, Object > generateLoginResult(User authenticatedUser, Date expirationDate, HttpServletRequest request) {
         Map< String, Object > data = new HashMap<>( 2 );
-        String ticket = generateTicket( authenticatedUser, expirationDate, request );
+        String ticket = generateTicket( authenticatedUser, expirationDate, request, null );
         data.put( "ticket", ticket );
         return data;
     }

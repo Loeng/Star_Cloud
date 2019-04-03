@@ -11,9 +11,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 基于 2048bit-RSA 的秘钥对
@@ -111,18 +109,37 @@ public class Secret {
         return this.keyPair.getPublic();
     }
 
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws Exception {
+//        String jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJsb2dpbiIsIm5iZiI6MTU1NDI2MjIwNCwiaWF0IjoxNTU0MjYyMjA0LCJqdGkiOiIwMzExNTJmNC1iZmUwLTRhNTktOTBkYi0zNjcxYzEzZmU0MzQiLCJydWxlQ29kZSI6InN0dWRlbnRzIiwiSVBBZGQiOiI3NjMzYjZmZmYzODc1MDY5ODQzYjFlZmE4MjQyNmNhNSIsImF1ZCI6IlNDRS1BcHBsaWNhdGlvbiIsImxvZ2luSWQiOiJ4c18xIiwiaXNGaXJzdExvZ2luIjoxLCJpc3MiOiJTQ0UtU1NPIiwidXNlclR5cGUiOjEsInVzZXJJZCI6IjQwMjg4MjNhNjdlNGQzMDYwMTY3ZjRkOWQwYWIwMDAyIiwiZXhwIjoxNTU0ODY3MDAzfQ.T1pqQmx-NJXacUrEauqyJlzlG08RiIxP3WpaUbXHq465vuixWtjFoCKb2x06pvQDmWhO04ifmoLqWIH5n6EiIT6UG4tB0LhMU_33PqMfviouE3VB6Un-B3n-G1AZpKXpH9ho4zIJ2lNvXKw0uwtNCjT9KcFBhfcW9VEP_sUmsvbQYkiccF3UYGSyV6t1iYTwRydZrBVO13oSDiQHsHH4QKNkqssYHrACFoIjtnuj_e3SqTYJ7qDmLcnFRYJUd7Xls8JYA7PsGJT_fYvk0a6qdXj-ACoWN7qugPXDewO3CPdIDlyuojLBTViVMff0bLwCUy3Sgzr_qlugqyOCU7MI3g";
+//        Map<String, Object> map = JWTUtil.parseJWT(jwt);
+//        System.out.println(map);
 //        String key = ES256GenerateSecret();
 //        String privateKey = key.substring(124);
+////        String privateKey = "MEECAQAwEwYHKoZIzj0CAQYIKoZIzj0DAQcEJzAlAgEBBCDK1UOPy+ImsMFnqF9C9uHsaC/0f5hKM84+wpzlw6Ha0w==";
 //        String publicKey = key.substring(0,124);
+//
 //        Map map = new HashMap();
 //        map.put("aa","11");
+//        List<String> list = new ArrayList<>();
+//        list.add("4028823a67e4d3060167e4d82fc90005");
+//        list.add("4028823a67e4d3060167e4d80fbb0004");
+//        map.put("users", list);
+//        map.put("appId", "4028819f6879ab8401687a3579600015");
 //        PrivateKey privateKeyObj = SecureUtil.generatePrivateKey("EC", Base64.decode(privateKey));
 //        PublicKey publicKeyObj = SecureUtil.generatePublicKey("EC", Base64.decode(publicKey));
 //        KeyPair keyPair = new KeyPair(publicKeyObj, privateKeyObj);
 //
-//        String jwt = JWTUtil.generateTicketWithSecret( map, keyPair.getPrivate(), new Date(System.currentTimeMillis() + 1000));
-//        Claims claims = Jwts.parser().setSigningKey(keyPair.getPublic()).parseClaimsJws(jwt).getBody();
+//        String jwt = JWTUtil.generateTicketWithSecret( map, keyPair.getPrivate(), new Date(System.currentTimeMillis() + 6000000));
+//        System.out.println("jwt--------");
+//        System.out.println(jwt);
+//        System.out.println("jwt--------");
+//        Claims claims = Jwts.parser().setSigningKey(publicKeyObj).parseClaimsJws(jwt).getBody();
 //        System.out.println(claims);
+//        List<String> users2 = (List)claims.get("users");
+//        System.out.println(users2.size());
+//        for(String user : users2){
+//            System.out.println(user);
+//        }
     }
+
 }

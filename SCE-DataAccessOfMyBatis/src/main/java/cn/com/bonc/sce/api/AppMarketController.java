@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +68,24 @@ public class AppMarketController {
     public int getUserAppAuth( @PathVariable String userId,
                                @PathVariable String appId ){
         return appMarketService.getUserAppAuth( userId, appId );
+    }
+
+    @GetMapping( "/user-rest" )
+    public RestRecord getUser( @RequestHeader String appId,
+                               @RequestHeader String appToken){
+        return appMarketService.getUser( appId, appToken );
+    }
+
+    @GetMapping( "/user-jwt" )
+    public RestRecord getUserJWT( @RequestParam String appId,
+                                  @RequestParam List users){
+        return appMarketService.getUser( appId, users );
+    }
+
+    @GetMapping( "/user-detailed" )
+    public RestRecord getUserDetailed( @RequestParam String appId,
+                                       @RequestParam String userId){
+        return appMarketService.getUserDetailed( appId, userId );
     }
 
 }

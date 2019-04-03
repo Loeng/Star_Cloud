@@ -83,4 +83,43 @@ GROUP BY
         WHERE APP_ID = #{appId} AND USER_ID = #{userId}
     </select>
 
+    <select id="selectUserToApp" resultType="Map">
+        SELECT
+          U.USER_ID as userId,
+          U.LOGIN_NAME as loginName,
+          U.USER_NAME as userName,
+          U.GENDER as gender,
+          U.USER_TYPE as userType,
+          U.MAIL_ADDRESS as mailAddress,
+          CEIL((SYSDATE - T.TEACH_TIME)/365) as schoolAge,
+          I.INSTITUTION_ID as institutionId,
+          P.FAMILY_ROLE as familyRole,
+          S.GRADE as grade,
+          S.CLASS_NUMBER as classNumber,
+          T.POSITION as position,
+          T.SUBJECT as subject,
+          I.TELEPHONE as telephone,
+          I.ADDRESS as address,
+          U.ISADMINISTRATORS as isDefaultManager
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+        LEFT JOIN STARCLOUDPORTAL.sce_info_student S
+          ON u.user_id = s.user_id
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER T
+          ON u.user_id = t.user_id
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_PARENT p
+          ON u.user_id = p.user_id
+        LEFT JOIN STARCLOUDPORTAL.sce_info_institution I
+          ON u.user_id = i.user_id
+        LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_OPEN O
+          ON O.APP_ID = #{appId}
+        WHERE U.USER_TYPE IN
+        <foreach collection="userTypes" open="(" close=")" item="userType" separator=",">
+            #{userType}
+        </foreach>
+        <foreach collection="users" open="AND U.USER_ID IN (" close=")" item="userId" separator=",">
+            #{userId}
+        </foreach>
+    </select>
+
+
 </mapper>

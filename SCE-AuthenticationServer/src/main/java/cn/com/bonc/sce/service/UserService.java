@@ -1,12 +1,15 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserDaoClient;
-import cn.com.bonc.sce.model.Secret;
+import cn.com.bonc.sce.dao.UserDaoOfMybatis;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,10 +23,12 @@ import java.util.Map;
 public class UserService {
 
     private UserDaoClient userDao;
+    private UserDaoOfMybatis userDaoOfMybatis;
 
     @Autowired
-    public UserService( UserDaoClient userDao ) {
+    public UserService( UserDaoClient userDao, UserDaoOfMybatis userDaoOfMybatis ) {
         this.userDao = userDao;
+        this.userDaoOfMybatis = userDaoOfMybatis;
     }
 
     /**
@@ -106,5 +111,31 @@ public class UserService {
         return userDao.updateUserLoginTimeAndCounts( userId );
     }
 
+    public RestRecord getUser( HttpServletRequest request ){
+        String appId = request.getHeader( "appId" );
+        String appToken = request.getHeader( "appToken" );
+        if( appId == null || appToken == null ){
+            return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
+        }
+        return userDaoOfMybatis.getUser( appId, appToken );
+    }
+
+    public RestRecord getUserJWT(List<Map> claims){
+        if( claims.size() < 1 ||  claims.get(0).get("appId") == null ){
+            return new RestRecord( 151, WebMessageConstants.SCE_WEB_MSG_151 );
+        }
+        String appId = claims.get(0).get("appId").toString();
+        List users = (List) claims.get(0).get("users");
+        return userDaoOfMybatis.getUserJWT( appId, users );
+    }
+
+    public RestRecord getUserDetailed(List<Map> claims){
+        if( claims.size() < 1 ||  claims.get(0).get("appId") == null ){
+            return new RestRecord( 151, WebMessageConstants.SCE_WEB_MSG_151 );
+        }
+        String appId = claims.get(0).get("appId").toString();
+        String userId = claims.get(0).get("userId").toString();
+        return userDaoOfMybatis.getUserDetailed( appId, userId );
+    }
 
 }

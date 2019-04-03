@@ -5,6 +5,7 @@ import cn.com.bonc.sce.mapper.AppMarketMapper;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
 import com.github.pagehelper.PageHelper;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class AppMarketService {
         try {
             PageHelper.startPage( Integer.parseInt( pageNum ), Integer.parseInt( pageSize ) );
         } catch ( NumberFormatException e ) {
-            log.warn( "不支持的分页参数" );
+            log.warn( "不支持的分页参数 -> pageNum:{},pageSize:{}", pageNum, pageSize );
             return new RestRecord( 433, WebMessageConstants.SCE_PORTAL_MSG_433 );
         }
         RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
@@ -87,6 +88,41 @@ public class AppMarketService {
 
     public int getUserAppAuth( String userId, String appId ){
         return appMarketMapper.selectUserAppAuth( userId, appId );
+    }
+
+    public RestRecord getUser(String appId, String appToken ){
+        //验证appToken
+        if( !appToken.equals( appMarketMapper.selectAppToken( appId ) ) ){
+            return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
+        }
+        // 可以同步给应用的数据类型
+        List< String > userTypes = new ArrayList<>( 5 );
+        userTypes.add("1");
+        userTypes.add("2");
+        userTypes.add("5");
+        userTypes.add("7");
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketMapper.selectUserToApp( appId, null, userTypes ) );
+    }
+
+    public RestRecord getUser( String appId, List users ){
+        // 可以同步给应用的数据类型
+        List< String > userTypes = new ArrayList<>( 5 );
+        userTypes.add("1");
+        userTypes.add("2");
+        userTypes.add("5");
+        userTypes.add("7");
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketMapper.selectUserToApp( appId, users, userTypes ) );
+    }
+
+    public RestRecord getUserDetailed( String appId, String userId ){
+        List< String > userTypes = new ArrayList<>( 5 );
+        userTypes.add("1");
+        userTypes.add("2");
+        userTypes.add("5");
+        userTypes.add("7");
+        List< String > users = new ArrayList<>( 2 );
+        users.add( userId );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, appMarketMapper.selectUserToApp( appId, users, userTypes ) );
     }
 
 }

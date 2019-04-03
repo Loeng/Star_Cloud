@@ -53,7 +53,7 @@ public class AuthenticationService {
      * @return JWT中的body(Claims类型)
      */
     public Claims validateJWT(NativeWebRequest webRequest) throws InvalidTokenException {
-        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        HttpServletRequest request = webRequest.getNativeRequest( HttpServletRequest.class );
         String ip = RestApiUtil.getIpAddr( request );
         String userAgent = request.getHeader( "User-Agent" );
         String ticket = webRequest.getHeader( "authentication" );

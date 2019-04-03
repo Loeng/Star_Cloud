@@ -9,7 +9,7 @@ spring:
     config:
       uri: http://localhost:10100
   datasource:
-    url: jdbc:oracle:thin:@192.168.1.130:1521:assistantdb
+    url: jdbc:oracle:thin:@f192x88923.iok.la:1521:assistantdb
     username: STARCLOUDUSER
     password: root123
     driver-class-name: oracle.jdbc.OracleDriver
