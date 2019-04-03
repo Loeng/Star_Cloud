@@ -274,14 +274,18 @@ public class AuthenticationController {
     /**
      * 临时token(30秒)换取正式ticket(3分钟)接口
      *
-     * @param userId 用户id
+     * @param claims payload
      *
      * @return RestRecord
      */
     @GetMapping( "/ticket" )
-    public RestRecord ticket( @CurrentUserId String userId,
+    public RestRecord ticket( @Payloads List<Map> claims,
                               HttpServletRequest request ) {
-        User user = userService.getUserByUserId( userId );
+        Object userId = claims.get(0).get("userId");
+        if( userId == null ){
+            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
+        }
+        User user = userService.getUserByUserId( userId.toString() );
         String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request, REFRESH );
         Map<String, String> result = new HashMap<>( 2 );
         result.put( "authentication", ticket );
@@ -294,8 +298,13 @@ public class AuthenticationController {
      * @return RestRecord
      */
     @GetMapping( "/refresh" )
-    public RestRecord refresh( @CurrentUserId String userId, HttpServletRequest request ){
-        User user = userService.getUserByUserId( userId );
+    public RestRecord refresh( @Payloads List<Map> claims,
+                               HttpServletRequest request ){
+        Object userId = claims.get(0).get("userId");
+        if( userId == null ){
+            return new RestRecord( 150, WebMessageConstants.SCE_WEB_MSG_150 );
+        }
+        User user = userService.getUserByUserId( userId.toString() );
         String ticket = loginService.generateTicket( user, new Date( System.currentTimeMillis() + DateConstants.THREE_MINUTE ), request, REFRESH );
         Map<String, String> result = new HashMap<>( 2 );
         result.put( "authentication", ticket );

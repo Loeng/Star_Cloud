@@ -1,18 +1,20 @@
 package cn.com.bonc.sce.tool;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
+import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.exception.InvalidTokenException;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.json.JSONUtil;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 
 import java.security.*;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 提供对 jwt token 的生成和解密
@@ -102,6 +104,23 @@ public class JWTUtil {
         }
         return payloadsMap;
     }
+
+    public static Object getDataOfTicket( Claims claims, MethodParameter parameter ) throws InvalidTokenException{
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        result.add(claims);
+        if( parameter.hasParameterAnnotation( Payloads.class )){
+            return result;
+        }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
+            if( !claims.get( "sub" ).equals( "login" ) ){
+                throw new InvalidTokenException( "JWT验证失败 -> 应用想要使用ticket访问平台接口窃取数据" );
+            }
+            return claims.get( "userId" );
+        }
+        return "";
+    }
+
+
 
     public static void main( String[] args ) throws InvalidKeyException, NoSuchAlgorithmException {
         /*KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance( "RSA" );

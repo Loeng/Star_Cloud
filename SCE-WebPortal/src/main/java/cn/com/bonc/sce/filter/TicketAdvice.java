@@ -2,7 +2,9 @@ package cn.com.bonc.sce.filter;
 
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.annotation.Payloads;
+import cn.com.bonc.sce.exception.InvalidTokenException;
 import cn.com.bonc.sce.service.AuthenticationService;
+import cn.com.bonc.sce.tool.JWTUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.json.JSONUtil;
 import io.jsonwebtoken.Claims;
@@ -14,6 +16,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,11 +45,6 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
         //验证JWT
         Claims claims = authenticationService.validateJWT( webRequest );
 
-        if( parameter.hasParameterAnnotation( Payloads.class )){
-            return claims;
-        }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
-            return claims.get( "userId" );
-        }
-        return "";
+        return JWTUtil.getDataOfTicket( claims, parameter );
     }
 }
