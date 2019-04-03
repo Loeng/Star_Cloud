@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
- * @ClassName SouponController
+ * @ClassName CouponController
  * @Description 优惠码相关操作
  * @Author YQ
  * @Date 2019/3/29 17:22
@@ -30,7 +30,7 @@ import java.util.Map;
         @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
 } )
 @RequestMapping( "/soupon" )
-public class SouponController {
+public class CouponController {
 
     @Autowired
     private CouponService couponService;

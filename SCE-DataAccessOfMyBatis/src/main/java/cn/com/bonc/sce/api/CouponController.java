@@ -26,7 +26,8 @@ public class CouponController {
 
     @PostMapping("/insertCoupon")
     public RestRecord addNewCoupon(@RequestBody Map param,@RequestParam String userId){
-        return null;
+
+        return couponService.addNewCoupon(param, userId);
     }
 
 }
