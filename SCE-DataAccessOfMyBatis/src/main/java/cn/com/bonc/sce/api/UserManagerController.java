@@ -171,9 +171,9 @@ public class UserManagerController {
     @GetMapping("/getPhone")
     @ResponseBody
     public RestRecord getPhone(@RequestParam( "loginName" ) String loginName){
-        String phone = userService.getPhone(loginName);
-        if (phone!=null){
-            return new RestRecord(200,MessageConstants.SCE_MSG_0200,phone);
+        Map map = userService.getPhone(loginName);
+        if (map!=null){
+            return new RestRecord(200,MessageConstants.SCE_MSG_0200,map);
         } else {
             return new RestRecord(406,MessageConstants.SCE_MSG_406);
         }
@@ -202,6 +202,37 @@ public class UserManagerController {
             return new RestRecord(200,MessageConstants.SCE_MSG_0200);
         } else {
             return new RestRecord(1010,"身份证验证失败");
+        }
+    }
+
+    @ApiOperation(value = "获取在职教师列表", notes="获取查询条件，返回在职教师列表", httpMethod = "GET")
+    @GetMapping("/getTeachers/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getTeachers(@RequestParam("organizationId")long organizationId,
+                                  @RequestParam ( value = "userName",required = false) String userName,
+                                  @RequestParam(value ="loginName",required = false ) String loginName,
+                                  @RequestParam ( value = "gender",required = false) String gender,
+                                  @RequestParam ( value = "position",required = false) String position,
+                                  @RequestParam ( value = "accountStatus",required = false) Integer accountStatus,
+                                  @PathVariable (value = "pageNum")Integer pageNum,
+                                  @PathVariable (value = "pageSize") Integer pageSize  ){
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map> teachers = userService.getTeachers(organizationId,userName,loginName,gender,position,accountStatus);
+        PageInfo pageInfo = new PageInfo(teachers);
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200,pageInfo );
+    }
+
+    @ApiOperation(value = "删除教师", notes="通过用户id，删除用户", httpMethod = "DELETE")
+    @DeleteMapping("/delTeacher")
+    @ResponseBody
+    @Transactional
+    public RestRecord delTeacher(@RequestParam( "id" ) String id){
+        int count1 = userService.delUser(id);
+        int count2 = userService.delTeacher(id);
+        if (count1==1 && count2==1){
+            return new RestRecord(200, MessageConstants.SCE_MSG_0200,1);
+        } else {
+            return new RestRecord(408,MessageConstants.SCE_MSG_408);
         }
     }
 }

@@ -37,11 +37,18 @@ public interface UserMapper {
 
     int isExist(@Param("loginName") String loginName);
 
-    String getPhone(@Param("loginName") String loginName);
+    Map getPhone(@Param("loginName") String loginName);
 
     int updatePwdByName(@Param("loginName") String loginName, @Param("password") String password);
 
     String testCertificate(@Param("loginName") String loginName);
 
     String getIdByPhone(@Param("phone") String phone);
+
+    List<Map> getTeachers(@Param("organizationId")long organizationId,
+                          @Param("userName")String userName, @Param("loginName")String loginName,
+                          @Param("gender")String gender, @Param("position")String position,
+                          @Param("accountStatus")Integer accountStatus);
+
+    int delTeacher(@Param("id") String id);
 }

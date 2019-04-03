@@ -48,4 +48,13 @@ public interface UserManagerDao {
     @RequestMapping( value = "/userManager/testCertificate", method = RequestMethod.GET )
     RestRecord testCertificate(@RequestParam("loginName") String loginName, @RequestParam("certificate") String certificate);
 
+    @RequestMapping( value = "/userManager/getTeachers/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getTeachers(@RequestParam("organizationId")long organizationId,@RequestParam("userName") String userName,
+                           @RequestParam("loginName")String loginName,
+                           @RequestParam("gender")String gender, @RequestParam("position")String position,
+                           @RequestParam("accountStatus")Integer accountStatus, @PathVariable("pageNum")Integer pageNum,
+                           @PathVariable("pageSize")Integer pageSize);
+
+    @RequestMapping( value = "/userManager/delTeacher", method = RequestMethod.DELETE )
+    RestRecord delTeacher( @RequestParam("id")String id);
 }

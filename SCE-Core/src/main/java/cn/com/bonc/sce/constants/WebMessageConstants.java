@@ -103,4 +103,11 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_641 = "您提交的应用[%s]%s已通过审核。";
     String SCE_PORTAL_MSG_642 = "您提交的应用[%s]%s未通过审核。";
     String SCE_PORTAL_MSG_643 = "您提交的应用[%s]%s未通过审核。原因为：%s";
+
+
+    /* *
+     * 优惠码相关
+     * 740-760
+     */
+    String SCE_PORTAL_MSG_740 = "转换日期出错";
 }

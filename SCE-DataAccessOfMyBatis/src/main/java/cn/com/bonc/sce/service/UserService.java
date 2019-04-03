@@ -57,7 +57,7 @@ public class UserService {
         return userDao.isExist(loginName);
     }
 
-    public String getPhone(String loginName) {
+    public Map getPhone(String loginName) {
         return userDao.getPhone(loginName);
     }
 
@@ -73,4 +73,11 @@ public class UserService {
         return userDao.getIdByPhone(phone);
     }
 
+    public List<Map> getTeachers(long organizationId,String userName, String loginName, String gender, String position, Integer accountStatus) {
+        return userDao.getTeachers(organizationId,userName,loginName,gender,position,accountStatus);
+    }
+
+    public int delTeacher(String id) {
+        return userDao.delTeacher(id);
+    }
 }
