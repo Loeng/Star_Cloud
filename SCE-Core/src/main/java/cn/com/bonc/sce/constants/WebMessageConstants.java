@@ -83,6 +83,11 @@ public interface WebMessageConstants {
 
     String SCE_PORTAL_MSG_470 = "下载应用失败";
 
+    String SCE_PORTAL_MSG_480 = "该订单无法开票";
+    String SCE_PORTAL_MSG_481 = "没有该订单";
+    String SCE_PORTAL_MSG_482 = "订单号不能为空";
+    String SCE_PORTAL_MSG_483 = "有无法开票的订单";
+
     /**
      * 通用错误信息
      */

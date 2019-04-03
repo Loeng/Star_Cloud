@@ -39,4 +39,16 @@ public class InvoiceService {
     public RestRecord selectInvoiceHistory( String userId, Integer pageNum, Integer pageSize, Map map ) {
         return invoiceDao.selectInvoiceHistory( userId, pageNum, pageSize, map );
     }
+
+    public RestRecord editOrderInvoiceState( Map map, String userId ) {
+        return invoiceDao.editOrderInvoiceState( map, userId );
+    }
+
+    public RestRecord addBillingInfo( Map< String, Object > invoiceInfo, String userId ) {
+        return invoiceDao.addBillingInfo( invoiceInfo, userId );
+    }
+
+    public RestRecord getBillingInfoByOrderNo( String userId, List< String > orderNoList ) {
+        return invoiceDao.getBillingInfoByOrderNo( userId, orderNoList );
+    }
 }

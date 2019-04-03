@@ -1,5 +1,9 @@
 package cn.com.bonc.sce.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -23,5 +27,23 @@ public interface InvoiceMapper {
     int updateInvoiceAddressByOrganizationId( Map< String, Object > invoiceInfo );
 
     int insertInvoiceAddressSelective( Map< String, Object > invoiceInfo );
+
+    @Select( "SELECT BUYING_USER_ID FROM STARCLOUDPORTAL.SCE_ORDER_INFO WHERE ORDER_ID = #{orderNO}" )
+    String SelectBuyingUserByOrderNo( @Param( "orderNO" ) String orderNO );
+
+    @Select( "SELECT ACTUAL_PAYMENT FROM STARCLOUDPORTAL.SCE_ORDER_INFO WHERE ORDER_ID = #{orderNO}" )
+    BigDecimal selectActualPaymentByOrderNo( @Param( "orderNO" ) String orderNO );
+
+    @Select( "SELECT ORDER_INVOICE_ID FROM STARCLOUDPORTAL.SCE_ORDER_INVOICE_REL WHERE ORDER_ID = #{orderNO}" )
+    String selectInvoiceIdByOrderNo( @Param( "orderNO" ) String orderNO );
+
+    Map selectOrderInvoiceInfo( @Param( "ID" ) String ID );
+
+    int insertOrderInvoiceRel( @Param( "ID" ) long id, @Param( "ORDER_ID" ) String orderId, @Param( "ORDER_INVOICE_ID" ) String orderInvoiceId );
+
+    int insertOrderInvoiceSelective( Map map );
+
+    int updateOrderInvoiceSelective( Map map );
+
 
 }

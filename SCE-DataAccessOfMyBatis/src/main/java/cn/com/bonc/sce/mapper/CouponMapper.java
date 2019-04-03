@@ -25,4 +25,6 @@ public interface CouponMapper {
                                  @Param("COUPON_TYPE_CODE") int couponTypeCode,
                                  @Param("REBATE_DETAIL") BigDecimal rebateDetial,
                                  @Param("REBATE_CAL") BigDecimal rebateCal) throws SQLException;
+
+    int deleteCoupon(@Param("COUPON_CODE") String couponCode) throws SQLException;
 }

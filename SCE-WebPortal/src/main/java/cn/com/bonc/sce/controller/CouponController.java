@@ -55,10 +55,10 @@ public class CouponController {
         return null;
     }
 
-    @DeleteMapping("/delete-coupon")
+    @DeleteMapping("/delete-coupon/{couponCode}")
     @ResponseBody
-    public RestRecord deleteCoupon(){
-        return null;
+    public RestRecord deleteCoupon(@PathVariable String couponCode){
+        return couponService.deleteCoupon(couponCode);
     }
 
 }

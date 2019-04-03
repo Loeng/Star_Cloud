@@ -30,4 +30,10 @@ public class CouponController {
         return couponService.addNewCoupon(param, userId);
     }
 
+
+    @DeleteMapping("deleteCoupon")
+    public RestRecord deleteCoupon(@RequestParam String couponCode){
+        return couponService.deleteCoupon(couponCode);
+    }
+
 }

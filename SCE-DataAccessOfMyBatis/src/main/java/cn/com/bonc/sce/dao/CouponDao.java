@@ -40,4 +40,9 @@ public class CouponDao {
                                         BigDecimal rebateCal) throws SQLException {
         return couponMapper.insertCouponRebateDetial(couponCode, couponTypeCode, rebateDetial, rebateCal);
     }
+
+
+    public int deleteCoupon(String couponCode) throws SQLException {
+        return couponMapper.deleteCoupon(couponCode);
+    }
 }
