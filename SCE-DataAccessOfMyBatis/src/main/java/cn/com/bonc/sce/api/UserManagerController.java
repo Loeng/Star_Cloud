@@ -171,9 +171,9 @@ public class UserManagerController {
     @GetMapping("/getPhone")
     @ResponseBody
     public RestRecord getPhone(@RequestParam( "loginName" ) String loginName){
-        String phone = userService.getPhone(loginName);
-        if (phone!=null){
-            return new RestRecord(200,MessageConstants.SCE_MSG_0200,phone);
+        Map map = userService.getPhone(loginName);
+        if (map!=null){
+            return new RestRecord(200,MessageConstants.SCE_MSG_0200,map);
         } else {
             return new RestRecord(406,MessageConstants.SCE_MSG_406);
         }

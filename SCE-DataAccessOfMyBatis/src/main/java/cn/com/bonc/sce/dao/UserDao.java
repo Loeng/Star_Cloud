@@ -55,7 +55,7 @@ public class UserDao {
         return userMapper.isExist(loginName);
     }
 
-    public String getPhone(String loginName) {
+    public Map getPhone(String loginName) {
         return userMapper.getPhone(loginName);
     }
 

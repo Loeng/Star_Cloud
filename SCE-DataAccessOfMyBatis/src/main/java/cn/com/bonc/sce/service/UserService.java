@@ -57,7 +57,7 @@ public class UserService {
         return userDao.isExist(loginName);
     }
 
-    public String getPhone(String loginName) {
+    public Map getPhone(String loginName) {
         return userDao.getPhone(loginName);
     }
 

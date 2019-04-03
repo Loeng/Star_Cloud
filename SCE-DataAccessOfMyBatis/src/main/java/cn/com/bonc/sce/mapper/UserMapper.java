@@ -37,7 +37,7 @@ public interface UserMapper {
 
     int isExist(@Param("loginName") String loginName);
 
-    String getPhone(@Param("loginName") String loginName);
+    Map getPhone(@Param("loginName") String loginName);
 
     int updatePwdByName(@Param("loginName") String loginName, @Param("password") String password);
 

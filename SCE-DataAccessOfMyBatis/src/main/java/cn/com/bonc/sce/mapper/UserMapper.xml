@@ -298,8 +298,8 @@
         where USER_ID = #{stringUserId,jdbcType=VARCHAR}
     </update>
 
-    <select id="getPhone" resultType="java.lang.String">
-        SELECT PHONE_NUMBER FROM STARCLOUDPORTAL.SCE_COMMON_USER
+    <select id="getPhone" resultType="Map">
+        SELECT PHONE_NUMBER,ACCOUNT_STATUS FROM STARCLOUDPORTAL.SCE_COMMON_USER
         WHERE LOGIN_NAME=#{loginName}
     </select>
 
