@@ -106,6 +106,30 @@ public class CouponService {
 
 
     /* *
+     * @Description 优惠码删除（逻辑删除）
+     * @Date 17:38 2019/4/3
+     * @param couponCode
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public RestRecord deleteCoupon(String couponCode){
+
+        try {
+            int count=couponDao.deleteCoupon(couponCode);
+            if (count<1){
+                return new RestRecord(422, WebMessageConstants.SCE_PORTAL_MSG_422);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return new RestRecord(422, WebMessageConstants.SCE_PORTAL_MSG_422);
+        }
+
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
+    /* *
      * @Description  优惠码主表初始化
      * @Date 11:58 2019/4/3
      * @param

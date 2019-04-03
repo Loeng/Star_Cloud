@@ -26,4 +26,9 @@ public class CouponService {
 
         return couponDao.addNewCoupon(param, userId);
     }
+
+
+    public RestRecord deleteCoupon(String couponCode){
+        return couponDao.deleteCoupon(couponCode);
+    }
 }
