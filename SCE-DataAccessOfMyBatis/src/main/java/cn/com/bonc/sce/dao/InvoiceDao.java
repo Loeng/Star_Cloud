@@ -1,9 +1,11 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.mapper.InvoiceMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -94,4 +96,79 @@ public class InvoiceDao {
     public int insertInvoiceAddressSelective( Map< String, Object > invoiceInfo ) {
         return invoiceMapper.insertInvoiceAddressSelective( invoiceInfo );
     }
+
+    /**
+     * 根据订单号查询购买人userID
+     *
+     * @param orderNO
+     * @return
+     */
+    public String SelectBuyingUserByOrderNo( String orderNO ) {
+        return invoiceMapper.SelectBuyingUserByOrderNo( orderNO );
+    }
+
+    /**
+     * 根据订单号查询购买人userID
+     *
+     * @param orderNO
+     * @return
+     */
+    public BigDecimal selectActualPaymentByOrderNo( String orderNO ) {
+        return invoiceMapper.selectActualPaymentByOrderNo( orderNO );
+    }
+
+    /**
+     * 判断订单号是否在订单与开票信息关系表中
+     *
+     * @param orderNO
+     * @return
+     */
+    public Boolean isExistRel( String orderNO ) {
+        return invoiceMapper.selectInvoiceIdByOrderNo( orderNO ) != null;
+    }
+
+    /**
+     * 通过订单号查询订单与开票信息关系表中的发票信息id
+     *
+     * @param orderNO
+     * @return
+     */
+    public String selectInvoiceIdByOrderNo( String orderNO ) {
+        return invoiceMapper.selectInvoiceIdByOrderNo( orderNO );
+    }
+
+    /**
+     * 查询开票信息
+     *
+     * @param ID
+     * @return
+     */
+    public Map selectOrderInvoiceInfo( String ID ) {
+        return invoiceMapper.selectOrderInvoiceInfo( ID );
+    }
+
+    /**
+     * 插入订单发票关系表
+     */
+
+    public int insertOrderInvoiceRel( long id, String orderId, String orderInvoiceId ) {
+        return invoiceMapper.insertOrderInvoiceRel( id, orderId, orderInvoiceId );
+    }
+
+    /**
+     * 插入订单发票表
+     */
+
+    public int insertOrderInvoiceSelective( Map map ) {
+        return invoiceMapper.insertOrderInvoiceSelective( map );
+    }
+
+    /**
+     * 通过id修改订单发票信息
+     */
+    public int updateOrderInvoiceSelective( Map map ) {
+        return invoiceMapper.updateOrderInvoiceSelective( map );
+    }
+
+
 }

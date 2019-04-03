@@ -31,6 +31,12 @@ public interface AppVersionRepository extends
                                                                @Param( "appVersion" ) String appVersion,
                                                                Pageable pageable );
 
+    //查询计费模式信息
+    @Query( nativeQuery = true,
+            value = "SELECT * FROM STARCLOUDMARKET.SCE_MARKET_PRICE_MODE WHERE APP_ID= :appId AND APP_VERSION = :appVersion ORDER BY SHOWING_ORDER ASC" )
+    List< Map< String, Object > > queryAppPriceModeInfo( @Param( "appId" ) String appId,
+                                                         @Param( "appVersion" ) String appVersion );
+
     /**
      * 通过AppId和AppVersion删除指定的版本信息
      *

@@ -68,8 +68,13 @@ public class AppVersionApiController {
         Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
         try {
             Page< List< Map< String, Object > > > temp = appVersionRepository.queryAppVersionInfo( appId, appVersion, pageable );
+
+            //查询计费模式信息
+            List< Map< String, Object > > price = appVersionRepository.queryAppPriceModeInfo( appId, appVersion );
+
             Map< String, Object > result = new HashMap<>( 16 );
             result.put( "data", temp.getContent() );
+            result.put( "priceMode", price );
             result.put( "totalPage", temp.getTotalPages() );
             result.put( "totalCount", temp.getTotalElements() );
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );

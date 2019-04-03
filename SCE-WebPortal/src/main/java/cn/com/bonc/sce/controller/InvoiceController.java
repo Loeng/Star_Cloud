@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,4 +95,40 @@ public class InvoiceController {
                                                     Map< String, Object > invoiceInfo, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
         return invoiceService.updateInvoiceAddressByOrganizationId( invoiceInfo, userId );
     }
+
+
+    @ApiOperation( value = "根据订单号查询开票相关信息（开票资质，收寄地址等）", notes = "根据订单号查询开票相关信息(开票资质，收寄地址等)", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @PostMapping( "/billing-by-order-no" )
+    @ResponseBody
+    public RestRecord getBillingInfoByOrderNo( @RequestBody @ApiParam( "[\"103\",\"104\"]" )
+                                                       List< String > orderNoList, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        return invoiceService.getBillingInfoByOrderNo( userId, orderNoList );
+    }
+
+    @ApiOperation( value = "增开发票(订单号用逗号分隔)", notes = "增开发票(订单号用逗号分隔)", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @PostMapping( "/add-order-invoice" )
+    @ResponseBody
+    public RestRecord addBillingInfo( @RequestBody @ApiParam( "json格式" )
+                                              Map< String, Object > invoiceInfo, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        return invoiceService.addBillingInfo( invoiceInfo, userId );
+    }
+
+    @ApiOperation( value = "编辑开票状态信息", notes = "编辑开票状态信息(1,未开票，2已开票，3已邮寄)", httpMethod = "PUT" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @PutMapping( "/update-order-invoice-state" )
+    @ResponseBody
+    public RestRecord editOrderInvoiceState( @RequestBody @ApiParam( "{\"ID\":2,\"INVOICE_CODE\":\"发票代码\",\"INVOICE_NO\":\"发票号码\",\"EXPRESS_COMPANY\":\"快递公司\",\"COURIER_NUMBER\":\"快递单号\",\"INVOICE_STATUS\":2}" )
+                                                     Map< String, Object > stateInfo, @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        return invoiceService.editOrderInvoiceState( stateInfo, userId );
+    }
+
+
 }

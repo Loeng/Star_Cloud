@@ -5,6 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,4 +38,17 @@ public interface InvoiceDao {
     @RequestMapping( value = "/invoice/update-address/{userId}", method = RequestMethod.PUT )
     public RestRecord updateInvoiceAddress( @RequestBody Map< String, Object > address,
                                             @PathVariable( "userId" ) String userId );
+
+    @RequestMapping( value = "/invoice/update-order-invoice-state/{userId}", method = RequestMethod.PUT )
+    public RestRecord editOrderInvoiceState( @RequestBody Map< String, Object > invoiceState,
+                                             @PathVariable( "userId" ) String userId );
+
+    @RequestMapping( value = "/invoice/add-order-invoice/{userId}", method = RequestMethod.POST )
+    public RestRecord addBillingInfo( @RequestBody Map< String, Object > invoiceInfo, @PathVariable( "userId" ) String userId );
+
+    @RequestMapping( value = "/invoice/billing-by-order-no/{userId}", method = RequestMethod.POST )
+    public RestRecord getBillingInfoByOrderNo(  @PathVariable( "userId" ) String userId,
+                                       @RequestBody List< String > orderNoList );
+
+
 }
