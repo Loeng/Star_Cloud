@@ -84,7 +84,7 @@ public class CouponService {
 
         // 根据优惠方式   插入 优惠码  todo 待完善
         int COUPON_TYPE_CODE=Integer.valueOf(param.get("COUPON_TYPE_CODE").toString());
-        if (COUPON_TYPE_CODE==0){
+        if (COUPON_TYPE_CODE==1){
             BigDecimal rebate=new BigDecimal(param.get("REBATE_DETAIL").toString());
             BigDecimal rebate_cal=rebate.divide(new BigDecimal("10"));
 
@@ -123,6 +123,45 @@ public class CouponService {
             e.printStackTrace();
 
             return new RestRecord(422, WebMessageConstants.SCE_PORTAL_MSG_422);
+        }
+
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
+    /* *
+     * @Description 优惠码审核操作
+     * @Date 15:04 2019/4/4
+     * @param reviewState
+     * @param reviewComment
+     * @param userId
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public RestRecord reviewCoupon(Map param, String userId){
+
+        // 优惠码CODE
+        String couponCode=param.get("COUPON_CODE").toString();
+
+        //优惠码审核状态： T 待审核      F 审核未通过     E 审核通过
+        String reviewState=param.get("REVIEW_STATE").toString();
+
+        // 审核意见
+        String reviewComment=param.get("REVIEW_COMMENT").toString();
+
+        // 审核时间
+        Date reviewDate=new Date();
+
+        try {
+            int count=couponDao.reviewCoupon(couponCode,reviewState,reviewComment,userId,reviewDate);
+            if (count<1){
+                return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
         }
 
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);

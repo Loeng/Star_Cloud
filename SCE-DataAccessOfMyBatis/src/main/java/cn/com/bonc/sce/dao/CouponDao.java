@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +45,14 @@ public class CouponDao {
 
     public int deleteCoupon(String couponCode) throws SQLException {
         return couponMapper.deleteCoupon(couponCode);
+    }
+
+
+    public int reviewCoupon(String couponCode,
+                            String reviewState,
+                            String reviewComment,
+                            String userID,
+                            Date reviewDate) throws SQLException{
+        return couponMapper.reviewCoupon(couponCode,reviewState, reviewComment, userID, reviewDate);
     }
 }

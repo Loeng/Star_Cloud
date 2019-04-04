@@ -6,9 +6,22 @@
         insert into STARCLOUDPORTAL.SCE_COUPON(COUPON_CODE,USER_ID,USE_TIMES_FLAG,TOTAL_USE_TIMES,
         VALID_USE_TIMES,VALID_DATE_FALG,START_DATE,END_DATE,OVER_FLAG,IS_DELETE,STATE,SUBMIT_DATE,REVIEW_STATE,
         REVIEW_COMMENT,REVIEW_USER_ID,REVIEW_DATE)
-        values(#{COUPON_CODE},#{USER_ID},#{USE_TIMES_FLAG},#{TOTAL_USE_TIMES},#{VALID_USE_TIMES},
-        #{VALID_DATE_FALG},#{START_DATE},#{END_DATE},#{OVER_FLAG},#{IS_DELETE},#{STATE},#{SUBMIT_DATE},
-        #{REVIEW_STATE},#{REVIEW_COMMENT},#{REVIEW_USER_ID},#{REVIEW_DATE})
+        values(#{COUPON_CODE,jdbcType=VARCHAR},
+        #{USER_ID,jdbcType=VARCHAR},
+        #{USE_TIMES_FLAG,jdbcType=NUMERIC},
+        #{TOTAL_USE_TIMES,jdbcType=NUMERIC},
+        #{VALID_USE_TIMES,jdbcType=NUMERIC},
+        #{VALID_DATE_FALG,jdbcType=NUMERIC},
+        #{START_DATE,jdbcType=VARCHAR},
+        #{END_DATE,jdbcType=VARCHAR},
+        #{OVER_FLAG,jdbcType=NUMERIC},
+        #{IS_DELETE,jdbcType=NUMERIC},
+        #{STATE,jdbcType=VARCHAR},
+        #{SUBMIT_DATE,jdbcType=VARCHAR},
+        #{REVIEW_STATE,jdbcType=VARCHAR},
+        #{REVIEW_COMMENT,jdbcType=VARCHAR},
+        #{REVIEW_USER_ID,jdbcType=VARCHAR},
+        #{REVIEW_DATE,jdbcType=VARCHAR})
     </insert>
 
 
@@ -16,16 +29,25 @@
         INSERT INTO STARCLOUDPORTAL.SCE_COUPON_GOODSTYPE_REL (ID,COUPON_CODE,GOODS_TYPE_CODE)
         VALUES
         <foreach collection="list" index="index" item="item"  separator="," >
-            (SCE_COUPON_GOODSTYPE_REL_ID.nextval,#{item.COUPON_CODE},#{item.GOODS_TYPE_CODE})
+            (SCE_COUPON_GOODSTYPE_REL_ID.nextval,#{item.COUPON_CODE,jdbcType=VARCHAR},#{item.GOODS_TYPE_CODE,jdbcType=NUMERIC})
         </foreach>
     </insert>
 
     <insert id="insertCouponRebateDetial">
         insert into STARCLOUDPORTAL.SCE_COUPON_REBATE_DETAIL (COUPON_CODE,COUPON_TYPE_CODE,REBATE_DETAIL,REBATE_CAL)
-        values (#{COUPON_CODE},#{COUPON_TYPE_CODE},#{REBATE_DETAIL},#{REBATE_CAL})
+        values (#{COUPON_CODE,jdbcType=VARCHAR},#{COUPON_TYPE_CODE,jdbcType=NUMERIC},#{REBATE_DETAIL,jdbcType=NUMERIC},#{REBATE_CAL,jdbcType=NUMERIC})
     </insert>
 
     <update id="deleteCoupon">
         update STARCLOUDPORTAL.SCE_COUPON set IS_DELETE = 0 and STATE = 'D' where COUPON_CODE = #{COUPON_CODE}
+    </update>
+
+    <update id="reviewCoupon">
+        update STARCLOUDPORTAL.SCE_COUPON set REVIEW_STATE = #{REVIEW_STATE}
+        and REVIEW_USER_ID = #{REVIEW_USER_ID} and REVIEW_DATE=#{REVIEW_DATE}
+        <if test='REVIEW_COMMENT != null and REVIEW_COMMENT != ""'>
+            and REVIEW_COMMENT=#{REVIEW_COMMENT}
+        </if>
+        where COUPON_CODE = #{COUPON_CODE}
     </update>
 </mapper>

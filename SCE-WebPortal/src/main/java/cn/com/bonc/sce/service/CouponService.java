@@ -31,4 +31,8 @@ public class CouponService {
     public RestRecord deleteCoupon(String couponCode){
         return couponDao.deleteCoupon(couponCode);
     }
+
+    public RestRecord reviewCoupon(Map param,String userID){
+        return couponDao.reviewCoupon(param, userID);
+    }
 }

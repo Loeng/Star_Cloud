@@ -5,6 +5,7 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CouponService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,12 @@ public class CouponController {
     private CouponService couponService;
 
 
+    @ApiOperation( value = "新增优惠码", notes = "新增优惠码", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 740, message = WebMessageConstants.SCE_PORTAL_MSG_740, response = RestRecord.class ),
+            @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
+    } )
     @PostMapping("/add-coupon")
     @ResponseBody
     public RestRecord addNewCoupon(@RequestBody Map param, @CurrentUserId String userId){
@@ -49,12 +56,23 @@ public class CouponController {
     }
 
 
+    @ApiOperation( value = "优惠码审核", notes = "优惠码审核", httpMethod = "PUT" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class )
+    } )
     @PutMapping("/review-coupon")
     @ResponseBody
-    public RestRecord reviewCoupon(){
-        return null;
+    public RestRecord reviewCoupon(@RequestBody Map param,@CurrentUserId String userId){
+        return couponService.reviewCoupon(param, userId);
     }
 
+
+    @ApiOperation( value = "删除优惠码", notes = "删除优惠码", httpMethod = "DELETE" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 422, message = WebMessageConstants.SCE_PORTAL_MSG_422, response = RestRecord.class )
+    } )
     @DeleteMapping("/delete-coupon/{couponCode}")
     @ResponseBody
     public RestRecord deleteCoupon(@PathVariable String couponCode){

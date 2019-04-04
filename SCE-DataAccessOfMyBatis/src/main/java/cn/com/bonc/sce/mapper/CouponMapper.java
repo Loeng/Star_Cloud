@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +28,10 @@ public interface CouponMapper {
                                  @Param("REBATE_CAL") BigDecimal rebateCal) throws SQLException;
 
     int deleteCoupon(@Param("COUPON_CODE") String couponCode) throws SQLException;
+
+    int reviewCoupon(@Param("COUPON_CODE") String couponCode,
+                     @Param("REVIEW_STATE") String reviewState,
+                     @Param("REVIEW_COMMENT") String reviewComment,
+                     @Param("REVIEW_USER_ID") String userID,
+                     @Param("REVIEW_DATE") Date reviewDate) throws SQLException;
 }

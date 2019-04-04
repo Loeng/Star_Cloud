@@ -29,4 +29,9 @@ public interface CouponDao {
 
     @RequestMapping(value = "/coupon/deleteCoupon",method = RequestMethod.DELETE)
     public RestRecord deleteCoupon(@RequestParam("couponCode") String couponCode);
+
+
+    @RequestMapping(value = "/coupon/reviewCoupon",method = RequestMethod.PUT)
+    public RestRecord reviewCoupon(@RequestBody Map param,
+                                   @RequestParam("userID") String userID);
 }
