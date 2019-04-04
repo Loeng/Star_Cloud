@@ -57,8 +57,6 @@ public interface UserMapper {
     @Select( "SELECT * FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE LOGIN_NAME =#{loginName}" )
     List< Map< String, Object > > getUserInfoByLoginName( @RequestParam( "loginName" ) String loginName );
 
-    int delTeacher(@Param("id") String id);
-
     Map getTeacherInfo(@Param("id") String id);
 
     int editUser(@Param("user_id") String user_id, @Param("certificate_type")Integer certificate_type,
