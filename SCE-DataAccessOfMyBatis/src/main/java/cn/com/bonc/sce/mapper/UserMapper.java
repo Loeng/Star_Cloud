@@ -4,8 +4,9 @@ import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.bean.UserBean;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,11 @@ public interface UserMapper {
                           @Param("userName")String userName, @Param("loginName")String loginName,
                           @Param("gender")String gender, @Param("position")String position,
                           @Param("accountStatus")Integer accountStatus);
+
+    int delTeacher( @Param( "id" ) String id );
+
+    @Select( "SELECT * FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE LOGIN_NAME =#{loginName}" )
+    List< Map< String, Object > > getUserInfoByLoginName( @RequestParam( "loginName" ) String loginName );
 
     int delTeacher(@Param("id") String id);
 

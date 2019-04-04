@@ -51,4 +51,8 @@ public class InvoiceService {
     public RestRecord getBillingInfoByOrderNo( String userId, List< String > orderNoList ) {
         return invoiceDao.getBillingInfoByOrderNo( userId, orderNoList );
     }
+
+    public RestRecord getBillingInfoByLoginName( String loginName ) {
+        return invoiceDao.getBillingInfoByLoginName(loginName);
+    }
 }

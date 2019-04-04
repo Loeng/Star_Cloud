@@ -2,6 +2,7 @@ package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.InvoiceDao;
+import cn.com.bonc.sce.mapper.UserMapper;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
 import cn.hutool.core.collection.CollectionUtil;
@@ -29,6 +30,9 @@ public class InvoiceController {
 
     @Autowired
     private IdWorker idWorker;
+
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 查询发票基础信息
@@ -254,6 +258,35 @@ public class InvoiceController {
         //todo
         // 已邮寄就不能修改
         return new RestRecord( 200, invoiceDao.updateOrderInvoiceSelective( param ) );
+    }
+
+
+    /**
+     * 增开发票时候，根据用户登陆账号查询用户开票信息（开票资质，收票地址，有效订单号）
+     */
+
+    @GetMapping( "/billing-by-loginName" )
+    public RestRecord getBillingInfoByLoginName( @RequestParam( "loginName" ) String loginName ) {
+        //通过用户填写的账号查询用户信息
+        List< Map< String, Object > > userInfo = userMapper.getUserInfoByLoginName( loginName );
+        if ( userInfo.size() == 0 ) {
+            return new RestRecord( 153, WebMessageConstants.SCE_WEB_MSG_153 );
+        }
+        String USER_ID = ( String ) userInfo.get( 0 ).get( "USER_ID" );
+        BigDecimal ORGANIZATION_ID = ( BigDecimal ) userInfo.get( 0 ).get( "ORGANIZATION_ID" );
+
+        //通过组织id 查询开票信息
+        List< Map > invoiceInfo = invoiceDao.selectInvoiceInfoByOrganizationId( ORGANIZATION_ID.longValue() );
+        //通过组织id 查询收寄地址信息
+        List< Map > address = invoiceDao.selectInvoiceAddress( ORGANIZATION_ID.longValue() );
+        //该用户的有效订单(1，先看用户有哪些订单（）;2,剔除掉在关系表中出现的订单。)
+        List< Map > orderInfo = invoiceDao.selectValidOrderNoByingUserId( USER_ID );
+
+        Map temp = new HashMap();
+        temp.put( "invoiceInfo", invoiceInfo );
+        temp.put( "address", address );
+        temp.put( "ORDER_NO", orderInfo );
+        return new RestRecord( 200, temp );
     }
 
 
