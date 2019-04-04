@@ -57,4 +57,13 @@ public interface UserManagerDao {
 
     @RequestMapping( value = "/userManager/delTeacher", method = RequestMethod.DELETE )
     RestRecord delTeacher( @RequestParam("id")String id);
+
+    @RequestMapping( value = "/userManager/getTeacherInfo", method = RequestMethod.GET )
+    RestRecord getTeacherInfo(@RequestParam("id") String id);
+
+    @RequestMapping( value = "/userManager/editTeacherInfo", method = RequestMethod.PUT )
+    RestRecord editTeacherInfo(@RequestBody String json);
+
+    @RequestMapping( value = "/userManager/addTeacher", method = RequestMethod.POST )
+    RestRecord addTeacher(@RequestBody String json);
 }

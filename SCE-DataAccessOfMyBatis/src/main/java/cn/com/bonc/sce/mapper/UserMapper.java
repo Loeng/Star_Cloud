@@ -5,6 +5,7 @@ import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.bean.UserBean;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,4 +52,28 @@ public interface UserMapper {
                           @Param("accountStatus")Integer accountStatus);
 
     int delTeacher(@Param("id") String id);
+
+    Map getTeacherInfo(@Param("id") String id);
+
+    int editUser(@Param("user_id") String user_id, @Param("certificate_type")Integer certificate_type,
+                 @Param("certificate_number")String certificate_number, @Param("user_name")String user_name,
+                 @Param("gender")String gender, @Param("phone_number")String phone_number,
+                 @Param("mail_address")String mail_address, @Param("birthdate")String birthdate);
+
+    int editTeacher(@Param("user_id") String user_id,@Param("nation_code")String nation_code,@Param("nationlity") String nationlity,
+                    @Param("academic_qualification")String academic_qualification, @Param("work_number")String work_number,
+                    @Param("school_time")String school_time, @Param("teach_time")String teach_time,
+                    @Param("job_code")String job_code, @Param("teach_range")Integer teach_range);
+
+    int addUser(@Param("user_id") Long user_id, @Param("certificate_type")Integer certificate_type,
+                @Param("certificate_number")String certificate_number, @Param("user_name")String user_name,
+                @Param("gender")String gender, @Param("phone_number")String phone_number,
+                @Param("organization_id")String organization_id, @Param("mail_address") String mail_address,
+                @Param("birthdate")String birthdate);
+
+    int addTeacher(@Param("user_id")Long user_id,@Param("nation_code")String nation_code,
+                   @Param("nationlity")String nationlity, @Param("academic_qualification")String academic_qualification,
+                   @Param("work_number")String work_number, @Param("school_time")String school_time,
+                   @Param("teach_time")String teach_time, @Param("job_code")String job_code,
+                   @Param("teach_range")Integer teach_range);
 }

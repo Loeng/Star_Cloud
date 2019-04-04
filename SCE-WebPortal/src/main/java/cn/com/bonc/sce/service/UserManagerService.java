@@ -70,4 +70,16 @@ public class UserManagerService {
     public RestRecord delTeacher(String id) {
         return userManagerDao.delTeacher(id);
     }
+
+    public RestRecord getTeacherInfo(String id) {
+        return userManagerDao.getTeacherInfo(id);
+    }
+
+    public RestRecord editTeacherInfo(String json) {
+        return userManagerDao.editTeacherInfo(json);
+    }
+
+    public RestRecord addTeacher(String json) {
+        return userManagerDao.addTeacher(json);
+    }
 }

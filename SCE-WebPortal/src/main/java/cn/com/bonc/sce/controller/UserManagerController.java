@@ -169,4 +169,24 @@ public class UserManagerController {
         return userManagerService.delTeacher(id);
     }
 
+    @ApiOperation(value = "通过教师id获取教师详细信息", notes="通过教师id获取教师详细信息", httpMethod = "GET")
+    @GetMapping("/getTeacherInfo")
+    @ResponseBody
+    public RestRecord getTeacherInfo(@RequestParam( "id" ) String id){
+        return userManagerService.getTeacherInfo(id);
+    }
+
+    @ApiOperation(value = "通过教师id修改教师详细信息", notes="通过教师id修改教师详细信息", httpMethod = "PUT")
+    @PutMapping("/editTeacherInfo")
+    @ResponseBody
+    public RestRecord editTeacherInfo(@RequestBody String json){
+        return userManagerService.editTeacherInfo(json);
+    }
+
+    @ApiOperation(value = "添加教师", notes="直接添加或者通过转入添加，通过前端出入的addType判断添加方式", httpMethod = "POST")
+    @PostMapping("/addTeacher")
+    @ResponseBody
+    public RestRecord addTeacher(@RequestBody String json){
+        return userManagerService.addTeacher(json);
+    }
 }
