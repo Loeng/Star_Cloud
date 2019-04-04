@@ -60,11 +60,6 @@ public class LoginService {
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
         claims.put( "userType", authenticatedUser.getUserType() );
-        if( subject != null ){
-            claims.put( "subject", subject );
-        } else {
-            claims.put( "subject", AuthenticationController.LOGIN );
-        }
         // 签发人
         claims.put( "iss", "SCE-SSO" );
         // 受众
@@ -84,7 +79,7 @@ public class LoginService {
         claims.put( "IPAdd", MD5Util.getMd5String( userAgent ) );
 
         log.info( "生成JWT，用户名：{}，用户IP：{}，userAgent={}", authenticatedUser.getLoginName(), ip, userAgent );
-        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey(), expirationDate );
+        return JWTUtil.generateTicketWithSecret( claims, authenticatedUser.getSecretKeyPair().getPrivateKey(), expirationDate, subject == null ? AuthenticationController.LOGIN : subject );
     }
 
     /**
@@ -95,11 +90,11 @@ public class LoginService {
      *
      * @return ticket
      */
-    public String generateTicket( Map< String, Object > claims, PrivateKey privateKey, Date expirationDate ) {
+    public String generateTicket( Map< String, Object > claims, PrivateKey privateKey, Date expirationDate, String subject ) {
         claims.put( "iss", "SCE-SSO" );
         claims.put( "aud", "SCE-Application" );
 
-        return JWTUtil.generateTicketWithSecret( claims, privateKey, expirationDate );
+        return JWTUtil.generateTicketWithSecret( claims, privateKey, expirationDate, subject );
     }
 
     /**

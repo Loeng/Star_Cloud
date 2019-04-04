@@ -1,6 +1,5 @@
 package cn.com.bonc.sce.controller;
 
-import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.constants.DateConstants;
 import cn.com.bonc.sce.constants.MessageConstants;
@@ -51,10 +50,10 @@ public class AuthenticationController {
     private static final String TEMP_TOKEN = "temp_token";
     private static final String REFRESH = "refresh";
 
-    @Value("{sce.appId}")
+    @Value( "${sce.appId}" )
     private String appId;
 
-    @Value("{sce.appToken}")
+    @Value( "${sce.appToken}" )
     private String appToken;
 
     private UserService userService;

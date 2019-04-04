@@ -37,31 +37,31 @@ public class JWTUtil {
      *
      * @return 加密过后的 JWT ticket
      */
-    public static String generateTicketWithSecret( Map< String, Object > header, Map< String, Object > claims, Key secret ) {
-        return defaultBuilder()
+    public static String generateTicketWithSecret( Map< String, Object > header, Map< String, Object > claims, Key secret, String subject ) {
+        return defaultBuilder( subject )
                 .setHeader( header )
                 .addClaims( claims )
                 .signWith( secret )
                 .compact();
     }
 
-    public static String generateTicketWithSecret( Map< String, Object > claims, Key secret ) {
-        return defaultBuilder()
+    public static String generateTicketWithSecret( Map< String, Object > claims, Key secret, String subject ) {
+        return defaultBuilder( subject )
                 .addClaims( claims )
                 .signWith( secret )
                 .compact();
     }
 
-    public static String generateTicketWithSecret( Map< String, Object > claims, Key secret, Date expirationDate ) {
-        return defaultBuilder()
+    public static String generateTicketWithSecret( Map< String, Object > claims, Key secret, Date expirationDate, String subject ) {
+        return defaultBuilder( subject )
                 .addClaims( claims )
                 .setExpiration( expirationDate )
                 .signWith( secret )
                 .compact();
     }
 
-    public static String generateTicketWithSecret( Key secret ) {
-        return defaultBuilder().signWith( secret ).compact();
+    public static String generateTicketWithSecret( Key secret, String subject ) {
+        return defaultBuilder( subject ).signWith( secret ).compact();
     }
 
     public static boolean volidate( String jwt ) {
@@ -69,7 +69,7 @@ public class JWTUtil {
     }
 
     @SuppressWarnings( "unchecked" )
-    public static JwtBuilder defaultBuilder() {
+    public static JwtBuilder defaultBuilder( String subject ) {
         Map defaultHeader = Jwts.header()
                 .setType( "JWT" );
 
@@ -78,7 +78,7 @@ public class JWTUtil {
                 // .setIssuer( "base" )
                 // 一分钟过期
 //                .setExpiration( new Date( System.currentTimeMillis() + DateConstants.ONE_MINUTE ) )
-//                .setSubject( "login" )
+                .setSubject( subject )
                 // .setAudience( "sce-application" )
                 .setNotBefore( new Date() )
                 .setIssuedAt( new Date() )
