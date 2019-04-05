@@ -22,6 +22,30 @@ import java.util.Map;
 public interface CouponDao {
 
 
+    @RequestMapping(value = "/coupon/queryCouponType",method = RequestMethod.GET)
+    public RestRecord queryCouponType();
+
+
+    @RequestMapping(value = "/coupon/queryGoodsType",method = RequestMethod.GET)
+    public RestRecord queryGoodsType();
+
+
+    @RequestMapping(value = "/coupon/queryAllCouponByCondition",method = RequestMethod.GET)
+    public RestRecord queryAllCouponByCondition(@RequestParam("COUPON_CODE") String COUPON_CODE,
+                                                @RequestParam("USER_NAME") String USER_NAME,
+                                                @RequestParam("COUPON_TYPE_CODE") String COUPON_TYPE_CODE,
+                                                @RequestParam("REVIEW_STATE") String REVIEW_STATE,
+                                                @RequestParam("OVER_FLAG") String OVER_FLAG,
+                                                @RequestParam("ORDER_BY") String ORDER_BY,
+                                                @RequestParam("pageNum") int pageNum,
+                                                @RequestParam("pageSize") int pageSize);
+
+
+    @RequestMapping(value = "/coupon/queryAgentCoupon",method = RequestMethod.GET)
+    public RestRecord queryAgentCoupon(@RequestParam("userId") String userId,
+                                       @RequestParam("pageNum") int pageNum,
+                                       @RequestParam("pageSize") int pageSize);
+
     @RequestMapping(value = "/coupon/insertCoupon",method = RequestMethod.POST)
     public RestRecord addNewCoupon(@RequestBody Map param,
                                    @RequestParam("userId") String userId);

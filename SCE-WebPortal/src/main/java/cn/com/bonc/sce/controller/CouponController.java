@@ -37,6 +37,17 @@ public class CouponController {
     private CouponService couponService;
 
 
+    @ApiOperation( value = "优惠码优惠方式查询", notes = "优惠码优惠方式查询", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping("/query-couponType")
+    @ResponseBody
+    public RestRecord queryCouponType(){
+        return couponService.queryCouponType();
+    }
+
+
     @ApiOperation( value = "新增优惠码", notes = "新增优惠码", httpMethod = "POST" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
@@ -49,10 +60,42 @@ public class CouponController {
         return couponService.addNewCoupon(param,userId);
     }
 
-    @GetMapping("/query-coupons")
+
+
+    @ApiOperation( value = "优惠码查询（代理商）", notes = "优惠码查询（代理商）", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping("/query-agent-coupons/{userId}")
     @ResponseBody
-    public RestRecord queryCouponByCondition(){
-        return null;
+    public RestRecord queryAgentCoupon(@PathVariable String userId,
+                                       @RequestParam(defaultValue = "1") int pageNum,
+                                       @RequestParam(defaultValue = "10") int pageSize){
+        return couponService.queryAgentCoupon(userId,pageNum,pageSize);
+    }
+//    public RestRecord queryAgentCoupon(@CurrentUserId String userId,
+//                                       @RequestParam(defaultValue = "1") int pageNum,
+//                                       @RequestParam(defaultValue = "10") int pageSize){
+//        return couponService.queryAgentCoupon(userId,pageNum,pageSize);
+//    }
+
+
+    // 排序未实现
+    @ApiOperation( value = "优惠码查询（运维管理）", notes = "优惠码查询（运维管理）", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping("/query-all-coupons")
+    @ResponseBody
+    public RestRecord queryAllCouponByCondition(@RequestParam(required = false) String COUPON_CODE,
+                                                @RequestParam(required = false) String USER_NAME,
+                                                @RequestParam(required = false) String COUPON_TYPE_CODE,
+                                                @RequestParam(required = false) String REVIEW_STATE,
+                                                @RequestParam(required = false) String OVER_FLAG,
+                                                @RequestParam(required = false) String ORDER_BY,
+                                                @RequestParam(defaultValue = "1") int pageNum,
+                                                @RequestParam(defaultValue = "10") int pageSize){
+        return couponService.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY, pageNum, pageSize);
     }
 
 

@@ -26,6 +26,23 @@ public class CouponController {
     @Autowired
     private CouponService couponService;
 
+
+    @ApiOperation(value = "优惠码优惠方式查询", notes="优惠码优惠方式查询", httpMethod = "GET")
+    @GetMapping("/queryCouponType")
+    public RestRecord queryCouponType(){
+        return couponService.queryCouponType();
+    }
+
+
+    @ApiOperation(value = "商品类型查询", notes="商品类型查询", httpMethod = "GET")
+    @GetMapping("/queryGoodsType")
+    public RestRecord queryGoodsType(){
+        return couponService.queryGoodsType();
+    }
+
+
+
+
     @ApiOperation(value = "新增优惠码", notes="新增优惠码", httpMethod = "POST")
     @PostMapping("/insertCoupon")
     public RestRecord addNewCoupon(@RequestBody Map param,@RequestParam String userId){
@@ -46,6 +63,29 @@ public class CouponController {
     public RestRecord reviewCoupon(@RequestBody Map param,
                                    @RequestParam String userID){
         return couponService.reviewCoupon(param, userID);
+    }
+
+
+    @ApiOperation(value = "优惠码查询（运维管理）", notes="优惠码查询（运维管理）", httpMethod = "GET")
+    @GetMapping("/queryAllCouponByCondition")
+    public RestRecord queryAllCouponByCondition(@RequestParam(required = false) String COUPON_CODE,
+                                                @RequestParam(required = false) String USER_NAME,
+                                                @RequestParam(required = false) String COUPON_TYPE_CODE,
+                                                @RequestParam(required = false) String REVIEW_STATE,
+                                                @RequestParam(required = false) String OVER_FLAG,
+                                                @RequestParam(required = false) String ORDER_BY,
+                                                @RequestParam int pageNum,
+                                                @RequestParam int pageSize){
+        return couponService.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY, pageNum, pageSize);
+    }
+
+
+    @ApiOperation(value = "优惠码查询（代理商）", notes="优惠码查询（代理商）", httpMethod = "GET")
+    @GetMapping("/queryAgentCoupon")
+    public RestRecord queryAgentCoupon(@RequestParam String userId,
+                                       @RequestParam int pageNum,
+                                       @RequestParam int pageSize){
+        return couponService.queryAgentCoupon(userId, pageNum, pageSize);
     }
 
 }

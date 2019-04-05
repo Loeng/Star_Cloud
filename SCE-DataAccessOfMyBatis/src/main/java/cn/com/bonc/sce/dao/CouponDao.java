@@ -25,6 +25,14 @@ public class CouponDao {
     @Resource
     private CouponMapper couponMapper;
 
+    public List<Map> queryCouponType(){
+        return couponMapper.queryCouponType();
+    }
+
+    public List<Map> queryGoodsType(){
+        return couponMapper.queryGoodsType();
+    }
+
     public int insertCoupon(CouponBean couponBean) throws SQLException {
         return couponMapper.insertCoupon(couponBean);
     }
@@ -54,5 +62,19 @@ public class CouponDao {
                             String userID,
                             Date reviewDate) throws SQLException{
         return couponMapper.reviewCoupon(couponCode,reviewState, reviewComment, userID, reviewDate);
+    }
+
+
+    public List<Map> queryAgentCoupon(String userId){
+        return couponMapper.queryAgentCoupon(userId);
+    }
+
+    public List<Map> queryAllCouponByCondition(String COUPON_CODE,
+                                               String USER_NAME,
+                                               String COUPON_TYPE_CODE,
+                                               String REVIEW_STATE,
+                                               String OVER_FLAG,
+                                               String ORDER_BY){
+        return couponMapper.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY);
     }
 }
