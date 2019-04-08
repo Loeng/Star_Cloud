@@ -245,6 +245,7 @@ public class CouponService {
         CouponBean couponBean=new CouponBean();
 
         couponBean.setCOUPON_CODE(param.get("COUPON_CODE").toString());
+        couponBean.setCOUPON_TYPE_CODE(Integer.valueOf(param.get("COUPON_TYPE_CODE").toString()));
         couponBean.setUSER_ID(userId);
 
         int USE_TIMES_FLAG=Integer.valueOf(param.get("USE_TIMES_FLAG").toString());
