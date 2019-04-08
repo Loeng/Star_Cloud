@@ -186,6 +186,10 @@ public class UserManagerController {
     @ApiOperation(value = "添加教师", notes="直接添加或者通过转入添加，通过前端出入的addType判断添加方式", httpMethod = "POST")
     @PostMapping("/addTeacher")
     @ResponseBody
+    /*
+    * {   "ADDTYPE":0 	"ORGANIZATION_ID": "66666666666", 	"CERTIFICATE_TYPE": 0, 	" CERTIFICATE_NUMBER": "66666666666666666", 	"USER_NAME": "USER_NAME", 	"GENDER": "1", 	"PHONE_NUMBER": "66666666666", 	"MAIL_ADDRESS": "666@666.666", 	"BIRTHDATE ": "", 	"NATION_CODE": "1", 	"NATIONLITY": "666", 	"ACADEMIC_QUALIFICATION": "666", 	"WORK_NUMBER": "666", 	"SCHOOL_TIME": "", 	"TEACH_TIME": "", 	"JOB_CODE": "1", 	"TEACH_RANGE": 1 }
+    *
+    * */
     public RestRecord addTeacher(@RequestBody String json){
         return userManagerService.addTeacher(json);
     }

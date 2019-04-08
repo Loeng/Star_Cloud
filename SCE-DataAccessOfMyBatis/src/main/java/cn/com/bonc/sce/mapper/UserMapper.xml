@@ -435,4 +435,15 @@
         #{academic_qualification,jdbcType=VARCHAR},#{work_number,jdbcType=VARCHAR},#{school_time,jdbcType=VARCHAR},
         #{teach_time,jdbcType=VARCHAR},#{job_code,jdbcType=VARCHAR},#{teach_range,jdbcType=VARCHAR},1)
     </insert>
+
+    <insert id="transInto">
+        INSERT INTO STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        (ID,USER_ID,USER_TYPE,ORIGIN_SCHOOL_ID,TARGET_SCHOOL_ID,APPLY_STATUS,APPLY_USER_ID,IS_DELETE,
+        TEA_ENTRANCE_YEAR,TEA_WORK_NUMBER,TEA_POSITION,TEACH_RANGE)
+        VALUES
+        (#{id,jdbcType=BIGINT},#{user_id,jdbcType=BIGINT},2,#{origin_school_id,jdbcType=VARCHAR},
+        #{target_school_id,jdbcType=VARCHAR},0,#{apply_user_id,jdbcType=VARCHAR},1,
+        #{tea_entrance_year,jdbcType=VARCHAR},#{tea_work_number,jdbcType=VARCHAR},
+        #{tea_position,jdbcType=VARCHAR},#{tea_range,jdbcType=VARCHAR})
+    </insert>
 </mapper>

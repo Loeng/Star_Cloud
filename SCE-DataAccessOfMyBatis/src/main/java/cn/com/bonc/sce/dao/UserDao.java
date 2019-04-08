@@ -99,4 +99,9 @@ public class UserDao {
     public int addTeacher(Long user_id,String nation_code, String nationlity, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
         return userMapper.addTeacher(user_id,nation_code,nationlity,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
     }
+
+
+    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, String tea_entrance_year, String tea_position,String tea_range) {
+        return userMapper.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,tea_entrance_year,tea_position,tea_range);
+    }
 }

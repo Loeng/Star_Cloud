@@ -80,4 +80,10 @@ public interface UserMapper {
                    @Param("work_number")String work_number, @Param("school_time")String school_time,
                    @Param("teach_time")String teach_time, @Param("job_code")String job_code,
                    @Param("teach_range")Integer teach_range);
+
+    int transInto(@Param("id")Long id,@Param("user_id")String user_id,
+                  @Param("apply_user_id")String apply_user_id,
+                  @Param("origin_school_id")String origin_school_id,@Param("target_school_id")String target_school_id,
+                  @Param("tea_work_number")String tea_work_number,@Param("tea_range")String tea_range,
+                  @Param("tea_entrance_year")String tea_entrance_year, @Param("tea_position")String tea_position);
 }
