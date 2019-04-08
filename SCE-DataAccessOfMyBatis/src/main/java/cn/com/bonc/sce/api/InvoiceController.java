@@ -224,6 +224,8 @@ public class InvoiceController {
         map.put( "INVOICE_ACCOUNT", money );
         map.put( "APPLY_TIME", new Date() );
         map.put( "ID", orderInvoiceId );
+        map.put( "CREATE_TIME", new Date() );
+        map.put( "CREATE_USER_ID", userId );
         invoiceDao.insertOrderInvoiceSelective( map );
 
         //存入订单与发票关系表
