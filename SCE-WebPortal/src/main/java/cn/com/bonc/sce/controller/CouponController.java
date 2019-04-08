@@ -66,18 +66,13 @@ public class CouponController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/query-agent-coupons/{userId}")
+    @GetMapping("/query-agent-coupons")
     @ResponseBody
-    public RestRecord queryAgentCoupon(@PathVariable String userId,
+    public RestRecord queryAgentCoupon(@CurrentUserId String userId,
                                        @RequestParam(defaultValue = "1") int pageNum,
                                        @RequestParam(defaultValue = "10") int pageSize){
         return couponService.queryAgentCoupon(userId,pageNum,pageSize);
     }
-//    public RestRecord queryAgentCoupon(@CurrentUserId String userId,
-//                                       @RequestParam(defaultValue = "1") int pageNum,
-//                                       @RequestParam(defaultValue = "10") int pageSize){
-//        return couponService.queryAgentCoupon(userId,pageNum,pageSize);
-//    }
 
 
     // 排序未实现
