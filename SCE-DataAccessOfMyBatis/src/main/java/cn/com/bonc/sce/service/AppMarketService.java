@@ -44,8 +44,11 @@ public class AppMarketService {
         return restRecord;
     }
 
-    @Transactional( rollbackFor = Exception.class )
-    public RestRecord saveBacklog( String userId, Map< String, Object > backlog ) {
+    @Transactional
+    public RestRecord saveBacklog( String appId, String appToken, String userId, Map< String, Object > backlog ) {
+        if( !appToken.equals( appMarketMapper.selectAppToken( appId ) ) ){
+            return new RestRecord( 152, WebMessageConstants.SCE_WEB_MSG_152 );
+        }
         List< String > operateUserIds = ( List ) backlog.get( "users" );
         if ( operateUserIds.size() < 1 ) {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "users" ) );
@@ -58,10 +61,14 @@ public class AppMarketService {
             long backlogId = idWorker.nextId();
             backlog.put( "backlogId", backlogId );
             backlog.put( "operateUserId", operateUserId );
+            backlog.put( "appId", appId );
             map.put( "backlogId", backlogId );
             map.put( "operateUserId", operateUserId );
             result.add( map );
             appMarketMapper.insertBacklog( backlog );
+            backlog.put( "id", idWorker.nextId() );
+            appMarketMapper.insertToDo( backlog );
+            appMarketMapper.insertPendingItem( backlog );
         }
 
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, result );

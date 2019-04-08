@@ -43,9 +43,11 @@ public class AppMarketController {
     }
 
     @PostMapping("/backlog")
-    public RestRecord backlog( @CurrentUserId String userId,
+    public RestRecord backlog( @RequestParam String appId,
+                               @RequestParam String appToken,
+                               @RequestParam String userId,
                                @RequestBody Map< String, Object > backlog ) {
-        return appMarketService.saveBacklog( userId, backlog );
+        return appMarketService.saveBacklog( appId, appToken, userId, backlog );
     }
 
     @GetMapping( "/app-token" )
@@ -60,7 +62,7 @@ public class AppMarketController {
 
     @PutMapping( "/backlog" )
     public RestRecord backlog_patch( @RequestHeader String userId,
-                                     @RequestBody Map map){
+                                     @RequestBody Map map ){
         return appMarketService.changeBacklog( userId, map );
     }
 

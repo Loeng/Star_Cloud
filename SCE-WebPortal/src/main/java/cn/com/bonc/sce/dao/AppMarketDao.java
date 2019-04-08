@@ -4,6 +4,7 @@ import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
 @Repository
@@ -30,7 +31,9 @@ public interface AppMarketDao {
                          @PathVariable( "pageSize" ) String pageSize );
 
     @RequestMapping(value = "/app-portal/backlog", method = RequestMethod.POST)
-    RestRecord backlog( @RequestParam( value = "userId" ) String userId,
+    RestRecord backlog( @RequestParam( "appId" ) String appId,
+                        @RequestParam( "appToken" ) String appToken,
+                        @RequestParam( "userId" ) String userId,
                         @RequestBody Map backlog );
 
     @RequestMapping( value = "/app-portal/backlog", method = RequestMethod.PUT )
@@ -38,6 +41,6 @@ public interface AppMarketDao {
                               @RequestBody Map map );
 
     @RequestMapping(value = "/app-portal/app-token", method = RequestMethod.GET)
-    String getAppToken(@RequestParam("appId") String appId);
+    String getAppToken(@RequestParam("appId") String appId );
 
 }

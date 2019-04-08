@@ -5,9 +5,7 @@ import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,16 +23,15 @@ public class AppMarketService {
         return appMarketDao.userToDo( userId, pageNum, pageSize );
     }
 
-    public RestRecord backlog( Map< String, Object > backlog, String userId ) {
-        RestRecord restRecord = appMarketDao.backlog( userId, backlog );
-//        for(String operateUserId : (List<String>) backlog.get("users")){
-//            socket.sendMessage(operateUserId, backlog.get("content"));
-//        }
-        return restRecord;
+    public RestRecord backlog(Map< String, Object > backlog, List<Map> list) {
+        String appId = backlog.get( "appId" ).toString();
+        String appToken = backlog.get( "appToken" ).toString();
+        String userId = list.get(0).get("userId").toString();
+        return appMarketDao.backlog( appId, appToken, userId, backlog );
     }
 
-    public RestRecord backlog_patch(String userId, Map map){
-        return appMarketDao.backlog_patch(userId, map);
+    public RestRecord backlog_patch( String userId, Map map ){
+        return appMarketDao.backlog_patch( userId, map );
     }
 
 }

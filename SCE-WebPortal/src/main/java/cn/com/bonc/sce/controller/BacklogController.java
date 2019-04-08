@@ -5,13 +5,11 @@ import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppMarketService;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -23,24 +21,27 @@ public class BacklogController {
     private AppMarketService appMarketService;
 
     @PostMapping("/backlog")
-    public RestRecord backlog( @RequestBody Map< String, Object > backlog, @CurrentUserId String userId ) {
-        if ( backlog == null || backlog.get( "backlogType" ) == null || backlog.get( "content" ) == null || backlog.get( "url" ) == null || backlog.get( "users" ) == null ) {
+    public RestRecord backlog( @RequestBody Map< String, Object > backlog, @Payloads List<Map> list ) {
+        System.out.println(backlog);
+        if ( backlog == null || backlog.get( "backlogType" ) == null || backlog.get( "url" ) == null|| backlog.get( "appId" ) == null
+                || backlog.get( "users" ) == null|| backlog.get( "title" ) == null || backlog.get( "appToken" ) == null ) {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必须" ) );
         }
-        return appMarketService.backlog( backlog, userId );
+        return appMarketService.backlog( backlog, list );
     }
 
-    @GetMapping( "/backlog/{pageNum}/{pageSize}" )
+    @GetMapping( "/backlog" )
     public RestRecord backlog( @CurrentUserId String userId,
-                               @PathVariable String pageNum,
-                               @PathVariable String pageSize ) {
+                               @RequestParam( required = false, value = "pageNum", defaultValue = "1" ) String pageNum,
+                               @RequestParam( required = false, value = "pageSize", defaultValue = "10" ) String pageSize ) {
         return appMarketService.userToDo( userId, pageNum, pageSize );
     }
 
     @PatchMapping("/backlog")
-    public RestRecord backlog_patch(@CurrentUserId String userId,
-                                    @RequestBody Map<String, String> map){
-        return appMarketService.backlog_patch(userId,map);
+    public RestRecord backlog_patch( @Payloads List<Map> list,
+                                     @RequestBody Map< String, String > map){
+        Object userId = list.get( 0 ).get( "userId" );
+        return appMarketService.backlog_patch( userId.toString(), map );
     }
 
 }

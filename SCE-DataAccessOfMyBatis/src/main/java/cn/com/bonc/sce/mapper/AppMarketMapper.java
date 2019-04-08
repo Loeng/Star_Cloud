@@ -17,6 +17,10 @@ public interface AppMarketMapper {
 
     void insertBacklog( Map map );
 
+    void insertToDo( Map map );
+
+    void insertPendingItem( Map map );
+
     String selectAppToken( String appId );
 
     void updateBacklog( Map map );

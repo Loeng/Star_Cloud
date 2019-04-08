@@ -25,41 +25,52 @@ GROUP BY
 
     </select>
 
-    <!--<select id="selectUserToDo" resultType="Map">
-        select b.content,
-        b.create_user_id,
-        b.create_time,
-        b.update_time,
-        b.status,
-        b.remarks,
-        p.pending_item_name,
-        t.todo_type from STARCLOUDPORTAL.sce_pending_items p
-        inner join STARCLOUDPORTAL.sce_backlog b
-        on b.id = p.pending_item_id and  b.is_delete = 1
-        inner join STARCLOUDPORTAL.sce_todo_type t
-        on p.pending_item_type = t.id
-        where b.is_delete = 1 and b.operate_user_id = #{param1}
-    </select>-->
-
     <select id="selectUserToDo" resultType="Map">
-        select b.content,
+        select b.title,
+        b.content,
         b.create_user_id,
-        b.create_time,
-        b.update_time,
-        b.status,
-        b.remarks from  STARCLOUDPORTAL.sce_backlog b
-        where b.is_delete = 1 and b.operate_user_id = #{param1}
+        TO_CHAR(b.create_time,'yyyy-MM-dd HH24:MI') as create_time,
+        p.pending_item_name,
+        b.url,
+        i.APP_LINK as receive_page,
+        t.todo_type from STARCLOUDPORTAL.sce_pending_items p
+        right join STARCLOUDPORTAL.sce_backlog b
+        on b.id = p.pending_item_id and  b.is_delete = 1
+        left join STARCLOUDPORTAL.sce_todo_type t
+        on p.pending_item_type = t.id
+        LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_INFO i
+		ON b.APP_ID = i.APP_ID
+        where b.is_delete = 1 and b.status = 1 and b.operate_user_id = #{param1}
+        order by b.create_time desc
     </select>
+
+    <insert id="insertToDo" >
+        insert into STARCLOUDPORTAL.sce_todo_type(id, todo_type)
+        values (#{id}, #{backlogType})
+    </insert>
+
+    <insert id="insertPendingItem">
+        insert into STARCLOUDPORTAL.sce_pending_items(pending_item_id, pending_item_name, pending_item_type)
+        values (#{backlogId}, #{pendingItemName}, #{id})
+    </insert>
 
     <select id="selectUserToDoCount" resultType="int">
         select count(*) from  STARCLOUDPORTAL.sce_backlog b
-        where b.is_delete = 1 and b.operate_user_id = #{param1}
+        where b.is_delete = 1 and b.status = 1 and b.operate_user_id = #{param1}
     </select>
 
-    <select id="insertBacklog">
-        insert into STARCLOUDPORTAL.sce_backlog(id, content, create_user_id,operate_user_id, create_time, status, url)
-        values (#{backlogId}, #{content}, #{userId}, #{operateUserId},SYSDATE, 1, #{url})
-    </select>
+    <insert id="insertBacklog">
+        insert into STARCLOUDPORTAL.sce_backlog(id,
+        <if test="content != null and content != ''">
+            content,
+        </if>
+        create_user_id,operate_user_id, create_time, status, url, title, app_id )
+        values (#{backlogId},
+        <if test="content != null and content != ''">
+            #{content},
+        </if>
+         #{userId}, #{operateUserId},SYSDATE, 1, #{url}, #{title}, #{appId})
+    </insert>
 
     <select id="selectAppToken" resultType="String">
         SELECT APP_TOKEN FROM STARCLOUDMARKET.SCE_MARKET_APP_INFO
