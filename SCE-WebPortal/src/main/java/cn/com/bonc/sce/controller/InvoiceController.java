@@ -130,5 +130,11 @@ public class InvoiceController {
         return invoiceService.editOrderInvoiceState( stateInfo, userId );
     }
 
+    @ApiOperation( value = "根据用户登陆账号查询用户开票信息（开票资质，收票地址，有效订单号）", notes = "根据用户登陆账号查询用户开票信息（开票资质，收票地址，有效订单号）", httpMethod = "GET" )
+    @GetMapping( "/billing-by-loginName" )
+    public RestRecord getBillingInfoByLoginName( @RequestParam( "loginName" ) String loginName ) {
+        return invoiceService.getBillingInfoByLoginName(loginName);
+    }
+
 
 }

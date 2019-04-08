@@ -320,7 +320,7 @@
     </select>
 
     <select id="getTeachers" resultType="Map">
-        SELECT USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,ACCOUNT_STATUS,POSITION
+        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,ACCOUNT_STATUS,POSITION
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
         WHERE u.USER_TYPE=2
@@ -350,5 +350,89 @@
         WHERE USER_ID=#{id}
     </update>
 
+    <select id="getTeacherInfo" resultType="Map">
+        SELECT CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,MAIL_ADDRESS,BIRTHDATE,
+                NATION_CODE,NATIONLITY,ACADEMIC_QUALIFICATION,WORK_NUMBER,SCHOOL_TIME,TEACH_TIME,JOB_CODE,
+                TEACH_RANGE
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER u , STARCLOUDPORTAL.SCE_INFO_TEACHER t
+        WHERE u.USER_ID=t.USER_ID
+        AND u.USER_ID=#{id}
+    </select>
 
+    <update id="editUser">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
+        <set>
+            <if test="certificate_type!=null">
+                CERTIFICATE_TYPE=#{certificate_type},
+            </if>
+            <if test="certificate_number!=null">
+                CERTIFICATE_NUMBER=#{certificate_number},
+            </if>
+            <if test="user_name!=null">
+                USER_NAME=#{user_name},
+            </if>
+            <if test="gender!=null">
+                GENDER=#{gender},
+            </if>
+            <if test="phone_number!=null">
+                PHONE_NUMBER=#{phone_number},
+            </if>
+            <if test="mail_address!=null">
+                MAIL_ADDRESS=#{mail_address},
+            </if>
+            <if test="birthdate!=null">
+                BIRTHDATE=#{birthdate}
+            </if>
+        </set>
+        WHERE USER_ID=#{user_id}
+    </update>
+
+    <update id="editTeacher">
+        UPDATE  STARCLOUDPORTAL.SCE_INFO_TEACHER
+        <set>
+            <if test="nation_code!=null">
+                NATION_CODE=#{nation_code},
+            </if>
+            <if test="nationlity!=null">
+                NATIONLITY=#{nationlity},
+            </if>
+            <if test="academic_qualification!=null">
+                ACADEMIC_QUALIFICATION=#{academic_qualification},
+            </if>
+            <if test="work_number!=null">
+                WORK_NUMBER=#{work_number},
+            </if>
+            <if test="school_time!=null">
+                SCHOOL_TIME=#{school_time},
+            </if>
+            <if test="teach_time!=null">
+                TEACH_TIME=#{teach_time},
+            </if>
+            <if test="job_code!=null">
+                JOB_CODE=#{job_code},
+            </if>
+            <if test="teach_range!=null">
+                TEACH_RANGE=#{teach_range}
+            </if>
+        </set>
+        WHERE USER_ID=#{user_id}
+    </update>
+
+    <insert id="addUser">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
+        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE)
+        VALUES
+        (#{user_id,jdbcType=BIGINT},#{certificate_type,jdbcType=INTEGER},#{certificate_number,jdbcType=VARCHAR},
+        #{user_name,jdbcType=VARCHAR},#{gender,jdbcType=VARCHAR},#{phone_number,jdbcType=VARCHAR},
+        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},#{birthdate,jdbcType=VARCHAR},1)
+    </insert>
+
+    <insert id="addTeacher">
+        INSERT INTO STARCLOUDPORTAL.SCE_INFO_TEACHER
+        (USER_ID,NATION_CODE, NATIONLITY, ACADEMIC_QUALIFICATION,WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, JOB_CODE, TEACH_RANGE,IS_DELETE)
+        VALUES
+        (#{user_id,jdbcType=BIGINT},#{nation_code,jdbcType=INTEGER},#{nationlity,jdbcType=VARCHAR},
+        #{academic_qualification,jdbcType=VARCHAR},#{work_number,jdbcType=VARCHAR},#{school_time,jdbcType=VARCHAR},
+        #{teach_time,jdbcType=VARCHAR},#{job_code,jdbcType=VARCHAR},#{teach_range,jdbcType=VARCHAR},1)
+    </insert>
 </mapper>

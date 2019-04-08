@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,14 @@ public class CouponDao {
 
     @Resource
     private CouponMapper couponMapper;
+
+    public List<Map> queryCouponType(){
+        return couponMapper.queryCouponType();
+    }
+
+    public List<Map> queryGoodsType(){
+        return couponMapper.queryGoodsType();
+    }
 
     public int insertCoupon(CouponBean couponBean) throws SQLException {
         return couponMapper.insertCoupon(couponBean);
@@ -44,5 +53,28 @@ public class CouponDao {
 
     public int deleteCoupon(String couponCode) throws SQLException {
         return couponMapper.deleteCoupon(couponCode);
+    }
+
+
+    public int reviewCoupon(String couponCode,
+                            String reviewState,
+                            String reviewComment,
+                            String userID,
+                            Date reviewDate) throws SQLException{
+        return couponMapper.reviewCoupon(couponCode,reviewState, reviewComment, userID, reviewDate);
+    }
+
+
+    public List<Map> queryAgentCoupon(String userId){
+        return couponMapper.queryAgentCoupon(userId);
+    }
+
+    public List<Map> queryAllCouponByCondition(String COUPON_CODE,
+                                               String USER_NAME,
+                                               String COUPON_TYPE_CODE,
+                                               String REVIEW_STATE,
+                                               String OVER_FLAG,
+                                               String ORDER_BY){
+        return couponMapper.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY);
     }
 }

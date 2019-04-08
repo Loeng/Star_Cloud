@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class CouponBean {
     String COUPON_CODE;  // 优惠码
+    int COUPON_TYPE_CODE;  // 优惠码
     String USER_ID; //  申请人ID
     int USE_TIMES_FLAG; //  使用次数是否无限：  0 无限      1 有限使用次数
     int TOTAL_USE_TIMES; //  （使用次数有限制时）总的使用次数
@@ -156,5 +157,13 @@ public class CouponBean {
 
     public void setREVIEW_DATE(Date REVIEW_DATE) {
         this.REVIEW_DATE = REVIEW_DATE;
+    }
+
+    public int getCOUPON_TYPE_CODE() {
+        return COUPON_TYPE_CODE;
+    }
+
+    public void setCOUPON_TYPE_CODE(int COUPON_TYPE_CODE) {
+        this.COUPON_TYPE_CODE = COUPON_TYPE_CODE;
     }
 }

@@ -119,7 +119,7 @@
         , D.IS_DELETE, D.RECIPIENTS, D.POST_ADDRESS, D.TELEPHONE_NUMBER, D.PROVINCE
         , D.CITY, D.AREA, D.INVOICE_TITLE, D.OPEN_TYPE, D.INVOICE_CONTENT
         , D.TAX_REGISTRATION_NO, D.DEPOSIT_BANK, D.BANK_ACCOUNT, D.REGISTRATION_LOCATION, D.REGISTRATION_TELEPHONE
-        , D.INVOICE_CODE, D.INVOICE_NO, D.EXPRESS_COMPANY, D.COURIER_NUMBER,'管理员'  AS CREATE_USER_NAME
+        , D.INVOICE_CODE, D.INVOICE_NO, D.EXPRESS_COMPANY, D.COURIER_NUMBER,scu.USER_NAME AS CREATE_USER_NAME,D.CREATE_TIME
         FROM STARCLOUDPORTAL.SCE_ORDER_INVOICE_INFO D
         INNER JOIN (
         SELECT WMSYS.WM_CONCAT(C.ORDER_ID) AS ORDER_NO, B.ID
@@ -128,6 +128,8 @@
         LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INFO C ON A.ORDER_ID = C.ORDER_ID
         GROUP BY B.ID
         ) E ON D.ID = E.ID
+        LEFT JOIN
+        STARCLOUDPORTAL.SCE_COMMON_USER scu ON D.CREATE_USER_ID =scu.user_id
         <where>
             <if test="INVOICE_STATUS != null and INVOICE_STATUS != '' ">
                 AND D.INVOICE_STATUS = #{INVOICE_STATUS}
@@ -142,7 +144,7 @@
                 AND D.INVOICE_CONTENT = #{INVOICE_CONTENT}
             </if>
         </where>
-        ORDER BY D.APPLY_TIME DESC
+        ORDER BY D.CREATE_TIME DESC
     </select>
     <!--修改发票资质信息-->
     <update id="updateInvoiceInfoByOrganizationId" parameterType="String">
@@ -291,6 +293,8 @@
             <if test="INVOICE_NO != null">INVOICE_NO,</if>
             <if test="EXPRESS_COMPANY != null">EXPRESS_COMPANY,</if>
             <if test="COURIER_NUMBER != null">COURIER_NUMBER,</if>
+            <if test="CREATE_USER_ID != null">CREATE_USER_ID,</if>
+            <if test="CREATE_TIME != null">CREATE_TIME,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="ID != null">#{ID,jdbcType=DECIMAL},</if>
@@ -318,6 +322,8 @@
             <if test="INVOICE_NO != null">#{INVOICE_NO,jdbcType=VARCHAR},</if>
             <if test="EXPRESS_COMPANY != null">#{EXPRESS_COMPANY,jdbcType=VARCHAR},</if>
             <if test="COURIER_NUMBER != null">#{COURIER_NUMBER,jdbcType=VARCHAR},</if>
+            <if test="CREATE_USER_ID != null">#{CREATE_USER_ID,jdbcType=VARCHAR},</if>
+            <if test="CREATE_TIME != null">#{CREATE_TIME},</if>
         </trim>
     </insert>
     <!--修改订单发票表 通过id修改SCE_ORDER_INVOICE_INFO-->

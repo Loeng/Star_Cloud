@@ -34,6 +34,10 @@ public interface InvoiceMapper {
     @Select( "SELECT ACTUAL_PAYMENT FROM STARCLOUDPORTAL.SCE_ORDER_INFO WHERE ORDER_ID = #{orderNO}" )
     BigDecimal selectActualPaymentByOrderNo( @Param( "orderNO" ) String orderNO );
 
+    @Select( "SELECT * FROM STARCLOUDPORTAL.SCE_ORDER_INFO WHERE BUYING_USER_ID = #{BUYING_USER_ID} AND ORDER_ID not IN (SELECT ORDER_ID FROM STARCLOUDPORTAL.SCE_ORDER_INVOICE_REL )" )
+    List< Map > selectValidOrderNoByingUserId( @Param( "BUYING_USER_ID" ) String BUYING_USER_ID );
+
+
     @Select( "SELECT ORDER_INVOICE_ID FROM STARCLOUDPORTAL.SCE_ORDER_INVOICE_REL WHERE ORDER_ID = #{orderNO}" )
     String selectInvoiceIdByOrderNo( @Param( "orderNO" ) String orderNO );
 

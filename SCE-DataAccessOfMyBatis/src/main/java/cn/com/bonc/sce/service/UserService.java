@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -79,5 +80,25 @@ public class UserService {
 
     public int delTeacher(String id) {
         return userDao.delTeacher(id);
+    }
+
+    public Map getTeacherInfo(String id) {
+        return userDao.getTeacherInfo(id);
+    }
+
+    public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String mail_address, String birthdate) {
+        return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate);
+    }
+
+    public int editTeacher(String user_id,String nation_code, String nationlity, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
+        return userDao.editTeacher( user_id,nation_code,nationlity,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
+    }
+
+    public int addUser(Long user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate) {
+        return userDao.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate);
+    }
+
+    public int addTeacher(Long user_id,String nation_code, String nationlity, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
+        return userDao.addTeacher(user_id,nation_code,nationlity,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
     }
 }

@@ -4,6 +4,8 @@ import cn.com.bonc.sce.bean.CouponBean;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.CouponDao;
 import cn.com.bonc.sce.rest.RestRecord;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,20 @@ public class CouponService {
     private CouponDao couponDao;
 
 
+    //优惠方式查询
+    public RestRecord queryCouponType(){
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200,couponDao.queryCouponType());
+    }
+
+
+    //商品类型查询
+    public RestRecord queryGoodsType(){
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200,couponDao.queryGoodsType());
+    }
+
+
+
+    // 新增优惠码
     @Transactional(rollbackFor = Exception.class)
     public RestRecord addNewCoupon(Map param,String userId){
 
@@ -82,9 +98,9 @@ public class CouponService {
         }
 
 
-        // 根据优惠方式   插入 优惠码  todo 待完善
+        // 根据优惠方式   插入 优惠码
         int COUPON_TYPE_CODE=Integer.valueOf(param.get("COUPON_TYPE_CODE").toString());
-        if (COUPON_TYPE_CODE==0){
+        if (COUPON_TYPE_CODE==1){ //  1 折扣
             BigDecimal rebate=new BigDecimal(param.get("REBATE_DETAIL").toString());
             BigDecimal rebate_cal=rebate.divide(new BigDecimal("10"));
 
@@ -99,6 +115,7 @@ public class CouponService {
                 return new  RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
             }
         }
+        /* 后面若增加其它的优惠的方式  可在这继续实现 */
 
 
         return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
@@ -130,6 +147,92 @@ public class CouponService {
 
 
     /* *
+     * @Description 优惠码审核操作
+     * @Date 15:04 2019/4/4
+     * @param reviewState
+     * @param reviewComment
+     * @param userId
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public RestRecord reviewCoupon(Map param, String userId){
+
+        // 优惠码CODE
+        String couponCode=param.get("COUPON_CODE").toString();
+
+        //优惠码审核状态： T 待审核      F 审核未通过     E 审核通过
+        String reviewState=param.get("REVIEW_STATE").toString();
+
+        // 审核意见
+        String reviewComment=param.get("REVIEW_COMMENT").toString();
+
+        // 审核时间
+        Date reviewDate=new Date();
+
+        try {
+            int count=couponDao.reviewCoupon(couponCode,reviewState,reviewComment,userId,reviewDate);
+            if (count<1){
+                return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+        }
+
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
+    /* *
+     * @Description 优惠码查询（代理商）
+     * @Date 17:14 2019/4/5
+     * @param userId
+     * @param pageNum
+     * @param pageSize
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord queryAgentCoupon(String userId,int pageNum, int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+
+        PageInfo<Map> pageInfo=new PageInfo<>(couponDao.queryAgentCoupon(userId));
+
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200,pageInfo);
+    }
+
+
+    /* *
+     * @Description 优惠码查询（运维管理）
+     * @Date 17:15 2019/4/5
+     * @param COUPON_CODE
+     * @param USER_NAME
+     * @param COUPON_TYPE_CODE
+     * @param REVIEW_STATE
+     * @param OVER_FLAG
+     * @param ORDER_BY
+     * @param pageNum
+     * @param pageSize
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord queryAllCouponByCondition(String COUPON_CODE,
+                                                String USER_NAME,
+                                                String COUPON_TYPE_CODE,
+                                                String REVIEW_STATE,
+                                                String OVER_FLAG,
+                                                String ORDER_BY,
+                                                int pageNum,
+                                                int pageSize){
+
+        PageHelper.startPage(pageNum, pageSize);
+
+        PageInfo<Map> pageInfo=new PageInfo<>(couponDao.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY));
+
+        return new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200,pageInfo);
+    }
+
+
+    /* *
      * @Description  优惠码主表初始化
      * @Date 11:58 2019/4/3
      * @param
@@ -142,6 +245,7 @@ public class CouponService {
         CouponBean couponBean=new CouponBean();
 
         couponBean.setCOUPON_CODE(param.get("COUPON_CODE").toString());
+        couponBean.setCOUPON_TYPE_CODE(Integer.valueOf(param.get("COUPON_TYPE_CODE").toString()));
         couponBean.setUSER_ID(userId);
 
         int USE_TIMES_FLAG=Integer.valueOf(param.get("USE_TIMES_FLAG").toString());

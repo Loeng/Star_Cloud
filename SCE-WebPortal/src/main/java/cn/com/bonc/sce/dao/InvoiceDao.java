@@ -47,8 +47,9 @@ public interface InvoiceDao {
     public RestRecord addBillingInfo( @RequestBody Map< String, Object > invoiceInfo, @PathVariable( "userId" ) String userId );
 
     @RequestMapping( value = "/invoice/billing-by-order-no/{userId}", method = RequestMethod.POST )
-    public RestRecord getBillingInfoByOrderNo(  @PathVariable( "userId" ) String userId,
-                                       @RequestBody List< String > orderNoList );
+    public RestRecord getBillingInfoByOrderNo( @PathVariable( "userId" ) String userId,
+                                               @RequestBody List< String > orderNoList );
 
-
+    @RequestMapping( value = "/invoice/billing-by-loginName", method = RequestMethod.GET )
+    public RestRecord getBillingInfoByLoginName( String loginName );
 }

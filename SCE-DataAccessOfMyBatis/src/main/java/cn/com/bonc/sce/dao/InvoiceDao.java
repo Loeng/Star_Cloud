@@ -108,13 +108,23 @@ public class InvoiceDao {
     }
 
     /**
-     * 根据订单号查询购买人userID
+     * 根据订单号查询实际支付金额
      *
      * @param orderNO
      * @return
      */
     public BigDecimal selectActualPaymentByOrderNo( String orderNO ) {
         return invoiceMapper.selectActualPaymentByOrderNo( orderNO );
+    }
+
+    /**
+     * 根据userId 查询用户的订单号
+     *
+     * @param byingUserId
+     * @return
+     */
+    public List< Map > selectValidOrderNoByingUserId( String byingUserId ) {
+        return invoiceMapper.selectValidOrderNoByingUserId( byingUserId );
     }
 
     /**
