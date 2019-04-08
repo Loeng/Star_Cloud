@@ -99,23 +99,20 @@ public class UserOperationController {
     }
 
     /**
-     * 用户信息查询接口
+     * 根据用户名查询账号名称
      *
-     * @param userId 需查询的用户id
-     * @return 查询用户信息
+     * @param userName 需查询用户名
+     * @return 账号名称
      */
-    @ApiOperation( value = "用户信息查询接口", notes = "根据Id查询对应用户信息及相关关联表中信息", httpMethod = "GET" )
+    @ApiOperation( value = "根据用户名查询账号名称", notes = "根据Id查询对应用户信息及相关关联表中信息", httpMethod = "GET" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "userId", dataType = "String", value = "删除的用户ID", paramType = "path", required = true )
+            @ApiImplicitParam( name = "userName", dataType = "String", value = "用户名", paramType = "path", required = true )
     } )
-    @ApiResponses( {
-            @ApiResponse( code = 0, message = WebMessageConstants.SCE_PORTAL_MSG_000, response = RestRecord.class )
-    } )
-    @GetMapping( "/{userId}" )
+    @GetMapping( "/{userName}" )
     @ResponseBody
-    public RestRecord selectUserInfoById( @PathVariable( "userId" ) String userId ) {
+    public RestRecord selectUserInfoByName( @PathVariable( "userName" ) String userName ) {
 
-        return userOperationService.selectUserInfoById( userId );
+        return userOperationService.selectUserInfoByName( userName );
     }
 
     @ApiOperation( value = "添加单个用户", notes = "通过控制接口参数，添加不同角色的用户", httpMethod = "POST" )

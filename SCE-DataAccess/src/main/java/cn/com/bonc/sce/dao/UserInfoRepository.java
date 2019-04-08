@@ -92,6 +92,15 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
             "      AND NVL(TO_CHAR(u.LOGIN_PERMISSION_STATUS,'999'),' ')LIKE CONCAT('%',CONCAT(?3,'%'))\t ", nativeQuery = true )
     Page< Map > findByManufacturerLike( String loginName, String organizationName, String status, Pageable pageable );
 
+    /**
+     * 根据用户名查询账号名称
+     *
+     * @param byName
+     * @return
+     */
+    @Query( value = "SELECT USER_NAME,LOGIN_NAME FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_NAME LIKE  CONCAT('%',CONCAT(:byName, '%'))", nativeQuery = true )
+    List<Map> findLoginNameByName( @Param( "byName" ) String byName );
+
     // 修改是否允许用户登录
     @Query( value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET LOGIN_PERMISSION_STATUS = :isLogin WHERE USER_ID = :userId ", nativeQuery = true )
     @Modifying

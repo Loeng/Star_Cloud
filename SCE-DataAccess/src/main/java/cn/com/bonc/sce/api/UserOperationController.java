@@ -201,28 +201,16 @@ public class UserOperationController {
     }
 
     /**
-     * 查询用户信息
+     * 查询用户名查询登陆账号
      *
-     * @param userId 用户ID
-     * @return 用户信息
+     * @param userName 用户ID
+     * @return 用户名和账号
      */
     @GetMapping
     @ResponseBody
     public RestRecord selectUserInfo(
-            @RequestParam( "userId" ) String userId ) {
-        Map map = new HashMap<>();
-        map.put( "userId", "43999" );
-        map.put( "userAccount", "X213212123" );
-        map.put( "userName", "loader" );
-        map.put( "userId", "X213212123" );
-        map.put( "gender", "1" );
-        map.put( "userType", "2" );
-        map.put( "mailAddress", "123112@qq.com" );
-        map.put( "phoneNumber", "186678XXX88" );
-        map.put( "certificateType", "2" );
-        map.put( "certificateNumber", "XR5441161X" );
-        map.put( "address", "成都市青羊区青年路" );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
+            @RequestParam( "userName" ) String userName ) {
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, userInfoRepository.findLoginNameByName( userName ) );
     }
 
     @PostMapping( "/insert" )

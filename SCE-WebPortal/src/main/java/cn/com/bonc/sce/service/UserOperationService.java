@@ -42,8 +42,8 @@ public class UserOperationService {
 
     }
 
-    public RestRecord selectUserInfoById( String userId ) {
-        return userOperationDao.selectUserInfoById( userId );
+    public RestRecord selectUserInfoByName( String userName ) {
+        return userOperationDao.selectUserInfoByName( userName );
 
     }
 
