@@ -88,15 +88,16 @@ public class WorkbenchController {
         return new RestRecord(200, workbenchDao.addStudentBinding(info.get("USER_ID").toString(), STU_USER_ID));
     }
 
-    @GetMapping("/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{pageNum}/{pageSize}")
+    @GetMapping("/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{GENDER}/{pageNum}/{pageSize}")
     @ResponseBody
     public RestRecord getOrganization(@PathVariable("USER_ID") String USER_ID,
                                       @PathVariable("LOGIN_NAME") String LOGIN_NAME,
                                       @PathVariable("USER_NAME") String USER_NAME,
+                                      @PathVariable("GENDER") String GENDER,
                                       @PathVariable(value = "pageNum") Integer pageNum,
                                       @PathVariable(value = "pageSize") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List schoolList = workbenchDao.getOrganization(USER_ID, LOGIN_NAME, USER_NAME);
+        List schoolList = workbenchDao.getOrganization(USER_ID, LOGIN_NAME, USER_NAME ,GENDER);
         PageInfo pageInfo = new PageInfo(schoolList);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200, pageInfo);
     }
@@ -113,18 +114,50 @@ public class WorkbenchController {
         long userId = idWorker.nextId();
         String secret = Secret.generateSecret();
 
+        int userType = workbenchDao.queryUserType(info);
+        long organizationId = workbenchDao.queryOrganizationId(info);
+
         user.setUserId( userId );
         user.setSecret( secret );
-        user.setUserType( workbenchDao.queryUserType(info));//查询操作人员的usertype，创建的用户和他一致
-        user.setOrganizationId(workbenchDao.queryOrganizationId(info));
+        user.setUserType( userType);//查询操作人员的usertype，创建的用户和他一致
+        user.setOrganizationId(organizationId);
         user.setUserName(info.get("USER_NAME").toString());
         user.setPhoneNumber(info.get("PHONE_NUMBER").toString());
         user.setLoginName(info.get("LOGIN_NAME").toString());
+        user.setCertificateNumber(info.get("CERTIFICATE_NUMBER").toString());
+        if(info.containsKey("GENDER")) {
+            user.setGender(info.get("GENDER").toString());
+        }
 
-        workbenchDao.addOrganization(user);
-        AccountBean account = new AccountBean( idWorker.nextId(), info.get( "PASSWORD" ).toString(), 1, userId );
+        if(userType == 6)//当代理商管理员添加代理商账号得时候保存省市县
+        {
+            info.put("userId",userId);
+            info.put("organizationId",organizationId);
+            workbenchDao.addAgentInfo(info);
+        }
 
-        return new RestRecord(200, workbenchDao.saveAccount(account));
+        //workbenchDao.addOrganization(user);
+       // AccountBean account = new AccountBean( idWorker.nextId(), info.get( "PASSWORD" ).toString(), 1, userId );
+
+        return new RestRecord(200, workbenchDao.addOrganization(user));
+    }
+
+    @PutMapping("/updateOrganization")
+    @ResponseBody
+    @Transactional
+    public RestRecord updateOrganization(@RequestBody Map<String, Object> info) {
+        int userType = workbenchDao.queryUserType(info);
+        if(userType == 6){
+            workbenchDao.updateAgentAddress(info);
+        }
+        return new RestRecord(200, workbenchDao.updateOrganization(info));
+    }
+
+
+    @DeleteMapping("/deleteOrganization/{USER_ID}")
+    @ResponseBody
+    public RestRecord deleteOrganization(@PathVariable("USER_ID") String USER_ID) {
+        return new RestRecord(200, workbenchDao.deleteOrganization(USER_ID));
     }
 
 }

@@ -31,16 +31,25 @@ public interface WorkbenchMapper {
 
     int addStudentBinding(@Param("PARENT_USER_ID") String PARENT_USER_ID, @Param("STUDENT_USER_ID") String STU_USER_ID);
 
-    List<Map> getOrganization(@Param("USER_ID") String USER_ID, @Param("LOGIN_NAME") String LOGIN_NAME,@Param("USER_NAME") String USER_NAME);
+    List<Map> getOrganization(@Param("USER_ID") String USER_ID, @Param("LOGIN_NAME") String LOGIN_NAME,
+                              @Param("USER_NAME") String USER_NAME,@Param("GENDER") String GENDER);
 
     String queryUserId(Map<String, Object> info);
 
     int queryUserType(Map<String, Object> info);
 
+    int addAgentInfo(Map<String, Object> info);
+
     long queryOrganizationId(Map<String, Object> info);
 
     int addOrganization(UserBean userBean);
 
+    int updateOrganization(Map<String, Object> info);
+
+    int updateAgentAddress(Map<String, Object> info);
+
     int saveAccount(AccountBean account);
+
+    int deleteOrganization(String USER_ID);
 
 }

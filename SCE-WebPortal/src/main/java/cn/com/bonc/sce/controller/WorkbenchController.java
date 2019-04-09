@@ -111,14 +111,15 @@ public class WorkbenchController {
      * @param info
      * @return
      */
-    @GetMapping("/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{pageNum}/{pageSize}")
+    @GetMapping("/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{GENDER}/{pageNum}/{pageSize}")
     @ResponseBody
     public RestRecord getOrganization(@PathVariable("USER_ID") String USER_ID,
                                       @PathVariable("LOGIN_NAME") String LOGIN_NAME,
                                       @PathVariable("USER_NAME") String USER_NAME,
+                                      @PathVariable("GENDER") String GENDER,
                                       @PathVariable (value = "pageNum")Integer pageNum,
                                       @PathVariable (value = "pageSize") Integer pageSize) {
-        return workbenchService.getOrganization(USER_ID,LOGIN_NAME,USER_NAME,pageNum,pageSize);
+        return workbenchService.getOrganization(USER_ID,LOGIN_NAME,USER_NAME,GENDER,pageNum,pageSize);
     }
 
     /**
@@ -131,6 +132,30 @@ public class WorkbenchController {
     @ResponseBody
     public RestRecord addOrganization(@RequestBody Map<String, Object> info) {
         return workbenchService.addOrganization(info);
+    }
+
+    /**
+     * 组织管理-修改账号
+     *
+     * @param info
+     * @return
+     */
+    @PutMapping("/updateOrganization")
+    @ResponseBody
+    public RestRecord updateOrganization(@RequestBody Map<String, Object> info) {
+        return workbenchService.updateOrganization(info);
+    }
+
+    /**
+     * 组织管理-删除账号
+     *
+     * @param USER_ID
+     * @return
+     */
+    @DeleteMapping("/deleteOrganization/{USER_ID}")
+    @ResponseBody
+    public RestRecord deleteOrganization(@PathVariable("USER_ID") String USER_ID) {
+        return workbenchService.deleteOrganization(USER_ID);
     }
 
 }

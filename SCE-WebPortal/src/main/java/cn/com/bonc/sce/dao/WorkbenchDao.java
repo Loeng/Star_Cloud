@@ -32,14 +32,21 @@ public interface WorkbenchDao {
     @RequestMapping(value = "/workbench/addStudentBinding", method = RequestMethod.POST)
     RestRecord addStudentBinding(@RequestBody Map<String, Object> info);
 
-    @RequestMapping(value = "/workbench/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{pageNum}/{pageSize}", method = RequestMethod.GET)
+    @RequestMapping(value = "/workbench/getOrganization/{USER_ID}/{LOGIN_NAME}/{USER_NAME}/{GENDER}/{pageNum}/{pageSize}", method = RequestMethod.GET)
     RestRecord getOrganization(@PathVariable("USER_ID") String USER_ID,
                                @PathVariable("LOGIN_NAME") String LOGIN_NAME,
                                @PathVariable("USER_NAME") String USER_NAME,
+                               @PathVariable("GENDER") String GENDER,
                                @PathVariable(value = "pageNum") Integer pageNum,
                                @PathVariable(value = "pageSize") Integer pageSize);
 
     @RequestMapping(value = "/workbench/addOrganization", method = RequestMethod.POST)
     RestRecord addOrganization(@RequestBody Map<String, Object> info);
+
+    @RequestMapping(value = "/workbench/updateOrganization", method = RequestMethod.PUT)
+    RestRecord updateOrganization(@RequestBody Map<String, Object> info);
+
+    @RequestMapping(value = "/workbench/deleteOrganization/{USER_ID}", method = RequestMethod.DELETE)
+    RestRecord deleteOrganization(@PathVariable("USER_ID") String USER_ID);
 
 }

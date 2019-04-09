@@ -92,7 +92,7 @@
     </insert>
 
     <select id="getOrganization" parameterType="String" resultType="Map">
-        select LOGIN_NAME , USER_NAME , PHONE_NUMBER , ISADMINISTRATORS , CREATE_TIME from
+        select USER_ID,LOGIN_NAME , USER_NAME , PHONE_NUMBER , GENDER,ISADMINISTRATORS , CERTIFICATE_NUMBER,IS_FIRST_LOGIN,CREATE_TIME from
         STARCLOUDPORTAL.SCE_COMMON_USER
         where ORGANIZATION_ID = (select ORGANIZATION_ID from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{USER_ID})
         and IS_DELETE = 1
@@ -102,6 +102,10 @@
         <if test="USER_NAME != null and USER_NAME != 'null' and  USER_NAME !='' ">
             and USER_NAME like CONCAT('%',CONCAT(#{USER_NAME},'%'))
         </if>
+        <if test="GENDER != null and GENDER != 'null' and  GENDER !='' ">
+            and GENDER = #{GENDER}
+        </if>
+        order by CREATE_TIME desc
     </select>
 
     <select id="queryUserId" parameterType="Map" resultType="java.lang.String">
@@ -109,20 +113,38 @@
     </select>
 
     <select id="queryOrganizationId" parameterType="Map" resultType="java.lang.Long">
-        SELECT ORGANIZATION_ID from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{USER_ID}
+        SELECT ORGANIZATION_ID from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{userId}
     </select>
 
     <select id="queryUserType" parameterType="Map" resultType="java.lang.Integer">
-        select USER_TYPE from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{USER_ID}
+        select USER_TYPE from STARCLOUDPORTAL.SCE_COMMON_USER where USER_ID = #{userId}
     </select>
+
+    <insert id="addAgentInfo" parameterType="Map" >
+        insert into STARCLOUDPORTAL.SCE_INFO_AGENT(USER_ID,AGENT_ID,TELPHONE,PROVINCE,CITY,AREA)
+        values (#{userId},#{organizationId},#{PHONE_NUMBER},#{PROVINCE},#{CITY},#{AREA})
+    </insert>
 
     <insert id="addOrganization" parameterType="cn.com.bonc.sce.bean.UserBean">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
-            (USER_ID,SECRET,LOGIN_NAME,USER_TYPE,PHONE_NUMBER,USER_NAME)
+            (USER_ID,SECRET,LOGIN_NAME,USER_TYPE,PHONE_NUMBER,USER_NAME,CERTIFICATE_NUMBER,GENDER,ORGANIZATION_ID)
         VALUES
             (#{userId,jdbcType=BIGINT},#{secret,jdbcType=VARCHAR},#{loginName,jdbcType=VARCHAR},
-            #{userType,jdbcType=INTEGER},#{phoneNumber,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR})
+            #{userType,jdbcType=INTEGER},#{phoneNumber,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},
+            #{certificateNumber,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},#{organizationId,jdbcType=BIGINT})
     </insert>
+
+    <update id="updateOrganization" parameterType="Map">
+        update STARCLOUDPORTAL.SCE_COMMON_USER set
+        USER_NAME = #{userName} ,
+        GENDER = #{gender}
+        where USER_ID = #{userId}
+    </update>
+
+    <update id="updateAgentAddress" parameterType="Map">
+        update STARCLOUDPORTAL.SCE_INFO_AGENT set PROVINCE = #{PROVINCE} ,CITY = #{CITY}, AREA = #{AREA}
+        where USER_ID = #{USER_ID}
+    </update>
 
     <insert id="saveAccount" parameterType="cn.com.bonc.sce.bean.AccountBean">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
@@ -131,4 +153,7 @@
         (#{id},#{password},#{isDelete},#{userId})
     </insert>
 
+    <update id="deleteOrganization" parameterType="String">
+        update STARCLOUDPORTAL.SCE_COMMON_USER set IS_DELETE = 0 where USER_ID = #{USER_ID}
+    </update>
 </mapper>

@@ -44,12 +44,20 @@ public class WorkbenchService {
         return workbenchDao.addStudentBinding(info);
     }
 
-    public RestRecord getOrganization(String USER_ID, String LOGIN_NAME, String USER_NAME, Integer pageNum, Integer pageSize) {
-        return workbenchDao.getOrganization(USER_ID, LOGIN_NAME, USER_NAME, pageNum, pageSize);
+    public RestRecord getOrganization(String USER_ID, String LOGIN_NAME, String USER_NAME,String GENDER, Integer pageNum, Integer pageSize) {
+        return workbenchDao.getOrganization(USER_ID, LOGIN_NAME, USER_NAME,GENDER, pageNum, pageSize);
     }
 
     public RestRecord addOrganization(Map<String, Object> info) {
         return workbenchDao.addOrganization(info);
+    }
+
+    public RestRecord updateOrganization(Map<String, Object> info) {
+        return workbenchDao.updateOrganization(info);
+    }
+
+    public RestRecord deleteOrganization(String USER_ID) {
+        return workbenchDao.deleteOrganization(USER_ID);
     }
 
 }

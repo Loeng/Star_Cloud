@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.BillMapper">
+    <insert id="applyForRefund" parameterType="Map">
+        insert into STARCLOUDPORTAL.SCE_ORDER_REFUND(ID,APPLY_TIME,REFUND_STATE,ORDER_ID,REASON,IS_DELETE)
+        values(#{ID},SYSDATE(),0,#{ORDER_ID},#{REASON},1)
+    </insert>
+
+    <update id="auditRefund" parameterType="Map">
+        update STARCLOUDPORTAL.SCE_ORDER_REFUND
+        <set>
+            REFUND_STATE = #{REFUND_STATE} ,
+            EXPENDITURE_TIME = #{EXPENDITURE_TIME} ,
+            REASON = #{REASON}
+        </set>
+        where ID = #{ID}
+    </update>
+
+    <select id="getRefundStatistics" resultType="Map">
+          SELECT
+	          count( 1 ) AS TOTAL,
+	          sum( ACTUAL_PAYMENT ) AS  MONEY
+          FROM
+	          STARCLOUDPORTAL.SCE_ORDER_REFUND sor
+	          LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INFO soi ON sor.ORDER_ID = soi.ORDER_ID
+          WHERE
+	          to_char( SYSDATE, 'yyyy-mm' ) = to_char( APPLY_TIME, 'yyyy-mm' )
+	          AND sor.IS_DELETE = 1
+	          AND sor.REFUND_STATE = 0
+    </select>
+
+</mapper>

@@ -35,9 +35,9 @@ public interface AgentRepository extends JpaRepository< Agent, String > {
             "       B.PHONE_NUMBER,B.ADDRESS,B.IS_FIRST_LOGIN,B.LOGIN_PERMISSION_STATUS,B.CREATE_TIME \n" +
             " FROM STARCLOUDPORTAL.SCE_ENTITY_AGENT A \n" +
             " LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER B ON A.ID=B.ORGANIZATION_ID AND A.IS_DELETE=1 AND B.IS_DELETE=1 ORDER BY B.CREATE_TIME DESC",
-    countQuery = "SELECT COUNT(*) " +
-            " FROM STARCLOUDPORTAL.SCE_ENTITY_AGENT A \n" +
-            " LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER B ON A.ID=B.ORGANIZATION_ID AND A.IS_DELETE=1 AND B.IS_DELETE=1",
-    nativeQuery = true)
+            countQuery = "SELECT COUNT(*) " +
+                    " FROM STARCLOUDPORTAL.SCE_ENTITY_AGENT A \n" +
+                    " LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER B ON A.ID=B.ORGANIZATION_ID AND A.IS_DELETE=1 AND B.IS_DELETE=1",
+            nativeQuery = true)
     Page<Map<String,Object> > getAllAgentUserInfo( Pageable pageable);
 }

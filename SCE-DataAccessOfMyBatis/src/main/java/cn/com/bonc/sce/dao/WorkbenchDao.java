@@ -59,8 +59,8 @@ public class WorkbenchDao {
         return workbenchMapper.addStudentBinding(PARENT_USER_ID, STU_USER_ID);
     }
 
-    public List<Map> getOrganization(String USER_ID, String LOGIN_NAME, String USER_NAME) {
-        return workbenchMapper.getOrganization(USER_ID, LOGIN_NAME, USER_NAME);
+    public List<Map> getOrganization(String USER_ID, String LOGIN_NAME, String USER_NAME ,String GENDER) {
+        return workbenchMapper.getOrganization(USER_ID, LOGIN_NAME, USER_NAME , GENDER);
     }
 
     public String queryUserId(Map<String, Object> info) {
@@ -71,6 +71,10 @@ public class WorkbenchDao {
         return workbenchMapper.queryUserType(info);
     }
 
+    public int addAgentInfo(Map<String, Object> info) {
+        return workbenchMapper.addAgentInfo(info);
+    }
+
     public long queryOrganizationId(Map<String, Object> info) {
         return workbenchMapper.queryOrganizationId(info);
     }
@@ -79,8 +83,20 @@ public class WorkbenchDao {
         return workbenchMapper.addOrganization(userBean);
     }
 
+    public int updateOrganization(Map<String, Object> info) {
+        return workbenchMapper.updateOrganization(info);
+    }
+
+    public int updateAgentAddress(Map<String, Object> info) {
+        return workbenchMapper.updateAgentAddress(info);
+    }
+
     public int saveAccount(AccountBean account) {
         return workbenchMapper.saveAccount(account);
+    }
+
+    public int deleteOrganization(String USER_ID) {
+        return workbenchMapper.deleteOrganization(USER_ID);
     }
 
 }
