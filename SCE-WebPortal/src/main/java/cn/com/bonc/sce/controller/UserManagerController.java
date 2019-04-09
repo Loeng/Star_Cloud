@@ -188,7 +188,17 @@ public class UserManagerController {
     @ResponseBody
     /*
     * {   "ADDTYPE":0 	"ORGANIZATION_ID": "66666666666", 	"CERTIFICATE_TYPE": 0, 	" CERTIFICATE_NUMBER": "66666666666666666", 	"USER_NAME": "USER_NAME", 	"GENDER": "1", 	"PHONE_NUMBER": "66666666666", 	"MAIL_ADDRESS": "666@666.666", 	"BIRTHDATE ": "", 	"NATION_CODE": "1", 	"NATIONLITY": "666", 	"ACADEMIC_QUALIFICATION": "666", 	"WORK_NUMBER": "666", 	"SCHOOL_TIME": "", 	"TEACH_TIME": "", 	"JOB_CODE": "1", 	"TEACH_RANGE": 1 }
-    *
+    *{
+	"ADDTYPE": 1,
+	"USER_ID": "99999",
+	"APPLY_USER_ID": "789",
+	" TEA_WORK_NUMBER": "2",
+	"TEA_ENTRANCE_YEAR": "2018-12-31 15:50:48",
+	"TEA_POSITION": "2",
+	"TEACH_RANGE": "2",
+	"ORIGIN_SCHOOL_ID": "99999",
+	"TARGET_SCHOOL_ID ": "555"
+}
     * */
     public RestRecord addTeacher(@RequestBody String json){
         return userManagerService.addTeacher(json);

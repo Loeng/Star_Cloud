@@ -103,7 +103,7 @@ public class UserService {
     }
 
 
-    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, String tea_entrance_year, String tea_position,String tea_range) {
-        return userDao.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,tea_entrance_year,tea_position,tea_range);
+    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, Date entrance_year, String tea_position,String tea_range) {
+        return userDao.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range);
     }
 }

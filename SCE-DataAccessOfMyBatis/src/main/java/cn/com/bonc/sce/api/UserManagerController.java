@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -303,25 +306,33 @@ public class UserManagerController {
 
             int count1 = userService.addUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
                     USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE);
-            int count2 = userService.addTeacher(USER_ID,NATION_CODE, NATIONLITY, ACADEMIC_QUALIFICATION,
+            int count2 = userService.addTeacher(USER_ID, NATION_CODE, NATIONLITY, ACADEMIC_QUALIFICATION,
                     WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, JOB_CODE, TEACH_RANGE);
             if (count1 == 1 && count2 == 1) {
                 return new RestRecord(200, MessageConstants.SCE_MSG_0200, 1);
             } else {
                 return new RestRecord(409, MessageConstants.SCE_MSG_409, 0);
             }
-        }else {//转入
+        } else {//转入
             Long ID = idWorker.nextId();
-            String USER_ID = (String)map.get("USER_ID") ;
+            String USER_ID = (String) map.get("USER_ID");
             String APPLY_USER_ID = (String) map.get("APPLY_USER_ID");
             String TEA_WORK_NUMBER = (String) map.get("TEA_WORK_NUMBER");
             String TEA_ENTRANCE_YEAR = (String) map.get("TEA_ENTRANCE_YEAR");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+            Date ENTRANCE_YEAR = null;
+            try {
+                ENTRANCE_YEAR = format.parse(TEA_ENTRANCE_YEAR);
+            } catch (ParseException e) {
+                return new RestRecord(409, MessageConstants.SCE_MSG_409, 0);
+            }
             String TEA_POSITION = (String) map.get("TEA_POSITION");
             String TEACH_RANGE = (String) map.get("TEACH_RANGE");
             String ORIGIN_SCHOOL_ID = (String) map.get("ORIGIN_SCHOOL_ID");
             String TARGET_SCHOOL_ID = (String) map.get("TARGET_SCHOOL_ID");
             return new RestRecord(200, MessageConstants.SCE_MSG_0200,
-                    userService.transInto(ID,USER_ID,APPLY_USER_ID,ORIGIN_SCHOOL_ID,TARGET_SCHOOL_ID,TEA_WORK_NUMBER,TEA_ENTRANCE_YEAR,TEA_POSITION,TEACH_RANGE));
+                    userService.transInto(ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE));
         }
 
     }
