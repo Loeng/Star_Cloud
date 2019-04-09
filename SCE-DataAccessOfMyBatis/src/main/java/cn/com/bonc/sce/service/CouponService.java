@@ -232,6 +232,161 @@ public class CouponService {
     }
 
 
+
+    /* *
+     * @Description 优惠码的折扣实现
+     * @Date 16:55 2019/4/9
+     * @param COUPON_CODE
+     * @param PRODUCT_TYPE_CODE
+     * @param ORIGIN_PRICE
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord calCoupon(String COUPON_CODE,String PRODUCT_TYPE_CODE,String ORIGIN_PRICE){
+
+        Map temp=couponDao.queryCouponByCode(COUPON_CODE);
+
+        /******************** 判断该优惠码是否符合使用要求 *******************************/
+
+        if ( temp==null|| temp.isEmpty()){
+            return new RestRecord(741,WebMessageConstants.SCE_PORTAL_MSG_741);
+        }
+
+        PRODUCT_TYPE_CODE=","+PRODUCT_TYPE_CODE+","; // 两边添加逗号
+        // 判断商品类型 是否符合该优惠码
+        if (!",0,".equals(temp.get("GOODS_TYPE_CODE").toString())){
+            if (temp.get("GOODS_TYPE_CODE").toString().indexOf(PRODUCT_TYPE_CODE)==-1){
+                return new RestRecord(744,WebMessageConstants.SCE_PORTAL_MSG_744);
+            }
+        }
+
+        //优惠码使用时间是否无限： 0 无限      1  使用时间有限制
+        long VALID_DATE_FALG=Long.parseLong(temp.get("VALID_DATE_FALG").toString());
+        if (VALID_DATE_FALG==1){
+            Date NOW_TIME=new Date();
+            java.sql.Date START_DATE= (java.sql.Date) temp.get("START_DATE");
+            java.sql.Date END_DATE=(java.sql.Date) temp.get("END_DATE");
+
+            // 判断优惠码使用时间是否过期
+            if (NOW_TIME.before(START_DATE) || NOW_TIME.after(END_DATE)){
+                return new RestRecord(742,WebMessageConstants.SCE_PORTAL_MSG_742);
+            }
+        }
+
+
+        //使用次数是否无限：  0 无限      1 有限使用次数
+        long USE_TIMES_FLAG=Long.parseLong(temp.get("USE_TIMES_FLAG").toString());
+        long VALID_USE_TIMES=Long.parseLong(temp.get("VALID_USE_TIMES").toString());//该优惠码的可使用次数   为无限次时值为0
+        if (USE_TIMES_FLAG==1){
+
+            if (VALID_USE_TIMES<1){
+                return new RestRecord(743,WebMessageConstants.SCE_PORTAL_MSG_743);
+            }
+        }
+
+
+        /********************* 计算优惠金额 *****************************/
+        // 目前只 计算折扣相关     后续有其它优惠方式   再进行代码修改
+
+        // 转成BigDecimal类型进行计算  避免小数精度丢失
+        BigDecimal TOTAL_MONEY=new BigDecimal(ORIGIN_PRICE); // 原价格
+        BigDecimal REBATE_CAL=new BigDecimal(temp.get("REBATE_CAL").toString()); // 折扣率
+
+        BigDecimal ACCOUNT_PAYABLE=TOTAL_MONEY.multiply(REBATE_CAL); // 实付金额
+        BigDecimal DISCOUNT_PRICE=TOTAL_MONEY.subtract(ACCOUNT_PAYABLE); // 折扣金额
+
+
+
+        Map result=new HashMap();
+        result.put("TOTAL_MONEY",TOTAL_MONEY);
+        result.put("ACCOUNT_PAYABLE",ACCOUNT_PAYABLE);
+        result.put("DISCOUNT_PRICE",DISCOUNT_PRICE);
+
+
+
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,result);
+    }
+
+
+    /* *
+     * @Description 优惠码使用次数减少
+     * @Date 12:01 2019/4/9
+     * @param COUPON_CODE
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord reduceCouponUseTimesByCode(String COUPON_CODE,String PRODUCT_TYPE_CODE){
+
+        Map temp = couponDao.queryCouponByCode(COUPON_CODE);
+
+        if (temp.isEmpty() || temp==null){
+            return new RestRecord(741,WebMessageConstants.SCE_PORTAL_MSG_741);
+        }
+
+        // 判断商品类型 是否符合该优惠码
+        if (!",0,".equals(temp.get("GOODS_TYPE_CODE").toString())){
+            if (temp.get("GOODS_TYPE_CODE").toString().indexOf(PRODUCT_TYPE_CODE)==-1){
+                return new RestRecord(744,WebMessageConstants.SCE_PORTAL_MSG_744);
+            }
+        }
+
+        //优惠码使用时间是否无限： 0 无限      1  使用时间有限制
+        long VALID_DATE_FALG=Long.parseLong(temp.get("VALID_DATE_FALG").toString());
+        if (VALID_DATE_FALG==1){
+            Date NOW_TIME=new Date();
+            java.sql.Date START_DATE= (java.sql.Date) temp.get("START_DATE");
+            java.sql.Date END_DATE=(java.sql.Date) temp.get("END_DATE");
+
+            // 判断优惠码使用时间是否过期
+            if (NOW_TIME.before(START_DATE) || NOW_TIME.after(END_DATE)){
+                return new RestRecord(742,WebMessageConstants.SCE_PORTAL_MSG_742);
+            }
+        }
+
+
+
+
+        //使用次数是否无限：  0 无限      1 有限使用次数
+        long USE_TIMES_FLAG=Long.parseLong(temp.get("USE_TIMES_FLAG").toString());
+        long VALID_USE_TIMES=Long.parseLong(temp.get("VALID_USE_TIMES").toString());//该优惠码的可使用次数   为无限次时值为0
+        long USED_TIMES=Long.parseLong(temp.get("USED_TIMES").toString()); // 优惠码已使用次数
+        if (USE_TIMES_FLAG==1){
+
+            if (VALID_USE_TIMES<1){
+                return new RestRecord(743,WebMessageConstants.SCE_PORTAL_MSG_743);
+            }
+        }
+
+
+        // 根据 使用次数是否无限  调用不同的修改方法(无限次时  有效使用次数无意义         有限次数时  有效使用次数才有意义)
+        synchronized (this){
+            if (USE_TIMES_FLAG==0){
+                try {
+                    int count = couponDao.reduceUnLimitedCouponUseTimes(COUPON_CODE,++USED_TIMES);
+                    if (count<1){
+                        return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                }
+            }else {
+
+                try {
+                    int count=couponDao.reduceLimitedCouponUseTimes(COUPON_CODE,--VALID_USE_TIMES,++USED_TIMES);
+                    if (count<1){
+                        return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                }
+
+            }
+        }
+
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
     /* *
      * @Description  优惠码主表初始化
      * @Date 11:58 2019/4/3

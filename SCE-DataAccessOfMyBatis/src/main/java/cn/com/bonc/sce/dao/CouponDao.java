@@ -77,4 +77,18 @@ public class CouponDao {
                                                String ORDER_BY){
         return couponMapper.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY);
     }
+
+
+    public Map queryCouponByCode(String COUPON_CODE){
+        return couponMapper.queryCouponByCode(COUPON_CODE);
+    }
+
+    public int reduceUnLimitedCouponUseTimes( String COUPON_CODE, long USED_TIMES) throws SQLException {
+        return couponMapper.reduceUnLimitedCouponUseTimes(COUPON_CODE, USED_TIMES);
+    }
+
+    public int reduceLimitedCouponUseTimes( String COUPON_CODE, long VALID_USE_TIMES, long USED_TIMES) throws SQLException {
+        return couponMapper.reduceLimitedCouponUseTimes(COUPON_CODE, VALID_USE_TIMES, USED_TIMES);
+    }
+
 }

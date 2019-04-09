@@ -117,4 +117,22 @@ public class CouponController {
         return couponService.deleteCoupon(couponCode);
     }
 
+
+
+    @ApiOperation( value = "优惠码优惠方式计算", notes = "优惠码优惠方式计算", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 741, message = WebMessageConstants.SCE_PORTAL_MSG_741, response = RestRecord.class ),
+            @ApiResponse( code = 742, message = WebMessageConstants.SCE_PORTAL_MSG_742, response = RestRecord.class ),
+            @ApiResponse( code = 743, message = WebMessageConstants.SCE_PORTAL_MSG_743, response = RestRecord.class ),
+            @ApiResponse( code = 744, message = WebMessageConstants.SCE_PORTAL_MSG_744, response = RestRecord.class )
+    } )
+    @GetMapping("/cal-coupon")
+    @ResponseBody
+    public RestRecord calCoupon(@RequestParam String COUPON_CODE,
+                                @RequestParam String PRODUCT_TYPE_CODE,
+                                @RequestParam String ORIGIN_PRICE){
+        return couponService.calCoupon(COUPON_CODE, PRODUCT_TYPE_CODE, ORIGIN_PRICE);
+    }
+
 }

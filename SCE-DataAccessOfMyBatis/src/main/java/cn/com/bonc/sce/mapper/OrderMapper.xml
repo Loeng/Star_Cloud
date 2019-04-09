@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.bonc.sce.mapper.OrderMapper">
+
+    <insert id="insertOrder" parameterType="map">
+        insert into STARCLOUDPORTAL.SCE_ORDER_INFO(ORDER_ID,PAYING_TYPE,ORDER_CREATE_TIME,BUYING_USER_ID,
+        PRODUCT_NAME,PRODUCT_ID,PRICE_CALCULATION_METHOD,ORIGIN_PRICE,DISCOUNT_MODE,DISCOUNT_PRICE,ACCOUNT_PAYABLE,
+        ACTUAL_PAYMENT,PAYMENT_VOUCHER,ORDER_STATUS,IS_DELETE,COUPON_CODE,PRODUCT_TYPE_CODE)
+        values (#{ORDER_ID,jdbcType=NUMERIC},#{PAYING_TYPE,jdbcType=NUMERIC},#{ORDER_CREATE_TIME,jdbcType=VARCHAR},
+        #{BUYING_USER_ID,jdbcType=VARCHAR},#{PRODUCT_NAME,jdbcType=VARCHAR},#{PRODUCT_ID,jdbcType=NUMERIC},
+        #{PRICE_CALCULATION_METHOD,jdbcType=NUMERIC},#{ORIGIN_PRICE,jdbcType=NUMERIC},#{DISCOUNT_MODE,jdbcType=VARCHAR},
+        #{DISCOUNT_PRICE,jdbcType=NUMERIC},#{ACCOUNT_PAYABLE,jdbcType=NUMERIC},#{ACTUAL_PAYMENT,jdbcType=NUMERIC},
+        #{PAYMENT_VOUCHER,jdbcType=NUMERIC},#{ORDER_STATUS,jdbcType=NUMERIC},#{IS_DELETE,jdbcType=NUMERIC},
+        #{COUPON_CODE,jdbcType=VARCHAR},#{PRODUCT_TYPE_CODE,jdbcType=NUMERIC})
+    </insert>
+
+</mapper>

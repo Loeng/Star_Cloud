@@ -60,4 +60,8 @@ public class CouponService {
     public RestRecord queryAgentCoupon(String userId, int pageNum, int pageSize){
         return couponDao.queryAgentCoupon(userId,pageNum,pageSize);
     }
+
+    public RestRecord calCoupon(String COUPON_CODE, String PRODUCT_TYPE_CODE, String ORIGIN_PRICE){
+        return couponDao.calCoupon(COUPON_CODE, PRODUCT_TYPE_CODE, ORIGIN_PRICE);
+    }
 }

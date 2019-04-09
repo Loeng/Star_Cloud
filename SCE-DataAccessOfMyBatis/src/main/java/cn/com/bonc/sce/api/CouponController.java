@@ -88,4 +88,13 @@ public class CouponController {
         return couponService.queryAgentCoupon(userId, pageNum, pageSize);
     }
 
+
+    @ApiOperation(value = "优惠码优惠方式计算", notes="优惠码优惠方式计算", httpMethod = "GET")
+    @GetMapping("/calCoupon")
+    public RestRecord calCoupon(@RequestParam String COUPON_CODE,
+                                @RequestParam String PRODUCT_TYPE_CODE,
+                                @RequestParam String ORIGIN_PRICE){
+        return couponService.calCoupon(COUPON_CODE, PRODUCT_TYPE_CODE, ORIGIN_PRICE);
+    }
+
 }
