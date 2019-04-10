@@ -51,4 +51,5 @@ public interface NewsMapper {
                        @Param( "userId" ) String userId,
                        @Param( "rejectOpinion" ) String rejectOpinion,
                        @Param( "contentId" ) Long contentId );
+
 }

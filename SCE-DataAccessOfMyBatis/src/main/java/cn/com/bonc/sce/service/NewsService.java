@@ -44,6 +44,7 @@ public class NewsService {
         }
         newsBean.setIsDelete( 1 );
         newsBean.setContentStatus( "0" );
+        newsBean.setIsPublish( 0 );
         return newsDao.insertNewsInfo( newsBean );
     }
 

@@ -46,7 +46,7 @@ public class NewsController {
                 return new RestRecord( 409, MessageConstants.SCE_MSG_409 );
             }
         } catch ( Exception e ) {
-            log.error( "delete newsInfo fail {}", e );
+            log.error( "insert newsInfo fail {}", e );
             return new RestRecord( 423, MessageConstants.SCE_MSG_409, e );
         }
     }

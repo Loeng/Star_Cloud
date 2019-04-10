@@ -28,8 +28,6 @@ import java.util.List;
 public class NewsInfoController {
 
     @Autowired
-    private NewsService newsService;
-    @Autowired
     private NewsInfoService newsInfoService;
 
     /**
