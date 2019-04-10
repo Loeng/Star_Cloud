@@ -21,9 +21,13 @@ public interface UserOperationMybatisDao {
      * @return 是否更新成功
      */
     @RequestMapping( value = "/user-info-mybatis/updateUserInfo", method = RequestMethod.PUT )
-    RestRecord updateUserInfoById(@RequestBody Map< String, Object > userInfo);
+    RestRecord updateUserInfoById( @RequestBody Map< String, Object > userInfo );
 
     @RequestMapping( value = "/user-info-mybatis/updatePassword", method = RequestMethod.PUT )
-    RestRecord updatePassword(@RequestBody Map< String, Object > info);
+    RestRecord updatePassword( @RequestBody Map< String, Object > info );
+
+    @RequestMapping( value = "/user-info-mybatis/user_head_portrait", method = RequestMethod.GET )
+    RestRecord updateUserHeadPortrait( @RequestParam( "userId" ) String userId,
+                                       @RequestParam( "resourceId" ) Integer resourceId );
 
 }

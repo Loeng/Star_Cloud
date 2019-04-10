@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.NewsMapper">
+    <resultMap id="BaseResultMap" type="cn.com.bonc.sce.bean.ContentTypeBean">
+        <result column="ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="id"></result>
+        <result column="CONTENT_TYPE" jdbcType="VARCHAR" javaType="java.lang.String" property="contentType"></result>
+        <result column="IS_DELETE" jdbcType="INTEGER" javaType="java.lang.Long" property="isDelete"></result>
+        <result column="SHOW_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="showOrder"></result>
+        <result column="IS_SHOWN" jdbcType="INTEGER" javaType="java.lang.Integer" property="isShown"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        T.ID,
+        T.CONTENT_TYPE,
+        T.IS_DELETE,
+        T.SHOW_ORDER,
+        T.IS_SHOWN
+    </sql>
+
+    <insert id="insertNewsInfo" parameterType="cn.com.bonc.sce.bean.NewsBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT (CONTENT_ID,COLUMN_ID,CONTENT_TYPE
+        <if test="contentTag != null and contentTag != ''">
+            ,CONTENT_TAG
+        </if>
+        <if test="contentTitle != null and contentTitle != ''">
+            ,CONTENT_TITLE
+        </if>
+        <if test="content != null and content != ''">
+            ,CONTENT
+        </if>
+        ,CONTENT_STATUS,CREATE_TIME,CREATE_USER_ID
+        <if test="picId != null ">
+            ,PIC_ID
+        </if>
+        <if test="fileId != null ">
+            ,FILE_ID
+        </if>
+        <if test="contentKeyword != null and contentKeyword != ''">
+            ,CONTENT_KEYWORD
+        </if>
+        <if test="publishDate != null ">
+            ,PUBLISH_DATE
+        </if>
+        ,IS_TOP
+        <if test="picUrl != null and picUrl != ''">
+            ,PIC_URL
+        </if>
+        <if test="fileUrl != null and fileUrl != ''">
+            ,FILE_URL
+        </if>
+        <if test="newsAbstract != null and newsAbstract != ''">
+            ,NEWS_ABSTRACT
+        </if>
+        ,AUTHOR_NAME
+        )
+        VALUES
+        (
+        #{contentId},#{columnId},#{contentType}
+        <if test="contentTag != null and contentTag != ''">
+            ,#{contentTag}
+        </if>
+        <if test="contentTitle != null and contentTitle != ''">
+            ,#{contentTitle}
+        </if>
+        <if test="content != null and content != ''">
+            ,#{content}
+        </if>
+        ,#{contentStatus},sysdate,#{createUserId}
+        <if test="picId != null ">
+            ,#{picId}
+        </if>
+        <if test="fileId != null ">
+            ,#{fileId}
+        </if>
+        <if test="contentKeyword != null and contentKeyword != ''">
+            ,#{contentKeyword}
+        </if>
+        <if test="publishDate != null ">
+            ,#{publishDate}
+        </if>
+        ,#{isTop}
+        <if test="picUrl != null and picUrl != ''">
+            ,#{picUrl}
+        </if>
+        <if test="fileUrl != null and fileUrl != ''">
+            ,#{fileUrl}
+        </if>
+        <if test="newsAbstract != null and newsAbstract != ''">
+            ,#{newsAbstract}
+        </if>
+        ,#{authorName}
+        )
+    </insert>
+
+    <update id="updateNewsInfo" parameterType="cn.com.bonc.sce.bean.NewsBean">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        <set>
+            <if test="contentType != null ">
+                CONTENT_TYPE = #{contentType},
+            </if>
+            <if test="contentTag != null and contentTag != ''">
+                CONTENT_TAG = #{contentTag},
+            </if>
+            <if test="contentTitle != null and contentTitle != ''">
+                CONTENT_TITLE = #{contentTitle},
+            </if>
+            <if test="content != null and content != ''">
+                CONTENT = #{content},
+            </if>
+            <if test="picId != null ">
+                PIC_ID = #{picId},
+            </if>
+            <if test="fileId != null ">
+                FILE_ID = #{fileId},
+            </if>
+            <if test="contentKeyword != null and contentKeyword != ''">
+                CONTENT_KEYWORD = #{contentKeyword},
+            </if>
+            <if test="publishDate != null ">
+                PUBLISH_DATE = #{publishDate},
+            </if>
+            <if test="isTop != null">
+                IS_TOP = #{isTop},
+            </if>
+            <if test="picUrl != null and picUrl != ''">
+                PIC_URL = #{picUrl},
+            </if>
+            <if test="fileUrl != null and fileUrl != ''">
+                FILE_URL = #{fileUrl},
+            </if>
+            <if test="newsAbstract != null and newsAbstract != ''">
+                NEWS_ABSTRACT = #{newsAbstract},
+            </if>
+            <if test="updateUserId != null and updateUserId != ''">
+                UPDATE_USER_ID = #{updateUserId},
+            </if>
+            <if test="contentId != null and contentId != ''">
+                UPDATE_TIME = sysdate,
+            </if>
+        </set>
+        WHERE CONTENT_ID = #{contentId}
+    </update>
+
+    <update id="deleteNewsInfo">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET IS_DELETE = 0, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId}
+        WHERE CONTENT_ID IN
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="auditNewsInfo">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET CONTENT_STATUS = #{contentStatus}, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId},
+            AUDIT_USER_ID = #{userId}, AUDIT_TIME = sysdate
+            <if test="rejectOpinion != null and rejectOpinion != ''">
+                ,REJECT_OPINION = #{rejectOpinion}
+            </if>
+        WHERE CONTENT_ID = #{contentId}
+    </update>
+
+</mapper>
