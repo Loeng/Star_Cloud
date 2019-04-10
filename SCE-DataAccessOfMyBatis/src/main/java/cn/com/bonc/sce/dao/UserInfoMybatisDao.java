@@ -24,4 +24,12 @@ public class UserInfoMybatisDao {
         return userInfoMybatisMapper.addPassword(userInfo);
     }
 
+    public int updateUserHeadPortrait( String userId, Integer resourceId ) {
+        return userInfoMybatisMapper.updateUserHeadPortrait( userId, resourceId );
+    }
+
+    public String getUserNameById(String userId) {
+        return userInfoMybatisMapper.getUserNameById( userId );
+    }
+
 }

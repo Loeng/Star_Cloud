@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.ContentTypeMapper">
+    <resultMap id="BaseResultMap" type="cn.com.bonc.sce.bean.ContentTypeBean">
+        <result column="ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="id"></result>
+        <result column="CONTENT_TYPE" jdbcType="VARCHAR" javaType="java.lang.String" property="contentType"></result>
+        <result column="IS_DELETE" jdbcType="INTEGER" javaType="java.lang.Long" property="isDelete"></result>
+        <result column="SHOW_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="showOrder"></result>
+        <result column="IS_SHOWN" jdbcType="INTEGER" javaType="java.lang.Integer" property="isShown"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        T.ID,
+        T.CONTENT_TYPE,
+        T.IS_DELETE,
+        T.SHOW_ORDER,
+        T.IS_SHOWN
+    </sql>
+
+    <select id="selectContentTypeList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT_TYPE  T
+        WHERE T.IS_DELETE = 1
+        ORDER BY T.SHOW_ORDER ASC
+    </select>
+
+    <insert id="insertContentTypeInfo" parameterType="cn.com.bonc.sce.bean.ContentTypeBean" >
+        <selectKey keyProperty="id" resultType="java.lang.Integer" order="BEFORE" statementType="PREPARED">
+            SELECT STARCLOUDPORTAL.SQE_CONTENT_TYPE.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT_TYPE (ID,CONTENT_TYPE,IS_DELETE,SHOW_ORDER,IS_SHOWN)
+        VALUES (#{id}, #{contentType}, #{isDelete}, #{showOrder}, #{isShown})
+    </insert>
+
+    <update id="updateContentTypeInfo" parameterType="cn.com.bonc.sce.bean.ContentTypeBean" >
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT_TYPE
+        <set>
+            <if test="contentType != null">
+                CONTENT_TYPE = #{contentType},
+            </if>
+            <if test="showOrder != null">
+                SHOW_ORDER=#{showOrder},
+            </if>
+            <if test="isShown != null">
+                IS_SHOWN=#{isShown},
+            </if>
+        </set>
+        WHERE ID = #{id,jdbcType=NUMERIC}
+    </update>
+
+    <update id="deleteContentTypeInfo">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT_TYPE
+        SET IS_DELETE = 0
+        WHERE ID = #{id}
+    </update>
+
+</mapper>

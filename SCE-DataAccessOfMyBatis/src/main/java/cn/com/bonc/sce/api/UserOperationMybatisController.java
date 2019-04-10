@@ -31,4 +31,11 @@ public class UserOperationMybatisController {
         return new RestRecord(200, userInfoMybatisDao.addPassword(userInfo));
     }
 
+    @GetMapping( "/user_head_portrait" )
+    @ResponseBody
+    public RestRecord updateUserHeadPortrait( @RequestParam( "userId" ) String userId,
+                                              @RequestParam( "resourceId" ) Integer resourceId ) {
+        return new RestRecord( 200, userInfoMybatisDao.updateUserHeadPortrait( userId, resourceId ) );
+    }
+
 }

@@ -87,4 +87,9 @@ public interface UserMapper {
                   @Param("origin_school_id")String origin_school_id, @Param("target_school_id")String target_school_id,
                   @Param("tea_work_number")String tea_work_number, @Param("entrance_year")Date entrance_year,
                   @Param("tea_position")String tea_position, @Param("tea_range")String tea_range);
+
+    List<Map> getTransferTeachers(@Param("getType")Integer getType,@Param("organizationId")long organizationId,
+                                  @Param("userName")String userName, @Param("loginName")String loginName,
+                                  @Param("gender")String gender, @Param("position")String position,
+                                  @Param("accountStatus")Integer accountStatus);
 }
