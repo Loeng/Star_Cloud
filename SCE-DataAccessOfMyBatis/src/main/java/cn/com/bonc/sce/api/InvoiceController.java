@@ -221,7 +221,7 @@ public class InvoiceController {
         //生成一个订单发票id
         long orderInvoiceId = idWorker.nextId();
         //存发票表
-        map.put( "INVOICE_ACCOUNT", money );
+        map.put( "INVOICE_AMOUNT", money );
         map.put( "APPLY_TIME", new Date() );
         map.put( "ID", orderInvoiceId );
         map.put( "CREATE_TIME", new Date() );
