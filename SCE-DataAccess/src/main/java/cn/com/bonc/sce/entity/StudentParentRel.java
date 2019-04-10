@@ -24,6 +24,8 @@ public class StudentParentRel {
     private String studentUserId;
     @Column( name = "IS_MAIN" )
     private Integer isMain;
+    @Column( name = "RELATIONSHIP" )
+    private String relationShip;
 
     public Integer getId() {
         return id;
@@ -55,6 +57,14 @@ public class StudentParentRel {
 
     public void setIsMain( Integer isMain ) {
         this.isMain = isMain;
+    }
+
+    public String getRelationShip() {
+        return relationShip;
+    }
+
+    public void setRelationShip(String relationShip) {
+        this.relationShip = relationShip;
     }
 
     public StudentParentRel() {

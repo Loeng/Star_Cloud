@@ -39,12 +39,12 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      */
     @Modifying
     @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
-            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ADDRESS,ORGANIZATION_ID,BIRTHDATE,SECRET) VALUES " +
-            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13)  " )
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ORGANIZATION_ID,BIRTHDATE,SECRET,NATIONALITY,VOLK,ISADMINISTRATORS) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15)  " )
     int savaAllUserInfo(String id, String userName, String gender , String loginName
                         , String userType, String mailAddress, String certificateType
-                        , String certificateNumber, String phoneNumber, String address
-                        , BigDecimal organizationId, Date birthDate, String secret);
+                        , String certificateNumber, String phoneNumber
+                        , BigDecimal organizationId, Date birthDate, String secret, String nationality, String volk, String isAdministrators);
 
     /**
      * 插入用户啊
@@ -63,7 +63,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      */
     @Modifying
     @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,LOGIN_NAME,USER_TYPE,SECRET) VALUES(?1,?2,?3,?4)" )
-    int saveParentOfUser(String userId, String loginName, String userType, String secret);
+    int saveParentOfUser(String userId, String loginName, String name, String gender, String userType, String secret);
 
     /**
      * 插入家长数据
@@ -72,12 +72,11 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      */
     @Modifying
     @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
-            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ADDRESS,BIRTHDATE,SECRET) VALUES " +
-            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12)  " )
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,BIRTHDATE,SECRET,NATIONALITY,VOLK) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13)  " )
     int saveParent(String id, String userName, String gender , String loginName
             , String userType, String mailAddress, String certificateType
-            , String certificateNumber, String phoneNumber, String address
-            , Date birthDate, String secret);
+            , String certificateNumber, String phoneNumber, Date birthDate, String secret, String nationality, String volk);
 
     /**
      *  插入数据到学生表
@@ -85,12 +84,9 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @return
      */
     @Modifying
-    @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_STUDENT(USER_ID,CLASS_NUMBER,GRADE,STUDENT_NUMBER," +
-            "HEALTH_CODE,NATIONALITY,MARRIAGE_CODE,ACCOUNT_AREA_CODE,NAME_SPELL,BIRTH_PLACE,NATIVE_PLACE,NATION_CODE," +
-            "POLITICS_STATUS,ACCOUNT_CLASS_CODE,ENTRANCE_YEAR,LEARN_SPECIALTY) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16) ")
-    int saveStudent(String userId, String classNumber, String grade, String studentNumber, String healthCode, String nationLity,
-                    String marriAgeCode, String accountAreaCode, String nameSpell, String birthPlace, String nativePlace,
-                    String nationCode, String politicsStatus, String accountClassCode, Date entranceYear, String learnSpecialty);
+    @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_STUDENT(USER_ID,CLASS_NUMBER,GRADE,STUDENT_NUMBER,ENTRANCE_YEAR) " +
+            "VALUES (?1,?2,?3,?4,?5) ")
+    int saveStudent(String userId, String classNumber, String grade, String studentNumber, Date entranceYear);
 
     /**
      * 插入家长信息
@@ -128,8 +124,24 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param certificateNumber
      * @return
      */
+    @Query( nativeQuery = true, value = "SELECT count(1) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
+    int selectUserCount(String certificateNumber);
+
+    /**
+     * 通过用户身份证作唯一判断
+     * @param certificateNumber
+     * @return
+     */
     @Query( nativeQuery = true, value = "SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
-    String selectUserCount(String certificateNumber);
+    String selectUserIdByCertificateNumber(String certificateNumber);
+
+    /**
+     * 通过用户身份证查询登录名
+     * @param certificateNumber
+     * @return
+     */
+    @Query( nativeQuery = true, value = "SELECT LOGIN_NAME FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
+    String selectUserLoginName(String certificateNumber);
 
     /**
      * 插入数据到教师表
@@ -137,10 +149,10 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @return
      */
     @Modifying
-    @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_TEACHER(USER_ID,SCHOOL_ID,POSITION,SUBJECT,SCHOOL_AGE," +
-            "NAME_SPELL,NATION_CODE,POLITICS_STATUS,WORK_NUMBER,MARRIAGE_CODE,BIRTH_PLACE,ACCOUNT_AREA_CODE,SCHOOL_TIME) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13)")
-    int saveTeacher(String userID, String schoolId, String position, String subject, String schoolAge, String nameSpell, String nationCode,
-                    String politicsStatus, String workNumber, String marriageCode, String birthPlace,String accountAreaCode, Date schoolTime);
+    @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_TEACHER(USER_ID,SCHOOL_ID,POSITION," +
+            "NATION_CODE,WORK_NUMBER,SCHOOL_TIME,NATIONLITY,TEACH_TIME,ACADEMIC_QUALIFICATION,TEACH_RANGE) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)")
+    int saveTeacher(String userID, String schoolId, String position, String nationCode, String workNumber,
+                    Date schoolTime, String nationality, Date teachTime, String academicQualification, String teachRange);
 
 
     /**
