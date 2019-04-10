@@ -32,6 +32,9 @@ public class NewsBean {
     private String fileUrl;
     private String newsAbstract;
     private String authorName;
+    private Integer topOrder;
+    private Integer showOrder;
+    private String newsSource;
 
     public Long getContentId() {
         return contentId;
@@ -231,5 +234,29 @@ public class NewsBean {
 
     public void setAuthorName( String authorName ) {
         this.authorName = authorName;
+    }
+
+    public Integer getTopOrder() {
+        return topOrder;
+    }
+
+    public void setTopOrder( Integer topOrder ) {
+        this.topOrder = topOrder;
+    }
+
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder( Integer showOrder ) {
+        this.showOrder = showOrder;
+    }
+
+    public String getNewsSource() {
+        return newsSource;
+    }
+
+    public void setNewsSource( String newsSource ) {
+        this.newsSource = newsSource;
     }
 }

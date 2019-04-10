@@ -30,6 +30,9 @@ public class NewsModel {
     private String fileUrl;
     private String newsAbstract;
     private String authorName;
+    private Integer topOrder;
+    private Integer showOrder;
+    private String newsSource;
 
     public Long getContentId() {
         return contentId;
@@ -213,5 +216,29 @@ public class NewsModel {
 
     public void setPublishTime( String publishTime ) {
         this.publishTime = publishTime;
+    }
+
+    public Integer getTopOrder() {
+        return topOrder;
+    }
+
+    public void setTopOrder( Integer topOrder ) {
+        this.topOrder = topOrder;
+    }
+
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder( Integer showOrder ) {
+        this.showOrder = showOrder;
+    }
+
+    public String getNewsSource() {
+        return newsSource;
+    }
+
+    public void setNewsSource( String newsSource ) {
+        this.newsSource = newsSource;
     }
 }

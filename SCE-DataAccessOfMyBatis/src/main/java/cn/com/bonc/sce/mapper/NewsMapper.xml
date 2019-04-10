@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.bonc.sce.mapper.NewsMapper">
-    <resultMap id="BaseResultMap" type="cn.com.bonc.sce.bean.ContentTypeBean">
-        <result column="ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="id"></result>
-        <result column="CONTENT_TYPE" jdbcType="VARCHAR" javaType="java.lang.String" property="contentType"></result>
-        <result column="IS_DELETE" jdbcType="INTEGER" javaType="java.lang.Long" property="isDelete"></result>
-        <result column="SHOW_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="showOrder"></result>
-        <result column="IS_SHOWN" jdbcType="INTEGER" javaType="java.lang.Integer" property="isShown"></result>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        T.ID,
-        T.CONTENT_TYPE,
-        T.IS_DELETE,
-        T.SHOW_ORDER,
-        T.IS_SHOWN
-    </sql>
 
     <insert id="insertNewsInfo" parameterType="cn.com.bonc.sce.bean.NewsBean">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT (CONTENT_ID,COLUMN_ID,CONTENT_TYPE
@@ -50,6 +35,15 @@
         </if>
         <if test="newsAbstract != null and newsAbstract != ''">
             ,NEWS_ABSTRACT
+        </if>
+        <if test="topOrder != null ">
+            ,TOP_ORDER
+        </if>
+        <if test="showOrder != null ">
+            ,SHOW_ORDER
+        </if>
+        <if test="newsSource != null and newsSource != ''">
+            ,NEWS_SOURCE
         </if>
         ,AUTHOR_NAME
         )
@@ -87,6 +81,15 @@
         </if>
         <if test="newsAbstract != null and newsAbstract != ''">
             ,#{newsAbstract}
+        </if>
+        <if test="topOrder != null ">
+            ,#{topOrder}
+        </if>
+        <if test="showOrder != null ">
+            ,#{showOrder}
+        </if>
+        <if test="newsSource != null and newsSource != ''">
+            ,#{newsSource}
         </if>
         ,#{authorName}
         )
@@ -134,6 +137,15 @@
             <if test="updateUserId != null and updateUserId != ''">
                 UPDATE_USER_ID = #{updateUserId},
             </if>
+            <if test="topOrder != null ">
+                TOP_ORDER = #{topOrder},
+            </if>
+            <if test="showOrder != null ">
+                SHOW_ORDER = #{showOrder},
+            </if>
+            <if test="newsSource != null and newsSource != ''">
+                NEWS_SOURCE = #{newsSource},
+            </if>
             <if test="contentId != null and contentId != ''">
                 UPDATE_TIME = sysdate,
             </if>
@@ -153,10 +165,10 @@
     <update id="auditNewsInfo">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
         SET CONTENT_STATUS = #{contentStatus}, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId},
-            AUDIT_USER_ID = #{userId}, AUDIT_TIME = sysdate
-            <if test="rejectOpinion != null and rejectOpinion != ''">
-                ,REJECT_OPINION = #{rejectOpinion}
-            </if>
+        AUDIT_USER_ID = #{userId}, AUDIT_TIME = sysdate
+        <if test="rejectOpinion != null and rejectOpinion != ''">
+            ,REJECT_OPINION = #{rejectOpinion}
+        </if>
         WHERE CONTENT_ID = #{contentId}
     </update>
 
