@@ -83,12 +83,13 @@ public class CouponDao {
         return couponMapper.queryCouponByCode(COUPON_CODE);
     }
 
-    public int reduceUnLimitedCouponUseTimes( String COUPON_CODE, long USED_TIMES) throws SQLException {
-        return couponMapper.reduceUnLimitedCouponUseTimes(COUPON_CODE, USED_TIMES);
+    public int changeUnLimitedCouponUseTimes( String COUPON_CODE, long USED_TIMES) throws SQLException {
+        return couponMapper.changeUnLimitedCouponUseTimes(COUPON_CODE, USED_TIMES);
     }
 
-    public int reduceLimitedCouponUseTimes( String COUPON_CODE, long VALID_USE_TIMES, long USED_TIMES) throws SQLException {
-        return couponMapper.reduceLimitedCouponUseTimes(COUPON_CODE, VALID_USE_TIMES, USED_TIMES);
+    public int changeLimitedCouponUseTimes( String COUPON_CODE, long VALID_USE_TIMES, long USED_TIMES) throws SQLException {
+        return couponMapper.changeLimitedCouponUseTimes(COUPON_CODE, VALID_USE_TIMES, USED_TIMES);
     }
+
 
 }

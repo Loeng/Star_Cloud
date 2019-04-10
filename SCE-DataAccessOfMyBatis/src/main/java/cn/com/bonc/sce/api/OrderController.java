@@ -25,9 +25,23 @@ public class OrderController {
     private OrderService orderService;
 
     @ApiOperation(value = "购买应用-生成订单", notes="购买应用-生成订单", httpMethod = "POST")
-    @PostMapping("/")
+    @PostMapping("/insertOrder")
     public RestRecord addNewOrder(@RequestBody Map param){
         return orderService.addNewOrder(param);
+    }
+
+
+    @ApiOperation(value = "取消订单", notes="取消订单", httpMethod = "PUT")
+    @PutMapping("/cancelOrder")
+    public RestRecord cancelOrder(@RequestBody Map pram){
+        return orderService.cancelOrder(pram);
+    }
+
+
+    @ApiOperation(value = "订单详情查询", notes="订单详情查询", httpMethod = "GET")
+    @GetMapping("/queryOrderByOrderID")
+    public RestRecord queryOrderByOrderID(@RequestParam String ORDER_ID){
+        return orderService.queryOrderByOrderID(ORDER_ID);
     }
 
 }
