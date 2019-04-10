@@ -173,4 +173,19 @@
         WHERE CONTENT_ID = #{contentId}
     </update>
 
+    <select id="selectNewsDetailById" resultType="Map">
+        SELECT
+          T.CONTENT_ID "contentId",
+          T.CONTENT_TITLE "contentTitle",
+          T.CONTENT "content",
+          T.PUBLISH_DATE "publishDate",
+          T.PIC_URL "picUrl",
+          T.NEWS_ABSTRACT "newsAbstract",
+          T.AUTHOR_NAME "authorName",
+          T.NEWS_SOURCE "newsSource",
+          (SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_NEWS_RECORD WHERE NEWS_ID = #{contentId}) "viewCount"
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
+        WHERE CONTENT_ID = #{contentId}
+    </select>
+
 </mapper>

@@ -38,4 +38,8 @@ public class NewsInfoService {
     public RestRecord updateNewsPublishStatus( Integer isPublish, String userId, Long contentId ) {
         return newsInfoDao.updateNewsPublishStatus( isPublish, userId, contentId );
     }
+
+    public RestRecord selectNewsById(Long contentId) {
+        return newsInfoDao.selectNewsById( contentId );
+    }
 }

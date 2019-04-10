@@ -41,10 +41,11 @@ public class NewsRecordController {
     } )
     @PostMapping( "/new-record" )
     @ResponseBody
-    public RestRecord insertNews( @RequestBody @ApiParam( name = "newsRecord", value = "新闻浏览信息", required = true ) NewsRecordModel newsRecordModel,
-                                  @CurrentUserId @ApiParam( hidden = true ) String userId
+    public RestRecord insertNews( @RequestBody @ApiParam( name = "newsRecord", value = "新闻浏览信息", required = true ) NewsRecordModel newsRecordModel
+//            ,
+//                                  @CurrentUserId @ApiParam( hidden = true ) String userId
     ) {
-        newsRecordModel.setUserId( userId );
+        newsRecordModel.setUserId( "cbba6bdd709c4095866d7e1ac95f05a8" );
         return newsRecordService.insertNewsRecord( newsRecordModel );
     }
 }

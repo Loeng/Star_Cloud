@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -34,5 +35,9 @@ public class NewsDao {
 
     public int updateNewsPublishStatus( Integer isPublish, String userId, Long contentId){
         return newsMapper.updateNewsPublishStatus( isPublish, userId, contentId );
+    }
+
+    public Map selectNewsDetailById( Long contentId ) {
+        return newsMapper.selectNewsDetailById( contentId );
     }
 }

@@ -71,4 +71,13 @@ public interface NewsInfoDao {
     RestRecord updateNewsPublishStatus( @RequestParam( "isPublish" ) Integer isPublish,
                                         @RequestParam( "userId" ) String userId,
                                         @RequestParam( "contentId" ) Long contentId );
+
+    /**
+     * 根据ID查询新闻
+     *
+     * @param contentId
+     * @return
+     */
+    @RequestMapping( value = "news-info/one-news-info", method = RequestMethod.GET )
+    RestRecord selectNewsById( @RequestParam( "contentId" ) Long contentId );
 }

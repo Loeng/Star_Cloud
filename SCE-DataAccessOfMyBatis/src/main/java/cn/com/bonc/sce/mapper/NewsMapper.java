@@ -5,6 +5,7 @@ import cn.com.bonc.sce.bean.NewsBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -63,5 +64,13 @@ public interface NewsMapper {
     int updateNewsPublishStatus( @Param( "isPublish" ) Integer isPublish,
                                  @Param( "userId" ) String userId,
                                  @Param( "contentId" ) Long contentId );
+
+    /**
+     * 通过新闻Id查询新闻详情
+     *
+     * @param contentId
+     * @return
+     */
+    Map<String, Object> selectNewsDetailById( @Param("contentId") Long contentId);
 
 }

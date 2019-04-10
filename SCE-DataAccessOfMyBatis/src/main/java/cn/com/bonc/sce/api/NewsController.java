@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -108,5 +109,13 @@ public class NewsController {
         } else {
             return new RestRecord( 409, MessageConstants.SCE_MSG_407 );
         }
+    }
+
+    @GetMapping("/one-news-info")
+    @ResponseBody
+    public RestRecord selectNewsById(@RequestParam( "contentId" ) Long contentId){
+        Map newsInfo = newsDao.selectNewsDetailById( contentId );
+        log.info( newsInfo.toString() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,newsInfo );
     }
 }

@@ -25,7 +25,7 @@
         <if test="userId != null and userId != ''">
             #{userId},
         </if>
-        #{recordTime})
+        sysdate)
     </insert>
 
 </mapper>

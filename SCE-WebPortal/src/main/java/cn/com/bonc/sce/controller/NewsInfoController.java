@@ -135,7 +135,7 @@ public class NewsInfoController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @PostMapping( "/audit-news" )
+    @PostMapping( "/news-publish-status" )
     @ResponseBody
     public RestRecord updateNewsPublishStatus( @RequestBody @ApiParam( name = "news", value = "新闻发布状态信息", required = true ) NewsStatusModel newsStatusModel,
                                                @CurrentUserId @ApiParam( hidden = true ) String userId
@@ -145,5 +145,21 @@ public class NewsInfoController {
         return newsInfoService.updateNewsPublishStatus( isPublish, userId, contentId );
     }
 
-
+    /**
+     * 新闻详细信息查询接口
+     *
+     * @return
+     */
+    @ApiOperation( value = "新闻详细信息查询接口", notes = "新闻详细信息查询接口", httpMethod = "GET" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "contentId", value = "新闻ID", paramType = "query" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping("/one-news-info")
+    @ResponseBody
+    public RestRecord selectNewsById(@RequestParam( "contentId" ) Long contentId) {
+        return newsInfoService.selectNewsById( contentId );
+    }
 }
