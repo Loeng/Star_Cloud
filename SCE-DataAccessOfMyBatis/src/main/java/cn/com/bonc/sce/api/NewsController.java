@@ -6,7 +6,6 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.NewsDao;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NewsService;
-import cn.com.bonc.sce.tool.IdWorker;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,10 @@ public class NewsController {
      * @return 添加新闻是否成功
      */
     @Transactional
-    @PostMapping("/new-info")
+    @PostMapping( "/new-info" )
     @ResponseBody
-    public RestRecord insertNewsInfo( @RequestBody NewsBean newsBean){
-        try{
+    public RestRecord insertNewsInfo( @RequestBody NewsBean newsBean ) {
+        try {
             int count = newsService.insertNewsInfo( newsBean );
             if ( count == 1 ) {
                 return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
@@ -57,9 +56,9 @@ public class NewsController {
      * @param newsBean 新闻
      * @return 修改新闻是否成功
      */
-    @PostMapping("/updated-info")
+    @PostMapping( "/updated-info" )
     @ResponseBody
-    public RestRecord updateNewsInfo( @RequestBody NewsBean newsBean){
+    public RestRecord updateNewsInfo( @RequestBody NewsBean newsBean ) {
         int count = newsDao.updateNewsInfo( newsBean );
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
@@ -83,14 +82,27 @@ public class NewsController {
 
     @PostMapping( "/audit-info" )
     @ResponseBody
-    public RestRecord auditNewsInfo(@RequestParam( "contentStatus" ) String contentStatus,
-                                    @RequestParam( "userId" ) String userId,
-                                    @RequestParam( "rejectOpinion" ) String rejectOpinion,
-                                    @RequestParam("contentId") Long contentId){
-        if( StrUtil.isBlank( rejectOpinion )) {
+    public RestRecord auditNewsInfo( @RequestParam( "contentStatus" ) String contentStatus,
+                                     @RequestParam( "userId" ) String userId,
+                                     @RequestParam( "rejectOpinion" ) String rejectOpinion,
+                                     @RequestParam( "contentId" ) Long contentId ) {
+        if ( StrUtil.isBlank( rejectOpinion ) ) {
             rejectOpinion = "";
         }
         int count = newsDao.auditNewsInfo( contentStatus, userId, rejectOpinion, contentId );
+        if ( count == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+        } else {
+            return new RestRecord( 409, MessageConstants.SCE_MSG_407 );
+        }
+    }
+
+    @PostMapping( "/publish-info" )
+    @ResponseBody
+    public RestRecord updateNewsPublishStatus( @RequestParam( "isPublish" ) Integer isPublish,
+                                               @RequestParam( "userId" ) String userId,
+                                               @RequestParam( "contentId" ) Long contentId ) {
+        int count = newsDao.updateNewsPublishStatus( isPublish, userId, contentId );
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {

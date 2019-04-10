@@ -39,8 +39,8 @@ public interface NewsMapper {
 
 
     /**
-     *
      * * 新闻审核
+     *
      * @param contentStatus 1：通过审核 2：不通过审核
      * @param userId
      * @param rejectOpinion
@@ -51,5 +51,17 @@ public interface NewsMapper {
                        @Param( "userId" ) String userId,
                        @Param( "rejectOpinion" ) String rejectOpinion,
                        @Param( "contentId" ) Long contentId );
+
+    /**
+     * 更新新闻发布状态
+     *
+     * @param isPublish
+     * @param userId
+     * @param contentId
+     * @return
+     */
+    int updateNewsPublishStatus( @Param( "isPublish" ) Integer isPublish,
+                                 @Param( "userId" ) String userId,
+                                 @Param( "contentId" ) Long contentId );
 
 }

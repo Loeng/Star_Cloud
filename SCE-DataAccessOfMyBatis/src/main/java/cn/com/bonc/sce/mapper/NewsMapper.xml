@@ -166,4 +166,11 @@
         WHERE CONTENT_ID = #{contentId}
     </update>
 
+    <update id="updateNewsPublishStatus">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET IS_PUBLISH = #{isPublish}, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId},
+        PUBLISH_DATE = NVL(PUBLISH_DATE,sysdate)
+        WHERE CONTENT_ID = #{contentId}
+    </update>
+
 </mapper>
