@@ -251,6 +251,10 @@ public class CouponService {
             return new RestRecord(741,WebMessageConstants.SCE_PORTAL_MSG_741);
         }
 
+        if (0==Integer.valueOf(temp.get("IS_DELETE").toString()) || "D".equals(temp.get("STATE").toString())){
+            return new RestRecord(741,WebMessageConstants.SCE_PORTAL_MSG_741);
+        }
+
         PRODUCT_TYPE_CODE=","+PRODUCT_TYPE_CODE+","; // 两边添加逗号
         // 判断商品类型 是否符合该优惠码
         if (!",0,".equals(temp.get("GOODS_TYPE_CODE").toString())){
@@ -317,7 +321,11 @@ public class CouponService {
 
         Map temp = couponDao.queryCouponByCode(COUPON_CODE);
 
-        if (temp.isEmpty() || temp==null){
+        if (temp==null || temp.isEmpty()){
+            return new RestRecord(741,WebMessageConstants.SCE_PORTAL_MSG_741);
+        }
+
+        if (0==Integer.valueOf(temp.get("IS_DELETE").toString()) || "D".equals(temp.get("STATE").toString())){
             return new RestRecord(741,WebMessageConstants.SCE_PORTAL_MSG_741);
         }
 
@@ -332,8 +340,8 @@ public class CouponService {
         long VALID_DATE_FALG=Long.parseLong(temp.get("VALID_DATE_FALG").toString());
         if (VALID_DATE_FALG==1){
             Date NOW_TIME=new Date();
-            java.sql.Date START_DATE= (java.sql.Date) temp.get("START_DATE");
-            java.sql.Date END_DATE=(java.sql.Date) temp.get("END_DATE");
+            java.sql.Timestamp START_DATE= (java.sql.Timestamp) temp.get("START_DATE");
+            java.sql.Timestamp END_DATE=(java.sql.Timestamp) temp.get("END_DATE");
 
             // 判断优惠码使用时间是否过期
             if (NOW_TIME.before(START_DATE) || NOW_TIME.after(END_DATE)){
@@ -360,7 +368,7 @@ public class CouponService {
         synchronized (this){
             if (USE_TIMES_FLAG==0){
                 try {
-                    int count = couponDao.reduceUnLimitedCouponUseTimes(COUPON_CODE,++USED_TIMES);
+                    int count = couponDao.changeUnLimitedCouponUseTimes(COUPON_CODE,++USED_TIMES);
                     if (count<1){
                         return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
                     }
@@ -371,7 +379,7 @@ public class CouponService {
             }else {
 
                 try {
-                    int count=couponDao.reduceLimitedCouponUseTimes(COUPON_CODE,--VALID_USE_TIMES,++USED_TIMES);
+                    int count=couponDao.changeLimitedCouponUseTimes(COUPON_CODE,--VALID_USE_TIMES,++USED_TIMES);
                     if (count<1){
                         return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
                     }
@@ -385,6 +393,58 @@ public class CouponService {
 
         return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
     }
+
+
+
+    /* *
+     * @Description 优惠码使用次数增加  （该方法用于订单取消后 恢复优惠码的有效使用次数）
+     * @Date 10:27 2019/4/10
+     * @param COUPON_CODE
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord addCouponUseTimesByCode(String COUPON_CODE){
+
+        // 订单取消时   该优惠吗是必定存在的  因此这里没做空值判断之类的
+
+        Map temp = couponDao.queryCouponByCode(COUPON_CODE);
+
+        //使用次数是否无限：  0 无限      1 有限使用次数
+        long USE_TIMES_FLAG=Long.parseLong(temp.get("USE_TIMES_FLAG").toString());
+        long VALID_USE_TIMES=Long.parseLong(temp.get("VALID_USE_TIMES").toString());//该优惠码的可使用次数   为无限次时值为0
+        long USED_TIMES=Long.parseLong(temp.get("USED_TIMES").toString()); // 优惠码已使用次数
+
+
+        // 根据 使用次数是否无限  调用不同的修改方法(无限次时  有效使用次数无意义         有限次数时  有效使用次数才有意义)
+        synchronized (this){
+            if (USE_TIMES_FLAG==0){
+                try {
+                    int count = couponDao.changeUnLimitedCouponUseTimes(COUPON_CODE,--USED_TIMES);
+                    if (count<1){
+                        return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                }
+            }else {
+
+                try {
+                    int count=couponDao.changeLimitedCouponUseTimes(COUPON_CODE,++VALID_USE_TIMES,--USED_TIMES);
+                    if (count<1){
+                        return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new RestRecord(421, WebMessageConstants.SCE_PORTAL_MSG_421);
+                }
+
+            }
+        }
+
+
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
 
 
     /* *

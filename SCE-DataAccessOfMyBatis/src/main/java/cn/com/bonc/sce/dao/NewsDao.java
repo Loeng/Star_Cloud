@@ -31,4 +31,8 @@ public class NewsDao {
     public int auditNewsInfo( String contentStatus, String userId, String rejectOpinion, Long contentId ) {
         return newsMapper.auditNewsInfo( contentStatus, userId, rejectOpinion, contentId );
     }
+
+    public int updateNewsPublishStatus( Integer isPublish, String userId, Long contentId){
+        return newsMapper.updateNewsPublishStatus( isPublish, userId, contentId );
+    }
 }

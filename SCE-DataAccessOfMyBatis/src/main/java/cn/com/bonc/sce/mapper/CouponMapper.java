@@ -50,11 +50,12 @@ public interface CouponMapper {
 
     Map queryCouponByCode(@Param("COUPON_CODE") String COUPON_CODE);
 
-    int reduceUnLimitedCouponUseTimes(@Param("COUPON_CODE") String COUPON_CODE,
+    int changeUnLimitedCouponUseTimes(@Param("COUPON_CODE") String COUPON_CODE,
                                       @Param("USED_TIMES") long USED_TIMES) throws SQLException;
 
-    int reduceLimitedCouponUseTimes(@Param("COUPON_CODE") String COUPON_CODE,
+    int changeLimitedCouponUseTimes(@Param("COUPON_CODE") String COUPON_CODE,
                                     @Param("VALID_USE_TIMES") long VALID_USE_TIMES,
                                     @Param("USED_TIMES") long USED_TIMES) throws SQLException;
+
 
 }

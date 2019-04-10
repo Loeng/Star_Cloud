@@ -35,6 +35,7 @@ public class NewsBean {
     private Integer topOrder;
     private Integer showOrder;
     private String newsSource;
+    private Integer isPublish;
 
     public Long getContentId() {
         return contentId;
@@ -258,5 +259,13 @@ public class NewsBean {
 
     public void setNewsSource( String newsSource ) {
         this.newsSource = newsSource;
+    }
+
+    public Integer getIsPublish() {
+        return isPublish;
+    }
+
+    public void setIsPublish( Integer isPublish ) {
+        this.isPublish = isPublish;
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.NewsRecordMapper">
+    <resultMap id="BaseResultMap" type="cn.com.bonc.sce.bean.ContentTypeBean">
+        <result column="ID" jdbcType="INTEGER" javaType="java.lang.Long" property="id"></result>
+        <result column="USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="userId"></result>
+        <result column="NEWS_ID" jdbcType="INTEGER" javaType="java.lang.Long" property="newsId"></result>
+        <result column="RECORD_TIME" jdbcType="DATE" javaType="java.util.Date" property="recordTime"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        T.ID,
+        T.USER_ID,
+        T.NEWS_ID,
+        T.RECORD_TIME
+    </sql>
+
+    <insert id="insertNewsRecord" parameterType="cn.com.bonc.sce.bean.NewsRecordBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_NEWS_RECORD (ID,NEWS_ID,
+        <if test="userId != null and userId != ''">
+            USER_ID,
+        </if>
+        RECORD_TIME)
+        VALUES (#{id}, #{newsId},
+        <if test="userId != null and userId != ''">
+            #{userId},
+        </if>
+        #{recordTime})
+    </insert>
+
+</mapper>

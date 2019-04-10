@@ -79,4 +79,5 @@ public class NewsService {
     public RestRecord getNews( Integer newsId ) {
         return newsDao.getNews( newsId );
     }
+
 }

@@ -43,3 +43,11 @@ pagehelper:
 IdWorker:
   workerId: 0
   datacenterId: 1
+
+#订单过期时间设置  线上交易 暂定为24小时过期    线下暂定为72小时过期     时间单位为小时 数值为整数 ！！！！！ 切记
+OrderDeadline:
+  OnLine: 24
+  OffLine: 72
+
+
+

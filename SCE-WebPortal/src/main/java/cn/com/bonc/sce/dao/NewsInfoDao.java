@@ -57,5 +57,18 @@ public interface NewsInfoDao {
     RestRecord auditNewsInfo( @RequestParam( "contentStatus" ) String contentStatus,
                               @RequestParam( "userId" ) String userId,
                               @RequestParam( "rejectOpinion" ) String rejectOpinion,
-                              @RequestParam( "contentId" ) Long contentId);
+                              @RequestParam( "contentId" ) Long contentId );
+
+    /**
+     * 更新新闻发布状态
+     *
+     * @param isPublish
+     * @param userId
+     * @param contentId
+     * @return
+     */
+    @RequestMapping( value = "/news-info/publish-info", method = RequestMethod.POST )
+    RestRecord updateNewsPublishStatus( @RequestParam( "isPublish" ) Integer isPublish,
+                                        @RequestParam( "userId" ) String userId,
+                                        @RequestParam( "contentId" ) Long contentId );
 }

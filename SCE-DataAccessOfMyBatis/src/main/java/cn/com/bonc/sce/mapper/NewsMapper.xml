@@ -23,9 +23,6 @@
         <if test="contentKeyword != null and contentKeyword != ''">
             ,CONTENT_KEYWORD
         </if>
-        <if test="publishDate != null ">
-            ,PUBLISH_DATE
-        </if>
         ,IS_TOP
         <if test="picUrl != null and picUrl != ''">
             ,PIC_URL
@@ -45,7 +42,7 @@
         <if test="newsSource != null and newsSource != ''">
             ,NEWS_SOURCE
         </if>
-        ,AUTHOR_NAME
+        ,AUTHOR_NAME,IS_PUBLISH
         )
         VALUES
         (
@@ -69,9 +66,6 @@
         <if test="contentKeyword != null and contentKeyword != ''">
             ,#{contentKeyword}
         </if>
-        <if test="publishDate != null ">
-            ,#{publishDate}
-        </if>
         ,#{isTop}
         <if test="picUrl != null and picUrl != ''">
             ,#{picUrl}
@@ -91,7 +85,7 @@
         <if test="newsSource != null and newsSource != ''">
             ,#{newsSource}
         </if>
-        ,#{authorName}
+        ,#{authorName},#{isPublish}
         )
     </insert>
 
@@ -169,6 +163,13 @@
         <if test="rejectOpinion != null and rejectOpinion != ''">
             ,REJECT_OPINION = #{rejectOpinion}
         </if>
+        WHERE CONTENT_ID = #{contentId}
+    </update>
+
+    <update id="updateNewsPublishStatus">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET IS_PUBLISH = #{isPublish}, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId},
+        PUBLISH_DATE = NVL(PUBLISH_DATE,sysdate)
         WHERE CONTENT_ID = #{contentId}
     </update>
 

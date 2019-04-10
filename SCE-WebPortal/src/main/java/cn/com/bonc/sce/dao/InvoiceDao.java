@@ -51,5 +51,5 @@ public interface InvoiceDao {
                                                @RequestBody List< String > orderNoList );
 
     @RequestMapping( value = "/invoice/billing-by-loginName", method = RequestMethod.GET )
-    public RestRecord getBillingInfoByLoginName( String loginName );
+    public RestRecord getBillingInfoByLoginName( @RequestParam("loginName") String loginName );
 }

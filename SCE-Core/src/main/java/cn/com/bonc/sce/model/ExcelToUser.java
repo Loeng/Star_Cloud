@@ -2,22 +2,17 @@ package cn.com.bonc.sce.model;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import java.util.Date;
-
 /**
  * @Author: Vloader
- * @Auther: 管理员
+ * @Auther: 管 理 员
  * @Date: 2018/12/26 16:09
  * @Description:
  */
 public class ExcelToUser {
-    @Excel( name = "姓名", orderNum = "0"  )
+    @Excel( name = "姓名" )
     private String userName;
 
-    @Excel( name = "性别", replace = { "男_1", "女_2" }, orderNum = "1" )
+    @Excel( name = "性别", replace = { "男_1", "女_0" }, orderNum = "1" )
     private String gender;
 
     @Excel( name = "身份证", orderNum = "2" )
@@ -26,83 +21,93 @@ public class ExcelToUser {
     @Excel( name = "联系方式", orderNum = "3" )
     private String phoneNumber;
 
-    @Excel( name = "当前住址", orderNum = "4" )
-    private String address;
-
-    @Excel( name = "电子邮箱", orderNum = "5" )
+    @Excel( name = "电子邮箱", orderNum = "4" )
     private String mailAddress;
 
-    @Excel( name = "出生日期", orderNum = "6")
+    @Excel( name = "出生日期", orderNum = "5")
     private String birthDate;
 
-    @Excel( name = "姓名拼音", orderNum = "7")
-    private String nameSpell;
-
-    @Excel( name = "年级", orderNum = "8")
+    @Excel( name = "年级", orderNum = "6")
     private String grade;
 
-    @Excel( name = "班号", orderNum = "9")
+    @Excel( name = "班号", orderNum = "7")
     private String classNumber;
 
-    @Excel( name = "学号", orderNum = "10")
+    @Excel( name = "学号", orderNum = "8")
     private String studentNumber;
 
-    @Excel( name = "健康状态", orderNum = "11")
-    private String healthCode;
-
-    @Excel( name = "国籍/地区码", orderNum = "12")
+    @Excel( name = "国籍", orderNum = "9")
     private String nationLity;
 
-    @Excel( name = "籍贯", orderNum = "13")
+    @Excel( name = "籍贯", orderNum = "10")
     private String nativePlace;
 
-    @Excel( name = "婚姻状况", orderNum = "14")
-    private String marriAgeCode;
-
-    @Excel( name = "户口所在地行政区划码", orderNum = "15")
-    private String accountAreaCode;
-
-    @Excel( name = "出生地", orderNum = "16")
-    private String birthPlace;
-
-    @Excel( name = "民族", orderNum = "17")
+    @Excel( name = "民族", orderNum = "11")
     private String nationCode;
 
-    @Excel( name = "政治面貌", orderNum = "18")
-    private String politicsStatus;
+    @Excel( name = "参加工作年月", orderNum = "12")
+    private String teachTime;
 
-    @Excel( name = "户口类别码", orderNum = "19")
-    private String accountClassCode;
-
-    @Excel( name = "入学年月", orderNum = "20")
+    @Excel( name = "入学年月", orderNum = "13")
     private String entranceYear;
 
-    @Excel( name = "职称", orderNum = "21")
+    @Excel( name = "职业岗位", orderNum = "14")
     private String position;
 
-    @Excel( name = "任职学科", orderNum = "22")
-    private String subject;
+    @Excel( name = "学历", orderNum = "15")
+    private String academicQualification;
 
-    @Excel( name = "教龄", orderNum = "23")
-    private String schoolAge;
+    @Excel( name = "管理员", replace = { "是_1","否_0" }, orderNum = "16")
+    private String isAdministrators;
 
-    @Excel( name = "所学专业", orderNum = "24")
-    private String learnSpecialty;
+    @Excel( name = "任课学段", replace = { "学前教育_1,","小学_2","普通初中_3","普通高中_4","职业初中_5","职业高中_6","成人中等专业学校_7","成人中学_8","特殊教育_9","其他_10" }, orderNum = "17")
+    private String teachRange;
 
-    @Excel( name = "工号", orderNum = "25")
+    @Excel( name = "工号", orderNum = "18")
     private String workNumber;
 
-    @Excel( name = "来校年月", orderNum = "26")
+    @Excel( name = "来校年月", orderNum = "19")
     private String schoolTime;
 
-    @Excel( name = "家庭角色", orderNum = "27")
-    private String fimilyRole;
+    @Excel( name = "家庭角色", orderNum = "20")
+    private String familyRole;
 
-    @Excel( name = "学生当前状态", orderNum = "28")
+    @Excel( name = "学生当前状态", orderNum = "21")
     private String currentStatus;
 
-    @Excel( name = "学生身份证", orderNum = "29")
+    @Excel( name = "学生身份证", orderNum = "22")
     private String studentCertificationNumber;
+
+    @Excel( name = "座号", orderNum = "23")
+    private String seatNumber;
+
+    @Excel( name = "学籍号", orderNum = "24")
+    private String studentCode;
+
+    //下面为学生模板中的家长
+    @Excel( name = "家长姓名", orderNum = "35")
+    private String parentName;
+
+    @Excel( name = "家长性别", replace = { "男_1", "女_0" }, orderNum = "26")
+    private String parentGender;
+
+    @Excel( name = "家长学生关系", orderNum = "27")
+    private String parentFamify;
+
+    @Excel( name = "家长国籍", orderNum = "28")
+    private String parentNationLity;
+
+    @Excel( name = "家长民族", orderNum = "29")
+    private String parentNationCode;
+
+    @Excel( name = "家长身份证", orderNum = "30")
+    private String parentCertificationNumber;
+
+    @Excel( name = "家长联系方式", orderNum = "31")
+    private String parentTelephone;
+
+    @Excel( name = "家长电子邮箱", orderNum = "32")
+    private String parentEmail;
 
     private String organizationId;
 
@@ -148,14 +153,6 @@ public class ExcelToUser {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getMailAddress() {
         return mailAddress;
     }
@@ -170,14 +167,6 @@ public class ExcelToUser {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getNameSpell() {
-        return nameSpell;
-    }
-
-    public void setNameSpell(String nameSpell) {
-        this.nameSpell = nameSpell;
     }
 
     public String getGrade() {
@@ -204,14 +193,6 @@ public class ExcelToUser {
         this.studentNumber = studentNumber;
     }
 
-    public String getHealthCode() {
-        return healthCode;
-    }
-
-    public void setHealthCode(String healthCode) {
-        this.healthCode = healthCode;
-    }
-
     public String getNationLity() {
         return nationLity;
     }
@@ -228,30 +209,6 @@ public class ExcelToUser {
         this.nativePlace = nativePlace;
     }
 
-    public String getMarriAgeCode() {
-        return marriAgeCode;
-    }
-
-    public void setMarriAgeCode(String marriAgeCode) {
-        this.marriAgeCode = marriAgeCode;
-    }
-
-    public String getAccountAreaCode() {
-        return accountAreaCode;
-    }
-
-    public void setAccountAreaCode(String accountAreaCode) {
-        this.accountAreaCode = accountAreaCode;
-    }
-
-    public String getBirthPlace() {
-        return birthPlace;
-    }
-
-    public void setBirthPlace(String birthPlace) {
-        this.birthPlace = birthPlace;
-    }
-
     public String getNationCode() {
         return nationCode;
     }
@@ -260,20 +217,12 @@ public class ExcelToUser {
         this.nationCode = nationCode;
     }
 
-    public String getPoliticsStatus() {
-        return politicsStatus;
+    public String getTeachTime() {
+        return teachTime;
     }
 
-    public void setPoliticsStatus(String politicsStatus) {
-        this.politicsStatus = politicsStatus;
-    }
-
-    public String getAccountClassCode() {
-        return accountClassCode;
-    }
-
-    public void setAccountClassCode(String accountClassCode) {
-        this.accountClassCode = accountClassCode;
+    public void setTeachTime(String teachTime) {
+        this.teachTime = teachTime;
     }
 
     public String getEntranceYear() {
@@ -292,28 +241,28 @@ public class ExcelToUser {
         this.position = position;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getAcademicQualification() {
+        return academicQualification;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setAcademicQualification(String academicQualification) {
+        this.academicQualification = academicQualification;
     }
 
-    public String getSchoolAge() {
-        return schoolAge;
+    public String getIsAdministrators() {
+        return isAdministrators;
     }
 
-    public void setSchoolAge(String schoolAge) {
-        this.schoolAge = schoolAge;
+    public void setIsAdministrators(String isAdministrators) {
+        this.isAdministrators = isAdministrators;
     }
 
-    public String getLearnSpecialty() {
-        return learnSpecialty;
+    public String getTeachRange() {
+        return teachRange;
     }
 
-    public void setLearnSpecialty(String learnSpecialty) {
-        this.learnSpecialty = learnSpecialty;
+    public void setTeachRange(String teachRange) {
+        this.teachRange = teachRange;
     }
 
     public String getWorkNumber() {
@@ -332,12 +281,12 @@ public class ExcelToUser {
         this.schoolTime = schoolTime;
     }
 
-    public String getFimilyRole() {
-        return fimilyRole;
+    public String getFamilyRole() {
+        return familyRole;
     }
 
-    public void setFimilyRole(String fimilyRole) {
-        this.fimilyRole = fimilyRole;
+    public void setFamilyRole(String familyRole) {
+        this.familyRole = familyRole;
     }
 
     public String getCurrentStatus() {
@@ -354,6 +303,86 @@ public class ExcelToUser {
 
     public void setStudentCertificationNumber(String studentCertificationNumber) {
         this.studentCertificationNumber = studentCertificationNumber;
+    }
+
+    public String getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(String seatNumber) {
+        this.seatNumber = seatNumber;
+    }
+
+    public String getStudentCode() {
+        return studentCode;
+    }
+
+    public void setStudentCode(String studentCode) {
+        this.studentCode = studentCode;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public String getParentGender() {
+        return parentGender;
+    }
+
+    public void setParentGender(String parentGender) {
+        this.parentGender = parentGender;
+    }
+
+    public String getParentFamify() {
+        return parentFamify;
+    }
+
+    public void setParentFamify(String parentFamify) {
+        this.parentFamify = parentFamify;
+    }
+
+    public String getParentNationLity() {
+        return parentNationLity;
+    }
+
+    public void setParentNationLity(String parentNationLity) {
+        this.parentNationLity = parentNationLity;
+    }
+
+    public String getParentNationCode() {
+        return parentNationCode;
+    }
+
+    public void setParentNationCode(String parentNationCode) {
+        this.parentNationCode = parentNationCode;
+    }
+
+    public String getParentCertificationNumber() {
+        return parentCertificationNumber;
+    }
+
+    public void setParentCertificationNumber(String parentCertificationNumber) {
+        this.parentCertificationNumber = parentCertificationNumber;
+    }
+
+    public String getParentTelephone() {
+        return parentTelephone;
+    }
+
+    public void setParentTelephone(String parentTelephone) {
+        this.parentTelephone = parentTelephone;
+    }
+
+    public String getParentEmail() {
+        return parentEmail;
+    }
+
+    public void setParentEmail(String parentEmail) {
+        this.parentEmail = parentEmail;
     }
 
     public String getOrganizationId() {
@@ -411,32 +440,35 @@ public class ExcelToUser {
                 ", gender='" + gender + '\'' +
                 ", certificateNumber='" + certificateNumber + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
                 ", mailAddress='" + mailAddress + '\'' +
                 ", birthDate='" + birthDate + '\'' +
-                ", nameSpell='" + nameSpell + '\'' +
                 ", grade='" + grade + '\'' +
                 ", classNumber='" + classNumber + '\'' +
                 ", studentNumber='" + studentNumber + '\'' +
-                ", healthCode='" + healthCode + '\'' +
                 ", nationLity='" + nationLity + '\'' +
                 ", nativePlace='" + nativePlace + '\'' +
-                ", marriAgeCode='" + marriAgeCode + '\'' +
-                ", accountAreaCode='" + accountAreaCode + '\'' +
-                ", birthPlace='" + birthPlace + '\'' +
                 ", nationCode='" + nationCode + '\'' +
-                ", politicsStatus='" + politicsStatus + '\'' +
-                ", accountClassCode='" + accountClassCode + '\'' +
+                ", teachTime='" + teachTime + '\'' +
                 ", entranceYear='" + entranceYear + '\'' +
                 ", position='" + position + '\'' +
-                ", subject='" + subject + '\'' +
-                ", schoolAge='" + schoolAge + '\'' +
-                ", learnSpecialty='" + learnSpecialty + '\'' +
+                ", academicQualification='" + academicQualification + '\'' +
+                ", isAdministrators='" + isAdministrators + '\'' +
+                ", teachRange='" + teachRange + '\'' +
                 ", workNumber='" + workNumber + '\'' +
                 ", schoolTime='" + schoolTime + '\'' +
-                ", fimilyRole='" + fimilyRole + '\'' +
+                ", familyRole='" + familyRole + '\'' +
                 ", currentStatus='" + currentStatus + '\'' +
                 ", studentCertificationNumber='" + studentCertificationNumber + '\'' +
+                ", seatNumber='" + seatNumber + '\'' +
+                ", studentCode='" + studentCode + '\'' +
+                ", parentName='" + parentName + '\'' +
+                ", parentGender='" + parentGender + '\'' +
+                ", parentFamify='" + parentFamify + '\'' +
+                ", parentNationLity='" + parentNationLity + '\'' +
+                ", parentNationCode='" + parentNationCode + '\'' +
+                ", parentCertificationNumber='" + parentCertificationNumber + '\'' +
+                ", parentTelephone='" + parentTelephone + '\'' +
+                ", parentEmail='" + parentEmail + '\'' +
                 ", organizationId='" + organizationId + '\'' +
                 ", schoolName='" + schoolName + '\'' +
                 ", loginName='" + loginName + '\'' +

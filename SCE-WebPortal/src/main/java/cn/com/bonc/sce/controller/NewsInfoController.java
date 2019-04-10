@@ -4,9 +4,9 @@ import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.NewsModel;
+import cn.com.bonc.sce.model.NewsStatusModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NewsInfoService;
-import cn.com.bonc.sce.service.NewsService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,6 @@ import java.util.List;
 @RequestMapping( "/news-info" )
 public class NewsInfoController {
 
-    @Autowired
-    private NewsService newsService;
     @Autowired
     private NewsInfoService newsInfoService;
 
@@ -106,9 +104,9 @@ public class NewsInfoController {
      */
     @ApiOperation( value = "新闻审核接口", notes = "新闻审核接口", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "contentStatus", value = "新闻审核状态，1为通过审核，2为驳回", paramType = "query", required = true ),
-            @ApiImplicitParam( name = "rejectOpinion", value = "驳回意见", paramType = "query", required = false ),
-            @ApiImplicitParam( name = "contentId", value = "新闻ID", paramType = "query", required = true ),
+//            @ApiImplicitParam( name = "contentStatus", value = "新闻审核状态，1为通过审核，2为驳回", paramType = "query", required = true ),
+//            @ApiImplicitParam( name = "rejectOpinion", value = "驳回意见", paramType = "query", required = false ),
+//            @ApiImplicitParam( name = "contentId", value = "新闻ID", paramType = "query", required = true ),
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
@@ -116,12 +114,35 @@ public class NewsInfoController {
     } )
     @PostMapping( "/audit-news" )
     @ResponseBody
-    public RestRecord updateAppTypeName( @RequestParam( "contentStatus" ) String contentStatus,
-                                         @RequestParam( "rejectOpinion" ) String rejectOpinion,
-                                         @RequestParam( "contentId" ) Long contentId,
-                                         @CurrentUserId @ApiParam( hidden = true ) String userId
+    public RestRecord updateNewsAuditStatus( @RequestBody @ApiParam( name = "news", value = "新闻审核状态信息", required = true ) NewsStatusModel newsStatusModel,
+                                             @CurrentUserId @ApiParam( hidden = true ) String userId
     ) {
+        String contentStatus = newsStatusModel.getContentStatus();
+        String rejectOpinion = newsStatusModel.getRejectOpinion();
+        Long contentId = newsStatusModel.getContentId();
         return newsInfoService.auditNewsInfo( contentStatus, userId, rejectOpinion, contentId );
+    }
+
+    /**
+     * 新闻发布状态修改接口
+     *
+     * @return
+     */
+    @ApiOperation( value = "新闻发布状态修改接口", notes = "新闻发布状态修改接口", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @PostMapping( "/audit-news" )
+    @ResponseBody
+    public RestRecord updateNewsPublishStatus( @RequestBody @ApiParam( name = "news", value = "新闻发布状态信息", required = true ) NewsStatusModel newsStatusModel,
+                                               @CurrentUserId @ApiParam( hidden = true ) String userId
+    ) {
+        Long contentId = newsStatusModel.getContentId();
+        Integer isPublish = newsStatusModel.getIsPublish();
+        return newsInfoService.updateNewsPublishStatus( isPublish, userId, contentId );
     }
 
 

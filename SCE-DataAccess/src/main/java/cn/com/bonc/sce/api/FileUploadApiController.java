@@ -62,13 +62,17 @@ public class FileUploadApiController {
 
     public static final String CERTIFICATE_TYPE = "1";
 
-    private static final String certificateNumberPrompt = "请检查身份证信息填写是否正确";
+    private static final int EXCEL_NUMBER = 4;
 
-    private static final String certificateNumberExist = "身份证已被使用";
+    private static final String certificateNumberPrompt = "请检查%s身份证信息填写是否正确";
 
-    private static final String phonePrompt = "手机号填写不正确";
+    private static final String certificateNumberExist = "%s身份证已被使用";
 
-    private static final String emailPrompt = "邮箱填写不正确";
+    private static final String phonePrompt = "%s手机号填写不正确";
+
+    private static final String emailPrompt = "%s邮箱填写不正确";
+
+    private static final String success = "共添加%s条数据";
 
     @Autowired
     public FileUploadApiController( FileResourceRepository fileResourceRepository, UserPasswordDao userPasswordDao ,ExportUserRepository exportUserRepository,MessageService messageService) {
@@ -98,12 +102,12 @@ public class FileUploadApiController {
 
     /**
      * 批量上传Excel解析用户数据
-     * 不能出现脏读（一边插入一边查询身份证是否被使用）
+     * READ_UNCOMMITTED 解决同一个表导入时所有身份证都不能相同，但是会出现脏读的情况，个人觉得并不影响使用。
      * @return 返回是否成功
      */
     @PostMapping( "/upload-user-info" )
     @ResponseBody
-    @Transactional( isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED )
+    @Transactional( isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class )
     public RestRecord uploadParseExcel(@RequestBody List< ExcelToUser > list, @RequestParam( "userType" ) String userType, @CurrentUserId String currentUserId) throws ImportUserFailedException{
 
         //通过用户id查询所属学校id
@@ -111,6 +115,7 @@ public class FileUploadApiController {
 
         ExcelToUser excelToUser;
         int i = 0;
+        int count = 0;
         try {
             if ( TEACHER_PRE.equals( userType ) ) {
                 String pre = "js_";
@@ -118,22 +123,25 @@ public class FileUploadApiController {
                     excelToUser = list.get(i);
                     if(excelToUser.getUserName() == null){
                         continue;
+                    }else if(excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null){
+                        log.info("缺少必填项");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
                     if(!UserPropertiesUtil.checkCertificateNumber(excelToUser.getCertificateNumber())){
-                        log.info("身份证验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, certificateNumberPrompt, i+3 ));
+                        log.info("教师身份证验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberPrompt, "教师" ), i + EXCEL_NUMBER ));
                     }
                     if(!UserPropertiesUtil.checkPhone(excelToUser.getPhoneNumber())){
-                        log.info("手机号验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, phonePrompt, i+3 ));
+                        log.info("教师手机号验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( phonePrompt, "教师" ), i + EXCEL_NUMBER ));
                     }
-                    if(!UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
-                        log.info("邮箱验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, emailPrompt, i+3 ));
+                    if( excelToUser.getMailAddress() != null && !UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
+                        log.info("教师邮箱验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "教师" ), i + EXCEL_NUMBER ));
                     }
-                    if(fileResourceRepository.selectUserCount(excelToUser.getCertificateNumber()) != null){
-                        log.info("身份证已被使用");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, certificateNumberExist, i+3 ));
+                    if(fileResourceRepository.selectUserCount(excelToUser.getCertificateNumber()) > 0){
+                        log.info("教师身份证已被使用");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberExist, "教师" ), i + EXCEL_NUMBER ));
                     }
 
                     UserPassword userPassword = new UserPassword();
@@ -145,45 +153,81 @@ public class FileUploadApiController {
                     userPassword.setUserId( userId );
                     fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
                             loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(), excelToUser.getAddress(), organizationId,
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret );
+                            excelToUser.getPhoneNumber(), organizationId,
+                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, null, null, excelToUser.getIsAdministrators());
                     userPasswordDao.save( userPassword );
 
                     String schoolTime = excelToUser.getSchoolTime();
+                    String teachTime = excelToUser.getTeachTime();
                     Date schoolDate;
+                    Date teachDate;
                     if ( schoolTime.length() > 5 ) {
                         schoolDate = new Date( schoolTime );
                     } else {
                         schoolDate = UserPropertiesUtil.getDateByExcelDate( schoolTime );
                     }
+                    if ( teachTime.length() > 5 ) {
+                        teachDate = new Date( teachTime );
+                    } else {
+                        teachDate = UserPropertiesUtil.getDateByExcelDate( teachTime );
+                    }
+
                     //插入数据到教师表
-                    fileResourceRepository.saveTeacher( userId, organizationId.toString(), excelToUser.getPosition(), excelToUser.getSubject(), excelToUser.getSchoolAge(),
-                            excelToUser.getNameSpell(), excelToUser.getNationCode(), excelToUser.getPoliticsStatus(), excelToUser.getWorkNumber(), excelToUser.getMarriAgeCode(),
-                            excelToUser.getBirthPlace(), excelToUser.getAccountAreaCode(), schoolDate );
+                    fileResourceRepository.saveTeacher( userId, organizationId.toString(), excelToUser.getPosition(),
+                            excelToUser.getNationCode(), excelToUser.getWorkNumber(), schoolDate, excelToUser.getNationLity(),
+                            teachDate, excelToUser.getAcademicQualification(), excelToUser.getTeachRange() );
+                    count++;
                 }
             } else if ( STUDENT_PRE.equals( userType ) ) {
                 String pre = "xs_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
+                    //必填项过滤
                     if(excelToUser.getUserName() == null){
                         continue;
+                    }else if(excelToUser.getCertificateNumber() == null || excelToUser.getParentFamify() == null || excelToUser.getParentCertificationNumber() == null
+                    || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null){
+                        log.info("缺少必填项");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
+                    }
+                    if( excelToUser.getParentCertificationNumber() == null ){
+                        log.info("该学生没有家长身份证，无法关联家长信息");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "该学生没有家长身份证，无法关联家长信息", i + EXCEL_NUMBER ));
                     }
                     if(!UserPropertiesUtil.checkCertificateNumber(excelToUser.getCertificateNumber())){
-                        log.info("身份证验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, certificateNumberPrompt, i+3 ));
+                        log.info("学生身份证验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberPrompt, "学生" ), i + EXCEL_NUMBER ));
                     }
-                    if(!UserPropertiesUtil.checkPhone(excelToUser.getPhoneNumber())){
-                        log.info("手机号验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, phonePrompt, i+3 ));
+                    if( excelToUser.getPhoneNumber() != null && !UserPropertiesUtil.checkPhone(excelToUser.getPhoneNumber())){
+                        log.info("学生手机号验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( phonePrompt, "学生" ), i + EXCEL_NUMBER ));
                     }
-                    if(!UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
-                        log.info("邮箱验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, emailPrompt, i+3 ));
+                    if( excelToUser.getMailAddress() != null && !UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
+                        log.info("学生邮箱验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "学生" ), i + EXCEL_NUMBER ));
                     }
-                    if(fileResourceRepository.selectUserCount(excelToUser.getCertificateNumber()) != null){
-                        log.info("身份证已被使用");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, certificateNumberExist, i+3 ));
+                    if(fileResourceRepository.selectUserCount(excelToUser.getCertificateNumber()) > 0){
+                        log.info("学生身份证已被使用");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberExist, "学生" ), i + EXCEL_NUMBER ));
                     }
+                    if(!UserPropertiesUtil.checkCertificateNumber(excelToUser.getParentCertificationNumber())){
+                        log.info("家长身份证验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberPrompt, "家长" ), i + EXCEL_NUMBER ));
+                    }
+                    if( excelToUser.getParentTelephone() != null && !UserPropertiesUtil.checkPhone(excelToUser.getParentTelephone())){
+                        log.info("家长手机号验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( phonePrompt, "家长" ), i + EXCEL_NUMBER ));
+                    }
+                    if( excelToUser.getParentEmail() != null && !UserPropertiesUtil.checkMail(excelToUser.getParentEmail())){
+                        log.info("家长邮箱验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "家长" ), i + EXCEL_NUMBER ));
+                    }
+//                    if(excelToUser.getParentCertificationNumber().equals(excelToUser.getCertificateNumber())){
+//                        log.info("家长和学生的身份证不能相同");
+//                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ));
+//                    }
+
+                    String parentId = fileResourceRepository.selectUserIdByCertificateNumber(excelToUser.getParentCertificationNumber());
 
                     //生成学生用户，并自动生成家长用户关联学生
                     UserPassword userPassword = new UserPassword();
@@ -195,23 +239,35 @@ public class FileUploadApiController {
                     userPassword.setUserId( studentId );
                     fileResourceRepository.savaAllUserInfo( studentId, excelToUser.getUserName(), excelToUser.getGender(),
                             loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(), excelToUser.getAddress(), organizationId,
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret );
+                            excelToUser.getPhoneNumber(),organizationId,
+                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),"0" );
                     userPasswordDao.save( userPassword );
 
-                    //生成家长用户，并关联学生
-                    UserPassword parentPassword = new UserPassword();
-                    String secretParent = Secret.ES256GenerateSecret();
-                    String loginParentName = IDUtil.createID( "zj_" );
-                    String parentId = UUID.getUUID();
-                    parentPassword.setIsDelete( 1 );
-                    parentPassword.setPassword( "star123!" );
-                    parentPassword.setUserId( parentId );
-                    fileResourceRepository.saveParentOfUser(parentId, loginParentName, PARENT_CODE, secretParent);
-                    userPasswordDao.save( parentPassword );
+                    String loginParentName;
+                    if(parentId == null){
+                        //生成家长用户，并关联学生
+                        UserPassword parentPassword = new UserPassword();
+                        String secretParent = Secret.ES256GenerateSecret();
+                        loginParentName = IDUtil.createID( "zj_" );
+                        parentId = UUID.getUUID();
+                        parentPassword.setIsDelete( 1 );
+                        parentPassword.setPassword( "star123!" );
+                        parentPassword.setUserId( parentId );
+                        fileResourceRepository.saveParent(parentId, excelToUser.getParentName(), excelToUser.getParentGender(), loginParentName, PARENT_CODE, excelToUser.getParentEmail(),
+                                CERTIFICATE_TYPE, excelToUser.getParentCertificationNumber(), excelToUser.getParentTelephone(),
+                                UserPropertiesUtil.getBirthDateByCer(excelToUser.getParentCertificationNumber()), secretParent, excelToUser.getParentNationLity(), excelToUser.getParentNationCode() );
+                        userPasswordDao.save( parentPassword );
+                    }else {
+                        loginParentName = fileResourceRepository.selectUserLoginName(excelToUser.getParentCertificationNumber());
+                    }
 
                     //建立学生家长关系
+                    if(excelToUser.getParentFamify() == null){
+                        log.info("家长学生关系未填写");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长学生关系未填写", i + EXCEL_NUMBER ));
+                    }
                     StudentParentRel studentParentRel = new StudentParentRel();
+                    studentParentRel.setRelationShip( excelToUser.getParentFamify() );
                     studentParentRel.setIsMain( 1 );
                     studentParentRel.setParentUserId( parentId );
                     studentParentRel.setStudentUserId( studentId );
@@ -225,10 +281,7 @@ public class FileUploadApiController {
                     }
 
                     //将学生数据插入到学生表中
-                    fileResourceRepository.saveStudent(studentId, excelToUser.getClassNumber(), excelToUser.getGrade(), excelToUser.getStudentNumber(),
-                            excelToUser.getHealthCode(), excelToUser.getNationLity(), excelToUser.getMarriAgeCode(), excelToUser.getAccountAreaCode(),
-                            excelToUser.getLoginName(), excelToUser.getBirthPlace(), excelToUser.getNativePlace(), excelToUser.getNationCode(),
-                            excelToUser.getPoliticsStatus(), excelToUser.getAccountClassCode(), entranceYear, excelToUser.getLearnSpecialty() );
+                    fileResourceRepository.saveStudent(studentId, excelToUser.getClassNumber(), excelToUser.getGrade(), excelToUser.getStudentNumber(),entranceYear);
 
                     //向学生账号发送一条消息告知家长账号
                     Message message = new Message();
@@ -236,6 +289,7 @@ public class FileUploadApiController {
                     message.setSourceId("0");
                     message.setTargetId( studentId );
                     messageService.insertMessage( message );
+                    count++;
                 }
             }else if( PARENT_CODE.equals( userType )){
                 String pre = "jz_";
@@ -243,26 +297,25 @@ public class FileUploadApiController {
                     excelToUser = list.get(i);
                     if(excelToUser.getUserName() == null){
                         continue;
+                    }else if(excelToUser.getGender() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null){
+                        log.info("缺少必填项");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
                     if(!UserPropertiesUtil.checkCertificateNumber(excelToUser.getCertificateNumber())){
                         log.info("家长身份证验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, certificateNumberPrompt, i+3 ));
-                    }
-                    if(!UserPropertiesUtil.checkCertificateNumber(excelToUser.getStudentCertificationNumber())){
-                        log.info("学生身份证验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, certificateNumberPrompt, i+3 ));
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberPrompt, "家长" ), i + EXCEL_NUMBER ));
                     }
                     if(!UserPropertiesUtil.checkPhone(excelToUser.getPhoneNumber())){
-                        log.info("手机号验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, phonePrompt, i+3 ));
+                        log.info("家长手机号验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( phonePrompt, "家长" ), i + EXCEL_NUMBER ));
                     }
-                    if(!UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
-                        log.info("邮箱验证未通过");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, emailPrompt, i+3 ));
+                    if( excelToUser.getMailAddress() !=null && !UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
+                        log.info("家长邮箱验证未通过");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "家长" ), i + EXCEL_NUMBER ));
                     }
-                    if ( excelToUser.getCertificateNumber().equals( excelToUser.getStudentCertificationNumber() ) || fileResourceRepository.selectUserCount( excelToUser.getCertificateNumber() ) != null || fileResourceRepository.selectUserCount( excelToUser.getStudentCertificationNumber() ) != null ) {
-                        log.info( "身份证已被使用" );
-                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, certificateNumberExist, i + 3 ) );
+                    if ( fileResourceRepository.selectUserCount( excelToUser.getCertificateNumber() ) > 0) {
+                        log.info( "家长身份证已被使用" );
+                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberExist, "家长" ), i + EXCEL_NUMBER ) );
                     }
 
                     //插入家长用户
@@ -275,16 +328,24 @@ public class FileUploadApiController {
                     userPassword.setUserId( parentId );
                     fileResourceRepository.saveParent(parentId, excelToUser.getUserName(), excelToUser.getGender(), loginName, PARENT_CODE,
                             excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber(),
-                            excelToUser.getAddress(), UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret);
+                             UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode());
                     userPasswordDao.save( userPassword );
 
-                    //插入数据到家长表
-                    fileResourceRepository.saveParent(parentId, excelToUser.getFimilyRole());
-
                     //查询学生id 并生成家长对应的  家长-学生关系
-                    String studentId = fileResourceRepository.selectUserCount(excelToUser.getStudentCertificationNumber());
-                    fileResourceRepository.saveStudentParentRel(idWorker.nextId(), parentId, studentId);
-
+                    if(excelToUser.getStudentCertificationNumber() != null){
+                        if(excelToUser.getParentFamify() == null){
+                            log.info("缺少家长学生关系");
+                            throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少家长学生关系", i + EXCEL_NUMBER ));
+                        }
+                        String studentId = fileResourceRepository.selectUserIdByCertificateNumber(excelToUser.getStudentCertificationNumber());
+                        StudentParentRel studentParentRel = new StudentParentRel();
+                        studentParentRel.setRelationShip( excelToUser.getParentFamify() );
+                        studentParentRel.setIsMain( 0 );
+                        studentParentRel.setParentUserId( parentId );
+                        studentParentRel.setStudentUserId( studentId );
+                        exportUserRepository.save( studentParentRel);
+                    }
+                    count++;
                 }
             }
         }catch (ImportUserFailedException e){
@@ -292,9 +353,9 @@ public class FileUploadApiController {
             throw  new ImportUserFailedException(e.getMsg());
         }catch (Exception e){
             e.printStackTrace();
-            return new RestRecord(423, String.format(WebMessageConstants.SCE_PORTAL_MSG_432, "添加数据失败", i+3));
+            return new RestRecord(423, String.format(WebMessageConstants.SCE_PORTAL_MSG_432, "添加数据失败", i + EXCEL_NUMBER));
         }
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, list.size() );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 + "，" + String.format( success, count ), list.size() );
 
     }
 

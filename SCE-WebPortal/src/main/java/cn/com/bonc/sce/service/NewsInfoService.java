@@ -19,19 +19,23 @@ public class NewsInfoService {
     @Autowired
     private NewsInfoDao newsInfoDao;
 
-    public RestRecord insertNewsInfo(NewsModel newsModel){
+    public RestRecord insertNewsInfo( NewsModel newsModel ) {
         return newsInfoDao.insertNewsInfo( newsModel );
     }
 
-    public RestRecord updateNewsInfo(NewsModel newsModel) {
+    public RestRecord updateNewsInfo( NewsModel newsModel ) {
         return newsInfoDao.updateNewsInfo( newsModel );
     }
 
-    public RestRecord deleteNewsInfo( List<Long> idList, String userId) {
+    public RestRecord deleteNewsInfo( List< Long > idList, String userId ) {
         return newsInfoDao.deleteNewsInfo( idList, userId );
     }
 
-    public RestRecord auditNewsInfo( String contentStatus, String userId,String rejectOpinion,Long contentId){
+    public RestRecord auditNewsInfo( String contentStatus, String userId, String rejectOpinion, Long contentId ) {
         return newsInfoDao.auditNewsInfo( contentStatus, userId, rejectOpinion, contentId );
+    }
+
+    public RestRecord updateNewsPublishStatus( Integer isPublish, String userId, Long contentId ) {
+        return newsInfoDao.updateNewsPublishStatus( isPublish, userId, contentId );
     }
 }
