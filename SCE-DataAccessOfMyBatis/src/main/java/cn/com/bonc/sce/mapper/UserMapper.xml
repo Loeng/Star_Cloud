@@ -446,4 +446,35 @@
         (#{entrance_year,jdbcType=DATE}),#{tea_work_number,jdbcType=VARCHAR},
         #{tea_position,jdbcType=VARCHAR},#{tea_range,jdbcType=VARCHAR})
     </insert>
+
+    <select id="getTransferTeachers" resultType="Map">
+        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,ACCOUNT_STATUS,POSITION
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER u
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
+        LEFT JOIN STARCLOUDPORTAL.SCE_TRANSFER_APPLY a ON  u.USER_ID=a.USER_ID
+        WHERE u.USER_TYPE=2
+        AND u.IS_DELETE=1
+        AND u.ORGANIZATION_ID=#{organizationId}
+        <if test="getType == 2" >
+            AND TARGET_SCHOOL_ID = #{organizationId}
+        </if>
+        <if test="getType == 1" >
+            AND ORIGIN_SCHOOL_ID = #{organizationId}
+        </if>
+        <if test="userName != null and userName!= ''" >
+            AND USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
+        </if>
+        <if test="loginName != null and loginName!= ''" >
+            AND LOGIN_NAME LIKE CONCAT(CONCAT('%',#{loginName}),'%')
+        </if>
+        <if test="gender != null and gender!=''" >
+            AND GENDER=#{gender}
+        </if>
+        <if test="position != null and position!=''" >
+            AND POSITION=#{position}
+        </if>
+        <if test="accountStatus != null and accountStatus!=''" >
+            AND ACCOUNT_STATUS=#{accountStatus}
+        </if>
+    </select>
 </mapper>

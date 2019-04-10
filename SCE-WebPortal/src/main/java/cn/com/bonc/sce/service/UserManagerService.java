@@ -82,4 +82,8 @@ public class UserManagerService {
     public RestRecord addTeacher(String json) {
         return userManagerDao.addTeacher(json);
     }
+
+    public RestRecord getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus, Integer pageNum, Integer pageSize) {
+        return userManagerDao.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
+    }
 }

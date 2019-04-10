@@ -203,4 +203,24 @@ public class UserManagerController {
     public RestRecord addTeacher(@RequestBody String json){
         return userManagerService.addTeacher(json);
     }
+
+    @ApiOperation(value = "获取转入转出教师列表", notes="获取查询条件，返回教师列表", httpMethod = "GET")
+    @GetMapping("/getTransferTeachers/{pageNum}/{pageSize}")
+    @ResponseBody
+    /**
+     * gender:1 男 ，0 女， null 全部
+     * position：null 全部
+     * accountStatus：0 未激活，1 已激活，null 全部
+     * getType：1 转出， 2 转入
+     */
+    public RestRecord getTransferTeachers(@RequestParam(value = "getType") Integer getType, @RequestParam ( value = "organizationId") long organizationId,
+                                  @RequestParam ( value = "userName",required = false) String userName,
+                                  @RequestParam(value ="loginName",required = false ) String loginName,
+                                  @RequestParam ( value = "gender",required = false) String gender,
+                                  @RequestParam ( value = "position",required = false) String position,
+                                  @RequestParam ( value = "accountStatus",required = false) Integer accountStatus,
+                                  @PathVariable (value = "pageNum")Integer pageNum,
+                                  @PathVariable (value = "pageSize") Integer pageSize ){
+        return userManagerService.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
+    }
 }

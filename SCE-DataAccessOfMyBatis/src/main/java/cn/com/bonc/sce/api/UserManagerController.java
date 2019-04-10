@@ -336,4 +336,21 @@ public class UserManagerController {
         }
 
     }
+
+    @ApiOperation(value = "获取转入转出教师列表", notes = "获取查询条件，返回教师列表", httpMethod = "GET")
+    @GetMapping("/getTransferTeachers/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getTransferTeachers(@RequestParam(value = "getType") Integer getType, @RequestParam("organizationId") long organizationId,
+                                  @RequestParam(value = "userName", required = false) String userName,
+                                  @RequestParam(value = "loginName", required = false) String loginName,
+                                  @RequestParam(value = "gender", required = false) String gender,
+                                  @RequestParam(value = "position", required = false) String position,
+                                  @RequestParam(value = "accountStatus", required = false) Integer accountStatus,
+                                  @PathVariable(value = "pageNum") Integer pageNum,
+                                  @PathVariable(value = "pageSize") Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map> teachers = userService.getTransferTeachers(getType,organizationId, userName, loginName, gender, position, accountStatus);
+        PageInfo pageInfo = new PageInfo(teachers);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200, pageInfo);
+    }
 }
