@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.bonc.sce.mapper.StudentMapper">
     <select id="getParents" resultType="Map">
-        SELECT PARENT_USER_ID,IS_MAIN,RELATIONSHIP,USER_NAME
+        SELECT PARENT_USER_ID,IS_MAIN,RELATIONSHIP,USER_NAME,u.HEAD_PORTRAIT
         FROM STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL r
         LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER u ON r.PARENT_USER_ID=u.USER_ID AND u.IS_DELETE=1
         WHERE STUDENT_USER_ID=#{id}

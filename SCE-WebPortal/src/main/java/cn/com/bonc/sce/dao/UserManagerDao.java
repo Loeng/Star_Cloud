@@ -66,4 +66,11 @@ public interface UserManagerDao {
 
     @RequestMapping( value = "/userManager/addTeacher", method = RequestMethod.POST )
     RestRecord addTeacher(@RequestBody String json);
+
+    @RequestMapping( value = "/userManager/getTransferTeachers/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getTransferTeachers(@RequestParam("getType")Integer getType, @RequestParam("organizationId")long organizationId,
+                                   @RequestParam("userName")String userName, @RequestParam("loginName")String loginName,
+                                   @RequestParam("gender")String gender, @RequestParam("position")String position,
+                                   @RequestParam("accountStatus")Integer accountStatus, @PathVariable("pageNum")Integer pageNum,
+                                   @PathVariable("pageSize")Integer pageSize);
 }

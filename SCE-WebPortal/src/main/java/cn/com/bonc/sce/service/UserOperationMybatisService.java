@@ -15,12 +15,16 @@ public class UserOperationMybatisService {
     @Autowired
     private UserOperationMybatisDao userOperationMybatisDao;
 
-    public RestRecord updateUserInfoById(Map< String, Object > userInfo ) {
+    public RestRecord updateUserInfoById( Map< String, Object > userInfo ) {
         return userOperationMybatisDao.updateUserInfoById( userInfo );
     }
 
-    public RestRecord updatePassword(Map< String, Object > info ) {
+    public RestRecord updatePassword( Map< String, Object > info ) {
         return userOperationMybatisDao.updatePassword( info );
+    }
+
+    public RestRecord updateUserHeadPortrait( String userId, Integer resourceId ) {
+        return userOperationMybatisDao.updateUserHeadPortrait( userId, resourceId );
     }
 
 }

@@ -115,4 +115,8 @@ public interface WebMessageConstants {
      * 740-760
      */
     String SCE_PORTAL_MSG_740 = "转换日期出错";
+    String SCE_PORTAL_MSG_741 = "该优惠码不存在";
+    String SCE_PORTAL_MSG_742 = "该优惠码已过期";
+    String SCE_PORTAL_MSG_743 = "已超过该优惠码的使用次数";
+    String SCE_PORTAL_MSG_744 = "该优惠码不适用此类商品";
 }

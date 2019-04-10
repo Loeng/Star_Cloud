@@ -189,8 +189,8 @@ public class AppManageService {
         if ( StringUtils.isNotEmpty( newFeatures ) ) {
             marketAppVersion.setNewFeatures( newFeatures );
         }
-        marketAppVersion.setCompanyRatio( platFormInfo.getCompanyRatio() );
-        marketAppVersion.setPlatformRatio( platFormInfo.getPlatformRatio() );
+        //只存厂家设置的比例，平台比例=1-厂家比例
+        marketAppVersion.setCompanySetRatio( platFormInfo.getCompanyRatio() );
         marketAppVersionRepository.saveAndFlush( marketAppVersion );
 
         //存储 价格与计费模式相关信息

@@ -186,7 +186,41 @@ public class UserManagerController {
     @ApiOperation(value = "添加教师", notes="直接添加或者通过转入添加，通过前端出入的addType判断添加方式", httpMethod = "POST")
     @PostMapping("/addTeacher")
     @ResponseBody
+    /*
+    * {   "ADDTYPE":0 	"ORGANIZATION_ID": "66666666666", 	"CERTIFICATE_TYPE": 0, 	" CERTIFICATE_NUMBER": "66666666666666666", 	"USER_NAME": "USER_NAME", 	"GENDER": "1", 	"PHONE_NUMBER": "66666666666", 	"MAIL_ADDRESS": "666@666.666", 	"BIRTHDATE ": "", 	"NATION_CODE": "1", 	"NATIONLITY": "666", 	"ACADEMIC_QUALIFICATION": "666", 	"WORK_NUMBER": "666", 	"SCHOOL_TIME": "", 	"TEACH_TIME": "", 	"JOB_CODE": "1", 	"TEACH_RANGE": 1 }
+    *{
+	"ADDTYPE": 1,
+	"USER_ID": "99999",
+	"APPLY_USER_ID": "789",
+	" TEA_WORK_NUMBER": "2",
+	"TEA_ENTRANCE_YEAR": "2018-12-31 15:50:48",
+	"TEA_POSITION": "2",
+	"TEACH_RANGE": "2",
+	"ORIGIN_SCHOOL_ID": "99999",
+	"TARGET_SCHOOL_ID ": "555"
+}
+    * */
     public RestRecord addTeacher(@RequestBody String json){
         return userManagerService.addTeacher(json);
+    }
+
+    @ApiOperation(value = "获取转入转出教师列表", notes="获取查询条件，返回教师列表", httpMethod = "GET")
+    @GetMapping("/getTransferTeachers/{pageNum}/{pageSize}")
+    @ResponseBody
+    /**
+     * gender:1 男 ，0 女， null 全部
+     * position：null 全部
+     * accountStatus：0 未激活，1 已激活，null 全部
+     * getType：1 转出， 2 转入
+     */
+    public RestRecord getTransferTeachers(@RequestParam(value = "getType") Integer getType, @RequestParam ( value = "organizationId") long organizationId,
+                                  @RequestParam ( value = "userName",required = false) String userName,
+                                  @RequestParam(value ="loginName",required = false ) String loginName,
+                                  @RequestParam ( value = "gender",required = false) String gender,
+                                  @RequestParam ( value = "position",required = false) String position,
+                                  @RequestParam ( value = "accountStatus",required = false) Integer accountStatus,
+                                  @PathVariable (value = "pageNum")Integer pageNum,
+                                  @PathVariable (value = "pageSize") Integer pageSize ){
+        return userManagerService.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
     }
 }

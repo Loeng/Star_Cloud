@@ -53,11 +53,11 @@ public interface UserOperationDao {
     /**
      * 查询用户
      *
-     * @param userId
+     * @param userName
      * @return 用户信息
      */
     @RequestMapping( value = "/user-info", method = RequestMethod.GET )
-    RestRecord selectUserInfoById( @RequestParam( "userId" ) String userId );
+    RestRecord selectUserInfoByName( @RequestParam( "userName" ) String userName );
 
 
     @RequestMapping( value = "/user-info/insert", method = RequestMethod.POST )

@@ -47,4 +47,15 @@ public interface CouponMapper {
                                         @Param("REVIEW_STATE") String REVIEW_STATE,
                                         @Param("OVER_FLAG") String OVER_FLAG,
                                         @Param("ORDER_BY") String ORDER_BY);
+
+    Map queryCouponByCode(@Param("COUPON_CODE") String COUPON_CODE);
+
+    int changeUnLimitedCouponUseTimes(@Param("COUPON_CODE") String COUPON_CODE,
+                                      @Param("USED_TIMES") long USED_TIMES) throws SQLException;
+
+    int changeLimitedCouponUseTimes(@Param("COUPON_CODE") String COUPON_CODE,
+                                    @Param("VALID_USE_TIMES") long VALID_USE_TIMES,
+                                    @Param("USED_TIMES") long USED_TIMES) throws SQLException;
+
+
 }

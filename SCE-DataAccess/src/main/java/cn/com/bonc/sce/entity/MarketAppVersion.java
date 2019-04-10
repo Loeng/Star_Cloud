@@ -43,6 +43,10 @@ public class MarketAppVersion implements Serializable {
     private String companyRatio;
     private String platformRatio;
     private String agentRatio;
+    private String companySetRatio;//厂家设置的比例（平台比例=1-厂家比例）
+    private Date applyTime;//提交审核时间
+    private Date auditTime;//审核时间
+
 
     @Basic
     @Column( name = "APP_PHONE_PIC", nullable = true, length = 50 )
@@ -315,6 +319,36 @@ public class MarketAppVersion implements Serializable {
         this.agentRatio = agentRatio;
     }
 
+    @Basic
+    @Column( name = "COMPANY_SET_RATIO" )
+    public String getCompanySetRatio() {
+        return companySetRatio;
+    }
+
+    public void setCompanySetRatio( String companySetRatio ) {
+        this.companySetRatio = companySetRatio;
+    }
+
+    @Basic
+    @Column( name = "APPLY_TIME" )
+    public Date getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime( Date applyTime ) {
+        this.applyTime = applyTime;
+    }
+
+    @Basic
+    @Column( name = "AUDIT_TIME" )
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime( Date auditTime ) {
+        this.auditTime = auditTime;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) {
@@ -348,13 +382,16 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( md5Code, that.md5Code ) &&
                 Objects.equals( agentRatio, that.agentRatio ) &&
                 Objects.equals( platformRatio, that.platformRatio ) &&
-                Objects.equals( companyRatio, that.companyRatio );
+                Objects.equals( companyRatio, that.companyRatio ) &&
+                Objects.equals( applyTime, that.applyTime ) &&
+                Objects.equals( auditTime, that.auditTime ) &&
+                Objects.equals( companySetRatio, that.companySetRatio );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl, testUrl, tokenAddress, md5Code, agentRatio, platformRatio, agentRatio );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl, testUrl, tokenAddress, md5Code, agentRatio, platformRatio, agentRatio, applyTime, auditTime, companySetRatio );
     }
 
     @Override
@@ -387,6 +424,9 @@ public class MarketAppVersion implements Serializable {
                 ", companyRatio='" + companyRatio + '\'' +
                 ", platformRatio='" + platformRatio + '\'' +
                 ", agentRatio='" + agentRatio + '\'' +
+                ", companySetRatio='" + companySetRatio + '\'' +
+                ", applyTime=" + applyTime +
+                ", auditTime=" + auditTime +
                 '}';
     }
 }

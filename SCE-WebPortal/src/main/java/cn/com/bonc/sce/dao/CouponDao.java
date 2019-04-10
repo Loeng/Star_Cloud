@@ -58,4 +58,11 @@ public interface CouponDao {
     @RequestMapping(value = "/coupon/reviewCoupon",method = RequestMethod.PUT)
     public RestRecord reviewCoupon(@RequestBody Map param,
                                    @RequestParam("userID") String userID);
+
+
+    @RequestMapping(value = "/coupon/calCoupon",method = RequestMethod.GET)
+    public RestRecord calCoupon(@RequestParam("COUPON_CODE") String COUPON_CODE,
+                                @RequestParam("PRODUCT_TYPE_CODE") String PRODUCT_TYPE_CODE,
+                                @RequestParam("ORIGIN_PRICE") String ORIGIN_PRICE);
+
 }

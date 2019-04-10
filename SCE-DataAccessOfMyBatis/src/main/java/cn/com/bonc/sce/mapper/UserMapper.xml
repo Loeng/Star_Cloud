@@ -435,4 +435,46 @@
         #{academic_qualification,jdbcType=VARCHAR},#{work_number,jdbcType=VARCHAR},#{school_time,jdbcType=VARCHAR},
         #{teach_time,jdbcType=VARCHAR},#{job_code,jdbcType=VARCHAR},#{teach_range,jdbcType=VARCHAR},1)
     </insert>
+
+    <insert id="transInto">
+        INSERT INTO STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        (ID,USER_ID,USER_TYPE,ORIGIN_SCHOOL_ID,TARGET_SCHOOL_ID,APPLY_STATUS,APPLY_TIME,APPLY_USER_ID,IS_DELETE,
+        TEA_ENTRANCE_YEAR,TEA_WORK_NUMBER,TEA_POSITION,TEACH_RANGE)
+        VALUES
+        (#{id,jdbcType=BIGINT},#{user_id,jdbcType=BIGINT},2,#{origin_school_id,jdbcType=VARCHAR},
+        #{target_school_id,jdbcType=VARCHAR},0,SYSDATE,#{apply_user_id,jdbcType=VARCHAR},1,
+        (#{entrance_year,jdbcType=DATE}),#{tea_work_number,jdbcType=VARCHAR},
+        #{tea_position,jdbcType=VARCHAR},#{tea_range,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="getTransferTeachers" resultType="Map">
+        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,ACCOUNT_STATUS,POSITION
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER u
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
+        LEFT JOIN STARCLOUDPORTAL.SCE_TRANSFER_APPLY a ON  u.USER_ID=a.USER_ID
+        WHERE u.USER_TYPE=2
+        AND u.IS_DELETE=1
+        AND u.ORGANIZATION_ID=#{organizationId}
+        <if test="getType == 2" >
+            AND TARGET_SCHOOL_ID = #{organizationId}
+        </if>
+        <if test="getType == 1" >
+            AND ORIGIN_SCHOOL_ID = #{organizationId}
+        </if>
+        <if test="userName != null and userName!= ''" >
+            AND USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
+        </if>
+        <if test="loginName != null and loginName!= ''" >
+            AND LOGIN_NAME LIKE CONCAT(CONCAT('%',#{loginName}),'%')
+        </if>
+        <if test="gender != null and gender!=''" >
+            AND GENDER=#{gender}
+        </if>
+        <if test="position != null and position!=''" >
+            AND POSITION=#{position}
+        </if>
+        <if test="accountStatus != null and accountStatus!=''" >
+            AND ACCOUNT_STATUS=#{accountStatus}
+        </if>
+    </select>
 </mapper>

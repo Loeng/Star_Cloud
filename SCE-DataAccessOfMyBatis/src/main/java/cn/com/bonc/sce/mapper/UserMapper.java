@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -80,4 +81,15 @@ public interface UserMapper {
                    @Param("work_number")String work_number, @Param("school_time")String school_time,
                    @Param("teach_time")String teach_time, @Param("job_code")String job_code,
                    @Param("teach_range")Integer teach_range);
+
+
+    int transInto(@Param("id")Long id, @Param("user_id")String user_id, @Param("apply_user_id")String apply_user_id,
+                  @Param("origin_school_id")String origin_school_id, @Param("target_school_id")String target_school_id,
+                  @Param("tea_work_number")String tea_work_number, @Param("entrance_year")Date entrance_year,
+                  @Param("tea_position")String tea_position, @Param("tea_range")String tea_range);
+
+    List<Map> getTransferTeachers(@Param("getType")Integer getType,@Param("organizationId")long organizationId,
+                                  @Param("userName")String userName, @Param("loginName")String loginName,
+                                  @Param("gender")String gender, @Param("position")String position,
+                                  @Param("accountStatus")Integer accountStatus);
 }
