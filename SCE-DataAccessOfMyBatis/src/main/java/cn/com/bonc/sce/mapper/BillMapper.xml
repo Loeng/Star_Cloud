@@ -29,4 +29,67 @@
 	          AND sor.REFUND_STATE = 0
     </select>
 
+    <select id="" resultType="Map" parameterType="String">
+        SELECT
+        sor.ID,
+        soi.ACTUAL_PAYMENT,
+        soi.ORDER_ID,
+        soi.PRODUCT_TYPE_CODE,
+        soi.PRODUCT_NAME,
+        sor.APPLY_TIME,
+        sor.REFUND_STATE,
+        sor.EXPENDITURE_TIME
+        FROM
+        STARCLOUDPORTAL.SCE_ORDER_REFUND sor
+        LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INFO soi ON sor.ORDER_ID = soi.ORDER_ID
+        WHERE
+        sor.IS_DELETE = 1
+        <if test="ID != null and ID != '' and ID != 'null' ">
+            and sor.ID = #{ID}
+        </if>
+        <if test="ORDER_ID != null and ORDER_ID != '' and ORDER_ID != 'null' ">
+            and sor.ORDER_ID = #{ORDER_ID}
+        </if>
+        <if test="start_time != null and start_time != '' and start_time != 'null' ">
+            and sor.APPLY_TIME <![CDATA[>=]]> TO_DATE(#{start_time}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+        <if test="end_time != null and end_time != '' and end_time != 'null' ">
+            and sor.APPLY_TIME <![CDATA[<=]]> TO_DATE(#{end_time}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+    </select>
+
+    <select id="getRefundDetails" resultType="Map" parameterType="String">
+        SELECT
+            sor.ID,
+            sor.ORDER_ID,
+            sor.APPLY_TIME,
+	        soi.ACTUAL_PAYMENT,
+	        sor.REFUND_STATE,
+	        sbc.OPENING_BANK,
+	        sbc.CARD_NUMBER,
+	        sbc.OPEN_ACCOUND_NAME,
+	        soi.BUYING_USER_ID,
+          	sor.REASON
+             FROM
+         	STARCLOUDPORTAL.SCE_ORDER_REFUND sor
+	           LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INFO soi ON sor.ORDER_ID = soi.ORDER_ID
+	            LEFT JOIN STARCLOUDPORTAL.SCE_BANK_CARD sbc ON soi.BUYING_USER_ID = sbc.USER_ID
+            WHERE
+	               sor.IS_DELETE = 1
+	        AND sor.ID = #{ID}
+    </select>
+
+    <select id="getBankCard" resultType="Map" parameterType="String">
+        select OPEN_ACCOUND_NAME ,CARD_NUMBER , OPENING_BANK, CARD_TYPE from STARCLOUDPORTAL.SCE_BANK_CARD where IS_DELETE = 1 and USER_ID = #{USER_ID}
+    </select>
+
+    <insert id="addBankCard" parameterType="Map">
+        insert into STARCLOUDPORTAL.SCE_BANK_CARD(ID,USER_ID,OPEN_ACCOUND_NAME,CARD_NUMBER,OPENING_BANK,CARD_TYPE,IS_DELETE)
+        values(#{ID},#{USER_ID},#{OPEN_ACCOUND_NAME},#{CARD_NUMBER},#{OPENING_BANK},#{CARD_TYPE},1)
+    </insert>
+
+    <update id="updateBankCard" parameterType="Map">
+        update STARCLOUDPORTAL.SCE_BANK_CARD set IS_DELETE = 0 where USER_ID = #{USER_ID} and IS_DELETE = 1
+    </update>
+
 </mapper>

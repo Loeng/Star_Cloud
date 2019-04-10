@@ -6,6 +6,7 @@ import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -24,7 +25,7 @@ public class BillController {
     @PostMapping("/applyForRefund")
     @ResponseBody
     public RestRecord applyForRefund(@RequestBody Map<String, Object> refundInfo) {
-        refundInfo.put("ID",idWorker.nextId());
+        refundInfo.put("ID", idWorker.nextId());
         return new RestRecord(200, billDao.applyForRefund(refundInfo));
     }
 
@@ -38,6 +39,41 @@ public class BillController {
     @ResponseBody
     public RestRecord getRefundStatistics() {
         return new RestRecord(200, billDao.getRefundStatistics());
+    }
+
+    @GetMapping("/getRefundList/{ID}/{ORDER_ID}/{start_time}/{end_time}")
+    @ResponseBody
+    public RestRecord getRefundList(@PathVariable("ID") String ID, @PathVariable("ORDER_ID") String ORDER_ID,
+                                    @PathVariable("start_time") String start_time, @PathVariable("end_time") String end_time) {
+        return new RestRecord(200, billDao.getRefundList(ID, ORDER_ID, start_time, end_time));
+    }
+
+    @GetMapping("/getRefundDetails/{ID}")
+    @ResponseBody
+    public RestRecord getRefundDetails(@PathVariable("ID") String ID) {
+        return new RestRecord(200, billDao.getRefundDetails(ID));
+    }
+
+    @GetMapping("/getBankCard/{USER_ID}")
+    @ResponseBody
+    public RestRecord getBankCard(@PathVariable("USER_ID") String USER_ID) {
+        return new RestRecord(200, billDao.getBankCard(USER_ID));
+    }
+
+    @GetMapping("/addBankCard/{ID}")
+    @ResponseBody
+    public RestRecord addBankCard(@RequestBody Map<String, Object> cardInfo) {
+        cardInfo.put("ID", idWorker.nextId());
+        return new RestRecord(200, billDao.addBankCard(cardInfo));
+    }
+
+    @GetMapping("/updateBankCard/{ID}")
+    @ResponseBody
+    @Transactional
+    public RestRecord updateBankCard(@RequestBody Map<String, Object> cardInfo) {
+        billDao.updateBankCard(cardInfo);
+        cardInfo.put("ID",idWorker.nextId());
+        return new RestRecord(200, billDao.updateBankCard(cardInfo));
     }
 
 }

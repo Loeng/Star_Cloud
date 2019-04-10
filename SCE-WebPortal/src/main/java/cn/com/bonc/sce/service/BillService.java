@@ -27,4 +27,24 @@ public class BillService {
     public RestRecord getRefundStatistics() {
         return billDao.getRefundStatistics();
     }
+
+    public RestRecord getRefundList(String ID, String ORDER_ID, String start_time, String end_time) {
+        return billDao.getRefundList(ID, ORDER_ID, start_time, end_time);
+    }
+
+    public RestRecord getRefundDetails(String ID) {
+        return billDao.getRefundDetails(ID);
+    }
+
+    public RestRecord getBankCard(String USER_ID) {
+        return billDao.getBankCard(USER_ID);
+    }
+
+    public RestRecord addBankCard(Map<String, Object> cardInfo) {
+        return billDao.addBankCard(cardInfo);
+    }
+
+    public RestRecord updateBankCard(Map<String, Object> cardInfo) {
+        return billDao.updateBankCard(cardInfo);
+    }
 }
