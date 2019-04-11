@@ -183,4 +183,15 @@ public class NewsController {
         PageInfo pageInfo = new PageInfo( list );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
+
+    @PostMapping("/select-top-list")
+    @ResponseBody
+    public RestRecord getNewsTopList( @RequestParam( value = "pageSize", defaultValue = "6" ) Integer pageSize,
+                                   @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                   @RequestBody NewsParamBean newsBean){
+        PageHelper.startPage( pageNum, pageSize );
+        List<NewsParamBean> list = newsDao.fetchTopNewsOrderList(newsBean);
+        PageInfo pageInfo = new PageInfo( list );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
+    }
 }

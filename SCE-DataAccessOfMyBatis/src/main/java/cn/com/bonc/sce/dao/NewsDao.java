@@ -54,6 +54,10 @@ public class NewsDao {
         return newsMapper.selectNewsList(newsBean);
     }
 
+    public List<NewsParamBean> fetchTopNewsOrderList(NewsParamBean newsBean) {
+        return newsMapper.fetchTopNewsList(newsBean);
+    }
+
     public List selectTopNewsList(){
         return newsMapper.selectTopNewsList();
     }
