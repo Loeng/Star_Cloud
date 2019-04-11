@@ -123,10 +123,18 @@ public interface NewsMapper {
     int selectTopNewsCount();
 
     /**
-     * 查询新闻栏目类型列表
+     * 查询新闻栏列表（按照新闻排序）
      *
      * @return
      */
     List<NewsParamBean> selectNewsList(NewsParamBean newsBean);
+
+    /**
+     * 查询头条新闻列表（按照头条排序）
+     * @param newsBean
+     * @return
+     */
+    List<NewsParamBean> fetchTopNewsList(NewsParamBean newsBean);
+
 
 }

@@ -311,6 +311,27 @@
 
     </select>
 
+    <select id="fetchTopNewsList" resultMap="NewsResultMap" parameterType="cn.com.bonc.sce.bean.NewsParamBean">
+        SELECT <include refid="News_Column_List"/>
+        <include refid="Hit-Volume"/>
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT  T
+        LEFT JOIN (SELECT NEWS_ID,COUNT(ID) HIT_VOLUME FROM STARCLOUDPORTAL.SCE_NEWS_RECORD R where 1=1 and R.RECORD_TIME >(select sysdate - interval '7' day from dual) GROUP BY R.NEWS_ID
+        ) C ON C.NEWS_ID = T.CONTENT_ID
+        WHERE T.IS_DELETE = 1
+        AND T.CONTENT_STATUS = '1'
+        AND T.IS_PUBLISH=1
+        AND T.IS_TOP = 1
+        <if test="contentType != null  and contentType != ''">
+            AND T.CONTENT_TYPE = #{contentType}
+        </if>
+
+        <if test="contentTitle != null  and contentTitle != ''">
+            AND T.CONTENT_TITLE LIKE   '%'||#{contentTitle}||'%'
+        </if>
+        ORDER BY T.TOP_ORDER DESC
+
+    </select>
+
     <select id="selectTopNewsList" resultType="Map">
         SELECT
           T.CONTENT_ID "contentId",
