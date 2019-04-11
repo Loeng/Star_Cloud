@@ -4,6 +4,7 @@ import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.NewsModel;
+import cn.com.bonc.sce.model.NewsParamModel;
 import cn.com.bonc.sce.model.NewsStatusModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NewsInfoService;
@@ -205,7 +206,7 @@ public class NewsInfoController {
     @ResponseBody
     public RestRecord getAllNews(@PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
                                  @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
-                                 @RequestBody NewsModel newsModel) {
+                                 @RequestBody NewsParamModel newsModel) {
         return newsInfoService.getAllNews(pageSize, pageNum,newsModel);
     }
 

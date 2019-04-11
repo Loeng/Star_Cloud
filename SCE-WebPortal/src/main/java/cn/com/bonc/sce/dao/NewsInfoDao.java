@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.NewsModel;
+import cn.com.bonc.sce.model.NewsParamModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
@@ -101,7 +102,7 @@ public interface NewsInfoDao {
     @RequestMapping( value = "/news-info/select-list", method = RequestMethod.POST )
     RestRecord selectNewsList(@RequestParam( "pageSize" ) Integer pageSize,
                               @RequestParam( "pageNum" ) Integer pageNum,
-                              NewsModel newsModel);
+                              NewsParamModel newsModel);
 
     /**
      * 查询头条新闻列表

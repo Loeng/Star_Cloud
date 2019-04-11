@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.bean.NewsBean;
+import cn.com.bonc.sce.bean.NewsParamBean;
 import cn.com.bonc.sce.mapper.NewsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -49,7 +50,7 @@ public class NewsDao {
         return newsMapper.selectNewsDetailById( contentId );
     }
 
-    public List< NewsBean > selectNewsList(NewsBean newsBean) {
+    public List<NewsParamBean> selectNewsList(NewsParamBean newsBean) {
         return newsMapper.selectNewsList(newsBean);
     }
 

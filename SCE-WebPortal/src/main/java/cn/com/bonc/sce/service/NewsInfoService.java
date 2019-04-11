@@ -2,6 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.NewsInfoDao;
 import cn.com.bonc.sce.model.NewsModel;
+import cn.com.bonc.sce.model.NewsParamModel;
 import cn.com.bonc.sce.model.NewsStatusModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class NewsInfoService {
         return newsInfoDao.selectNewsById( contentId );
     }
 
-    public RestRecord getAllNews( Integer pageSize, Integer pageNum, NewsModel newsModel) {
+    public RestRecord getAllNews( Integer pageSize, Integer pageNum, NewsParamModel newsModel) {
 
         return newsInfoDao.selectNewsList(pageSize, pageNum,newsModel);
     }

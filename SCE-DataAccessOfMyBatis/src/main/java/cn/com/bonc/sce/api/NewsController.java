@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.bean.NewsBean;
+import cn.com.bonc.sce.bean.NewsParamBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.NewsDao;
@@ -176,9 +177,9 @@ public class NewsController {
     @ResponseBody
     public RestRecord getNewsList( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
                                    @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
-                                   @RequestBody NewsBean newsBean){
+                                   @RequestBody NewsParamBean newsBean){
         PageHelper.startPage( pageNum, pageSize );
-        List< NewsBean > list = newsDao.selectNewsList(newsBean);
+        List<NewsParamBean> list = newsDao.selectNewsList(newsBean);
         PageInfo pageInfo = new PageInfo( list );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }

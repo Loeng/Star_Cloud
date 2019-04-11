@@ -2,6 +2,7 @@ package cn.com.bonc.sce.mapper;
 
 
 import cn.com.bonc.sce.bean.NewsBean;
+import cn.com.bonc.sce.bean.NewsParamBean;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -126,6 +127,6 @@ public interface NewsMapper {
      *
      * @return
      */
-    List<NewsBean> selectNewsList(NewsBean newsBean);
+    List<NewsParamBean> selectNewsList(NewsParamBean newsBean);
 
 }
