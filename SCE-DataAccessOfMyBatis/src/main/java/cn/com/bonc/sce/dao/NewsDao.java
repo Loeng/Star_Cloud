@@ -29,6 +29,14 @@ public class NewsDao {
         return newsMapper.deleteNewsInfo( idList, userId );
     }
 
+    public int deleteTopNewsInfo( List< Long > idList, String userId ) {
+        return newsMapper.deleteTopNewsInfo( idList, userId );
+    }
+
+    public int addTopNewsInfo( List< Long > idList, String userId ) {
+        return newsMapper.addTopNewsInfo( idList, userId );
+    }
+
     public int auditNewsInfo( String contentStatus, String userId, String rejectOpinion, Long contentId ) {
         return newsMapper.auditNewsInfo( contentStatus, userId, rejectOpinion, contentId );
     }
@@ -43,5 +51,17 @@ public class NewsDao {
 
     public List< NewsBean > selectNewsList(NewsBean newsBean) {
         return newsMapper.selectNewsList(newsBean);
+    }
+
+    public List selectTopNewsList(){
+        return newsMapper.selectTopNewsList();
+    }
+
+    public int updateTopNewsOrder(Integer topOrder, Long contentId, String userId){
+        return newsMapper.updateTopNewOrder( topOrder, contentId, userId );
+    }
+
+    public int selectTopNewsCount(){
+        return newsMapper.selectTopNewsCount();
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -43,6 +44,17 @@ public interface NewsInfoDao {
     @RequestMapping( value = "/news-info/{userId}", method = RequestMethod.DELETE )
     RestRecord deleteNewsInfo( @RequestBody List< Long > idList,
                                @PathVariable( "userId" ) String userId );
+
+    /**
+     * 删除头条新闻
+     *
+     * @param idList
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/news-info/top-news/{userId}", method = RequestMethod.DELETE )
+    RestRecord deleteTopNewsInfo( @RequestBody List< Long > idList,
+                                  @PathVariable( "userId" ) String userId );
 
     /**
      * 新闻审核
@@ -90,4 +102,29 @@ public interface NewsInfoDao {
     RestRecord selectNewsList(@RequestParam( "pageSize" ) Integer pageSize,
                               @RequestParam( "pageNum" ) Integer pageNum,
                               NewsModel newsModel);
+
+    /**
+     * 查询头条新闻列表
+     *
+     * @return
+     */
+    @RequestMapping( value = "news-info/top-manage-list", method = RequestMethod.GET )
+    RestRecord selectTopNewsList();
+
+    /**
+     * 更新头条新闻排序信息
+     *
+     * @return
+     */
+    @RequestMapping( value = "news-info/top-order-change", method = RequestMethod.POST )
+    RestRecord updateTopNewsInfo( @RequestBody Map newsInfoMap );
+
+    /**
+     * 添加头条新闻
+     *
+     * @param map
+     * @return
+     */
+    @RequestMapping( value = "news-info/new-top-news", method = RequestMethod.POST)
+    RestRecord addTopNewsInfo(@RequestBody Map map);
 }

@@ -3,6 +3,7 @@ package cn.com.bonc.sce.mapper;
 
 import cn.com.bonc.sce.bean.NewsBean;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,26 @@ public interface NewsMapper {
     int deleteNewsInfo( @Param( "idList" ) List< Long > idList,
                         @Param( "userId" ) String userId );
 
+    /**
+     * 取消头条信息
+     *
+     * @param idList
+     * @param userId
+     * @return
+     */
+    int deleteTopNewsInfo( @Param( "idList" ) List< Long > idList,
+                           @Param( "userId" ) String userId );
+
+    /**
+     * 添加头条信息
+     *
+     * @param idList
+     * @param userId
+     * @return
+     */
+    int addTopNewsInfo( @Param( "idList" ) List< Long > idList,
+                        @Param( "userId" ) String userId );
+
 
     /**
      * * 新闻审核
@@ -71,7 +92,34 @@ public interface NewsMapper {
      * @param contentId
      * @return
      */
-    Map<String, Object> selectNewsDetailById( @Param("contentId") Long contentId);
+    Map< String, Object > selectNewsDetailById( @Param( "contentId" ) Long contentId );
+
+    /**
+     * 查询头条新闻列表
+     *
+     * @return
+     */
+    List< Map > selectTopNewsList();
+
+    /**
+     * 更新头条新闻排序信息
+     *
+     * @param topOrder
+     * @param contentId
+     * @param userId
+     * @return
+     */
+    int updateTopNewOrder( @Param( "topOrder" ) Integer topOrder,
+                           @Param( "contentId" ) Long contentId,
+                           @Param( "userId" ) String userId );
+
+    /**
+     * 查询头条新闻数量
+     *
+     * @return
+     */
+    @Select( "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT WHERE IS_DELETE = 1 AND CONTENT_STATUS = '1' AND IS_PUBLISH = 1 AND IS_TOP = 1" )
+    int selectTopNewsCount();
 
     /**
      * 查询新闻栏目类型列表

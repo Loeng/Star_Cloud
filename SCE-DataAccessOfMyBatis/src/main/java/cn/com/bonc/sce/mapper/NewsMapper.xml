@@ -156,6 +156,24 @@
         </foreach>
     </update>
 
+    <update id="deleteTopNewsInfo">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET IS_TOP = 0, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId}
+        WHERE CONTENT_ID IN
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="addTopNewsInfo">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET IS_TOP = 1, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId}
+        WHERE CONTENT_ID IN
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
     <update id="auditNewsInfo">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
         SET CONTENT_STATUS = #{contentStatus}, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId},
@@ -258,5 +276,21 @@
         </if>
         ORDER BY T.SHOW_ORDER ASC,T.CREATE_TIME DESC
     </select>
+
+    <select id="selectTopNewsList" resultType="Map">
+        SELECT
+          T.CONTENT_ID "contentId",
+          T.CONTENT_TITLE "contentTitle",
+          T.TOP_ORDER "topOrder"
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
+        WHERE IS_TOP = 1
+        ORDER BY TOP_ORDER DESC
+    </select>
+
+    <update id="updateTopNewOrder" >
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET TOP_ORDER = #{topOrder}, UPDATE_TIME = sysdate,UPDATE_USER_ID = #{userId}
+        WHERE CONTENT_ID = #{contentId}
+    </update>
 
 </mapper>

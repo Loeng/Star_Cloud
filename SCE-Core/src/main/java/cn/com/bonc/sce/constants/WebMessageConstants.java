@@ -88,6 +88,8 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_482 = "订单号不能为空";
     String SCE_PORTAL_MSG_483 = "有无法开票的订单";
 
+    String SCE_PORTAL_MSG_490 = "头条信息数量超过8条，无法添加已选新闻作为头条";
+
     /**
      * 通用错误信息
      */

@@ -72,13 +72,46 @@ public class NewsController {
 
     @Transactional
     @DeleteMapping( "/{userId}" )
-    public RestRecord deleteApps( @RequestBody List< Long > idList,
-                                  @PathVariable( "userId" ) String userId ) {
+    public RestRecord deleteNewsInfo( @RequestBody List< Long > idList,
+                                      @PathVariable( "userId" ) String userId ) {
         try {
             newsDao.deleteNewsInfo( idList, userId );
         } catch ( Exception e ) {
             log.error( "delete newsInfo fail {}", e );
             return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_422, e );
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    @Transactional
+    @DeleteMapping( "/top-news/{userId}" )
+    public RestRecord deleteTopNewsInfo( @RequestBody List< Long > idList,
+                                         @PathVariable( "userId" ) String userId ) {
+        try {
+            newsDao.deleteTopNewsInfo( idList, userId );
+        } catch ( Exception e ) {
+            log.error( "delete topNewsInfo fail {}", e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_422, e );
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    @Transactional
+    @PostMapping( "/new-top-news" )
+    @ResponseBody
+    public RestRecord addTopNewsInfo( @RequestBody Map map ) {
+        List< Long > idList = ( List< Long > ) map.get( "idList" );
+        String userId = String.valueOf( map.get( "userId" ) );
+        int count = newsDao.selectTopNewsCount();
+        int listCount = idList.size();
+        if( (count + listCount) > 8 ) {
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_490 );
+        }
+        try {
+            newsDao.addTopNewsInfo( idList, userId );
+        } catch ( Exception e ) {
+            log.error( "add topNewsInfo fail {}", e );
+            return new RestRecord( 423, WebMessageConstants.SCE_PORTAL_MSG_423, e );
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
@@ -113,12 +146,30 @@ public class NewsController {
         }
     }
 
-    @GetMapping("/one-news-info")
+    @GetMapping( "/one-news-info" )
     @ResponseBody
-    public RestRecord selectNewsById(@RequestParam( "contentId" ) Long contentId){
+    public RestRecord selectNewsById( @RequestParam( "contentId" ) Long contentId ) {
         Map newsInfo = newsDao.selectNewsDetailById( contentId );
-        log.info( newsInfo.toString() );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,newsInfo );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, newsInfo );
+    }
+
+    @GetMapping( "/top-manage-list" )
+    @ResponseBody
+    public RestRecord selectTopNewsList() {
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, newsDao.selectTopNewsList() );
+    }
+
+    @PostMapping( "/top-order-change" )
+    @ResponseBody
+    public RestRecord updateNewsInfo( @RequestBody Map newsInfoMap ) {
+        List< Map > newsBeanList = ( List< Map > ) newsInfoMap.get( "newsList" );
+        String userId = ( String ) newsInfoMap.get( "userId" );
+        int count = newsService.updateTopNewsOrder( newsBeanList, userId );
+        if ( count == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+        } else {
+            return new RestRecord( 409, MessageConstants.SCE_MSG_407 );
+        }
     }
 
     @PostMapping("/select-list")

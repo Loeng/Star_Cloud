@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -75,6 +77,29 @@ public class NewsInfoController {
         return newsInfoService.deleteNewsInfo( idList, userId );
     }
 
+
+    /**
+     * 删除头条新闻
+     *
+     * @param idList 新闻Id列表
+     * @return 删除头条新闻是否成功
+     */
+    @ApiOperation( value = "删除头条新闻", notes = "删除头条新闻", httpMethod = "DELETE" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "idList", value = "新闻Id,json数组", paramType = "body", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
+    } )
+    @DeleteMapping( "/top-news" )
+    @ResponseBody
+    public RestRecord deleteTopNewsByIdList( @RequestBody List< Long > idList,
+                                             @CurrentUserId @ApiParam( hidden = true ) String userId
+    ) {
+        return newsInfoService.deleteTopNewsInfo( idList, userId );
+    }
 
     /**
      * 更改教育新闻
@@ -157,9 +182,9 @@ public class NewsInfoController {
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @GetMapping("/one-news-info")
+    @GetMapping( "/one-news-info" )
     @ResponseBody
-    public RestRecord selectNewsById(@RequestParam( "contentId" ) Long contentId) {
+    public RestRecord selectNewsById( @RequestParam( "contentId" ) Long contentId ) {
         return newsInfoService.selectNewsById( contentId );
     }
 
@@ -182,5 +207,52 @@ public class NewsInfoController {
                                  @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
                                  @RequestBody NewsModel newsModel) {
         return newsInfoService.getAllNews(pageSize, pageNum,newsModel);
+    }
+
+    /**
+     * 后台头条新闻管理列表查询接口
+     *
+     * @return
+     */
+    @ApiOperation( value = "后台头条新闻管理列表查询接口", notes = "后台头条新闻管理列表查询接口", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping( "/top-manage-list" )
+    @ResponseBody
+    public RestRecord selectTopNewsList() {
+        return newsInfoService.selectTopNewsList();
+    }
+
+    @ApiOperation( value = "后台头条新闻管理接口", notes = "后台头条新闻管理接口", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @PostMapping( "/top-order-change" )
+    @ResponseBody
+    public RestRecord updateTopNewsInfo( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) List< NewsStatusModel > newsList,
+                                         @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        return newsInfoService.updateTopNewsInfo( newsList, userId );
+    }
+
+    @ApiOperation( value = "后台头条新闻添加接口", notes = "后台头条新闻添加接口", httpMethod = "POST" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "idList", value = "新闻Id,json数组", paramType = "body", required = true ),
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @PostMapping( "/new-top-news" )
+    @ResponseBody
+    public RestRecord addTopNewsInfo( @RequestBody List< Long > idList,
+                                      @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+        Map map = new HashMap<>( 2 );
+        map.put( "idList", idList );
+        map.put( "userId", userId );
+        return newsInfoService.addTopNewsInfo( map );
     }
 }
