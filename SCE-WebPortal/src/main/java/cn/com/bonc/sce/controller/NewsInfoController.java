@@ -162,4 +162,25 @@ public class NewsInfoController {
     public RestRecord selectNewsById(@RequestParam( "contentId" ) Long contentId) {
         return newsInfoService.selectNewsById( contentId );
     }
+
+    /**
+     * 获取所新闻列表
+     * @return
+     */
+    @ApiOperation( value = "根据类型获取新闻分页列表", notes = "根据类型获取新闻分页列表", httpMethod = "POST" )
+
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
+    } )
+    @PostMapping( "/getNewsListByType/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getAllNews(@PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                 @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
+                                 @RequestBody NewsModel newsModel) {
+        return newsInfoService.getAllNews(pageSize, pageNum,newsModel);
+    }
 }

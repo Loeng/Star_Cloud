@@ -42,4 +42,9 @@ public class NewsInfoService {
     public RestRecord selectNewsById(Long contentId) {
         return newsInfoDao.selectNewsById( contentId );
     }
+
+    public RestRecord getAllNews( Integer pageSize, Integer pageNum, NewsModel newsModel) {
+
+        return newsInfoDao.selectNewsList(pageSize, pageNum,newsModel);
+    }
 }

@@ -188,4 +188,75 @@
         WHERE CONTENT_ID = #{contentId}
     </select>
 
+    <resultMap id="NewsResultMap" type="cn.com.bonc.sce.bean.NewsBean">
+        <result column="CONTENT_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="contentId"></result>
+        <result column="COLUMN_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="columnId"></result>
+        <result column="CONTENT_TYPE" jdbcType="INTEGER" javaType="java.lang.Integer" property="contentType"></result>
+        <result column="CONTENT_TAG" jdbcType="VARCHAR" javaType="java.lang.String" property="contentTag"></result>
+        <result column="CONTENT_TITLE" jdbcType="VARCHAR" javaType="java.lang.String" property="contentTitle"></result>
+        <result column="CONTENT" jdbcType="VARCHAR" javaType="java.lang.String" property="content"></result>
+        <result column="CONTENT_STATUS" jdbcType="VARCHAR" javaType="java.lang.String" property="contentStatus"></result>
+        <result column="REJECT_OPINION" jdbcType="VARCHAR" javaType="java.lang.String" property="rejectOpinion"></result>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"></result>
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="updateTime"></result>
+        <result column="CREATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="createUserId"></result>
+        <result column="UPDATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="updateUserId"></result>
+        <result column="REMARKS" jdbcType="VARCHAR" javaType="java.lang.String" property="remarks"></result>
+        <result column="IS_DELETE" jdbcType="INTEGER" javaType="java.lang.Integer" property="isDelete"></result>
+        <result column="PIC_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="picId"></result>
+        <result column="FILE_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="fileId"></result>
+        <result column="AUDIT_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="auditUserId"></result>
+        <result column="AUDIT_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="auditDate"></result>
+        <result column="CONTENT_KEYWORD" jdbcType="VARCHAR" javaType="java.lang.String" property="contentKeyword"></result>
+        <result column="PUBLISH_DATE" jdbcType="TIMESTAMP" javaType="java.util.Date" property="publishDate"></result>
+        <result column="IS_TOP" jdbcType="INTEGER" javaType="java.lang.Integer" property="isTop"></result>
+        <result column="PIC_URL" jdbcType="VARCHAR" javaType="java.lang.String" property="picUrl"></result>
+        <result column="FILE_URL" jdbcType="VARCHAR" javaType="java.lang.String" property="fileUrl"></result>
+        <result column="NEWS_ABSTRACT" jdbcType="VARCHAR" javaType="java.lang.String" property="newsAbstract"></result>
+        <result column="AUTHOR_NAME" jdbcType="VARCHAR" javaType="java.lang.String" property="authorName"></result>
+        <result column="NEWS_SOURCE" jdbcType="VARCHAR" javaType="java.lang.String" property="newsSource"></result>
+        <result column="TOP_ORDER" jdbcType="INTEGER" javaType="java.lang.Long" property="topOrder"></result>
+        <result column="SHOW_ORDER" jdbcType="INTEGER" javaType="java.lang.Long" property="showOrder"></result>
+        <result column="IS_PUBLISH" jdbcType="INTEGER" javaType="java.lang.Integer" property="isPublish"></result>
+    </resultMap>
+
+    <sql id="News_Column_List">
+        T.COLUMN_ID,
+        T.CONTENT_TYPE,
+        T.CONTENT_TAG,
+        T.CONTENT_TITLE,
+        T.CONTENT,
+        T.CONTENT_STATUS,
+        T.REJECT_OPINION,
+        T.CREATE_TIME,
+        T.CREATE_USER_ID,
+        T.REMARKS,
+        T.IS_DELETE,
+        T.PIC_ID,
+        T.FILE_ID,
+        T.AUDIT_USER_ID,
+        T.AUDIT_TIME,
+        T.CONTENT_KEYWORD,
+        T.PUBLISH_DATE,
+        T.IS_TOP,
+        T.PIC_URL,
+        T.FILE_URL,
+        T.NEWS_ABSTRACT,
+        T.AUTHOR_NAME,
+        T.TOP_ORDER,
+        T.SHOW_ORDER,
+        T.NEWS_SOURCE,
+        T.IS_PUBLISH
+    </sql>
+
+    <select id="selectNewsList" resultMap="NewsResultMap" parameterType="cn.com.bonc.sce.bean.NewsBean">
+        SELECT <include refid="News_Column_List"/>
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT  T
+        WHERE T.IS_DELETE = 1
+        <if test="contentType != null ">
+            AND CONTENT_TYPE = #{contentType}
+        </if>
+        ORDER BY T.SHOW_ORDER ASC,T.CREATE_TIME DESC
+    </select>
+
 </mapper>

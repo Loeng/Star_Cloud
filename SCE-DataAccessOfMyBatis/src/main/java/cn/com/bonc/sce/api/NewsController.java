@@ -7,6 +7,8 @@ import cn.com.bonc.sce.dao.NewsDao;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NewsService;
 import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -117,5 +119,16 @@ public class NewsController {
         Map newsInfo = newsDao.selectNewsDetailById( contentId );
         log.info( newsInfo.toString() );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,newsInfo );
+    }
+
+    @PostMapping("/select-list")
+    @ResponseBody
+    public RestRecord getNewsList( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
+                                   @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                   @RequestBody NewsBean newsBean){
+        PageHelper.startPage( pageNum, pageSize );
+        List< NewsBean > list = newsDao.selectNewsList(newsBean);
+        PageInfo pageInfo = new PageInfo( list );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
 }

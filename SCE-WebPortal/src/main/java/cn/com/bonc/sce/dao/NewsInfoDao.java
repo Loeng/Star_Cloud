@@ -80,4 +80,14 @@ public interface NewsInfoDao {
      */
     @RequestMapping( value = "news-info/one-news-info", method = RequestMethod.GET )
     RestRecord selectNewsById( @RequestParam( "contentId" ) Long contentId );
+
+
+    /**
+     * 获取新闻列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-list", method = RequestMethod.POST )
+    RestRecord selectNewsList(@RequestParam( "pageSize" ) Integer pageSize,
+                              @RequestParam( "pageNum" ) Integer pageNum,
+                              NewsModel newsModel);
 }

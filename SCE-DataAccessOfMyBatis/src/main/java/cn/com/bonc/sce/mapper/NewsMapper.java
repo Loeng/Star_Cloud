@@ -73,4 +73,11 @@ public interface NewsMapper {
      */
     Map<String, Object> selectNewsDetailById( @Param("contentId") Long contentId);
 
+    /**
+     * 查询新闻栏目类型列表
+     *
+     * @return
+     */
+    List<NewsBean> selectNewsList(NewsBean newsBean);
+
 }

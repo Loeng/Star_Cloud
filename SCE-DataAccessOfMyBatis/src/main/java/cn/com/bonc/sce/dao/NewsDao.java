@@ -40,4 +40,8 @@ public class NewsDao {
     public Map selectNewsDetailById( Long contentId ) {
         return newsMapper.selectNewsDetailById( contentId );
     }
+
+    public List< NewsBean > selectNewsList(NewsBean newsBean) {
+        return newsMapper.selectNewsList(newsBean);
+    }
 }
