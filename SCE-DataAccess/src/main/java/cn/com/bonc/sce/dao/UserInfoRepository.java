@@ -185,4 +185,8 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
                            @Param( "schoolAge" ) Long schoolAge,
                            @Param( "remarks" ) String remarks );
 
+    @Modifying
+    @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET HEAD_PORTRAIT = ?1,USER_NAME = ?2,GENDER = ?3,BIRTHDATE = ?4,NATIONALITY = ?5,VOLK = ?6,EDUCATIONAL_BACKGROUND = ?7,ADDRESS = ?8 WHERE USER_ID = ?9 ", nativeQuery = true)
+    int updateUser(String headPortrait,String userName,String gender,Date birthDate,String nationality,String volk,String educationalBackground,String address,String userId);
+
 }

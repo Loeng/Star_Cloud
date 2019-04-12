@@ -19,6 +19,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -181,6 +184,22 @@ public class UserOperationController {
                 isReset = PASSWORD;
                 log.info( "更正用户[{}]的密码[{}]", userId, isReset );
                 status = userInfoRepository.resetUserPassword( isReset, userId );
+            } else {
+                String headPortrait = userInfo.get( "headPortrait" ) == null ? "" : userInfo.get( "headPortrait" ).toString(); //头像
+                String userName = userInfo.get( "userName" ) == null ? "" : userInfo.get( "userName" ).toString();  //姓名
+                String gender = userInfo.get( "gender" ) == null ? "" : userInfo.get( "gender" ).toString();   //性别
+                DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date birthDate;
+                try {
+                    birthDate = userInfo.get("birthDate") == null ? new Date() : sdf.parse(userInfo.get("birthDate").toString());  //出生日期
+                }catch (Exception e){
+                    return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+                }
+                String nationality = userInfo.get( "nationality" ) == null ? "" : userInfo.get( "nationality" ).toString();   //国籍
+                String volk = userInfo.get( "volk" ) == null ? "" : userInfo.get( "volk" ).toString();   //民族
+                String educationalBackground = userInfo.get( "educationalBackground" ) == null ? "" : userInfo.get( "educationalBackground" ).toString();   //学历
+                String address = userInfo.get( "address" ) == null ? "" : userInfo.get( "address" ).toString();   //住址
+                status = userInfoRepository.updateUser(headPortrait,userName,gender,birthDate,nationality,volk,educationalBackground,address,userId);
             }
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, status );
