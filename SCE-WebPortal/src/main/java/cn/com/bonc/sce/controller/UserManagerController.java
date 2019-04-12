@@ -192,7 +192,7 @@ public class UserManagerController {
         return userManagerService.addTeacher(json);
     }
 
-    @ApiOperation(value = "通过用户id修改教师从业信息", notes="通过用户id修改教师从业信息", httpMethod = "PUT")
+    @ApiOperation(value = "通过用户id修改教师从业信息接口", notes="通过用户id修改教师从业信息", httpMethod = "PUT")
     @PutMapping("/editTeacherPracticeInfo")
     @ResponseBody
     public RestRecord editTeacherPracticeInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model){
