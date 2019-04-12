@@ -232,6 +232,27 @@ public class NewsInfoController {
     }
 
     /**
+     * 获取头条新闻列表（后台）
+     * @return
+     */
+    @ApiOperation( value = "获取头条新闻列表（后台）", notes = "获取头条新闻列表（后台）", httpMethod = "POST" )
+
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
+    } )
+    @PostMapping( "/getBackendNewsList/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getBackendNewsList(@PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                     @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
+                                     @RequestBody NewsParamModel newsModel) {
+        return newsInfoService.getBackendNewsList(pageSize, pageNum,newsModel);
+    }
+
+    /**
      * 后台头条新闻管理列表查询接口
      *
      * @return

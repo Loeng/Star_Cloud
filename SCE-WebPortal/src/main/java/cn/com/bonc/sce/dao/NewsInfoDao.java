@@ -99,7 +99,7 @@ public interface NewsInfoDao {
      * 获取新闻列表
      * @return
      */
-    @RequestMapping( value = "/news-info/select-list", method = RequestMethod.POST )
+    @RequestMapping( value = "/news-info/select-front-list", method = RequestMethod.POST )
     RestRecord selectNewsList(@RequestParam( "pageSize" ) Integer pageSize,
                               @RequestParam( "pageNum" ) Integer pageNum,
                               NewsParamModel newsModel);
@@ -112,6 +112,15 @@ public interface NewsInfoDao {
     RestRecord getTopNewsListWithOrder(@RequestParam( "pageSize" ) Integer pageSize,
                                        @RequestParam( "pageNum" ) Integer pageNum,
                                        NewsParamModel newsModel);
+
+    /**
+     * 获取新闻列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-back-list", method = RequestMethod.POST )
+    RestRecord selectBackendNewsList(@RequestParam( "pageSize" ) Integer pageSize,
+                              @RequestParam( "pageNum" ) Integer pageNum,
+                              NewsParamModel newsModel);
     /**
      * 查询头条新闻列表
      *
