@@ -164,7 +164,7 @@ public class CouponService {
         String reviewState=param.get("REVIEW_STATE").toString();
 
         // 审核意见
-        String reviewComment=param.get("REVIEW_COMMENT").toString();
+        String reviewComment=param.containsKey("REVIEW_COMMENT")?param.get("REVIEW_COMMENT").toString():"";
 
         // 审核时间
         Date reviewDate=new Date();
