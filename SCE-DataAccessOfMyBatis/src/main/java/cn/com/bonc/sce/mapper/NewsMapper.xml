@@ -353,7 +353,16 @@
             AND T.CONTENT_TITLE LIKE   '%'||#{contentTitle}||'%'
         </if>
 
-        ORDER BY T.SHOW_ORDER ASC,T.PUBLISH_DATE DESC
+        <if test="startDate != null and startDate != '' and startDate != 'null' ">
+            and T.CREATE_TIME <![CDATA[>=]]>  TO_DATE(#{startDate}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+
+        <if test="endDate != null and endDate != '' and endDate != 'null' ">
+            and T.CREATE_TIME <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+
+
+        ORDER BY T.CREATE_TIME ASC
 
     </select>
 
