@@ -136,5 +136,12 @@ public interface NewsMapper {
      */
     List<NewsParamBean> fetchTopNewsList(NewsParamBean newsBean);
 
+    /**
+     * 查询新闻栏列表（后台管理用）
+     *
+     * @return
+     */
+    List<NewsParamBean> selectBackendNewsList(NewsParamBean newsBean);
+
 
 }

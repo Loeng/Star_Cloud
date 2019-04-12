@@ -173,7 +173,7 @@ public class NewsController {
         }
     }
 
-    @PostMapping("/select-list")
+    @PostMapping("/select-front-list")
     @ResponseBody
     public RestRecord getNewsList( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
                                    @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
@@ -191,6 +191,17 @@ public class NewsController {
                                    @RequestBody NewsParamBean newsBean){
         PageHelper.startPage( pageNum, pageSize );
         List<NewsParamBean> list = newsDao.fetchTopNewsOrderList(newsBean);
+        PageInfo pageInfo = new PageInfo( list );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
+    }
+
+    @PostMapping("/select-back-list")
+    @ResponseBody
+    public RestRecord getBackNewsList( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
+                                   @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                   @RequestBody NewsParamBean newsBean){
+        PageHelper.startPage( pageNum, pageSize );
+        List<NewsParamBean> list = newsDao.selectBackendNewsList(newsBean);
         PageInfo pageInfo = new PageInfo( list );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
