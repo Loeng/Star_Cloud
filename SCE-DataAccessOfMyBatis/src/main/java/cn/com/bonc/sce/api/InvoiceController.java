@@ -244,10 +244,9 @@ public class InvoiceController {
      * @return
      */
     @Transactional( rollbackFor = Exception.class )
-    @PostMapping( "/update-order-invoice-state/{userId}" )
+    @PutMapping( "/update-order-invoice-state/{userId}" )
     public RestRecord editOrderInvoiceState(
-            @PathVariable( "userId" ) String userId,
-            @RequestBody Map map ) {
+            @RequestBody Map map, @PathVariable( "userId" ) String userId ) {
 
         //  1未开票，2已开票，3已邮寄
         Map param = new HashMap();
