@@ -92,4 +92,8 @@ public interface UserMapper {
                                   @Param("userName")String userName, @Param("loginName")String loginName,
                                   @Param("gender")String gender, @Param("position")String position,
                                   @Param("accountStatus")Integer accountStatus);
+
+    int editTeacherPracticeInfo(@Param("user_id") String user_id,@Param("teach_certification")String teach_certification,@Param("teach_time") Date teach_time,
+                    @Param("school_time")Date school_time, @Param("job_profession")String job_profession,
+                    @Param("teach_range")String teach_range, @Param("work_number")String work_number);
 }

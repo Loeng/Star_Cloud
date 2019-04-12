@@ -3,6 +3,7 @@ package cn.com.bonc.sce.controller;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
+import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import cn.com.bonc.sce.service.UserManagerService;
@@ -189,5 +190,12 @@ public class UserManagerController {
     @ResponseBody
     public RestRecord addTeacher(@RequestBody String json){
         return userManagerService.addTeacher(json);
+    }
+
+    @ApiOperation(value = "通过用户id修改教师从业信息", notes="通过用户id修改教师从业信息", httpMethod = "PUT")
+    @PutMapping("/editTeacherPracticeInfo")
+    @ResponseBody
+    public RestRecord editTeacherPracticeInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model){
+        return userManagerService.editTeacherPracticeInfo(model);
     }
 }

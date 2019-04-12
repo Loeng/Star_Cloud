@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
+import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
@@ -73,4 +75,8 @@ public interface UserManagerDao {
                                    @RequestParam("gender")String gender, @RequestParam("position")String position,
                                    @RequestParam("accountStatus")Integer accountStatus, @PathVariable("pageNum")Integer pageNum,
                                    @PathVariable("pageSize")Integer pageSize);
+
+    @RequestMapping( value = "/userManager/editTeacherPracticeInfo", method = RequestMethod.PUT )
+    RestRecord editTeacherPracticeInfo(@RequestBody  @ApiParam( "教师从业信息对象" ) InfoTeacherModel model);
+
 }

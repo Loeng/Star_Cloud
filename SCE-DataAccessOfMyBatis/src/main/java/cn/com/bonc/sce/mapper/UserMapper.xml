@@ -477,4 +477,29 @@
             AND ACCOUNT_STATUS=#{accountStatus}
         </if>
     </select>
+
+    <update id="editTeacherPracticeInfo">
+        UPDATE  STARCLOUDPORTAL.SCE_INFO_TEACHER
+        <set>
+            <if test="teach_certification!=null">
+                TEACH_CERTIFICATION=#{teach_certification},
+            </if>
+            <if test="teach_time!=null">
+                TEACH_TIME=#{teach_time},
+            </if>
+            <if test="school_time!=null">
+                SCHOOL_TIME=#{school_time},
+            </if>
+            <if test="job_profession!=null">
+                JOB_PROFESSION=#{job_profession},
+            </if>
+            <if test="teach_range!=null">
+                TEACH_RANGE=#{teach_range},
+            </if>
+            <if test="work_number!=null">
+                WORK_NUMBER=#{work_number},
+            </if>
+        </set>
+        WHERE USER_ID=#{user_id}
+    </update>
 </mapper>

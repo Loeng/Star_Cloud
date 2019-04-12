@@ -30,4 +30,19 @@ public class InfoTeacherModel {
 
     @ApiModelProperty(value = "是否显示",hidden = true)
     private int isDelete;
+
+    @ApiModelProperty(value = "教师资格证号")
+    private String teachCertification;
+
+    @ApiModelProperty(value = "来校年月")
+    private String schoolTime;
+
+    @ApiModelProperty(value = "岗位职业")
+    private String jobProfession;
+
+    @ApiModelProperty(value = "任课学段")
+    private String teachRange;
+
+    @ApiModelProperty(value = "工号")
+    private String workNumber;
 }

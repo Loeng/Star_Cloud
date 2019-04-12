@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.dao.UserManagerDao;
+import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +86,9 @@ public class UserManagerService {
 
     public RestRecord getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus, Integer pageNum, Integer pageSize) {
         return userManagerDao.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
+    }
+
+    public RestRecord editTeacherPracticeInfo(InfoTeacherModel model){
+        return userManagerDao.editTeacherPracticeInfo(model);
     }
 }
