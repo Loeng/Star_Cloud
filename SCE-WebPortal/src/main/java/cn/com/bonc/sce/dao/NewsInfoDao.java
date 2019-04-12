@@ -105,6 +105,14 @@ public interface NewsInfoDao {
                               NewsParamModel newsModel);
 
     /**
+     * 获取头条新闻列表（按照头条排序）
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-top-list", method = RequestMethod.POST )
+    RestRecord getTopNewsListWithOrder(@RequestParam( "pageSize" ) Integer pageSize,
+                                       @RequestParam( "pageNum" ) Integer pageNum,
+                                       NewsParamModel newsModel);
+    /**
      * 查询头条新闻列表
      *
      * @return

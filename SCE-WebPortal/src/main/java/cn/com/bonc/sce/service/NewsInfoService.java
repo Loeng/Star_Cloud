@@ -60,6 +60,11 @@ public class NewsInfoService {
         return newsInfoDao.selectNewsList(pageSize, pageNum,newsModel);
     }
 
+    public RestRecord getTopNewsWithOrder( Integer pageSize, Integer pageNum, NewsParamModel newsModel) {
+
+        return newsInfoDao.getTopNewsListWithOrder(pageSize, pageNum,newsModel);
+    }
+
     public RestRecord selectTopNewsList(){
         return newsInfoDao.selectTopNewsList();
     }

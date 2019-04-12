@@ -190,10 +190,10 @@ public class NewsInfoController {
     }
 
     /**
-     * 获取所新闻列表
+     * 获取头条新闻列表（前台）（按新闻排序）
      * @return
      */
-    @ApiOperation( value = "根据类型获取新闻分页列表", notes = "根据类型获取新闻分页列表", httpMethod = "POST" )
+    @ApiOperation( value = "获取头条新闻列表（前台）（按新闻排序）", notes = "获取头条新闻列表（前台）（按新闻排序）", httpMethod = "POST" )
 
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
@@ -208,6 +208,27 @@ public class NewsInfoController {
                                  @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
                                  @RequestBody NewsParamModel newsModel) {
         return newsInfoService.getAllNews(pageSize, pageNum,newsModel);
+    }
+
+    /**
+     * 获取头条新闻列表（前台）（按头条排序）
+     * @return
+     */
+    @ApiOperation( value = "获取头条新闻列表（前台）（按头条排序）", notes = "获取头条新闻列表（前台）（按头条排序）", httpMethod = "POST" )
+
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
+    } )
+    @PostMapping( "/getTopNewsList/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getTopNewsList(@PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                     @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
+                                     @RequestBody NewsParamModel newsModel) {
+        return newsInfoService.getTopNewsWithOrder(pageSize, pageNum,newsModel);
     }
 
     /**
