@@ -38,12 +38,21 @@ public class OrderDao {
         return orderMapper.queryOrderByOrderID(ORDER_ID);
     }
 
-    public int cancelOrder(long ORDER_ID) throws SQLException {
-        return orderMapper.cancelOrder(ORDER_ID);
+    public int updateOrderByOrderID(Map param) throws SQLException {
+        return orderMapper.updateOrderByOrderID(param);
     }
 
 
     public int insertOrderVoucher(Map param) throws SQLException {
         return orderMapper.insertOrderVoucher(param);
+    }
+
+
+    public int updateOrderVoucher(Map param) throws SQLException {
+        return orderMapper.updateOrderVoucher(param);
+    }
+
+    public int deleteOrderVoucher(long ORDER_ID){
+        return orderMapper.deleteOrderVoucher(ORDER_ID);
     }
 }

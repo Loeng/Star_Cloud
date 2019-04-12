@@ -36,4 +36,15 @@ public class OrderService {
     public RestRecord queryOrderByOrderID(String ORDER_ID){
         return orderDao.queryOrderByOrderID(ORDER_ID);
     }
+
+
+    public RestRecord uploadVoucher(Map param,String userId){
+        param.put("UPLOAD_USER_ID",userId);
+        return orderDao.uploadVoucher(param);
+    }
+
+    public RestRecord reviewVoucher(Map param,String userId){
+        param.put("AUDITING_USER_ID",userId);
+        return orderDao.reviewVoucher(param);
+    }
 }

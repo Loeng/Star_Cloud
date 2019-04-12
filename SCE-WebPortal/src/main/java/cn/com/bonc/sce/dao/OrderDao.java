@@ -30,4 +30,10 @@ public interface OrderDao {
 
     @RequestMapping(value = "/order-manage/queryOrderByOrderID",method = RequestMethod.GET)
     public RestRecord queryOrderByOrderID(@RequestParam("ORDER_ID") String ORDER_ID);
+
+    @RequestMapping(value = "/order-manage/uploadVoucher",method = RequestMethod.POST)
+    public RestRecord uploadVoucher(@RequestBody Map param);
+
+    @RequestMapping(value = "/order-manage/reviewVoucher",method = RequestMethod.PUT)
+    public RestRecord reviewVoucher(@RequestBody Map param);
 }

@@ -44,4 +44,18 @@ public class OrderController {
         return orderService.queryOrderByOrderID(ORDER_ID);
     }
 
+
+    @ApiOperation(value = "上传线下支付凭证", notes="上传线下支付凭证", httpMethod = "POST")
+    @PostMapping("/uploadVoucher")
+    public RestRecord uploadVoucher(@RequestBody Map param){
+        return orderService.uploadVoucher(param);
+    }
+
+
+    @ApiOperation(value = "支付凭证审核", notes="支付凭证审核", httpMethod = "PUT")
+    @PutMapping("/reviewVoucher")
+    public RestRecord reviewVoucher(@RequestBody Map param){
+        return orderService.reviewVoucher(param);
+    }
+
 }

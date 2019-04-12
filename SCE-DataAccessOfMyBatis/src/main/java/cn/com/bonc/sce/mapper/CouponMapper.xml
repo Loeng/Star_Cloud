@@ -30,7 +30,7 @@
         #{SUBMIT_DATE,jdbcType=VARCHAR},
         #{REVIEW_STATE,jdbcType=VARCHAR},
         #{REVIEW_COMMENT,jdbcType=VARCHAR},
-        #{REVIEW_USER_ID,jdbcType=VARCHAR},
+        #{REVIEW_USER_ID,jdbcType=NUMERIC},
         #{REVIEW_DATE,jdbcType=VARCHAR},
         #{COUPON_TYPE_CODE,jdbcType=NUMERIC})
     </insert>

@@ -267,8 +267,8 @@ public class CouponService {
         long VALID_DATE_FALG=Long.parseLong(temp.get("VALID_DATE_FALG").toString());
         if (VALID_DATE_FALG==1){
             Date NOW_TIME=new Date();
-            java.sql.Date START_DATE= (java.sql.Date) temp.get("START_DATE");
-            java.sql.Date END_DATE=(java.sql.Date) temp.get("END_DATE");
+            java.sql.Timestamp START_DATE= (java.sql.Timestamp) temp.get("START_DATE");
+            java.sql.Timestamp END_DATE=(java.sql.Timestamp) temp.get("END_DATE");
 
             // 判断优惠码使用时间是否过期
             if (NOW_TIME.before(START_DATE) || NOW_TIME.after(END_DATE)){

@@ -39,8 +39,8 @@ public class Orderontroller {
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
-    @PostMapping("/add-order/{userId}")
-    public RestRecord addNewOrder(@RequestBody Map param, @PathVariable String userId){
+    @PostMapping("/add-order")
+    public RestRecord addNewOrder(@RequestBody Map param, @CurrentUserId String userId){
         return orderService.addNewOrder(param, userId);
     }
 
@@ -50,7 +50,7 @@ public class Orderontroller {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @PutMapping("/cancel-order")
-    public RestRecord cancelOrder(@RequestBody Map param){
+    public RestRecord cancelOrder(@RequestBody Map param,@CurrentUserId String userId){
         return orderService.cancelOrder(param);
     }
 
@@ -63,4 +63,25 @@ public class Orderontroller {
     public RestRecord queryOrderByOrderID(@RequestParam String ORDER_ID){
         return orderService.queryOrderByOrderID(ORDER_ID);
     }
+
+
+    @ApiOperation( value = "上传线下支付凭证", notes = "上传线下支付凭证", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @PostMapping("/upload-voucher")
+    public RestRecord uploadVoucher(@RequestBody Map param,@CurrentUserId String userId){
+        return orderService.uploadVoucher(param,userId);
+    }
+
+
+    @ApiOperation( value = "支付凭证审核", notes = "支付凭证审核", httpMethod = "PUT" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @PutMapping("/review-voucher")
+    public RestRecord reviewVoucher(@RequestBody Map param,@CurrentUserId String userId){
+        return orderService.reviewVoucher(param,userId);
+    }
+
 }

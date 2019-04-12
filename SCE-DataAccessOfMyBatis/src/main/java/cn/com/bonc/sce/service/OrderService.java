@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -173,7 +174,11 @@ public class OrderService {
 
         //修改订单的状态
         try {
-            int count=orderDao.cancelOrder(ORDER_ID);
+            Map sendMap = new HashMap();
+            sendMap.put("ORDER_ID",ORDER_ID);
+            sendMap.put("ORDER_STATUS",2);
+
+            int count=orderDao.updateOrderByOrderID(sendMap);
             if (count<1){
                 return new RestRecord(421,WebMessageConstants.SCE_PORTAL_MSG_421);
             }
@@ -207,7 +212,101 @@ public class OrderService {
      * @param param
      * @return cn.com.bonc.sce.rest.RestRecord
      */
-    public RestRecord insertOrderVoucher(Map param){
+    public RestRecord uploadVoucher(Map param){
+
+        // 数据校验
+
+        if(param==null || !param.containsKey("UPLOAD_USER_ID") || !param.containsKey("PAYING_VOUCHER")){
+            return new RestRecord(431,WebMessageConstants.SCE_PORTAL_MSG_431);
+        }
+
+
+        // 先删除凭证表里对应ORDER_ID的数据（逻辑删除）   再新增凭证
+        // 再次上传凭证时  之前的凭证作废
+        orderDao.deleteOrderVoucher(Long.parseLong(param.get("ORDER_ID").toString()));
+
+        // 初始化一些数据
+        long ID = idWorker.nextId(); // 主键ID
+        param.put("ID",ID);
+        param.put("UPLOAD_TIME",new Date());
+
+        // 插入数据到线下支付凭证表
+        try {
+            int count = orderDao.insertOrderVoucher(param);
+            if (count<1){
+                return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+        }
+
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
+
+    /* *
+     * @Description 线下凭证审核
+     * @Date 10:44 2019/4/11
+     * @param param
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord reviewVoucher(Map param){
+
+        param.put("REVIEW_TIME",new Date()); // 审核时间
+
+        // 修改凭证表里对应数据的状态
+        try {
+            int count = orderDao.updateOrderVoucher(param);
+            if (count<1){
+                return new RestRecord(421,WebMessageConstants.SCE_PORTAL_MSG_421);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new RestRecord(421,WebMessageConstants.SCE_PORTAL_MSG_421);
+        }
+
+
+        // 如果支付凭证审核通过   还需修改订单表里对应数据的支付状态为已支付
+
+        //审核状态 0待审核 1审核通过 2审核未通过
+        int AUDITING_STATUS=Integer.parseInt(param.get("AUDITING_STATUS").toString());
+        if (AUDITING_STATUS==1){
+
+            Map sendMap=new HashMap();
+            sendMap.put("ORDER_ID",param.get("ORDER_ID"));
+            sendMap.put("ORDER_STATUS",1);
+
+            // 修改order_info表里对应数据的状态
+            try {
+                int count2=orderDao.updateOrderByOrderID(sendMap);
+                if (count2<1){
+                    return new RestRecord(421,WebMessageConstants.SCE_PORTAL_MSG_421);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return new RestRecord(421,WebMessageConstants.SCE_PORTAL_MSG_421);
+            }
+
+
+            // 订单的状态发生变化   往order_histroy 表里增加对应数据
+            long ID = idWorker.nextId(); // order_histroy 主键
+            try {
+                int count3 = orderDao.insertOrderHistroy(ID,
+                        Long.parseLong(param.get("ORDER_ID").toString()),
+                        new Date(), 1);
+                if (count3<1){
+                    return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+            }
+
+        }
+
         return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
     }
 

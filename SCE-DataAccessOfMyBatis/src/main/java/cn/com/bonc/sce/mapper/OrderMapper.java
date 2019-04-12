@@ -15,18 +15,21 @@ import java.util.Map;
  */
 public interface OrderMapper {
 
-    public int insertOrder(Map param) throws SQLException;
+     int insertOrder(Map param) throws SQLException;
 
-    public int insertOrderHistroy(@Param("ID") long ID,
+     int insertOrderHistroy(@Param("ID") long ID,
                                   @Param("ORDER_ID") long ORDER_ID,
                                   @Param("STATUS_UPDATE_TIME") Date STATUS_UPDATE_TIME,
                                   @Param("ORDER_STATUS") int ORDER_STATUS) throws SQLException;
 
-    public Map queryOrderByOrderID(@Param("ORDER_ID") long ORDER_ID);
+     Map queryOrderByOrderID(@Param("ORDER_ID") long ORDER_ID);
 
-    public int cancelOrder(@Param("ORDER_ID") long ORDER_ID) throws SQLException;
+     int updateOrderByOrderID(Map param) throws SQLException;
 
+     int insertOrderVoucher(Map param) throws SQLException;
 
-    public int insertOrderVoucher(Map param) throws SQLException;
+     int updateOrderVoucher(Map param) throws SQLException;
+
+     int deleteOrderVoucher(@Param("ORDER_ID") long ORDER_ID);
 
 }
