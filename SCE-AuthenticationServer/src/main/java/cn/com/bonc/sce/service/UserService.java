@@ -42,6 +42,16 @@ public class UserService {
     }
 
     /**
+     * 根据用户的 手机号 获取用户信息
+     *
+     * @param phoneNumber 手机号
+     * @return 用户数据
+     */
+    public User getUserByPhoneNubmer( String phoneNumber ) {
+        return userDao.getUserByPhoneNubmer( phoneNumber );
+    }
+
+    /**
      * 根据用户数据生成 ticket
      *
      * @return

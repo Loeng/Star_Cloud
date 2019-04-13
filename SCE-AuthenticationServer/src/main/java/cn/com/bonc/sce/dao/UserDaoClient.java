@@ -32,6 +32,15 @@ public interface UserDaoClient {
     public User getUserByLoginName( @RequestBody String loginName );
 
     /**
+     * 根据用户的 手机号 获取用户信息
+     *
+     * @param phoneNumber 登录的账号信息
+     * @return 用户数据
+     */
+    @RequestMapping( value = "/users/login-phoneNumber-is/", method = RequestMethod.POST )
+    public User getUserByPhoneNubmer( @RequestBody String phoneNumber );
+
+    /**
      * 获取用户详细信息
      *
      * @param userId userId
@@ -53,7 +62,6 @@ public interface UserDaoClient {
      * 更新用户【登陆时间】和【登陆次数】
      *
      * @param userId
-     *
      * @return
      */
     @RequestMapping( value = "/users/login-time-counts/{userId}", method = RequestMethod.POST )

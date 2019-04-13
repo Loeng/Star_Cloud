@@ -52,7 +52,6 @@ public class LoginService {
      * 根据用户私钥生成 ticket
      *
      * @param authenticatedUser 登录用户
-     *
      * @return 字符串形式的 jwt ticket
      */
     public String generateTicket( User authenticatedUser, Date expirationDate, HttpServletRequest request, String subject ) {
@@ -87,7 +86,6 @@ public class LoginService {
      *
      * @param claims         payload内容
      * @param expirationDate 过期时间
-     *
      * @return ticket
      */
     public String generateTicket( Map< String, Object > claims, PrivateKey privateKey, Date expirationDate, String subject ) {
@@ -118,7 +116,12 @@ public class LoginService {
          * 验证数据有效性并验证用户登录信息
          */
         if ( loginInfo.getAuthType() == AUTH_TYPE_0 ) {
+            //1，根据账号获取用户信息
             authenticatedUser = userService.getUserByLoginName( loginInfo.getIdentifier() );
+            if ( authenticatedUser == null ) {
+                //2.根据手机号获取用户信息
+                authenticatedUser = userService.getUserByPhoneNubmer( loginInfo.getIdentifier() );
+            }
         } else if ( loginInfo.getAuthType() == AUTH_TYPE_1 ) {
             // 暂不支持
             throw new UnsupportedAuthenticationTypeException();
@@ -136,10 +139,9 @@ public class LoginService {
      * 用户成功登录后，生成返回给前台的登录信息
      *
      * @param authenticatedUser 登录用户数据
-     *
      * @return 登录信息
      */
-    public Map< String, Object > generateLoginResult(User authenticatedUser, Date expirationDate, HttpServletRequest request) {
+    public Map< String, Object > generateLoginResult( User authenticatedUser, Date expirationDate, HttpServletRequest request ) {
         Map< String, Object > data = new HashMap<>( 2 );
         String ticket = generateTicket( authenticatedUser, expirationDate, request, null );
         data.put( "ticket", ticket );
