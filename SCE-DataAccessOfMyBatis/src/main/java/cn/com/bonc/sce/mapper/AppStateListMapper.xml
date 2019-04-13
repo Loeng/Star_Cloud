@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.AppStateListMapper">
+    <select id="getListByCondition" resultType="java.util.LinkedHashMap">
+        SELECT
+        AI.APP_ID,
+        AV.APP_NAME,
+        AI.APP_SOURCE,
+        AV.CREATE_TIME,
+        AV.APP_STATUS,
+        AV.APP_VERSION,
+        AV.STORE_LOCATION,
+        AV.INDEX_URL,
+        AV.APPLY_TIME,
+        AV.AUDIT_TIME,
+        AT.APP_TYPE_ID,
+        AT.APP_TYPE_NAME,
+        SMC.COMPANY_NAME,
+        SMC.COMPANY_ID,
+        AV.UPDATE_TIME,
+        AV.CURRENT_VERSION AS CURRENT_VERSION,
+        0 AS PURCHASE_FREQUENCY
+        FROM
+        STARCLOUDMARKET.SCE_MARKET_APP_INFO AI
+        INNER JOIN STARCLOUDMARKET.SCE_MARKET_APP_VERSION AV ON AI.APP_ID = AV.APP_ID AND AV.IS_DELETE = 1 AND
+        AI.APP_SOURCE ='pt' AND AI.IS_DELETE='1'
+        LEFT JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY SMC ON AI.COMPANY_ID = SMC.COMPANY_ID
+        LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_APPTYPE_REL AR ON AI.APP_ID = AR.APP_ID
+        LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_TYPE AT ON AR.APP_TYPE_ID = AT.APP_TYPE_ID
+        <where>
+            <if test="companyId !=null">
+                AND SMC.COMPANY_ID = #{companyId}
+            </if>
+
+            <if test=" keyword != null and keyword !='' ">
+                AND AI.APP_NAME LIKE CONCAT(CONCAT('%',#{keyword}),'%')
+            </if>
+
+            <if test=" typeId >0 ">
+                AND AT.APP_TYPE_ID =#{typeId}
+            </if>
+
+            <if test=" auditStatus != null and auditStatus != '' ">
+                and AV.APP_STATUS IN ${auditStatus}
+            </if>
+
+        </where>
+    </select>
+</mapper>

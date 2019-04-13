@@ -116,4 +116,8 @@ public interface UserMapper {
 
     void insertStudent(Map map);
 
+
+    int editTeacherPracticeInfo(@Param("user_id") String user_id,@Param("teach_certification")String teach_certification,@Param("teach_time") Date teach_time,
+                    @Param("school_time")Date school_time, @Param("job_profession")String job_profession,
+                    @Param("teach_range")String teach_range, @Param("work_number")String work_number);
 }

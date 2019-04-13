@@ -1,12 +1,14 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.NewsModel;
+import cn.com.bonc.sce.model.NewsParamModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BTW
@@ -45,6 +47,17 @@ public interface NewsInfoDao {
                                @PathVariable( "userId" ) String userId );
 
     /**
+     * 删除头条新闻
+     *
+     * @param idList
+     * @param userId
+     * @return
+     */
+    @RequestMapping( value = "/news-info/top-news/{userId}", method = RequestMethod.DELETE )
+    RestRecord deleteTopNewsInfo( @RequestBody List< Long > idList,
+                                  @PathVariable( "userId" ) String userId );
+
+    /**
      * 新闻审核
      *
      * @param contentStatus
@@ -80,4 +93,73 @@ public interface NewsInfoDao {
      */
     @RequestMapping( value = "news-info/one-news-info", method = RequestMethod.GET )
     RestRecord selectNewsById( @RequestParam( "contentId" ) Long contentId );
+
+
+    /**
+     * 获取新闻列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-front-list", method = RequestMethod.POST )
+    RestRecord selectNewsList(@RequestParam( "pageSize" ) Integer pageSize,
+                              @RequestParam( "pageNum" ) Integer pageNum,
+                              NewsParamModel newsModel);
+
+    /**
+     * 获取头条新闻列表（按照头条排序）
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-top-list", method = RequestMethod.POST )
+    RestRecord getTopNewsListWithOrder(@RequestParam( "pageSize" ) Integer pageSize,
+                                       @RequestParam( "pageNum" ) Integer pageNum,
+                                       NewsParamModel newsModel);
+
+    /**
+     * 获取新闻列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-back-list", method = RequestMethod.POST )
+    RestRecord selectBackendNewsList(@RequestParam( "pageSize" ) Integer pageSize,
+                              @RequestParam( "pageNum" ) Integer pageNum,
+                              NewsParamModel newsModel);
+
+    /**
+     * 获取点击量列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-hit-rank", method = RequestMethod.POST )
+    RestRecord selectVolumeRankList(@RequestParam( "pageSize" ) Integer pageSize,
+                                     @RequestParam( "pageNum" ) Integer pageNum);
+
+    /**
+     * 获取最新列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-newest-rank", method = RequestMethod.POST )
+    RestRecord selectNewestList(@RequestParam( "pageSize" ) Integer pageSize,
+                                    @RequestParam( "pageNum" ) Integer pageNum);
+
+    /**
+     * 查询头条新闻列表
+     *
+     * @return
+     */
+    @RequestMapping( value = "news-info/top-manage-list", method = RequestMethod.GET )
+    RestRecord selectTopNewsList();
+
+    /**
+     * 更新头条新闻排序信息
+     *
+     * @return
+     */
+    @RequestMapping( value = "news-info/top-order-change", method = RequestMethod.POST )
+    RestRecord updateTopNewsInfo( @RequestBody Map newsInfoMap );
+
+    /**
+     * 添加头条新闻
+     *
+     * @param map
+     * @return
+     */
+    @RequestMapping( value = "news-info/new-top-news", method = RequestMethod.POST)
+    RestRecord addTopNewsInfo(@RequestBody Map map);
 }

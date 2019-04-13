@@ -44,4 +44,32 @@ public class OrderController {
         return orderService.queryOrderByOrderID(ORDER_ID);
     }
 
+
+    @ApiOperation(value = "上传线下支付凭证", notes="上传线下支付凭证", httpMethod = "POST")
+    @PostMapping("/uploadVoucher")
+    public RestRecord uploadVoucher(@RequestBody Map param){
+        return orderService.uploadVoucher(param);
+    }
+
+
+    @ApiOperation(value = "支付凭证审核", notes="支付凭证审核", httpMethod = "PUT")
+    @PutMapping("/reviewVoucher")
+    public RestRecord reviewVoucher(@RequestBody Map param){
+        return orderService.reviewVoucher(param);
+    }
+
+
+    @ApiOperation(value = "所有订单查询（管理员）", notes="所有订单查询（管理员）", httpMethod = "GET")
+    @GetMapping("/queryAllOrder")
+    public RestRecord queryAllOrder(@RequestParam(required = false) String ORDER_ID,
+                                    @RequestParam(required = false) String START_TIME,
+                                    @RequestParam(required = false) String END_TIME,
+                                    @RequestParam(required = false) String PRODUCT_TYPE_CODE,
+                                    @RequestParam(required = false) String PAYING_TYPE,
+                                    @RequestParam(required = false) String ORDER_STATUS,
+                                    @RequestParam String ORDER_BY,
+                                    @RequestParam int pageNum,
+                                    @RequestParam int pageSize){
+        return orderService.queryAllOrderByCondition(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY, pageNum, pageSize);
+    }
 }

@@ -2,6 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserManagerDao;
+import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,4 +116,8 @@ public class UserManagerService {
         return userManagerDao.addStudent(map, userId);
     }
 
+
+    public RestRecord editTeacherPracticeInfo(InfoTeacherModel model){
+        return userManagerDao.editTeacherPracticeInfo(model);
+    }
 }

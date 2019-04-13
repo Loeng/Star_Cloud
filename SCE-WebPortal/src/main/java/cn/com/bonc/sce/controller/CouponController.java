@@ -42,7 +42,6 @@ public class CouponController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/query-couponType")
-    @ResponseBody
     public RestRecord queryCouponType(){
         return couponService.queryCouponType();
     }
@@ -55,7 +54,6 @@ public class CouponController {
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
     @PostMapping("/add-coupon")
-    @ResponseBody
     public RestRecord addNewCoupon(@RequestBody Map param, @CurrentUserId String userId){
         return couponService.addNewCoupon(param,userId);
     }
@@ -67,7 +65,6 @@ public class CouponController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/query-agent-coupons")
-    @ResponseBody
     public RestRecord queryAgentCoupon(@CurrentUserId String userId,
                                        @RequestParam(defaultValue = "1") int pageNum,
                                        @RequestParam(defaultValue = "10") int pageSize){
@@ -75,19 +72,18 @@ public class CouponController {
     }
 
 
-    // 排序未实现
+
     @ApiOperation( value = "优惠码查询（运维管理）", notes = "优惠码查询（运维管理）", httpMethod = "GET" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
     } )
     @GetMapping("/query-all-coupons")
-    @ResponseBody
     public RestRecord queryAllCouponByCondition(@RequestParam(required = false) String COUPON_CODE,
                                                 @RequestParam(required = false) String USER_NAME,
                                                 @RequestParam(required = false) String COUPON_TYPE_CODE,
                                                 @RequestParam(required = false) String REVIEW_STATE,
                                                 @RequestParam(required = false) String OVER_FLAG,
-                                                @RequestParam(required = false) String ORDER_BY,
+                                                @RequestParam(defaultValue = "1") String ORDER_BY,
                                                 @RequestParam(defaultValue = "1") int pageNum,
                                                 @RequestParam(defaultValue = "10") int pageSize){
         return couponService.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY, pageNum, pageSize);
@@ -100,7 +96,6 @@ public class CouponController {
             @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class )
     } )
     @PutMapping("/review-coupon")
-    @ResponseBody
     public RestRecord reviewCoupon(@RequestBody Map param,@CurrentUserId String userId){
         return couponService.reviewCoupon(param, userId);
     }
@@ -112,8 +107,7 @@ public class CouponController {
             @ApiResponse( code = 422, message = WebMessageConstants.SCE_PORTAL_MSG_422, response = RestRecord.class )
     } )
     @DeleteMapping("/delete-coupon/{couponCode}")
-    @ResponseBody
-    public RestRecord deleteCoupon(@PathVariable String couponCode){
+    public RestRecord deleteCoupon(@PathVariable String couponCode,@CurrentUserId String userId){
         return couponService.deleteCoupon(couponCode);
     }
 
@@ -128,11 +122,21 @@ public class CouponController {
             @ApiResponse( code = 744, message = WebMessageConstants.SCE_PORTAL_MSG_744, response = RestRecord.class )
     } )
     @GetMapping("/cal-coupon")
-    @ResponseBody
     public RestRecord calCoupon(@RequestParam String COUPON_CODE,
                                 @RequestParam String PRODUCT_TYPE_CODE,
                                 @RequestParam String ORIGIN_PRICE){
         return couponService.calCoupon(COUPON_CODE, PRODUCT_TYPE_CODE, ORIGIN_PRICE);
+    }
+
+
+
+    @ApiOperation( value = "优惠码详情查询", notes = "优惠码详情查询", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping("/query-coupon-by-code")
+    public RestRecord queryCouponByCode(@RequestParam String COUPON_CODE){
+        return couponService.queryCouponByCode(COUPON_CODE);
     }
 
 }

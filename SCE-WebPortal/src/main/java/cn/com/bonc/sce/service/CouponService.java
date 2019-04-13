@@ -64,4 +64,8 @@ public class CouponService {
     public RestRecord calCoupon(String COUPON_CODE, String PRODUCT_TYPE_CODE, String ORIGIN_PRICE){
         return couponDao.calCoupon(COUPON_CODE, PRODUCT_TYPE_CODE, ORIGIN_PRICE);
     }
+
+    public RestRecord queryCouponByCode(String COUPON_CODE){
+        return couponDao.queryCouponByCode(COUPON_CODE);
+    }
 }

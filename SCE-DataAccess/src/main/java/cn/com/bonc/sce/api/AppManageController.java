@@ -352,13 +352,13 @@ public class AppManageController {
         for ( Map map : appIdList ) {
             String appId = String.valueOf( map.get( "appId" ) );
             String appVersion = String.valueOf( map.get( "appVersion" ) );
-            appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( "5", userId, appId, appVersion );
+            appInfo += marketAppVersionRepository.applyAppOnShelfByUserId( type, userId, appId, appVersion );
         }
         return new RestRecord( 200, appInfo );
     }
 
     /**
-     * 通过审核状态查询app列表
+     * 通过审核状态查询app列表(已弃用)
      *
      * @param auditStatus
      * @param typeId
@@ -380,17 +380,22 @@ public class AppManageController {
         try {
             RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
             Page< List< Map< String, Object > > > page;
-            if ( "6".equals( auditStatus ) ) { // 查询暂存列表  1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架  6,暂存
-                Pageable newpageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( "desc" ) ? Sort.Direction.DESC : Sort.Direction.ASC, "APP_NAME" );
-                page = appInfoRepository.getTempAPPInfoByTypeIdAndKeyword( typeId, keyword, newpageable );
-                Map< String, Object > temp = new HashMap<>( 16 );
-                temp.put( "data", page.getContent() );
-                temp.put( "totalPage", page.getTotalPages() );
-                temp.put( "totalCount", page.getTotalElements() );
-                restRecord.setData( temp );
-                return restRecord;
-            } else {
-
+//            if ( "6".equals( auditStatus ) ) { // 查询暂存列表  1，审核中2，迭代审核3，未通过审核，4已上架（运营中）， 5应用下架  6,暂存
+//                Pageable newpageable = PageRequest.of( pageNum - 1, pageSize, "desc".equalsIgnoreCase( "desc" ) ? Sort.Direction.DESC : Sort.Direction.ASC, "APP_NAME" );
+//                page = appInfoRepository.getTempAPPInfoByTypeIdAndKeyword( typeId, keyword, newpageable );
+//                Map< String, Object > temp = new HashMap<>( 16 );
+//                temp.put( "data", page.getContent() );
+//                temp.put( "totalPage", page.getTotalPages() );
+//                temp.put( "totalCount", page.getTotalElements() );
+//                restRecord.setData( temp );
+//                return restRecord;
+//            } else {
+            //运营中 4
+            //上架审核 1(审核中) 3(被驳回)
+            //迭代审核 2(审核中) 6(被驳回)
+            //下架审核 9(审核中) 10(被驳回)
+            //已下架 5（已停止） 7(运行中)
+            //8 已撤销上架
                 //根据userId查询厂商id
                 Long companyId = companyInfoRepository.getCompanyIdByUid( userId );
 
@@ -430,7 +435,7 @@ public class AppManageController {
                 restRecord.setData( temp );
                 return restRecord;
 
-            }
+//            }
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );

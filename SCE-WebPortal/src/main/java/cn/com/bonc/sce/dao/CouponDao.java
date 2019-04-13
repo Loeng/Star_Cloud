@@ -23,15 +23,15 @@ public interface CouponDao {
 
 
     @RequestMapping(value = "/coupon/queryCouponType",method = RequestMethod.GET)
-    public RestRecord queryCouponType();
+    RestRecord queryCouponType();
 
 
     @RequestMapping(value = "/coupon/queryGoodsType",method = RequestMethod.GET)
-    public RestRecord queryGoodsType();
+    RestRecord queryGoodsType();
 
 
     @RequestMapping(value = "/coupon/queryAllCouponByCondition",method = RequestMethod.GET)
-    public RestRecord queryAllCouponByCondition(@RequestParam("COUPON_CODE") String COUPON_CODE,
+    RestRecord queryAllCouponByCondition(@RequestParam("COUPON_CODE") String COUPON_CODE,
                                                 @RequestParam("USER_NAME") String USER_NAME,
                                                 @RequestParam("COUPON_TYPE_CODE") String COUPON_TYPE_CODE,
                                                 @RequestParam("REVIEW_STATE") String REVIEW_STATE,
@@ -42,27 +42,31 @@ public interface CouponDao {
 
 
     @RequestMapping(value = "/coupon/queryAgentCoupon",method = RequestMethod.GET)
-    public RestRecord queryAgentCoupon(@RequestParam("userId") String userId,
+    RestRecord queryAgentCoupon(@RequestParam("userId") String userId,
                                        @RequestParam("pageNum") int pageNum,
                                        @RequestParam("pageSize") int pageSize);
 
     @RequestMapping(value = "/coupon/insertCoupon",method = RequestMethod.POST)
-    public RestRecord addNewCoupon(@RequestBody Map param,
+    RestRecord addNewCoupon(@RequestBody Map param,
                                    @RequestParam("userId") String userId);
 
 
     @RequestMapping(value = "/coupon/deleteCoupon",method = RequestMethod.DELETE)
-    public RestRecord deleteCoupon(@RequestParam("couponCode") String couponCode);
+     RestRecord deleteCoupon(@RequestParam("couponCode") String couponCode);
 
 
     @RequestMapping(value = "/coupon/reviewCoupon",method = RequestMethod.PUT)
-    public RestRecord reviewCoupon(@RequestBody Map param,
+     RestRecord reviewCoupon(@RequestBody Map param,
                                    @RequestParam("userID") String userID);
 
 
     @RequestMapping(value = "/coupon/calCoupon",method = RequestMethod.GET)
-    public RestRecord calCoupon(@RequestParam("COUPON_CODE") String COUPON_CODE,
+     RestRecord calCoupon(@RequestParam("COUPON_CODE") String COUPON_CODE,
                                 @RequestParam("PRODUCT_TYPE_CODE") String PRODUCT_TYPE_CODE,
                                 @RequestParam("ORIGIN_PRICE") String ORIGIN_PRICE);
+
+
+    @RequestMapping(value = "/coupon/queryCouponByCode",method = RequestMethod.GET)
+    RestRecord queryCouponByCode(@RequestParam("COUPON_CODE") String COUPON_CODE);
 
 }

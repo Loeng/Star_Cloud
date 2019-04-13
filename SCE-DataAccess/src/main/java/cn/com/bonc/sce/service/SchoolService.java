@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.AccountDao;
 import cn.com.bonc.sce.dao.SchoolDao;
 import cn.com.bonc.sce.dao.UserDao;
@@ -135,4 +136,9 @@ public class SchoolService {
 
     }
 
+    public RestRecord addSchool( School school ) {
+        school.setIsDelete(1);
+        schoolDao.save(school);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200);
+    }
 }

@@ -5,8 +5,6 @@
     <select id="selectInvoiceInfoByOrganizationId" parameterType="java.lang.Long" resultType="Map">
             SELECT
                 INVOICE_TITLE,
-                OPEN_TYPE,
-                INVOICE_TYPE,
                 TAX_REGISTRATION_NO,
                 DEPOSIT_BANK,
                 BANK_ACCOUNT,
@@ -115,9 +113,9 @@
     </insert>
     <!-- 查询开票历史-->
     <select id="selectInvoiceHistory" parameterType="String" resultType="Map">
-        SELECT ORDER_NO, D.ID, D.APPLY_TIME, D.APPLY_USER_ID, D.INVOICE_AMOUNT, D.INVOICE_STATUS
+        SELECT ORDER_NO,TO_CHAR(D.ID) ID, D.APPLY_TIME, D.APPLY_USER_ID, D.INVOICE_AMOUNT, D.INVOICE_STATUS
         , D.IS_DELETE, D.RECIPIENTS, D.POST_ADDRESS, D.TELEPHONE_NUMBER, D.PROVINCE
-        , D.CITY, D.AREA, D.INVOICE_TITLE, D.OPEN_TYPE, D.INVOICE_CONTENT
+        , D.CITY, D.AREA, D.INVOICE_TITLE, D.INVOICE_TYPE, D.INVOICE_CONTENT
         , D.TAX_REGISTRATION_NO, D.DEPOSIT_BANK, D.BANK_ACCOUNT, D.REGISTRATION_LOCATION, D.REGISTRATION_TELEPHONE
         , D.INVOICE_CODE, D.INVOICE_NO, D.EXPRESS_COMPANY, D.COURIER_NUMBER,scu.USER_NAME AS CREATE_USER_NAME,D.CREATE_TIME
         FROM STARCLOUDPORTAL.SCE_ORDER_INVOICE_INFO D
@@ -137,8 +135,8 @@
             <if test="ORDER_NO != null and ORDER_NO != '' ">
                 AND ORDER_NO LIKE CONCAT(CONCAT('%',#{ORDER_NO}),'%')
             </if>
-            <if test="OPEN_TYPE != null and OPEN_TYPE != '' ">
-                AND D.OPEN_TYPE = #{OPEN_TYPE}
+            <if test="INVOICE_TYPE != null and INVOICE_TYPE != '' ">
+                AND D.INVOICE_TYPE = #{INVOICE_TYPE}
             </if>
             <if test="INVOICE_CONTENT != null and INVOICE_CONTENT != '' ">
                 AND D.INVOICE_CONTENT = #{INVOICE_CONTENT}
@@ -248,7 +246,7 @@
         SII.CITY,
         SII.AREA,
         SII.INVOICE_TITLE,
-        SII.OPEN_TYPE,
+        SII.INVOICE_TYPE,
         SII.INVOICE_CONTENT,
         SII.TAX_REGISTRATION_NO,
         SII.DEPOSIT_BANK,
@@ -282,7 +280,7 @@
             <if test="CITY != null">CITY,</if>
             <if test="AREA != null">AREA,</if>
             <if test="INVOICE_TITLE != null">INVOICE_TITLE,</if>
-            <if test="OPEN_TYPE != null">OPEN_TYPE,</if>
+            <if test="INVOICE_TYPE != null">INVOICE_TYPE,</if>
             <if test="INVOICE_CONTENT != null">INVOICE_CONTENT,</if>
             <if test="TAX_REGISTRATION_NO != null">TAX_REGISTRATION_NO,</if>
             <if test="DEPOSIT_BANK != null">DEPOSIT_BANK,</if>
@@ -311,7 +309,7 @@
             <if test="CITY != null">#{CITY,jdbcType=VARCHAR},</if>
             <if test="AREA != null">#{AREA,jdbcType=VARCHAR},</if>
             <if test="INVOICE_TITLE != null">#{INVOICE_TITLE,jdbcType=VARCHAR},</if>
-            <if test="OPEN_TYPE != null">#{OPEN_TYPE,jdbcType=VARCHAR},</if>
+            <if test="INVOICE_TYPE != null">#{INVOICE_TYPE,jdbcType=VARCHAR},</if>
             <if test="INVOICE_CONTENT != null">#{INVOICE_CONTENT,jdbcType=VARCHAR},</if>
             <if test="TAX_REGISTRATION_NO != null">#{TAX_REGISTRATION_NO,jdbcType=VARCHAR},</if>
             <if test="DEPOSIT_BANK != null">#{DEPOSIT_BANK,jdbcType=VARCHAR},</if>
@@ -344,7 +342,7 @@
             <if test="CITY != null">CITY = #{CITY,jdbcType=VARCHAR},</if>
             <if test="AREA != null">AREA = #{AREA,jdbcType=VARCHAR},</if>
             <if test="INVOICE_TITLE != null">INVOICE_TITLE = #{INVOICE_TITLE,jdbcType=VARCHAR},</if>
-            <if test="OPEN_TYPE != null">OPEN_TYPE = #{OPEN_TYPE,jdbcType=VARCHAR},</if>
+            <if test="INVOICE_TYPE != null">INVOICE_TYPE = #{INVOICE_TYPE,jdbcType=VARCHAR},</if>
             <if test="INVOICE_CONTENT != null">INVOICE_CONTENT = #{INVOICE_CONTENT,jdbcType=VARCHAR},</if>
             <if test="TAX_REGISTRATION_NO != null">TAX_REGISTRATION_NO = #{TAX_REGISTRATION_NO,jdbcType=VARCHAR},</if>
             <if test="DEPOSIT_BANK != null">DEPOSIT_BANK = #{DEPOSIT_BANK,jdbcType=VARCHAR},</if>

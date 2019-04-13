@@ -149,7 +149,6 @@ public class AppManageService {
         appInfoEntity.setCreateTime( new Date() );
         appInfoEntity.setIsDelete( 1 );
         appInfoEntity.setAppSource( "pt" );
-        appInfoEntity.setAppNotes( platFormInfo.getAppNotes() );
         appInfoEntity.setCompanyId( companyId );
         //财务凭证(文件路径)
         String auditVoucher = getFilesUrlById( platFormInfo.getAuditVoucher() );
@@ -176,19 +175,15 @@ public class AppManageService {
         //往版本表存东西
         MarketAppVersion marketAppVersion = new MarketAppVersion();
         marketAppVersion.setAppId( appId );
-        // marketAppVersion.setAppDownloadAddress( platFormAddress );
         marketAppVersion.setAppVersion( platFormInfo.getAppVersion() );
-        marketAppVersion.setVersionInfo( platFormInfo.getAppNotes() );
+        marketAppVersion.setVersionInfo( platFormInfo.getVersionInfo() );
         marketAppVersion.setAppStatus( "1" );
         marketAppVersion.setAppPcPic( pcUrl );
         marketAppVersion.setCreateTime( new Date() );
         marketAppVersion.setIsDelete( 1L );
         marketAppVersion.setCreateUserId( uid );
         marketAppVersion.setStoreLocation( platFormAddress );
-        String newFeatures = platFormInfo.getNewFeatures();
-        if ( StringUtils.isNotEmpty( newFeatures ) ) {
-            marketAppVersion.setNewFeatures( newFeatures );
-        }
+        marketAppVersion.setNewFeatures( platFormInfo.getNewFeatures() );
         //只存厂家设置的比例，平台比例=1-厂家比例
         marketAppVersion.setCompanySetRatio( platFormInfo.getCompanyRatio() );
         marketAppVersionRepository.saveAndFlush( marketAppVersion );

@@ -33,7 +33,7 @@ public class PlatformAddModel {
 
     @NotBlank( message = "应用描述不能为空" )
     @ApiModelProperty( name = "应用描述" )
-    private String appNotes;
+    private String versionInfo;
 
     @NotBlank( message = "新版特性不能为空" )
     @ApiModelProperty( name = "新版特性" )
@@ -64,6 +64,9 @@ public class PlatformAddModel {
 
     @ApiModelProperty( name = "平台比例" )
     private String platformRatio;
+
+    @ApiModelProperty( name = "当前版本" )
+    private String currentVersion;
 
 
 //    @NotNull( message = "包名不能为空" )

@@ -59,6 +59,12 @@ public class UserApiController {
         return userDao.findUserByLoginName( loginName );
     }
 
+    @PostMapping( "/login-phoneNumber-is/" )
+    @ResponseBody
+    public User getUserByLoginNameOrPhoneNumber( @RequestBody String phoneNumber ) {
+           return userDao.findUserByPhoneNumber( phoneNumber );
+    }
+
     @PostMapping( value = "" )
     @ResponseBody
     public RestRecord getUserById( @RequestBody Account account ) {
@@ -117,8 +123,8 @@ public class UserApiController {
             }
             user.setSecret( null );
             Account account = user.getAccount();
-            account.setPassword(null);
-            user.setAccount(account);
+            account.setPassword( null );
+            user.setAccount( account );
             return new RestRecord( 200, user );
         } catch ( Exception e ) {
             log.error( e.getMessage(), e );
@@ -195,7 +201,6 @@ public class UserApiController {
      * 更新用户【登陆时间】和【登陆次数】
      *
      * @param userId
-     *
      * @return
      */
     @PostMapping( "/login-time-counts/{userId}" )

@@ -3,6 +3,7 @@ package cn.com.bonc.sce.controller;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.AppVersionModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AppAuditingService;
 import cn.com.bonc.sce.service.AppVersionService;
@@ -96,16 +97,16 @@ public class AppVersionController {
     }
 
     /**
-     * 应用版本更新申请接口
+     * 应用版本更新申请接口（迭代接口）
      * 1. 在应用版本信息表中插入一条新的版本信息, 并将状态设置为待审核
      * 2. 创建一条待办消息，创建人为申请人，接收人为系统管理员
      *
      * @param appId            更新版本的应用Id
      * @param userId           提交版本更新申请的用户Id
-     * @param marketAppVersion 版本更新详情
+     * @param platformAddModel 版本更新详情
      * @return
      */
-    @ApiOperation( value = "应用版本更新申请接口", notes = "添加一条版本更新申请", httpMethod = "POST" )
+    @ApiOperation( value = "应用版本迭代申请接口", notes = "添加一条版本更新申请（迭代接口）", httpMethod = "POST" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
@@ -114,14 +115,14 @@ public class AppVersionController {
     public RestRecord appVersionUpdateApply(
             @PathVariable( "appId" ) @ApiParam( "应用Id" ) String appId,
             @CurrentUserId @ApiParam( hidden = true ) String userId,
-            @RequestBody @ApiParam( "应用版本信息对象" ) AppVersionModel marketAppVersion ) {
-        return appVersionService.createVersionInfo( appId, userId, marketAppVersion );
+            @RequestBody @ApiParam( "应用版本信息对象" ) PlatformAddModel platformAddModel ) {
+        return appVersionService.createVersionInfo( appId, userId, platformAddModel );
 //        messageService.createAppVersionUpdateApplyMessage( userId, appId );
 
     }
 
     /**
-     * 应用版本审批接口
+     * 应用上架审批，迭代审批通过接口
      * 1	将应用版本表中应用状态更新为通过审核
      * 2	创建一条消息，通知对应厂商用户
      *
@@ -129,13 +130,28 @@ public class AppVersionController {
      * @param approveList 提交审核的APP列表
      * @return
      */
-    @ApiOperation( value = "应用版本审批接口", notes = "将应用版本表中应用状态更新为通过审核", httpMethod = "PUT" )
+    @ApiOperation( value = "应用上架审批，迭代审批通过接口", notes = "应用上架审批，迭代审批通过接口", httpMethod = "PUT" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
     @PutMapping( "/approve" )
     @ResponseBody
     public RestRecord appVersionUpdateApprove(
             @CurrentUserId @ApiParam( hidden = true ) String userId,
-            @RequestBody @ApiParam( "需通过审核的列表,如果是审核的是平台应用，前端需要多传一个appLink(用户输入的地址拼接INDEX_URL),后端需要将拼接后的appLink存入info表[{\"appId\":\"101\",\"appVersion\":\"v1.1\",\"currentVersion\":\"v1.0\"},{略}]" ) List< Map< String, String > > approveList ) {
+            @RequestBody @ApiParam( "若果有currentVersion字段，说明是迭代申请[{\"appId\":\"101\",\"appVersion\":\"v1.1\",\"currentVersion\":\"v1.0\",\"indexUrl\":\"www.baidu.com\",\"platformRatio\":\"25\",\"companyRatio\":\"25\",\"agentRatio\":\"50\"},{略}]" ) List< Map< String, String > > approveList ) {
         return appAuditingService.appVersionUpdateApprove( userId, approveList );
+    }
+
+    @ApiOperation( value = "下架审批通过接口", notes = "下架审批通过接口", httpMethod = "PUT" )
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
+    } )
+    @PutMapping( "/approve/down-shelf" )
+    @ResponseBody
+    public RestRecord appVersionDownShelfApprove(
+            @CurrentUserId @ApiParam( hidden = true ) String userId,
+            @RequestBody @ApiParam( "[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList ) {
+        return appAuditingService.appVersionDownShelfApprove( userId, approveList );
 //        messageService.createAppVersionUpdateApproveMessage( appId, userId );
     }
 
@@ -148,33 +164,33 @@ public class AppVersionController {
      * @param rejectReason 驳回请求原因
      * @return
      */
-    @ApiOperation( value = "审批不通过接口", notes = "不通过审核，并更新不通过原因", httpMethod = "PUT" )
-    @PutMapping( "/reject" )
+    @ApiOperation( value = "上架，下架，迭代 驳回接口", notes = "不通过审核，并更新不通过原因", httpMethod = "PUT" )
+    @PutMapping( "/reject/{operateType}" )
     @ResponseBody
     public RestRecord appVersionUpdateReject(
+            @PathVariable( "operateType" ) @ApiParam( "up为上架驳回，down为下架驳回，iterator为迭代驳回" ) String operateType,
             @CurrentUserId @ApiParam( hidden = true ) String userId,
-            @RequestBody @ApiParam( "需通过审核的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList,
+            @RequestBody @ApiParam( "需要驳回的列表[{\"appId\":\"101\",\"appVersion\":\"v1.1\"},{略}]" ) List< Map< String, String > > approveList,
             @RequestParam( "rejectReason" ) String rejectReason ) {
-        return appAuditingService.appVersionUpdateReject( userId, approveList, rejectReason );
+        return appAuditingService.appVersionUpdateReject( operateType, userId, approveList, rejectReason );
 //        messageService.createAppVersionUpdateRejectMessage( appId, userId, rejectReason );
 
     }
 
 
-
     /* *
-     * @Description 
+     * @Description
      * @Date 17:45 2019/1/14
      * @Param [userId, marketAppVersion]
      * @return cn.com.bonc.sce.rest.RestRecord
      */
     @ApiOperation( value = "应用数据暂存接口", notes = "暂存应用数据", httpMethod = "POST" )
-    @PostMapping("/temp/save")
+    @PostMapping( "/temp/save" )
     @ResponseBody
     public RestRecord appVersionTempSave(
             @CurrentUserId @ApiParam( hidden = true ) String userId,
-            @RequestBody @ApiParam( "应用信息暂存对象" ) Map<String,String> tempData
-    ){
-        return appVersionService.tempSaveVersionInfo(userId,tempData);
+            @RequestBody @ApiParam( "应用信息暂存对象" ) Map< String, String > tempData
+    ) {
+        return appVersionService.tempSaveVersionInfo( userId, tempData );
     }
 }

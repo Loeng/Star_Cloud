@@ -164,7 +164,7 @@ public class CouponService {
         String reviewState=param.get("REVIEW_STATE").toString();
 
         // 审核意见
-        String reviewComment=param.get("REVIEW_COMMENT").toString();
+        String reviewComment=param.containsKey("REVIEW_COMMENT")?param.get("REVIEW_COMMENT").toString():"";
 
         // 审核时间
         Date reviewDate=new Date();
@@ -267,8 +267,8 @@ public class CouponService {
         long VALID_DATE_FALG=Long.parseLong(temp.get("VALID_DATE_FALG").toString());
         if (VALID_DATE_FALG==1){
             Date NOW_TIME=new Date();
-            java.sql.Date START_DATE= (java.sql.Date) temp.get("START_DATE");
-            java.sql.Date END_DATE=(java.sql.Date) temp.get("END_DATE");
+            java.sql.Timestamp START_DATE= (java.sql.Timestamp) temp.get("START_DATE");
+            java.sql.Timestamp END_DATE=(java.sql.Timestamp) temp.get("END_DATE");
 
             // 判断优惠码使用时间是否过期
             if (NOW_TIME.before(START_DATE) || NOW_TIME.after(END_DATE)){
@@ -443,6 +443,18 @@ public class CouponService {
 
 
         return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
+
+    /* *
+     * @Description 优惠码详情查询
+     * @Date 10:54 2019/4/13
+     * @param COUPON_CODE
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord queryCouponByCode(String COUPON_CODE){
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,couponDao.queryCouponByCode(COUPON_CODE));
     }
 
 

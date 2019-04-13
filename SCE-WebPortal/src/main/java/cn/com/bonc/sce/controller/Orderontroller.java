@@ -37,7 +37,14 @@ public class Orderontroller {
 
     @ApiOperation( value = "生成订单", notes = "生成订单", httpMethod = "POST" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class ),
+            @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class ),
+            @ApiResponse( code = 431, message = WebMessageConstants.SCE_PORTAL_MSG_431, response = RestRecord.class ),
+            @ApiResponse( code = 741, message = WebMessageConstants.SCE_PORTAL_MSG_741, response = RestRecord.class ),
+            @ApiResponse( code = 742, message = WebMessageConstants.SCE_PORTAL_MSG_742, response = RestRecord.class ),
+            @ApiResponse( code = 743, message = WebMessageConstants.SCE_PORTAL_MSG_743, response = RestRecord.class ),
+            @ApiResponse( code = 744, message = WebMessageConstants.SCE_PORTAL_MSG_744, response = RestRecord.class )
     } )
     @PostMapping("/add-order/{userId}")
     public RestRecord addNewOrder(@RequestBody Map param, @PathVariable String userId){
@@ -47,10 +54,12 @@ public class Orderontroller {
 
     @ApiOperation( value = "订单取消", notes = "订单取消", httpMethod = "PUT" )
     @ApiResponses( {
-            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class ),
+            @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
-    @PutMapping("/cancel-order")
-    public RestRecord cancelOrder(@RequestBody Map param){
+    @PutMapping("/cancel-order/{userId}")
+    public RestRecord cancelOrder(@RequestBody Map param,@PathVariable String userId){
         return orderService.cancelOrder(param);
     }
 
@@ -63,4 +72,47 @@ public class Orderontroller {
     public RestRecord queryOrderByOrderID(@RequestParam String ORDER_ID){
         return orderService.queryOrderByOrderID(ORDER_ID);
     }
+
+
+    @ApiOperation( value = "上传线下支付凭证", notes = "上传线下支付凭证", httpMethod = "POST" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class ),
+            @ApiResponse( code = 431, message = WebMessageConstants.SCE_PORTAL_MSG_431, response = RestRecord.class )
+    } )
+    @PostMapping("/upload-voucher/{userId}")
+    public RestRecord uploadVoucher(@RequestBody Map param,@PathVariable String userId){
+        return orderService.uploadVoucher(param,userId);
+    }
+
+
+    @ApiOperation( value = "支付凭证审核", notes = "支付凭证审核", httpMethod = "PUT" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class ),
+            @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
+    } )
+    @PutMapping("/review-voucher/{userId}")
+    public RestRecord reviewVoucher(@RequestBody Map param,@PathVariable String userId){
+        return orderService.reviewVoucher(param,userId);
+    }
+
+
+    @ApiOperation( value = "订单列表查询（管理员）", notes = "订单列表查询（管理员）", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping("/query-all-order")
+    public RestRecord queryAllOrder(@RequestParam(required = false) String ORDER_ID,
+                                    @RequestParam(required = false) String START_TIME,
+                                    @RequestParam(required = false) String END_TIME,
+                                    @RequestParam(required = false) String PRODUCT_TYPE_CODE,
+                                    @RequestParam(required = false) String PAYING_TYPE,
+                                    @RequestParam(required = false) String ORDER_STATUS,
+                                    @RequestParam(defaultValue = "1") String ORDER_BY,
+                                    @RequestParam(defaultValue = "1") int pageNum,
+                                    @RequestParam(defaultValue = "10") int pageSize){
+        return orderService.queryAllOrder(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY, pageNum, pageSize);
+    }
+
 }

@@ -22,12 +22,30 @@ import java.util.Map;
 public interface OrderDao {
 
     @RequestMapping(value = "/order-manage/insertOrder",method = RequestMethod.POST)
-    public RestRecord addNewOrder(@RequestBody Map param);
+    RestRecord addNewOrder(@RequestBody Map param);
 
 
     @RequestMapping(value = "/order-manage/cancelOrder",method = RequestMethod.PUT)
-    public RestRecord cancelOrder(@RequestBody Map param);
+    RestRecord cancelOrder(@RequestBody Map param);
 
     @RequestMapping(value = "/order-manage/queryOrderByOrderID",method = RequestMethod.GET)
-    public RestRecord queryOrderByOrderID(@RequestParam("ORDER_ID") String ORDER_ID);
+    RestRecord queryOrderByOrderID(@RequestParam("ORDER_ID") String ORDER_ID);
+
+    @RequestMapping(value = "/order-manage/uploadVoucher",method = RequestMethod.POST)
+    RestRecord uploadVoucher(@RequestBody Map param);
+
+    @RequestMapping(value = "/order-manage/reviewVoucher",method = RequestMethod.PUT)
+    RestRecord reviewVoucher(@RequestBody Map param);
+
+
+    @RequestMapping(value = "/order-manage/queryAllOrder",method = RequestMethod.GET)
+    RestRecord queryAllOrder(@RequestParam("ORDER_ID") String ORDER_ID,
+                             @RequestParam("START_TIME") String START_TIME,
+                             @RequestParam("END_TIME") String END_TIME,
+                             @RequestParam("PRODUCT_TYPE_CODE") String PRODUCT_TYPE_CODE,
+                             @RequestParam("PAYING_TYPE") String PAYING_TYPE,
+                             @RequestParam("ORDER_STATUS") String ORDER_STATUS,
+                             @RequestParam("ORDER_BY") String ORDER_BY,
+                             @RequestParam("pageNum") int pageNum,
+                             @RequestParam("pageSize") int pageSize);
 }

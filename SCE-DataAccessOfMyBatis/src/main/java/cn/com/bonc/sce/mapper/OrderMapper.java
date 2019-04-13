@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,18 +16,29 @@ import java.util.Map;
  */
 public interface OrderMapper {
 
-    public int insertOrder(Map param) throws SQLException;
+     int insertOrder(Map param) throws SQLException;
 
-    public int insertOrderHistroy(@Param("ID") long ID,
+     int insertOrderHistroy(@Param("ID") long ID,
                                   @Param("ORDER_ID") long ORDER_ID,
                                   @Param("STATUS_UPDATE_TIME") Date STATUS_UPDATE_TIME,
                                   @Param("ORDER_STATUS") int ORDER_STATUS) throws SQLException;
 
-    public Map queryOrderByOrderID(@Param("ORDER_ID") long ORDER_ID);
+     Map queryOrderByOrderID(@Param("ORDER_ID") long ORDER_ID);
 
-    public int cancelOrder(@Param("ORDER_ID") long ORDER_ID) throws SQLException;
+     int updateOrderByOrderID(Map param) throws SQLException;
 
+     int insertOrderVoucher(Map param) throws SQLException;
 
-    public int insertOrderVoucher(Map param) throws SQLException;
+     int updateOrderVoucher(Map param) throws SQLException;
+
+     int deleteOrderVoucher(@Param("ORDER_ID") long ORDER_ID);
+
+     List<Map> queryAllOrderByCondition(@Param("ORDER_ID") String ORDER_ID,
+                                        @Param("START_TIME") Date START_TIME,
+                                        @Param("END_TIME") Date END_TIME,
+                                        @Param("PRODUCT_TYPE_CODE") String PRODUCT_TYPE_CODE,
+                                        @Param("PAYING_TYPE") String PAYING_TYPE,
+                                        @Param("ORDER_STATUS") String ORDER_STATUS,
+                                        @Param("ORDER_BY") String ORDER_BY);
 
 }

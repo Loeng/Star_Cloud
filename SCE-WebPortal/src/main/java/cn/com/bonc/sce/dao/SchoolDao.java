@@ -42,5 +42,12 @@ public interface SchoolDao {
     @RequestMapping( value = "/schools", method = RequestMethod.POST )
     RestRecord saveSchool( Map map );
 
-
+    /**
+     * 添加school
+     *
+     * @param school 信息
+     * @return 是否添加成功
+     */
+    @RequestMapping( value = "/schools/addSchool", method = RequestMethod.POST )
+    RestRecord addSchool(School school);
 }

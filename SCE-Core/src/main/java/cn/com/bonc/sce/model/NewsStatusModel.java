@@ -9,6 +9,8 @@ public class NewsStatusModel {
     private String contentStatus;
     private String rejectOpinion;
     private Integer isPublish;
+    private Integer isTop;
+    private Integer topOrder;
 
     public Long getContentId() {
         return contentId;
@@ -40,5 +42,21 @@ public class NewsStatusModel {
 
     public void setIsPublish( Integer isPublish ) {
         this.isPublish = isPublish;
+    }
+
+    public Integer getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop( Integer isTop ) {
+        this.isTop = isTop;
+    }
+
+    public Integer getTopOrder() {
+        return topOrder;
+    }
+
+    public void setTopOrder( Integer topOrder ) {
+        this.topOrder = topOrder;
     }
 }

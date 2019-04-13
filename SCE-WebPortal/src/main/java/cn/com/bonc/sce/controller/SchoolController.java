@@ -84,5 +84,16 @@ public class SchoolController {
         return schoolService.saveSchool(map);
     }
 
+    /**
+     * 新增学校信息
+     * @param school
+     * @return
+     */
+    @ApiOperation(value = "新增学校信息接口",notes = "新增学校信息",httpMethod = "POST")
+    @PostMapping("/addSchool")
+    @ResponseBody
+    public RestRecord addSchool(@RequestBody School school){
+        return schoolService.addSchool(school);
+    }
 
 }

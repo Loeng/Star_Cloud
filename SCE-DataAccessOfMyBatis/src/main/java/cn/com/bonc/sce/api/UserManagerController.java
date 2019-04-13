@@ -5,6 +5,8 @@ import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserService;
 import cn.com.bonc.sce.tool.IdWorker;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -387,5 +390,31 @@ public class UserManagerController {
     public RestRecord addStudent(@RequestBody Map map,
                                  @CurrentUserId String userId){
         return userService.addStudent(map, userId);
+    }
+
+    @ApiOperation(value = "通过用户id修改教师从业信息", notes = "通过用户id修改教师从业信息", httpMethod = "PUT")
+    @PutMapping("/editTeacherPracticeInfo")
+    @ResponseBody
+    public RestRecord editTeacherPracticeInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model) {
+
+        String USER_ID = model.getUserId(); //用户ID
+        String TEACH_CERTIFICATION = model.getTeachCertification(); //教师资格证号
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date TEACH_TIME;
+        Date SCHOOL_TIME;
+        try {
+            TEACH_TIME = sdf.parse(model.getSchoolAge());  //参加工作年月
+            SCHOOL_TIME = sdf.parse(model.getSchoolTime()); //来校年月
+        }catch (Exception e){
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+        String JOB_PROFESSION = model.getJobProfession(); //岗位职业
+        String TEACH_RANGE = model.getTeachRange(); //任课学段
+        String WORK_NUMBER = model.getWorkNumber(); //工号
+
+        int teacherEdit = userService.editTeacherPracticeInfo(USER_ID, TEACH_CERTIFICATION, TEACH_TIME, SCHOOL_TIME,
+                JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER);
+
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200, teacherEdit);
     }
 }

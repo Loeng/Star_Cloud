@@ -45,4 +45,15 @@ public class SchoolService {
 
          return schoolDao.saveSchool(map);
     }
+
+    /**
+     * 添加school
+     *
+     * @param school 信息
+     * @return 是否添加成功
+     */
+    public RestRecord addSchool( School school ) {
+        return schoolDao.addSchool(school);
+    }
+
 }

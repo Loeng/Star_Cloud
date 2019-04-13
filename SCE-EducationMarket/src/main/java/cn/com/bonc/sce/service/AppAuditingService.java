@@ -20,15 +20,19 @@ public class AppAuditingService {
     private AppAuditingDao appAuditingDao;
 
     @Autowired
-    public AppAuditingService(AppAuditingDao appAuditingDao){
+    public AppAuditingService( AppAuditingDao appAuditingDao ) {
         this.appAuditingDao = appAuditingDao;
     }
 
-    public RestRecord appVersionUpdateApprove( String userId, List< Map<String,String> > approveList ) {
+    public RestRecord appVersionUpdateApprove( String userId, List< Map< String, String > > approveList ) {
         return appAuditingDao.appVersionUpdateApprove( userId, approveList );
     }
 
-    public RestRecord appVersionUpdateReject( String userId, List< Map<String,String> > approveList, String rejectReason ) {
-        return appAuditingDao.appVersionUpdateReject( userId, approveList, rejectReason );
+    public RestRecord appVersionDownShelfApprove( String userId, List< Map< String, String > > approveList ) {
+        return appAuditingDao.appVersionDownShelfApprove( userId, approveList );
+    }
+
+    public RestRecord appVersionUpdateReject( String operateType, String userId, List< Map< String, String > > approveList, String rejectReason ) {
+        return appAuditingDao.appVersionUpdateReject(operateType, userId, approveList, rejectReason );
     }
 }
