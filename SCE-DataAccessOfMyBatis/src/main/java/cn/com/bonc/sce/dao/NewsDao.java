@@ -72,4 +72,19 @@ public class NewsDao {
     public int selectTopNewsCount(){
         return newsMapper.selectTopNewsCount();
     }
+
+    /**
+     * 获取点击排行榜
+     * @return
+     */
+    public List<Map> getHitVolumeRank() {
+        return newsMapper.getHitVolumeRank();
+    }
+    /**
+     * 获取最新发布排行榜
+     * @return
+     */
+    public List< Map >  getNewestNewsRank() {
+        return newsMapper.getHitVolumeRank();
+    }
 }

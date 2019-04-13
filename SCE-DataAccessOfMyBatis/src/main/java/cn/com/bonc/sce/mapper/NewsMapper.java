@@ -96,6 +96,20 @@ public interface NewsMapper {
     Map< String, Object > selectNewsDetailById( @Param( "contentId" ) Long contentId );
 
     /**
+     * 获取点击排行
+     *
+     * @return
+     */
+    List< Map >  getHitVolumeRank();
+
+    /**
+     * 获取最新发布排行
+     *
+     * @return
+     */
+    List< Map >  getNewestNewsRank();
+
+    /**
      * 查询头条新闻列表
      *
      * @return

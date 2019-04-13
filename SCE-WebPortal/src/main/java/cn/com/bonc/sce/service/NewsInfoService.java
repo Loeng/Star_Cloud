@@ -70,6 +70,29 @@ public class NewsInfoService {
         return newsInfoDao.selectBackendNewsList(pageSize, pageNum,newsModel);
     }
 
+    /**
+     * 获取点击量排行列表
+     * @param pageSize
+     * @param pageNum
+     * @return
+     */
+    public RestRecord selectVolumeRankList( Integer pageSize, Integer pageNum) {
+
+        return newsInfoDao.selectVolumeRankList(pageSize, pageNum);
+    }
+
+
+    /**
+     * 最新发布列表
+     * @param pageSize
+     * @param pageNum
+     * @return
+     */
+    public RestRecord selectNewestList( Integer pageSize, Integer pageNum) {
+
+        return newsInfoDao.selectNewestList(pageSize, pageNum);
+    }
+
     public RestRecord selectTopNewsList(){
         return newsInfoDao.selectTopNewsList();
     }

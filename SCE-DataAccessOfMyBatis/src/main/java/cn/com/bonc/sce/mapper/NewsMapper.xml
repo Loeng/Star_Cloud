@@ -201,9 +201,48 @@
           T.NEWS_ABSTRACT "newsAbstract",
           T.AUTHOR_NAME "authorName",
           T.NEWS_SOURCE "newsSource",
-          (SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_NEWS_RECORD WHERE NEWS_ID = #{contentId}) "viewCount"
+          NVL((SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_NEWS_RECORD WHERE NEWS_ID = T.CONTENT_ID),0) "viewCount"
         FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
         WHERE CONTENT_ID = #{contentId}
+    </select>
+
+    <!--获取点击排行-->
+    <select id="getHitVolumeRank" resultType="Map">
+        SELECT
+        T.CONTENT_ID "contentId",
+        T.CONTENT_TITLE "contentTitle",
+        T.CONTENT "content",
+        T.PUBLISH_DATE "publishDate",
+        T.PIC_URL "picUrl",
+        T.NEWS_ABSTRACT "newsAbstract",
+        T.AUTHOR_NAME "authorName",
+        T.NEWS_SOURCE "newsSource",
+        NVL((SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_NEWS_RECORD WHERE NEWS_ID = T.CONTENT_ID),0) "viewCount"
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
+        WHERE 1=1 AND
+        T.IS_DELETE = 1
+        AND T.CONTENT_STATUS = '1'
+        AND T.IS_PUBLISH=1
+        ORDER BY "viewCount" DESC
+    </select>
+
+    <!--获取最新发布排行-->
+    <select id="getNewestNewsRank" resultType="Map">
+        SELECT
+        T.CONTENT_ID "contentId",
+        T.CONTENT_TITLE "contentTitle",
+        T.CONTENT "content",
+        T.PUBLISH_DATE "publishDate",
+        T.PIC_URL "picUrl",
+        T.NEWS_ABSTRACT "newsAbstract",
+        T.AUTHOR_NAME "authorName",
+        T.NEWS_SOURCE "newsSource"
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
+        WHERE 1=1 AND
+        T.IS_DELETE = 1
+        AND T.CONTENT_STATUS = '1'
+        AND T.IS_PUBLISH=1
+        ORDER BY T.PUBLISH_DATE DESC
     </select>
 
     <resultMap id="NewsResultMap" type="cn.com.bonc.sce.bean.NewsParamBean">

@@ -205,4 +205,25 @@ public class NewsController {
         PageInfo pageInfo = new PageInfo( list );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
+
+
+    @PostMapping( "/select-hit-rank" )
+    @ResponseBody
+    public RestRecord selectHitVolumeRank( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
+                                           @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum ) {
+        PageHelper.startPage( pageNum, pageSize );
+        List<Map> list = newsDao.getHitVolumeRank();
+        PageInfo pageInfo = new PageInfo( list );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, pageInfo );
+    }
+
+    @PostMapping( "/select-newest-rank" )
+    @ResponseBody
+    public RestRecord selectNewestRank( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
+                                           @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum ) {
+        PageHelper.startPage( pageNum, pageSize );
+        List<Map> list = newsDao.getNewestNewsRank();
+        PageInfo pageInfo = new PageInfo( list );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, pageInfo );
+    }
 }

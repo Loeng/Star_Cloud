@@ -252,6 +252,47 @@ public class NewsInfoController {
         return newsInfoService.getBackendNewsList(pageSize, pageNum,newsModel);
     }
 
+
+    /**
+     * 获取点击量列表（前台）
+     * @return
+     */
+    @ApiOperation( value = "获取点击量列表（前台）", notes = "获取点击量列表（前台）", httpMethod = "POST" )
+
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
+    } )
+    @PostMapping( "/getNewsRankList/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getNewsRankList(@PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                      @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum) {
+        return newsInfoService.selectVolumeRankList(pageSize, pageNum);
+    }
+
+    /**
+     * 获取最新发布列表（前台）
+     * @return
+     */
+    @ApiOperation( value = "获取最新发布列表（前台）", notes = "获取最新发布列表（前台）", httpMethod = "POST" )
+
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
+    } )
+    @PostMapping( "/getNewestNewsList/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getNewestNewsList(@PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                      @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum) {
+        return newsInfoService.selectNewestList(pageSize, pageNum);
+    }
+
     /**
      * 后台头条新闻管理列表查询接口
      *

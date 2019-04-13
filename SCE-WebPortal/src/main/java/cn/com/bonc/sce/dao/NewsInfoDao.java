@@ -121,6 +121,23 @@ public interface NewsInfoDao {
     RestRecord selectBackendNewsList(@RequestParam( "pageSize" ) Integer pageSize,
                               @RequestParam( "pageNum" ) Integer pageNum,
                               NewsParamModel newsModel);
+
+    /**
+     * 获取点击量列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-hit-rank", method = RequestMethod.POST )
+    RestRecord selectVolumeRankList(@RequestParam( "pageSize" ) Integer pageSize,
+                                     @RequestParam( "pageNum" ) Integer pageNum);
+
+    /**
+     * 获取最新列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-newest-rank", method = RequestMethod.POST )
+    RestRecord selectNewestList(@RequestParam( "pageSize" ) Integer pageSize,
+                                    @RequestParam( "pageNum" ) Integer pageNum);
+
     /**
      * 查询头条新闻列表
      *
