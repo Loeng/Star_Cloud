@@ -448,6 +448,18 @@ public class CouponService {
 
 
     /* *
+     * @Description 优惠码详情查询
+     * @Date 10:54 2019/4/13
+     * @param COUPON_CODE
+     * @return cn.com.bonc.sce.rest.RestRecord
+     */
+    public RestRecord queryCouponByCode(String COUPON_CODE){
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,couponDao.queryCouponByCode(COUPON_CODE));
+    }
+
+
+
+    /* *
      * @Description  优惠码主表初始化
      * @Date 11:58 2019/4/3
      * @param

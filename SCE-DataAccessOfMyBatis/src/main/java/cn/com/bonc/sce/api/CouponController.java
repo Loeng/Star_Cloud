@@ -73,7 +73,7 @@ public class CouponController {
                                                 @RequestParam(required = false) String COUPON_TYPE_CODE,
                                                 @RequestParam(required = false) String REVIEW_STATE,
                                                 @RequestParam(required = false) String OVER_FLAG,
-                                                @RequestParam(required = false) String ORDER_BY,
+                                                @RequestParam String ORDER_BY,
                                                 @RequestParam int pageNum,
                                                 @RequestParam int pageSize){
         return couponService.queryAllCouponByCondition(COUPON_CODE, USER_NAME, COUPON_TYPE_CODE, REVIEW_STATE, OVER_FLAG, ORDER_BY, pageNum, pageSize);
@@ -95,6 +95,13 @@ public class CouponController {
                                 @RequestParam String PRODUCT_TYPE_CODE,
                                 @RequestParam String ORIGIN_PRICE){
         return couponService.calCoupon(COUPON_CODE, PRODUCT_TYPE_CODE, ORIGIN_PRICE);
+    }
+
+
+    @ApiOperation(value = "优惠码详情查询", notes="优惠码详情查询", httpMethod = "GET")
+    @GetMapping("/queryCouponByCode")
+    public RestRecord queryCouponByCode(@RequestParam String COUPON_CODE){
+        return couponService.queryCouponByCode(COUPON_CODE);
     }
 
 }

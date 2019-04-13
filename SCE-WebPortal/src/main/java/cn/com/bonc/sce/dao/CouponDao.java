@@ -65,4 +65,8 @@ public interface CouponDao {
                                 @RequestParam("PRODUCT_TYPE_CODE") String PRODUCT_TYPE_CODE,
                                 @RequestParam("ORIGIN_PRICE") String ORIGIN_PRICE);
 
+
+    @RequestMapping(value = "/coupon/queryCouponByCode",method = RequestMethod.GET)
+    RestRecord queryCouponByCode(@RequestParam("COUPON_CODE") String COUPON_CODE);
+
 }

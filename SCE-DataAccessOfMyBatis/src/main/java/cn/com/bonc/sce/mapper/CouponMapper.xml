@@ -135,11 +135,85 @@
         <if test='OVER_FLAG != null and OVER_FLAG != ""'>
             and A.OVER_FLAG=#{OVER_FLAG}
         </if>
+
+
+        <if test='ORDER_BY == "1"'>
+            order by A.COUPON_CODE asc
+        </if>
+        <if test='ORDER_BY == "2"'>
+            order by A.COUPON_CODE desc
+        </if>
+
+        <if test='ORDER_BY == "3"'>
+            order by B.USER_NAME asc
+        </if>
+        <if test='ORDER_BY == "4"'>
+            order by B.USER_NAME desc
+        </if>
+
+        <if test='ORDER_BY == "5"'>
+            order by COUPONTYPEDIC.COUPON_TYPE_CODE asc
+        </if>
+        <if test='ORDER_BY == "6"'>
+            order by COUPONTYPEDIC.COUPON_TYPE_CODE desc
+        </if>
+
+        <if test='ORDER_BY == "7"'>
+            order by TEMP.GOODS_TYPE_NAME asc
+        </if>
+        <if test='ORDER_BY == "8"'>
+            order by TEMP.GOODS_TYPE_NAME desc
+        </if>
+
+        <if test='ORDER_BY == "9"'>
+            order by USE_TIMES asc
+        </if>
+        <if test='ORDER_BY == "10"'>
+            order by USE_TIMES desc
+        </if>
+
+        <if test='ORDER_BY == "11"'>
+            order by A.OVER_FLAG asc
+        </if>
+        <if test='ORDER_BY == "12"'>
+            order by A.OVER_FLAG desc
+        </if>
+
+        <if test='ORDER_BY == "13"'>
+            order by A.USED_TIMES asc
+        </if>
+        <if test='ORDER_BY == "14"'>
+            order by A.USED_TIMES desc
+        </if>
+
+        <if test='ORDER_BY == "15"'>
+            order by REVIEW_DATE asc
+        </if>
+        <if test='ORDER_BY == "16"'>
+            order by REVIEW_DATE desc
+        </if>
+
+        <if test='ORDER_BY == "17"'>
+            order by A.REVIEW_STATE asc
+        </if>
+        <if test='ORDER_BY == "18"'>
+            order by A.REVIEW_STATE desc
+        </if>
+
+        <if test='ORDER_BY == "19"'>
+            order by SUBMIT_DATE asc
+        </if>
+        <if test='ORDER_BY == "20"'>
+            order by SUBMIT_DATE desc
+        </if>
     </select>
 
     <select id="queryCouponByCode" resultType="map">
         SELECT TEMP.COUPON_CODE,TEMP.USE_TIMES_FLAG,TEMP.TOTAL_USE_TIMES,TEMP.VALID_USE_TIMES,
-               TEMP.VALID_DATE_FALG,TEMP.START_DATE,TEMP.END_DATE,TEMP.USED_TIMES,TEMP.OVER_FLAG,
+               TEMP.VALID_DATE_FALG,
+               TO_CHAR(TEMP.START_DATE,'yyyy-MM-dd HH24:mi:ss') AS START_DATE,
+               TO_CHAR(TEMP.END_DATE,'yyyy-MM-dd HH24:mi:ss') AS END_DATE,
+               TEMP.USED_TIMES,TEMP.OVER_FLAG,
                TEMP.COUPON_TYPE_CODE,C.COUPON_TYPE_NAME,B.REBATE_CAL,B.REBATE_DETAIL,D.GOODS_TYPE_CODE,D.GOODS_TYPE_CODE2,TEMP.IS_DELETE,TEMP.STATE
         FROM STARCLOUDPORTAL.SCE_COUPON TEMP
         LEFT JOIN STARCLOUDPORTAL.SCE_COUPON_REBATE_DETAIL B ON TEMP.COUPON_CODE=B.COUPON_CODE

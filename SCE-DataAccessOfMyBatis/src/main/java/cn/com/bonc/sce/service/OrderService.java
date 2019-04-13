@@ -54,8 +54,6 @@ public class OrderService {
         // 校验所需参数是否齐全
         if (!parm.containsKey("PAYING_TYPE")
                 || !parm.containsKey("BUYING_USER_ID")
-                || !parm.containsKey("PRODUCT_NAME")
-                || !parm.containsKey("PRODUCT_ID")
                 || !parm.containsKey("PRODUCT_TYPE_CODE")
                 || !parm.containsKey("PRICE_CALCULATION_METHOD")
                 || !parm.containsKey("ORIGIN_PRICE")
