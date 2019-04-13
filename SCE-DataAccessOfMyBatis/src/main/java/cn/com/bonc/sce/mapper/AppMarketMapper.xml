@@ -40,7 +40,7 @@ GROUP BY
         on p.pending_item_type = t.id
         LEFT JOIN STARCLOUDMARKET.SCE_MARKET_APP_INFO i
 		ON b.APP_ID = i.APP_ID
-        where b.is_delete = 1 and b.status = 1 and b.operate_user_id = #{param1}
+        where b.is_delete = 1 and b.status = 0 and b.operate_user_id = #{param1}
         order by b.create_time desc
     </select>
 
@@ -56,7 +56,7 @@ GROUP BY
 
     <select id="selectUserToDoCount" resultType="int">
         select count(*) from  STARCLOUDPORTAL.sce_backlog b
-        where b.is_delete = 1 and b.status = 1 and b.operate_user_id = #{param1}
+        where b.is_delete = 1 and b.status = 0 and b.operate_user_id = #{param1}
     </select>
 
     <insert id="insertBacklog">
@@ -69,7 +69,7 @@ GROUP BY
         <if test="content != null and content != ''">
             #{content},
         </if>
-         #{userId}, #{operateUserId},SYSDATE, 1, #{url}, #{title}, #{appId})
+         #{userId}, #{operateUserId},SYSDATE, 0, #{url}, #{title}, #{appId})
     </insert>
 
     <select id="selectAppToken" resultType="String">
@@ -102,7 +102,7 @@ GROUP BY
           U.GENDER as gender,
           U.USER_TYPE as userType,
           U.MAIL_ADDRESS as mailAddress,
-          CEIL((SYSDATE - T.TEACH_TIME)/365) as schoolAge,
+          T.SCHOOL_AGE,
           I.INSTITUTION_ID as institutionId,
           P.FAMILY_ROLE as familyRole,
           S.GRADE as grade,

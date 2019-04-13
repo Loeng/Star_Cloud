@@ -150,9 +150,9 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      */
     @Modifying
     @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_TEACHER(USER_ID,SCHOOL_ID,POSITION," +
-            "NATION_CODE,WORK_NUMBER,SCHOOL_TIME,NATIONLITY,TEACH_TIME,ACADEMIC_QUALIFICATION,TEACH_RANGE) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)")
-    int saveTeacher(String userID, String schoolId, String position, String nationCode, String workNumber,
-                    Date schoolTime, String nationality, Date teachTime, String academicQualification, String teachRange);
+            "WORK_NUMBER,SCHOOL_TIME,TEACH_TIME,ACADEMIC_QUALIFICATION,TEACH_RANGE) VALUES (?1,?2,?3,?4,?5,?6,?7,?8)")
+    int saveTeacher(String userID, String schoolId, String position, String workNumber,
+                    Date schoolTime, Date teachTime, String academicQualification, String teachRange);
 
 
     /**

@@ -11,12 +11,13 @@
         WHERE s.USER_ID in
         (SELECT STUDENT_USER_ID FROM STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL r WHERE PARENT_USER_ID=#{id})
         AND s.IS_DELETE=1
+        and r.PARENT_USER_ID = #{id}
     </select>
 
     <insert id="bindStudent">
         INSERT INTO STARCLOUDPORTAL.SCE_BINDING_APPLY(ID,APPLY_USER_ID,RELATIONSHIP,TARGET_USER_ID,
-              APPLY_TYPE,IS_DELETE,BINDING_USER_ID)
-        VALUES (#{id},#{applyUserId},#{relationship},#{targetUserId},#{applyType},1,#{bindUserId})
+              APPLY_TYPE,APPLY_RESULT,BINDING_USER_ID)
+        VALUES (#{id},#{applyUserId},#{relationship},#{targetUserId},#{applyType},0,#{bindUserId})
     </insert>
 
     <delete id="unbind">
@@ -25,11 +26,28 @@
         AND STUDENT_USER_ID=#{studentId}
     </delete>
 
+    <select id="selectIsMain" resultType="int">
+        select IS_MAIN from STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL
+        where PARENT_USER_ID = #{userId}
+        and STUDENT_USER_ID = #{id}
+    </select>
+
     <select id="getParentList" resultType="Map">
-        SELECT r.PARENT_USER_ID,r.IS_MAIN,r.RELATIONSHIP,u.USER_NAME,u.HEAD_PORTRAIT
+        SELECT r.PARENT_USER_ID,r.IS_MAIN,r.RELATIONSHIP,u.USER_NAME,u.HEAD_PORTRAIT,A.APPLY_RESULT
         FROM STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL r
         LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER u ON r.PARENT_USER_ID=u.USER_ID AND u.IS_DELETE=1
-        WHERE r.STUDENT_USER_ID=#{id}
+        LEFT JOIN STARCLOUDPORTAL.SCE_BINDING_APPLY A
+        ON A.BINDING_USER_ID = R.STUDENT_USER_ID and A.APPLY_RESULT != 1
+        <if test="isMain == 1">
+            and A.TARGET_USER_ID = #{userId}
+            and A.APPLY_USER_ID = r.PARENT_USER_ID
+        </if>
+        <if test="isMain == 0">
+            and A.APPLY_USER_ID = #{userId}
+            and A.TARGET_USER_ID = r.PARENT_USER_ID
+        </if>
+        WHERE r.STUDENT_USER_ID = #{id}
+        and A.APPLY_TYPE = 0
     </select>
 
     <select id="getApplyList" resultType="Map">
@@ -39,8 +57,81 @@
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT s ON r.BINDING_USER_ID=s.USER_ID
         LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER u ON s.USER_ID=u.USER_ID AND u.IS_DELETE=1
         LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION i ON u.ORGANIZATION_ID=i.ID AND i.IS_DELETE=1
-        WHERE TARGET_USER_ID=#{id}
+        WHERE APPLY_USER_ID=#{id}
         AND r.IS_DELETE=1
         AND r.APPLY_RESULT != 1
+        and r.APPLY_TYPE = 1
     </select>
+
+    <insert id="addApplyMain">
+        INSERT into STARCLOUDPORTAL.SCE_BINDING_APPLY(id,APPLY_USER_ID,TARGET_USER_ID,APPLY_TYPE,APPLY_RESULT,BINDING_USER_ID)
+        VALUES(#{id}, #{userId}, #{targetUserId}, 0, 0, #{studentUserId})
+    </insert>
+
+    <update id="updateApplyMain">
+        update STARCLOUDPORTAL.SCE_BINDING_APPLY set APPLY_RESULT = 0
+        where  APPLY_USER_ID = #{userId} and TARGET_USER_ID = #{targetUserId} and BINDING_USER_ID = #{studentUserId}
+        and APPLY_TYPE = 0
+    </update>
+
+    <select id="selectApply" resultType="BigDecimal">
+        select  id from STARCLOUDPORTAL.SCE_BINDING_APPLY
+        where  APPLY_USER_ID = #{userId} and TARGET_USER_ID = #{targetUserId} and BINDING_USER_ID = #{studentUserId}
+        and APPLY_TYPE = 0
+    </select>
+
+    <select id="selectApplyMain" resultType="String">
+        select APPLY_RESULT from  STARCLOUDPORTAL.SCE_BINDING_APPLY
+        where APPLY_USER_ID = #{userId} and BINDING_USER_ID = #{studentUserId}
+        and APPLY_RESULT = 0
+        and APPLY_TYPE = 0
+    </select>
+
+    <update id="auditApplyMain" >
+        UPDATE STARCLOUDPORTAL.SCE_BINDING_APPLY SET APPLY_RESULT = #{audit}
+        WHERE APPLY_USER_ID = #{applyUserId}
+        AND TARGET_USER_ID = #{userId}
+        AND BINDING_USER_ID = #{studentUserId}
+        and APPLY_TYPE = 0
+    </update>
+
+    <delete id="delStudentParentRel">
+        update STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL
+        set IS_MAIN = 0
+        WHERE PARENT_USER_ID = #{userId}
+        and STUDENT_USER_ID = #{studentUserId}
+    </delete>
+
+    <update id="updateStudentParentRel">
+        update STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL
+        set IS_MAIN = 1
+        WHERE PARENT_USER_ID = #{applyUserId}
+        AND STUDENT_USER_ID = #{studentUserId}
+    </update>
+
+    <select id="getMainPhone" resultType="String">
+        SELECT PHONE_NUMBER FROM STARCLOUDPORTAL.SCE_COMMON_USER U WHERE USER_ID IN (
+        SELECT SP.PARENT_USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL SP
+        ON U.USER_ID = SP.STUDENT_USER_ID AND SP.IS_MAIN = 1
+        WHERE U.LOGIN_NAME = #{studentLoginName}
+        )
+    </select>
+
+    <select id="selectUserTypeByUserId" resultType="BigDecimal">
+        SELECT USER_TYPE
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER
+         WHERE USER_ID = #{userId}
+    </select>
+
+    <insert id="addStudentParentRel">
+        INSERT into STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL(id,PARENT_USER_ID,STUDENT_USER_ID,IS_MAIN,RELATIONSHIP)
+        VALUES(#{id}, #{parentUserId}, #{studentUserId},#{isMain},#{relationship})
+    </insert>
+
+    <delete id="delAudit">
+        delete from STARCLOUDPORTAL.SCE_BINDING_APPLY
+        where APPLY_USER_ID = #{applyUserId}
+		and BINDING_USER_ID = #{targetUserId}
+    </delete>
 </mapper>

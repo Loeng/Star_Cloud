@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Map;
+
 /**
  * Created by Charles on 2019/3/28.
  */
@@ -25,8 +27,20 @@ public interface ParentDao {
     RestRecord unbind(@RequestParam("parentId")String parentId, @RequestParam("studentId")String studentId);
 
     @RequestMapping( value = "/parent/getParentList", method = RequestMethod.GET )
-    RestRecord getParentList(@RequestParam("id") String id);
+    RestRecord getParentList(@RequestParam("userId") String userId, @RequestParam("id") String id);
 
     @RequestMapping( value = "/parent/getApplyList", method = RequestMethod.GET )
     RestRecord getApplyList(@RequestParam("id") String id);
+
+    @RequestMapping( value = "/parent/applyMain", method = RequestMethod.POST )
+    RestRecord applyMain(@RequestParam("userId") String userId,
+                         @RequestBody Map map);
+
+    @RequestMapping( value = "/parent/auditApplyMain", method = RequestMethod.PUT )
+    RestRecord auditApplyMain(@RequestParam("userId") String userId,
+                              @RequestBody Map map);
+
+    @RequestMapping( value = "/parent/getMainPhone", method = RequestMethod.GET )
+    RestRecord getMainPhone(@RequestParam("userId") String userId,
+                            @RequestParam("studentLoginName") String studentLoginName);
 }

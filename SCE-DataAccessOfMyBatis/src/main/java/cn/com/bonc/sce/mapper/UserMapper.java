@@ -63,9 +63,10 @@ public interface UserMapper {
     int editUser(@Param("user_id") String user_id, @Param("certificate_type")Integer certificate_type,
                  @Param("certificate_number")String certificate_number, @Param("user_name")String user_name,
                  @Param("gender")String gender, @Param("phone_number")String phone_number,
-                 @Param("mail_address")String mail_address, @Param("birthdate")String birthdate);
+                 @Param("mail_address")String mail_address, @Param("birthdate")String birthdate,
+                 @Param("nationCode") String nationCode, @Param("nationality") String nationality);
 
-    int editTeacher(@Param("user_id") String user_id,@Param("nation_code")String nation_code,@Param("nationlity") String nationlity,
+    int editTeacher(@Param("user_id") String user_id,
                     @Param("academic_qualification")String academic_qualification, @Param("work_number")String work_number,
                     @Param("school_time")String school_time, @Param("teach_time")String teach_time,
                     @Param("job_code")String job_code, @Param("teach_range")Integer teach_range);
@@ -92,4 +93,27 @@ public interface UserMapper {
                                   @Param("userName")String userName, @Param("loginName")String loginName,
                                   @Param("gender")String gender, @Param("position")String position,
                                   @Param("accountStatus")Integer accountStatus);
+
+    List< Map > getStudents( @Param("userName") String userName,
+                             @Param("loginName") String loginName,
+                             @Param("studentNumber") String studentNumber,
+                             @Param("gender") String gender,
+                             @Param("grade") String grade,
+                             @Param("accountStatus") String accountStatus,
+                             @Param("organizationId") String organizationId);
+
+    String getOrganizationIdByUserId( @Param( "userId" ) String userId );
+
+    Map getStudentInfo(@Param("userId") String userId);
+
+    int editStudentOfStudent(Map map);
+
+    int editStudentOfUser(Map map);
+
+    int delStudentOfStudent(@Param("userId") String userId);
+
+    int delStudentOfUser(@Param("userId") String userId);
+
+    void insertStudent(Map map);
+
 }

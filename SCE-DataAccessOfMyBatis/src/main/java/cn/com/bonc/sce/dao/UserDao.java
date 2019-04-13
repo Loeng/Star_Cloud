@@ -84,12 +84,13 @@ public class UserDao {
         return userMapper.getTeacherInfo(id);
     }
 
-    public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String mail_address, String birthdate) {
-        return userMapper.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate);
+    public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number,
+                        String mail_address, String birthdate, String nationCode, String nationality) {
+        return userMapper.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate, nationCode, nationality);
     }
 
-    public int editTeacher(String user_id,String nation_code, String nationlity, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
-        return userMapper.editTeacher( user_id,nation_code,nationlity,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
+    public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
+        return userMapper.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
     }
 
     public int addUser(Long user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate) {
@@ -108,4 +109,42 @@ public class UserDao {
     public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus) {
         return userMapper.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus);
     }
+
+    public List< Map > getStudents(String userName, String loginName, String studentNumber, String gender, String grade,
+                                   String accountStatus, String organizationId){
+        return userMapper.getStudents( userName, loginName, studentNumber, gender, grade, accountStatus, organizationId );
+    }
+
+    public String getOrganizationIdByUserId( String userId ){
+        return userMapper.getOrganizationIdByUserId( userId );
+    }
+
+    public Map getStudentInfo(String userId){
+        return userMapper.getStudentInfo(userId);
+    }
+
+    public int editStudentOfStudent(Map map){
+        return userMapper.editStudentOfStudent(map);
+    }
+
+    public int editStudentOfUser(Map map){
+        return userMapper.editStudentOfUser(map);
+    }
+
+    public int delStudentOfStudent(String userId){
+        return userMapper.delStudentOfStudent(userId);
+    }
+
+    public int delStudentOfUser(String userId){
+        return userMapper.delStudentOfUser(userId);
+    }
+
+    public String selectUserIdByLoginName(String loginName){
+        return userMapper.selectUserIdByLoginName(loginName);
+    }
+
+    public void insertStudent(Map map){
+        userMapper.insertStudent(map);
+    }
+
 }

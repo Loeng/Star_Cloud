@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.StudentService;
 import cn.com.bonc.sce.tool.IdWorker;
@@ -46,20 +47,29 @@ public class StudentController {
     @Transactional
     public RestRecord audit(@RequestBody @ApiParam( example = "{\"id\": \"c0190f3e1ae54dc890a4a2afee10f527\",\"relationship\": \"父子\",\"rejectReason\": \"55555555555\",\"applyResult\": 0,\"bindUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\",\"applyUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\"}" ) String json){
         Map map = (Map) JSONUtils.parse(json);
-        String id = (String) map.get("id");
-        String relationship = (String) map.get("relationship");
-        String rejectReason = (String) map.get("rejectReason");
-        Integer applyResult = (Integer) map.get("applyResult");
-        String bindUserId = (String) map.get("bindUserId");
-        String applyUserId = (String) map.get("applyUserId");
-
-        int auditCount = studentService.audit(id,applyResult,rejectReason);
-        int relationCount = studentService.addRelation(idWorker.nextId(),applyUserId,bindUserId,relationship);
-
-        if (auditCount==1 && relationCount==1){
-            return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
-        }else {
-            return new RestRecord(407,MessageConstants.SCE_MSG_407,0);
+        String id = null;
+        String relationship = null;
+        String rejectReason = null;
+        Integer applyResult = null;
+        String bindUserId = null;
+        String applyUserId = null;
+        try {
+            id = map.get("id").toString();
+            relationship = map.get("relationship").toString();
+            rejectReason = map.get("rejectReason").toString();
+            applyResult = Integer.parseInt(map.get("applyResult").toString());
+            bindUserId = map.get("bindUserId").toString();
+            applyUserId = map.get("applyUserId").toString();
+        }catch (NullPointerException e){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431,"必要") );
+        }catch (NumberFormatException e){
+            return new RestRecord( 431, "applyResult参数不正确");
         }
+
+        studentService.audit(id,applyResult,rejectReason);
+        if(applyResult == 1){
+           studentService.addRelation(idWorker.nextId(),applyUserId,bindUserId,relationship);
+        }
+        return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
     }
 }

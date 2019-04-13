@@ -4,8 +4,8 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.mapper.AppMarketMapper;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,8 @@ public class AppMarketService {
         RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         List list = appMarketMapper.selectUserToDo( userId );
         restRecord.setData( list );
-        restRecord.setTotal( appMarketMapper.selectUserToDoCount( userId ) );
+        long total = list == null ? 0L : ((Page<Map<String, Object>>) list).getTotal();
+        restRecord.setTotal( total );
         return restRecord;
     }
 

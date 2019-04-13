@@ -1,13 +1,15 @@
 package cn.com.bonc.sce.controller;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.rest.RestRecord;
-import cn.com.bonc.sce.service.AgencyService;
 import cn.com.bonc.sce.service.ParentService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Created by Charles on 2019/3/28.
@@ -50,8 +52,8 @@ public class ParentController {
     @ApiOperation(value = "获取学生对应的家长列表", notes="获取学生对应的家长列表", httpMethod = "GET")
     @GetMapping("/getParentList")
     @ResponseBody
-    public RestRecord getParentList(@RequestParam( "id" ) String id){
-        return parentService.getParentList(id);
+    public RestRecord getParentList(@CurrentUserId String userId,@RequestParam( "id" ) String id){
+        return parentService.getParentList(userId, id);
     }
 
     @ApiOperation(value = "获取申请列表", notes="获取申请列表", httpMethod = "GET")
@@ -59,6 +61,35 @@ public class ParentController {
     @ResponseBody
     public RestRecord getApplyList(@RequestParam( "id" ) String id){
         return parentService.getApplyList(id);
+    }
+
+    /**
+     *  防止重复添加
+     * @param userId 用户ID
+     * @param map targetUserId studentUserId
+     * @return RestRecord
+     */
+    @ApiOperation( value = "申请成为监护人", notes = "家长提交申请", httpMethod = "POST" )
+    @PostMapping( "/applyMain" )
+    public RestRecord applyMain(@CurrentUserId String userId, @RequestBody Map map){
+            return parentService.applyMain(userId, map);
+    }
+
+    /**
+     * @param userId 用户id
+     * @param map audit-审核，1通过，2不通过  applyUserId  - 申请人id  studentUserId -- 学生id
+     * @return RestRecord
+     */
+    @ApiOperation( value = "审核家长的申请成为监护人", notes = "同意或者不同意申请", httpMethod = "PUT" )
+    @PutMapping( "/auditApplyMain" )
+    public RestRecord auditApplyMain(@CurrentUserId String userId, @RequestBody Map map){
+        return parentService.auditApplyMain(userId, map);
+    }
+
+    @ApiOperation( value = "获取手机号", notes = "根据学生账号获取其监护人的手机号", httpMethod = "GET" )
+    @GetMapping( "/getMainPhone" )
+    public RestRecord getMainPhone(@CurrentUserId String userId, @RequestParam String studentLoginName){
+        return parentService.getMainPhone(userId, studentLoginName);
     }
 
 }

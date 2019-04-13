@@ -3,10 +3,16 @@ package cn.com.bonc.sce.service;
 import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserDao;
+import cn.com.bonc.sce.rest.RestRecord;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -86,12 +92,13 @@ public class UserService {
         return userDao.getTeacherInfo(id);
     }
 
-    public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String mail_address, String birthdate) {
-        return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate);
+    public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender,
+                        String phone_number, String mail_address, String birthdate, String nationCode, String nationality) {
+        return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate,nationCode, nationality);
     }
 
-    public int editTeacher(String user_id,String nation_code, String nationlity, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
-        return userDao.editTeacher( user_id,nation_code,nationlity,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
+    public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
+        return userDao.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
     }
 
     public int addUser(Long user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate) {
@@ -110,4 +117,64 @@ public class UserService {
     public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus) {
         return userDao.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus);
     }
+
+    public RestRecord getStudents(String userName, String loginName, String studentNumber, String gender, String grade, String accountStatus,
+                                  String userId, String pageNum, String pageSize){
+        String organizationId = userDao.getOrganizationIdByUserId( userId );
+        try {
+            PageHelper.startPage( Integer.parseInt( pageNum ), Integer.parseInt( pageSize ) );
+        } catch ( NumberFormatException e ) {
+            log.warn( "不支持的分页参数 -> pageNum:{},pageSize:{}", pageNum, pageSize );
+            return new RestRecord( 433, WebMessageConstants.SCE_PORTAL_MSG_433 );
+        }
+        List list = userDao.getStudents( userName, loginName, studentNumber, gender, grade, accountStatus, organizationId );
+        long total = list == null ? 0L : ((Page) list).getTotal();
+        RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, list );
+        restRecord.setTotal( total );
+        return restRecord;
+    }
+
+    public RestRecord getStudentInfo( String userId ){
+        Map map = userDao.getStudentInfo(userId);
+        if(map == null){
+            return new RestRecord( 434, String.format( WebMessageConstants.SCE_PORTAL_MSG_434, "" ) );
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map );
+    }
+
+    @Transactional( rollbackFor = Exception.class )
+    public RestRecord editStudent(Map map){
+        int count1 =  userDao.editStudentOfUser(map);
+        int count2 =  userDao.editStudentOfStudent(map);
+        if(count1 >0 && count2 > 0 ){
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        }else {
+            return new RestRecord( 434, String.format( WebMessageConstants.SCE_PORTAL_MSG_434, "修改学生失败，" ) );
+        }
+    }
+
+    @Transactional( rollbackFor = Exception.class )
+    public RestRecord delStudent(String userId){
+        int count1 = userDao.delStudentOfStudent(userId);
+        int count2 = userDao.delStudentOfUser(userId);
+        if(count1 >0 && count2 > 0 ){
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        }else {
+            return new RestRecord( 434, String.format( WebMessageConstants.SCE_PORTAL_MSG_434, "删除学生失败，" ) );
+        }
+    }
+
+    @Transactional( isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class )
+    public RestRecord addStudent(Map map, String userId){
+        String organizationId = userDao.getOrganizationIdByUserId(userId);
+        //插入学生到学生表
+
+
+        return null;
+    }
+
+    public String selectUserIdByLoginName(String loginName){
+        return userDao.selectUserIdByLoginName(loginName);
+    }
+
 }

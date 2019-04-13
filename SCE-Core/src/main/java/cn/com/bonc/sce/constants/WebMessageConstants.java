@@ -73,6 +73,9 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_431 = "缺失 %s 参数";
     String SCE_PORTAL_MSG_432 = "%s，在Excel中的第 %d 行";
     String SCE_PORTAL_MSG_433 = "不支持的分页参数";
+    String SCE_PORTAL_MSG_434 = "%s无相关学生信息";
+    String SCE_PORTAL_MSG_435 = "%s，请勿重复提交";
+    String SCE_PORTAL_MSG_436 = "您无权进行此操作";
 
     String SCE_PORTAL_MSG_440 = "您不是机构用户，无权进行此操作";
 

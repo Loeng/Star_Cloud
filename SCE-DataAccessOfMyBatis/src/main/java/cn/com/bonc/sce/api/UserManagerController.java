@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.bean.UserBean;
@@ -267,8 +268,8 @@ public class UserManagerController {
         Integer TEACH_RANGE = (Integer) map.get("TEACH_RANGE");
 
         int userEdit = userService.editUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, USER_NAME,
-                GENDER, PHONE_NUMBER, MAIL_ADDRESS, BIRTHDATE);
-        int teacherEdit = userService.editTeacher(USER_ID, NATION_CODE, NATIONLITY, ACADEMIC_QUALIFICATION,
+                GENDER, PHONE_NUMBER, MAIL_ADDRESS, BIRTHDATE,NATION_CODE,NATIONLITY);
+        int teacherEdit = userService.editTeacher(USER_ID, ACADEMIC_QUALIFICATION,
                 WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, JOB_CODE, TEACH_RANGE);
 
         if (userEdit == 1 && teacherEdit == 1) {
@@ -278,7 +279,7 @@ public class UserManagerController {
         }
     }
 
-    @ApiOperation(value = "添加教师", notes = "直接添加或者通过转入添加，通过前端出入的addType判断添加方式", httpMethod = "POST")
+    @ApiOperation(value = "添加教师", notes = "直接添加或者通过转入添加，通过前端传入的addType判断添加方式", httpMethod = "POST")
     @PostMapping("/addTeacher")
     @ResponseBody
     @Transactional
@@ -352,5 +353,39 @@ public class UserManagerController {
         List<Map> teachers = userService.getTransferTeachers(getType,organizationId, userName, loginName, gender, position, accountStatus);
         PageInfo pageInfo = new PageInfo(teachers);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200, pageInfo);
+    }
+
+    @GetMapping( "/getStudents/{pageNum}/{pageSize}" )
+    public RestRecord getStudents(@RequestParam( value = "userName", required = false ) String userName,
+                                  @RequestParam( value = "loginName", required = false ) String loginName,
+                                  @RequestParam( value = "studentNumber", required = false ) String studentNumber,
+                                  @RequestParam( value = "gender", required = false ) String gender,
+                                  @RequestParam( value = "grade", required = false ) String grade,
+                                  @RequestParam( value = "accountStatus", required = false ) String accountStatus,
+                                  @PathVariable String pageNum,
+                                  @PathVariable String pageSize,
+                                  @CurrentUserId String userId){
+        return userService.getStudents(userName, loginName, studentNumber, gender, grade, accountStatus, userId, pageNum, pageSize);
+    }
+
+    @GetMapping( "/getStudentInfo/{userId}" )
+    public RestRecord getStudentInfo( @PathVariable("userId") String userId ){
+        return userService.getStudentInfo(userId);
+    }
+
+    @PutMapping( "/editStudent" )
+    public RestRecord editStudent(@RequestBody Map map){
+        return userService.editStudent(map);
+    }
+
+    @DeleteMapping( "delStudent" )
+    public RestRecord delStudent(@RequestParam String userId){
+        return userService.delStudent(userId);
+    }
+
+    @PostMapping( "/addStudent" )
+    public RestRecord addStudent(@RequestBody Map map,
+                                 @CurrentUserId String userId){
+        return userService.addStudent(map, userId);
     }
 }

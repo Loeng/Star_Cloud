@@ -9,12 +9,13 @@
     </select>
 
     <select id="getApplyList" resultType="Map">
-        SELECT b.ID,USER_NAME,RELATIONSHIP,APPLY_USER_ID
+        SELECT TO_CHAR(b.ID) AS ID,USER_NAME,RELATIONSHIP,APPLY_USER_ID,u.HEAD_PORTRAIT
         FROM STARCLOUDPORTAL.SCE_BINDING_APPLY b
         LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER u ON b.APPLY_USER_ID=u.USER_ID AND u.IS_DELETE=1
         WHERE TARGET_USER_ID=#{id}
         AND b.IS_DELETE=1
         AND b.APPLY_RESULT=0
+        and b.APPLY_TYPE = 1
     </select>
 
     <update id="audit">
@@ -27,7 +28,7 @@
     </update>
 
     <insert id="addRelation">
-        INSERT INTO STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL(ID,PARENT_USER_ID,STUDENT_USER_ID,RELATIONSHIP)
-        VALUES (#{id},#{applyUserId},#{bindUserId},#{relationship})
+        INSERT INTO STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL(ID,PARENT_USER_ID,STUDENT_USER_ID,IS_MAIN,RELATIONSHIP)
+        VALUES (#{id},#{applyUserId},#{bindUserId},0,#{relationship})
     </insert>
 </mapper>

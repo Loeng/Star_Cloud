@@ -58,7 +58,11 @@
     </update>
 
     <select id="getInstitutions" resultType="Map">
-        SELECT u.USER_ID,i.INSTITUTION_NAME,u.LOGIN_NAME,i.ID,u.LOGIN_PERMISSION_STATUS,u.ACCOUNT_STATUS
+        SELECT u.USER_ID,i.INSTITUTION_NAME,u.LOGIN_NAME,i.ID,u.LOGIN_PERMISSION_STATUS,
+        case u.ACCOUNT_STATUS when 1 then '已激活'
+        else '未激活'
+        end as ACCOUNT_STATUS,
+        ROWNUM
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         INNER JOIN STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION i ON u.ORGANIZATION_ID=i.ID
         WHERE u.IS_DELETE=1
@@ -356,7 +360,7 @@
                 TEACH_RANGE
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u , STARCLOUDPORTAL.SCE_INFO_TEACHER t
         WHERE u.USER_ID=t.USER_ID
-        AND u.USER_ID=#{id}
+        AND u.USER_ID=#{id} and u.IS_DELETE = 1 and t.IS_DELETE = 1
     </select>
 
     <update id="editUser">
@@ -383,6 +387,12 @@
             <if test="birthdate!=null">
                 BIRTHDATE=#{birthdate}
             </if>
+            <if test="nationCode!=null">
+                VOLK=#{nationCode},
+            </if>
+            <if test="nationality!=null">
+                NATIONALITY=#{nationality}
+            </if>
         </set>
         WHERE USER_ID=#{user_id}
     </update>
@@ -390,12 +400,6 @@
     <update id="editTeacher">
         UPDATE  STARCLOUDPORTAL.SCE_INFO_TEACHER
         <set>
-            <if test="nation_code!=null">
-                NATION_CODE=#{nation_code},
-            </if>
-            <if test="nationlity!=null">
-                NATIONLITY=#{nationlity},
-            </if>
             <if test="academic_qualification!=null">
                 ACADEMIC_QUALIFICATION=#{academic_qualification},
             </if>
@@ -477,4 +481,113 @@
             AND ACCOUNT_STATUS=#{accountStatus}
         </if>
     </select>
+
+    <select id="getStudents" resultType="Map">
+      SELECT U.USER_ID,
+      U.USER_NAME,
+      U.LOGIN_NAME,
+      U.GENDER,
+      T.GRADE,
+      T.STUDENT_NUMBER,
+      U.ACCOUNT_STATUS,
+      to_char(T.ENTRANCE_YEAR,'yyyy-MM-dd') as ENTRANCE_YEAR
+       FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+      INNER JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT T
+      ON U.USER_ID = T.USER_ID
+      where U.ORGANIZATION_ID = #{organizationId}
+        AND U.IS_DELETE = 1 AND T.IS_DELETE = 1
+      <if test="userName != null and userName != ''">
+        and U.USER_NAME like '%'||#{userName}||'%'
+      </if>
+      <if test="loginName != null and loginName != ''">
+          and U.LOGIN_NAME like '%'||#{loginName}||'%'
+      </if>
+      <if test="studentNumber != null and studentNumber != ''">
+          and T.STUDENT_NUMBER = #{studentNumber}
+      </if>
+      <if test="gender != null and gender != ''">
+          and U.GENDER = #{gender}
+      </if>
+      <if test="grade != null and grade != ''">
+          and T.GRADE = #{grade}
+      </if>
+      <if test="accountStatus != null and accountStatus != ''">
+          and U.ACCOUNT_STATUS = #{accountStatus}
+      </if>
+        order by U.CREATE_TIME desc
+    </select>
+
+    <select id="getOrganizationIdByUserId" resultType="String">
+        SELECT ORGANIZATION_ID
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="getStudentInfo" resultType="Map">
+        SELECT U.USER_ID,
+        U.CERTIFICATE_TYPE,
+        U.CERTIFICATE_NUMBER,
+        U.USER_NAME,
+        U.GENDER,
+        U.BIRTHDATE,
+        U.NATIONALITY,
+        U.VOLK,
+        T.STUDENT_CODE,
+        to_char(T.ENTRANCE_YEAR,'yyyy-MM-dd') as ENTRANCE_YEAR,
+        T.GRADE,
+        T.CLASS_NUMBER,
+        T.STUDENT_NUMBER
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT T
+        ON U.USER_ID = T.USER_ID
+        WHERE U.USER_ID = #{userId} AND U.IS_DELETE = 1 AND T.IS_DELETE = 1
+    </select>
+
+    <update id="editStudentOfUser">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
+        <set>
+            <if test="nationCode != null and nationCode != ''">
+                VOLK = #{nationCode},
+            </if>
+            <if test="nationality != null and nationality != ''">
+                NATIONALITY = #{nationality}
+            </if>
+        </set>
+        WHERE USER_ID = #{userId}
+        and USER_TYPE = 1 AND IS_DELETE = 1
+    </update>
+
+    <update id="editStudentOfStudent">
+        UPDATE STARCLOUDPORTAL.SCE_INFO_STUDENT
+        <set>
+            <if test="entranceYear != null and entranceYear != ''">
+                ENTRANCE_YEAR = TO_DATE(#{entranceYear},'YYYY-MM-dd'),
+            </if>
+            <if test="grade != null and grade != ''">
+                GRADE = #{grade},
+            </if>
+            <if test="classNumber != null and classNumber != ''">
+                CLASS_NUMBER = #{classNumber},
+            </if>
+            <if test="studentNumber != null and studentNumber != ''">
+                STUDENT_NUMBER = #{studentNumber}
+            </if>
+        </set>
+        WHERE USER_ID = #{userId}
+        AND IS_DELETE = 1
+    </update>
+
+    <update id="delStudentOfStudent">
+        update STARCLOUDPORTAL.SCE_INFO_STUDENT
+        set  is_delete = 0
+        where  USER_ID = #{userId} and is_delete = 1
+    </update>
+
+    <update id="delStudentOfUser">
+        update STARCLOUDPORTAL.SCE_COMMON_USER
+        set  is_delete = 0
+        where  USER_ID = #{userId} and is_delete = 1
+    </update>
+
+
 </mapper>

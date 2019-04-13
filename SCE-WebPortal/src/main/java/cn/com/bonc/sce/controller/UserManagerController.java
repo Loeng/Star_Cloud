@@ -3,6 +3,7 @@ package cn.com.bonc.sce.controller;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import cn.com.bonc.sce.service.UserManagerService;
@@ -90,7 +91,7 @@ public class UserManagerController {
         System.out.println( info.size() + "" + info.get( 0 ) );
         try {
             List<ExcelExportEntity> entity = new ArrayList<>();
-            entity.add( new ExcelExportEntity( "序号", "number" ) );
+            entity.add( new ExcelExportEntity( "序号", "ROWNUM" ) );
             entity.add( new ExcelExportEntity( "机构名称", "INSTITUTION_NAME" ) );
             entity.add( new ExcelExportEntity( "账号", "LOGIN_NAME" ) );
             entity.add( new ExcelExportEntity( "组织编号", "ID" ) );
@@ -190,4 +191,72 @@ public class UserManagerController {
     public RestRecord addTeacher(@RequestBody String json){
         return userManagerService.addTeacher(json);
     }
+
+
+    /**
+     * @param userName 用户名
+     * @param loginName 登录名
+     * @param studentNumber 学号
+     * @param gender 性别
+     * @param grade 年级
+     * @param accountStatus 激活状态
+     * @param pageNum 页数
+     * @param pageSize 每页数量
+     * @param userId 用户ID
+     * @return RestRecord
+     */
+    @ApiOperation( value = "查询所有学生", notes = "通过查询条件查询该校所有学生", httpMethod = "GET" )
+    @GetMapping("/getStudents/{pageNum}/{pageSize}")
+    public RestRecord getStudents(@RequestParam( value = "userName", required = false ) String userName,
+                                  @RequestParam( value = "loginName", required = false ) String loginName,
+                                  @RequestParam( value = "studentNumber", required = false ) String studentNumber,
+                                  @RequestParam( value = "gender", required = false ) String gender,
+                                  @RequestParam( value = "grade", required = false ) String grade,
+                                  @RequestParam( value = "accountStatus", required = false ) String accountStatus,
+                                  @PathVariable String pageNum,
+                                  @PathVariable String pageSize,
+                                  @CurrentUserId String userId){
+        return userManagerService.getStudents(userName, loginName, studentNumber, gender, grade, accountStatus, userId,pageNum,pageSize);
+    }
+
+    @GetMapping( "/getStudentInfo/{userId}" )
+    public RestRecord getStudentInfo( @PathVariable String userId ){
+        return userManagerService.getStudentInfo( userId );
+    }
+
+    /**
+     * @param map nationCode-民族，nationality-国籍，entranceYear-入学年月，grade-年级，classNumber-班号，studentNumber-学号
+     * @return RestRecord
+     */
+    @ApiOperation( value = "编辑学生", notes = "根据学生id编辑学生", httpMethod = "PATCH")
+    @PatchMapping( "/editStudent" )
+    public RestRecord editStudent(@RequestBody Map map){
+        return userManagerService.editStudent(map);
+    }
+
+    @ApiOperation( value = "删除学生", notes = "根据学生ID逻辑删除学生", httpMethod = "DELETE" )
+    @DeleteMapping( "/delStudent" )
+    public RestRecord delStudent(@RequestParam String userId){
+        return userManagerService.delStudent(userId);
+    }
+
+    @ApiOperation( value = "添加学生", notes = "添加学生，同时添加或者绑定家长", httpMethod = "POST")
+    @PostMapping( "/addStudent" )
+    public RestRecord addStudent(@RequestBody Map map, @CurrentUserId String userId){
+        return userManagerService.addStudent(map, userId);
+    }
+
+    @GetMapping( "/getTransferStudent/{pageNum}/{pageSize}" )
+    public RestRecord getTransferStudent(@RequestParam( value = "userName", required = false ) String userName,
+                                         @RequestParam( value = "loginName", required = false ) String loginName,
+                                         @RequestParam( value = "studentNumber", required = false ) String studentNumber,
+                                         @RequestParam( value = "gender", required = false ) String gender,
+                                         @RequestParam( value = "grade", required = false ) String grade,
+                                         @RequestParam( value = "applyStatus", required = false ) String applyStatus,
+                                         @PathVariable String pageNum,
+                                         @PathVariable String pageSize,
+                                         @CurrentUserId String userId){
+        return null;
+    }
+
 }

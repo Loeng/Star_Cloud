@@ -154,7 +154,7 @@ public class FileUploadApiController {
                     fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
                             loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
                             excelToUser.getPhoneNumber(), organizationId,
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, null, null, excelToUser.getIsAdministrators());
+                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(), excelToUser.getIsAdministrators());
                     userPasswordDao.save( userPassword );
 
                     String schoolTime = excelToUser.getSchoolTime();
@@ -174,7 +174,7 @@ public class FileUploadApiController {
 
                     //插入数据到教师表
                     fileResourceRepository.saveTeacher( userId, organizationId.toString(), excelToUser.getPosition(),
-                            excelToUser.getNationCode(), excelToUser.getWorkNumber(), schoolDate, excelToUser.getNationLity(),
+                            excelToUser.getWorkNumber(), schoolDate,
                             teachDate, excelToUser.getAcademicQualification(), excelToUser.getTeachRange() );
                     count++;
                 }
@@ -222,10 +222,10 @@ public class FileUploadApiController {
                         log.info("家长邮箱验证未通过");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "家长" ), i + EXCEL_NUMBER ));
                     }
-//                    if(excelToUser.getParentCertificationNumber().equals(excelToUser.getCertificateNumber())){
-//                        log.info("家长和学生的身份证不能相同");
-//                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ));
-//                    }
+                    if(excelToUser.getParentCertificationNumber().equals(excelToUser.getCertificateNumber())){
+                        log.info("家长和学生的身份证不能相同");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ));
+                    }
 
                     String parentId = fileResourceRepository.selectUserIdByCertificateNumber(excelToUser.getParentCertificationNumber());
 

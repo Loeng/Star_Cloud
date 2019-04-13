@@ -4,6 +4,7 @@ import cn.com.bonc.sce.mapper.ParentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +29,59 @@ public class ParentDao {
         return parentMapper.unbind(parentId,studentId);
     }
 
-    public List<Map> getParentList(String id) {
-        return parentMapper.getParentList(id);
+    public List<Map> getParentList(String userId, String id, int isMain) {
+        return parentMapper.getParentList(userId, id, isMain);
+    }
+
+    public Integer selectIsMain(String userId, String id){
+        return parentMapper.selectIsMain(userId, id);
     }
 
     public List<Map> getApplyList(String id) {
         return parentMapper.getApplyList(id);
+    }
+
+    public int addApplyMain( Map map ){
+        return parentMapper.addApplyMain( map );
+    }
+
+    public BigDecimal selectApply(Map map){
+        return parentMapper.selectApply(map);
+    }
+
+    public int updateApplyMain(Map map){
+        return parentMapper.updateApplyMain(map);
+    }
+
+    public String selectApplyMain(Map map){
+        return parentMapper.selectApplyMain(map);
+    }
+
+    public int auditApplyMain(Map map){
+        return parentMapper.auditApplyMain(map);
+    }
+
+    public int delStudentParentRel(Map map){
+        return parentMapper.delStudentParentRel(map);
+    }
+
+    public int updateStudentParentRel(Map map){
+        return parentMapper.updateStudentParentRel(map);
+    }
+
+    public String getMainPhone(String studentLoginName){
+        return parentMapper.getMainPhone(studentLoginName);
+    }
+
+    public BigDecimal selectUserTypeByUserId(String userId){
+        return parentMapper.selectUserTypeByUserId(userId);
+    }
+
+    public void addStudentParentRel(long id, String parentUserId, String studentUserId, Integer isMain, String relationship){
+        parentMapper.addStudentParentRel(id, parentUserId, studentUserId, isMain, relationship);
+    }
+
+    public void delAudit(String applyUserId, String targetUserId){
+        parentMapper.delAudit(applyUserId, targetUserId);
     }
 }

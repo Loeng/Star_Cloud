@@ -1,6 +1,8 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.ParentService;
 import cn.com.bonc.sce.service.UserService;
@@ -42,30 +44,41 @@ public class ParentController {
     public RestRecord bindStudent(@RequestBody @ApiParam( example = "{\n" +
             "\t\"applyUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\",\n" +
             "\t\"relationship\": \"父子\",\n" +
-            "\t\"phone\": \"18782461247\",\n" +
-            "\t\"applyType\": 0,\n" +
-            "\t\"bindUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\"\n" +
+            "\t\"applyType\": 1,\n" +
+            "\t\"studentLoginName\": \"xs_0\"\n" +
             "}" ) String json){
         Map map = (Map) JSONUtils.parse(json);
         String targetUserId ="";
-        String applyUserId = (String) map.get("applyUserId");
-        String bindUserId = (String) map.get("bindUserId");
-        String relationship = (String) map.get("relationship");
+        String applyUserId = null;
+        String studentLoginName = null;
+        String relationship = null;
+        Integer applyType = null;
+        try {
+            applyUserId = map.get("applyUserId").toString();
+            studentLoginName = map.get("studentLoginName").toString();
+            relationship = map.get("relationship").toString();
+            applyType = Integer.parseInt(map.get("applyType").toString());
+        }catch (NullPointerException e){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必须"));
+        }
         Long id = idWorker.nextId();
-        Integer applyType = (Integer) map.get("applyType");
 
-        if (applyType==0){
-            targetUserId = userService.getIdByPhone((String)map.get("phone"));
-        }else {
+        //通过学生账号查询学生id
+        String bindUserId = userService.selectUserIdByLoginName(studentLoginName);
+        if(bindUserId == null){
+            return new RestRecord( 434, String.format(WebMessageConstants.SCE_PORTAL_MSG_434, "") );
+        }
+
+        if ( applyType == 1 ){
             targetUserId = bindUserId;
+            parentService.bindStudent(id,applyUserId,targetUserId,applyType,bindUserId,relationship);
+        } else {
+            //直接绑定该家长和学生的亲属关系，并删掉绑定审核表中的审核数据。
+            parentService.addStudentParentRel(idWorker.nextId(), applyUserId, bindUserId, 0, relationship);
+            parentService.delAudit(applyUserId, bindUserId);
         }
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
 
-        int count = parentService.bindStudent(id,applyUserId,targetUserId,applyType,bindUserId,relationship);
-        if (count == 1){
-            return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
-        }else {
-            return new RestRecord(409,MessageConstants.SCE_MSG_409,0);
-        }
     }
 
     @ApiOperation(value = "解除家长和学生的绑定关系", notes="解除家长和学生的绑定关系", httpMethod = "DELETE")
@@ -82,8 +95,8 @@ public class ParentController {
     @ApiOperation(value = "获取学生对应的家长列表", notes="获取学生对应的家长列表", httpMethod = "GET")
     @GetMapping("/getParentList")
     @ResponseBody
-    public RestRecord getParentList(@RequestParam( "id" ) String id){
-        return new RestRecord(200,MessageConstants.SCE_MSG_0200,parentService.getParentList(id));
+    public RestRecord getParentList(@CurrentUserId String userId, @RequestParam( "id" ) String id){
+        return new RestRecord(200,MessageConstants.SCE_MSG_0200,parentService.getParentList(userId, id));
     }
 
     @ApiOperation(value = "获取申请列表", notes="获取申请列表", httpMethod = "GET")
@@ -91,6 +104,23 @@ public class ParentController {
     @ResponseBody
     public RestRecord getApplyList(@RequestParam( "id" ) String id){
         return new RestRecord(200,MessageConstants.SCE_MSG_0200,parentService.getApplyList(id));
+    }
+
+    @PostMapping("/applyMain")
+    public RestRecord applyMain(@CurrentUserId String userId,
+                                @RequestBody Map map){
+        return parentService.applyMain(userId, map);
+    }
+
+    @PutMapping("/auditApplyMain")
+    public RestRecord auditApplyMain( @CurrentUserId String userId,
+                                      @RequestBody Map map){
+        return parentService.auditApplyMain(userId, map);
+    }
+
+    @GetMapping("/getMainPhone")
+    public RestRecord getMainPhone(@CurrentUserId String userId, @RequestParam String studentLoginName){
+        return parentService.getMainPhone(userId, studentLoginName);
     }
 
 }

@@ -49,10 +49,13 @@ public interface UserManagerDao {
     RestRecord testCertificate(@RequestParam("loginName") String loginName, @RequestParam("certificate") String certificate);
 
     @RequestMapping( value = "/userManager/getTeachers/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord getTeachers(@RequestParam("organizationId")long organizationId,@RequestParam("userName") String userName,
+    RestRecord getTeachers(@RequestParam("organizationId")long organizationId,
+                           @RequestParam("userName") String userName,
                            @RequestParam("loginName")String loginName,
-                           @RequestParam("gender")String gender, @RequestParam("position")String position,
-                           @RequestParam("accountStatus")Integer accountStatus, @PathVariable("pageNum")Integer pageNum,
+                           @RequestParam("gender")String gender,
+                           @RequestParam("position")String position,
+                           @RequestParam("accountStatus")Integer accountStatus,
+                           @PathVariable("pageNum")Integer pageNum,
                            @PathVariable("pageSize")Integer pageSize);
 
     @RequestMapping( value = "/userManager/delTeacher", method = RequestMethod.DELETE )
@@ -73,4 +76,28 @@ public interface UserManagerDao {
                                    @RequestParam("gender")String gender, @RequestParam("position")String position,
                                    @RequestParam("accountStatus")Integer accountStatus, @PathVariable("pageNum")Integer pageNum,
                                    @PathVariable("pageSize")Integer pageSize);
+
+    @RequestMapping( value = "/userManager/getStudents/{pageNum}/{pageSize}", method = RequestMethod.GET)
+    RestRecord getStudents( @RequestParam( "userName" ) String userName,
+                            @RequestParam( "loginName" ) String loginName,
+                            @RequestParam( "studentNumber" ) String studentNumber,
+                            @RequestParam( "gender" ) String gender,
+                            @RequestParam( "grade" ) String grade,
+                            @RequestParam( "accountStatus" ) String accountStatus,
+                            @RequestParam( "userId" ) String userId,
+                            @PathVariable( "pageNum" ) String pageNum,
+                            @PathVariable( "pageSize" ) String pageSize);
+
+    @RequestMapping( value = "/userManager/getStudentInfo/{userId}", method = RequestMethod.GET )
+    RestRecord getStudentInfo( @PathVariable("userId") String userId );
+
+    @RequestMapping( value = "/userManager/editStudent", method = RequestMethod.PUT )
+    RestRecord editStudent(@RequestBody Map map);
+
+    @RequestMapping( value = "/userManager/delStudent", method = RequestMethod.DELETE )
+    RestRecord delStudent(@RequestParam( "userId" ) String userId);
+
+    @RequestMapping( value = "/userManager/addStudent", method = RequestMethod.POST )
+    public RestRecord addStudent(@RequestBody Map map,
+                                 @RequestParam( "userId" ) String userId);
 }

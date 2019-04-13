@@ -60,7 +60,7 @@ public class ExcelToUser {
     @Excel( name = "管理员", replace = { "是_1","否_0" }, orderNum = "16")
     private String isAdministrators;
 
-    @Excel( name = "任课学段", replace = { "学前教育_1,","小学_2","普通初中_3","普通高中_4","职业初中_5","职业高中_6","成人中等专业学校_7","成人中学_8","特殊教育_9","其他_10" }, orderNum = "17")
+    @Excel( name = "任课学段", orderNum = "17")
     private String teachRange;
 
     @Excel( name = "工号", orderNum = "18")
@@ -85,7 +85,7 @@ public class ExcelToUser {
     private String studentCode;
 
     //下面为学生模板中的家长
-    @Excel( name = "家长姓名", orderNum = "35")
+    @Excel( name = "家长姓名", orderNum = "25")
     private String parentName;
 
     @Excel( name = "家长性别", replace = { "男_1", "女_0" }, orderNum = "26")
