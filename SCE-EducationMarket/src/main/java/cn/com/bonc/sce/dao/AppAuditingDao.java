@@ -19,8 +19,14 @@ public interface AppAuditingDao {
             @PathVariable( "userId" ) String userId,
             @RequestBody List< Map< String, String > > approveList );
 
-    @RequestMapping( value = "/app-version/reject/{userId}", method = RequestMethod.PUT )
+    @RequestMapping( value = "/app-version/approve/down-shelf/{userId}", method = RequestMethod.PUT )
+    public RestRecord appVersionDownShelfApprove(
+            @PathVariable( "userId" ) String userId,
+            @RequestBody List< Map< String, String > > approveList );
+
+    @RequestMapping( value = "/app-version/reject/{operateType}/{userId}", method = RequestMethod.PUT )
     public RestRecord appVersionUpdateReject(
+            @PathVariable( "operateType" ) String operateType,
             @PathVariable( "userId" ) String userId,
             @RequestBody List< Map< String, String > > approveList,
             @RequestParam( "rejectReason" ) String rejectReason );

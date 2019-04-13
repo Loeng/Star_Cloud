@@ -46,6 +46,8 @@ public class MarketAppVersion implements Serializable {
     private String companySetRatio;//厂家设置的比例（平台比例=1-厂家比例）
     private Date applyTime;//提交审核时间
     private Date auditTime;//审核时间
+    private String appName;
+    private String appIcon;
 
 
     @Basic
@@ -349,6 +351,26 @@ public class MarketAppVersion implements Serializable {
         this.auditTime = auditTime;
     }
 
+    @Basic
+    @Column( name = "APP_NAME" )
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName( String appName ) {
+        this.appName = appName;
+    }
+
+    @Basic
+    @Column( name = "APP_ICON" )
+    public String getAppIcon() {
+        return appIcon;
+    }
+
+    public void setAppIcon( String appIcon ) {
+        this.appIcon = appIcon;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) {
@@ -385,13 +407,15 @@ public class MarketAppVersion implements Serializable {
                 Objects.equals( companyRatio, that.companyRatio ) &&
                 Objects.equals( applyTime, that.applyTime ) &&
                 Objects.equals( auditTime, that.auditTime ) &&
-                Objects.equals( companySetRatio, that.companySetRatio );
+                Objects.equals( companySetRatio, that.companySetRatio ) &&
+                Objects.equals( appName, that.appName ) &&
+                Objects.equals( appIcon, that.appIcon );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl, testUrl, tokenAddress, md5Code, agentRatio, platformRatio, agentRatio, applyTime, auditTime, companySetRatio );
+        return Objects.hash( appId, appVersion, appStatus, appDownloadAddress, createTime, versionInfo, versionSize, runningPlatform, isDelete, createUserId, updateUserId, updateTime, newFeatures, packageName, authDetail, currentVersion, installInfo, storeLocation, indexUrl, testUrl, tokenAddress, md5Code, agentRatio, platformRatio, agentRatio, applyTime, auditTime, companySetRatio,appName,appIcon );
     }
 
     @Override
@@ -427,6 +451,8 @@ public class MarketAppVersion implements Serializable {
                 ", companySetRatio='" + companySetRatio + '\'' +
                 ", applyTime=" + applyTime +
                 ", auditTime=" + auditTime +
+                ", appName='" + appName + '\'' +
+                ", appIcon='" + appIcon + '\'' +
                 '}';
     }
 }

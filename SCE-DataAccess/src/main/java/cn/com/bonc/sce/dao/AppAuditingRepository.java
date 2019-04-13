@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,8 @@ public interface AppAuditingRepository extends JpaRepository< MarketAppVersion, 
      */
     MarketAppVersion findByAppIdAndAppVersion( String appId, String appVersion );
 
-    @Query( nativeQuery = true, value = "SELECT APP_NAME AS appName FROM \"STARCLOUDMARKET\".\"SCE_MARKET_APP_INFO\" WHERE APP_ID=:appId" )
-    Map< String, Object > getAppName( @Param( "appId" ) String appId );
+    @Query( nativeQuery = true, value = "SELECT APP_NAME AS appName FROM \"STARCLOUDMARKET\".\"SCE_MARKET_APP_VERSION\" WHERE APP_ID=:appId AND APP_VERSION=:appVersion" )
+    Map< String, Object > getAppName( @Param( "appId" ) String appId, @Param( "appVersion" ) String appVersion );
 
     @Modifying
     @Query(
@@ -43,8 +44,8 @@ public interface AppAuditingRepository extends JpaRepository< MarketAppVersion, 
 
     @Modifying
     @Query(
-            value = "UPDATE AppInfoEntity SET APP_LINK=:appLink,UPDATE_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId ",nativeQuery = false)
-    int updateAppLink( @Param( "appId" ) String appId, @Param( "userId" ) String userId, @Param( "appLink" ) String appLink );
+            value = "UPDATE MarketAppVersion SET INDEX_URL=:indexUrl,AUDIT_TIME=sysdate,UPDATE_USER_ID=:userId WHERE APP_ID=:appId AND APP_VERSION = :appVersion", nativeQuery = false )
+    int updateIndexUrl( @Param( "appId" ) String appId, @Param( "appVersion" ) String appVersion, @Param( "userId" ) String userId, @Param( "indexUrl" ) String indexUrl );
 
 
 }

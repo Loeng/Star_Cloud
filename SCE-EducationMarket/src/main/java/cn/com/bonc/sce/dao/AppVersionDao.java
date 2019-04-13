@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.AppVersionModel;
+import cn.com.bonc.sce.model.PlatformAddModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +45,10 @@ public interface AppVersionDao {
     public RestRecord createVersionInfo(
             @PathVariable( "appId" ) String appId,
             @RequestParam( "userId" ) String userId,
-            @RequestBody AppVersionModel appVersionInfo );
+            @RequestBody PlatformAddModel platformAddModel );
 
     @RequestMapping( value = "/app-version/temp/save", method = RequestMethod.PUT )
     public RestRecord tempSaveVersionInfo(
             @RequestParam( "userId" ) String userId,
-            @RequestBody Map<String,String> tempData);
+            @RequestBody Map< String, String > tempData );
 }

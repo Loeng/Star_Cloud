@@ -261,7 +261,14 @@ public class AppManageController {
                                                @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize,
                                                @RequestParam( value = "userId" ) String userId
     ) {
-        //todo
+        //运营中 4
+        //上架审核 1(审核中) 3(被驳回)
+        //迭代审核 2(审核中) 6(被驳回)
+        //下架审核 9(审核中) 10(被驳回)
+        //已下架 5（已停止） 7(运行中)
+        //8 已撤销上架
+
+
         return null;
     }
 
@@ -312,6 +319,7 @@ public class AppManageController {
     public RestRecord getAppInfo() {
         return new RestRecord( 200, appInfoMapper.getAppInfo() );
     }
+
 
 
 }
