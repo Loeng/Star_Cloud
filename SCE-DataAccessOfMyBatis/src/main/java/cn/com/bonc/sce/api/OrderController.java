@@ -58,4 +58,18 @@ public class OrderController {
         return orderService.reviewVoucher(param);
     }
 
+
+    @ApiOperation(value = "所有订单查询（管理员）", notes="所有订单查询（管理员）", httpMethod = "GET")
+    @GetMapping("/queryAllOrder")
+    public RestRecord queryAllOrder(@RequestParam(required = false) String ORDER_ID,
+                                    @RequestParam(required = false) String START_TIME,
+                                    @RequestParam(required = false) String END_TIME,
+                                    @RequestParam(required = false) String PRODUCT_TYPE_CODE,
+                                    @RequestParam(required = false) String PAYING_TYPE,
+                                    @RequestParam(required = false) String ORDER_STATUS,
+                                    @RequestParam String ORDER_BY,
+                                    @RequestParam int pageNum,
+                                    @RequestParam int pageSize){
+        return orderService.queryAllOrderByCondition(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY, pageNum, pageSize);
+    }
 }

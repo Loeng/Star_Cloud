@@ -47,4 +47,17 @@ public class OrderService {
         param.put("AUDITING_USER_ID",userId);
         return orderDao.reviewVoucher(param);
     }
+
+
+    public RestRecord queryAllOrder( String ORDER_ID,
+                                     String START_TIME,
+                                     String END_TIME,
+                                     String PRODUCT_TYPE_CODE,
+                                     String PAYING_TYPE,
+                                     String ORDER_STATUS,
+                                     String ORDER_BY,
+                                     int pageNum,
+                                     int pageSize){
+        return orderDao.queryAllOrder(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY, pageNum, pageSize);
+    }
 }

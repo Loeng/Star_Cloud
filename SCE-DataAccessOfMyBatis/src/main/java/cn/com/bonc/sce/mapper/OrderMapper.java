@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,5 +32,13 @@ public interface OrderMapper {
      int updateOrderVoucher(Map param) throws SQLException;
 
      int deleteOrderVoucher(@Param("ORDER_ID") long ORDER_ID);
+
+     List<Map> queryAllOrderByCondition(@Param("ORDER_ID") String ORDER_ID,
+                                        @Param("START_TIME") Date START_TIME,
+                                        @Param("END_TIME") Date END_TIME,
+                                        @Param("PRODUCT_TYPE_CODE") String PRODUCT_TYPE_CODE,
+                                        @Param("PAYING_TYPE") String PAYING_TYPE,
+                                        @Param("ORDER_STATUS") String ORDER_STATUS,
+                                        @Param("ORDER_BY") String ORDER_BY);
 
 }

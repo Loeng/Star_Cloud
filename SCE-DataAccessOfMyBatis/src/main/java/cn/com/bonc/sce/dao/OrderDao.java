@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,5 +55,15 @@ public class OrderDao {
 
     public int deleteOrderVoucher(long ORDER_ID){
         return orderMapper.deleteOrderVoucher(ORDER_ID);
+    }
+
+    public List<Map> queryAllOrderByCondition(String ORDER_ID,
+                                              Date START_TIME,
+                                              Date END_TIME,
+                                              String PRODUCT_TYPE_CODE,
+                                              String PAYING_TYPE,
+                                              String ORDER_STATUS,
+                                              String ORDER_BY){
+        return orderMapper.queryAllOrderByCondition(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY);
     }
 }

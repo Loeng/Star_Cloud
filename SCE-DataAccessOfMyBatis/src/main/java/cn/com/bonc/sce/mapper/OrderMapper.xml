@@ -5,13 +5,13 @@
     <insert id="insertOrder" parameterType="map">
         insert into STARCLOUDPORTAL.SCE_ORDER_INFO(ORDER_ID,PAYING_TYPE,ORDER_CREATE_TIME,BUYING_USER_ID,
         PRODUCT_NAME,PRODUCT_ID,PRICE_CALCULATION_METHOD,ORIGIN_PRICE,DISCOUNT_MODE,DISCOUNT_PRICE,ACCOUNT_PAYABLE,
-        ACTUAL_PAYMENT,PAYMENT_VOUCHER,ORDER_STATUS,IS_DELETE,COUPON_CODE,PRODUCT_TYPE_CODE,ORDER_DEADLINE_TIME)
+        ACTUAL_PAYMENT,PAYMENT_VOUCHER,ORDER_STATUS,IS_DELETE,COUPON_CODE,PRODUCT_TYPE_CODE,ORDER_DEADLINE_TIME,STATE_UPDATE_TIME)
         values (#{ORDER_ID,jdbcType=NUMERIC},#{PAYING_TYPE,jdbcType=NUMERIC},#{ORDER_CREATE_TIME,jdbcType=VARCHAR},
         #{BUYING_USER_ID,jdbcType=VARCHAR},#{PRODUCT_NAME,jdbcType=VARCHAR},#{PRODUCT_ID,jdbcType=VARCHAR},
         #{PRICE_CALCULATION_METHOD,jdbcType=NUMERIC},#{ORIGIN_PRICE,jdbcType=NUMERIC},#{DISCOUNT_MODE,jdbcType=VARCHAR},
         #{DISCOUNT_PRICE,jdbcType=NUMERIC},#{ACCOUNT_PAYABLE,jdbcType=NUMERIC},#{ACTUAL_PAYMENT,jdbcType=NUMERIC},
         #{PAYMENT_VOUCHER,jdbcType=NUMERIC},#{ORDER_STATUS,jdbcType=NUMERIC},#{IS_DELETE,jdbcType=NUMERIC},
-        #{COUPON_CODE,jdbcType=VARCHAR},#{PRODUCT_TYPE_CODE,jdbcType=NUMERIC},#{ORDER_DEADLINE_TIME,jdbcType=VARCHAR})
+        #{COUPON_CODE,jdbcType=VARCHAR},#{PRODUCT_TYPE_CODE,jdbcType=NUMERIC},#{ORDER_DEADLINE_TIME,jdbcType=VARCHAR},#{STATE_UPDATE_TIME,jdbcType=VARCHAR})
     </insert>
 
     <insert id="insertOrderHistroy">
@@ -133,6 +133,10 @@
         <if test='BUYING_USER_ID != null and BUYING_USER_ID != ""'>
             ,BUYING_USER_ID = #{BUYING_USER_ID}
         </if>
+
+        <if test='STATE_UPDATE_TIME != null and STATE_UPDATE_TIME != ""'>
+            ,STATE_UPDATE_TIME = #{STATE_UPDATE_TIME}
+        </if>
         where ORDER_ID = #{ORDER_ID}
     </update>
 
@@ -158,5 +162,109 @@
         UPDATE STARCLOUDPORTAL.SCE_ORDER_VOUCHER SET IS_DELETE = 0
         WHERE  ORDER_ID = #{ORDER_ID}
     </update>
+
+    <select id="queryAllOrderByCondition" resultType="map">
+        SELECT ORDERINFO.ORDER_ID,ORDERINFO.PRODUCT_NAME,ORDERINFO.ORIGIN_PRICE,ORDERINFO.ACCOUNT_PAYABLE,ORDERINFO.ACTUAL_PAYMENT,
+               ORDERINFO.PAYING_TYPE,ORDERINFO.ORDER_STATUS,TO_CHAR(ORDERINFO.STATE_UPDATE_TIME,'yyyy-MM-dd HH24:mi:ss') AS STATE_UPDATE_TIME,
+               USERINFO.USER_NAME,USERINFO.LOGIN_NAME,TO_CHAR(ORDERINFO.ORDER_CREATE_TIME,'yyyy-MM-dd HH24:mi:ss') AS ORDER_CREATE_TIME,
+
+               VOUCHER.PAYING_VOUCHER,FILERESOURCE.RESOURCE_ID,FILERESOURCE.FILE_STORE_PATH
+      FROM STARCLOUDPORTAL.SCE_ORDER_INFO ORDERINFO
+      LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER USERINFO ON ORDERINFO.BUYING_USER_ID = USERINFO.USER_ID
+
+      LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_VOUCHER VOUCHER ON ORDERINFO.ORDER_ID = VOUCHER.ORDER_ID
+      LEFT JOIN STARCLOUDPORTAL.SCE_FILE_RESOURCE FILERESOURCE ON VOUCHER.PAYING_VOUCHER = FILERESOURCE.RESOURCE_ID
+
+      WHERE ORDERINFO.IS_DELETE = 1
+        <if test='ORDER_ID != null and ORDER_ID != ""'>
+            AND ORDER_ID LIKE LIKE CONCAT('%', CONCAT(#{ORDER_ID}, '%'))
+        </if>
+
+        <if test='START_TIME != null and START_TIME != ""'>
+            AND ORDERINFO.ORDER_CREATE_TIME > #{START_TIME}
+        </if>
+
+        <if test='END_TIME != null and END_TIME != ""'>
+            AND  #{END_TIME} > ORDERINFO.ORDER_CREATE_TIME
+        </if>
+
+        <if test='PRODUCT_TYPE_CODE != null and PRODUCT_TYPE_CODE != ""'>
+            AND  ORDERINFO.PRODUCT_TYPE_CODE = #{PRODUCT_TYPE_CODE}
+        </if>
+
+        <if test='PAYING_TYPE != null and PAYING_TYPE != ""'>
+            AND  ORDERINFO.PAYING_TYPE = #{PAYING_TYPE}
+        </if>
+
+        <if test='ORDER_STATUS != null and ORDER_STATUS != ""'>
+            AND  ORDERINFO.ORDER_STATUS = #{ORDER_STATUS}
+        </if>
+
+        <if test='ORDER_BY == "1"'>
+            order by ORDERINFO.ORDER_ID asc
+        </if>
+
+        <if test='ORDER_BY == "2"'>
+            order by ORDERINFO.ORDER_ID desc
+        </if>
+
+        <if test='ORDER_BY == "3"'>
+            order by ORDERINFO.PRODUCT_NAME asc
+        </if>
+
+        <if test='ORDER_BY == "4"'>
+            order by ORDERINFO.PRODUCT_NAME desc
+        </if>
+
+        <if test='ORDER_BY == "5"'>
+            order by ORDERINFO.ORIGIN_PRICE asc
+        </if>
+
+        <if test='ORDER_BY == "6"'>
+            order by ORDERINFO.ORIGIN_PRICE desc
+        </if>
+
+        <if test='ORDER_BY == "7"'>
+            order by ORDERINFO.PAYING_TYPE asc
+        </if>
+
+        <if test='ORDER_BY == "8"'>
+            order by ORDERINFO.PAYING_TYPE desc
+        </if>
+
+        <if test='ORDER_BY == "9"'>
+            order by ORDERINFO.ORDER_STATUS asc
+        </if>
+
+        <if test='ORDER_BY == "10"'>
+            order by ORDERINFO.ORDER_STATUS desc
+        </if>
+
+        <if test='ORDER_BY == "11"'>
+            order by STATE_UPDATE_TIME asc
+        </if>
+
+        <if test='ORDER_BY == "12"'>
+            order by STATE_UPDATE_TIME desc
+        </if>
+
+        <if test='ORDER_BY == "13"'>
+            order by USERINFO.USER_NAME asc
+        </if>
+
+        <if test='ORDER_BY == "14"'>
+            order by USERINFO.USER_NAME desc
+        </if>
+
+        <if test='ORDER_BY == "15"'>
+            order by ORDER_CREATE_TIME asc
+        </if>
+
+        <if test='ORDER_BY == "16"'>
+            order by ORDER_CREATE_TIME desc
+        </if>
+
+
+    </select>
 
 </mapper>

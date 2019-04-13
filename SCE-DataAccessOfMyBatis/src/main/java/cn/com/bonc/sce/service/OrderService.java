@@ -4,6 +4,8 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.OrderDao;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +88,8 @@ public class OrderService {
 
         Date NOW_TIME=new Date(); // 当前时间
         parm.put("ORDER_CREATE_TIME",NOW_TIME);
+
+        parm.put("STATE_UPDATE_TIME",NOW_TIME); // 订单最近状态更新时间
 
         int PAYING_TYPE=Integer.valueOf(parm.get("PAYING_TYPE").toString()); // 1:线上支付 2:线下支付
         // 根据支付方式  设置订单过期时间
@@ -175,6 +181,7 @@ public class OrderService {
             Map sendMap = new HashMap();
             sendMap.put("ORDER_ID",ORDER_ID);
             sendMap.put("ORDER_STATUS",2);
+            sendMap.put("STATE_UPDATE_TIME",new Date());
 
             int count=orderDao.updateOrderByOrderID(sendMap);
             if (count<1){
@@ -276,6 +283,7 @@ public class OrderService {
             Map sendMap=new HashMap();
             sendMap.put("ORDER_ID",param.get("ORDER_ID"));
             sendMap.put("ORDER_STATUS",1);
+            sendMap.put("STATE_UPDATE_TIME",new Date());
 
             // 修改order_info表里对应数据的状态
             try {
@@ -306,6 +314,42 @@ public class OrderService {
         }
 
         return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
+    }
+
+
+
+    public RestRecord queryAllOrderByCondition(String ORDER_ID,
+                                               String START_TIME,
+                                               String END_TIME,
+                                               String PRODUCT_TYPE_CODE,
+                                               String PAYING_TYPE,
+                                               String ORDER_STATUS,
+                                               String ORDER_BY,
+                                               int pageNum,
+                                               int pageSize){
+
+        SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+        Date START_TIME_TEMP = null,END_TIME_TEMP=null;
+
+        if (START_TIME!=null && END_TIME!=null && !"".equals(START_TIME) && !"".equals(END_TIME)){
+
+            try {
+                START_TIME_TEMP = sdf.parse(START_TIME);
+                END_TIME_TEMP = sdf.parse(END_TIME);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return new  RestRecord(740,WebMessageConstants.SCE_PORTAL_MSG_740);
+            }
+
+        }
+
+
+        PageHelper.startPage(pageNum, pageSize);
+
+        PageInfo<Map> pageInfo=new PageInfo<>(orderDao.queryAllOrderByCondition(ORDER_ID,START_TIME_TEMP,END_TIME_TEMP,PRODUCT_TYPE_CODE,PAYING_TYPE,ORDER_STATUS,ORDER_BY));
+
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,pageInfo);
+
     }
 
 
