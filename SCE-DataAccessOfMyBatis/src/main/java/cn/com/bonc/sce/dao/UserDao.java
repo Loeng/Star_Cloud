@@ -2,6 +2,7 @@ package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
+import cn.com.bonc.sce.bean.TeacherInfoBean;
 import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,5 +151,13 @@ public class UserDao {
 
     public int editTeacherPracticeInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,String teach_range, String work_number) {
         return userMapper.editTeacherPracticeInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number);
+    }
+
+    public TeacherInfoBean getTeacherInfoById(String userId){
+        return userMapper.getTeacherInfoById(userId);
+    }
+
+    public UserBean getUserById(String userId){
+        return userMapper.getUserById(userId);
     }
 }

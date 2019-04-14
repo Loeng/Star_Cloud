@@ -120,4 +120,12 @@ public class UserManagerService {
     public RestRecord editTeacherPracticeInfo(InfoTeacherModel model){
         return userManagerDao.editTeacherPracticeInfo(model);
     }
+
+    public RestRecord getTeacherInfoById(String userId){
+        return userManagerDao.getTeacherInfoById(userId);
+    }
+
+    public RestRecord getUserById(String userId){
+        return userManagerDao.getUserById(userId);
+    }
 }

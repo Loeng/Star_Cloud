@@ -3,6 +3,7 @@ package cn.com.bonc.sce.api;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
+import cn.com.bonc.sce.bean.TeacherInfoBean;
 import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
@@ -416,5 +417,29 @@ public class UserManagerController {
                 JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER);
 
         return new RestRecord(200, MessageConstants.SCE_MSG_0200, teacherEdit);
+    }
+
+    @ApiOperation(value = "通过用户id获取教师从业信息接口", notes="通过用户id获取教师从业信息", httpMethod = "GET")
+    @GetMapping("/getTeacherInfoById/{userId}")
+    @ResponseBody
+    public RestRecord getTeacherInfoById( @PathVariable( "userId" ) String userId ) {
+        TeacherInfoBean user = userService.getTeacherInfoById(userId);
+        if ( user == null ) {
+            return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
+        } else {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
+        }
+    }
+
+    @ApiOperation(value = "通过用户id获取用户信息接口", notes="通过用户id获取用户信息", httpMethod = "GET")
+    @GetMapping("/{userId}")
+    @ResponseBody
+    public RestRecord getUserById( @PathVariable( "userId" ) String userId ) {
+        UserBean user = userService.getUserById(userId);
+        if ( user == null ) {
+            return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
+        } else {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
+        }
     }
 }

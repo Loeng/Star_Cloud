@@ -267,4 +267,19 @@ public class UserManagerController {
     public RestRecord editTeacherPracticeInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model){
         return userManagerService.editTeacherPracticeInfo(model);
     }
+
+    @ApiOperation(value = "通过用户id获取教师从业信息接口", notes="通过用户id获取教师从业信息", httpMethod = "GET")
+    @GetMapping("/getTeacherInfoById/{userId}")
+    @ResponseBody
+    public RestRecord getTeacherInfoById( @PathVariable( "userId" ) String userId ) {
+        return userManagerService.getTeacherInfoById(userId);
+    }
+
+    @ApiOperation(value = "通过用户id获取用户信息接口", notes="通过用户id获取用户信息", httpMethod = "GET")
+    @GetMapping("/{userId}")
+    @ResponseBody
+    public RestRecord getUserById( @PathVariable( "userId" ) String userId ) {
+        return userManagerService.getUserById(userId);
+    }
+
 }

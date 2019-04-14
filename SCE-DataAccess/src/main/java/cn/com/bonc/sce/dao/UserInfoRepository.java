@@ -1,6 +1,7 @@
 package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.entity.FamilyInfoEntity;
+import cn.com.bonc.sce.entity.UserAudit;
 import cn.com.bonc.sce.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @Description:
  */
 @Transactional( rollbackFor = Exception.class )
-public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Long >, JpaSpecificationExecutor< User > {
+public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, JpaSpecificationExecutor< User > {
 
 
     // 查询和搜索 学校 -> 教师 的列表信息
@@ -189,4 +190,18 @@ public interface UserInfoRepository extends JpaRepository< FamilyInfoEntity, Lon
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET HEAD_PORTRAIT = ?1,USER_NAME = ?2,GENDER = ?3,BIRTHDATE = ?4,NATIONALITY = ?5,VOLK = ?6,EDUCATIONAL_BACKGROUND = ?7,ADDRESS = ?8 WHERE USER_ID = ?9 ", nativeQuery = true)
     int updateUser(String headPortrait,String userName,String gender,Date birthDate,String nationality,String volk,String educationalBackground,String address,String userId);
 
+    /**
+     * 根据用户ID更新组织机构ID
+     * @param organizationId  组织机构ID
+     * @param userId   用户ID
+     * @return
+     */
+    @Modifying
+    @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET ORGANIZATION_ID = ?1 WHERE USER_ID = ?2", nativeQuery = true)
+    int updateOrganizationIdByUserId(Integer organizationId,String userId);
+
+    @Override
+    UserAudit save(UserAudit userAudit );
+
+    UserAudit findByEntityId(Integer id);
 }

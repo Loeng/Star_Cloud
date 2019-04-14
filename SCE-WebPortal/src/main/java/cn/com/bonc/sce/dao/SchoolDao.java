@@ -2,11 +2,10 @@ package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.School;
 import cn.com.bonc.sce.rest.RestRecord;
+import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -48,6 +47,17 @@ public interface SchoolDao {
      * @param school 信息
      * @return 是否添加成功
      */
-    @RequestMapping( value = "/schools/addSchool", method = RequestMethod.POST )
-    RestRecord addSchool(School school);
+    @RequestMapping( value = "/schools/addSchool/{roleId}", method = RequestMethod.POST )
+    RestRecord addSchool(@RequestBody School school,@RequestParam( "userId" ) String userId,@PathVariable( "roleId" ) Integer roleId);
+
+    @RequestMapping(value = "/schools/{id}", method = RequestMethod.GET)
+    RestRecord getSchoolById(@PathVariable("id") Integer id);
+
+    @RequestMapping( value = "/schools/updateSchoolById", method = RequestMethod.PUT )
+    RestRecord updateSchoolById(@RequestBody @ApiParam( "学校信息对象" ) School school);
+
+    @RequestMapping( value = "/schools/updateSchoolInfo", method = RequestMethod.PUT )
+    RestRecord updateSchoolInfo(@RequestBody @ApiParam( "学校信息对象" ) School school,@ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId,@ApiParam(name = "roleId", value = "角色类型", required = true) @RequestParam( "roleId" ) Integer roleId);
+
+
 }

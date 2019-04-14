@@ -106,4 +106,10 @@ public interface UserManagerDao {
     @RequestMapping( value = "/userManager/editTeacherPracticeInfo", method = RequestMethod.PUT )
     RestRecord editTeacherPracticeInfo(@RequestBody  @ApiParam( "教师从业信息对象" ) InfoTeacherModel model);
 
+    @RequestMapping(value = "/userManager/getTeacherInfoById/{userId}", method = RequestMethod.GET)
+    RestRecord getTeacherInfoById(@PathVariable("userId") String userId);
+
+    @RequestMapping(value = "/userManager/{userId}", method = RequestMethod.GET)
+    RestRecord getUserById(@PathVariable("userId") String userId);
+
 }

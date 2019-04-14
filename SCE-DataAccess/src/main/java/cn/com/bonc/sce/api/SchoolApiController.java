@@ -6,6 +6,7 @@ import cn.com.bonc.sce.entity.School;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.SchoolService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 学校
@@ -81,9 +83,35 @@ public class SchoolApiController {
 
 
     @ApiOperation(value = "新增学校信息接口",notes = "新增学校信息",httpMethod = "POST")
-    @PostMapping("/addSchool")
+    @PostMapping("/addSchool/{roleId}")
     @ResponseBody
-    public RestRecord addSchool(@RequestBody School school){
-        return schoolService.addSchool(school);
+    public RestRecord addSchool(@RequestBody School school,@RequestParam( "userId" ) String userId,@PathVariable( "roleId" ) Integer roleId){
+        return schoolService.addSchool(school,userId,roleId);
+    }
+
+    @ApiOperation(value = "通过学校id获取学校信息接口", notes="通过学校id获取学校信息", httpMethod = "GET")
+    @GetMapping("/{id}")
+    @ResponseBody
+    public RestRecord getSchoolById( @PathVariable( "id" ) Integer id ) {
+        Optional<School> school = schoolService.getSchoolById(id);
+        if ( school == null ) {
+            return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, id );
+        } else {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, school );
+        }
+    }
+
+    @ApiOperation(value = "通过学校id修改学校信息接口",notes = "通过学校id修改学校信息",httpMethod = "PUT")
+    @PutMapping( "/updateSchoolById" )
+    @ResponseBody
+    public RestRecord updateSchoolById(@RequestBody @ApiParam( "学校信息对象" ) School school) {
+        return schoolService.updateSchoolById(school);
+    }
+
+    @ApiOperation(value = "变更或驳回提交学校信息接口",notes = "变更或驳回提交学校信息",httpMethod = "PUT")
+    @PutMapping( "/updateSchoolInfo" )
+    @ResponseBody
+    public RestRecord updateSchoolInfo(@RequestBody @ApiParam( "学校信息对象" ) School school,@ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId,@ApiParam(name = "roleId", value = "角色类型", required = true) @RequestParam( "roleId" ) Integer roleId) {
+        return schoolService.updateSchoolInfo(school,userId,roleId);
     }
 }
