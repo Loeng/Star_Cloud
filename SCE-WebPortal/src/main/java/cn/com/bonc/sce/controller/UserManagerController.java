@@ -159,7 +159,7 @@ public class UserManagerController {
                                   @RequestParam(value ="loginName",required = false ) String loginName,
                                   @RequestParam ( value = "gender",required = false) String gender,
                                   @RequestParam ( value = "position",required = false) String position,
-                                  @RequestParam ( value = "accountStatus",required = false) Integer accountStatus,
+                                  @RequestParam ( value = "accountStatus",required = false) String accountStatus,
                                   @PathVariable (value = "pageNum")Integer pageNum,
                                   @PathVariable (value = "pageSize") Integer pageSize ){
         return userManagerService.getTeachers(organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
@@ -247,6 +247,21 @@ public class UserManagerController {
         return userManagerService.addStudent(map, userId);
     }
 
+    /**
+     *
+     * @param userName 用户姓名
+     * @param loginName 登录名
+     * @param studentNumber 学号
+     * @param gender 性别
+     * @param grade 年级
+     * @param applyStatus 审核状态
+     * @param transferType 1转入，2转出
+     * @param pageNum 页数
+     * @param pageSize 每页数量
+     * @param userId 当前登录人ID
+     * @return RestRecord
+     */
+    @ApiOperation( value = "获取转入转出的学生列表", notes = "根据参数查询申请中的学生列表", httpMethod = "GET" )
     @GetMapping( "/getTransferStudent/{pageNum}/{pageSize}" )
     public RestRecord getTransferStudent(@RequestParam( value = "userName", required = false ) String userName,
                                          @RequestParam( value = "loginName", required = false ) String loginName,
@@ -254,10 +269,11 @@ public class UserManagerController {
                                          @RequestParam( value = "gender", required = false ) String gender,
                                          @RequestParam( value = "grade", required = false ) String grade,
                                          @RequestParam( value = "applyStatus", required = false ) String applyStatus,
+                                         @RequestParam( value = "transferType" ) String transferType,
                                          @PathVariable String pageNum,
                                          @PathVariable String pageSize,
                                          @CurrentUserId String userId){
-        return null;
+        return userManagerService.getTransferStudent(userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId);
     }
 
 
@@ -267,4 +283,35 @@ public class UserManagerController {
     public RestRecord editTeacherPracticeInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model){
         return userManagerService.editTeacherPracticeInfo(model);
     }
+
+    @ApiOperation( value = "通过证件类型和证件号查询父亲信息" ,notes = "通过条件查询父亲信息", httpMethod = "GET" )
+    @GetMapping("/getParentInfo/{certificationNumber}/{userType}")
+    public RestRecord getParentInfo(@PathVariable String certificationNumber, @PathVariable String userType){
+        return userManagerService.getParentInfo(certificationNumber, userType);
+    }
+
+    @ApiOperation( value = "教师撤回学生转入的申请", notes = "通过id撤回", httpMethod = "DELETE" )
+    @DeleteMapping("/repealApply")
+    public RestRecord repealApply(@CurrentUserId String userId, @RequestBody Map map){
+        return userManagerService.repealApply(userId, map);
+    }
+
+    @ApiOperation( value = "再次申请学生转入", notes = "通过转入申请ID发起再次申请", httpMethod = "PATCH" )
+    @PatchMapping("/reCall/{transferId}")
+    public RestRecord reCall(@PathVariable String transferId){
+        return userManagerService.reCall(transferId);
+    }
+
+    @ApiOperation( value = "获取转出申请详细信息", notes = "通过ID获取", httpMethod = "GET" )
+    @GetMapping("/getTransferOut/{transferId}")
+    public RestRecord getTransferOut(@PathVariable String transferId){
+        return userManagerService.getTransferOut(transferId);
+    }
+
+    @ApiOperation( value = "转出审核", notes = "学生转出审核", httpMethod = "PATCH" )
+    @PatchMapping("/auditTransfer")
+    public RestRecord auditTransfer(@CurrentUserId String userId, @RequestBody Map map){
+        return userManagerService.auditTransfer(userId, map);
+    }
+
 }

@@ -51,7 +51,7 @@ public interface UserMapper {
     List<Map> getTeachers(@Param("organizationId")long organizationId,
                           @Param("userName")String userName, @Param("loginName")String loginName,
                           @Param("gender")String gender, @Param("position")String position,
-                          @Param("accountStatus")Integer accountStatus);
+                          @Param("accountStatus")String accountStatus);
 
     int delTeacher( @Param( "id" ) String id );
 
@@ -114,10 +114,51 @@ public interface UserMapper {
 
     int delStudentOfUser(@Param("userId") String userId);
 
-    void insertStudent(Map map);
-
-
     int editTeacherPracticeInfo(@Param("user_id") String user_id,@Param("teach_certification")String teach_certification,@Param("teach_time") Date teach_time,
                     @Param("school_time")Date school_time, @Param("job_profession")String job_profession,
                     @Param("teach_range")String teach_range, @Param("work_number")String work_number);
+
+    Map selectParentInfoByCertificationNumber(@Param("certificationNumber") String certificationNumber);
+
+    Map selectStudentInfoByCertificationNumber(@Param("certificationNumber") String certificationNumber);
+
+    void insertUserPassword(@Param("id") long id, @Param("userId") String userId, @Param("password") String password);
+
+    void saveUserOfStudent(Map map);
+
+    void saveStudent(Map map);
+
+    void saveUserOfParent(Map map);
+
+    void saveParentStudentRel(@Param("id") long id, @Param("parentUserId") String parentUserId,
+                              @Param("studentUserId") String studentUserId, @Param("isMain") int isMain, @Param("relationship") String relationship);
+
+    Map selectUserIdAndOrganizationId(@Param("parentCertificateNumber") String parentCertificateNumber,
+                                      @Param("parentCertificateType") String parentCertificateType);
+
+    void addTransfer(Map map);
+
+    List<Map> selectTransferInStudent(@Param("userName") String userName, @Param("loginName") String loginName, @Param("studentNumber") String studentNumber,
+                                      @Param("gender") String gender, @Param("grade") String grade, @Param("applyStatus") String applyStatus,
+                                      @Param("organizationId") String organizationId);
+
+    List<Map> selectTransferOutStudent(@Param("userName") String userName, @Param("loginName") String loginName, @Param("studentNumber") String studentNumber,
+                                    @Param("gender") String gender, @Param("grade") String grade, @Param("organizationId") String organizationId);
+
+    int deleteTransferApply(@Param("id") long id, @Param("organizationId") String organizationId);
+
+    int selectTransfer(@Param("userId") String userId, @Param("organizationId") String organizationId);
+
+    void reCall(@Param("transferId") String transferId);
+
+    Map selectTransferInfo(@Param("transferId") String transferId);
+
+    int auditTransfer(Map map);
+
+    void updateOrganizationIdByTransferId(@Param("transferId") String transferId);
+
+    void updateStudent(Map map);
+
+    Map selectStudentInfoByTransferId(@Param("transferId") String transferId);
+
 }

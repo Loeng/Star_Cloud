@@ -99,7 +99,11 @@ public class FileUploadController {
         }catch (Exception e){
             e.printStackTrace();
             try {
-                restRecord = new RestRecord(423, e.getMessage().substring(e.getMessage().indexOf("message") + 10, e.getMessage().indexOf("path") - 3));
+                if(e.getMessage().indexOf("Transaction") != -1){
+                    restRecord = new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+                }else {
+                    restRecord = new RestRecord(423, e.getMessage().substring(e.getMessage().indexOf("message") + 10, e.getMessage().indexOf("path") - 3));
+                }
             }catch (Exception e1){
                 e1.printStackTrace();
                 restRecord = new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);

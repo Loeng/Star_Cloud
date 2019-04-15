@@ -65,7 +65,7 @@ public class UserManagerService {
         return userManagerDao.testCertificate(loginName,certificate);
     }
 
-    public RestRecord getTeachers(long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus, Integer pageNum, Integer pageSize) {
+    public RestRecord getTeachers(long organizationId, String userName, String loginName, String gender, String position, String accountStatus, Integer pageNum, Integer pageSize) {
         return userManagerDao.getTeachers(organizationId,userName,loginName,gender,position,accountStatus,pageNum,pageSize);
     }
 
@@ -107,17 +107,68 @@ public class UserManagerService {
     }
 
     public RestRecord addStudent(Map map, String userId){
-        if(map.get("bindType") == null || map.get("studentCertificateType") == null || map.get("studentCertificateNumber") == null || map.get("studentUserName") == null ||
-                map.get("studentBirthDate") == null || map.get("studentNationality") == null || map.get("studentVolk") == null || map.get("entranceYear") == null || map.get("grade") == null ||
-                map.get("classNumber") == null || map.get("seatNumber") == null || map.get("studentNumber") == null ||  map.get("parentCertificateType") == null ||
-                map.get("parentCertificateNumber") == null ){
+        //必需字段验证
+        if(map.get("transferType") == null || map.get("studentCertificateType") == null || map.get("studentCertificateNumber") == null || map.get("entranceYear") == null ||
+                map.get("grade") == null || map.get("classNumber") == null || map.get("seatNumber") == null || map.get("studentNumber") == null ){
             return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
         }
-        return userManagerDao.addStudent(map, userId);
+        RestRecord restRecord = null;
+        if( map.get("studentUserName") == null || map.get("studentBirthDate") == null || map.get("studentNationality") == null || map.get("studentVolk") == null ||
+                map.get("parentCertificateType") == null || map.get("parentCertificateNumber") == null || map.get("relationship") == null ){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+        }
+
+        String bindType;
+        try{
+            bindType = map.get("bindType").toString();
+        }catch (NullPointerException e){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+        }
+        if(bindType.equals("1")){
+            if(map.get("parentUserName") == null || map.get("parentNationality") == null || map.get("parentVolk") == null ||
+                    map.get("parentPhoneNumber") == null ){
+                return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+            }
+        }
+        restRecord = userManagerDao.addStudent(map, userId);
+
+        return restRecord;
     }
 
 
     public RestRecord editTeacherPracticeInfo(InfoTeacherModel model){
         return userManagerDao.editTeacherPracticeInfo(model);
     }
+
+    public RestRecord getParentInfo(String certificationNumber, String userType){
+        return userManagerDao.getParentInfo(certificationNumber, userType);
+    }
+
+    public RestRecord getTransferStudent(String userName, String loginName, String studentNumber, String gender, String grade, String applyStatus,
+                                         String transferType, String pageNum, String pageSize, String userId){
+        return userManagerDao.getTransferStudent(userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId);
+    }
+
+    public RestRecord repealApply(String userId, Map map){
+        if(map.get("id") == null){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+        }
+        return userManagerDao.repealApply(userId, map);
+    }
+
+    public RestRecord reCall(String transferId){
+        return userManagerDao.reCall(transferId);
+    }
+
+    public RestRecord getTransferOut(String transferId){
+        return userManagerDao.getTransferOut(transferId);
+    }
+
+    public RestRecord auditTransfer(String userId, Map map){
+        if(map.get("applyStatus") == null || map.get("id") == null){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+        }
+        return userManagerDao.auditTransfer(userId, map);
+    }
+
 }

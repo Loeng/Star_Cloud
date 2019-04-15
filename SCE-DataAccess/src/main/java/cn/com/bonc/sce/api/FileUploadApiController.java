@@ -355,7 +355,7 @@ public class FileUploadApiController {
             e.printStackTrace();
             return new RestRecord(423, String.format(WebMessageConstants.SCE_PORTAL_MSG_432, "添加数据失败", i + EXCEL_NUMBER));
         }
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 + "，" + String.format( success, count ), list.size() );
+        return new RestRecord( 200, String.format( success, count ), list.size() );
 
     }
 

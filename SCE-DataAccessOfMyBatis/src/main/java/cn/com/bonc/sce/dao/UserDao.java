@@ -6,6 +6,8 @@ import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -72,7 +74,12 @@ public class UserDao {
         return userMapper.getIdByPhone(phone);
     }
 
-    public List<Map> getTeachers(long organizationId,String userName, String loginName, String gender, String position, Integer accountStatus) {
+    public List<Map> getTeachers(long organizationId,String userName, String loginName, String gender, String position, String accountStatus) {
+        System.out.println("------------------------------");
+        System.out.println("------------------------------");
+        System.out.println(accountStatus);
+        System.out.println("------------------------------");
+        System.out.println("------------------------------");
         return userMapper.getTeachers(organizationId,userName,loginName,gender,position,accountStatus);
     }
 
@@ -143,12 +150,86 @@ public class UserDao {
         return userMapper.selectUserIdByLoginName(loginName);
     }
 
-    public void insertStudent(Map map){
-        userMapper.insertStudent(map);
-    }
-
-
     public int editTeacherPracticeInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,String teach_range, String work_number) {
         return userMapper.editTeacherPracticeInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number);
+    }
+
+    public Map selectParentInfoByCertificationNumber(String certificationNumber){
+        return userMapper.selectParentInfoByCertificationNumber(certificationNumber);
+    }
+
+    public Map selectStudentInfoByCertificationNumber(String certificationNumber){
+        return userMapper.selectStudentInfoByCertificationNumber(certificationNumber);
+    }
+
+    public void saveUserPassword(long id, String userId, String password){
+        userMapper.insertUserPassword(id, userId, password);
+    }
+
+    public void saveUserOfStudent(Map map){
+        userMapper.saveUserOfStudent(map);
+    }
+
+    public void saveStudent(Map map){
+        userMapper.saveStudent(map);
+    }
+
+    public void saveUserOfParent(Map map){
+        userMapper.saveUserOfParent(map);
+    }
+
+    public void saveParentStudentRel(long id, String parentUserId, String studentUserId, int isMain, String relationship){
+        userMapper.saveParentStudentRel(id, parentUserId, studentUserId, isMain, relationship);
+    }
+
+    public String selectUserIdByCertification(String parentCertificateNumber, String parentCertificateType){
+        Map map = selectUserIdAndOrganizationId(parentCertificateNumber, parentCertificateType);
+        return map.get("USER_ID").toString();
+    }
+
+    public Map selectUserIdAndOrganizationId(String parentCertificateNumber, String parentCertificateType){
+        return userMapper.selectUserIdAndOrganizationId(parentCertificateNumber, parentCertificateType);
+    }
+
+    public void addTransfer(Map map){
+        userMapper.addTransfer(map);
+    }
+
+    public List<Map> selectTransferInStudent(String userName, String loginName, String studentNumber, String gender, String grade, String applyStatus, String organizationId){
+        return userMapper.selectTransferInStudent(userName, loginName, studentNumber, gender, grade, applyStatus, organizationId);
+    }
+
+    public List<Map> selectTransferOutStudent(String userName, String loginName, String studentNumber, String gender, String grade, String organizationId){
+        return userMapper.selectTransferOutStudent(userName, loginName, studentNumber, gender, grade, organizationId);
+    }
+
+    public int deleteTransferApply(long id, String organizationId){
+       return userMapper.deleteTransferApply(id, organizationId);
+    }
+
+    public int selectTransfer(String userId, String organizationId){
+        return userMapper.selectTransfer(userId, organizationId);
+    }
+
+    public void reCall(String transferId){
+        userMapper.reCall(transferId);
+    }
+
+    public Map selectTransferInfo(String transferId){
+        return userMapper.selectTransferInfo(transferId);
+    }
+
+    public int auditTransfer(Map map){
+        return userMapper.auditTransfer(map);
+    }
+
+    public void updateOrganizationIdByTransferId(String transferId){
+        userMapper.updateOrganizationIdByTransferId(transferId);
+    }
+
+    @Transactional( propagation = Propagation.REQUIRED )
+    public void updateStudent(String transferId){
+        Map map = userMapper.selectStudentInfoByTransferId(transferId);
+        userMapper.updateStudent(map);
     }
 }

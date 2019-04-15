@@ -5,18 +5,26 @@ import cn.com.bonc.sce.bean.SchoolBean;
 import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserDao;
+import cn.com.bonc.sce.exception.ImportUserFailedException;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IDUtil;
+import cn.com.bonc.sce.tool.IdWorker;
+import cn.com.bonc.sce.tool.UserPropertiesUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Charles on 2019/3/6.
@@ -25,8 +33,15 @@ import java.util.Map;
 @Slf4j
 public class UserService {
 
+    private static final String DEFAULT_PASSWORD = "star123!";
+    private static final String STUDENT = "该学生%s";
+    private static final String PARENT = "该家长%s";
+
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private IdWorker idWorker;
 
     public int saveUser(UserBean userBean) {
         return userDao.saveUser(userBean);
@@ -80,7 +95,7 @@ public class UserService {
         return userDao.getIdByPhone(phone);
     }
 
-    public List<Map> getTeachers(long organizationId,String userName, String loginName, String gender, String position, Integer accountStatus) {
+    public List<Map> getTeachers(long organizationId,String userName, String loginName, String gender, String position, String accountStatus) {
         return userDao.getTeachers(organizationId,userName,loginName,gender,position,accountStatus);
     }
 
@@ -164,13 +179,106 @@ public class UserService {
         }
     }
 
-    @Transactional( isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class )
+    @Transactional( propagation = Propagation.REQUIRED )
     public RestRecord addStudent(Map map, String userId){
+        //学生身份证验证
+        if(map.get("studentCertificateType").toString().equals("1") && !UserPropertiesUtil.checkCertificateNumber(map.get("studentCertificateNumber").toString())){
+            log.info("学生身份证验证未通过");
+            return new RestRecord( 432, String.format(STUDENT, "身份证填写不正确") );
+        }
+        if(map.get("parentCertificateType").toString().equals("1") && !UserPropertiesUtil.checkCertificateNumber(map.get("parentCertificateNumber").toString())){
+            log.info("家长身份证验证未通过");
+            return new RestRecord( 432, String.format(PARENT, "身份证填写不正确") );
+        }
         String organizationId = userDao.getOrganizationIdByUserId(userId);
-        //插入学生到学生表
+        //1.存入学生密码
+        String studentSecret = Secret.ES256GenerateSecret();
+        String studentLoginName = IDUtil.createID( "xs_" );
+        String studentId = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
+        userDao.saveUserPassword(idWorker.nextId(), studentId, DEFAULT_PASSWORD);
+
+        //2.存入学生用户表
+        map.put("studentId", studentId);
+        map.put("studentLoginName", studentLoginName);
+        map.put("studentSecret", studentSecret);
+        map.put("organizationId", organizationId);
+        map.put("userType", 1);
+        userDao.saveUserOfStudent(map);
+
+        //3.存入学生表
+        userDao.saveStudent(map);
+
+        String bindType = map.get("bindType").toString();
+        String parentId = null;
+        if(bindType.equals("1")){
+            //新建家长
+            //验证手机号
+            if(!UserPropertiesUtil.checkPhone(map.get("parentPhoneNumber").toString())){
+                log.info("家长手机号验证未通过");
+                return new RestRecord( 432, String.format(PARENT, "手机号填写不正确") );
+            }
+            String parentMailAddress = null;
+            try{
+                parentMailAddress = map.get("parentMailAddress").toString();
+            }catch (NullPointerException e){}
+
+            if( parentMailAddress != null && !UserPropertiesUtil.checkMail(parentMailAddress)){
+                log.info("家长邮箱验证未通过");
+                return new RestRecord( 432, String.format(PARENT, "邮箱填写不正确") );
+            }
+            //1.存入家长密码表
+            String parentSecret = Secret.ES256GenerateSecret();
+            String parentLoginName = IDUtil.createID( "zj_" );
+            parentId = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
+            userDao.saveUserPassword(idWorker.nextId(), parentId, DEFAULT_PASSWORD);
+
+            //2.存入家长用户表
+            map.put("parentId", parentId);
+            map.put("parentSecret", parentSecret);
+            map.put("parentLoginName", parentLoginName);
+            map.put("userType", 5);
+            userDao.saveUserOfParent(map);
 
 
-        return null;
+        }else if(bindType.equals("2")){
+            //绑定现有家长
+            parentId = userDao.selectUserIdByCertification(map.get("parentCertificateNumber").toString(), map.get("parentCertificateType").toString());
+        }
+
+        //4.存入家长学生关系表
+        userDao.saveParentStudentRel(idWorker.nextId(), parentId, studentId, 1, map.get("relationship").toString());
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    /**
+     *  外校转入学生
+     * @param map 数据
+     * @param currentUserId 用户ID
+     * @return RestRecord
+     */
+    public RestRecord transferInStudent(Map map, String currentUserId){
+        Map userInfo = userDao.selectUserIdAndOrganizationId(map.get("studentCertificateNumber").toString(), map.get("studentCertificateType").toString());
+        if(userInfo == null){
+            return new RestRecord( 434, String.format(WebMessageConstants.SCE_PORTAL_MSG_434, "") );
+        }
+        String organizationId = userDao.getOrganizationIdByUserId(currentUserId);
+        if(organizationId.equals(userInfo.get("ORGANIZATION_ID"))){
+            return new RestRecord( 434, "该学生已是本校学生，无需申请转入" );
+        }
+        map.put("id", idWorker.nextId());
+        map.put("userId", userInfo.get("USER_ID"));
+        map.put("userType", 1);
+        map.put("originSchoolId", userInfo.get("ORGANIZATION_ID"));
+        map.put("targetSchoolId", organizationId);
+        map.put("applyUserId", currentUserId);
+
+        //查询该学生是否已申请转入
+        int count = userDao.selectTransfer(userInfo.get("USER_ID").toString(), organizationId);
+        if(count > 0){
+            return new RestRecord( 435, String.format(WebMessageConstants.SCE_PORTAL_MSG_435, "已提交转入申请"));
+        }
+        userDao.addTransfer(map);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
     public String selectUserIdByLoginName(String loginName){
@@ -180,5 +288,77 @@ public class UserService {
 
     public int editTeacherPracticeInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,String teach_range, String work_number) {
         return userDao.editTeacherPracticeInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number);
+    }
+
+    public RestRecord getParentInfo(String certificationNumber, String userType){
+        Map map = null;
+        if(userType.equals("1")){
+            map = userDao.selectStudentInfoByCertificationNumber(certificationNumber);
+        }else if(userType.equals("5")){
+            map = userDao.selectParentInfoByCertificationNumber(certificationNumber);
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map);
+    }
+
+    public RestRecord getTransferStudent(String userName, String loginName, String studentNumber, String gender, String grade, String applyStatus,
+                                         String transferType, String pageNum, String pageSize, String userId){
+        String organizationId = userDao.getOrganizationIdByUserId(userId);
+        try {
+            PageHelper.startPage( Integer.parseInt( pageNum ), Integer.parseInt( pageSize ) );
+        } catch ( NumberFormatException e ) {
+            log.warn( "不支持的分页参数 -> pageNum:{},pageSize:{}", pageNum, pageSize );
+            return new RestRecord( 433, WebMessageConstants.SCE_PORTAL_MSG_433 );
+        }
+        List list = null;
+        if(transferType.equals("1")){
+            list = userDao.selectTransferInStudent(userName, loginName, studentNumber, gender, grade, applyStatus, organizationId);
+        }else if(transferType.equals("2")){
+            list = userDao.selectTransferOutStudent(userName, loginName, studentNumber, gender, grade, organizationId);
+        }
+        long total = list == null ? 0L : ((Page) list).getTotal();
+        RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, list );
+        restRecord.setTotal( total );
+        return restRecord;
+    }
+
+    public RestRecord repealApply(String currentUserId, Map map){
+        long id;
+        try{
+            id = Long.parseLong(map.get("id").toString());
+        }catch (NumberFormatException e){
+            return new RestRecord( 422, WebMessageConstants.SCE_PORTAL_MSG_422 );
+        }
+        String organizationId = userDao.getOrganizationIdByUserId(currentUserId);
+        int count = userDao.deleteTransferApply(id, organizationId);
+        if(count > 0 ){
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        }
+        return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
+    }
+
+    public RestRecord reCall(String transferId){
+        userDao.reCall(transferId);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    public RestRecord getTransferOut(String transferId){
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, userDao.selectTransferInfo(transferId) );
+    }
+
+    @Transactional( isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class )
+    public RestRecord auditTransfer(String userId, Map map){
+        String organizationId = userDao.getOrganizationIdByUserId(userId);
+        map.put("organizationId", organizationId);
+        int count = userDao.auditTransfer(map);
+        if(count > 0){
+            if(map.get("applyStatus").toString().equals("1")){
+                //转移学生的学校
+                userDao.updateOrganizationIdByTransferId(map.get("id").toString());
+                //修改学生的学生表
+                userDao.updateStudent(map.get("id").toString());
+            }
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, count );
+        }
+        return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
     }
 }

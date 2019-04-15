@@ -217,7 +217,7 @@ public class UserManagerController {
                                   @RequestParam(value = "loginName", required = false) String loginName,
                                   @RequestParam(value = "gender", required = false) String gender,
                                   @RequestParam(value = "position", required = false) String position,
-                                  @RequestParam(value = "accountStatus", required = false) Integer accountStatus,
+                                  @RequestParam(value = "accountStatus", required = false) String accountStatus,
                                   @PathVariable(value = "pageNum") Integer pageNum,
                                   @PathVariable(value = "pageSize") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -386,10 +386,31 @@ public class UserManagerController {
         return userService.delStudent(userId);
     }
 
+    /**
+     *  根据参数添加学生
+     * @param map transferType 新建类型，1新建学生，2外校转入
+     *            bindType 绑定类型，1新建家长，2绑定现有家长
+     *            必须字段：studentCertificateType 学生证件类型，studentCertificateNumber 学生证件号，entranceYear 入学年月（格式YYYY-MM-dd）
+     *            grade 年级，classNumber 班级，seatNumber 座号，studentNumber 学号，studentUserName 学生姓名，studentBirthDate 学生生日
+     *            studentNationality 学生国籍，studentVolk 学生民族，parentCertificateType 家长证件类型，parentCertificateNumber 家长证件号
+     *            relationship 家长学生关系
+     *            新建家长的必需字段：parentUserName 家长姓名，parentNationality 家长国籍，parentVolk 家长民族，parentPhoneNumber 家长手机号
+     *            不必需字段：studentGender 学生性别，studentCode 学生学籍号，parentGender 家长性别，parentMailAddress 家长电子邮箱
+     * @param userId 当前用户id
+     * @return RestRecord
+     */
     @PostMapping( "/addStudent" )
+    @Transactional( rollbackFor = Exception.class )
     public RestRecord addStudent(@RequestBody Map map,
                                  @CurrentUserId String userId){
-        return userService.addStudent(map, userId);
+        String transferType = map.get("transferType").toString();
+        RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        if(transferType.equals("1")){
+            restRecord = userService.addStudent(map, userId);
+        }else if(transferType.equals("2")){
+            restRecord = userService.transferInStudent(map, userId);
+        }
+        return restRecord;
     }
 
     @ApiOperation(value = "通过用户id修改教师从业信息", notes = "通过用户id修改教师从业信息", httpMethod = "PUT")
@@ -416,5 +437,51 @@ public class UserManagerController {
                 JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER);
 
         return new RestRecord(200, MessageConstants.SCE_MSG_0200, teacherEdit);
+    }
+
+    @GetMapping("/getParentInfo/{certificationNumber}/{userType}")
+    public RestRecord getParentInfo(@PathVariable String certificationNumber, @PathVariable String userType){
+        return userService.getParentInfo(certificationNumber, userType);
+    }
+
+    @GetMapping( "/getTransferStudent/{pageNum}/{pageSize}" )
+    public RestRecord getTransferStudent(@RequestParam( value = "userName", required = false ) String userName,
+                                         @RequestParam( value = "loginName", required = false ) String loginName,
+                                         @RequestParam( value = "studentNumber", required = false ) String studentNumber,
+                                         @RequestParam( value = "gender", required = false ) String gender,
+                                         @RequestParam( value = "grade", required = false ) String grade,
+                                         @RequestParam( value = "applyStatus", required = false ) String applyStatus,
+                                         @RequestParam( value = "transferType" ) String transferType,
+                                         @PathVariable String pageNum,
+                                         @PathVariable String pageSize,
+                                         @CurrentUserId String userId) {
+        return userService.getTransferStudent(userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId);
+    }
+
+    @DeleteMapping("/repealApply")
+    public RestRecord repealApply(@CurrentUserId String userId,
+                                  @RequestBody Map map){
+        return userService.repealApply(userId, map);
+    }
+
+    @PutMapping("/reCall/{transferId}")
+    public RestRecord reCall(@PathVariable String transferId){
+        return userService.reCall(transferId);
+    }
+
+    @GetMapping("/getTransferOut/{transferId}")
+    public RestRecord getTransferOut(@PathVariable String transferId){
+        return userService.getTransferOut(transferId);
+    }
+
+    /**
+     * 学生转出申请的审核
+     * @param userId 用户ID
+     * @param map 参数 applyStatus：1通过，2不通过；id：申请ID；rejectReason，不通过原因
+     * @return RestRecord
+     */
+    @PutMapping("/auditTransfer")
+    public RestRecord auditTransfer(@CurrentUserId String userId, @RequestBody Map map){
+        return userService.auditTransfer(userId, map);
     }
 }

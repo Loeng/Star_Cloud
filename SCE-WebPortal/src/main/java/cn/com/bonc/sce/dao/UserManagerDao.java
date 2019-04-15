@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.dao;
 
+import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import io.swagger.annotations.ApiParam;
@@ -56,7 +57,7 @@ public interface UserManagerDao {
                            @RequestParam("loginName")String loginName,
                            @RequestParam("gender")String gender,
                            @RequestParam("position")String position,
-                           @RequestParam("accountStatus")Integer accountStatus,
+                           @RequestParam("accountStatus")String accountStatus,
                            @PathVariable("pageNum")Integer pageNum,
                            @PathVariable("pageSize")Integer pageSize);
 
@@ -100,10 +101,39 @@ public interface UserManagerDao {
     RestRecord delStudent(@RequestParam( "userId" ) String userId);
 
     @RequestMapping( value = "/userManager/addStudent", method = RequestMethod.POST )
-    public RestRecord addStudent(@RequestBody Map map,
-                                 @RequestParam( "userId" ) String userId);
+    RestRecord addStudent(@RequestBody Map map, @RequestParam( "userId" ) String userId);
 
     @RequestMapping( value = "/userManager/editTeacherPracticeInfo", method = RequestMethod.PUT )
     RestRecord editTeacherPracticeInfo(@RequestBody  @ApiParam( "教师从业信息对象" ) InfoTeacherModel model);
+
+    @RequestMapping( value = "/userManager/getParentInfo/{certificationNumber}/{userType}", method = RequestMethod.GET)
+    RestRecord getParentInfo(@PathVariable("certificationNumber") String certificationNumber,
+                             @PathVariable("userType") String userType);
+
+    @RequestMapping( value = "/userManager/getTransferStudent/{pageNum}/{pageSize}", method = RequestMethod.GET)
+    RestRecord getTransferStudent(@RequestParam( value = "userName", required = false ) String userName,
+                                  @RequestParam( value = "loginName", required = false ) String loginName,
+                                  @RequestParam( value = "studentNumber", required = false ) String studentNumber,
+                                  @RequestParam( value = "gender", required = false ) String gender,
+                                  @RequestParam( value = "grade", required = false ) String grade,
+                                  @RequestParam( value = "applyStatus", required = false ) String applyStatus,
+                                  @RequestParam( value = "transferType" ) String transferType,
+                                  @PathVariable("pageNum") String pageNum,
+                                  @PathVariable("pageSize") String pageSize,
+                                  @RequestParam( value = "userId") String userId);
+
+    @RequestMapping( value = "/userManager/repealApply", method = RequestMethod.DELETE )
+    RestRecord repealApply(@RequestParam("userId") String userId,
+                           @RequestBody Map map);
+
+    @RequestMapping( value = "/userManager/reCall/{transferId}", method = RequestMethod.PUT )
+    RestRecord reCall(@PathVariable("transferId") String transferId);
+
+    @RequestMapping( value = "/userManager/getTransferOut/{transferId}", method = RequestMethod.GET )
+    RestRecord getTransferOut(@PathVariable("transferId") String transferId);
+
+    @RequestMapping( value = "/userManager/auditTransfer", method = RequestMethod.PUT )
+    RestRecord auditTransfer(@RequestParam("userId") String userId,
+                             @RequestBody Map map);
 
 }

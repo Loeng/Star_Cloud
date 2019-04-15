@@ -324,7 +324,11 @@
     </select>
 
     <select id="getTeachers" resultType="Map">
-        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,ACCOUNT_STATUS,POSITION
+        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,
+        case ACCOUNT_STATUS when 1 then '已激活'
+        else '未激活'
+        end as ACCOUNT_STATUS,
+        POSITION
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
         WHERE u.USER_TYPE=2
@@ -590,7 +594,6 @@
     </update>
 
 
-
     <update id="editTeacherPracticeInfo">
         UPDATE  STARCLOUDPORTAL.SCE_INFO_TEACHER
         <set>
@@ -614,5 +617,281 @@
             </if>
         </set>
         WHERE USER_ID=#{user_id}
+    </update>
+
+    <select id="selectParentInfoByCertificationNumber" resultType="Map">
+        SELECT USER_NAME,GENDER,NATIONALITY,VOLK,PHONE_NUMBER,MAIL_ADDRESS
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER
+        WHERE IS_DELETE = 1 AND CERTIFICATE_NUMBER = #{certificationNumber}
+    </select>
+
+    <select id="selectStudentInfoByCertificationNumber" resultType="Map">
+        SELECT U.USER_NAME,U.GENDER,TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd'),NATIONALITY,VOLK,S.STUDENT_CODE
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT S
+        ON U.USER_ID = S.USER_ID
+        WHERE U.IS_DELETE = 1 AND S.IS_DELETE = 1
+        WHERE U.CERTIFICATE_NUMBER = #{certificationNumber}
+    </select>
+
+    <insert id="insertUserPassword">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD(ID, USER_ID, PASSWORD)
+        VALUES(#{id}, #{userId}, #{password})
+    </insert>
+
+    <insert id="saveUserOfStudent">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID, LOGIN_NAME, USER_NAME,
+         <if test="studentGender != null and studentGender != ''">
+             GENDER,
+         </if>
+         USER_TYPE, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, ORGANIZATION_ID, SECRET, TO_DATE(BIRTHDATE, 'YYYY-MM-dd'), ISADMINISTRATORS, NATIONALITY, VOLK)
+        VALUES(#{studentId}, #{studentLoginName}, #{studentUserName}
+        <if test="studentGender != null and studentGender != ''">
+            #{studentGender},
+        </if>
+        #{userType}, #{studentCertificateType}, #{studentCertificateNumber}, #{organizationId}, #{studentSecret}, #{studentBirthDate}, 0, #{studentNationality}, #{studentVolk}
+        )
+    </insert>
+
+    <insert id="saveStudent">
+        INSERT INTO STARCLOUDPORTAL.SCE_INFO_STUDENT(USER_ID, CLASS_NUMBER, GRADE, STUDENT_NUMBER, ENTRANCE_YEAR, SEAT_NUMBER
+        <if test="studentCode != null and studentCode != ''">
+            , STUDENT_CODE
+        </if>
+        )
+        VALUES(#{studentId}, #{classNumber}, #{grade}, #{studentNumber}, TO_DATE(#{entranceYear}, 'YYYY-MM-dd'), #{seatNumber}
+        <if test="studentCode != null and studentCode != ''">
+            , #{studentCode}
+        </if>
+        )
+    </insert>
+
+    <insert id="saveUserOfParent">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID, LOGIN_NAME, USER_NAME,
+        <if test="parentGender != null and parentGender != ''">
+            GENDER,
+        </if>
+        USER_TYPE,
+        <if test="parentMailAddress != null and parentMailAddress != ''">
+            MAIL_ADDRESS,
+        </if>
+        PHONE_NUMBER, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, SECRET, ISADMINISTRATORS, NATIONALITY, VOLK)
+        VALUES(#{parentId}, #{parentLoginName}, #{parentUserName}
+        <if test="parentGender != null and parentGender != ''">
+            #{parentGender},
+        </if>
+        #{userType},
+        <if test="parentMailAddress != null and parentMailAddress != ''">
+            #{parentMailAddress},
+        </if>
+        #{parentPhoneNumber}, #{parentCertificateType}, #{parentCertificateNumber}, #{parentSecret}, 0, #{parentNationality}, #{parentVolk}
+        )
+    </insert>
+
+    <insert id="saveParentStudentRel">
+        INSERT INTO STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL(ID, PARENT_USER_ID, STUDENT_USER_ID, IS_MAIN, RELATIONSHIP)
+        VALUES(#{id}, #{parentUserId}, #{studentUserId}, #{isMain}, #{relationship})
+    </insert>
+
+    <select id="selectUserIdAndOrganizationId" resultType="Map">
+        SELECT USER_ID,ORGANIZATION_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER
+        WHERE CERTIFICATE_NUMBER = #{parentCertificateNumber}
+        AND CERTIFICATE_TYPE = #{parentCertificateType}
+    </select>
+
+    <insert id="addTransfer">
+        INSERT INTO STARCLOUDPORTAL.SCE_TRANSFER_APPLY(ID, USER_ID, USER_TYPE, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID,
+        APPLY_STATUS, APPLY_USER_ID, APPLY_TIME, STU_ENTRANCE_YEAR, STU_CLASS_NUMBER, STU_GRADE, STU_SEAT_NUMBER, STUDENT_NUMBER)
+        VALUES(#{id}, #{userId}, #{userType}, #{originSchoolId}, #{targetSchoolId}, 0, #{applyUserId}, SYSDATE, #{entranceYear},
+        #{classNumber}, #{grade}, #{seatNumber}, #{studentNumber})
+    </insert>
+
+    <select id="selectTransferInStudent" resultType="Map">
+        SELECT TA.ID,
+        U.USER_NAME,
+        U.LOGIN_NAME,
+        U.GENDER,
+        TA.STU_GRADE,
+        TA.STUDENT_NUMBER,
+        ES.SCHOOL_NAME,
+        TA.APPLY_STATUS,
+        TA.REJECT_REASON
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY TA
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U
+        ON TA.USER_ID = U.USER_ID AND U.USER_TYPE = TA.USER_TYPE AND U.ORGANIZATION_ID = TA.ORIGIN_SCHOOL_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES
+        ON U.ORGANIZATION_ID = ES.ID
+        WHERE TA.APPLY_STATUS != 1
+        AND TA.IS_DELETE == 1
+        AND U.IS_DELETE == 1
+        AND TA.USER_TYPE = 1
+        AND TA.TARGET_SCHOOL_ID = #{organizationId}
+        <if test="userName != null and userName != ''">
+            AND U.USER_NAME like '%'||#{userName}||'%'
+        </if>
+        <if test="loginName != null and loginName != ''">
+            AND U.LOGIN_NAME like '%'||#{loginName}||'%'
+        </if>
+        <if test="gender != null and gender != ''">
+            AND U.GENDER = #{gender}
+        </if>
+        <if test="studentNumber != null and studentNumber != ''">
+            AND TA.STUDENT_NUMBER = #{studentNumber}
+        </if>
+        <if test="grade != null and grade != ''">
+            AND TA.STU_GRADE = #{grade}
+        </if>
+        <if test="applyStatus != null and applyStatus != ''">
+            AND TA.APPLY_STATUS = #{applyStatus}
+        </if>
+        ORDER BY TA.APPLY_TIME DESC
+    </select>
+
+    <select id="selectTransferOutStudent" resultType="Map">
+        SELECT U.USER_ID,
+        U.USER_NAME,
+        U.LOGIN_NAME,
+        U.GENDER,
+        ES.SCHOOL_NAME,
+        TA.APPLY_STATUS
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY TA
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U
+        ON TA.USER_ID = U.USER_ID AND U.USER_TYPE = TA.USER_TYPE AND U.ORGANIZATION_ID = TA.ORIGIN_SCHOOL_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT S
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES
+        ON TA.TARGET_SCHOOL_ID = ES.ID
+        WHERE TA.APPLY_STATUS != 1
+        AND TA.IS_DELETE == 1
+        AND U.IS_DELETE == 1
+        AND S.IS_DELETE == 1
+        AND TA.USER_TYPE = 1
+        AND TA.ORIGIN_SCHOOL_ID = #{organizationId}
+        <if test="userName != null and userName != ''">
+            AND U.USER_NAME like '%'||#{userName}||'%'
+        </if>
+        <if test="loginName != null and loginName != ''">
+            AND U.LOGIN_NAME like '%'||#{loginName}||'%'
+        </if>
+        <if test="gender != null and gender != ''">
+            AND U.GENDER = #{gender}
+        </if>
+        <if test="studentNumber != null and studentNumber != ''">
+            AND S.STUDENT_NUMBER = #{studentNumber}
+        </if>
+        <if test="grade != null and grade != ''">
+            AND S.GRADE = #{grade}
+        </if>
+        ORDER BY TA.APPLY_TIME DESC
+    </select>
+
+    <delete id="deleteTransferApply">
+        delete from STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        where ID = #{ID}
+        AND ORIGIN_SCHOOL_ID = #{organizationId}
+        AND IS_DELETE = 1
+    </delete>
+
+    <select id="selectTransfer" resultType="int">
+        SELECT count(1)
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        WHERE USER_ID = #{userId}
+        AND TARGET_SCHOOL_ID = #{organizationId}
+        AND IS_DELETE = 1
+    </select>
+
+    <update id="reCall">
+        UPDATE STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        SET APPLY_STATUS = 0
+        WHERE ID = TO_NUMBER(#{id})
+        AND IS_DELETE = 1
+    </update>
+
+    <select id="selectTransferInfo" resultType="Map">
+        SELECT U.CERTIFICATE_TYPE,
+        U.CERTIFICATE_NUMBER,
+        U.USER_NAME,
+        U.GENDER,
+        TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') AS BIRTHDATE,
+        U.VOLK,
+        U.NATIONALITY,
+        S.STUDENT_CODE,
+        S.ENTRANCE_YEAR,
+        S.GRADE,
+        S.CLASS_NUMBER,
+        S.STUDENT_NUMBER,
+        ES.SCHOOL_NAME
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY TA
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U
+        ON U.USER_ID = TA.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT S
+        ON S.USER_ID = U.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES
+        ON ES.ID = TA.TARGET_SCHOOL_ID
+        AND U.IS_DELETE = 1
+        AND TA.IS_DELETE = 1
+        WHERE TA.ID = #{id}
+    </select>
+
+    <update id="auditTransfer">
+        UPDATE STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        SET APPLY_STATUS = #{applyStatus}
+        <if test="rejectReason != null and rejectReason != ''">
+          ,REJECT_REASON = #{rejectReason}
+        </if>
+        <if test="applyStatus == '1'">
+          ,IS_DELETE = 0
+        </if>
+        WHERE ID = #{id}
+        AND IS_DELETE = 1
+        AND ORIGIN_SCHOOL_ID = #{organizationId}
+    </update>
+
+    <update id="updateOrganizationIdByTransferId">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
+        SET ORGANIZATION_ID = (
+        SELECT TARGET_SCHOOL_ID
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        WHERE ID = TO_NUMBER(#{transferId})
+        AND ID_DELETE = 1
+        )
+        WHERE USER_ID =  (
+        SELECT USER_ID
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        WHERE ID = TO_NUMBER(#{transferId})
+        AND ID_DELETE = 1
+        )
+    </update>
+
+    <select id="selectStudentInfoByTransferId" resultType="Map">
+        SELECT USER_ID,
+        STU_ENTRANCE_YEAR,
+        STU_CLASS_NUMBER,
+        STU_GRADE,
+        STU_SEAT_NUMBER,
+        STUDENT_NUMBER
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        WHERE ID = #{transferId}
+    </select>
+
+    <update id="updateStudent">
+        UPDATE STARCLOUDPORTAL.SCE_INFO_STUDENT
+        <set>
+            <if test="STU_ENTRANCE_YEAR != null">
+                 ENTRANCE_YEAR = #{STU_ENTRANCE_YEAR}
+            </if>
+            <if test="STU_CLASS_NUMBER != null">
+                AND CLASS_NUMBER = #{STU_CLASS_NUMBER}
+            </if>
+            <if test="STU_GRADE != null">
+                AND GRADE = #{STU_GRADE}
+            </if>
+            <if test="STU_SEAT_NUMBER != null">
+                AND SEAT_NUMBER = #{STU_SEAT_NUMBER}
+            </if>
+            <if test="STUDENT_NUMBER != null">
+                AND STUDENT_NUMBER = #{STUDENT_NUMBER}
+            </if>
+        </set>
+        WHERE USER_ID = #{USER_ID}
     </update>
 </mapper>
