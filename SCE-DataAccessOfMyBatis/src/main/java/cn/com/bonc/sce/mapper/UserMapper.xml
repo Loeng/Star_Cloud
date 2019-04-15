@@ -616,6 +616,62 @@
         WHERE USER_ID=#{user_id}
     </update>
 
+    <insert id="addTeacherInfo">
+        insert into STARCLOUDPORTAL.SCE_INFO_TEACHER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user_id != null">
+                USER_ID,
+            </if>
+            <if test="teach_certification != null">
+                TEACH_CERTIFICATION,
+            </if>
+            <if test="teach_time != null">
+                TEACH_TIME,
+            </if>
+            <if test="school_time != null">
+                SCHOOL_TIME,
+            </if>
+            <if test="job_profession != null">
+                JOB_PROFESSION,
+            </if>
+            <if test="teach_range != null">
+                TEACH_RANGE,
+            </if>
+            <if test="work_number != null">
+                WORK_NUMBER,
+            </if>
+            <if test="is_delete != null">
+                IS_DELETE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="user_id != null">
+                #{user_id,jdbcType=VARCHAR},
+            </if>
+            <if test="teach_certification != null">
+                #{teach_certification,jdbcType=VARCHAR},
+            </if>
+            <if test="teach_time != null">
+                #{teach_time,jdbcType=DATE},
+            </if>
+            <if test="school_time != null">
+                #{school_time,jdbcType=DATE},
+            </if>
+            <if test="job_profession != null">
+                #{job_profession,jdbcType=VARCHAR},
+            </if>
+            <if test="teach_range != null">
+                #{teach_range,jdbcType=DECIMAL},
+            </if>
+            <if test="work_number != null">
+                #{work_number,jdbcType=VARCHAR},
+            </if>
+            <if test="is_delete != null">
+                #{is_delete,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
     <select id="getUserById" resultType="cn.com.bonc.sce.bean.UserBean">
         SELECT
         T.USER_ID "stringUserId",

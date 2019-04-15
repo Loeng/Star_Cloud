@@ -125,6 +125,10 @@ public class UserManagerService {
         return userManagerDao.getTeacherInfoById(userId);
     }
 
+    public RestRecord addTeacherInfo(InfoTeacherModel model) {
+        return userManagerDao.addTeacherInfo(model);
+    }
+
     public RestRecord getUserById(String userId){
         return userManagerDao.getUserById(userId);
     }

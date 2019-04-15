@@ -275,6 +275,13 @@ public class UserManagerController {
         return userManagerService.getTeacherInfoById(userId);
     }
 
+    @ApiOperation(value = "新增教师从业信息接口", notes="新增教师从业信息接口", httpMethod = "POST")
+    @PostMapping("/addTeacherInfo")
+    @ResponseBody
+    public RestRecord addTeacherInfo(@RequestBody InfoTeacherModel infoTeacherModel){
+        return userManagerService.addTeacherInfo(infoTeacherModel);
+    }
+
     @ApiOperation(value = "通过用户id获取用户信息接口", notes="通过用户id获取用户信息", httpMethod = "GET")
     @GetMapping("/{userId}")
     @ResponseBody

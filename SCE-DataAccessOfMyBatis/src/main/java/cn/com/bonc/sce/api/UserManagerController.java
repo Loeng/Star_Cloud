@@ -410,7 +410,7 @@ public class UserManagerController {
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
         String JOB_PROFESSION = model.getJobProfession(); //岗位职业
-        String TEACH_RANGE = model.getTeachRange(); //任课学段
+        Integer TEACH_RANGE = Integer.parseInt(model.getTeachRange()); //任课学段
         String WORK_NUMBER = model.getWorkNumber(); //工号
 
         int teacherEdit = userService.editTeacherPracticeInfo(USER_ID, TEACH_CERTIFICATION, TEACH_TIME, SCHOOL_TIME,
@@ -429,6 +429,32 @@ public class UserManagerController {
         } else {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
+    }
+
+    @ApiOperation(value = "新增教师从业信息接口", notes = "新增教师从业信息", httpMethod = "POST")
+    @PostMapping("/addTeacherInfo")
+    @ResponseBody
+    public RestRecord addTeacherInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model) {
+
+        String USER_ID = model.getUserId(); //用户ID
+        String TEACH_CERTIFICATION = model.getTeachCertification(); //教师资格证号
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date TEACH_TIME;
+        Date SCHOOL_TIME;
+        try {
+            TEACH_TIME = sdf.parse(model.getSchoolAge());  //参加工作年月
+            SCHOOL_TIME = sdf.parse(model.getSchoolTime()); //来校年月
+        }catch (Exception e){
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+        String JOB_PROFESSION = model.getJobProfession(); //岗位职业
+        Integer TEACH_RANGE = Integer.parseInt(model.getTeachRange()); //任课学段
+        String WORK_NUMBER = model.getWorkNumber(); //工号
+        Integer IS_DELETE = 1;
+        int teacherEdit = userService.addTeacherInfo(USER_ID, TEACH_CERTIFICATION, TEACH_TIME, SCHOOL_TIME,
+                JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER,IS_DELETE);
+
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200, teacherEdit);
     }
 
     @ApiOperation(value = "通过用户id获取用户信息接口", notes="通过用户id获取用户信息", httpMethod = "GET")
