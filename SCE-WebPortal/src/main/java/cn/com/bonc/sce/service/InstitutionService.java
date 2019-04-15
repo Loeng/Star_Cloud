@@ -27,6 +27,10 @@ public class InstitutionService {
         return institutionDao.getInstitutionInfoByUserId(userId);
     }
 
+    public RestRecord addInstitutionInfo(InstitutionInfo info) {
+        return institutionDao.addInstitutionInfo(info);
+    }
+
     /**
      * 添加教育局信息
      * @param institution 信息

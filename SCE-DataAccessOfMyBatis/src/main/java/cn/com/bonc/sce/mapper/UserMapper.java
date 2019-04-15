@@ -1,9 +1,6 @@
 package cn.com.bonc.sce.mapper;
 
-import cn.com.bonc.sce.bean.AccountBean;
-import cn.com.bonc.sce.bean.SchoolBean;
-import cn.com.bonc.sce.bean.TeacherInfoBean;
-import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.bean.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -173,4 +170,8 @@ public interface UserMapper {
                                 @Param("teach_range")Integer teach_range, @Param("work_number")String work_number,@Param("is_delete")Integer is_delete);
 
     UserBean getUserById(@Param("userId") String userId);
+
+    int updateOrganizationIdByUserId(@Param("organizationId") Long organizationId,@Param("userId") String userId);
+
+    int saveUserAudit(UserAuditBean userAudit);
 }

@@ -1018,4 +1018,21 @@
         WHERE USER_ID = #{userId}
     </select>
 
+    <update id="updateOrganizationIdByUserId">
+        UPDATE  STARCLOUDPORTAL.SCE_COMMON_USER
+        <set>
+            <if test="organizationId!=null">
+                ORGANIZATION_ID=#{organizationId},
+            </if>
+        </set>
+        WHERE USER_ID=#{userId}
+    </update>
+
+    <insert id="saveUserAudit" parameterType="cn.com.bonc.sce.bean.UserAuditBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_USER_AUDIT
+        (ID,USER_ID,USER_TYPE,ENTITY_ID,AUDIT_STATUS)
+        VALUES
+        (#{id},#{userId},#{userType},#{entityId},#{auditStatus})
+    </insert>
+
 </mapper>

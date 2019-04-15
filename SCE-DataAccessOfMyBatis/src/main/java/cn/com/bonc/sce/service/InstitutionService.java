@@ -1,7 +1,9 @@
 package cn.com.bonc.sce.service;
 
+import cn.com.bonc.sce.bean.UserAuditBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.InstitutionDao;
+import cn.com.bonc.sce.dao.UserDao;
 import cn.com.bonc.sce.model.Institution;
 import cn.com.bonc.sce.model.InstitutionInfo;
 import cn.com.bonc.sce.rest.RestRecord;
@@ -24,6 +26,8 @@ public class InstitutionService {
     @Autowired
     private InstitutionDao institutionDao;
 
+    @Autowired
+    private UserDao userDao;
 
     public int editInstitutionInfo(String user_id, Date work_time, Date entry_time, String job_profession, String work_number) {
         return institutionDao.editInstitutionInfo( user_id,work_time,entry_time,job_profession,work_number);
@@ -31,6 +35,10 @@ public class InstitutionService {
 
     public InstitutionInfo getInstitutionInfoByUserId(String userId){
         return institutionDao.getInstitutionInfoByUserId(userId);
+    }
+
+    public int addInstitutionInfo(String user_id, Date work_time, Date entry_time, String job_profession,String work_number,Integer is_delete) {
+        return institutionDao.addInstitutionInfo( user_id,work_time,entry_time,job_profession,work_number,is_delete);
     }
 
     public RestRecord addInstitution(Institution institution,String userId,Integer roleId){
@@ -48,10 +56,19 @@ public class InstitutionService {
         String HOMEPAGE = institution.getHomepage() == null ? "":institution.getHomepage();
         String PARENT_INSTITUTION = institution.getParentInstitution() == null ? "":institution.getParentInstitution();
         Integer IS_DELETE = 1;
-        institutionDao.addInstitution(Id,INSTITUTION_NAME,ADDRESS,POSTCODE,PROVINCE,CITY,DISTRICT,INSTITUTION_CODE,TELEPHONE,EMAIL,HOMEPAGE,PARENT_INSTITUTION,IS_DELETE,userId,roleId);
+        institutionDao.addInstitution(Id,INSTITUTION_NAME,ADDRESS,POSTCODE,PROVINCE,CITY,DISTRICT,INSTITUTION_CODE,TELEPHONE,EMAIL,HOMEPAGE,PARENT_INSTITUTION,IS_DELETE);
 
+        userDao.updateOrganizationIdByUserId(Id,userId);
 
+        UserAuditBean userAudit = new UserAuditBean();
+        IdWorker worker = new IdWorker();
+        userAudit.setId(worker.nextId());
+        userAudit.setUserId(userId);
+        userAudit.setUserType(roleId);
+        userAudit.setEntityId(Id);
+        userAudit.setAuditStatus(0);
 
+        userDao.saveUserAudit(userAudit);
 
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }

@@ -21,6 +21,136 @@
         WHERE USER_ID=#{user_id}
     </update>
 
+    <insert id="addInstitutionInfo">
+        insert into STARCLOUDPORTAL.SCE_INFO_INSTITUTION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user_id != null">
+                USER_ID,
+            </if>
+            <if test="work_time != null">
+                WORK_TIME,
+            </if>
+            <if test="entry_time != null">
+                ENTRY_TIME,
+            </if>
+            <if test="job_profession != null">
+                JOB_PROFESSION,
+            </if>
+            <if test="work_number != null">
+                WORK_NUMBER,
+            </if>
+            <if test="is_delete != null">
+                IS_DELETE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="user_id != null">
+                #{user_id,jdbcType=VARCHAR},
+            </if>
+            <if test="work_time != null">
+                #{work_time,jdbcType=DATE},
+            </if>
+            <if test="entry_time != null">
+                #{entry_time,jdbcType=DATE},
+            </if>
+            <if test="job_profession != null">
+                #{job_profession,jdbcType=VARCHAR},
+            </if>
+            <if test="work_number != null">
+                #{work_number,jdbcType=VARCHAR},
+            </if>
+            <if test="is_delete != null">
+                #{is_delete,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="addInstitution">
+        insert into STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="institution_name != null">
+                INSTITUTION_NAME,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="postcode != null">
+                POSTCODE,
+            </if>
+            <if test="province != null">
+                PROVINCE,
+            </if>
+            <if test="city != null">
+                CITY,
+            </if>
+            <if test="district != null">
+                DISTRICT,
+            </if>
+            <if test="institution_code != null">
+                INSTITUTION_CODE,
+            </if>
+            <if test="telephone != null">
+                TELEPHONE,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="homepage != null">
+                HOMEPAGE,
+            </if>
+            <if test="parent_institution != null">
+                PARENT_INSTITUTION,
+            </if>
+            <if test="is_delete != null">
+                IS_DELETE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="institution_name != null">
+                #{institution_name,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode != null">
+                #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="district != null">
+                #{district,jdbcType=VARCHAR},
+            </if>
+            <if test="institution_code != null">
+                #{institution_code,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="homepage != null">
+                #{homepage,jdbcType=VARCHAR},
+            </if>
+            <if test="parent_institution != null">
+                #{parent_institution,jdbcType=VARCHAR},
+            </if>
+            <if test="is_delete != null">
+                #{is_delete,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
     <select id="getUserById" resultType="cn.com.bonc.sce.bean.UserBean">
         SELECT
           T.USER_ID "stringUserId",

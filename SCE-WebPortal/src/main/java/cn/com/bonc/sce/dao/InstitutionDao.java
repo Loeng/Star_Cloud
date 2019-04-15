@@ -21,6 +21,9 @@ public interface InstitutionDao {
     @RequestMapping(value = "/institution/getInstitutionInfoByUserId/{userId}", method = RequestMethod.GET)
     RestRecord getInstitutionInfoByUserId(@PathVariable("userId") String userId);
 
+    @RequestMapping( value = "/institution/addInstitutionInfo", method = RequestMethod.POST )
+    RestRecord addInstitutionInfo(@RequestBody  @ApiParam( "教育局人员从业信息对象" ) InstitutionInfo info);
+
     @RequestMapping( value = "/institution/addInstitution/{roleId}", method = RequestMethod.POST )
     RestRecord addInstitution(Institution institution, @RequestParam( "userId" ) String userId, @PathVariable( "roleId" ) Integer roleId);
 }
