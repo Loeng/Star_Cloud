@@ -15,7 +15,7 @@
                 JOB_PROFESSION=#{job_profession},
             </if>
             <if test="work_number!=null">
-                WORK_NUMBER=#{work_number},
+                WORK_NUMBER=#{work_number}
             </if>
         </set>
         WHERE USER_ID=#{user_id}
