@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.InstitutionMapper">
+
+    <update id="editInstitutionInfo">
+        UPDATE  STARCLOUDPORTAL.SCE_INFO_INSTITUTION
+        <set>
+            <if test="work_time!=null">
+                WORK_TIME=#{work_time},
+            </if>
+            <if test="entry_time!=null">
+                ENTRY_TIME=#{entry_time},
+            </if>
+            <if test="job_profession!=null">
+                JOB_PROFESSION=#{job_profession},
+            </if>
+            <if test="work_number!=null">
+                WORK_NUMBER=#{work_number}
+            </if>
+        </set>
+        WHERE USER_ID=#{user_id}
+    </update>
+
+    <select id="getUserById" resultType="cn.com.bonc.sce.bean.UserBean">
+        SELECT
+          T.USER_ID "stringUserId",
+          T.LOGIN_NAME "loginName",
+          T.USER_NAME "userName",
+          T.GENDER "gender",
+          T.USER_TYPE "userType",
+          T.MAIL_ADDRESS "mailAddress",
+          T.CERTIFICATE_TYPE "certificateType",
+          T.CERTIFICATE_NUMBER "certificateNumber",
+          T.PHONE_NUMBER "phoneNumber",
+          T.ADDRESS "address",
+          T.CREATE_TIME "createTime",
+          T.LOGIN_TIME "loginTime",
+          T.LAST_LOGIN_TIME "lastLoginTime",
+          T.LOGIN_COUNTS "loginCounts",
+          T.ORGANIZATION_ID "organizationId",
+          T.LOGIN_PERMISSION_STATUS "loginPermissionStatus",
+          T.IS_DELETE "isDelete",
+          T.SECRET "secret",
+          T.LOGINTIMES "loginTimes",
+          T.IS_FIRST_LOGIN "isFirstLogin",
+          T.HEAD_PORTRAIT "headPortrait",
+          T.BIRTHDATE "birthday",
+          T.ISADMINISTRATORS "isAdministrators",
+          T.ACCOUNT_STATUS "accountStatus",
+          T.NATIONALITY "nationality",
+          T.VOLK "volk",
+          T.EDUCATIONAL_BACKGROUND "educationalBackground"
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER T
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="getInstitutionInfoByUserId" resultType="cn.com.bonc.sce.model.InstitutionInfo">
+        SELECT
+        T.USER_ID "userId",
+        T.INSTITUTION_ID "institutionId",
+        T.TELEPHONE "telephone",
+        T.ADDRESS "address",
+        T.IS_DELETE "isDelete",
+        T.WORK_TIME "workTime",
+        T.ENTRY_TIME "entryTime",
+        T.JOB_PROFESSION "jobProfession",
+        T.WORK_NUMBER "workNumber"
+        FROM STARCLOUDPORTAL.SCE_INFO_INSTITUTION T
+        WHERE USER_ID = #{userId}
+    </select>
+</mapper>

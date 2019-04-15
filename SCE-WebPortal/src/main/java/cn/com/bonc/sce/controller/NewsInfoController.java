@@ -193,7 +193,7 @@ public class NewsInfoController {
      * 获取头条新闻列表（前台）（按新闻排序）
      * @return
      */
-    @ApiOperation( value = "获取头条新闻列表（前台）（按新闻排序）", notes = "获取头条新闻列表（前台）（按新闻排序）", httpMethod = "POST" )
+    @ApiOperation( value = "获取新闻列表（前台）（按新闻排序）", notes = "获取新闻列表（前台）（按新闻排序）", httpMethod = "POST" )
 
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
@@ -232,10 +232,10 @@ public class NewsInfoController {
     }
 
     /**
-     * 获取头条新闻列表（后台）
+     * 获取新闻列表（后台）
      * @return
      */
-    @ApiOperation( value = "获取头条新闻列表（后台）", notes = "获取头条新闻列表（后台）", httpMethod = "POST" )
+    @ApiOperation( value = "获取新闻列表（后台）", notes = "获取新闻列表（后台）", httpMethod = "POST" )
 
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
@@ -308,7 +308,7 @@ public class NewsInfoController {
         return newsInfoService.selectTopNewsList();
     }
 
-    @ApiOperation( value = "后台头条新闻管理接口", notes = "后台头条新闻管理接口", httpMethod = "POST" )
+    @ApiOperation( value = "后台新闻排序管理接口", notes = "后台新闻排序管理接口", httpMethod = "POST" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )

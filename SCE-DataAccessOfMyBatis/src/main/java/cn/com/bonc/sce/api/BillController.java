@@ -60,20 +60,46 @@ public class BillController {
         return new RestRecord(200, billDao.getBankCard(USER_ID));
     }
 
-    @GetMapping("/addBankCard/{ID}")
+    @PostMapping("/addBankCard/{ID}")
     @ResponseBody
     public RestRecord addBankCard(@RequestBody Map<String, Object> cardInfo) {
         cardInfo.put("ID", idWorker.nextId());
         return new RestRecord(200, billDao.addBankCard(cardInfo));
     }
 
-    @GetMapping("/updateBankCard/{ID}")
+    @PutMapping("/updateBankCard/{ID}")
     @ResponseBody
     @Transactional
     public RestRecord updateBankCard(@RequestBody Map<String, Object> cardInfo) {
         billDao.updateBankCard(cardInfo);
         cardInfo.put("ID",idWorker.nextId());
-        return new RestRecord(200, billDao.updateBankCard(cardInfo));
+        return new RestRecord(200, billDao.addBankCard(cardInfo));
+    }
+
+    @GetMapping("/getTransactionRecordStatistics")
+    @ResponseBody
+    public RestRecord getTransactionRecordStatistics() {
+        return new RestRecord(200, billDao.getTransactionRecordStatistics());
+    }
+
+    @GetMapping("/getTransactionRecordList/{ID}/{ORDER_ID}/{start_time}/{end_time}")
+    @ResponseBody
+    public RestRecord getTransactionRecordList(@PathVariable("ID") String ID, @PathVariable("ORDER_ID") String ORDER_ID,
+                                               @PathVariable("PAYING_TYPE") String PAYING_TYPE,
+                                               @PathVariable("start_time") String start_time, @PathVariable("end_time") String end_time) {
+        return new RestRecord(200, billDao.getTransactionRecordList(ID,ORDER_ID,PAYING_TYPE,start_time,end_time));
+    }
+
+    @GetMapping("/getTransactionRecordDetail/{ID}/{PAYING_TYPE}")
+    @ResponseBody
+    public RestRecord getTransactionRecordDetail(@PathVariable("ID") String ID, @PathVariable("PAYING_TYPE") String PAYING_TYPE) {
+        return new RestRecord(200, billDao.getTransactionRecordDetail(ID,PAYING_TYPE));
+    }
+
+    @PutMapping("/updateTransactionRecord/")
+    @ResponseBody
+    public RestRecord updateTransactionRecord(@RequestBody Map<String, Object> transactionRecordInfo) {
+        return new RestRecord(200, billDao.updateTransactionRecord(transactionRecordInfo));
     }
 
 }

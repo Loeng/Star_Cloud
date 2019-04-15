@@ -22,8 +22,18 @@ public interface BillMapper {
 
     int addBankCard(Map<String, Object> cardInfo);
 
-    int deleteBankCard(Map<String, Object> cardInfo);
-
     int updateBankCard(Map<String, Object> cardInfo);
+
+    Map getTransactionRecordStatistics();
+
+    List<Map> getTransactionRecordList(@Param("ID") String ID, @Param("ORDER_ID") String ORDER_ID,
+                                       @Param("PAYING_TYPE") String PAYING_TYPE,
+                                       @Param("start_time") String start_time, @Param("end_time") String end_time);
+
+    Map getTransactionRecordDetail(@Param("ID") String ID, @Param("PAYING_TYPE") String PAYING_TYPE);
+
+    int updateACCOUNT_ENTRY_TIME(Map<String, Object> transactionRecordInfo);
+
+    int updateDEAL_REMARKS(Map<String, Object> transactionRecordInfo);
 
 }

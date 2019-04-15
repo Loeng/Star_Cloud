@@ -2,6 +2,7 @@ package cn.com.bonc.sce.mapper;
 
 import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
+import cn.com.bonc.sce.bean.TeacherInfoBean;
 import cn.com.bonc.sce.bean.UserBean;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -161,4 +162,13 @@ public interface UserMapper {
 
     Map selectStudentInfoByTransferId(@Param("transferId") String transferId);
 
+                    @Param("teach_range")Integer teach_range, @Param("work_number")String work_number);
+
+    TeacherInfoBean getTeacherInfoById(@Param("userId") String userId);
+
+    int addTeacherInfo(@Param("user_id") String user_id,@Param("teach_certification")String teach_certification,@Param("teach_time") Date teach_time,
+                                @Param("school_time")Date school_time, @Param("job_profession")String job_profession,
+                                @Param("teach_range")Integer teach_range, @Param("work_number")String work_number,@Param("is_delete")Integer is_delete);
+
+    UserBean getUserById(@Param("userId") String userId);
 }

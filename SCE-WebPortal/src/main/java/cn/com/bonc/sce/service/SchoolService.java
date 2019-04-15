@@ -52,8 +52,24 @@ public class SchoolService {
      * @param school 信息
      * @return 是否添加成功
      */
-    public RestRecord addSchool( School school ) {
-        return schoolDao.addSchool(school);
+    public RestRecord addSchool( School school,String userId,Integer roleId ) {
+        return schoolDao.addSchool(school,userId,roleId);
+    }
+
+    public RestRecord getSchoolById(Integer id){
+        return schoolDao.getSchoolById(id);
+    }
+
+    public RestRecord updateSchoolById(School school){
+        return schoolDao.updateSchoolById(school);
+    }
+
+    public RestRecord updateSchoolInfo(School school,String userId,Integer roleId){
+        return schoolDao.updateSchoolInfo(school,userId,roleId);
+    }
+
+    public RestRecord getSchoolInfoList(String SCHOOL_NAME,String SCHOOL_TYPE,Integer AUDIT_STATUS,Integer pageNum ,Integer pageSize){
+        return schoolDao.getSchoolInfoList(SCHOOL_NAME,SCHOOL_TYPE,AUDIT_STATUS,pageNum,pageSize);
     }
 
 }

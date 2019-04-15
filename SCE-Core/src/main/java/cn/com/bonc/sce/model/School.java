@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class School {
+    private Integer id;
     private String schoolName;    //学校名称
     private String authorityName;
     private String schoolAddress;  //学校地址
@@ -29,5 +30,5 @@ public class School {
     private String homepage;  //主页地址
     private String schoolRunning;   //学校办别
     private String schoolDistrict; //所属学区
-
+    private Integer isDelete;
 }

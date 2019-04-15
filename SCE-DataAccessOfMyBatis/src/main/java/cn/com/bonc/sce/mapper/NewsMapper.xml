@@ -201,6 +201,8 @@
           T.NEWS_ABSTRACT "newsAbstract",
           T.AUTHOR_NAME "authorName",
           T.NEWS_SOURCE "newsSource",
+          DECODE(T.CONTENT_TYPE,1,'校园频道',2,'综合新闻',3,'基础教育',4,'学前教育',5,'家庭教育',6,'思想理论',7,'信息公开') "contentType",
+          T.IS_TOP "isTop",
           NVL((SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_NEWS_RECORD WHERE NEWS_ID = T.CONTENT_ID),0) "viewCount"
         FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
         WHERE CONTENT_ID = #{contentId}
@@ -276,6 +278,7 @@
         <result column="SHOW_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="showOrder"></result>
         <result column="HIT_VOLUME" jdbcType="INTEGER" javaType="java.lang.Long" property="hitVolume"></result>
         <result column="IS_PUBLISH" jdbcType="INTEGER" javaType="java.lang.Integer" property="isPublish"></result>
+        <result column="PUBLISH_TIME" jdbcType="INTEGER" javaType="java.lang.String" property="publishTimestamp"></result>
     </resultMap>
 
     <sql id="News_Column_List">
@@ -305,7 +308,8 @@
         T.TOP_ORDER,
         T.SHOW_ORDER,
         T.NEWS_SOURCE,
-        T.IS_PUBLISH
+        T.IS_PUBLISH,
+        TO_NUMBER(T.PUBLISH_DATE - TO_DATE( '1970-01-01 8:0:0', 'YYYY-MM-DD HH24:MI:SS' )) * 24 * 60 * 60 * 1000 PUBLISH_TIME
     </sql>
 
     <sql id="Hit-Volume">

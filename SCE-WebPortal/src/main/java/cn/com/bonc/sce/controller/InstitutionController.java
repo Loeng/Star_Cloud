@@ -1,0 +1,52 @@
+package cn.com.bonc.sce.controller;
+
+import cn.com.bonc.sce.model.Institution;
+import cn.com.bonc.sce.model.InstitutionInfo;
+import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.InstitutionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * Created by Administrator on 2019/4/14.
+ */
+@Slf4j
+@Api( value = "教育局相关接口", tags = "教育局相关接口" )
+@RestController
+@RequestMapping( "/institution" )
+public class InstitutionController {
+
+    @Autowired
+    InstitutionService institutionService;
+
+    @ApiOperation(value = "通过用户ID修改教育局人员从业信息接口", notes="通过用户ID修改教育局人员从业信息", httpMethod = "PUT")
+    @PutMapping("/editInstitutionInfo")
+    @ResponseBody
+    public RestRecord editInstitutionInfo(@RequestBody @ApiParam( "教育局人员从业信息对象" ) InstitutionInfo info){
+        return institutionService.editInstitutionInfo(info);
+    }
+
+    @ApiOperation(value = "通过用户ID获取教育局人员从业信息接口", notes="通过用户ID获取教育局人员从业信息", httpMethod = "GET")
+    @GetMapping("/getInstitutionInfoByUserId/{userId}")
+    @ResponseBody
+    public RestRecord getInstitutionInfoByUserId( @PathVariable( "userId" ) String userId ) {
+        return institutionService.getInstitutionInfoByUserId(userId);
+    }
+
+    /**
+     * 新增教育局信息
+     * @param institution
+     * @return
+     */
+    @ApiOperation(value = "新增教育局信息接口",notes = "新增教育局信息",httpMethod = "POST")
+    @PostMapping("/addInstitution/{roleId}")
+    @ResponseBody
+    public RestRecord addInstitution(@ApiParam(name = "school", value = "学校实体", required = true) @RequestBody Institution institution, @ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId, @ApiParam(name = "roleId", value = "角色类型", required = true) @PathVariable( "roleId" ) Integer roleId){
+        return institutionService.addInstitution(institution,userId,roleId);
+    }
+
+}

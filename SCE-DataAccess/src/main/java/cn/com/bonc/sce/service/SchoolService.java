@@ -1,12 +1,10 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.constants.MessageConstants;
-import cn.com.bonc.sce.dao.AccountDao;
-import cn.com.bonc.sce.dao.SchoolDao;
-import cn.com.bonc.sce.dao.UserDao;
-import cn.com.bonc.sce.dao.UserPasswordDao;
+import cn.com.bonc.sce.dao.*;
 import cn.com.bonc.sce.entity.Account;
 import cn.com.bonc.sce.entity.School;
+import cn.com.bonc.sce.entity.UserAudit;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.entity.user.User;
 import cn.com.bonc.sce.model.Secret;
@@ -26,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 学校
@@ -57,6 +56,8 @@ public class SchoolService {
 
     public static final String SCHOOL_CODE = "3";
 
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     /**
      * 添加school
@@ -136,9 +137,51 @@ public class SchoolService {
 
     }
 
-    public RestRecord addSchool( School school ) {
+    public RestRecord addSchool( School school,String userId,Integer roleId) {
         school.setIsDelete(1);
         schoolDao.save(school);
+        userInfoRepository.updateOrganizationIdByUserId(school.getId(),userId);
+        UserAudit userAudit = new UserAudit();
+        userAudit.setUserId(userId);
+        userAudit.setUserType(roleId);
+        userAudit.setEntityId(school.getId());
+        userAudit.setAuditStatus(0);
+        userInfoRepository.save(userAudit);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
+
+    public Optional<School> getSchoolById(Integer id){
+        return schoolDao.findById(id);
+    }
+
+    public RestRecord updateSchoolById(School school){
+        int status = 0;
+        Integer id = school.getId() == null ? 0:school.getId();
+        String schoolAddress = school.getSchoolAddress() == null ? "":school.getSchoolAddress();
+        String postcode = school.getPostcode() == null ? "" : school.getPostcode();
+        String province = school.getProvince() == null ? "" : school.getProvince();
+        String city = school.getCity() == null ? "" : school.getCity();
+        String area = school.getArea() == null ? "" : school.getArea();
+        String schoolMasterName = school.getSchoolmasterName() == null ? "" : school.getSchoolmasterName();
+        String telephone = school.getTelephone() == null ? "" : school.getTelephone();
+        String email = school.getEmail() == null ? "" : school.getEmail();
+        String homepage = school.getHomepage() == null ? "" :school.getHomepage();
+        status = schoolDao.updateSchoolById(id,schoolAddress,postcode,province,city,area,schoolMasterName,telephone,email,homepage);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200,status);
+    }
+
+    public RestRecord updateSchoolInfo(School school,String userId,Integer roleId){
+        school.setIsDelete(1);
+        schoolDao.save(school);
+        UserAudit audit = userInfoRepository.findByEntityId(school.getId());
+        UserAudit userAudit = new UserAudit();
+        userAudit.setId(audit.getId());
+        userAudit.setUserId(userId);
+        userAudit.setUserType(roleId);
+        userAudit.setEntityId(school.getId());
+        userAudit.setAuditStatus(0);
+        userInfoRepository.save(userAudit);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200);
+    }
+
 }

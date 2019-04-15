@@ -2,6 +2,7 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.bean.AccountBean;
 import cn.com.bonc.sce.bean.SchoolBean;
+import cn.com.bonc.sce.bean.TeacherInfoBean;
 import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserDao;
@@ -286,7 +287,7 @@ public class UserService {
     }
 
 
-    public int editTeacherPracticeInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,String teach_range, String work_number) {
+    public int editTeacherPracticeInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,Integer teach_range, String work_number) {
         return userDao.editTeacherPracticeInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number);
     }
 
@@ -360,5 +361,17 @@ public class UserService {
             return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, count );
         }
         return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
+    }
+
+    public TeacherInfoBean getTeacherInfoById(String userId){
+        return userDao.getTeacherInfoById(userId);
+    }
+
+    public int addTeacherInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,Integer teach_range, String work_number,Integer is_delete) {
+        return userDao.addTeacherInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number,is_delete);
+    }
+
+    public UserBean getUserById(String userId){
+        return userDao.getUserById(userId);
     }
 }

@@ -136,4 +136,13 @@ public interface UserManagerDao {
     RestRecord auditTransfer(@RequestParam("userId") String userId,
                              @RequestBody Map map);
 
+    @RequestMapping(value = "/userManager/getTeacherInfoById/{userId}", method = RequestMethod.GET)
+    RestRecord getTeacherInfoById(@PathVariable("userId") String userId);
+
+    @RequestMapping( value = "/userManager/addTeacherInfo", method = RequestMethod.POST )
+    RestRecord addTeacherInfo(@RequestBody  @ApiParam( "教师从业信息对象" ) InfoTeacherModel model);
+
+    @RequestMapping(value = "/userManager/{userId}", method = RequestMethod.GET)
+    RestRecord getUserById(@PathVariable("userId") String userId);
+
 }
