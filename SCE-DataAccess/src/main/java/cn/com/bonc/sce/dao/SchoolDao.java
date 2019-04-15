@@ -42,6 +42,7 @@ public interface SchoolDao extends JpaRepository< School, Integer > {
             "ON  u.ORGANIZATION_ID = s.ID   ")
     Page<List<Map<String,Object> >> selectAllSchool( Integer isDelete , Pageable pageable);
 
+
     Optional<School> findById(Integer id);
 
     @Modifying

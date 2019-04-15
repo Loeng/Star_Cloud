@@ -59,5 +59,9 @@ public interface SchoolDao {
     @RequestMapping( value = "/schools/updateSchoolInfo", method = RequestMethod.PUT )
     RestRecord updateSchoolInfo(@RequestBody @ApiParam( "学校信息对象" ) School school,@ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId,@ApiParam(name = "roleId", value = "角色类型", required = true) @RequestParam( "roleId" ) Integer roleId);
 
+    @RequestMapping( value = "/schools/getSchoolInfoList/{SCHOOL_NAME}/{SCHOOL_TYPE}/{AUDIT_STATUS}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getSchoolInfoList(@PathVariable("SCHOOL_NAME") String SCHOOL_NAME,@PathVariable("SCHOOL_TYPE") String SCHOOL_TYPE,@PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+    ,@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize);
+
 
 }

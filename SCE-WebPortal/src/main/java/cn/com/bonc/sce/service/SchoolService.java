@@ -68,4 +68,8 @@ public class SchoolService {
         return schoolDao.updateSchoolInfo(school,userId,roleId);
     }
 
+    public RestRecord getSchoolInfoList(String SCHOOL_NAME,String SCHOOL_TYPE,Integer AUDIT_STATUS,Integer pageNum ,Integer pageSize){
+        return schoolDao.getSchoolInfoList(SCHOOL_NAME,SCHOOL_TYPE,AUDIT_STATUS,pageNum,pageSize);
+    }
+
 }

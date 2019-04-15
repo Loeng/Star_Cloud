@@ -40,4 +40,18 @@ public interface BillDao {
     @RequestMapping(value = "/bill/updateBankCard", method = RequestMethod.PUT)
     RestRecord updateBankCard(@RequestBody Map<String, Object> cardInfo);
 
+    @RequestMapping(value = "/bill/getTransactionRecordStatistics", method = RequestMethod.GET)
+    RestRecord getTransactionRecordStatistics();
+
+    @RequestMapping(value = "/bill/getTransactionRecordList/{ID}/{ORDER_ID}/{PAYING_TYPE}/{start_time}/{end_time}", method = RequestMethod.GET)
+    RestRecord getTransactionRecordList(@PathVariable("ID") String ID, @PathVariable("ORDER_ID") String ORDER_ID,
+                                        @PathVariable("PAYING_TYPE") String PAYING_TYPE,
+                                        @PathVariable("start_time") String start_time, @PathVariable("end_time") String end_time);
+
+    @RequestMapping(value = "/bill/getTransactionRecordDetail/{ID}/{PAYING_TYPE}", method = RequestMethod.GET)
+    RestRecord getTransactionRecordDetail(@PathVariable("ID") String ID, @PathVariable("PAYING_TYPE") String PAYING_TYPE);
+
+    @RequestMapping(value = "/bill/updateTransactionRecord", method = RequestMethod.PUT)
+    RestRecord updateTransactionRecord(@RequestBody Map<String, Object> transactionRecordInfo);
+
 }

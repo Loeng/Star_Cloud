@@ -29,7 +29,7 @@
 	          AND sor.REFUND_STATE = 0
     </select>
 
-    <select id="" resultType="Map" parameterType="String">
+    <select id="getRefundList" resultType="Map" parameterType="String">
         SELECT
         sor.ID,
         soi.ACTUAL_PAYMENT,
@@ -90,6 +90,230 @@
 
     <update id="updateBankCard" parameterType="Map">
         update STARCLOUDPORTAL.SCE_BANK_CARD set IS_DELETE = 0 where USER_ID = #{USER_ID} and IS_DELETE = 1
+    </update>
+
+    <select id="getTransactionRecordStatistics" resultType="Map">
+        SELECT
+        (
+        SELECT
+        sum( PAYING_AMOUNT ) AS money
+        FROM
+        STARCLOUDPORTAL.SCE_ORDER_PAYMENT
+        WHERE
+        to_char( SYSDATE, 'yyyy-mm' ) = to_char( PAYING_TIME, 'yyyy-mm' )
+        AND PAYING_STATUS = 1
+        ) + (
+        SELECT
+        sum( soi.ACTUAL_PAYMENT ) AS money
+        FROM
+        STARCLOUDPORTAL.SCE_ORDER_INFO soi
+        LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_VOUCHER sov ON soi.ORDER_ID = sov.ORDER_ID
+        WHERE
+        sov.IS_DELETE = 1
+        AND soi.IS_DELETE = 1
+        AND sov.AUDITING_STATUS = 1
+        AND to_char( SYSDATE, 'yyyy-mm' ) = to_char( sov.UPLOAD_TIME, 'yyyy-mm' )) AS money,
+        (
+        SELECT
+        count( PAYING_AMOUNT ) AS total
+        FROM
+        STARCLOUDPORTAL.SCE_ORDER_PAYMENT
+        WHERE
+        to_char( SYSDATE, 'yyyy-mm' ) = to_char( PAYING_TIME, 'yyyy-mm' )
+        AND PAYING_STATUS = 1
+        ) + (
+        SELECT
+        count( soi.ACTUAL_PAYMENT ) AS total
+        FROM
+        STARCLOUDPORTAL.SCE_ORDER_INFO soi
+        LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_VOUCHER sov ON soi.ORDER_ID = sov.ORDER_ID
+        WHERE
+        sov.IS_DELETE = 1
+        AND soi.IS_DELETE = 1
+        AND sov.AUDITING_STATUS = 1
+        AND to_char( SYSDATE, 'yyyy-mm' ) = to_char( sov.UPLOAD_TIME, 'yyyy-mm' )) AS total
+        FROM
+        STARCLOUDPORTAL.SCE_ORDER_INFO
+        WHERE ROWNUM <![CDATA[<=]]> 1
+    </select>
+
+    <select id="getTransactionRecordList" resultType="Map" parameterType="Map">
+        <if test="PAYING_TYPE == null or PAYING_TYPE == '' and PAYING_TYPE == 'null' ">
+            SELECT
+            *
+            FROM
+            (
+            SELECT
+            sop.ID,
+            soi.ORDER_ID,
+            soi.PRODUCT_TYPE_CODE,
+            soi.PRODUCT_NAME,
+            soi.PAYING_TYPE,
+            soi.ACTUAL_PAYMENT,
+            sop.PAYING_TIME,
+            soi.ACCOUNT_ENTRY_TIME
+            FROM
+            STARCLOUDPORTAL.SCE_ORDER_INFO soi
+            LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_PAYMENT sop ON soi.ORDER_ID = sop.ORDER_ID
+            WHERE
+            soi.IS_DELETE = 1
+            AND soi.PAYING_TYPE = 1
+            AND sop.PAYING_STATUS = 1
+            <if test="ID != null and ID != '' and ID != 'null' ">
+                AND soi.ID = #{ID}
+            </if>
+            <if test="ORDER_ID != null and ORDER_ID != '' and ORDER_ID != 'null' ">
+                AND soi.ORDER_ID = #{ORDER_ID}
+            </if>
+            <if test="start_time != null and start_time != '' and start_time != 'null' ">
+                AND #{start_time} <![CDATA[<=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            <if test="end_time != null and end_time != '' and end_time != 'null' ">
+                AND #{end_time} <![CDATA[>=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            UNION ALL
+            SELECT
+            sov.ID,
+            soi.ORDER_ID,
+            soi.PRODUCT_TYPE_CODE,
+            soi.PRODUCT_NAME,
+            soi.PAYING_TYPE,
+            soi.ACTUAL_PAYMENT,
+            sov.UPLOAD_TIME AS PAYING_TIME,
+            soi.ACCOUNT_ENTRY_TIME
+            FROM
+            STARCLOUDPORTAL.SCE_ORDER_INFO soi
+            LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_VOUCHER sov ON soi.ORDER_ID = sov.ORDER_ID
+            WHERE
+            soi.IS_DELETE = 1
+            AND soi.PAYING_TYPE = 2
+            AND sov.AUDITING_STATUS = 1
+            AND sov.IS_DELETE = 1
+            <if test="ID != null and ID != '' and ID != 'null' ">
+                AND soi.ID = #{ID}
+            </if>
+            <if test="ORDER_ID != null and ORDER_ID != '' and ORDER_ID != 'null' ">
+                AND soi.ORDER_ID = #{ORDER_ID}
+            </if>
+            <if test="start_time != null and start_time != '' and start_time != 'null' ">
+                AND #{start_time} <![CDATA[<=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            <if test="end_time != null and end_time != '' and end_time != 'null' ">
+                AND #{end_time} <![CDATA[>=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            ) order by ACCOUNT_ENTRY_TIME desc
+        </if>
+        <if test="PAYING_TYPE ！= null and PAYING_TYPE != '' and PAYING_TYPE == '1' ">
+            SELECT
+            *
+            FROM
+            (
+            SELECT
+            sop.ID,
+            soi.ORDER_ID,
+            soi.PRODUCT_TYPE_CODE,
+            soi.PRODUCT_NAME,
+            soi.PAYING_TYPE,
+            soi.ACTUAL_PAYMENT,
+            sop.PAYING_TIME,
+            soi.ACCOUNT_ENTRY_TIME
+            FROM
+            STARCLOUDPORTAL.SCE_ORDER_INFO soi
+            LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_PAYMENT sop ON soi.ORDER_ID = sop.ORDER_ID
+            WHERE
+            soi.IS_DELETE = 1
+            AND soi.PAYING_TYPE = 1
+            AND sop.PAYING_STATUS = 1
+            <if test="ID != null and ID != '' and ID != 'null' ">
+                AND soi.ID = #{ID}
+            </if>
+            <if test="ORDER_ID != null and ORDER_ID != '' and ORDER_ID != 'null' ">
+                AND soi.ORDER_ID = #{ORDER_ID}
+            </if>
+            <if test="start_time != null and start_time != '' and start_time != 'null' ">
+                AND #{start_time} <![CDATA[<=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            <if test="end_time != null and end_time != '' and end_time != 'null' ">
+                AND #{end_time} <![CDATA[>=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            order by ACCOUNT_ENTRY_TIME desc
+        </if>
+        <if test="PAYING_TYPE ！= null and PAYING_TYPE != '' and PAYING_TYPE == '2' ">
+            SELECT
+            sov.ID,
+            soi.ORDER_ID,
+            soi.PRODUCT_TYPE_CODE,
+            soi.PRODUCT_NAME,
+            soi.PAYING_TYPE,
+            soi.ACTUAL_PAYMENT,
+            sov.UPLOAD_TIME AS PAYING_TIME,
+            soi.ACCOUNT_ENTRY_TIME
+            FROM
+            STARCLOUDPORTAL.SCE_ORDER_INFO soi
+            LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_VOUCHER sov ON soi.ORDER_ID = sov.ORDER_ID
+            WHERE
+            soi.IS_DELETE = 1
+            AND soi.PAYING_TYPE = 2
+            AND sov.AUDITING_STATUS = 1
+            AND sov.IS_DELETE = 1
+            <if test="ID != null and ID != '' and ID != 'null' ">
+                AND soi.ID = #{ID}
+            </if>
+            <if test="ORDER_ID != null and ORDER_ID != '' and ORDER_ID != 'null' ">
+                AND soi.ORDER_ID = #{ORDER_ID}
+            </if>
+            <if test="start_time != null and start_time != '' and start_time != 'null' ">
+                AND #{start_time} <![CDATA[<=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            <if test="end_time != null and end_time != '' and end_time != 'null' ">
+                AND #{end_time} <![CDATA[>=]]> soi.ACCOUNT_ENTRY_TIME
+            </if>
+            order by ACCOUNT_ENTRY_TIME desc
+        </if>
+    </select>
+
+    <select id="getTransactionRecordDetail" resultType="Map" parameterType="Map">
+        <if test="PAYING_TYPE != null and PAYING_TYPE != '' and PAYING_TYPE == '1' ">
+            SELECT
+            sop.ID,
+            sop.ORDER_ID,
+            sop.PAYING_TIME,
+            soi.ACTUAL_PAYMENT,
+            soi.ACCOUNT_ENTRY_TIME,
+            sop.DEAL_REMARKS
+            FROM
+            STARCLOUDPORTAL.SCE_ORDER_PAYMENT sop
+            LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INFO soi ON sop.ORDER_ID = soi.ORDER_ID
+            WHERE
+            sop.ID = #{ID}
+        </if>
+        <if test="PAYING_TYPE != null and PAYING_TYPE != '' and PAYING_TYPE == '2' ">
+            SELECT
+            sov.ID,
+            sov.ORDER_ID,
+            sov.UPLOAD_TIME as PAYING_TIME,
+            soi.ACTUAL_PAYMENT,
+            soi.ACCOUNT_ENTRY_TIME,
+            sov.DEAL_REMARKS
+            FROM
+            STARCLOUDPORTAL.SCE_ORDER_VOUCHER sov
+            LEFT JOIN STARCLOUDPORTAL.SCE_ORDER_INFO soi ON sov.ORDER_ID = soi.ORDER_ID
+            WHERE
+            sov.ID = #{ID}
+        </if>
+    </select>
+
+    <update id="updateACCOUNT_ENTRY_TIME" parameterType="Map">
+         update STARCLOUDPORTAL.SCE_ORDER_INFO set ACCOUNT_ENTRY_TIME = #{ACCOUNT_ENTRY_TIME} where ORDER_ID = #{ORDER_ID}
+    </update>
+
+    <update id="updateDEAL_REMARKS" parameterType="Map">
+        <if test="PAYING_TYPE != null and PAYING_TYPE != '' and PAYING_TYPE == '1' ">
+            update STARCLOUDPORTAL.SCE_ORDER_PAYMENT set DEAL_REMARKS = #{DEAL_REMARKS} where ID = #{ID}
+        </if>
+        <if test="PAYING_TYPE != null and PAYING_TYPE != '' and PAYING_TYPE == '2' ">
+            update STARCLOUDPORTAL.SCE_ORDER_PAYMENT set DEAL_REMARKS = #{DEAL_REMARKS} where ID = #{ID}
+        </if>
     </update>
 
 </mapper>

@@ -102,5 +102,50 @@ public class BillController {
         return billService.updateBankCard(cardInfo);
     }
 
+    /**
+     * 获取交易记录每月统计
+     *
+     * @return
+     */
+    @GetMapping("/getTransactionRecordStatistics")
+    @ResponseBody
+    public RestRecord getTransactionRecordStatistics() {
+        return billService.getTransactionRecordStatistics();
+    }
+
+    /**
+     * 获取交易记录列表
+     *
+     * @return
+     */
+    @GetMapping("/getTransactionRecordList/{ID}/{ORDER_ID}/{PAYING_TYPE}/{start_time}/{end_time}")
+    @ResponseBody
+    public RestRecord getTransactionRecordList(@PathVariable("ID") String ID, @PathVariable("ORDER_ID") String ORDER_ID,
+                                               @PathVariable("PAYING_TYPE") String PAYING_TYPE,
+                                               @PathVariable("start_time") String start_time, @PathVariable("end_time") String end_time) {
+        return billService.getTransactionRecordList(ID, ORDER_ID, PAYING_TYPE, start_time, end_time);
+    }
+
+    /**
+     * 交易记录详情
+     * @param ID
+     * @param PAYING_TYPE
+     * @return
+     */
+    @GetMapping("/getTransactionRecordDetail/{ID}/{PAYING_TYPE}")
+    @ResponseBody
+    public RestRecord getTransactionRecordDetail(@PathVariable("ID") String ID, @PathVariable("PAYING_TYPE") String PAYING_TYPE) {
+        return billService.getTransactionRecordDetail(ID, PAYING_TYPE);
+    }
+
+    /**
+     * 更新交易记录
+     * @return
+     */
+    @PutMapping("/updateTransactionRecord")
+    @ResponseBody
+    public RestRecord updateTransactionRecord(@RequestBody Map<String, Object> transactionRecordInfo) {
+        return billService.updateTransactionRecord(transactionRecordInfo);
+    }
 
 }

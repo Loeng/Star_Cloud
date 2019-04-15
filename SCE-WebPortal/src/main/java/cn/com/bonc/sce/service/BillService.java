@@ -47,4 +47,21 @@ public class BillService {
     public RestRecord updateBankCard(Map<String, Object> cardInfo) {
         return billDao.updateBankCard(cardInfo);
     }
+
+    public RestRecord getTransactionRecordStatistics() {
+        return billDao.getTransactionRecordStatistics();
+    }
+
+    public RestRecord getTransactionRecordList(String ID, String ORDER_ID, String PAYING_TYPE, String start_time, String end_time) {
+        return billDao.getTransactionRecordList(ID, ORDER_ID, PAYING_TYPE, start_time, end_time);
+    }
+
+    public RestRecord getTransactionRecordDetail(String ID, String PAYING_TYPE) {
+        return billDao.getTransactionRecordDetail(ID, PAYING_TYPE);
+    }
+
+    public RestRecord updateTransactionRecord(Map<String, Object> transactionRecordInfo) {
+        return billDao.updateTransactionRecord(transactionRecordInfo);
+    }
+
 }
