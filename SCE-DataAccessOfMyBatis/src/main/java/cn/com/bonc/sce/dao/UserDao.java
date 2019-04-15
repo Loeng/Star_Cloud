@@ -151,7 +151,7 @@ public class UserDao {
         return userMapper.selectUserIdByLoginName(loginName);
     }
 
-    public int editTeacherPracticeInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,String teach_range, String work_number) {
+    public int editTeacherPracticeInfo(String user_id,String teach_certification, Date teach_time, Date school_time, String job_profession,Integer teach_range, String work_number) {
         return userMapper.editTeacherPracticeInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number);
     }
 

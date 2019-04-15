@@ -135,6 +135,37 @@ public class UserManagerService {
         return restRecord;
     }
 
+    public RestRecord getParentInfo(String certificationNumber, String userType){
+        return userManagerDao.getParentInfo(certificationNumber, userType);
+    }
+
+    public RestRecord getTransferStudent(String userName, String loginName, String studentNumber, String gender, String grade, String applyStatus,
+                                         String transferType, String pageNum, String pageSize, String userId){
+        return userManagerDao.getTransferStudent(userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId);
+    }
+
+    public RestRecord repealApply(String userId, Map map){
+        if(map.get("id") == null){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+        }
+        return userManagerDao.repealApply(userId, map);
+    }
+
+    public RestRecord reCall(String transferId){
+        return userManagerDao.reCall(transferId);
+    }
+
+    public RestRecord getTransferOut(String transferId){
+        return userManagerDao.getTransferOut(transferId);
+    }
+
+    public RestRecord auditTransfer(String userId, Map map){
+        if(map.get("applyStatus") == null || map.get("id") == null){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+        }
+        return userManagerDao.auditTransfer(userId, map);
+    }
+
 
     public RestRecord editTeacherPracticeInfo(InfoTeacherModel model){
         return userManagerDao.editTeacherPracticeInfo(model);
