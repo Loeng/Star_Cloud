@@ -9,10 +9,10 @@ import java.util.Date;
  */
 @Data
 public class UserAuditBean {
-    private Long id;
+    private String id;
     private String userId;
     private Integer userType;
-    private Long entityId;
+    private String entityId;
     private Integer auditStatus;
     private Date auditTime;
     private String auditUserId;

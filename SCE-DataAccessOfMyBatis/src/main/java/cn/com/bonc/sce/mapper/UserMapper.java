@@ -171,7 +171,11 @@ public interface UserMapper {
 
     UserBean getUserById(@Param("userId") String userId);
 
-    int updateOrganizationIdByUserId(@Param("organizationId") Long organizationId,@Param("userId") String userId);
+    int updateOrganizationIdByUserId(@Param("organizationId") String organizationId,@Param("userId") String userId);
 
     int saveUserAudit(UserAuditBean userAudit);
+
+    UserAuditBean findByUserAuditEntityId(@Param("entityId") String entityId);
+
+    int updateUserAuditById(UserAuditBean userAudit);
 }

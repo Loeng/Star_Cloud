@@ -243,11 +243,19 @@ public class UserDao {
         return userMapper.getUserById(userId);
     }
 
-    public int updateOrganizationIdByUserId(Long organizationId,String userId){
+    public int updateOrganizationIdByUserId(String organizationId,String userId){
         return userMapper.updateOrganizationIdByUserId(organizationId,userId);
     }
 
     public int saveUserAudit(UserAuditBean userAudit) {
         return userMapper.saveUserAudit(userAudit);
+    }
+
+    public UserAuditBean findByUserAuditEntityId(String entityId){
+        return userMapper.findByUserAuditEntityId(entityId);
+    }
+
+    public int updateUserAuditById(UserAuditBean userAudit){
+        return userMapper.updateUserAuditById(userAudit);
     }
 }

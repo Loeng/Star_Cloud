@@ -93,4 +93,31 @@ public class InstitutionController {
     public RestRecord addInstitution(@RequestBody Institution institution, @RequestParam( "userId" ) String userId, @PathVariable( "roleId" ) Integer roleId){
         return institutionService.addInstitution(institution,userId,roleId);
     }
+
+    @ApiOperation(value = "通过教育局ID修改教育局信息接口",notes = "通过教育局ID修改教育局信息",httpMethod = "PUT")
+    @PutMapping( "/updateInstitutionById" )
+    @ResponseBody
+    public RestRecord updateInstitutionById(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution) {
+        return institutionService.updateInstitutionById(institution);
+    }
+
+    @ApiOperation(value = "通过教育局ID获取教育局信息接口", notes="通过教育局ID获取教育局信息", httpMethod = "GET")
+    @GetMapping("/{id}")
+    @ResponseBody
+    public RestRecord getInstitutionById( @PathVariable( "id" ) String id ) {
+        Institution user = institutionService.getInstitutionById(id);
+        if ( user == null ) {
+            return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, id );
+        } else {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
+        }
+    }
+
+    @ApiOperation(value = "变更或驳回提交教育局信息接口",notes = "变更或驳回教育局信息",httpMethod = "PUT")
+    @PutMapping( "/updateInstitutionInfo" )
+    @ResponseBody
+    public RestRecord updateInstitutionInfo(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution) {
+        return institutionService.updateInstitutionInfo(institution);
+    }
+
 }

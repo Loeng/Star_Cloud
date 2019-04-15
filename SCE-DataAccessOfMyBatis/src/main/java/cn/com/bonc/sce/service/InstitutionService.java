@@ -8,6 +8,7 @@ import cn.com.bonc.sce.model.Institution;
 import cn.com.bonc.sce.model.InstitutionInfo;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
+import cn.com.bonc.sce.tool.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,8 +43,7 @@ public class InstitutionService {
     }
 
     public RestRecord addInstitution(Institution institution,String userId,Integer roleId){
-        IdWorker idWorker = new IdWorker();
-        Long Id = idWorker.nextId();
+        String Id = UUID.getUUID();
         String INSTITUTION_NAME = institution.getInstitutionName() == null ? "" : institution.getInstitutionName();
         String ADDRESS = institution.getAddress() == null ? "":institution.getAddress();
         String POSTCODE = institution.getPostcode() == null ? "" :institution.getPostcode();
@@ -61,8 +61,7 @@ public class InstitutionService {
         userDao.updateOrganizationIdByUserId(Id,userId);
 
         UserAuditBean userAudit = new UserAuditBean();
-        IdWorker worker = new IdWorker();
-        userAudit.setId(worker.nextId());
+        userAudit.setId(UUID.getUUID());
         userAudit.setUserId(userId);
         userAudit.setUserType(roleId);
         userAudit.setEntityId(Id);
@@ -72,5 +71,34 @@ public class InstitutionService {
 
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
+
+    public RestRecord updateInstitutionById(Institution institution) {
+        int status = 0;
+        status = institutionDao.updateInstitutionById(institution);
+
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200,status);
+    }
+
+    public Institution getInstitutionById(String id){
+        return institutionDao.getInstitutionById(id);
+    }
+
+    public RestRecord updateInstitutionInfo(Institution institution){
+        institutionDao.updateInstitutionInfo(institution);
+
+        UserAuditBean audit = userDao.findByUserAuditEntityId(institution.getId());
+
+        UserAuditBean userAudit = new UserAuditBean();
+
+        userAudit.setId(audit.getId());
+        userAudit.setAuditStatus(0);
+        userAudit.setAuditUserId("");
+        userAudit.setRejectOpinion("");
+
+        userDao.updateUserAuditById(userAudit);
+
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200);
+    }
+
 
 }
