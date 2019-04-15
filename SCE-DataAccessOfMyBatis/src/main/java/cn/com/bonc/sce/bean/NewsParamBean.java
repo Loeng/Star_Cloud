@@ -40,6 +40,14 @@ public class NewsParamBean {
     private Integer isPublish;
 
 
+    public Long getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(Long contentId) {
+        this.contentId = contentId;
+    }
+
     private Long contentId;
 
     private String startDate;
