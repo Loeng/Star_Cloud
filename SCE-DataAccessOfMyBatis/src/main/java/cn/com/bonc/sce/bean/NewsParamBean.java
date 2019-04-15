@@ -39,6 +39,15 @@ public class NewsParamBean {
     private String newsSource;
     private Integer isPublish;
 
+    private String publishTimestamp;
+
+    public String getPublishTimestamp() {
+        return publishTimestamp;
+    }
+
+    public void setPublishTimestamp(String publishTimestamp) {
+        this.publishTimestamp = publishTimestamp;
+    }
 
     public Long getContentId() {
         return contentId;
