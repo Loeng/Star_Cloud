@@ -1,9 +1,6 @@
 package cn.com.bonc.sce.mapper;
 
-import cn.com.bonc.sce.bean.AccountBean;
-import cn.com.bonc.sce.bean.SchoolBean;
-import cn.com.bonc.sce.bean.TeacherInfoBean;
-import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.bean.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -70,17 +67,18 @@ public interface UserMapper {
     int editTeacher(@Param("user_id") String user_id,
                     @Param("academic_qualification")String academic_qualification, @Param("work_number")String work_number,
                     @Param("school_time")String school_time, @Param("teach_time")String teach_time,
-                    @Param("position")String position, @Param("teach_range")Integer teach_range);
+                    @Param("job_code")String job_code, @Param("teach_range")Integer teach_range);
 
-    int addUser(@Param("user_id") String user_id, @Param("certificate_type")Integer certificate_type,
+    int addUser(@Param("user_id") Long user_id, @Param("certificate_type")Integer certificate_type,
                 @Param("certificate_number")String certificate_number, @Param("user_name")String user_name,
                 @Param("gender")String gender, @Param("phone_number")String phone_number,
                 @Param("organization_id")String organization_id, @Param("mail_address") String mail_address,
-                @Param("birthdate")String birthdate, @Param("nationality")String nationality, @Param("nationCode")String nationCode);
+                @Param("birthdate")String birthdate);
 
-    int addTeacher(@Param("user_id")String user_id, @Param("academic_qualification")String academic_qualification,
+    int addTeacher(@Param("user_id")Long user_id,@Param("nation_code")String nation_code,
+                   @Param("nationlity")String nationlity, @Param("academic_qualification")String academic_qualification,
                    @Param("work_number")String work_number, @Param("school_time")String school_time,
-                   @Param("teach_time")String teach_time, @Param("position")String position,
+                   @Param("teach_time")String teach_time, @Param("job_code")String job_code,
                    @Param("teach_range")Integer teach_range);
 
 
@@ -118,9 +116,9 @@ public interface UserMapper {
                     @Param("school_time")Date school_time, @Param("job_profession")String job_profession,
                     @Param("teach_range")String teach_range, @Param("work_number")String work_number);
 
-    Map selectParentInfoByCertificationNumber(@Param("certificationType") String certificationType, @Param("certificationNumber") String certificationNumber);
+    Map selectParentInfoByCertificationNumber(@Param("certificationNumber") String certificationNumber);
 
-    Map selectStudentInfoByCertificationNumber(@Param("certificationType") String certificationType, @Param("certificationNumber") String certificationNumber);
+    Map selectStudentInfoByCertificationNumber(@Param("certificationNumber") String certificationNumber);
 
     void insertUserPassword(@Param("id") long id, @Param("userId") String userId, @Param("password") String password);
 
@@ -174,4 +172,12 @@ public interface UserMapper {
     UserBean getUserById(@Param("userId") String userId);
 
     int delPassword(@Param("id") String id);
+
+    int updateOrganizationIdByUserId(@Param("organizationId") String organizationId,@Param("userId") String userId);
+
+    int saveUserAudit(UserAuditBean userAudit);
+
+    UserAuditBean findByUserAuditEntityId(@Param("entityId") String entityId);
+
+    int updateUserAuditById(UserAuditBean userAudit);
 }

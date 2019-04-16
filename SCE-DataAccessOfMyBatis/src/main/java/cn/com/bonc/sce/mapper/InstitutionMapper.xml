@@ -21,38 +21,215 @@
         WHERE USER_ID=#{user_id}
     </update>
 
-    <select id="getUserById" resultType="cn.com.bonc.sce.bean.UserBean">
+    <insert id="addInstitutionInfo">
+        insert into STARCLOUDPORTAL.SCE_INFO_INSTITUTION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user_id != null">
+                USER_ID,
+            </if>
+            <if test="work_time != null">
+                WORK_TIME,
+            </if>
+            <if test="entry_time != null">
+                ENTRY_TIME,
+            </if>
+            <if test="job_profession != null">
+                JOB_PROFESSION,
+            </if>
+            <if test="work_number != null">
+                WORK_NUMBER,
+            </if>
+            <if test="is_delete != null">
+                IS_DELETE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="user_id != null">
+                #{user_id,jdbcType=VARCHAR},
+            </if>
+            <if test="work_time != null">
+                #{work_time,jdbcType=DATE},
+            </if>
+            <if test="entry_time != null">
+                #{entry_time,jdbcType=DATE},
+            </if>
+            <if test="job_profession != null">
+                #{job_profession,jdbcType=VARCHAR},
+            </if>
+            <if test="work_number != null">
+                #{work_number,jdbcType=VARCHAR},
+            </if>
+            <if test="is_delete != null">
+                #{is_delete,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="addInstitution">
+        insert into STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="institution_name != null">
+                INSTITUTION_NAME,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="postcode != null">
+                POSTCODE,
+            </if>
+            <if test="province != null">
+                PROVINCE,
+            </if>
+            <if test="city != null">
+                CITY,
+            </if>
+            <if test="district != null">
+                DISTRICT,
+            </if>
+            <if test="institution_code != null">
+                INSTITUTION_CODE,
+            </if>
+            <if test="telephone != null">
+                TELEPHONE,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="homepage != null">
+                HOMEPAGE,
+            </if>
+            <if test="parent_institution != null">
+                PARENT_INSTITUTION,
+            </if>
+            <if test="is_delete != null">
+                IS_DELETE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="institution_name != null">
+                #{institution_name,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode != null">
+                #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="district != null">
+                #{district,jdbcType=VARCHAR},
+            </if>
+            <if test="institution_code != null">
+                #{institution_code,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="homepage != null">
+                #{homepage,jdbcType=VARCHAR},
+            </if>
+            <if test="parent_institution != null">
+                #{parent_institution,jdbcType=VARCHAR},
+            </if>
+            <if test="is_delete != null">
+                #{is_delete,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateInstitutionById" parameterType="cn.com.bonc.sce.model.Institution">
+        UPDATE  STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION
+        <set>
+            <if test="address!=null">
+                ADDRESS=#{address},
+            </if>
+            <if test="postcode!=null">
+                POSTCODE=#{postcode},
+            </if>
+            <if test="telephone!=null">
+                TELEPHONE=#{telephone},
+            </if>
+            <if test="email!=null">
+                EMAIL=#{email},
+            </if>
+            <if test="homepage!=null">
+                HOMEPAGE=#{homepage}
+            </if>
+        </set>
+        WHERE ID=#{id}
+    </update>
+
+    <select id="getInstitutionById" resultType="cn.com.bonc.sce.model.Institution">
         SELECT
-          T.USER_ID "stringUserId",
-          T.LOGIN_NAME "loginName",
-          T.USER_NAME "userName",
-          T.GENDER "gender",
-          T.USER_TYPE "userType",
-          T.MAIL_ADDRESS "mailAddress",
-          T.CERTIFICATE_TYPE "certificateType",
-          T.CERTIFICATE_NUMBER "certificateNumber",
-          T.PHONE_NUMBER "phoneNumber",
+          T.ID "id",
+          T.INSTITUTION_NAME "institutionName",
           T.ADDRESS "address",
-          T.CREATE_TIME "createTime",
-          T.LOGIN_TIME "loginTime",
-          T.LAST_LOGIN_TIME "lastLoginTime",
-          T.LOGIN_COUNTS "loginCounts",
-          T.ORGANIZATION_ID "organizationId",
-          T.LOGIN_PERMISSION_STATUS "loginPermissionStatus",
-          T.IS_DELETE "isDelete",
-          T.SECRET "secret",
-          T.LOGINTIMES "loginTimes",
-          T.IS_FIRST_LOGIN "isFirstLogin",
-          T.HEAD_PORTRAIT "headPortrait",
-          T.BIRTHDATE "birthday",
-          T.ISADMINISTRATORS "isAdministrators",
-          T.ACCOUNT_STATUS "accountStatus",
-          T.NATIONALITY "nationality",
-          T.VOLK "volk",
-          T.EDUCATIONAL_BACKGROUND "educationalBackground"
-        FROM STARCLOUDPORTAL.SCE_COMMON_USER T
-        WHERE USER_ID = #{userId}
+          T.POSTCODE "postcode",
+          T.PROVINCE "province",
+          T.CITY "city",
+          T.DISTRICT "district",
+          T.INSTITUTION_CODE "institutionCode",
+          T.TELEPHONE "telephone",
+          T.EMAIL "email",
+          T.HOMEPAGE "homepage",
+          T.PARENT_INSTITUTION "parentInstitution"
+        FROM STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION T
+        WHERE ID = #{id}
     </select>
+
+    <update id="updateInstitutionInfo" parameterType="cn.com.bonc.sce.model.Institution">
+        UPDATE  STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION
+        <set>
+            <if test="institutionName!=null">
+                INSTITUTION_NAME=#{institutionName},
+            </if>
+            <if test="address!=null">
+                ADDRESS=#{address},
+            </if>
+            <if test="postcode!=null">
+                POSTCODE=#{postcode},
+            </if>
+            <if test="province!=null">
+                PROVINCE=#{province},
+            </if>
+            <if test="city!=null">
+                CITY=#{city},
+            </if>
+            <if test="district!=null">
+                DISTRICT=#{district},
+            </if>
+            <if test="institutionCode!=null">
+                INSTITUTION_CODE=#{institutionCode},
+            </if>
+            <if test="telephone!=null">
+                TELEPHONE=#{telephone},
+            </if>
+            <if test="email!=null">
+                EMAIL=#{email},
+            </if>
+            <if test="homepage!=null">
+                HOMEPAGE=#{homepage},
+            </if>
+            <if test="parentInstitution!=null">
+                PARENT_INSTITUTION=#{parentInstitution}
+            </if>
+        </set>
+        WHERE ID=#{id}
+    </update>
 
     <select id="getInstitutionInfoByUserId" resultType="cn.com.bonc.sce.model.InstitutionInfo">
         SELECT

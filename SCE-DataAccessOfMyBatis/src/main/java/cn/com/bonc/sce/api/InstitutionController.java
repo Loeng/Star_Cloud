@@ -62,10 +62,62 @@ public class InstitutionController {
         }
     }
 
+    @ApiOperation(value = "新增教育局人员从业信息接口", notes = "新增教育局人员从业信息", httpMethod = "POST")
+    @PostMapping("/addInstitutionInfo")
+    @ResponseBody
+    public RestRecord addInstitutionInfo(@RequestBody @ApiParam( "教育局人员从业信息对象" ) InstitutionInfo info) {
+
+        String USER_ID = info.getUserId(); //用户ID
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date WORK_TIME;
+        Date ENTRY_TIME;
+        try {
+            WORK_TIME = sdf.parse(info.getWorkTime());  //参加工作年月
+            ENTRY_TIME = sdf.parse(info.getEntryTime()); //入职年月
+        }catch (Exception e){
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+        String JOB_PROFESSION = info.getJobProfession(); //岗位职业
+        String WORK_NUMBER = info.getWorkNumber(); //工号
+        Integer IS_DELETE = 1;
+        int institutionEdit = institutionService.addInstitutionInfo(USER_ID,WORK_TIME, ENTRY_TIME,
+                JOB_PROFESSION, WORK_NUMBER,IS_DELETE);
+
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200, institutionEdit);
+    }
+
+
     @ApiOperation(value = "新增教育局信息接口",notes = "新增教育局信息",httpMethod = "POST")
     @PostMapping("/addInstitution/{roleId}")
     @ResponseBody
     public RestRecord addInstitution(@RequestBody Institution institution, @RequestParam( "userId" ) String userId, @PathVariable( "roleId" ) Integer roleId){
         return institutionService.addInstitution(institution,userId,roleId);
     }
+
+    @ApiOperation(value = "通过教育局ID修改教育局信息接口",notes = "通过教育局ID修改教育局信息",httpMethod = "PUT")
+    @PutMapping( "/updateInstitutionById" )
+    @ResponseBody
+    public RestRecord updateInstitutionById(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution) {
+        return institutionService.updateInstitutionById(institution);
+    }
+
+    @ApiOperation(value = "通过教育局ID获取教育局信息接口", notes="通过教育局ID获取教育局信息", httpMethod = "GET")
+    @GetMapping("/{id}")
+    @ResponseBody
+    public RestRecord getInstitutionById( @PathVariable( "id" ) String id ) {
+        Institution user = institutionService.getInstitutionById(id);
+        if ( user == null ) {
+            return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, id );
+        } else {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
+        }
+    }
+
+    @ApiOperation(value = "变更或驳回提交教育局信息接口",notes = "变更或驳回教育局信息",httpMethod = "PUT")
+    @PutMapping( "/updateInstitutionInfo" )
+    @ResponseBody
+    public RestRecord updateInstitutionInfo(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution) {
+        return institutionService.updateInstitutionInfo(institution);
+    }
+
 }

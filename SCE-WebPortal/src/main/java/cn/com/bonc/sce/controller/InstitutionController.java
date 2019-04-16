@@ -38,6 +38,18 @@ public class InstitutionController {
     }
 
     /**
+     * 新增教育局从业信息
+     * @param info
+     * @return
+     */
+    @ApiOperation(value = "新增教育局从业信息接口",notes = "新增教育局从业信息",httpMethod = "POST")
+    @PostMapping("/addInstitutionInfo")
+    @ResponseBody
+    public RestRecord addInstitutionInfo(@ApiParam(name = "info", value = "从业信息", required = true) @RequestBody InstitutionInfo info){
+        return institutionService.addInstitutionInfo(info);
+    }
+
+    /**
      * 新增教育局信息
      * @param institution
      * @return
@@ -45,8 +57,29 @@ public class InstitutionController {
     @ApiOperation(value = "新增教育局信息接口",notes = "新增教育局信息",httpMethod = "POST")
     @PostMapping("/addInstitution/{roleId}")
     @ResponseBody
-    public RestRecord addInstitution(@ApiParam(name = "school", value = "学校实体", required = true) @RequestBody Institution institution, @ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId, @ApiParam(name = "roleId", value = "角色类型", required = true) @PathVariable( "roleId" ) Integer roleId){
+    public RestRecord addInstitution(@ApiParam(name = "institution", value = "教育局实体", required = true) @RequestBody Institution institution, @ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId, @ApiParam(name = "roleId", value = "角色类型", required = true) @PathVariable( "roleId" ) Integer roleId){
         return institutionService.addInstitution(institution,userId,roleId);
+    }
+
+    @ApiOperation(value = "通过教育局ID修改教育局信息接口",notes = "通过教育局ID修改教育局信息",httpMethod = "PUT")
+    @PutMapping( "/updateInstitutionById" )
+    @ResponseBody
+    public RestRecord updateInstitutionById(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution) {
+        return institutionService.updateInstitutionById(institution);
+    }
+
+    @ApiOperation(value = "通过教育局ID获取教育局信息接口", notes="通过教育局ID获取教育局信息", httpMethod = "GET")
+    @GetMapping("/{id}")
+    @ResponseBody
+    public RestRecord getInstitutionById( @PathVariable( "id" ) String id ) {
+        return institutionService.getInstitutionById(id);
+    }
+
+    @ApiOperation(value = "变更或驳回提交教育局信息接口",notes = "变更或驳回教育局信息",httpMethod = "PUT")
+    @PutMapping( "/updateInstitutionInfo" )
+    @ResponseBody
+    public RestRecord updateInstitutionInfo(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution) {
+        return institutionService.updateInstitutionInfo(institution);
     }
 
 }

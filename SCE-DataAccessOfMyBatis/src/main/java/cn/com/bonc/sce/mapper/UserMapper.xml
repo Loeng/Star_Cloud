@@ -1029,4 +1029,43 @@
         WHERE USER_ID = #{id}
     </delete>
 
+    <update id="updateOrganizationIdByUserId">
+        UPDATE  STARCLOUDPORTAL.SCE_COMMON_USER
+        <set>
+            <if test="organizationId!=null">
+                ORGANIZATION_ID=#{organizationId},
+            </if>
+        </set>
+        WHERE USER_ID=#{userId}
+    </update>
+
+    <insert id="saveUserAudit" parameterType="cn.com.bonc.sce.bean.UserAuditBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_USER_AUDIT
+        (ID,USER_ID,USER_TYPE,ENTITY_ID,AUDIT_STATUS)
+        VALUES
+        (#{id},#{userId},#{userType},#{entityId},#{auditStatus})
+    </insert>
+
+    <update id="updateUserAuditById" parameterType="cn.com.bonc.sce.bean.UserAuditBean">
+        UPDATE  STARCLOUDPORTAL.SCE_USER_AUDIT
+        SET AUDIT_STATUS = #{auditStatus},
+            AUDIT_TIME =  NULL ,
+            AUDIT_USER_ID = #{auditUserId},
+            REJECT_OPINION = #{rejectOpinion}
+        WHERE ID=#{id}
+    </update>
+
+    <select id="findByUserAuditEntityId" resultType="cn.com.bonc.sce.bean.UserAuditBean">
+        SELECT
+        T.ID "id",
+        T.USER_ID "userId",
+        T.USER_TYPE "userType",
+        T.AUDIT_STATUS "auditStatus",
+        T.AUDIT_TIME "auditTime",
+        T.AUDIT_USER_ID "auditUserId",
+        T.REJECT_OPINION "rejectOpinion"
+        FROM STARCLOUDPORTAL.SCE_USER_AUDIT T
+        WHERE ENTITY_ID = #{entityId}
+    </select>
+
 </mapper>

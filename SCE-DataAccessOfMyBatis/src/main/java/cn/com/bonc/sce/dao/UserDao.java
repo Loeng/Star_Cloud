@@ -1,9 +1,6 @@
 package cn.com.bonc.sce.dao;
 
-import cn.com.bonc.sce.bean.AccountBean;
-import cn.com.bonc.sce.bean.SchoolBean;
-import cn.com.bonc.sce.bean.TeacherInfoBean;
-import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.bean.*;
 import cn.com.bonc.sce.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -243,5 +240,21 @@ public class UserDao {
 
     public int delPassword(String id){
         return userMapper.delPassword(id);
+    }
+
+    public int updateOrganizationIdByUserId(String organizationId,String userId){
+        return userMapper.updateOrganizationIdByUserId(organizationId,userId);
+    }
+
+    public int saveUserAudit(UserAuditBean userAudit) {
+        return userMapper.saveUserAudit(userAudit);
+    }
+
+    public UserAuditBean findByUserAuditEntityId(String entityId){
+        return userMapper.findByUserAuditEntityId(entityId);
+    }
+
+    public int updateUserAuditById(UserAuditBean userAudit){
+        return userMapper.updateUserAuditById(userAudit);
     }
 }

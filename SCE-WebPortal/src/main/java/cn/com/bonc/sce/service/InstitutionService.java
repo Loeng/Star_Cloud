@@ -27,6 +27,10 @@ public class InstitutionService {
         return institutionDao.getInstitutionInfoByUserId(userId);
     }
 
+    public RestRecord addInstitutionInfo(InstitutionInfo info) {
+        return institutionDao.addInstitutionInfo(info);
+    }
+
     /**
      * 添加教育局信息
      * @param institution 信息
@@ -34,5 +38,17 @@ public class InstitutionService {
      */
     public RestRecord addInstitution(Institution institution, String userId, Integer roleId ) {
         return institutionDao.addInstitution(institution,userId,roleId);
+    }
+
+    public RestRecord updateInstitutionById(Institution institution){
+        return institutionDao.updateInstitutionById(institution);
+    }
+
+    public RestRecord getInstitutionById(String id){
+        return institutionDao.getInstitutionById(id);
+    }
+
+    public RestRecord updateInstitutionInfo(Institution institution){
+        return institutionDao.updateInstitutionInfo(institution);
     }
 }
