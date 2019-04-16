@@ -38,18 +38,26 @@ public class NewsService {
         if( newsBean.getPicId() != null ) {
             String picUrl = fileResourceDao.getFileStorePath( newsBean.getPicId() );
             newsBean.setPicUrl( picUrl );
+        }else{
+            newsBean.setPicId(0);
         }
+
         if( newsBean.getFileId() != null ) {
             String fileUrl = fileResourceDao.getFileStorePath( newsBean.getFileId() );
             newsBean.setFileUrl( fileUrl );
+        }else{
+            newsBean.setFileId(0);
         }
         if( StrUtil.isBlank( newsBean.getAuthorName() )){
             String authorName = userInfoMybatisDao.getUserNameById( newsBean.getCreateUserId() );
             newsBean.setAuthorName( authorName );
         }
+        newsBean.setColumnId(100);//栏目ID 预留字段 暂不使用
         newsBean.setIsDelete( 1 );
         newsBean.setContentStatus( "0" );
         newsBean.setIsPublish( 0 );
+        newsBean.setIsTop(0);
+        newsBean.setTopOrder(0);
         return newsDao.insertNewsInfo( newsBean );
     }
 

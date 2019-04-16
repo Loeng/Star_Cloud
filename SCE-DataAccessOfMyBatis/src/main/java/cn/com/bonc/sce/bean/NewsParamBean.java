@@ -39,6 +39,16 @@ public class NewsParamBean {
     private String newsSource;
     private Integer isPublish;
 
+    public String getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(String contentId) {
+        this.contentId = contentId;
+    }
+
+    private String contentId;
+
     private String publishTimestamp;
 
     public String getPublishTimestamp() {
@@ -49,15 +59,6 @@ public class NewsParamBean {
         this.publishTimestamp = publishTimestamp;
     }
 
-    public Long getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
-    }
-
-    private Long contentId;
 
     private String startDate;
 
