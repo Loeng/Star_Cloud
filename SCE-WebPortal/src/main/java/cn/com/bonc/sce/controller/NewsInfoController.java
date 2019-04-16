@@ -3,6 +3,7 @@ package cn.com.bonc.sce.controller;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.model.NewsIdModel;
 import cn.com.bonc.sce.model.NewsModel;
 import cn.com.bonc.sce.model.NewsParamModel;
 import cn.com.bonc.sce.model.NewsStatusModel;
@@ -58,12 +59,12 @@ public class NewsInfoController {
     /**
      * 删除教育新闻
      *
-     * @param idList 新闻Id列表
+     * @param newsIdModel 新闻Id列表
      * @return 删除新闻是否成功
      */
     @ApiOperation( value = "删除教育新闻", notes = "删除教育新闻", httpMethod = "DELETE" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "idList", value = "新闻Id,json数组", paramType = "body", required = true ),
+
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
@@ -72,9 +73,10 @@ public class NewsInfoController {
     } )
     @DeleteMapping
     @ResponseBody
-    public RestRecord deleteNewsByIdList( @RequestBody List< Long > idList,
-                                          @CurrentUserId @ApiParam( hidden = true ) String userId
+    public RestRecord deleteNewsByIdList( @RequestBody NewsIdModel newsIdModel
+                                          ,@CurrentUserId @ApiParam( hidden = true ) String userId
     ) {
+        List<Long> idList = newsIdModel.getIdList();
         return newsInfoService.deleteNewsInfo( idList, userId );
     }
 
