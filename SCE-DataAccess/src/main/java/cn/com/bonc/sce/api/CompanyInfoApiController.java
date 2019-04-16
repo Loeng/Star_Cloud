@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.api;
 
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.dao.UserPasswordDao;
@@ -104,6 +105,19 @@ public class CompanyInfoApiController {
         }
     }
 
+    @ApiOperation( value = "通过厂商ID获取厂商信息接口", notes = "通过厂商ID获取厂商信息", httpMethod = "GET" )
+    @GetMapping( "/{companyId}" )
+    @ResponseBody
+    public RestRecord getCompanyByCompanyId(
+            @PathVariable( value = "companyId" ) @ApiParam( value = "厂商Id" ) String companyId ) {
+        CompanyInfo info =  companyService.getCompanyByCompanyId( companyId );
+        if (info == null) {
+            return new RestRecord(111, WebMessageConstants.SCE_PORTAL_MSG_111, companyId);
+        } else {
+            return new RestRecord(200, MessageConstants.SCE_MSG_0200, info);
+        }
+    }
+
     /**
      * 添加单个厂商信息
      *
@@ -161,7 +175,7 @@ public class CompanyInfoApiController {
     @PutMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
-            @PathVariable( "companyId" ) Long companyId,
+            @PathVariable( "companyId" ) String companyId,
             @RequestBody CompanyInfo companyInfo ) {
         log.trace( "Update companyInfo,companyId is : {} ,companyInfo is {}", companyId, companyInfo );
         try {
@@ -173,6 +187,15 @@ public class CompanyInfoApiController {
             log.error( WebMessageConstants.SCE_PORTAL_MSG_501, e );
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
+    }
+
+    @ApiOperation( value = "通过厂商ID修改厂商信息接口", notes = "通过厂商ID修改厂商信息", httpMethod = "PUT" )
+    @PutMapping( "/updateCompanyByCompanyId" )
+    @ResponseBody
+    public RestRecord updateCompanyByCompanyId(
+            @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
+                    CompanyInfo companyInfo ) {
+        return companyService.updateCompanyByCompanyId(companyInfo);
     }
 
     /**
@@ -234,4 +257,12 @@ public class CompanyInfoApiController {
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420 );
         }
     }
+
+    @ApiOperation(value = "变更或驳回提交厂商信息接口",notes = "变更或驳回提交厂商信息",httpMethod = "PUT")
+    @PutMapping( "/updateCompany" )
+    @ResponseBody
+    public RestRecord updateCompany(@RequestBody @ApiParam( "厂商信息对象" ) CompanyInfo companyInfo) {
+        return companyService.updateCompany(companyInfo);
+    }
+
 }

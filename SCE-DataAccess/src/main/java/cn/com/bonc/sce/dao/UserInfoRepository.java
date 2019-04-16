@@ -137,7 +137,7 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
                     @Param( "userType" ) Integer userType, @Param( "mailAddress" ) String mailAddress,
                     @Param( "certificateType" ) Integer certificateType, @Param( "certificateNumber" ) String certificateNumber,
                     @Param( "phoneNumber" ) String phoneNumber, @Param( "address" ) String address,
-                    @Param( "createTime" ) Date createTime, @Param( "organizationId" ) Long organizationId,
+                    @Param( "createTime" ) Date createTime, @Param( "organizationId" ) String organizationId,
                     @Param( "remarks" ) String remarks, @Param( "secret" ) String secret );
 
 

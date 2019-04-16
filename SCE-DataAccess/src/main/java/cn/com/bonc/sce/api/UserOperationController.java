@@ -265,14 +265,7 @@ public class UserOperationController {
                 userModel.setLoginName( IDUtil.createID( "jyj_" ) );
                 break;
         }
-        Long ORGANIZATION_ID = null;
-        if ( StringUtils.isNotBlank( userModel.getOrganizationId() ) ) {
-            try {
-                ORGANIZATION_ID = Long.parseLong( userModel.getOrganizationId() );
-            } catch ( Exception e ) {
-                log.error( "组织id转换出错!!" );
-            }
-        }
+        String ORGANIZATION_ID = userModel.getOrganizationId();
         //插入基本信息
         userInfoRepository.insertUser( userModel.getUserId(), userModel.getLoginName(), userModel.getUserName()
                 , userModel.getGender(), userModel.getUserType(), userModel.getMailAddress(), userModel.getCertificateType(), userModel.getCertificateNumber()

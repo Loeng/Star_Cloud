@@ -25,6 +25,10 @@ public class CompanyInfoService {
         return companyInfoDao.queryOneCompanyInfo( companyId );
     }
 
+    public RestRecord getCompanyByCompanyId( String companyId ) {
+        return companyInfoDao.getCompanyByCompanyId( companyId );
+    }
+
     public RestRecord addCompanyInfo( CompanyInfoModel companyInfo ) {
         return companyInfoDao.addCompanyInfo( companyInfo );
     }
@@ -37,6 +41,10 @@ public class CompanyInfoService {
         return companyInfoDao.updateCompanyInfo( companyId, companyInfo );
     }
 
+    public RestRecord updateCompanyByCompanyId(CompanyInfoModel companyInfo ) {
+        return companyInfoDao.updateCompanyByCompanyId(companyInfo );
+    }
+
     public RestRecord deleteCompanyInfo( Long companyId ) {
         return companyInfoDao.deleteCompanyInfo( companyId );
     }
@@ -44,5 +52,9 @@ public class CompanyInfoService {
 
     public RestRecord getAllUserInfo( String loginName, String companyName, String enable, Integer pageNum, Integer pageSize ) {
         return companyInfoDao.getAllUserInfo( loginName, companyName, enable, pageNum, pageSize );
+    }
+
+    public RestRecord updateCompany(CompanyInfoModel companyInfo){
+        return companyInfoDao.updateCompany(companyInfo);
     }
 }

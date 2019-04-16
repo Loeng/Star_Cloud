@@ -36,6 +36,7 @@ public interface WebMessageConstants {
 
 
     String SCE_PORTAL_MSG_110 = "没有关联的厂商";
+    String SCE_PORTAL_MSG_111 = "找不到厂商 companyId";
     /**
      * 操作成功
      * 200 - 299

@@ -58,6 +58,14 @@ public class CompanyInfoController {
         return companyInfoService.queryOneCompanyInfo( companyId );
     }
 
+    @ApiOperation( value = "通过厂商ID获取厂商信息接口", notes = "通过厂商ID获取厂商信息", httpMethod = "GET" )
+    @GetMapping( "/{companyId}" )
+    @ResponseBody
+    public RestRecord getCompanyByCompanyId(
+            @PathVariable( value = "companyId" ) @ApiParam( value = "厂商Id" ) String companyId ) {
+        return companyInfoService.getCompanyByCompanyId( companyId );
+    }
+
     /**
      * 添加单个厂商信息
      *
@@ -100,6 +108,15 @@ public class CompanyInfoController {
         return companyInfoService.updateCompanyInfo( companyId, companyInfo );
     }
 
+    @ApiOperation( value = "通过厂商ID修改厂商信息接口", notes = "通过厂商ID修改厂商信息", httpMethod = "PUT" )
+    @PutMapping( "/updateCompanyByCompanyId" )
+    @ResponseBody
+    public RestRecord updateCompanyByCompanyId(
+            @RequestBody @ApiParam( name = "companyInfo", value = "厂商信息对象", required = true )
+                    CompanyInfoModel companyInfo ) {
+        return companyInfoService.updateCompanyByCompanyId(companyInfo);
+    }
+
     /**
      * 删除单个厂商信息
      * 在厂商信息表中将对应厂商状态改为已删除
@@ -134,4 +151,12 @@ public class CompanyInfoController {
             @RequestParam( value = "pageSize", required = false, defaultValue = "10" ) Integer pageSize ) {
         return companyInfoService.getAllUserInfo( loginName, companyName, enable, pageNum, pageSize );
     }
+
+    @ApiOperation(value = "变更或驳回提交厂商信息接口",notes = "变更或驳回提交厂商信息",httpMethod = "PUT")
+    @PutMapping( "/updateCompany" )
+    @ResponseBody
+    public RestRecord updateCompany(@RequestBody @ApiParam( "厂商信息对象" ) CompanyInfoModel companyInfo) {
+        return companyInfoService.updateCompany(companyInfo);
+    }
+
 }
