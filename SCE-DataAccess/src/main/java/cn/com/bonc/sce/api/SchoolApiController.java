@@ -128,7 +128,7 @@ public class SchoolApiController {
 
     @GetMapping("/getSchoolInfoList/{SCHOOL_NAME}/{SCHOOL_TYPE}/{AUDIT_STATUS}/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getSchoolInfoList(@PathVariable("SCHOOL_NAME") String SCHOOL_NAME, @PathVariable("SCHOOL_TYPE") String SCHOOL_TYPE, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+    public RestRecord getSchoolInfoList(@PathVariable("SCHOOL_NAME") String SCHOOL_NAME, @PathVariable("SCHOOL_TYPE") String SCHOOL_TYPE, @PathVariable("AUDIT_STATUS") String AUDIT_STATUS
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
@@ -150,13 +150,13 @@ public class SchoolApiController {
                     "WHERE\n" +
                     "\tses.IS_DELETE = 1 " );
             if(!StringUtils.isEmpty(SCHOOL_NAME) && !"null".equals(SCHOOL_NAME)){
-                sql.append("and ses.SCHOOL_NAME like '%"+SCHOOL_NAME+"%'");
+                sql.append("and ses.SCHOOL_NAME like '%"+SCHOOL_NAME+"%' ");
             }
             if(!StringUtils.isEmpty(SCHOOL_TYPE) && !"null".equals(SCHOOL_TYPE)){
                 sql.append("and ses.SCHOOL_TYPE = "+SCHOOL_TYPE+" ");
             }
             if(StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS) ){
-                sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2)");
+                sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
             }
             if(!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS) ){
                 sql.append("AND  sua.AUDIT_STATUS = 0 ");

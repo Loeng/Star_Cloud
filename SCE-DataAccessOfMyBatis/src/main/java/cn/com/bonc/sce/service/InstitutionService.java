@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2019/4/14.
@@ -100,5 +102,8 @@ public class InstitutionService {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
 
+    public List<Map> getInstitutionInfoList(String INSTITUTION_NAME, String AUDIT_STATUS) {
+        return institutionDao.getInstitutionInfoList(INSTITUTION_NAME,AUDIT_STATUS);
+    }
 
 }

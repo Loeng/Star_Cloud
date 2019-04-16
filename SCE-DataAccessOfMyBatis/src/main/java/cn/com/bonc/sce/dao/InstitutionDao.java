@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2019/4/14.
@@ -43,6 +45,10 @@ public class InstitutionDao {
 
     public int updateInstitutionInfo(Institution institution) {
         return institutionMapper.updateInstitutionInfo(institution);
+    }
+
+    public List<Map> getInstitutionInfoList(String INSTITUTION_NAME, String AUDIT_STATUS) {
+        return institutionMapper.getInstitutionInfoList(INSTITUTION_NAME,AUDIT_STATUS);
     }
 
 
