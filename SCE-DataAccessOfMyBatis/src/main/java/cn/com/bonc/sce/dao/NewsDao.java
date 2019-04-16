@@ -68,6 +68,9 @@ public class NewsDao {
     public int updateTopNewsOrder(Integer topOrder, Long contentId, String userId){
         return newsMapper.updateTopNewOrder( topOrder, contentId, userId );
     }
+    public int updateNormalNewsOrder(Integer showOrder, Long contentId, String userId){
+        return newsMapper.updateNormalNewOrder( showOrder, contentId, userId );
+    }
 
     public int selectTopNewsCount(){
         return newsMapper.selectTopNewsCount();

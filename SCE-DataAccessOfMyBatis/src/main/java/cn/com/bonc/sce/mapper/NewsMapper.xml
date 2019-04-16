@@ -423,7 +423,17 @@
 
     <update id="updateTopNewOrder" >
         UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
-        SET TOP_ORDER = #{topOrder}, UPDATE_TIME = sysdate,UPDATE_USER_ID = #{userId}
+        SET
+          TOP_ORDER = #{topOrder},
+         UPDATE_TIME = sysdate,UPDATE_USER_ID = #{userId}
+        WHERE CONTENT_ID = #{contentId}
+    </update>
+
+    <update id="updateNormalNewOrder" >
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
+        SET
+        SHOW_ORDER = #{showOrder},
+        UPDATE_TIME = sysdate,UPDATE_USER_ID = #{userId}
         WHERE CONTENT_ID = #{contentId}
     </update>
 

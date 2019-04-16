@@ -320,8 +320,9 @@ public class NewsInfoController {
     } )
     @PostMapping( "/top-order-change" )
     @ResponseBody
-    public RestRecord updateTopNewsInfo( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) List< NewsStatusModel > newsList,
-                                         @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+    public RestRecord updateTopNewsInfo( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) List< NewsStatusModel > newsList
+            ,@CurrentUserId @ApiParam( hidden = true ) String userId
+    ) {
         return newsInfoService.updateTopNewsInfo( newsList, userId );
     }
 

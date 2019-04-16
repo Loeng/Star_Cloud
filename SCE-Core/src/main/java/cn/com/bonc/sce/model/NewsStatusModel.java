@@ -11,6 +11,15 @@ public class NewsStatusModel {
     private Integer isPublish;
     private Integer isTop;
     private Integer topOrder;
+    private Integer showOrder;
+
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder(Integer showOrder) {
+        this.showOrder = showOrder;
+    }
 
     public Long getContentId() {
         return contentId;
