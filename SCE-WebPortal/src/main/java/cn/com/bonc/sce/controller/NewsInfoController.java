@@ -62,7 +62,7 @@ public class NewsInfoController {
      * @param newsIdModel 新闻Id列表
      * @return 删除新闻是否成功
      */
-    @ApiOperation( value = "删除教育新闻", notes = "删除教育新闻", httpMethod = "DELETE" )
+    @ApiOperation( value = "删除教育新闻", notes = "删除教育新闻", httpMethod = "POST" )
     @ApiImplicitParams( {
 
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
@@ -71,37 +71,38 @@ public class NewsInfoController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
-    @DeleteMapping
+    @PostMapping
     @ResponseBody
     public RestRecord deleteNewsByIdList( @RequestBody NewsIdModel newsIdModel
                                           ,@CurrentUserId @ApiParam( hidden = true ) String userId
     ) {
         List<Long> idList = newsIdModel.getIdList();
-        return newsInfoService.deleteNewsInfo( idList, userId );
+        return newsInfoService.deleteNewsInfo( idList, userId);
     }
 
 
     /**
      * 删除头条新闻
      *
-     * @param idList 新闻Id列表
+     * @param newsIdModel 新闻Id列表
      * @return 删除头条新闻是否成功
      */
-    @ApiOperation( value = "删除头条新闻", notes = "删除头条新闻", httpMethod = "DELETE" )
+    @ApiOperation( value = "删除头条新闻", notes = "删除头条新闻", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "idList", value = "新闻Id,json数组", paramType = "body", required = true ),
+
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
-    @DeleteMapping( "/top-news" )
+    @PostMapping( "/top-news" )
     @ResponseBody
-    public RestRecord deleteTopNewsByIdList( @RequestBody List< Long > idList,
-                                             @CurrentUserId @ApiParam( hidden = true ) String userId
+    public RestRecord deleteTopNewsByIdList( @RequestBody NewsIdModel newsIdModel
+                                             ,@CurrentUserId @ApiParam( hidden = true ) String userId
     ) {
-        return newsInfoService.deleteTopNewsInfo( idList, userId );
+        List<Long> idList = newsIdModel.getIdList();
+        return newsInfoService.deleteTopNewsInfo( idList, userId);
     }
 
     /**
@@ -326,7 +327,7 @@ public class NewsInfoController {
 
     @ApiOperation( value = "后台头条新闻添加接口", notes = "后台头条新闻添加接口", httpMethod = "POST" )
     @ApiImplicitParams( {
-            @ApiImplicitParam( name = "idList", value = "新闻Id,json数组", paramType = "body", required = true ),
+
             @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     } )
     @ApiResponses( {
@@ -334,8 +335,10 @@ public class NewsInfoController {
     } )
     @PostMapping( "/new-top-news" )
     @ResponseBody
-    public RestRecord addTopNewsInfo( @RequestBody List< Long > idList,
-                                      @CurrentUserId @ApiParam( hidden = true ) String userId ) {
+    public RestRecord addTopNewsInfo( @RequestBody NewsIdModel newsIdModel
+                                      ,@CurrentUserId @ApiParam( hidden = true ) String userId
+                                      ) {
+        List<Long> idList = newsIdModel.getIdList();
         Map map = new HashMap<>( 2 );
         map.put( "idList", idList );
         map.put( "userId", userId );
