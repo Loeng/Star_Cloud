@@ -83,7 +83,7 @@ public class JWTUtil {
                 .setNotBefore( new Date() )
                 .setIssuedAt( new Date() )
                 // TODO 访问统一 id 生成服务获取 id
-                .setId( UUID.randomUUID().toString() );
+                .setId( UUID.getUUID() );
     }
 
     public static String readJWTClaim( String claim ) {
