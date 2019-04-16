@@ -3,6 +3,7 @@ package cn.com.bonc.sce.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,9 +19,10 @@ import java.util.Date;
 public class UserAudit {
 
     @Id
-    @GeneratedValue
+    @GenericGenerator(name="idGenerator", strategy="uuid")
+    @GeneratedValue(generator="idGenerator")
     @Column( name = "ID" )
-    private Long id;
+    private String id;
 
     @Column( name = "USER_ID" )
     private String userId;
@@ -29,7 +31,7 @@ public class UserAudit {
     private Integer userType;
 
     @Column( name = "ENTITY_ID" )
-    private Integer entityId;
+    private String entityId;
 
     @Column( name = "AUDIT_STATUS" )
     private Integer auditStatus;

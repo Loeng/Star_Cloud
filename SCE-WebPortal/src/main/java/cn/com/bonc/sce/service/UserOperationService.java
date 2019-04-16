@@ -50,4 +50,10 @@ public class UserOperationService {
     public RestRecord insertUser( UserModel userModel ) {
         return userOperationDao.insertUser( userModel );
     }
+
+    public RestRecord getAuditStatusByEntityId( String id ,Integer roleId) {
+        return userOperationDao.getAuditStatusByEntityId( id,roleId );
+
+    }
+
 }

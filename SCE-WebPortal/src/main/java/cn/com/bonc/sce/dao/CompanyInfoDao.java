@@ -26,6 +26,10 @@ public interface CompanyInfoDao {
     public RestRecord addCompanyInfo(
             @RequestBody CompanyInfoModel companyInfo );
 
+    @RequestMapping( value = "/company/addCompany", method = RequestMethod.POST )
+    public RestRecord addCompany(
+            @RequestBody CompanyInfoModel companyInfo );
+
     @RequestMapping( value = "/company/{companyId}", method = RequestMethod.PUT )
     public RestRecord updateCompanyInfo(
             @PathVariable( "companyId" ) Long companyId,

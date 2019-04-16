@@ -73,6 +73,15 @@ public class CompanyInfoController {
         return companyInfoService.addCompanyInfo( companyInfo );
     }
 
+    /*@ApiOperation( value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST" )
+    @PostMapping
+    @ResponseBody
+    public RestRecord addCompany(
+            @RequestBody @ApiParam( name = "company", value = "厂商信息对象", required = true )
+                    CompanyInfoModel company ) {
+        return companyInfoService.addCompany( company );
+    }*/
+
     /**
      * 根据用户输入信息，在厂商信息表中修改对应厂商信息
      *

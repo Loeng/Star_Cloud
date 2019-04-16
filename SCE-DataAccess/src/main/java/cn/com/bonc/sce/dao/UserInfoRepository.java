@@ -203,5 +203,7 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
     @Override
     UserAudit save(UserAudit userAudit );
 
-    UserAudit findByEntityId(Integer id);
+    UserAudit findByEntityId(String id);
+
+    UserAudit findByEntityIdAndUserType(String entityId,Integer userType);
 }

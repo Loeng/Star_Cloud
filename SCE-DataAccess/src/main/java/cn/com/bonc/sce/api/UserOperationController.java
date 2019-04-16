@@ -6,12 +6,14 @@ import cn.com.bonc.sce.dao.StudentParentRelDao;
 import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.dao.UserPasswordDao;
 import cn.com.bonc.sce.entity.StudentParentRel;
+import cn.com.bonc.sce.entity.UserAudit;
 import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import cn.com.bonc.sce.tool.IDUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -381,6 +383,14 @@ public class UserOperationController {
     public RestRecord saveUserPassword( @RequestParam( "userId" ) String userId, @RequestParam( "password" ) String password ) {
         int date = userPasswordDao.updateUserPassword( userId, password );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, date );
+    }
+
+    @ApiOperation( value = "查询审核状态接口", notes = "查询审核状态", httpMethod = "GET" )
+    @GetMapping( "/getAuditStatusByEntityId/{id}/{roleId}" )
+    @ResponseBody
+    public RestRecord getAuditStatusByEntityId( @PathVariable( "id" ) String id,@PathVariable( "roleId" ) Integer roleId  ) {
+        UserAudit audit = userInfoRepository.findByEntityIdAndUserType( id ,roleId);
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, audit );
     }
 
 }
