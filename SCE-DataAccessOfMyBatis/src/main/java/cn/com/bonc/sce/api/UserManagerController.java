@@ -11,6 +11,7 @@ import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserService;
 import cn.com.bonc.sce.tool.IdWorker;
+import cn.com.bonc.sce.tool.UserPropertiesUtil;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -258,10 +259,22 @@ public class UserManagerController {
         String USER_ID = (String) map.get("USER_ID");
         Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
         String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
+        if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
+            log.info("教师身份证验证未通过");
+            return new RestRecord( 432, "身份证填写不正确");
+        }
         String USER_NAME = (String) map.get("USER_NAME");
         String GENDER = (String) map.get("GENDER");
         String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
+        if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
+            log.info("教师身手机号验证未通过");
+            return new RestRecord( 432, "手机号填写不正确");
+        }
         String MAIL_ADDRESS = (String) map.get("MAIL_ADDRESS");
+        if(!UserPropertiesUtil.checkMail(MAIL_ADDRESS)){
+            log.info("教师身邮箱证未通过");
+            return new RestRecord( 432, "邮箱填写不正确");
+        }
         String BIRTHDATE = (String) map.get("BIRTHDATE");
         String NATION_CODE = (String) map.get("NATION_CODE");
         String NATIONLITY = (String) map.get("NATIONLITY");
@@ -296,10 +309,22 @@ public class UserManagerController {
             String ORGANIZATION_ID = (String) map.get("ORGANIZATION_ID");
             Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
             String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
+            if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
+                log.info("教师身份证验证未通过");
+                return new RestRecord( 432, "身份证填写不正确");
+            }
             String USER_NAME = (String) map.get("USER_NAME");
             String GENDER = (String) map.get("GENDER");
             String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
+            if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
+                log.info("教师身手机号验证未通过");
+                return new RestRecord( 432, "手机号填写不正确");
+            }
             String MAIL_ADDRESS = (String) map.get("MAIL_ADDRESS");
+            if(!UserPropertiesUtil.checkMail(MAIL_ADDRESS)){
+                log.info("教师身邮箱证未通过");
+                return new RestRecord( 432, "邮箱填写不正确");
+            }
             String BIRTHDATE = (String) map.get("BIRTHDATE");
             String NATION_CODE = (String) map.get("NATION_CODE");
             String NATIONLITY = (String) map.get("NATIONLITY");
