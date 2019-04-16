@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.*;
 import java.util.*;
-import java.util.UUID;
 
 /**
  * 提供对 jwt token 的生成和解密
