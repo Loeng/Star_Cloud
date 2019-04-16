@@ -198,7 +198,7 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
      */
     @Modifying
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET ORGANIZATION_ID = ?1 WHERE USER_ID = ?2", nativeQuery = true)
-    int updateOrganizationIdByUserId(Integer organizationId,String userId);
+    int updateOrganizationIdByUserId(String organizationId,String userId);
 
     @Override
     UserAudit save(UserAudit userAudit );

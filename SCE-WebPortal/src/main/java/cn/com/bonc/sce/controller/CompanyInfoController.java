@@ -73,14 +73,14 @@ public class CompanyInfoController {
         return companyInfoService.addCompanyInfo( companyInfo );
     }
 
-    /*@ApiOperation( value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST" )
-    @PostMapping
+    @ApiOperation( value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST" )
+    @PostMapping("/addCompany/{roleId}")
     @ResponseBody
     public RestRecord addCompany(
-            @RequestBody @ApiParam( name = "company", value = "厂商信息对象", required = true )
-                    CompanyInfoModel company ) {
-        return companyInfoService.addCompany( company );
-    }*/
+             @ApiParam( name = "company", value = "厂商信息对象", required = true )
+             @RequestBody CompanyInfoModel company,@ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId,@ApiParam(name = "roleId", value = "角色类型", required = true) @PathVariable( "roleId" ) Integer roleId ) {
+        return companyInfoService.addCompany( company ,userId,roleId);
+    }
 
     /**
      * 根据用户输入信息，在厂商信息表中修改对应厂商信息

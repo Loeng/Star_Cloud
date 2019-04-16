@@ -26,9 +26,9 @@ public interface CompanyInfoDao {
     public RestRecord addCompanyInfo(
             @RequestBody CompanyInfoModel companyInfo );
 
-    @RequestMapping( value = "/company/addCompany", method = RequestMethod.POST )
+    @RequestMapping( value = "/company/addCompany/{roleId}", method = RequestMethod.POST )
     public RestRecord addCompany(
-            @RequestBody CompanyInfoModel companyInfo );
+            @RequestBody CompanyInfoModel companyInfo,@RequestParam( "userId" ) String userId,@PathVariable( "roleId" ) Integer roleId );
 
     @RequestMapping( value = "/company/{companyId}", method = RequestMethod.PUT )
     public RestRecord updateCompanyInfo(

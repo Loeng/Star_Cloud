@@ -5,11 +5,15 @@ import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.dao.UserPasswordDao;
 import cn.com.bonc.sce.entity.CompanyInfo;
 import cn.com.bonc.sce.entity.UserPassword;
+import cn.com.bonc.sce.model.CompanyInfoModel;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.repository.CompanyInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.CompanyService;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.type.TypeDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +48,9 @@ public class CompanyInfoApiController {
 
     @Autowired
     private UserPasswordDao passwordDao;
+
+    @Autowired
+    private CompanyService companyService;
 
     @GetMapping
     @ResponseBody
@@ -133,6 +140,15 @@ public class CompanyInfoApiController {
         } catch ( Exception e ) {
             return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_423 );
         }
+    }
+
+    @ApiOperation( value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST" )
+    @PostMapping("/addCompany/{roleId}")
+    @ResponseBody
+    public RestRecord addCompany(
+            @RequestBody @ApiParam( name = "company", value = "厂商信息对象", required = true )
+                    CompanyInfo company,@RequestParam("userId") String userId, @PathVariable("roleId") Integer roleId ) {
+        return companyService.addCompany(company, userId, roleId);
     }
 
     /**
