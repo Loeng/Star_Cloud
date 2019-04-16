@@ -60,7 +60,7 @@ public class ExcelToUser {
     @Excel( name = "管理员", replace = { "是_1","否_0" }, orderNum = "16")
     private String isAdministrators;
 
-    @Excel( name = "任课学段", orderNum = "17")
+    @Excel( name = "任课学段", replace = { "学前教育_0","小学_1","普通初中_2","普通高中_3","职业初中_4","职业高中_5","成人中等专业学校_6","成人中学_7","特殊教育_8","其他_9" }, orderNum = "17")
     private String teachRange;
 
     @Excel( name = "工号", orderNum = "18")

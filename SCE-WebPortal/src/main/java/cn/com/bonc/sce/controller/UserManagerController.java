@@ -285,9 +285,9 @@ public class UserManagerController {
     }
 
     @ApiOperation( value = "通过证件类型和证件号查询父亲信息" ,notes = "通过条件查询父亲信息", httpMethod = "GET" )
-    @GetMapping("/getParentInfo/{certificationNumber}/{userType}")
-    public RestRecord getParentInfo(@PathVariable String certificationNumber, @PathVariable String userType){
-        return userManagerService.getParentInfo(certificationNumber, userType);
+    @GetMapping("/getParentInfo/{certificationType}/{certificationNumber}/{userType}")
+    public RestRecord getParentInfo(@PathVariable String certificationType, @PathVariable String certificationNumber, @PathVariable String userType){
+        return userManagerService.getParentInfo(certificationType, certificationNumber, userType);
     }
 
     @ApiOperation( value = "教师撤回学生转入的申请", notes = "通过id撤回", httpMethod = "DELETE" )

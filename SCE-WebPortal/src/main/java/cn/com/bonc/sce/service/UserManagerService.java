@@ -135,8 +135,8 @@ public class UserManagerService {
         return restRecord;
     }
 
-    public RestRecord getParentInfo(String certificationNumber, String userType){
-        return userManagerDao.getParentInfo(certificationNumber, userType);
+    public RestRecord getParentInfo(String certificationType, String certificationNumber, String userType){
+        return userManagerDao.getParentInfo(certificationType, certificationNumber, userType);
     }
 
     public RestRecord getTransferStudent(String userName, String loginName, String studentNumber, String gender, String grade, String applyStatus,

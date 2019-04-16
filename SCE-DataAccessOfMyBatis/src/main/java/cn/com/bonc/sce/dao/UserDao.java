@@ -76,11 +76,6 @@ public class UserDao {
     }
 
     public List<Map> getTeachers(long organizationId,String userName, String loginName, String gender, String position, String accountStatus) {
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-        System.out.println(accountStatus);
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
         return userMapper.getTeachers(organizationId,userName,loginName,gender,position,accountStatus);
     }
 
@@ -97,16 +92,16 @@ public class UserDao {
         return userMapper.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate, nationCode, nationality);
     }
 
-    public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
-        return userMapper.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
+    public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
+        return userMapper.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,position,teach_range);
     }
 
-    public int addUser(Long user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate) {
-        return userMapper.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate);
+    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate, String nationality, String nationCode) {
+        return userMapper.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate, nationality, nationCode);
     }
 
-    public int addTeacher(Long user_id,String nation_code, String nationlity, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
-        return userMapper.addTeacher(user_id,nation_code,nationlity,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
+    public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
+        return userMapper.addTeacher(user_id,academic_qualification,work_number,school_time,teach_time,position,teach_range);
     }
 
 
@@ -155,12 +150,12 @@ public class UserDao {
         return userMapper.editTeacherPracticeInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number);
     }
 
-    public Map selectParentInfoByCertificationNumber(String certificationNumber){
-        return userMapper.selectParentInfoByCertificationNumber(certificationNumber);
+    public Map selectParentInfoByCertificationNumber(String certificationType, String certificationNumber){
+        return userMapper.selectParentInfoByCertificationNumber(certificationType, certificationNumber);
     }
 
-    public Map selectStudentInfoByCertificationNumber(String certificationNumber){
-        return userMapper.selectStudentInfoByCertificationNumber(certificationNumber);
+    public Map selectStudentInfoByCertificationNumber(String certificationType, String certificationNumber){
+        return userMapper.selectStudentInfoByCertificationNumber(certificationType, certificationNumber);
     }
 
     public void saveUserPassword(long id, String userId, String password){
@@ -244,5 +239,9 @@ public class UserDao {
 
     public UserBean getUserById(String userId){
         return userMapper.getUserById(userId);
+    }
+
+    public int delPassword(String id){
+        return userMapper.delPassword(id);
     }
 }

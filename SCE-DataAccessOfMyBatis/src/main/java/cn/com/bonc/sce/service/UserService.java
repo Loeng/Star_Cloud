@@ -56,6 +56,10 @@ public class UserService {
         return userDao.delUser(id);
     }
 
+    public int delPassword(String id){
+        return userDao.delPassword(id);
+    }
+
     public int resetPwd(String id,String pwd) {
         return userDao.resetPwd(id,pwd);
     }
@@ -113,16 +117,16 @@ public class UserService {
         return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate,nationCode, nationality);
     }
 
-    public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
-        return userDao.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
+    public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
+        return userDao.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,position,teach_range);
     }
 
-    public int addUser(Long user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate) {
-        return userDao.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate);
+    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate,String nationality, String nationCode) {
+        return userDao.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate, nationality, nationCode);
     }
 
-    public int addTeacher(Long user_id,String nation_code, String nationlity, String academic_qualification, String work_number, String school_time, String teach_time, String job_code, Integer teach_range) {
-        return userDao.addTeacher(user_id,nation_code,nationlity,academic_qualification,work_number,school_time,teach_time,job_code,teach_range);
+    public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
+        return userDao.addTeacher(user_id,academic_qualification,work_number,school_time,teach_time,position,teach_range);
     }
 
 
@@ -291,12 +295,12 @@ public class UserService {
         return userDao.editTeacherPracticeInfo( user_id,teach_certification,teach_time,school_time,job_profession,teach_range,work_number);
     }
 
-    public RestRecord getParentInfo(String certificationNumber, String userType){
+    public RestRecord getParentInfo(String certificationType, String certificationNumber, String userType){
         Map map = null;
         if(userType.equals("1")){
-            map = userDao.selectStudentInfoByCertificationNumber(certificationNumber);
+            map = userDao.selectStudentInfoByCertificationNumber(certificationType, certificationNumber);
         }else if(userType.equals("5")){
-            map = userDao.selectParentInfoByCertificationNumber(certificationNumber);
+            map = userDao.selectParentInfoByCertificationNumber(certificationType, certificationNumber);
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map);
     }
@@ -373,5 +377,9 @@ public class UserService {
 
     public UserBean getUserById(String userId){
         return userDao.getUserById(userId);
+    }
+
+    public void addPassword(long id, String userId, String password){
+        userDao.saveUserPassword(id, userId, password);
     }
 }

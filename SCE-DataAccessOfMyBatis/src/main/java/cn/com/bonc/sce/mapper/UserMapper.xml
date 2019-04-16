@@ -328,7 +328,11 @@
         case ACCOUNT_STATUS when 1 then '已激活'
         else '未激活'
         end as ACCOUNT_STATUS,
-        POSITION
+        POSITION,
+        U.CERTIFICATE_TYPE,
+        U.CERTIFICATE_NUMBER,
+        U.MAIL_ADDRESS,
+        TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
         WHERE u.USER_TYPE=2
@@ -389,7 +393,7 @@
                 MAIL_ADDRESS=#{mail_address},
             </if>
             <if test="birthdate!=null">
-                BIRTHDATE=#{birthdate}
+                BIRTHDATE=TO_DATE(#{birthdate},'YYYY-MM-dd'),
             </if>
             <if test="nationCode!=null">
                 VOLK=#{nationCode},
@@ -411,13 +415,13 @@
                 WORK_NUMBER=#{work_number},
             </if>
             <if test="school_time!=null">
-                SCHOOL_TIME=#{school_time},
+                SCHOOL_TIME=TO_DATE(#{school_time},'YYYY-MM'),
             </if>
             <if test="teach_time!=null">
-                TEACH_TIME=#{teach_time},
+                TEACH_TIME=TO_DATE(#{teach_time},'YYYY-MM'),
             </if>
-            <if test="job_code!=null">
-                JOB_CODE=#{job_code},
+            <if test="position!=null">
+                POSITION=#{position},
             </if>
             <if test="teach_range!=null">
                 TEACH_RANGE=#{teach_range}
@@ -428,20 +432,19 @@
 
     <insert id="addUser">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
-        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE)
+        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE,NATIONALITY,VOLK)
         VALUES
         (#{user_id,jdbcType=BIGINT},#{certificate_type,jdbcType=INTEGER},#{certificate_number,jdbcType=VARCHAR},
         #{user_name,jdbcType=VARCHAR},#{gender,jdbcType=VARCHAR},#{phone_number,jdbcType=VARCHAR},
-        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},#{birthdate,jdbcType=VARCHAR},1)
+        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},TO_DATE(#{birthdate,jdbcType=VARCHAR},'YYYY-MM-dd'),1,#{nationality},#{nationCode})
     </insert>
 
     <insert id="addTeacher">
         INSERT INTO STARCLOUDPORTAL.SCE_INFO_TEACHER
-        (USER_ID,NATION_CODE, NATIONLITY, ACADEMIC_QUALIFICATION,WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, JOB_CODE, TEACH_RANGE,IS_DELETE)
+        (USER_ID, ACADEMIC_QUALIFICATION,WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE,IS_DELETE)
         VALUES
-        (#{user_id,jdbcType=BIGINT},#{nation_code,jdbcType=INTEGER},#{nationlity,jdbcType=VARCHAR},
-        #{academic_qualification,jdbcType=VARCHAR},#{work_number,jdbcType=VARCHAR},#{school_time,jdbcType=VARCHAR},
-        #{teach_time,jdbcType=VARCHAR},#{job_code,jdbcType=VARCHAR},#{teach_range,jdbcType=VARCHAR},1)
+        (#{user_id},#{academic_qualification},#{work_number},TO_DATE(#{school_time},'YYYY-MM'),
+        TO_DATE(#{teach_time},'YYYY-MM'),#{position},TO_NUMBER(#{teach_range}),1)
     </insert>
 
     <insert id="transInto">
@@ -623,6 +626,7 @@
         SELECT USER_NAME,GENDER,NATIONALITY,VOLK,PHONE_NUMBER,MAIL_ADDRESS
         FROM STARCLOUDPORTAL.SCE_COMMON_USER
         WHERE IS_DELETE = 1 AND CERTIFICATE_NUMBER = #{certificationNumber}
+        AND CERTIFICATE_TYPE = #{certificationType}
     </select>
 
     <select id="selectStudentInfoByCertificationNumber" resultType="Map">
@@ -632,6 +636,7 @@
         ON U.USER_ID = S.USER_ID
         WHERE U.IS_DELETE = 1 AND S.IS_DELETE = 1
         WHERE U.CERTIFICATE_NUMBER = #{certificationNumber}
+        AND U.CERTIFICATE_TYPE = #{certificationType}
     </select>
 
     <insert id="insertUserPassword">
@@ -1017,5 +1022,11 @@
         FROM STARCLOUDPORTAL.SCE_INFO_TEACHER T
         WHERE USER_ID = #{userId}
     </select>
+
+    <delete id="delPassword">
+        update STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
+        set IS_DELETE = 0
+        WHERE USER_ID = #{id}
+    </delete>
 
 </mapper>

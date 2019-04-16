@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Charles on 2019/3/8.
@@ -40,6 +38,8 @@ public class UserManagerController {
     private UserService userService;
     @Autowired
     private IdWorker idWorker;
+
+    private static final String DEFAULT_PASSWORD = "star123!";
 
     @ApiOperation(value = "删除用户", notes = "通过用户id，删除用户", httpMethod = "DELETE")
     @DeleteMapping("/delUser")
@@ -234,7 +234,8 @@ public class UserManagerController {
     public RestRecord delTeacher(@RequestParam("id") String id) {
         int count1 = userService.delUser(id);
         int count2 = userService.delTeacher(id);
-        if (count1 == 1 && count2 == 1) {
+        int count3 = userService.delPassword(id);
+        if (count1 == 1 && count2 == 1 && count3 == 1) {
             return new RestRecord(200, MessageConstants.SCE_MSG_0200, 1);
         } else {
             return new RestRecord(408, MessageConstants.SCE_MSG_408);
@@ -268,13 +269,13 @@ public class UserManagerController {
         String WORK_NUMBER = (String) map.get("WORK_NUMBER");
         String SCHOOL_TIME = (String) map.get("SCHOOL_TIME");
         String TEACH_TIME = (String) map.get("TEACH_TIME");
-        String JOB_CODE = (String) map.get("JOB_CODE");
+        String POSITION = (String) map.get("POSITION");
         Integer TEACH_RANGE = (Integer) map.get("TEACH_RANGE");
 
         int userEdit = userService.editUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, USER_NAME,
                 GENDER, PHONE_NUMBER, MAIL_ADDRESS, BIRTHDATE,NATION_CODE,NATIONLITY);
         int teacherEdit = userService.editTeacher(USER_ID, ACADEMIC_QUALIFICATION,
-                WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, JOB_CODE, TEACH_RANGE);
+                WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE);
 
         if (userEdit == 1 && teacherEdit == 1) {
             return new RestRecord(200, MessageConstants.SCE_MSG_0200, 1);
@@ -291,7 +292,7 @@ public class UserManagerController {
         Map map = (Map) JSONUtils.parse(json);
         Integer ADDTYPE = (Integer) map.get("ADDTYPE");
         if (ADDTYPE == 0) {//建新用户
-            Long USER_ID = idWorker.nextId();
+            String USER_ID = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
             String ORGANIZATION_ID = (String) map.get("ORGANIZATION_ID");
             Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
             String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
@@ -306,13 +307,14 @@ public class UserManagerController {
             String WORK_NUMBER = (String) map.get("WORK_NUMBER");
             String SCHOOL_TIME = (String) map.get("SCHOOL_TIME");
             String TEACH_TIME = (String) map.get("TEACH_TIME");
-            String JOB_CODE = (String) map.get("JOB_CODE");
+            String POSITION = (String) map.get("POSITION");
             Integer TEACH_RANGE = (Integer) map.get("TEACH_RANGE");
 
             int count1 = userService.addUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
-                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE);
-            int count2 = userService.addTeacher(USER_ID, NATION_CODE, NATIONLITY, ACADEMIC_QUALIFICATION,
-                    WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, JOB_CODE, TEACH_RANGE);
+                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE,NATIONLITY,NATION_CODE);
+            int count2 = userService.addTeacher(USER_ID, ACADEMIC_QUALIFICATION,
+                    WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE);
+            userService.addPassword(idWorker.nextId(), USER_ID, DEFAULT_PASSWORD);
             if (count1 == 1 && count2 == 1) {
                 return new RestRecord(200, MessageConstants.SCE_MSG_0200, 1);
             } else {
@@ -440,9 +442,9 @@ public class UserManagerController {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200, teacherEdit);
     }
 
-    @GetMapping("/getParentInfo/{certificationNumber}/{userType}")
-    public RestRecord getParentInfo(@PathVariable String certificationNumber, @PathVariable String userType){
-        return userService.getParentInfo(certificationNumber, userType);
+    @GetMapping("/getParentInfo/{certificationType}/{certificationNumber}/{userType}")
+    public RestRecord getParentInfo(@PathVariable String certificationType, @PathVariable String certificationNumber, @PathVariable String userType){
+        return userService.getParentInfo(certificationType, certificationNumber, userType);
     }
 
     @GetMapping( "/getTransferStudent/{pageNum}/{pageSize}" )
