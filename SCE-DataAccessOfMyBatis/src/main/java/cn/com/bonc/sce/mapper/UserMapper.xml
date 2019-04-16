@@ -324,10 +324,7 @@
     </select>
 
     <select id="getTeachers" resultType="Map">
-        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,
-        case ACCOUNT_STATUS when 1 then '已激活'
-        else '未激活'
-        end as ACCOUNT_STATUS,
+        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,ACCOUNT_STATUS,
         POSITION,
         U.CERTIFICATE_TYPE,
         U.CERTIFICATE_NUMBER,
@@ -338,7 +335,7 @@
         WHERE u.USER_TYPE=2
         AND u.IS_DELETE=1
         AND u.ORGANIZATION_ID=#{organizationId}
-        AND u.USER_ID NOT IN (SELECT USER_ID FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY)
+        AND u.USER_ID IN (SELECT USER_ID FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY)
         <if test="userName != null and userName!= ''" >
             AND USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
         </if>
@@ -459,18 +456,24 @@
     </insert>
 
     <select id="getTransferTeachers" resultType="Map">
-        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,ACCOUNT_STATUS,POSITION
+        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,a.APPLY_STATUS,POSITION,S1.SCHOOL_NAME AS OLD_SCHOOL_NAME,
+        U.ACCOUNT_STATUS,S2.SCHOOL_NAME AS NEW_SCHOOL_NAME,TO_CHAR(A.ID) AS TRANSFER_ID
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
         LEFT JOIN STARCLOUDPORTAL.SCE_TRANSFER_APPLY a ON  u.USER_ID=a.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL S1
+        ON U.ORGANIZATION_ID = S1.ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL S2
+        ON A.TARGET_SCHOOL_ID = S2.ID
         WHERE u.USER_TYPE=2
         AND u.IS_DELETE=1
-        AND u.ORGANIZATION_ID=#{organizationId}
         <if test="getType == 2" >
             AND TARGET_SCHOOL_ID = #{organizationId}
+            AND A.APPLY_STATUS != 1
         </if>
         <if test="getType == 1" >
             AND ORIGIN_SCHOOL_ID = #{organizationId}
+            AND A.APPLY_STATUS = 0
         </if>
         <if test="userName != null and userName!= ''" >
             AND USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
@@ -623,19 +626,29 @@
     </update>
 
     <select id="selectParentInfoByCertificationNumber" resultType="Map">
-        SELECT USER_NAME,GENDER,NATIONALITY,VOLK,PHONE_NUMBER,MAIL_ADDRESS
+        SELECT USER_NAME,GENDER,NATIONALITY,TO_CHAR(BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE,VOLK,PHONE_NUMBER,MAIL_ADDRESS,
         FROM STARCLOUDPORTAL.SCE_COMMON_USER
         WHERE IS_DELETE = 1 AND CERTIFICATE_NUMBER = #{certificationNumber}
         AND CERTIFICATE_TYPE = #{certificationType}
     </select>
 
     <select id="selectStudentInfoByCertificationNumber" resultType="Map">
-        SELECT U.USER_NAME,U.GENDER,TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd'),NATIONALITY,VOLK,S.STUDENT_CODE
+        SELECT U.USER_NAME,U.GENDER,TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE,NATIONALITY,VOLK,S.STUDENT_CODE
         FROM STARCLOUDPORTAL.SCE_COMMON_USER U
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT S
         ON U.USER_ID = S.USER_ID
         WHERE U.IS_DELETE = 1 AND S.IS_DELETE = 1
-        WHERE U.CERTIFICATE_NUMBER = #{certificationNumber}
+        AND U.CERTIFICATE_NUMBER = #{certificationNumber}
+        AND U.CERTIFICATE_TYPE = #{certificationType}
+    </select>
+
+    <select id="selectTeacherInfoByCertificationNumber" resultType="Map">
+        SELECT U.USER_NAME,U.GENDER,U.NATIONALITY,TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE,U.VOLK,U.PHONE_NUMBER,U.USER_ID,U.ORGANIZATION_ID,
+        U.MAIL_ADDRESS,U.EDUCATIONAL_BACKGROUND,TO_CHAR(T.TEACH_TIME,'YYYY-MM-dd') as TEACH_TIME
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER T
+        ON U.USER_ID = T.USER_ID
+        WHERE U.IS_DELETE = 1 AND U.CERTIFICATE_NUMBER = #{certificationNumber}
         AND U.CERTIFICATE_TYPE = #{certificationType}
     </select>
 
@@ -859,7 +872,7 @@
         WHERE ID = TO_NUMBER(#{transferId})
         AND ID_DELETE = 1
         )
-        WHERE USER_ID =  (
+        WHERE USER_ID in (
         SELECT USER_ID
         FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
         WHERE ID = TO_NUMBER(#{transferId})
@@ -1067,5 +1080,51 @@
         FROM STARCLOUDPORTAL.SCE_USER_AUDIT T
         WHERE ENTITY_ID = #{entityId}
     </select>
+
+    <select id="checkUser" resultType="int">
+        select count(1)
+        from STARCLOUDPORTAL.SCE_COMMON_USER
+        WHERE CERTIFICATE_TYPE = #{certificateType}
+        AND CERTIFICATE_NUMBER = #{certificateNumber}
+        AND PHONE_NUMBER = #{phoneNumber}
+    </select>
+
+    <select id="getTransferTeacherInfo" resultType="Map">
+        SELECT U.CERTIFICATE_TYPE,
+        U.CERTIFICATE_NUMBER,
+        U.USER_NAME,
+        U.GENDER,
+        U.PHONE_NUMBER,
+        U.MAIL_ADDRESS,
+        TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') AS BIRTHDATE,
+        U.NATIONALITY AS NATIONLITY,
+        U.VOLK AS NATION_CODE,
+        T.ACADEMIC_QUALIFICATION,
+        T.WORK_NUMBER,
+        TO_CHAR(T.TEACH_TIME,'YYYY-MM-dd') AS TEACH_TIME,
+        TO_CHAR(T.SCHOOL_TIME,'YYYY-MM-dd') AS SCHOOL_TIME,
+        T.POSITION,
+        T.TEACH_RANGE,
+        ES.SCHOOL_NAME,
+        ES2.SCHOOL_NAME AS NEW_SCHOOL_NAME
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+        LEFT JOIN STARCLOUDPORTAL.SCE_TRANSFER_APPLY TA
+        ON U.USER_ID = TA.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER T
+        ON T.USER_ID = U.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES
+        ON ES.ID = U.ORGANIZATION_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES2
+        ON ES2.ID = TA.TARGET_SCHOOL_ID
+        WHERE U.IS_DELETE = 1
+        AND TA.IS_DELETE = 1
+        AND T.IS_DELETE = 1
+        AND ES.IS_DELETE = 1
+        AND TA.ID = TO_NUMBER(#{transferId})
+    </select>
+
+    <update id="updateTeacher">
+
+    </update>
 
 </mapper>

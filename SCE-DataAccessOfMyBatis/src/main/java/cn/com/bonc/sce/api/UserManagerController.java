@@ -301,9 +301,9 @@ public class UserManagerController {
     @PostMapping("/addTeacher")
     @ResponseBody
     @Transactional
-    public RestRecord addTeacher(@RequestBody String json) {
+    public RestRecord addTeacher(@RequestBody String json, @CurrentUserId String userId) {
         Map map = (Map) JSONUtils.parse(json);
-        Integer ADDTYPE = (Integer) map.get("ADDTYPE");
+        Integer ADDTYPE = Integer.parseInt(map.get("ADDTYPE").toString());
         if (ADDTYPE == 0) {//建新用户
             String USER_ID = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
             String ORGANIZATION_ID = (String) map.get("ORGANIZATION_ID");
@@ -313,6 +313,7 @@ public class UserManagerController {
                 log.info("教师身份证验证未通过");
                 return new RestRecord( 432, "身份证填写不正确");
             }
+            //todo 验证身份证是否被使用
             String USER_NAME = (String) map.get("USER_NAME");
             String GENDER = (String) map.get("GENDER");
             String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
@@ -346,12 +347,30 @@ public class UserManagerController {
                 return new RestRecord(409, MessageConstants.SCE_MSG_409, 0);
             }
         } else {//转入
+            Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
+            String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
+            if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
+                log.info("教师身份证验证未通过");
+                return new RestRecord( 432, "身份证填写不正确");
+            }
+            String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
+            if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
+                log.info("教师身手机号验证未通过");
+                return new RestRecord( 432, "手机号填写不正确");
+            }
+            //通过身份证和手机号验证该教师的身份证在提交前是否被修改
+            int count = userService.checkUser(CERTIFICATE_TYPE, CERTIFICATE_NUMBER, PHONE_NUMBER);
+            if(count < 1){
+                return new RestRecord( 432, "请检查录入信息是否正确");
+            }
             Long ID = idWorker.nextId();
-            String USER_ID = (String) map.get("USER_ID");
+            //通过证件类型和证件号码查询用户ID
+            Map teacher = userService.getUserId(CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER);
+            String USER_ID = teacher.get("USER_ID").toString();
             String APPLY_USER_ID = (String) map.get("APPLY_USER_ID");
-            String TEA_WORK_NUMBER = (String) map.get("TEA_WORK_NUMBER");
-            String TEA_ENTRANCE_YEAR = (String) map.get("TEA_ENTRANCE_YEAR");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String TEA_WORK_NUMBER = (String) map.get("WORK_NUMBER");
+            String TEA_ENTRANCE_YEAR = (String) map.get("SCHOOL_TIME");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
 
             Date ENTRANCE_YEAR = null;
             try {
@@ -359,9 +378,9 @@ public class UserManagerController {
             } catch (ParseException e) {
                 return new RestRecord(409, MessageConstants.SCE_MSG_409, 0);
             }
-            String TEA_POSITION = (String) map.get("TEA_POSITION");
-            String TEACH_RANGE = (String) map.get("TEACH_RANGE");
-            String ORIGIN_SCHOOL_ID = (String) map.get("ORIGIN_SCHOOL_ID");
+            String TEA_POSITION = (String) map.get("POSITION");
+            String TEACH_RANGE = map.get("TEACH_RANGE").toString();
+            String ORIGIN_SCHOOL_ID = teacher.get("ORGANIZATION_ID").toString();
             String TARGET_SCHOOL_ID = (String) map.get("TARGET_SCHOOL_ID");
             return new RestRecord(200, MessageConstants.SCE_MSG_0200,
                     userService.transInto(ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE));
@@ -561,5 +580,21 @@ public class UserManagerController {
         } else {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
+    }
+
+    @GetMapping("/getTransferTeacherInfo/{transferId}")
+    public RestRecord getTransferTeacherInfo(@PathVariable String transferId){
+        return userService.getTransferTeacherInfo(transferId);
+    }
+
+    /**
+     * 学生转出申请的审核
+     * @param userId 用户ID
+     * @param map 参数 applyStatus：1通过，2不通过；id：申请ID；rejectReason，不通过原因
+     * @return RestRecord
+     */
+    @PatchMapping("/auditTeacher")
+    public RestRecord auditTeacher(@CurrentUserId String userId, @RequestBody Map map){
+        return userService.auditTeacher(userId, map);
     }
 }

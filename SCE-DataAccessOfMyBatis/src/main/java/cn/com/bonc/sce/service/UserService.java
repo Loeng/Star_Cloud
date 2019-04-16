@@ -301,6 +301,8 @@ public class UserService {
             map = userDao.selectStudentInfoByCertificationNumber(certificationType, certificationNumber);
         }else if(userType.equals("5")){
             map = userDao.selectParentInfoByCertificationNumber(certificationType, certificationNumber);
+        }else if(userType.equals("2")){
+            map = userDao.selectTeacherInfoByCertificationNumber(certificationType, certificationNumber);
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, map);
     }
@@ -381,5 +383,38 @@ public class UserService {
 
     public void addPassword(long id, String userId, String password){
         userDao.saveUserPassword(id, userId, password);
+    }
+
+    public int checkUser(Integer certificateType, String certificateNumber, String phoneNumber){
+        return userDao.checkUser(certificateType, certificateNumber, phoneNumber);
+    }
+
+    public RestRecord getTransferTeacherInfo(String transferId){
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, userDao.getTransferTeacherInfo(transferId));
+    }
+
+    public Map getUserId(String certificateType, String certificateNumber){
+        return userDao.selectTeacherInfoByCertificationNumber(certificateType, certificateNumber);
+    }
+
+    @Transactional( isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class )
+    public RestRecord auditTeacher(String userId, Map map){
+        String organizationId = userDao.getOrganizationIdByUserId(userId);
+        map.put("organizationId", organizationId);
+        int count = userDao.auditTransfer(map);
+        if(count > 0){
+            if(map.get("applyStatus").toString().equals("1")){
+                //转移教师的学校
+                userDao.updateOrganizationIdByTransferId(map.get("id").toString());
+                //修改教师的教师表
+                userDao.updateTeacher(map.get("id").toString());
+            }
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, count );
+        }
+        return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
+    }
+
+    public int selectCountByCertificateNumber(String certificateType, String certificateNumber){
+        return userDao.selectCountByCertificateNumber(certificateType, certificateNumber);
     }
 }

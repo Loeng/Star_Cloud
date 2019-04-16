@@ -189,8 +189,8 @@ public class UserManagerController {
     @ApiOperation(value = "添加教师", notes="直接添加或者通过转入添加，通过前端出入的addType判断添加方式", httpMethod = "POST")
     @PostMapping("/addTeacher")
     @ResponseBody
-    public RestRecord addTeacher(@RequestBody String json){
-        return userManagerService.addTeacher(json);
+    public RestRecord addTeacher(@RequestBody String json, @CurrentUserId String userId){
+        return userManagerService.addTeacher(json, userId);
     }
 
 
@@ -334,6 +334,32 @@ public class UserManagerController {
     @ResponseBody
     public RestRecord getUserById( @PathVariable( "userId" ) String userId ) {
         return userManagerService.getUserById(userId);
+    }
+
+    @ApiOperation( value = "获取转出教师详细信息", notes = "通过用户id获取", httpMethod = "GET" )
+    @GetMapping( "/getTransferTeacherInfo/{transferId}" )
+    public RestRecord getTransferTeacherInfo(@PathVariable String transferId){
+        return userManagerService.getTransferTeacherInfo(transferId);
+    }
+
+    @ApiOperation(value = "获取转入转出教师列表", notes = "获取查询条件，返回教师列表", httpMethod = "GET")
+    @GetMapping("/getTransferTeachers/{pageNum}/{pageSize}")
+    @ResponseBody
+    public RestRecord getTransferTeachers(@RequestParam(value = "getType") Integer getType, @RequestParam("organizationId") long organizationId,
+                                          @RequestParam(value = "userName", required = false) String userName,
+                                          @RequestParam(value = "loginName", required = false) String loginName,
+                                          @RequestParam(value = "gender", required = false) String gender,
+                                          @RequestParam(value = "position", required = false) String position,
+                                          @RequestParam(value = "accountStatus", required = false) Integer accountStatus,
+                                          @PathVariable(value = "pageNum") Integer pageNum,
+                                          @PathVariable(value = "pageSize") Integer pageSize) {
+        return userManagerService.getTransferTeachers(getType, organizationId, userName, loginName, gender, position, accountStatus, pageNum, pageSize);
+    }
+
+    @ApiOperation( value = "审核教师转出", notes = "")
+    @PatchMapping("/auditTeacher")
+    public RestRecord auditTeacher(@CurrentUserId String userId, @RequestBody Map map){
+        return userManagerService.auditTeacher(userId, map);
     }
 
 }

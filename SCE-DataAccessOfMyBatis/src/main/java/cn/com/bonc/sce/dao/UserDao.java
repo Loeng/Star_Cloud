@@ -155,6 +155,10 @@ public class UserDao {
         return userMapper.selectStudentInfoByCertificationNumber(certificationType, certificationNumber);
     }
 
+    public Map selectTeacherInfoByCertificationNumber(String certificationType, String certificationNumber){
+        return userMapper.selectTeacherInfoByCertificationNumber(certificationType, certificationNumber);
+    }
+
     public void saveUserPassword(long id, String userId, String password){
         userMapper.insertUserPassword(id, userId, password);
     }
@@ -257,4 +261,21 @@ public class UserDao {
     public int updateUserAuditById(UserAuditBean userAudit){
         return userMapper.updateUserAuditById(userAudit);
     }
+
+    public int checkUser(Integer certificateType, String certificateNumber, String phoneNumber){
+        return userMapper.checkUser(certificateType, certificateNumber, phoneNumber);
+    }
+
+    public Map getTransferTeacherInfo(String transferId){
+        return userMapper.getTransferTeacherInfo(transferId);
+    }
+
+    public void updateTeacher(String id){
+        userMapper.updateTeacher(id);
+    }
+
+    public int selectCountByCertificateNumber(String certificateType, String certificateNumber){
+        return userMapper.selectCountByCertificateNumber(certificateType, certificateNumber);
+    }
+
 }

@@ -81,8 +81,8 @@ public class UserManagerService {
         return userManagerDao.editTeacherInfo(json);
     }
 
-    public RestRecord addTeacher(String json) {
-        return userManagerDao.addTeacher(json);
+    public RestRecord addTeacher(String json, String userId) {
+        return userManagerDao.addTeacher(json, userId);
     }
 
     public RestRecord getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus, Integer pageNum, Integer pageSize) {
@@ -181,5 +181,13 @@ public class UserManagerService {
 
     public RestRecord getUserById(String userId){
         return userManagerDao.getUserById(userId);
+    }
+
+    public RestRecord getTransferTeacherInfo(String transferId){
+        return userManagerDao.getTransferTeacherInfo(transferId);
+    }
+
+    public RestRecord auditTeacher(String userId, Map map){
+        return userManagerDao.auditTeacher(userId, map);
     }
 }

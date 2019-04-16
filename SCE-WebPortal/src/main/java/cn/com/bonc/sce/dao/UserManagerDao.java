@@ -71,7 +71,7 @@ public interface UserManagerDao {
     RestRecord editTeacherInfo(@RequestBody String json);
 
     @RequestMapping( value = "/userManager/addTeacher", method = RequestMethod.POST )
-    RestRecord addTeacher(@RequestBody String json);
+    RestRecord addTeacher(@RequestBody String json, @RequestParam("userId") String userId);
 
     @RequestMapping( value = "/userManager/getTransferTeachers/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord getTransferTeachers(@RequestParam("getType")Integer getType, @RequestParam("organizationId")long organizationId,
@@ -145,5 +145,12 @@ public interface UserManagerDao {
 
     @RequestMapping(value = "/userManager/{userId}", method = RequestMethod.GET)
     RestRecord getUserById(@PathVariable("userId") String userId);
+
+    @RequestMapping( value = "/userManager/getTransferTeacherInfo/{transferId}")
+    RestRecord getTransferTeacherInfo(@PathVariable("transferId") String transferId);
+
+    @RequestMapping( value = "/userManager/auditTeacher")
+    RestRecord auditTeacher(@RequestParam("userId") String userId,
+                            @RequestBody Map map);
 
 }

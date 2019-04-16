@@ -119,6 +119,8 @@ public interface UserMapper {
 
     Map selectStudentInfoByCertificationNumber(@Param("certificationType") String certificationType, @Param("certificationNumber") String certificationNumber);
 
+    Map selectTeacherInfoByCertificationNumber(@Param("certificationType") String certificationType, @Param("certificationNumber") String certificationNumber);
+
     void insertUserPassword(@Param("id") long id, @Param("userId") String userId, @Param("password") String password);
 
     void saveUserOfStudent(Map map);
@@ -179,4 +181,14 @@ public interface UserMapper {
     UserAuditBean findByUserAuditEntityId(@Param("entityId") String entityId);
 
     int updateUserAuditById(UserAuditBean userAudit);
+
+    int checkUser(@Param("certificateType") Integer certificateType,
+                  @Param("certificateNumber") String certificateNumber,
+                  @Param("phoneNumber") String phoneNumber);
+
+    Map getTransferTeacherInfo(@Param("transferId") String transferId);
+
+    void updateTeacher(@Param("transferId") String transferId);
+
+    int selectCountByCertificateNumber(@Param("certificateType") String certificateType, @Param("certificateNumber") String certificateNumber);
 }
