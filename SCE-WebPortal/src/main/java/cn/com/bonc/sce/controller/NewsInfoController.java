@@ -68,7 +68,7 @@ public class NewsInfoController {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 408, message = MessageConstants.SCE_MSG_408, response = RestRecord.class )
     } )
-    @PostMapping
+    @PostMapping( "/delete-info" )
     @ResponseBody
     public RestRecord deleteNewsByIdList( @RequestBody NewsIdModel newsIdModel
                                           ,@CurrentUserId @ApiParam( hidden = true ) String userId

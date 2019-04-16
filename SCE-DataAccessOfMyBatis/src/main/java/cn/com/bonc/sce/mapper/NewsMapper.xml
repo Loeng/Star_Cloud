@@ -203,6 +203,7 @@
           T.NEWS_SOURCE "newsSource",
           DECODE(T.CONTENT_TYPE,1,'校园频道',2,'综合新闻',3,'基础教育',4,'学前教育',5,'家庭教育',6,'思想理论',7,'信息公开') "contentType",
           T.IS_TOP "isTop",
+          T.PIC_ID "picId",
           T.CONTENT_KEYWORD "contentKeyword",
           T.SHOW_ORDER "showOrder",
           NVL((SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_NEWS_RECORD WHERE NEWS_ID = T.CONTENT_ID),0) "viewCount"
