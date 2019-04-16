@@ -29,6 +29,10 @@ public class CompanyInfoService {
         return companyInfoDao.addCompanyInfo( companyInfo );
     }
 
+    public RestRecord addCompany( CompanyInfoModel company,String userId,Integer roleId ) {
+        return companyInfoDao.addCompany( company,userId,roleId );
+    }
+
     public RestRecord updateCompanyInfo( Long companyId, CompanyInfoModel companyInfo ) {
         return companyInfoDao.updateCompanyInfo( companyId, companyInfo );
     }

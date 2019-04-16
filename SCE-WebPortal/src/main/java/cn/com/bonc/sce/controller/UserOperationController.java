@@ -121,4 +121,12 @@ public class UserOperationController {
     public RestRecord insertUser( @RequestBody @ApiParam( "用户对象" ) UserModel userModel ) {
         return userOperationService.insertUser( userModel );
     }
+
+    @ApiOperation( value = "查询审核状态接口", notes = "查询审核状态", httpMethod = "GET" )
+    @GetMapping( "/getAuditStatusByEntityId/{id}/{roleId}" )
+    @ResponseBody
+    public RestRecord getAuditStatusByEntityId( @PathVariable( "id" ) String id,@PathVariable( "roleId" ) Integer roleId  ) {
+
+        return userOperationService.getAuditStatusByEntityId( id ,roleId);
+    }
 }

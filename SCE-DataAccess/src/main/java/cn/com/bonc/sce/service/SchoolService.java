@@ -140,11 +140,11 @@ public class SchoolService {
     public RestRecord addSchool( School school,String userId,Integer roleId) {
         school.setIsDelete(1);
         schoolDao.save(school);
-        userInfoRepository.updateOrganizationIdByUserId(school.getId(),userId);
+        userInfoRepository.updateOrganizationIdByUserId(String.valueOf(school.getId()),userId);
         UserAudit userAudit = new UserAudit();
         userAudit.setUserId(userId);
         userAudit.setUserType(roleId);
-        userAudit.setEntityId(school.getId());
+        userAudit.setEntityId(String.valueOf(school.getId()));
         userAudit.setAuditStatus(0);
         userInfoRepository.save(userAudit);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
@@ -173,12 +173,12 @@ public class SchoolService {
     public RestRecord updateSchoolInfo(School school,String userId,Integer roleId){
         school.setIsDelete(1);
         schoolDao.save(school);
-        UserAudit audit = userInfoRepository.findByEntityId(school.getId());
+        UserAudit audit = userInfoRepository.findByEntityId(String.valueOf(school.getId()));
         UserAudit userAudit = new UserAudit();
         userAudit.setId(audit.getId());
         userAudit.setUserId(userId);
         userAudit.setUserType(roleId);
-        userAudit.setEntityId(school.getId());
+        userAudit.setEntityId(String.valueOf(school.getId()));
         userAudit.setAuditStatus(0);
         userInfoRepository.save(userAudit);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);

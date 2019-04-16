@@ -51,4 +51,8 @@ public class InstitutionService {
     public RestRecord updateInstitutionInfo(Institution institution){
         return institutionDao.updateInstitutionInfo(institution);
     }
+
+    public RestRecord getInstitutionInfoList(String INSTITUTION_NAME,String AUDIT_STATUS,Integer pageNum,Integer pageSize){
+        return institutionDao.getInstitutionInfoList(INSTITUTION_NAME,AUDIT_STATUS,pageNum,pageSize);
+    }
 }

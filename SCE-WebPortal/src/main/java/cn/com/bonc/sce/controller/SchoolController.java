@@ -123,7 +123,7 @@ public class SchoolController {
      */
     @GetMapping( "/getSchoolInfoList/{SCHOOL_NAME}/{SCHOOL_TYPE}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getSchoolInfoList(@PathVariable("SCHOOL_NAME") String SCHOOL_NAME,@PathVariable("SCHOOL_TYPE") String SCHOOL_TYPE,@PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+    public RestRecord getSchoolInfoList(@PathVariable("SCHOOL_NAME") String SCHOOL_NAME,@PathVariable("SCHOOL_TYPE") String SCHOOL_TYPE,@PathVariable("AUDIT_STATUS") String AUDIT_STATUS
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize){
         return schoolService.getSchoolInfoList(SCHOOL_NAME,SCHOOL_TYPE,AUDIT_STATUS,pageNum,pageSize);
     }

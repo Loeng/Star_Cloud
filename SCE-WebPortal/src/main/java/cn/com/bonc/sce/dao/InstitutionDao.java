@@ -36,4 +36,9 @@ public interface InstitutionDao {
     @RequestMapping( value = "/institution/updateInstitutionInfo", method = RequestMethod.PUT )
     RestRecord updateInstitutionInfo(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution);
 
+    @RequestMapping( value = "/institution/getInstitutionInfoList/{INSTITUTION_NAME}/{AUDIT_STATUS}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getInstitutionInfoList(@PathVariable("INSTITUTION_NAME") String INSTITUTION_NAME,@PathVariable("AUDIT_STATUS") String AUDIT_STATUS
+            ,@PathVariable("pageNum") Integer pageNum,@PathVariable("pageSize") Integer pageSize);
+
+
 }

@@ -82,4 +82,11 @@ public class InstitutionController {
         return institutionService.updateInstitutionInfo(institution);
     }
 
+    @GetMapping( "/getInstitutionInfoList/{INSTITUTION_NAME}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @ResponseBody
+    public RestRecord getInstitutionInfoList(@PathVariable("INSTITUTION_NAME") String INSTITUTION_NAME,@PathVariable("AUDIT_STATUS") String AUDIT_STATUS
+    ,@PathVariable("pageNum") Integer pageNum,@PathVariable("pageSize") Integer pageSize) {
+        return institutionService.getInstitutionInfoList(INSTITUTION_NAME,AUDIT_STATUS,pageNum,pageSize);
+    }
+
 }

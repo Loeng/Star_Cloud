@@ -6,6 +6,8 @@ import cn.com.bonc.sce.model.InstitutionInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2019/4/14.
@@ -30,5 +32,7 @@ public interface InstitutionMapper {
     Institution getInstitutionById(@Param("id") String id);
 
     int updateInstitutionInfo(Institution institution);
+
+    List<Map> getInstitutionInfoList(@Param("INSTITUTION_NAME") String INSTITUTION_NAME, @Param("AUDIT_STATUS") String AUDIT_STATUS);
 
 }

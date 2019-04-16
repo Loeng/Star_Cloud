@@ -129,6 +129,18 @@ public interface NewsMapper {
                            @Param( "userId" ) String userId );
 
     /**
+     * 更新新闻排序信息
+     *
+     * @param showOrder
+     * @param contentId
+     * @param userId
+     * @return
+     */
+    int updateNormalNewOrder( @Param( "showOrder" ) Integer showOrder,
+                           @Param( "contentId" ) Long contentId,
+                           @Param( "userId" ) String userId );
+
+    /**
      * 查询头条新闻数量
      *
      * @return

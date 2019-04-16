@@ -245,4 +245,34 @@
         FROM STARCLOUDPORTAL.SCE_INFO_INSTITUTION T
         WHERE USER_ID = #{userId}
     </select>
+
+    <select id="getInstitutionInfoList" resultType="Map">
+        SELECT
+	      sei.ID,
+          sei.INSTITUTION_NAME,
+	      sei.PARENT_INSTITUTION,
+      	  scu.USER_NAME,
+	      scu.LOGIN_NAME,
+	      sua.AUDIT_STATUS,
+	      sua.AUDIT_TIME
+        FROM
+	      STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION sei
+	      LEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON sei.ID = sua.ENTITY_ID
+	      left join STARCLOUDPORTAL.SCE_COMMON_USER scu on sua.USER_ID = scu.USER_ID
+        WHERE
+	      sei.IS_DELETE = 1
+         <if test="INSTITUTION_NAME != null and INSTITUTION_NAME != 'null' and  INSTITUTION_NAME !='' ">
+            and sei.INSTITUTION_NAME like CONCAT('%',CONCAT(#{INSTITUTION_NAME},'%'))
+        </if>
+        <if test="AUDIT_STATUS != null and AUDIT_STATUS != 'null' and  AUDIT_STATUS == '0' ">
+            and  sua.AUDIT_STATUS = 0
+        </if>
+        <if test="AUDIT_STATUS != null and AUDIT_STATUS != 'null' and  AUDIT_STATUS == '2' ">
+            and  sua.AUDIT_STATUS = 2
+        </if>
+        <if test="AUDIT_STATUS == null or AUDIT_STATUS == 'null' ">
+            and (sua.AUDIT_STATUS = 0 or sua.AUDIT_STATUS = 2)
+        </if>
+	    order by sua.AUDIT_TIME desc
+    </select>
 </mapper>
