@@ -3,10 +3,7 @@ package cn.com.bonc.sce.controller;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
-import cn.com.bonc.sce.model.NewsIdModel;
-import cn.com.bonc.sce.model.NewsModel;
-import cn.com.bonc.sce.model.NewsParamModel;
-import cn.com.bonc.sce.model.NewsStatusModel;
+import cn.com.bonc.sce.model.*;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.NewsInfoService;
 import io.swagger.annotations.*;
@@ -320,9 +317,10 @@ public class NewsInfoController {
     } )
     @PostMapping( "/top-order-change" )
     @ResponseBody
-    public RestRecord updateTopNewsInfo( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) List< NewsStatusModel > newsList
+    public RestRecord updateTopNewsInfo( @RequestBody @ApiParam( name = "news", value = "新闻信息", required = true ) NewsOrderModel newsOrderModel
             ,@CurrentUserId @ApiParam( hidden = true ) String userId
     ) {
+        List< NewsStatusModel > newsList = newsOrderModel.getNewsList();
         return newsInfoService.updateTopNewsInfo( newsList, userId );
     }
 
