@@ -193,10 +193,10 @@
 
     <select id="selectNewsDetailById" resultType="Map">
         SELECT
-          T.CONTENT_ID "contentId",
+          to_char(T.CONTENT_ID) "contentId",
           T.CONTENT_TITLE "contentTitle",
           T.CONTENT "content",
-          T.PUBLISH_DATE "publishDate",
+          TO_DATE(T.PUBLISH_DATE,'YYYY-MM-DD HH24:MI:SS') "publishDate",
           T.PIC_URL "picUrl",
           T.NEWS_ABSTRACT "newsAbstract",
           T.AUTHOR_NAME "authorName",
@@ -261,6 +261,7 @@
         <result column="CONTENT_STATUS" jdbcType="VARCHAR" javaType="java.lang.String" property="contentStatus"></result>
         <result column="REJECT_OPINION" jdbcType="VARCHAR" javaType="java.lang.String" property="rejectOpinion"></result>
         <result column="CREATE_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"></result>
+        <result column="CREATE_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="createDate"></result>
         <result column="UPDATE_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="updateTime"></result>
         <result column="CREATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="createUserId"></result>
         <result column="UPDATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="updateUserId"></result>
@@ -269,9 +270,10 @@
         <result column="PIC_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="picId"></result>
         <result column="FILE_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="fileId"></result>
         <result column="AUDIT_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="auditUserId"></result>
-        <result column="AUDIT_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="auditDate"></result>
+        <result column="AUDIT_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="auditTime"></result>
+        <result column="AUDIT_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="auditDate"></result>
         <result column="CONTENT_KEYWORD" jdbcType="VARCHAR" javaType="java.lang.String" property="contentKeyword"></result>
-        <result column="PUBLISH_DATE" jdbcType="TIMESTAMP" javaType="java.util.Date" property="publishDate"></result>
+        <result column="PUBLISH_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="publishDate"></result>
         <result column="IS_TOP" jdbcType="INTEGER" javaType="java.lang.Integer" property="isTop"></result>
         <result column="PIC_URL" jdbcType="VARCHAR" javaType="java.lang.String" property="picUrl"></result>
         <result column="FILE_URL" jdbcType="VARCHAR" javaType="java.lang.String" property="fileUrl"></result>
@@ -295,6 +297,7 @@
         T.CONTENT_STATUS,
         T.REJECT_OPINION,
         T.CREATE_TIME,
+        TO_CHAR(T.CREATE_TIME,'YYYY-MM-DD HH24:MI:SS') CREATE_DATE,
         T.CREATE_USER_ID,
         T.REMARKS,
         T.IS_DELETE,
@@ -302,8 +305,9 @@
         T.FILE_ID,
         T.AUDIT_USER_ID,
         T.AUDIT_TIME,
+        TO_CHAR(T.AUDIT_TIME,'YYYY-MM-DD HH24:MI:SS') AUDIT_DATE,
         T.CONTENT_KEYWORD,
-        T.PUBLISH_DATE,
+        TO_CHAR(T.PUBLISH_DATE,'YYYY-MM-DD HH24:MI:SS') PUBLISH_DATE,
         T.IS_TOP,
         T.PIC_URL,
         T.FILE_URL,
