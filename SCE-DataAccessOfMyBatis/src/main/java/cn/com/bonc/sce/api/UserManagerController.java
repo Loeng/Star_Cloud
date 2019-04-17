@@ -8,6 +8,7 @@ import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.InfoTeacherModel;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserService;
 import cn.com.bonc.sce.tool.IdWorker;
@@ -155,6 +156,7 @@ public class UserManagerController {
         user.setIsDelete( 1 );
         user.setUserId( userId );
         user.setAccountStatus( 0 );
+        user.setSecret( Secret.ES256GenerateSecret() );
 
         if ( userService.isExist( loginName ) > 0 ) {
             return new RestRecord( 1022, MessageConstants.SCE_MSG_1022 );

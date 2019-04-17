@@ -130,6 +130,7 @@ public class AuthenticationController {
         try {
             loginResult = loginService.generateLoginResult( authenticatedUser, new Date( System.currentTimeMillis() + DateConstants.SEVEN_DAY ), request );
         } catch ( NullPointerException e ) {
+            log.warn( "{}", e );
             return new RestRecord( 100, WebMessageConstants.SCE_PORTAL_MSG_100 );
         }
 
