@@ -18,6 +18,7 @@ public class NewsParamBean {
     private String contentStatus;
     private String rejectOpinion;
     private Date createTime;
+    private String createDate;
     private Date updateTime;
     private String createUserId;
     private String updateUserId;
@@ -26,9 +27,10 @@ public class NewsParamBean {
     private Integer picId;
     private Integer fileId;
     private String auditUserId;
-    private Date auditDate;
+    private String auditDate;
+    private Date auditTime;
     private String contentKeyword;
-    private Date publishDate;
+    private String publishDate;
     private Integer isTop;
     private String picUrl;
     private String fileUrl;
@@ -38,6 +40,15 @@ public class NewsParamBean {
     private Integer showOrder;
     private String newsSource;
     private Integer isPublish;
+
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
 
     public String getContentId() {
         return contentId;
@@ -208,12 +219,20 @@ public class NewsParamBean {
         this.auditUserId = auditUserId;
     }
 
-    public Date getAuditDate() {
+    public String getAuditDate() {
         return auditDate;
     }
 
-    public void setAuditDate(Date auditDate) {
+    public void setAuditDate(String auditDate) {
         this.auditDate = auditDate;
+    }
+
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
     }
 
     public String getContentKeyword() {
@@ -224,11 +243,11 @@ public class NewsParamBean {
         this.contentKeyword = contentKeyword;
     }
 
-    public Date getPublishDate() {
+    public String getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }
 

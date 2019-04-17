@@ -31,7 +31,7 @@ public class UserAudit {
     private Integer userType;
 
     @Column( name = "ENTITY_ID" )
-    private String entityId;
+    private Long entityId;
 
     @Column( name = "AUDIT_STATUS" )
     private Integer auditStatus;

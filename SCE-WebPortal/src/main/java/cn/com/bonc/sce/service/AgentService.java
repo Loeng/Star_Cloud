@@ -23,4 +23,8 @@ public class AgentService {
         return agentDao.getAllAgentUserInfo( pageNum, pageSize );
     }
 
+    public RestRecord getAgentInfo( String AGENT_NAME,String PROPERTY,Integer AUDIT_STATUS,Integer pageNum ,Integer pageSize ) {
+        return agentDao.getAgentInfo(AGENT_NAME,PROPERTY,AUDIT_STATUS, pageNum, pageSize );
+    }
+
 }

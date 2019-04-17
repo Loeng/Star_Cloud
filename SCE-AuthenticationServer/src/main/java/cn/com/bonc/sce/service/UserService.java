@@ -5,6 +5,9 @@ import cn.com.bonc.sce.dao.UserDaoClient;
 import cn.com.bonc.sce.dao.UserDaoOfMybatis;
 import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import org.bouncycastle.util.Integers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,6 +90,23 @@ public class UserService {
     }
 
     /**
+     * 获取认证状态
+     *
+     * @param userId
+     * @return 1为已认证
+     */
+    public int getAuditStatus( String userId ) {
+        RestRecord restRecord = userDao.getAuditStatusByEntityId( userId );
+        if ( restRecord.getCode() == 200 && restRecord.getData() != null ) {
+            JSONObject json = JSONUtil.parseObj( restRecord.getData() );
+            Integer auditStatus = Integer.parseInt( json.get( "auditStatus" ).toString() );
+            return auditStatus == 1 ? 1 : 0;
+        }
+
+        return 0;
+    }
+
+    /**
      * 修改用户
      *
      * @return 修改用户
@@ -114,37 +134,36 @@ public class UserService {
      * 更新用户【登陆时间】和【登陆次数】
      *
      * @param userId
-     *
      * @return
      */
     public RestRecord updateUserLoginTimeAndCounts( String userId ) {
         return userDao.updateUserLoginTimeAndCounts( userId );
     }
 
-    public RestRecord getUser( HttpServletRequest request ){
+    public RestRecord getUser( HttpServletRequest request ) {
         String appId = request.getHeader( "appId" );
         String appToken = request.getHeader( "appToken" );
-        if( appId == null || appToken == null ){
+        if ( appId == null || appToken == null ) {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
         return userDaoOfMybatis.getUser( appId, appToken );
     }
 
-    public RestRecord getUserJWT(List<Map> claims){
-        if( claims.size() < 1 ||  claims.get(0).get("appId") == null ){
+    public RestRecord getUserJWT( List< Map > claims ) {
+        if ( claims.size() < 1 || claims.get( 0 ).get( "appId" ) == null ) {
             return new RestRecord( 151, WebMessageConstants.SCE_WEB_MSG_151 );
         }
-        String appId = claims.get(0).get("appId").toString();
-        List users = (List) claims.get(0).get("users");
+        String appId = claims.get( 0 ).get( "appId" ).toString();
+        List users = ( List ) claims.get( 0 ).get( "users" );
         return userDaoOfMybatis.getUserJWT( appId, users );
     }
 
-    public RestRecord getUserDetailed(List<Map> claims){
-        if( claims.size() < 1 ||  claims.get(0).get("appId") == null ){
+    public RestRecord getUserDetailed( List< Map > claims ) {
+        if ( claims.size() < 1 || claims.get( 0 ).get( "appId" ) == null ) {
             return new RestRecord( 151, WebMessageConstants.SCE_WEB_MSG_151 );
         }
-        String appId = claims.get(0).get("appId").toString();
-        String userId = claims.get(0).get("userId").toString();
+        String appId = claims.get( 0 ).get( "appId" ).toString();
+        String userId = claims.get( 0 ).get( "userId" ).toString();
         return userDaoOfMybatis.getUserDetailed( appId, userId );
     }
 

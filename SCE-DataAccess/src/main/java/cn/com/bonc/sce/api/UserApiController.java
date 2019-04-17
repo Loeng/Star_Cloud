@@ -61,8 +61,8 @@ public class UserApiController {
 
     @PostMapping( "/login-phoneNumber-is/" )
     @ResponseBody
-    public User getUserByLoginNameOrPhoneNumber( @RequestBody String phoneNumber ) {
-           return userDao.findUserByPhoneNumber( phoneNumber );
+    public User getUserByPhoneNumber( @RequestBody String phoneNumber ) {
+        return userDao.findUserByPhoneNumberAndIsDelete( phoneNumber, 1 );
     }
 
     @PostMapping( value = "" )

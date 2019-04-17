@@ -39,6 +39,11 @@ public interface UserOperationDao {
     @RequestMapping( value = "/user-info/updateUserInfo", method = RequestMethod.PUT )
     RestRecord updateUserInfoById( @RequestBody Map< String, Object > userInfo, @RequestParam( "userId" ) String userId );
 
+    @RequestMapping( value = "/user-info/updateUserInfoAndAgent", method = RequestMethod.PUT )
+    RestRecord updateUserInfoAndAgent( @RequestBody Map< String, Object > userInfo, @RequestParam( "userId" ) String userId );
+
+    @RequestMapping( value = "/user-info/getUserAndAgentInfoByUserId/{userId}", method = RequestMethod.GET )
+    RestRecord getUserAndAgentInfoByUserId( @PathVariable( "userId" ) String userId );
 
     /**
      * 删除用户
@@ -63,7 +68,7 @@ public interface UserOperationDao {
     @RequestMapping( value = "/user-info/insert", method = RequestMethod.POST )
     RestRecord insertUser( @RequestBody UserModel userModel );
 
-    @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{id}/{roleId}", method = RequestMethod.GET )
-    RestRecord getAuditStatusByEntityId( @PathVariable( "id" ) String id,@PathVariable( "roleId" ) Integer roleId);
+    @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{userId}", method = RequestMethod.GET )
+    RestRecord getAuditStatusByEntityId( @PathVariable( "userId" ) String userId);
 
 }

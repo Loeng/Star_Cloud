@@ -43,6 +43,9 @@ public class User {
     private String secret;
     private Secret secretKeyPair;
     private int isFirstLogin;
+    private Integer isAdministrators;
+    private Integer accountStatus;
+    private int auditStatus;
     private Map<String,String> userDetailedInfo;
 
     public String getUserId() {

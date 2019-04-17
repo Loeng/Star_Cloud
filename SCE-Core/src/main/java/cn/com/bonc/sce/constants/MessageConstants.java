@@ -2,6 +2,7 @@ package cn.com.bonc.sce.constants;
 
 /**
  * 服务间通信用 msg constants
+ *
  * @author Leucippus
  * @version 0.1
  * @since 2018/12/11 16:56
@@ -55,6 +56,8 @@ public interface MessageConstants {
     String SCE_MSG_1021 = "修改用户登录状态，是否第一次登录： {}， userId: [{}]";
 
     String SCE_MSG_1022 = "登录名已存在";
+    String SCE_MSG_1023 = "手机号已被注册";
+    String SCE_MSG_1024 = "用户名不存在";
 
     /**
      * 加密错误

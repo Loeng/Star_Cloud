@@ -6,6 +6,8 @@ import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.entity.CompanyInfo;
 import cn.com.bonc.sce.entity.UserAudit;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IdWorker;
+import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,16 +27,52 @@ public class CompanyService {
     @Autowired
     private CompanyDao companyDao;
 
+    @Autowired
+    private IdWorker idWorker;
+
     public RestRecord addCompany(CompanyInfo company, String userId, Integer roleId) {
         company.setIsDelete(1L);
+        Long id = idWorker.nextId();
+        company.setCompanyId(id);
         companyDao.save(company);
-        userInfoRepository.updateOrganizationIdByUserId(String.valueOf(company.getCompanyId()),userId);
+        userInfoRepository.updateOrganizationIdByUserId(company.getCompanyId(),userId);
         UserAudit userAudit = new UserAudit();
         userAudit.setUserId(userId);
         userAudit.setUserType(roleId);
-        userAudit.setEntityId(String.valueOf(company.getCompanyId()));
+        userAudit.setEntityId(company.getCompanyId());
         userAudit.setAuditStatus(0);
         userInfoRepository.save(userAudit);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
+
+    public RestRecord updateCompanyByCompanyId(CompanyInfo companyInfo){
+        int status = 0;
+        Long companyId = companyInfo.getCompanyId() == null ? 0:companyInfo.getCompanyId();
+        String companyAddress = companyInfo.getCompanyAddress() == null ? "":companyInfo.getCompanyAddress();
+        String postcode = companyInfo.getPostcode() == null ? "" : companyInfo.getPostcode();
+        String phone = companyInfo.getPhone() == null ? "" : companyInfo.getPhone();
+        String companyEmail = companyInfo.getCompanyEmail() == null ? "" : companyInfo.getCompanyEmail();
+        String companyWebsite = companyInfo.getCompanyWebsite() == null ? "" : companyInfo.getCompanyWebsite();
+        status = companyDao.updateCompanyByCompanyId(companyId,companyAddress,postcode,phone,companyEmail,companyWebsite);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200,status);
+    }
+
+    public CompanyInfo getCompanyByCompanyId(Long companyId){
+        return companyDao.findByCompanyId(companyId);
+    }
+
+    public RestRecord updateCompany(CompanyInfo company) {
+        company.setIsDelete(1L);
+        companyDao.save(company);
+        UserAudit audit = userInfoRepository.findByEntityId(company.getCompanyId());
+        UserAudit userAudit = new UserAudit();
+        userAudit.setId(audit.getId());
+        userAudit.setUserId(audit.getUserId());
+        userAudit.setUserType(audit.getUserType());
+        userAudit.setEntityId(company.getCompanyId());
+        userAudit.setAuditStatus(0);
+        userInfoRepository.save(userAudit);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200);
+    }
+
 }

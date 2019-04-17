@@ -4,10 +4,7 @@ import cn.com.bonc.sce.model.AgentModel;
 import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author BTW
@@ -37,5 +34,9 @@ public interface AgentDao {
     public RestRecord getAllAgentUserInfo(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize );
+
+    @RequestMapping( value = "/agent/getAgentInfo/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    public RestRecord getAgentInfo(@PathVariable("AGENT_NAME") String AGENT_NAME, @PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize );
 
 }

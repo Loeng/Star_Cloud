@@ -32,16 +32,16 @@ public class AgentModel {
     @ApiModelProperty( name = "代理网址" )
     private String agentWebsite;
 
-    @ApiModelProperty( name = "代理ID" )
+    @ApiModelProperty( name = "注册ID" )
     private String agentRegistationId;
 
-    @ApiModelProperty( name = "代理ID" )
+    @ApiModelProperty( name = "联系邮箱" )
     private String agentEmail;
 
-    @ApiModelProperty( name = "代理ID" )
+    @ApiModelProperty( name = "创立时间" )
     private Date establishingTime;
 
-    @ApiModelProperty( name = "代理ID" )
+    @ApiModelProperty( name = "代理简介" )
     private String agentIntroduction;
 
     public String getAgentName() {

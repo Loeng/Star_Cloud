@@ -309,7 +309,7 @@
 
     <update id="updatePwdByName">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
-        SET PASSWORD=#{password}
+        SET PASSWORD=#{password},ACCOUNT_STATUS=1
         WHERE USER_ID=(SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE LOGIN_NAME=#{loginName})
     </update>
 
@@ -320,7 +320,7 @@
 
     <select id="getIdByPhone" resultType="java.lang.String">
         SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER
-        WHERE PHONE_NUMBER=#{phone}
+        WHERE PHONE_NUMBER=#{phone} and IS_DELETE=1
     </select>
 
     <select id="getTeachers" resultType="Map">

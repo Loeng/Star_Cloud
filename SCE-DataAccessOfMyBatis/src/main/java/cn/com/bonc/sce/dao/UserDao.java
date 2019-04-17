@@ -256,7 +256,7 @@ public class UserDao {
         return userMapper.saveUserAudit(userAudit);
     }
 
-    public UserAuditBean findByUserAuditEntityId(String entityId){
+    public UserAuditBean findByUserAuditEntityId(Long entityId){
         return userMapper.findByUserAuditEntityId(entityId);
     }
 

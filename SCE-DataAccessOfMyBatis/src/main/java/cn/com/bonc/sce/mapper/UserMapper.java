@@ -180,7 +180,7 @@ public interface UserMapper {
 
     int saveUserAudit(UserAuditBean userAudit);
 
-    UserAuditBean findByUserAuditEntityId(@Param("entityId") String entityId);
+    UserAuditBean findByUserAuditEntityId(@Param("entityId") Long entityId);
 
     int updateUserAuditById(UserAuditBean userAudit);
 

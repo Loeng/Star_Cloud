@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping( "/user-info" )
+@Transactional(rollbackFor = Exception.class)
 public class UserOperationController {
 
     public static final String PASSWORD = "star123!";
@@ -206,6 +208,44 @@ public class UserOperationController {
         }
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, status );
     }
+
+    @PutMapping( "/updateUserInfoAndAgent" )
+    @ResponseBody
+    public RestRecord updateUserInfoAndAgent( @RequestBody Map< String, Object > userInfo, @RequestParam( "userId" ) String userId ) {
+        String headPortrait = userInfo.get( "headPortrait" ) == null ? "" : userInfo.get( "headPortrait" ).toString(); //头像
+        String userName = userInfo.get( "userName" ) == null ? "" : userInfo.get( "userName" ).toString();  //姓名
+        String gender = userInfo.get( "gender" ) == null ? "" : userInfo.get( "gender" ).toString();   //性别
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date birthDate;
+        try {
+            birthDate = userInfo.get("birthDate") == null ? new Date() : sdf.parse(userInfo.get("birthDate").toString());  //出生日期
+        }catch (Exception e){
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+        String address = userInfo.get( "address" ) == null ? "" : userInfo.get( "address" ).toString();   //住址
+        String province = userInfo.get( "province" ) == null ? "" : userInfo.get( "province" ).toString();   //省
+        String city = userInfo.get( "city" ) == null ? "" : userInfo.get( "city" ).toString();   //市
+        String area = userInfo.get( "area" ) == null ? "" : userInfo.get( "area" ).toString();   //区
+        userInfoRepository.updateUserAgent(headPortrait,userName,gender,birthDate,address,userId);
+
+        int count = userInfoRepository.getAgentInfoCount(userId);
+        if(count>0){
+            userInfoRepository.updateAgentInfo(userId,province,city,area);
+        }else{
+            userInfoRepository.insertInfoAgent(userId,province,city,area);
+        }
+
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    @GetMapping("/getUserAndAgentInfoByUserId/{userId}" )
+    @ResponseBody
+    public RestRecord getUserAndAgentInfoByUserId(
+            @PathVariable( "userId" ) String userId ) {
+        Map<String,Object> map = userInfoRepository.getUserAndAgentInfoByUserId( userId );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,map );
+    }
+
 
     /**
      * 删除用户信息
@@ -386,10 +426,10 @@ public class UserOperationController {
     }
 
     @ApiOperation( value = "查询审核状态接口", notes = "查询审核状态", httpMethod = "GET" )
-    @GetMapping( "/getAuditStatusByEntityId/{id}/{roleId}" )
+    @GetMapping( "/getAuditStatusByEntityId/{userId}" )
     @ResponseBody
-    public RestRecord getAuditStatusByEntityId( @PathVariable( "id" ) String id,@PathVariable( "roleId" ) Integer roleId  ) {
-        UserAudit audit = userInfoRepository.findByEntityIdAndUserType( id ,roleId);
+    public RestRecord getAuditStatusByEntityId(@PathVariable( "userId" ) String userId) {
+        UserAudit audit = userInfoRepository.findByUserId( userId);
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, audit );
     }
 

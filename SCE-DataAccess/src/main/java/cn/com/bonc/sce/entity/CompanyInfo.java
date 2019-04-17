@@ -3,6 +3,7 @@ package cn.com.bonc.sce.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,9 +29,12 @@ public class CompanyInfo {
     private String companyEmail;
     private String companyIntroduction;
     private Date establishingTime;
+    private String postcode;
+    private String property;
+    private String institutionCode;
+    private String phone;
 
     @Id
-    @GeneratedValue
     @Column( name = "COMPANY_ID", nullable = false )
     public Long getCompanyId() {
         return companyId;
@@ -150,6 +154,45 @@ public class CompanyInfo {
         this.establishingTime = establishingTime;
     }
 
+    @Basic
+    @Column( name = "POSTCODE", nullable = true )
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    @Basic
+    @Column( name = "PROPERTY", nullable = true )
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    @Basic
+    @Column( name = "INSTITUTION_CODE", nullable = true )
+    public String getInstitutionCode() {
+        return institutionCode;
+    }
+
+    public void setInstitutionCode(String institutionCode) {
+        this.institutionCode = institutionCode;
+    }
+
+    @Basic
+    @Column( name = "PHONE", nullable = true )
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     @Override
     public boolean equals( Object o ) {
@@ -171,13 +214,17 @@ public class CompanyInfo {
                 Objects.equals( companyRegistationId, that.companyRegistationId ) &&
                 Objects.equals( companyEmail, that.companyEmail ) &&
                 Objects.equals( companyIntroduction, that.companyIntroduction ) &&
-                Objects.equals( establishingTime, that.establishingTime );
+                Objects.equals( establishingTime, that.establishingTime )&&
+                Objects.equals( postcode, that.postcode )&&
+                Objects.equals( property, that.property )&&
+                Objects.equals( institutionCode, that.institutionCode )&&
+                Objects.equals( phone, that.phone );
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash( companyId, companyName, companyAddress, companyTaxNum, remarks, isDelete,
-                juridicalPerson, companyWebsite, companyRegistationId, companyEmail, companyIntroduction, establishingTime );
+                juridicalPerson, companyWebsite, companyRegistationId, companyEmail, companyIntroduction, establishingTime,postcode,property,institutionCode,phone );
     }
 }

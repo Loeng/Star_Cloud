@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class Institution {
 
-    private String id;
+    private Long id;
     private String institutionName; //机构名（教育局名称）
     private Integer isDelete;
     private Integer pid; //父ID

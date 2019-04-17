@@ -37,6 +37,16 @@ public class UserOperationService {
 
     }
 
+    public RestRecord updateUserInfoAndAgent( Map< String, Object > userInfo, String userId ) {
+        return userOperationDao.updateUserInfoAndAgent( userInfo, userId );
+
+    }
+
+    public RestRecord getUserAndAgentInfoByUserId(String userId ) {
+        return userOperationDao.getUserAndAgentInfoByUserId(userId );
+
+    }
+
     public RestRecord deleteUserInfoById( String userId ) {
         return userOperationDao.deleteUserInfoById( userId );
 
@@ -51,8 +61,8 @@ public class UserOperationService {
         return userOperationDao.insertUser( userModel );
     }
 
-    public RestRecord getAuditStatusByEntityId( String id ,Integer roleId) {
-        return userOperationDao.getAuditStatusByEntityId( id,roleId );
+    public RestRecord getAuditStatusByEntityId( String userId) {
+        return userOperationDao.getAuditStatusByEntityId(userId);
 
     }
 

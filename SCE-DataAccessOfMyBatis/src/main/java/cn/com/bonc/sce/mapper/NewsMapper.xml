@@ -193,10 +193,10 @@
 
     <select id="selectNewsDetailById" resultType="Map">
         SELECT
-          T.CONTENT_ID "contentId",
+          to_char(T.CONTENT_ID) "contentId",
           T.CONTENT_TITLE "contentTitle",
           T.CONTENT "content",
-          T.PUBLISH_DATE "publishDate",
+          TO_CHAR(T.PUBLISH_DATE,'YYYY-MM-DD HH24:MI:SS') "publishDate",
           T.PIC_URL "picUrl",
           T.NEWS_ABSTRACT "newsAbstract",
           T.AUTHOR_NAME "authorName",
@@ -261,6 +261,7 @@
         <result column="CONTENT_STATUS" jdbcType="VARCHAR" javaType="java.lang.String" property="contentStatus"></result>
         <result column="REJECT_OPINION" jdbcType="VARCHAR" javaType="java.lang.String" property="rejectOpinion"></result>
         <result column="CREATE_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"></result>
+        <result column="CREATE_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="createDate"></result>
         <result column="UPDATE_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="updateTime"></result>
         <result column="CREATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="createUserId"></result>
         <result column="UPDATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="updateUserId"></result>
@@ -269,9 +270,10 @@
         <result column="PIC_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="picId"></result>
         <result column="FILE_ID" jdbcType="INTEGER" javaType="java.lang.Integer" property="fileId"></result>
         <result column="AUDIT_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="auditUserId"></result>
-        <result column="AUDIT_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="auditDate"></result>
+        <result column="AUDIT_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" property="auditTime"></result>
+        <result column="AUDIT_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="auditDate"></result>
         <result column="CONTENT_KEYWORD" jdbcType="VARCHAR" javaType="java.lang.String" property="contentKeyword"></result>
-        <result column="PUBLISH_DATE" jdbcType="TIMESTAMP" javaType="java.util.Date" property="publishDate"></result>
+        <result column="PUBLISH_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="publishDate"></result>
         <result column="IS_TOP" jdbcType="INTEGER" javaType="java.lang.Integer" property="isTop"></result>
         <result column="PIC_URL" jdbcType="VARCHAR" javaType="java.lang.String" property="picUrl"></result>
         <result column="FILE_URL" jdbcType="VARCHAR" javaType="java.lang.String" property="fileUrl"></result>
@@ -295,6 +297,7 @@
         T.CONTENT_STATUS,
         T.REJECT_OPINION,
         T.CREATE_TIME,
+        TO_CHAR(T.CREATE_TIME,'YYYY-MM-DD HH24:MI:SS') CREATE_DATE,
         T.CREATE_USER_ID,
         T.REMARKS,
         T.IS_DELETE,
@@ -302,8 +305,9 @@
         T.FILE_ID,
         T.AUDIT_USER_ID,
         T.AUDIT_TIME,
+        TO_CHAR(T.AUDIT_TIME,'YYYY-MM-DD HH24:MI:SS') AUDIT_DATE,
         T.CONTENT_KEYWORD,
-        T.PUBLISH_DATE,
+        TO_CHAR(T.PUBLISH_DATE,'YYYY-MM-DD HH24:MI:SS') PUBLISH_DATE,
         T.IS_TOP,
         T.PIC_URL,
         T.FILE_URL,
@@ -419,7 +423,10 @@
           T.CONTENT_TITLE "contentTitle",
           T.TOP_ORDER "topOrder"
         FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
-        WHERE IS_TOP = 1
+        WHERE IS_DELETE = 1
+	    AND CONTENT_STATUS = '1'
+	    AND IS_PUBLISH = 1
+	    AND IS_TOP =1
         ORDER BY TOP_ORDER DESC
     </select>
 
@@ -438,5 +445,38 @@
         UPDATE_TIME = sysdate,UPDATE_USER_ID = #{userId}
         WHERE CONTENT_ID = #{contentId}
     </update>
+
+
+    <select id="selectNotTopList" resultMap="NewsResultMap" parameterType="cn.com.bonc.sce.bean.NewsParamBean">
+        SELECT <include refid="News_Column_List"/>
+        <include refid="Hit-Volume"/>
+        FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT  T
+        LEFT JOIN (SELECT NEWS_ID,COUNT(ID) HIT_VOLUME FROM STARCLOUDPORTAL.SCE_NEWS_RECORD R where 1=1 and R.RECORD_TIME >(select sysdate - interval '7' day from dual) GROUP BY R.NEWS_ID
+        ) C ON C.NEWS_ID = T.CONTENT_ID
+        WHERE 1=1 AND T.IS_DELETE = 1
+        AND T.CONTENT_STATUS = '1'
+        AND T.IS_PUBLISH=1
+        AND T.IS_TOP = 0
+
+        <if test="contentType != null  and contentType != ''">
+            AND T.CONTENT_TYPE = #{contentType}
+        </if>
+
+        <if test="contentTitle != null  and contentTitle != ''">
+            AND T.CONTENT_TITLE LIKE   '%'||#{contentTitle}||'%'
+        </if>
+
+        <if test="startDate != null and startDate != '' and startDate != 'null' ">
+            and T.CREATE_TIME <![CDATA[>=]]>  TO_DATE(#{startDate}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+
+        <if test="endDate != null and endDate != '' and endDate != 'null' ">
+            and T.CREATE_TIME <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+
+
+        ORDER BY T.CREATE_TIME ASC
+
+    </select>
 
 </mapper>

@@ -37,7 +37,7 @@ public class UserBean {
     private Secret secretKeyPair;
     private Integer isFirstLogin=0;
     private String headPortrait;
-    private Date birthday;
+    private String birthday;
     private Map<String,String> userDetailedInfo;
     private Integer accountStatus;
     private Integer isAdministrators;

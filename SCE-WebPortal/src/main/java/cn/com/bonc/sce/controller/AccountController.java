@@ -85,7 +85,6 @@ public class AccountController {
      * @return 修改结果
      */
     @ApiOperation( value = "修改账号信息", notes = "修改账号信息", httpMethod = "POST" )
-    @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
             @ApiResponse( code = 412, message = WebMessageConstants.SCE_PORTAL_MSG_412, response = RestRecord.class )
@@ -102,7 +101,7 @@ public class AccountController {
      * @param accountSecurity 安全码和账号信息（或者是用户id、用户名和密码）
      * @return 修改结果
      */
-    @ApiOperation( value = "修改账号信息", notes = "修改账号信息", httpMethod = "POST" )
+    @ApiOperation( value = "修改当前已登录用户账号信息", notes = "修改当前已登录用户账号信息", httpMethod = "POST" )
     @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header" )
     @ApiResponses( {
             @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),

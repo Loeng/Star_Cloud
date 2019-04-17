@@ -252,6 +252,27 @@ public class NewsInfoController {
         return newsInfoService.getBackendNewsList(pageSize, pageNum,newsModel);
     }
 
+    /**
+     * 获取新闻列表（后台）
+     * @return
+     */
+    @ApiOperation( value = "获取非头条列表（后台）", notes = "获取非头条列表（后台）", httpMethod = "POST" )
+
+    @ApiImplicitParams( {
+            @ApiImplicitParam( name = "authentication", value = "用户信息", paramType = "header", required = false )
+    } )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class ),
+            @ApiResponse( code = 407, message = MessageConstants.SCE_MSG_407, response = RestRecord.class )
+    } )
+    @PostMapping( "/getNotTopList/{pageSize}/{pageNum}" )
+    @ResponseBody
+    public RestRecord getNotTopList(@PathVariable( "pageSize" ) @ApiParam( "分页条数" ) Integer pageSize,
+                                         @PathVariable( "pageNum" ) @ApiParam( "分页页数" ) Integer pageNum,
+                                         @RequestBody NewsParamModel newsModel) {
+        return newsInfoService.getNotTopList(pageSize, pageNum,newsModel);
+    }
+
 
     /**
      * 获取点击量列表（前台）

@@ -190,6 +190,31 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET HEAD_PORTRAIT = ?1,USER_NAME = ?2,GENDER = ?3,BIRTHDATE = ?4,NATIONALITY = ?5,VOLK = ?6,EDUCATIONAL_BACKGROUND = ?7,ADDRESS = ?8 WHERE USER_ID = ?9 ", nativeQuery = true)
     int updateUser(String headPortrait,String userName,String gender,Date birthDate,String nationality,String volk,String educationalBackground,String address,String userId);
 
+    @Modifying
+    @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET HEAD_PORTRAIT = ?1,USER_NAME = ?2,GENDER = ?3,BIRTHDATE = ?4,ADDRESS = ?5 WHERE USER_ID = ?6 ", nativeQuery = true)
+    int updateUserAgent(String headPortrait,String userName,String gender,Date birthDate,String address,String userId);
+
+    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_INFO_AGENT WHERE USER_ID = ?1", nativeQuery = true )
+    Integer getAgentInfoCount( String userId );
+
+    @Modifying
+    @Query( nativeQuery = true, value = "INSERT into STARCLOUDPORTAL.SCE_INFO_AGENT (USER_ID,PROVINCE,CITY,AREA) " +
+            "VALUES (:userId,:province,:city,:area)" )
+    int insertInfoAgent( @Param( "userId" ) String userId,
+                          @Param( "province" ) String province,
+                          @Param( "city" ) String city,
+                          @Param( "area" ) String area);
+
+    @Modifying
+    @Query(value = "UPDATE STARCLOUDPORTAL.SCE_INFO_AGENT SET PROVINCE = ?2,CITY = ?3,AREA = ?4 WHERE USER_ID = ?1 ", nativeQuery = true)
+    int updateAgentInfo( String userId,String province,String city,String area);
+
+    @Query( value = "SELECT u.HEAD_PORTRAIT as headPortrait,u.LOGIN_NAME as loginName,u.USER_TYPE as userType,u.USER_NAME as userName, " +
+            "u.GENDER as gender,u.BIRTHDATE as birthDate,u.ADDRESS as address,a.PROVINCE as province,a.CITY as city,a.AREA as area " +
+            "FROM STARCLOUDPORTAL.SCE_COMMON_USER u LEFT JOIN STARCLOUDPORTAL.SCE_INFO_AGENT a ON u.USER_ID = a.USER_ID WHERE u.USER_ID = ?1", nativeQuery = true )
+    Map< String, Object > getUserAndAgentInfoByUserId( String userId );
+
+
     /**
      * 根据用户ID更新组织机构ID
      * @param organizationId  组织机构ID
@@ -198,12 +223,12 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
      */
     @Modifying
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET ORGANIZATION_ID = ?1 WHERE USER_ID = ?2", nativeQuery = true)
-    int updateOrganizationIdByUserId(String organizationId,String userId);
+    int updateOrganizationIdByUserId(Long organizationId,String userId);
 
     @Override
     UserAudit save(UserAudit userAudit );
 
-    UserAudit findByEntityId(String id);
+    UserAudit findByEntityId(Long id);
 
-    UserAudit findByEntityIdAndUserType(String entityId,Integer userType);
+    UserAudit findByUserId(String userId);
 }

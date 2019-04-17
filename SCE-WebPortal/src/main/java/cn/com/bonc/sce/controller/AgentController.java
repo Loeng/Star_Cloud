@@ -58,4 +58,11 @@ public class AgentController {
                                            @PathVariable Integer pageSize ) {
         return agentService.getAllAgentUserInfo( pageNum, pageSize );
     }
+
+    @GetMapping( "/getAgentInfo/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    public RestRecord getAgentInfo( @PathVariable("AGENT_NAME") String AGENT_NAME,@PathVariable("PROPERTY") String PROPERTY,@PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
+        return agentService.getAgentInfo( AGENT_NAME,PROPERTY,AUDIT_STATUS,pageNum, pageSize );
+    }
+
 }

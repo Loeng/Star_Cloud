@@ -170,4 +170,12 @@ public interface NewsMapper {
     List<NewsParamBean> selectBackendNewsList(NewsParamBean newsBean);
 
 
+    /**
+     * 查询非头条列表（后台管理用）
+     *
+     * @return
+     */
+    List<NewsParamBean> selectNotTopList(NewsParamBean newsBean);
+
+
 }

@@ -42,13 +42,13 @@ public class AccountService {
         String valid;
         try {
             //valid = VaildSecurityUtils.randomStr();
-            valid="123456";
-            VaildSecurityUtils.addValid(getAccountEncryptionCode(phone,valid));
-            SendMessage.postMsgToPhone(valid,phone);
+            valid = "123456";
+            VaildSecurityUtils.addValid( getAccountEncryptionCode( phone, valid ) );
+            SendMessage.postMsgToPhone( valid, phone );
         } catch ( UnsupportedEncodingException e ) {
-            return new RestRecord(409,WebMessageConstants.SCE_PORTAL_MSG_409);
+            return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_409 );
         }
-        return new RestRecord(200,valid);
+        return new RestRecord( 200, valid );
     }
 
     /**
@@ -78,9 +78,9 @@ public class AccountService {
      */
     public RestRecord updateAccount( Account accountSecurity ) {
         Integer successCode = 200;
-        if(!StringUtils.isEmpty( accountSecurity.getUserId())&&
-                !StringUtils.isEmpty( accountSecurity.getPassword())&&
-                !StringUtils.isEmpty( accountSecurity.getNewPassword())){
+        if ( !StringUtils.isEmpty( accountSecurity.getUserId() ) &&
+                !StringUtils.isEmpty( accountSecurity.getPassword() ) &&
+                !StringUtils.isEmpty( accountSecurity.getNewPassword() ) ) {
             RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );
             if ( rr.getCode() == successCode ) {
                 rr.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );
@@ -90,14 +90,14 @@ public class AccountService {
         //加密加工
         //accountSecurity.getPassword();
         String code;
-        if( StringUtils.isEmpty( accountSecurity.getPhone())||StringUtils.isEmpty( accountSecurity.getCode())) {
+        if ( StringUtils.isEmpty( accountSecurity.getPhone() ) || StringUtils.isEmpty( accountSecurity.getCode() ) ) {
             return new RestRecord( 412, WebMessageConstants.SCE_PORTAL_MSG_412 );
-        }else{
+        } else {
             code = getAccountEncryptionCode(
                     accountSecurity.getPhone(), accountSecurity.getCode() );
         }
-        if ( VaildSecurityUtils.checkCode( code ) ) {
-            VaildSecurityUtils.delCode( code );
+        if ( VaildSecurityUtils.checkValid( code ) ) {
+            VaildSecurityUtils.delValid( code );
             RestRecord rr = accountSecurityDao.updateAccount( accountSecurity );
             if ( rr.getCode() == successCode ) {
                 rr.setMsg( WebMessageConstants.SCE_PORTAL_MSG_200 );

@@ -32,6 +32,9 @@ public class InstitutionService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private IdWorker idWorker;
+
     public int editInstitutionInfo(String user_id, Date work_time, Date entry_time, String job_profession, String work_number) {
         return institutionDao.editInstitutionInfo( user_id,work_time,entry_time,job_profession,work_number);
     }
@@ -45,7 +48,7 @@ public class InstitutionService {
     }
 
     public RestRecord addInstitution(Institution institution,String userId,Integer roleId){
-        String Id = UUID.getUUID();
+        Long Id = idWorker.nextId();
         String INSTITUTION_NAME = institution.getInstitutionName() == null ? "" : institution.getInstitutionName();
         String ADDRESS = institution.getAddress() == null ? "":institution.getAddress();
         String POSTCODE = institution.getPostcode() == null ? "" :institution.getPostcode();

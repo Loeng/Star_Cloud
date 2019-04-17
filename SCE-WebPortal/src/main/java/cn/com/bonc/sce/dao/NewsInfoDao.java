@@ -122,6 +122,15 @@ public interface NewsInfoDao {
                               @RequestParam( "pageNum" ) Integer pageNum,
                               NewsParamModel newsModel);
 
+
+    /**
+     * 获取非头条列表
+     * @return
+     */
+    @RequestMapping( value = "/news-info/select-notTop-list", method = RequestMethod.POST )
+    RestRecord selectNotTopList(@RequestParam( "pageSize" ) Integer pageSize,
+                                     @RequestParam( "pageNum" ) Integer pageNum,
+                                     NewsParamModel newsModel);
     /**
      * 获取点击量列表
      * @return

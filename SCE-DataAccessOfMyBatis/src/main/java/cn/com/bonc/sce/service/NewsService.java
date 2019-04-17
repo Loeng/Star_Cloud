@@ -1,11 +1,16 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.bean.NewsBean;
+import cn.com.bonc.sce.bean.NewsParamBean;
+import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.dao.FileResourceDao;
 import cn.com.bonc.sce.dao.NewsDao;
 import cn.com.bonc.sce.dao.UserInfoMybatisDao;
+import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IdWorker;
 import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +66,20 @@ public class NewsService {
         return newsDao.insertNewsInfo( newsBean );
     }
 
+    /**
+     * 更新新闻
+     * @param newsBean
+     * @return
+     */
+    public int updateNewsInfo(NewsBean newsBean){
+
+        if( newsBean.getPicId() != null ) {
+            String picUrl = fileResourceDao.getFileStorePath( newsBean.getPicId() );
+            newsBean.setPicUrl( picUrl );
+        }
+        return newsDao.updateNewsInfo( newsBean );
+    }
+
     public int updateTopNewsOrder( List<Map> newsBeanList , String userId){
         try{
             for(Map newsBean: newsBeanList){
@@ -76,6 +95,22 @@ public class NewsService {
             log.error( "update News Order fail {}", e );
             return 0;
         }
+    }
+
+    /**
+     * 获取非头条列表
+     * @param pageSize
+     * @param pageNum
+     * @param newsBean
+     * @return
+     */
+    public RestRecord getNotTopList(Integer pageSize,
+                                    Integer pageNum,
+                                    NewsParamBean newsBean){
+        PageHelper.startPage( pageNum, pageSize );
+        List<NewsParamBean> list = newsDao.selectNotTopList(newsBean);
+        PageInfo pageInfo = new PageInfo( list );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
 
 
