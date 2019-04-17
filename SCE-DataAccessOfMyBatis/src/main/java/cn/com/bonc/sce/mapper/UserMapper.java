@@ -174,11 +174,11 @@ public interface UserMapper {
 
     int delPassword(@Param("id") String id);
 
-    int updateOrganizationIdByUserId(@Param("organizationId") String organizationId,@Param("userId") String userId);
+    int updateOrganizationIdByUserId(@Param("organizationId") Long organizationId,@Param("userId") String userId);
 
     int saveUserAudit(UserAuditBean userAudit);
 
-    UserAuditBean findByUserAuditEntityId(@Param("entityId") String entityId);
+    UserAuditBean findByUserAuditEntityId(@Param("entityId") Long entityId);
 
     int updateUserAuditById(UserAuditBean userAudit);
 

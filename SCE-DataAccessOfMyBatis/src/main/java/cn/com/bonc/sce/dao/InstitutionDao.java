@@ -31,7 +31,7 @@ public class InstitutionDao {
         return institutionMapper.addInstitutionInfo(user_id,work_time,entry_time,job_profession,work_number,is_delete);
     }
 
-    public int addInstitution(String id,String institution_name,String address,String postcode,String province,String city,String district,String institution_code,String telephone,String email,String  homepage,String  parent_institution,Integer is_delete){
+    public int addInstitution(Long id,String institution_name,String address,String postcode,String province,String city,String district,String institution_code,String telephone,String email,String  homepage,String  parent_institution,Integer is_delete){
         return institutionMapper.addInstitution(id,institution_name,address,postcode,province,city,district,institution_code,telephone,email,homepage,parent_institution,is_delete);
     }
 

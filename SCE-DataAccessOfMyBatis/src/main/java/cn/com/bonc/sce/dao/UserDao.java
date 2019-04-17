@@ -246,7 +246,7 @@ public class UserDao {
         return userMapper.delPassword(id);
     }
 
-    public int updateOrganizationIdByUserId(String organizationId,String userId){
+    public int updateOrganizationIdByUserId(Long organizationId,String userId){
         return userMapper.updateOrganizationIdByUserId(organizationId,userId);
     }
 
@@ -254,7 +254,7 @@ public class UserDao {
         return userMapper.saveUserAudit(userAudit);
     }
 
-    public UserAuditBean findByUserAuditEntityId(String entityId){
+    public UserAuditBean findByUserAuditEntityId(Long entityId){
         return userMapper.findByUserAuditEntityId(entityId);
     }
 
