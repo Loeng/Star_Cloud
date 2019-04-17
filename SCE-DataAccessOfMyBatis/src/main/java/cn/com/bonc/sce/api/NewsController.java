@@ -63,7 +63,7 @@ public class NewsController {
     @PostMapping( "/updated-info" )
     @ResponseBody
     public RestRecord updateNewsInfo( @RequestBody NewsBean newsBean ) {
-        int count = newsDao.updateNewsInfo( newsBean );
+        int count = newsService.updateNewsInfo(newsBean);
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {
@@ -157,7 +157,10 @@ public class NewsController {
     @GetMapping( "/top-manage-list" )
     @ResponseBody
     public RestRecord selectTopNewsList() {
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, newsDao.selectTopNewsList() );
+        PageHelper.startPage( 1, 8 );// 取8条头条
+        List<Map> list = newsDao.selectTopNewsList();
+        PageInfo pageInfo = new PageInfo( list );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, pageInfo );
     }
 
     @PostMapping( "/top-order-change" )

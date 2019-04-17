@@ -61,6 +61,20 @@ public class NewsService {
         return newsDao.insertNewsInfo( newsBean );
     }
 
+    /**
+     * 更新新闻
+     * @param newsBean
+     * @return
+     */
+    public int updateNewsInfo(NewsBean newsBean){
+
+        if( newsBean.getPicId() != null ) {
+            String picUrl = fileResourceDao.getFileStorePath( newsBean.getPicId() );
+            newsBean.setPicUrl( picUrl );
+        }
+        return newsDao.updateNewsInfo( newsBean );
+    }
+
     public int updateTopNewsOrder( List<Map> newsBeanList , String userId){
         try{
             for(Map newsBean: newsBeanList){
