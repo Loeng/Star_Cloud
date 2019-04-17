@@ -423,7 +423,10 @@
           T.CONTENT_TITLE "contentTitle",
           T.TOP_ORDER "topOrder"
         FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
-        WHERE IS_TOP = 1
+        WHERE IS_DELETE = 1
+	    AND CONTENT_STATUS = '1'
+	    AND IS_PUBLISH = 1
+	    AND IS_TOP =1
         ORDER BY TOP_ORDER DESC
     </select>
 
