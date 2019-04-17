@@ -737,17 +737,18 @@
         <if test="userType != null and userType != ''">
             AND USER_TYPE = #{userType}
         </if>
+        and IS_DELETE = 1
     </select>
 
     <insert id="addTransfer">
         INSERT INTO STARCLOUDPORTAL.SCE_TRANSFER_APPLY(ID, USER_ID, USER_TYPE, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID,
         APPLY_STATUS, APPLY_USER_ID, APPLY_TIME, STU_ENTRANCE_YEAR, STU_CLASS_NUMBER, STU_GRADE, STU_SEAT_NUMBER, STUDENT_NUMBER)
-        VALUES(#{id}, #{userId}, #{userType}, #{originSchoolId}, #{targetSchoolId}, 0, #{applyUserId}, SYSDATE, #{entranceYear},
+        VALUES(#{id}, #{userId}, #{userType}, #{originSchoolId}, #{targetSchoolId}, 0, #{applyUserId}, SYSDATE, TO_DATE(#{entranceYear},'YYYY-MM'),
         #{classNumber}, #{grade}, #{seatNumber}, #{studentNumber})
     </insert>
 
     <select id="selectTransferInStudent" resultType="Map">
-        SELECT TA.ID,
+        SELECT TO_CHAR(TA.ID) AS TRANSFER_ID,
         U.USER_NAME,
         U.LOGIN_NAME,
         U.GENDER,
@@ -755,16 +756,21 @@
         TA.STUDENT_NUMBER,
         ES.SCHOOL_NAME,
         TA.APPLY_STATUS,
-        TA.REJECT_REASON
+        TA.REJECT_REASON,
+        ES2.SCHOOL_NAME AS OLD_SCHOOL_NAME
         FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY TA
         LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U
         ON TA.USER_ID = U.USER_ID AND U.USER_TYPE = TA.USER_TYPE AND U.ORGANIZATION_ID = TA.ORIGIN_SCHOOL_ID
         LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES
         ON U.ORGANIZATION_ID = ES.ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES2
+        ON TA.ORIGIN_SCHOOL_ID = ES2.ID
         WHERE TA.APPLY_STATUS != 1
-        AND TA.IS_DELETE == 1
-        AND U.IS_DELETE == 1
+        AND TA.IS_DELETE = 1
+        AND U.IS_DELETE = 1
         AND TA.USER_TYPE = 1
+        AND ES.IS_DELETE = 1
+        AND ES2.IS_DELETE = 1
         AND TA.TARGET_SCHOOL_ID = #{organizationId}
         <if test="userName != null and userName != ''">
             AND U.USER_NAME like '%'||#{userName}||'%'
@@ -788,22 +794,37 @@
     </select>
 
     <select id="selectTransferOutStudent" resultType="Map">
-        SELECT U.USER_ID,
+        SELECT TO_CHAR(TA.ID) AS ID,
+        U.USER_ID,
         U.USER_NAME,
         U.LOGIN_NAME,
         U.GENDER,
-        ES.SCHOOL_NAME,
-        TA.APPLY_STATUS
+        ES.SCHOOL_NAME AS NEW_SCHOOL_NAME,
+        TA.APPLY_STATUS,
+        U.CERTIFICATE_TYPE,
+        U.CERTIFICATE_NUMBER,
+        TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') AS BIRTHDATE,
+        U.NATIONALITY,
+        U.VOLK,
+        S.STUDENT_CODE,
+        TO_CHAR(S.ENTRANCE_YEAR,'YYYY-MM-dd') AS ENTRANCE_YEAR,
+        S.GRADE,
+        S.CLASS_NUMBER,
+        ES2.SCHOOL_NAME,
+        S.STUDENT_NUMBER
         FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY TA
         LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U
         ON TA.USER_ID = U.USER_ID AND U.USER_TYPE = TA.USER_TYPE AND U.ORGANIZATION_ID = TA.ORIGIN_SCHOOL_ID
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT S
+        ON S.USER_ID = U.USER_ID
         LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES
         ON TA.TARGET_SCHOOL_ID = ES.ID
-        WHERE TA.APPLY_STATUS != 1
-        AND TA.IS_DELETE == 1
-        AND U.IS_DELETE == 1
-        AND S.IS_DELETE == 1
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ES2
+        ON TA.ORIGIN_SCHOOL_ID = ES2.ID
+        WHERE TA.APPLY_STATUS = 0
+        AND TA.IS_DELETE = 1
+        AND U.IS_DELETE = 1
+        AND S.IS_DELETE = 1
         AND TA.USER_TYPE = 1
         AND TA.ORIGIN_SCHOOL_ID = #{organizationId}
         <if test="userName != null and userName != ''">
@@ -913,19 +934,19 @@
         UPDATE STARCLOUDPORTAL.SCE_INFO_STUDENT
         <set>
             <if test="STU_ENTRANCE_YEAR != null">
-                 ENTRANCE_YEAR = #{STU_ENTRANCE_YEAR}
+                 ENTRANCE_YEAR = #{STU_ENTRANCE_YEAR},
             </if>
             <if test="STU_CLASS_NUMBER != null">
-                AND CLASS_NUMBER = #{STU_CLASS_NUMBER}
+                CLASS_NUMBER = #{STU_CLASS_NUMBER},
             </if>
             <if test="STU_GRADE != null">
-                AND GRADE = #{STU_GRADE}
+                GRADE = #{STU_GRADE},
             </if>
             <if test="STU_SEAT_NUMBER != null">
-                AND SEAT_NUMBER = #{STU_SEAT_NUMBER}
+                SEAT_NUMBER = #{STU_SEAT_NUMBER},
             </if>
             <if test="STUDENT_NUMBER != null">
-                AND STUDENT_NUMBER = #{STUDENT_NUMBER}
+                STUDENT_NUMBER = #{STUDENT_NUMBER}
             </if>
         </set>
         WHERE USER_ID = #{USER_ID}

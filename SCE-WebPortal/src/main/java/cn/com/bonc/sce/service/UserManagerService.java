@@ -139,21 +139,21 @@ public class UserManagerService {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
         RestRecord restRecord = null;
-        if ( map.get( "studentUserName" ) == null || map.get( "studentBirthDate" ) == null || map.get( "studentNationality" ) == null || map.get( "studentVolk" ) == null ||
-                map.get( "parentCertificateType" ) == null || map.get( "parentCertificateNumber" ) == null || map.get( "relationship" ) == null ) {
+        if ( map.get( "studentUserName" ) == null || map.get( "studentBirthDate" ) == null || map.get( "studentNationality" ) == null || map.get( "studentVolk" ) == null) {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
-
-        String bindType;
-        try {
-            bindType = map.get( "bindType" ).toString();
-        } catch ( NullPointerException e ) {
-            return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
-        }
-        if ( bindType.equals( "1" ) ) {
-            if ( map.get( "parentUserName" ) == null || map.get( "parentNationality" ) == null || map.get( "parentVolk" ) == null ||
-                    map.get( "parentPhoneNumber" ) == null ) {
+        if(map.get( "transferType" ).toString().equals("1")){
+            String bindType;
+            try {
+                bindType = map.get( "bindType" ).toString();
+            } catch ( NullPointerException e ) {
                 return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
+            }
+            if ( bindType.equals( "1" ) ) {
+                if ( map.get( "parentUserName" ) == null || map.get( "parentNationality" ) == null || map.get( "parentVolk" ) == null ||
+                        map.get( "parentPhoneNumber" ) == null || map.get( "parentCertificateType" ) == null || map.get( "parentCertificateNumber" ) == null || map.get( "relationship" ) == null) {
+                    return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
+                }
             }
         }
         restRecord = userManagerDao.addStudent( map, userId );

@@ -293,12 +293,14 @@ public class UserService {
      * @return RestRecord
      */
     public RestRecord transferInStudent(Map map, String currentUserId){
-        Map userInfo = userDao.selectUserIdAndOrganizationId(map.get("studentCertificateNumber").toString(), map.get("studentCertificateType").toString(), "1");
+        String studentCertificateType = map.get("studentCertificateType").toString();
+        String studentCertificateNumber = map.get("studentCertificateNumber").toString();
+        Map userInfo = userDao.selectUserIdAndOrganizationId(studentCertificateNumber, studentCertificateType, "1");
         if(userInfo == null){
             return new RestRecord( 434, String.format(WebMessageConstants.SCE_PORTAL_MSG_434, "") );
         }
         String organizationId = userDao.getOrganizationIdByUserId(currentUserId);
-        if(organizationId.equals(userInfo.get("ORGANIZATION_ID"))){
+        if(organizationId.equals(userInfo.get("ORGANIZATION_ID").toString())){
             return new RestRecord( 434, "该学生已是本校学生，无需申请转入" );
         }
         map.put("id", idWorker.nextId());
@@ -311,7 +313,7 @@ public class UserService {
         //查询该学生是否已申请转入
         int count = userDao.selectTransfer(userInfo.get("USER_ID").toString(), organizationId);
         if(count > 0){
-            return new RestRecord( 435, String.format(WebMessageConstants.SCE_PORTAL_MSG_435, "已提交转入申请"));
+            return new RestRecord( 434, String.format(WebMessageConstants.SCE_PORTAL_MSG_435, "已提交转入申请"));
         }
         userDao.addTransfer(map);
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
