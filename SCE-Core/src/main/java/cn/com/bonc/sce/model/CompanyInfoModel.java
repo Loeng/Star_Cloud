@@ -15,7 +15,7 @@ import java.util.Date;
 @ApiModel( value = "Company", description = "厂商对象" )
 public class CompanyInfoModel {
     @ApiModelProperty( name = "厂商ID", hidden = true )
-    private String companyId;
+    private Long companyId;
 
     @ApiModelProperty( name = "厂商名称" )
     private String companyName;
