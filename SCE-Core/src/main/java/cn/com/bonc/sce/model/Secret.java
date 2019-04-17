@@ -65,7 +65,11 @@ public class Secret {
      * 此方法只能生成基于 2048bits-RSA 加密算法生成的 RSA 公私钥，如需定制加密算法，请自建 CryptoUtil 并设置相应算法的 keyPairGenerator
      *
      * @return a secret buries secrets
+     *
+     *  添加注解： wf
+     *  添加原因： RSA加密不建议使用，下面添加了ES256GenerateSecret生成秘钥的方法，其秘钥长度更短，加解密速度更快，安全性更高
      */
+    @Deprecated
     public static String generateSecret() {
         KeyPair keyPair = CryptoUtil.RSA_CRYPTO_UTIL_INSTANCE.generateKeyPair();
 

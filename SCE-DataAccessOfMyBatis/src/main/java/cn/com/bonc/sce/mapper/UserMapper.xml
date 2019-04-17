@@ -329,13 +329,19 @@
         U.CERTIFICATE_TYPE,
         U.CERTIFICATE_NUMBER,
         U.MAIL_ADDRESS,
-        TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE
+        TO_CHAR(U.BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE,
+        U.NATIONALITY AS NATIONLITY,
+        U.VOLK AS NATION_CODE,
+        T.ACADEMIC_QUALIFICATION,
+        T.WORK_NUMBER,
+        TO_CHAR(T.TEACH_TIME,'YYYY-MM-dd') as TEACH_TIME,
+        TO_CHAR(T.SCHOOL_TIME,'YYYY-MM-dd') as SCHOOL_TIME,
+        T.TEACH_RANGE
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
         WHERE u.USER_TYPE=2
         AND u.IS_DELETE=1
         AND u.ORGANIZATION_ID=#{organizationId}
-        AND u.USER_ID IN (SELECT USER_ID FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY)
         <if test="userName != null and userName!= ''" >
             AND USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
         </if>
@@ -351,6 +357,7 @@
         <if test="accountStatus != null and accountStatus!=''" >
             AND ACCOUNT_STATUS=#{accountStatus}
         </if>
+        order by U.CREATE_TIME desc
     </select>
 
     <update id="delTeacher">
@@ -429,11 +436,11 @@
 
     <insert id="addUser">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
-        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE,NATIONALITY,VOLK)
+        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE,NATIONALITY,VOLK,SECRET)
         VALUES
         (#{user_id,jdbcType=BIGINT},#{certificate_type,jdbcType=INTEGER},#{certificate_number,jdbcType=VARCHAR},
         #{user_name,jdbcType=VARCHAR},#{gender,jdbcType=VARCHAR},#{phone_number,jdbcType=VARCHAR},
-        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},TO_DATE(#{birthdate,jdbcType=VARCHAR},'YYYY-MM-dd'),1,#{nationality},#{nationCode})
+        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},TO_DATE(#{birthdate,jdbcType=VARCHAR},'YYYY-MM-dd'),1,#{nationality},#{nationCode},#{secret})
     </insert>
 
     <insert id="addTeacher">
@@ -456,7 +463,7 @@
     </insert>
 
     <select id="getTransferTeachers" resultType="Map">
-        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,a.APPLY_STATUS,POSITION,S1.SCHOOL_NAME AS OLD_SCHOOL_NAME,
+        SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,a.APPLY_STATUS,POSITION,S1.SCHOOL_NAME AS OLD_SCHOOL_NAME,A.REJECT_REASON,
         U.ACCOUNT_STATUS,S2.SCHOOL_NAME AS NEW_SCHOOL_NAME,TO_CHAR(A.ID) AS TRANSFER_ID
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
@@ -493,37 +500,46 @@
     </select>
 
     <select id="getStudents" resultType="Map">
-      SELECT U.USER_ID,
-      U.USER_NAME,
-      U.LOGIN_NAME,
-      U.GENDER,
-      T.GRADE,
-      T.STUDENT_NUMBER,
-      U.ACCOUNT_STATUS,
-      to_char(T.ENTRANCE_YEAR,'yyyy-MM-dd') as ENTRANCE_YEAR
-       FROM STARCLOUDPORTAL.SCE_COMMON_USER U
-      INNER JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT T
-      ON U.USER_ID = T.USER_ID
-      where U.ORGANIZATION_ID = #{organizationId}
+        SELECT U.USER_ID,
+        U.USER_NAME,
+        U.LOGIN_NAME,
+        U.GENDER,
+        T.GRADE,
+        T.CLASS_NUMBER,
+        T.STUDENT_NUMBER,
+        U.ACCOUNT_STATUS,
+        to_char(T.ENTRANCE_YEAR,'yyyy-MM') as ENTRANCE_YEAR,
+        U.CERTIFICATE_TYPE,
+        U.CERTIFICATE_NUMBER,
+        to_char(U.BIRTHDATE,'yyyy-MM-dd') as BIRTHDATE,
+        U.NATIONALITY,
+        U.VOLK,
+        T.STUDENT_CODE,
+        T.SEAT_NUMBER
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER U
+        INNER JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT T
+        ON U.USER_ID = T.USER_ID
+        where U.ORGANIZATION_ID = #{organizationId}
+        AND U.USER_TYPE = 1
         AND U.IS_DELETE = 1 AND T.IS_DELETE = 1
-      <if test="userName != null and userName != ''">
-        and U.USER_NAME like '%'||#{userName}||'%'
-      </if>
-      <if test="loginName != null and loginName != ''">
+        <if test="userName != null and userName != ''">
+          and U.USER_NAME like '%'||#{userName}||'%'
+        </if>
+        <if test="loginName != null and loginName != ''">
           and U.LOGIN_NAME like '%'||#{loginName}||'%'
-      </if>
-      <if test="studentNumber != null and studentNumber != ''">
+        </if>
+        <if test="studentNumber != null and studentNumber != ''">
           and T.STUDENT_NUMBER = #{studentNumber}
-      </if>
-      <if test="gender != null and gender != ''">
+        </if>
+        <if test="gender != null and gender != ''">
           and U.GENDER = #{gender}
-      </if>
-      <if test="grade != null and grade != ''">
+        </if>
+        <if test="grade != null and grade != ''">
           and T.GRADE = #{grade}
-      </if>
-      <if test="accountStatus != null and accountStatus != ''">
+        </if>
+        <if test="accountStatus != null and accountStatus != ''">
           and U.ACCOUNT_STATUS = #{accountStatus}
-      </if>
+        </if>
         order by U.CREATE_TIME desc
     </select>
 
@@ -556,34 +572,37 @@
     <update id="editStudentOfUser">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
         <set>
-            <if test="nationCode != null and nationCode != ''">
-                VOLK = #{nationCode},
+            <if test="VOLK != null and VOLK != ''">
+                VOLK = #{VOLK},
             </if>
-            <if test="nationality != null and nationality != ''">
-                NATIONALITY = #{nationality}
+            <if test="NATIONALITY != null and NATIONALITY != ''">
+                NATIONALITY = #{NATIONALITY}
             </if>
         </set>
-        WHERE USER_ID = #{userId}
+        WHERE USER_ID = #{USER_ID}
         and USER_TYPE = 1 AND IS_DELETE = 1
     </update>
 
     <update id="editStudentOfStudent">
         UPDATE STARCLOUDPORTAL.SCE_INFO_STUDENT
         <set>
-            <if test="entranceYear != null and entranceYear != ''">
-                ENTRANCE_YEAR = TO_DATE(#{entranceYear},'YYYY-MM-dd'),
+            <if test="ENTRANCE_YEAR != null and ENTRANCE_YEAR != ''">
+                ENTRANCE_YEAR = TO_DATE(#{ENTRANCE_YEAR},'YYYY-MM'),
             </if>
-            <if test="grade != null and grade != ''">
-                GRADE = #{grade},
+            <if test="GRADE != null and GRADE != ''">
+                GRADE = #{GRADE},
             </if>
-            <if test="classNumber != null and classNumber != ''">
-                CLASS_NUMBER = #{classNumber},
+            <if test="CLASS_NUMBER != null and CLASS_NUMBER != ''">
+                CLASS_NUMBER = #{CLASS_NUMBER},
             </if>
-            <if test="studentNumber != null and studentNumber != ''">
-                STUDENT_NUMBER = #{studentNumber}
+            <if test="STUDENT_NUMBER != null and STUDENT_NUMBER != ''">
+                STUDENT_NUMBER = #{STUDENT_NUMBER},
+            </if>
+            <if test="SEAT_NUMBER != null and SEAT_NUMBER != ''">
+                SEAT_NUMBER = #{SEAT_NUMBER}
             </if>
         </set>
-        WHERE USER_ID = #{userId}
+        WHERE USER_ID = #{USER_ID}
         AND IS_DELETE = 1
     </update>
 
@@ -626,7 +645,7 @@
     </update>
 
     <select id="selectParentInfoByCertificationNumber" resultType="Map">
-        SELECT USER_NAME,GENDER,NATIONALITY,TO_CHAR(BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE,VOLK,PHONE_NUMBER,MAIL_ADDRESS,
+        SELECT USER_NAME,GENDER,NATIONALITY,TO_CHAR(BIRTHDATE,'YYYY-MM-dd') as BIRTHDATE,VOLK,PHONE_NUMBER,MAIL_ADDRESS
         FROM STARCLOUDPORTAL.SCE_COMMON_USER
         WHERE IS_DELETE = 1 AND CERTIFICATE_NUMBER = #{certificationNumber}
         AND CERTIFICATE_TYPE = #{certificationType}
@@ -662,12 +681,12 @@
          <if test="studentGender != null and studentGender != ''">
              GENDER,
          </if>
-         USER_TYPE, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, ORGANIZATION_ID, SECRET, TO_DATE(BIRTHDATE, 'YYYY-MM-dd'), ISADMINISTRATORS, NATIONALITY, VOLK)
-        VALUES(#{studentId}, #{studentLoginName}, #{studentUserName}
+         USER_TYPE, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, ORGANIZATION_ID, SECRET, BIRTHDATE, ISADMINISTRATORS, NATIONALITY, VOLK)
+        VALUES(#{studentId}, #{studentLoginName}, #{studentUserName},
         <if test="studentGender != null and studentGender != ''">
             #{studentGender},
         </if>
-        #{userType}, #{studentCertificateType}, #{studentCertificateNumber}, #{organizationId}, #{studentSecret}, #{studentBirthDate}, 0, #{studentNationality}, #{studentVolk}
+        #{userType}, #{studentCertificateType}, #{studentCertificateNumber}, #{organizationId}, #{studentSecret}, TO_DATE(#{studentBirthDate},'YYYY-MM-dd'), 0, #{studentNationality}, #{studentVolk}
         )
     </insert>
 
@@ -677,7 +696,7 @@
             , STUDENT_CODE
         </if>
         )
-        VALUES(#{studentId}, #{classNumber}, #{grade}, #{studentNumber}, TO_DATE(#{entranceYear}, 'YYYY-MM-dd'), #{seatNumber}
+        VALUES(#{studentId}, #{classNumber}, #{grade}, #{studentNumber}, TO_DATE(#{entranceYear}, 'YYYY-MM'), #{seatNumber}
         <if test="studentCode != null and studentCode != ''">
             , #{studentCode}
         </if>
@@ -694,7 +713,7 @@
             MAIL_ADDRESS,
         </if>
         PHONE_NUMBER, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, SECRET, ISADMINISTRATORS, NATIONALITY, VOLK)
-        VALUES(#{parentId}, #{parentLoginName}, #{parentUserName}
+        VALUES(#{parentId}, #{parentLoginName}, #{parentUserName},
         <if test="parentGender != null and parentGender != ''">
             #{parentGender},
         </if>
@@ -713,8 +732,11 @@
 
     <select id="selectUserIdAndOrganizationId" resultType="Map">
         SELECT USER_ID,ORGANIZATION_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER
-        WHERE CERTIFICATE_NUMBER = #{parentCertificateNumber}
-        AND CERTIFICATE_TYPE = #{parentCertificateType}
+        WHERE CERTIFICATE_NUMBER = #{certificateNumber}
+        AND CERTIFICATE_TYPE = #{certificateType}
+        <if test="userType != null and userType != ''">
+            AND USER_TYPE = #{userType}
+        </if>
     </select>
 
     <insert id="addTransfer">
@@ -804,8 +826,8 @@
 
     <delete id="deleteTransferApply">
         delete from STARCLOUDPORTAL.SCE_TRANSFER_APPLY
-        where ID = #{ID}
-        AND ORIGIN_SCHOOL_ID = #{organizationId}
+        where ID = #{id}
+        AND TARGET_SCHOOL_ID = #{organizationId}
         AND IS_DELETE = 1
     </delete>
 
@@ -820,7 +842,7 @@
     <update id="reCall">
         UPDATE STARCLOUDPORTAL.SCE_TRANSFER_APPLY
         SET APPLY_STATUS = 0
-        WHERE ID = TO_NUMBER(#{id})
+        WHERE ID = TO_NUMBER(#{transferId})
         AND IS_DELETE = 1
     </update>
 
@@ -856,7 +878,7 @@
         <if test="rejectReason != null and rejectReason != ''">
           ,REJECT_REASON = #{rejectReason}
         </if>
-        <if test="applyStatus == '1'">
+        <if test="applyStatus == 1">
           ,IS_DELETE = 0
         </if>
         WHERE ID = #{id}
@@ -864,20 +886,16 @@
         AND ORIGIN_SCHOOL_ID = #{organizationId}
     </update>
 
-    <update id="updateOrganizationIdByTransferId">
+    <select id="selectUserIdAndOrganizationIdByTransferId" resultType="Map">
+        select TARGET_SCHOOL_ID as ORGANIZATION_ID,USER_ID
+        from  STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        where ID = #{transferId}
+    </select>
+
+    <update id="updateOrganizationId">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
-        SET ORGANIZATION_ID = (
-        SELECT TARGET_SCHOOL_ID
-        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
-        WHERE ID = TO_NUMBER(#{transferId})
-        AND ID_DELETE = 1
-        )
-        WHERE USER_ID in (
-        SELECT USER_ID
-        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
-        WHERE ID = TO_NUMBER(#{transferId})
-        AND ID_DELETE = 1
-        )
+        SET ORGANIZATION_ID = #{organizationId}
+        WHERE USER_ID = #{userId}
     </update>
 
     <select id="selectStudentInfoByTransferId" resultType="Map">
@@ -1106,7 +1124,8 @@
         T.POSITION,
         T.TEACH_RANGE,
         ES.SCHOOL_NAME,
-        ES2.SCHOOL_NAME AS NEW_SCHOOL_NAME
+        ES2.SCHOOL_NAME AS NEW_SCHOOL_NAME,
+        TO_CHAR(TA.ID) AS ID
         FROM STARCLOUDPORTAL.SCE_COMMON_USER U
         LEFT JOIN STARCLOUDPORTAL.SCE_TRANSFER_APPLY TA
         ON U.USER_ID = TA.USER_ID
@@ -1123,8 +1142,52 @@
         AND TA.ID = TO_NUMBER(#{transferId})
     </select>
 
-    <update id="updateTeacher">
+    <select id="selectTeacherInfoByTransferId" resultType="Map">
+        SELECT USER_ID,
+        TO_CHAR(TEA_ENTRANCE_YEAR,'YYYY-MM-dd'),
+        TEA_WORK_NUMBER,
+        TEA_POSITION,
+        TEACH_RANGE
+        FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
+        WHERE ID = TO_NUMBER(#{transferId})
+    </select>
 
+    <update id="updateTeacher">
+        UPDATE STARCLOUDPORTAL.SCE_INFO_TEACHER
+        <set>
+            <if test="TEA_ENTRANCE_YEAR != null and TEA_ENTRANCE_YEAR != ''">
+                SCHOOL_TIME = TO_DATE(#{TEA_ENTRANCE_YEAR},'YYYY-MM-dd'),
+            </if>
+            <if test="TEA_WORK_NUMBER != null and TEA_WORK_NUMBER != ''">
+                WORK_NUMBER = #{TEA_WORK_NUMBER},
+            </if>
+            <if test="TEA_POSITION != null and TEA_POSITION != ''">
+                POSITION = #{TEA_POSITION},
+            </if>
+            <if test="TEACH_RANGE != null and TEACH_RANGE != ''">
+                TEACH_RANGE = #{TEACH_RANGE}
+            </if>
+        </set>
+        where USER_ID = #{USER_ID}
     </update>
+
+    <select id="selectCountByCertificateNumber" resultType="int">
+        select count(1)
+        from STARCLOUDPORTAL.SCE_COMMON_USER
+        where CERTIFICATE_TYPE = #{certificateType}
+        and CERTIFICATE_NUMBER = #{certificateNumber}
+    </select>
+
+    <select id="selectCountByPhoneNumber" resultType="int">
+        select count(1)
+        from STARCLOUDPORTAL.SCE_COMMON_USER
+        where PHONE_NUMBER = #{phoneNumber}
+    </select>
+
+    <select id="selectCountByMailAddress" resultType="int">
+        select count(1)
+        from STARCLOUDPORTAL.SCE_COMMON_USER
+        where MAIL_ADDRESS = #{mailAddress}
+    </select>
 
 </mapper>

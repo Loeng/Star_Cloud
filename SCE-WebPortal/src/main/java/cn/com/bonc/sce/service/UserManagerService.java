@@ -144,11 +144,8 @@ public class UserManagerService {
         return userManagerDao.getTransferStudent(userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId);
     }
 
-    public RestRecord repealApply(String userId, Map map){
-        if(map.get("id") == null){
-            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
-        }
-        return userManagerDao.repealApply(userId, map);
+    public RestRecord repealApply(String userId, String transferId){
+        return userManagerDao.repealApply(userId, transferId);
     }
 
     public RestRecord reCall(String transferId){
@@ -189,5 +186,12 @@ public class UserManagerService {
 
     public RestRecord auditTeacher(String userId, Map map){
         return userManagerDao.auditTeacher(userId, map);
+    }
+
+    public RestRecord reCallTeacher(Map map){
+        if(map.get("transferId") == null){
+            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+        }
+        return userManagerDao.reCallTeacher(map);
     }
 }

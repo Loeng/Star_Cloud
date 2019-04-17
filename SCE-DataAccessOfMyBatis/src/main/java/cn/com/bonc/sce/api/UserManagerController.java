@@ -8,6 +8,7 @@ import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.InfoTeacherModel;
+import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserService;
 import cn.com.bonc.sce.tool.IdWorker;
@@ -313,7 +314,9 @@ public class UserManagerController {
                 log.info("教师身份证验证未通过");
                 return new RestRecord( 432, "身份证填写不正确");
             }
-            //todo 验证身份证是否被使用
+            if(userService.selectCountByCertificateNumber(CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER) > 0){
+                return new RestRecord( 432, "身份证已被使用");
+            }
             String USER_NAME = (String) map.get("USER_NAME");
             String GENDER = (String) map.get("GENDER");
             String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
@@ -321,10 +324,16 @@ public class UserManagerController {
                 log.info("教师身手机号验证未通过");
                 return new RestRecord( 432, "手机号填写不正确");
             }
+            if(userService.selectCountByPhoneNumber(PHONE_NUMBER) > 0){
+                return new RestRecord( 432, "手机号已被使用");
+            }
             String MAIL_ADDRESS = (String) map.get("MAIL_ADDRESS");
             if(!UserPropertiesUtil.checkMail(MAIL_ADDRESS)){
                 log.info("教师身邮箱证未通过");
                 return new RestRecord( 432, "邮箱填写不正确");
+            }
+            if(userService.selectCountByMailAddress(MAIL_ADDRESS) > 0){
+                return new RestRecord( 432, "邮箱已被使用");
             }
             String BIRTHDATE = (String) map.get("BIRTHDATE");
             String NATION_CODE = (String) map.get("NATION_CODE");
@@ -335,9 +344,9 @@ public class UserManagerController {
             String TEACH_TIME = (String) map.get("TEACH_TIME");
             String POSITION = (String) map.get("POSITION");
             Integer TEACH_RANGE = (Integer) map.get("TEACH_RANGE");
-
+            String secret = Secret.ES256GenerateSecret();
             int count1 = userService.addUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
-                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE,NATIONLITY,NATION_CODE);
+                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE,NATIONLITY,NATION_CODE, secret);
             int count2 = userService.addTeacher(USER_ID, ACADEMIC_QUALIFICATION,
                     WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE);
             userService.addPassword(idWorker.nextId(), USER_ID, DEFAULT_PASSWORD);
@@ -349,29 +358,42 @@ public class UserManagerController {
         } else {//转入
             Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
             String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
+            String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
+            String APPLY_USER_ID = (String) map.get("APPLY_USER_ID");
+            String TEA_WORK_NUMBER = (String) map.get("WORK_NUMBER");
+            String TEA_ENTRANCE_YEAR = (String) map.get("SCHOOL_TIME");
             if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
                 log.info("教师身份证验证未通过");
                 return new RestRecord( 432, "身份证填写不正确");
             }
-            String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
-            if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
-                log.info("教师身手机号验证未通过");
-                return new RestRecord( 432, "手机号填写不正确");
+            Map userInfo = userService.selectUserIdAndOrganizationId(CERTIFICATE_NUMBER, CERTIFICATE_TYPE.toString(), "2");
+            if( userInfo == null ){
+                return new RestRecord( 432, "请输入已录入教师的证件号");
             }
-            //通过身份证和手机号验证该教师的身份证在提交前是否被修改
-            int count = userService.checkUser(CERTIFICATE_TYPE, CERTIFICATE_NUMBER, PHONE_NUMBER);
-            if(count < 1){
-                return new RestRecord( 432, "请检查录入信息是否正确");
-            }
+//            if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
+//                log.info("教师身手机号验证未通过");
+//                return new RestRecord( 432, "手机号填写不正确");
+//            }
+//            //通过身份证和手机号验证该教师的身份证在提交前是否被修改
+//            int count = userService.checkUser(CERTIFICATE_TYPE, CERTIFICATE_NUMBER, PHONE_NUMBER);
+//            if(count < 1){
+//                return new RestRecord( 432, "请检查录入信息是否正确");
+//            }
             Long ID = idWorker.nextId();
             //通过证件类型和证件号码查询用户ID
             Map teacher = userService.getUserId(CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER);
             String USER_ID = teacher.get("USER_ID").toString();
-            String APPLY_USER_ID = (String) map.get("APPLY_USER_ID");
-            String TEA_WORK_NUMBER = (String) map.get("WORK_NUMBER");
-            String TEA_ENTRANCE_YEAR = (String) map.get("SCHOOL_TIME");
+            //检查该教师是否已是本校教师
+            String organizationId =  userService.getOrganizationIdByUserId(APPLY_USER_ID);
+            if(userInfo.get("ORGANIZATION_ID").toString().equals(organizationId)){
+                return new RestRecord( 434, "该教师已是本校教师，无需申请转入" );
+            }
+            //通过申请人查看组织id 并检查该教师是否已申请转入本学校
+            int count = userService.selectTransfer(USER_ID, organizationId);
+            if(count > 0){
+                return new RestRecord( 435, String.format(WebMessageConstants.SCE_PORTAL_MSG_435, "已提交转入申请"));
+            }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
-
             Date ENTRANCE_YEAR = null;
             try {
                 ENTRANCE_YEAR = format.parse(TEA_ENTRANCE_YEAR);
@@ -505,10 +527,10 @@ public class UserManagerController {
         return userService.getTransferStudent(userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId);
     }
 
-    @DeleteMapping("/repealApply")
+    @DeleteMapping("/repealApply/{transferId}")
     public RestRecord repealApply(@CurrentUserId String userId,
-                                  @RequestBody Map map){
-        return userService.repealApply(userId, map);
+                                  @PathVariable String transferId){
+        return userService.repealApply(userId, transferId);
     }
 
     @PutMapping("/reCall/{transferId}")
@@ -588,13 +610,18 @@ public class UserManagerController {
     }
 
     /**
-     * 学生转出申请的审核
+     * 教师转出申请的审核
      * @param userId 用户ID
      * @param map 参数 applyStatus：1通过，2不通过；id：申请ID；rejectReason，不通过原因
      * @return RestRecord
      */
-    @PatchMapping("/auditTeacher")
+    @PutMapping("/auditTeacher")
     public RestRecord auditTeacher(@CurrentUserId String userId, @RequestBody Map map){
         return userService.auditTeacher(userId, map);
+    }
+
+    @PutMapping("/reCallTeacher")
+    public RestRecord reCallTeacher(@RequestBody Map map){
+        return userService.reCallTeacher(map);
     }
 }

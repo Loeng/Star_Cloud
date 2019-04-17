@@ -93,8 +93,8 @@ public class UserDao {
         return userMapper.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,position,teach_range);
     }
 
-    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate, String nationality, String nationCode) {
-        return userMapper.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate, nationality, nationCode);
+    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate, String nationality, String nationCode, String secret) {
+        return userMapper.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate, nationality, nationCode, secret);
     }
 
     public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -179,13 +179,13 @@ public class UserDao {
         userMapper.saveParentStudentRel(id, parentUserId, studentUserId, isMain, relationship);
     }
 
-    public String selectUserIdByCertification(String parentCertificateNumber, String parentCertificateType){
-        Map map = selectUserIdAndOrganizationId(parentCertificateNumber, parentCertificateType);
+    public String selectUserIdByCertification(String parentCertificateNumber, String parentCertificateType, String userType){
+        Map map = selectUserIdAndOrganizationId(parentCertificateNumber, parentCertificateType, userType);
         return map.get("USER_ID").toString();
     }
 
-    public Map selectUserIdAndOrganizationId(String parentCertificateNumber, String parentCertificateType){
-        return userMapper.selectUserIdAndOrganizationId(parentCertificateNumber, parentCertificateType);
+    public Map selectUserIdAndOrganizationId(String certificateNumber, String certificateType, String userType){
+        return userMapper.selectUserIdAndOrganizationId(certificateNumber, certificateType, userType);
     }
 
     public void addTransfer(Map map){
@@ -220,8 +220,10 @@ public class UserDao {
         return userMapper.auditTransfer(map);
     }
 
+    @Transactional( propagation = Propagation.REQUIRED )
     public void updateOrganizationIdByTransferId(String transferId){
-        userMapper.updateOrganizationIdByTransferId(transferId);
+        Map map = userMapper.selectUserIdAndOrganizationIdByTransferId(transferId);
+        userMapper.updateOrganizationId(map.get("ORGANIZATION_ID").toString(), map.get("USER_ID").toString());
     }
 
     @Transactional( propagation = Propagation.REQUIRED )
@@ -247,7 +249,7 @@ public class UserDao {
     }
 
     public int updateOrganizationIdByUserId(String organizationId,String userId){
-        return userMapper.updateOrganizationIdByUserId(organizationId,userId);
+        return userMapper.updateOrganizationId(organizationId,userId);
     }
 
     public int saveUserAudit(UserAuditBean userAudit) {
@@ -270,12 +272,22 @@ public class UserDao {
         return userMapper.getTransferTeacherInfo(transferId);
     }
 
+    @Transactional( propagation = Propagation.REQUIRED )
     public void updateTeacher(String id){
-        userMapper.updateTeacher(id);
+        Map map = userMapper.selectTeacherInfoByTransferId(id);
+        userMapper.updateTeacher(map);
     }
 
     public int selectCountByCertificateNumber(String certificateType, String certificateNumber){
         return userMapper.selectCountByCertificateNumber(certificateType, certificateNumber);
+    }
+
+    public int selectCountByPhoneNumber(String phoneNumber){
+        return userMapper.selectCountByPhoneNumber(phoneNumber);
+    }
+
+    public int selectCountByMailAddress(String mailAddress){
+        return userMapper.selectCountByMailAddress(mailAddress);
     }
 
 }

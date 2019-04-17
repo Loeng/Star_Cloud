@@ -186,7 +186,7 @@ public class FileUploadApiController {
                     if(excelToUser.getUserName() == null){
                         continue;
                     }else if(excelToUser.getCertificateNumber() == null || excelToUser.getParentFamify() == null || excelToUser.getParentCertificationNumber() == null
-                    || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null){
+                    || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null || excelToUser.getParentTelephone() == null){
                         log.info("缺少必填项");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }

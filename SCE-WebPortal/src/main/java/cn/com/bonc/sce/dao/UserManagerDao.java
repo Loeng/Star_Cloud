@@ -123,9 +123,9 @@ public interface UserManagerDao {
                                   @PathVariable("pageSize") String pageSize,
                                   @RequestParam( value = "userId") String userId);
 
-    @RequestMapping( value = "/userManager/repealApply", method = RequestMethod.DELETE )
+    @RequestMapping( value = "/userManager/repealApply/{transferId}", method = RequestMethod.DELETE )
     RestRecord repealApply(@RequestParam("userId") String userId,
-                           @RequestBody Map map);
+                           @PathVariable("transferId") String transferId);
 
     @RequestMapping( value = "/userManager/reCall/{transferId}", method = RequestMethod.PUT )
     RestRecord reCall(@PathVariable("transferId") String transferId);
@@ -146,11 +146,14 @@ public interface UserManagerDao {
     @RequestMapping(value = "/userManager/{userId}", method = RequestMethod.GET)
     RestRecord getUserById(@PathVariable("userId") String userId);
 
-    @RequestMapping( value = "/userManager/getTransferTeacherInfo/{transferId}")
+    @RequestMapping( value = "/userManager/getTransferTeacherInfo/{transferId}", method = RequestMethod.GET)
     RestRecord getTransferTeacherInfo(@PathVariable("transferId") String transferId);
 
-    @RequestMapping( value = "/userManager/auditTeacher")
+    @RequestMapping( value = "/userManager/auditTeacher", method = RequestMethod.PUT)
     RestRecord auditTeacher(@RequestParam("userId") String userId,
                             @RequestBody Map map);
+
+    @RequestMapping( value = "/userManager/reCallTeacher", method = RequestMethod.PUT)
+    RestRecord reCallTeacher(@RequestBody Map map);
 
 }

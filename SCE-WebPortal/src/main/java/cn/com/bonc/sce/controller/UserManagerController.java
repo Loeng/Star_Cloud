@@ -226,11 +226,11 @@ public class UserManagerController {
     }
 
     /**
-     * @param map nationCode-民族，nationality-国籍，entranceYear-入学年月，grade-年级，classNumber-班号，studentNumber-学号
+     * @param map VOLK-民族，NATIONALITY-国籍，ENTRANCE_YEAR-入学年月，GRADE-年级，，SEAT_NUMBER-座号，CLASS_NUMBER-班号，STUDENT_NUMBER-学号
      * @return RestRecord
      */
     @ApiOperation( value = "编辑学生", notes = "根据学生id编辑学生", httpMethod = "PATCH")
-    @PatchMapping( "/editStudent" )
+    @PutMapping( "/editStudent" )
     public RestRecord editStudent(@RequestBody Map map){
         return userManagerService.editStudent(map);
     }
@@ -291,9 +291,10 @@ public class UserManagerController {
     }
 
     @ApiOperation( value = "教师撤回学生转入的申请", notes = "通过id撤回", httpMethod = "DELETE" )
-    @DeleteMapping("/repealApply")
-    public RestRecord repealApply(@CurrentUserId String userId, @RequestBody Map map){
-        return userManagerService.repealApply(userId, map);
+    @DeleteMapping("/repealApply/{transferId}")
+    public RestRecord repealApply(@CurrentUserId String userId, @PathVariable String transferId){
+        System.out.println(transferId);
+        return userManagerService.repealApply(userId, transferId);
     }
 
     @ApiOperation( value = "再次申请学生转入", notes = "通过转入申请ID发起再次申请", httpMethod = "PATCH" )
@@ -356,10 +357,16 @@ public class UserManagerController {
         return userManagerService.getTransferTeachers(getType, organizationId, userName, loginName, gender, position, accountStatus, pageNum, pageSize);
     }
 
-    @ApiOperation( value = "审核教师转出", notes = "")
+    @ApiOperation( value = "审核教师转出", httpMethod = "PATCH")
     @PatchMapping("/auditTeacher")
     public RestRecord auditTeacher(@CurrentUserId String userId, @RequestBody Map map){
         return userManagerService.auditTeacher(userId, map);
+    }
+
+    @ApiOperation( value = "教师再次申请转入", notes = "参数为transferId", httpMethod = "PATCH" )
+    @PatchMapping("/reCallTeacher")
+    public RestRecord reCallTeacher(@RequestBody Map map){
+        return userManagerService.reCallTeacher(map);
     }
 
 }

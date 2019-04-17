@@ -73,7 +73,8 @@ public interface UserMapper {
                 @Param("certificate_number")String certificate_number, @Param("user_name")String user_name,
                 @Param("gender")String gender, @Param("phone_number")String phone_number,
                 @Param("organization_id")String organization_id, @Param("mail_address") String mail_address,
-                @Param("birthdate")String birthdate, @Param("nationality")String nationality, @Param("nationCode")String nationCode);
+                @Param("birthdate")String birthdate, @Param("nationality")String nationality, @Param("nationCode")String nationCode,
+                @Param("secret") String secret);
 
     int addTeacher(@Param("user_id")String user_id, @Param("academic_qualification")String academic_qualification,
                    @Param("work_number")String work_number, @Param("school_time")String school_time,
@@ -132,8 +133,9 @@ public interface UserMapper {
     void saveParentStudentRel(@Param("id") long id, @Param("parentUserId") String parentUserId,
                               @Param("studentUserId") String studentUserId, @Param("isMain") int isMain, @Param("relationship") String relationship);
 
-    Map selectUserIdAndOrganizationId(@Param("parentCertificateNumber") String parentCertificateNumber,
-                                      @Param("parentCertificateType") String parentCertificateType);
+    Map selectUserIdAndOrganizationId(@Param("certificateNumber") String certificateNumber,
+                                      @Param("certificateType") String certificateType,
+                                      @Param("userType") String userType);
 
     void addTransfer(Map map);
 
@@ -154,7 +156,7 @@ public interface UserMapper {
 
     int auditTransfer(Map map);
 
-    void updateOrganizationIdByTransferId(@Param("transferId") String transferId);
+    Map selectUserIdAndOrganizationIdByTransferId(@Param("transferId") String transferId);
 
     void updateStudent(Map map);
 
@@ -174,7 +176,7 @@ public interface UserMapper {
 
     int delPassword(@Param("id") String id);
 
-    int updateOrganizationIdByUserId(@Param("organizationId") String organizationId,@Param("userId") String userId);
+    int updateOrganizationId(@Param("organizationId") String organizationId,@Param("userId") String userId);
 
     int saveUserAudit(UserAuditBean userAudit);
 
@@ -188,7 +190,14 @@ public interface UserMapper {
 
     Map getTransferTeacherInfo(@Param("transferId") String transferId);
 
-    void updateTeacher(@Param("transferId") String transferId);
+    Map selectTeacherInfoByTransferId(@Param("transferId") String transferId);
+
+    void updateTeacher(Map map);
 
     int selectCountByCertificateNumber(@Param("certificateType") String certificateType, @Param("certificateNumber") String certificateNumber);
+
+    int selectCountByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+    int selectCountByMailAddress(@Param("mailAddress") String mailAddress);
+
 }
