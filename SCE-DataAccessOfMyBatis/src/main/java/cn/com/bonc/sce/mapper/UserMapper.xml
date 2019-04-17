@@ -320,7 +320,7 @@
 
     <select id="getIdByPhone" resultType="java.lang.String">
         SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER
-        WHERE PHONE_NUMBER=#{phone}
+        WHERE PHONE_NUMBER=#{phone} and IS_DELETE=1
     </select>
 
     <select id="getTeachers" resultType="Map">
