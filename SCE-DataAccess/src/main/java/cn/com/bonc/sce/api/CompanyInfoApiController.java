@@ -17,13 +17,19 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.type.TypeDefinition;
+import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +58,9 @@ public class CompanyInfoApiController {
 
     @Autowired
     private CompanyService companyService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @GetMapping
     @ResponseBody
@@ -263,6 +272,64 @@ public class CompanyInfoApiController {
     @ResponseBody
     public RestRecord updateCompany(@RequestBody @ApiParam( "厂商信息对象" ) CompanyInfo companyInfo) {
         return companyService.updateCompany(companyInfo);
+    }
+
+    @GetMapping( "/getCompanyList/{COMPANY_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @ResponseBody
+    public RestRecord getCompanyList(@PathVariable("COMPANY_NAME") String COMPANY_NAME,@PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
+        try {
+            RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+            Page<List<Map<String, Object>>> page;
+            StringBuilder sql = new StringBuilder( "SELECT\n" +
+                    "\tsmc.COMPANY_ID,\n" +
+                    "\tsmc.COMPANY_NAME,\n" +
+                    "\tsmc.PROPERTY,\n" +
+                    "\tscu.USER_NAME,\n" +
+                    "\tscu.LOGIN_NAME,\n" +
+                    "\tsua.AUDIT_STATUS,\n" +
+                    "\tsua.AUDIT_TIME \n" +
+                    "FROM\n" +
+                    "\tSTARCLOUDMARKET.SCE_MARKET_COMPANY smc\n" +
+                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON smc.COMPANY_ID = to_char(sua.ENTITY_ID)\n" +
+                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu ON sua.USER_ID = scu.USER_ID \n" +
+                    "WHERE\n" +
+                    "\tsmc.IS_DELETE = 1 " );
+            if(!StringUtils.isEmpty(COMPANY_NAME) && !"null".equals(COMPANY_NAME)){
+                sql.append("and smc.COMPANY_NAME like '%"+COMPANY_NAME+"%' ");
+            }
+            if(!StringUtils.isEmpty(PROPERTY) && !"null".equals(PROPERTY)){
+                sql.append("and smc.PROPERTY = "+PROPERTY+" ");
+            }
+            if(StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS) ){
+                sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
+            }
+            if(!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS) ){
+                sql.append("AND  sua.AUDIT_STATUS = 0 ");
+            }
+            if(!StringUtils.isEmpty(AUDIT_STATUS) && "2".equals(AUDIT_STATUS) ){
+                sql.append("AND  sua.AUDIT_STATUS = 2 ");
+            }
+
+            Session session = entityManager.unwrap( org.hibernate.Session.class );
+            NativeQuery query = session.createNativeQuery( sql.toString() );
+            query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
+            int start = ( pageNum - 1 ) * pageSize;
+            int total = query.getResultList().size();
+            //判断分页
+            if ( start < total && pageSize > 0 ) {
+                query.setFirstResult( start );
+                query.setMaxResults( pageSize );
+            }
+            Map< String, Object > temp = new HashMap<>( 16 );
+            temp.put( "data", query.getResultList() );
+            temp.put( "totalPage", ( total + pageSize - 1 ) / pageSize );
+            temp.put( "totalCount", total );
+            restRecord.setData( temp );
+            return restRecord;
+        } catch ( Exception e ) {
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
+        }
     }
 
 }

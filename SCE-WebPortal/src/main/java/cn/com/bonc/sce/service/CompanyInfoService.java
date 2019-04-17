@@ -57,4 +57,8 @@ public class CompanyInfoService {
     public RestRecord updateCompany(CompanyInfoModel companyInfo){
         return companyInfoDao.updateCompany(companyInfo);
     }
+
+    public RestRecord getCompanyList( String COMPANY_NAME, String PROPERTY, Integer AUDIT_STATUS, Integer pageNum,Integer pageSize ) {
+        return companyInfoDao.getCompanyList( COMPANY_NAME, PROPERTY, AUDIT_STATUS, pageNum, pageSize );
+    }
 }

@@ -159,4 +159,12 @@ public class CompanyInfoController {
         return companyInfoService.updateCompany(companyInfo);
     }
 
+
+    @GetMapping( "/getCompanyList/{COMPANY_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @ResponseBody
+    public RestRecord getCompanyList(@PathVariable("COMPANY_NAME") String COMPANY_NAME,@PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize ) {
+        return companyInfoService.getCompanyList( COMPANY_NAME, PROPERTY, AUDIT_STATUS, pageNum, pageSize );
+    }
+
 }

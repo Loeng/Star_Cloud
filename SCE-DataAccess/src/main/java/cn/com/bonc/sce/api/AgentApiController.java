@@ -12,14 +12,21 @@ import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +42,8 @@ public class AgentApiController {
     private UserInfoRepository userInfoRepository;
     @Autowired
     private UserPasswordDao passwordDao;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     public AgentApiController( AgentRepository agentRepository ) {
@@ -99,4 +108,63 @@ public class AgentApiController {
             return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_423 );
         }
     }
+
+    @GetMapping( "/getCompanyList/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @ResponseBody
+    public RestRecord getCompanyList(@PathVariable("AGENT_NAME") String AGENT_NAME,@PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
+        try {
+            RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+            Page<List<Map<String, Object>>> page;
+            StringBuilder sql = new StringBuilder( "SELECT\n" +
+                    "\tsma.ID,\n" +
+                    "\tsma.AGENT_NAME,\n" +
+                    "\tsma.PROPERTY,\n" +
+                    "\tscu.USER_NAME,\n" +
+                    "\tscu.LOGIN_NAME,\n" +
+                    "\tsua.AUDIT_STATUS,\n" +
+                    "\tsua.AUDIT_TIME \n" +
+                    "FROM\n" +
+                    "\tSTARCLOUDPORTAL.SCE_ENTITY_AGENT sma\n" +
+                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON sma.ID = to_char(sua.ENTITY_ID)\n" +
+                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu ON sua.USER_ID = scu.USER_ID \n" +
+                    "WHERE\n" +
+                    "\tsma.IS_DELETE = 1  " );
+            if(!StringUtils.isEmpty(AGENT_NAME) && !"null".equals(AGENT_NAME)){
+                sql.append("and sma.AGENT_NAME like '%"+AGENT_NAME+"%' ");
+            }
+            if(!StringUtils.isEmpty(PROPERTY) && !"null".equals(PROPERTY)){
+                sql.append("and smc.PROPERTY = "+PROPERTY+" ");
+            }
+            if(StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS) ){
+                sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
+            }
+            if(!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS) ){
+                sql.append("AND  sua.AUDIT_STATUS = 0 ");
+            }
+            if(!StringUtils.isEmpty(AUDIT_STATUS) && "2".equals(AUDIT_STATUS) ){
+                sql.append("AND  sua.AUDIT_STATUS = 2 ");
+            }
+
+            Session session = entityManager.unwrap( org.hibernate.Session.class );
+            NativeQuery query = session.createNativeQuery( sql.toString() );
+            query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
+            int start = ( pageNum - 1 ) * pageSize;
+            int total = query.getResultList().size();
+            //判断分页
+            if ( start < total && pageSize > 0 ) {
+                query.setFirstResult( start );
+                query.setMaxResults( pageSize );
+            }
+            Map< String, Object > temp = new HashMap<>( 16 );
+            temp.put( "data", query.getResultList() );
+            temp.put( "totalPage", ( total + pageSize - 1 ) / pageSize );
+            temp.put( "totalCount", total );
+            restRecord.setData( temp );
+            return restRecord;
+        } catch ( Exception e ) {
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
+        }
+    }
+
 }
