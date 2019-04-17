@@ -11,6 +11,7 @@ import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.repository.FileResourceRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.IDUtil;
+import cn.com.bonc.sce.tool.IdWorker;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,9 @@ public class SchoolService {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private IdWorker idWorker;
 
     /**
      * 添加school
@@ -139,24 +143,26 @@ public class SchoolService {
 
     public RestRecord addSchool( School school,String userId,Integer roleId) {
         school.setIsDelete(1);
+        Long id = idWorker.nextId();
+        school.setId(id);
         schoolDao.save(school);
-        userInfoRepository.updateOrganizationIdByUserId(String.valueOf(school.getId()),userId);
+        userInfoRepository.updateOrganizationIdByUserId(school.getId(),userId);
         UserAudit userAudit = new UserAudit();
         userAudit.setUserId(userId);
         userAudit.setUserType(roleId);
-        userAudit.setEntityId(String.valueOf(school.getId()));
+        userAudit.setEntityId(school.getId());
         userAudit.setAuditStatus(0);
         userInfoRepository.save(userAudit);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
 
-    public Optional<School> getSchoolById(Integer id){
+    public Optional<School> getSchoolById(Long id){
         return schoolDao.findById(id);
     }
 
     public RestRecord updateSchoolById(School school){
         int status = 0;
-        Integer id = school.getId() == null ? 0:school.getId();
+        Long id = school.getId() == null ? 0:school.getId();
         String schoolAddress = school.getSchoolAddress() == null ? "":school.getSchoolAddress();
         String postcode = school.getPostcode() == null ? "" : school.getPostcode();
         String province = school.getProvince() == null ? "" : school.getProvince();
@@ -170,15 +176,15 @@ public class SchoolService {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200,status);
     }
 
-    public RestRecord updateSchoolInfo(School school,String userId,Integer roleId){
+    public RestRecord updateSchoolInfo(School school){
         school.setIsDelete(1);
         schoolDao.save(school);
-        UserAudit audit = userInfoRepository.findByEntityId(String.valueOf(school.getId()));
+        UserAudit audit = userInfoRepository.findByEntityId(school.getId());
         UserAudit userAudit = new UserAudit();
         userAudit.setId(audit.getId());
-        userAudit.setUserId(userId);
-        userAudit.setUserType(roleId);
-        userAudit.setEntityId(String.valueOf(school.getId()));
+        userAudit.setUserId(audit.getUserId());
+        userAudit.setUserType(audit.getUserType());
+        userAudit.setEntityId(school.getId());
         userAudit.setAuditStatus(0);
         userInfoRepository.save(userAudit);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);

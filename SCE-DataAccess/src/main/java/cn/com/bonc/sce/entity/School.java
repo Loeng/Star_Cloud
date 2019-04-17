@@ -30,10 +30,10 @@ import java.util.Date;
 @Table(name="SCE_ENTITY_SCHOOL",schema = "STARCLOUDPORTAL")
 public class School {
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_ENTITY_SCHOOL")
-    @SequenceGenerator(name="SEQ_GEN_ENTITY_SCHOOL",allocationSize=1, sequenceName="SEQ_ENTITY_SCHOOL")
+   /* @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN_ENTITY_SCHOOL")
+    @SequenceGenerator(name="SEQ_GEN_ENTITY_SCHOOL",allocationSize=1, sequenceName="SEQ_ENTITY_SCHOOL")*/
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @Column(name = "SCHOOL_NAME")
     private String schoolName;  //学校名称

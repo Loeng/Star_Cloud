@@ -17,7 +17,7 @@ import java.util.Objects;
 @Table( name = "SCE_MARKET_COMPANY", schema = "STARCLOUDMARKET" )
 public class CompanyInfo {
 
-    private String companyId;
+    private Long companyId;
     private String companyName;
     private String companyAddress;
     private String companyTaxNum;
@@ -36,11 +36,11 @@ public class CompanyInfo {
 
     @Id
     @Column( name = "COMPANY_ID", nullable = false )
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId( String companyId ) {
+    public void setCompanyId( Long companyId ) {
         this.companyId = companyId;
     }
 

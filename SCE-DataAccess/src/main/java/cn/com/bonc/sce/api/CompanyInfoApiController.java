@@ -109,7 +109,7 @@ public class CompanyInfoApiController {
     @GetMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord getCompanyByCompanyId(
-            @PathVariable( value = "companyId" ) @ApiParam( value = "厂商Id" ) String companyId ) {
+            @PathVariable( value = "companyId" ) @ApiParam( value = "厂商Id" ) Long companyId ) {
         CompanyInfo info =  companyService.getCompanyByCompanyId( companyId );
         if (info == null) {
             return new RestRecord(111, WebMessageConstants.SCE_PORTAL_MSG_111, companyId);
@@ -175,7 +175,7 @@ public class CompanyInfoApiController {
     @PutMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord updateCompanyInfo(
-            @PathVariable( "companyId" ) String companyId,
+            @PathVariable( "companyId" ) Long companyId,
             @RequestBody CompanyInfo companyInfo ) {
         log.trace( "Update companyInfo,companyId is : {} ,companyInfo is {}", companyId, companyInfo );
         try {

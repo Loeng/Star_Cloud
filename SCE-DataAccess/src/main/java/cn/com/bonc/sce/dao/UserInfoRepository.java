@@ -137,7 +137,7 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
                     @Param( "userType" ) Integer userType, @Param( "mailAddress" ) String mailAddress,
                     @Param( "certificateType" ) Integer certificateType, @Param( "certificateNumber" ) String certificateNumber,
                     @Param( "phoneNumber" ) String phoneNumber, @Param( "address" ) String address,
-                    @Param( "createTime" ) Date createTime, @Param( "organizationId" ) String organizationId,
+                    @Param( "createTime" ) Date createTime, @Param( "organizationId" ) Long organizationId,
                     @Param( "remarks" ) String remarks, @Param( "secret" ) String secret );
 
 
@@ -223,12 +223,12 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
      */
     @Modifying
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET ORGANIZATION_ID = ?1 WHERE USER_ID = ?2", nativeQuery = true)
-    int updateOrganizationIdByUserId(String organizationId,String userId);
+    int updateOrganizationIdByUserId(Long organizationId,String userId);
 
     @Override
     UserAudit save(UserAudit userAudit );
 
-    UserAudit findByEntityId(String id);
+    UserAudit findByEntityId(Long id);
 
     UserAudit findByUserId(String userId);
 }

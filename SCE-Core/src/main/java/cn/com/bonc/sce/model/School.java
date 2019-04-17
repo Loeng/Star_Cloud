@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class School {
-    private Integer id;
+    private Long id;
     private String schoolName;    //学校名称
     private String authorityName;
     private String schoolAddress;  //学校地址

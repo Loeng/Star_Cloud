@@ -56,7 +56,7 @@ public class SchoolService {
         return schoolDao.addSchool(school,userId,roleId);
     }
 
-    public RestRecord getSchoolById(Integer id){
+    public RestRecord getSchoolById(Long id){
         return schoolDao.getSchoolById(id);
     }
 
@@ -64,8 +64,8 @@ public class SchoolService {
         return schoolDao.updateSchoolById(school);
     }
 
-    public RestRecord updateSchoolInfo(School school,String userId,Integer roleId){
-        return schoolDao.updateSchoolInfo(school,userId,roleId);
+    public RestRecord updateSchoolInfo(School school){
+        return schoolDao.updateSchoolInfo(school);
     }
 
     public RestRecord getSchoolInfoList(String SCHOOL_NAME,String SCHOOL_TYPE,String AUDIT_STATUS,Integer pageNum ,Integer pageSize){

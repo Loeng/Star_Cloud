@@ -6,6 +6,7 @@ import cn.com.bonc.sce.dao.UserInfoRepository;
 import cn.com.bonc.sce.entity.CompanyInfo;
 import cn.com.bonc.sce.entity.UserAudit;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.IdWorker;
 import cn.com.bonc.sce.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +27,19 @@ public class CompanyService {
     @Autowired
     private CompanyDao companyDao;
 
+    @Autowired
+    private IdWorker idWorker;
+
     public RestRecord addCompany(CompanyInfo company, String userId, Integer roleId) {
         company.setIsDelete(1L);
-        String uuid = UUID.getUUID();
-        company.setCompanyId(uuid);
+        Long id = idWorker.nextId();
+        company.setCompanyId(id);
         companyDao.save(company);
-        userInfoRepository.updateOrganizationIdByUserId(uuid,userId);
+        userInfoRepository.updateOrganizationIdByUserId(company.getCompanyId(),userId);
         UserAudit userAudit = new UserAudit();
         userAudit.setUserId(userId);
         userAudit.setUserType(roleId);
-        userAudit.setEntityId(uuid);
+        userAudit.setEntityId(company.getCompanyId());
         userAudit.setAuditStatus(0);
         userInfoRepository.save(userAudit);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
@@ -43,7 +47,7 @@ public class CompanyService {
 
     public RestRecord updateCompanyByCompanyId(CompanyInfo companyInfo){
         int status = 0;
-        String companyId = companyInfo.getCompanyId() == null ? "":companyInfo.getCompanyId();
+        Long companyId = companyInfo.getCompanyId() == null ? 0:companyInfo.getCompanyId();
         String companyAddress = companyInfo.getCompanyAddress() == null ? "":companyInfo.getCompanyAddress();
         String postcode = companyInfo.getPostcode() == null ? "" : companyInfo.getPostcode();
         String phone = companyInfo.getPhone() == null ? "" : companyInfo.getPhone();
@@ -53,7 +57,7 @@ public class CompanyService {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200,status);
     }
 
-    public CompanyInfo getCompanyByCompanyId(String companyId){
+    public CompanyInfo getCompanyByCompanyId(Long companyId){
         return companyDao.findByCompanyId(companyId);
     }
 

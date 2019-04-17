@@ -99,7 +99,7 @@ public class SchoolController {
     @ApiOperation(value = "通过学校id获取学校信息接口", notes="通过学校id获取学校信息", httpMethod = "GET")
     @GetMapping("/{id}")
     @ResponseBody
-    public RestRecord getSchoolById( @PathVariable( "id" ) Integer id ) {
+    public RestRecord getSchoolById( @PathVariable( "id" ) Long id ) {
         return schoolService.getSchoolById(id);
     }
 
@@ -113,8 +113,8 @@ public class SchoolController {
     @ApiOperation(value = "变更或驳回提交学校信息接口",notes = "变更或驳回提交学校信息",httpMethod = "PUT")
     @PutMapping( "/updateSchoolInfo" )
     @ResponseBody
-    public RestRecord updateSchoolInfo(@RequestBody @ApiParam( "学校信息对象" ) School school,@ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId,@ApiParam(name = "roleId", value = "角色类型", required = true) @RequestParam( "roleId" ) Integer roleId) {
-        return schoolService.updateSchoolInfo(school,userId,roleId);
+    public RestRecord updateSchoolInfo(@RequestBody @ApiParam( "学校信息对象" ) School school) {
+        return schoolService.updateSchoolInfo(school);
     }
 
     /**

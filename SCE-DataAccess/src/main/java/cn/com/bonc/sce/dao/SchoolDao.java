@@ -43,10 +43,10 @@ public interface SchoolDao extends JpaRepository< School, Integer > {
     Page<List<Map<String,Object> >> selectAllSchool( Integer isDelete , Pageable pageable);
 
 
-    Optional<School> findById(Integer id);
+    Optional<School> findById(Long id);
 
     @Modifying
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_ENTITY_SCHOOL SET SCHOOL_ADDRESS = ?2,POSTCODE = ?3,PROVINCE = ?4,CITY = ?5,AREA = ?6,SCHOOLMASTER_NAME = ?7,TELEPHONE = ?8,EMAIL = ?9,HOMEPAGE = ?10 WHERE ID = ?1 ", nativeQuery = true)
-    int updateSchoolById(Integer id, String schoolAddress, String postcode, String province, String city, String area, String schoolMasterName, String telephone, String email,String homepage);
+    int updateSchoolById(Long id, String schoolAddress, String postcode, String province, String city, String area, String schoolMasterName, String telephone, String email,String homepage);
 
 }

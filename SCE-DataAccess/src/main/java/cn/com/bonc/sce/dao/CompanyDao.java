@@ -17,8 +17,8 @@ public interface CompanyDao extends JpaRepository<CompanyInfo, Integer > {
 
     @Modifying
     @Query(value = "UPDATE STARCLOUDMARKET.SCE_MARKET_COMPANY SET COMPANY_ADDRESS = ?2,POSTCODE = ?3,PHONE = ?4,COMPANY_EMAIL = ?5,COMPANY_WEBSITE = ?6 WHERE COMPANY_ID = ?1 ", nativeQuery = true)
-    int updateCompanyByCompanyId(String companyId,String companyAddress,String postcode,String phone,String companyEmail,String companyWebsite);
+    int updateCompanyByCompanyId(Long companyId,String companyAddress,String postcode,String phone,String companyEmail,String companyWebsite);
 
-    CompanyInfo findByCompanyId(String companyId);
+    CompanyInfo findByCompanyId(Long companyId);
 
 }
