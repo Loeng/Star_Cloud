@@ -190,7 +190,7 @@ public class UserManagerController {
         }
     }
 
-    @ApiOperation( value = "通过用户名修改密码", notes = "重设密码", httpMethod = "PUT" )
+    @ApiOperation( value = "通过用户名修改密码", notes = "重设密码(激活操作)", httpMethod = "PUT" )
     @PutMapping( "/updatePwdByName" )
     @ResponseBody
     public RestRecord updatePwdByName( @RequestParam( "loginName" ) String loginName,
