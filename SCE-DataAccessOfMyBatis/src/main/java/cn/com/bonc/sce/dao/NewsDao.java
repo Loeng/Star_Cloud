@@ -61,6 +61,15 @@ public class NewsDao {
         return newsMapper.selectBackendNewsList(newsBean);
     }
 
+    /**
+     * 获取非头条列表
+     * @param newsBean
+     * @return
+     */
+    public List<NewsParamBean> selectNotTopList(NewsParamBean newsBean) {
+        return newsMapper.selectNotTopList(newsBean);
+    }
+
     public List selectTopNewsList(){
         return newsMapper.selectTopNewsList();
     }

@@ -71,6 +71,18 @@ public class NewsInfoService {
     }
 
     /**
+     * 获取非头条列表
+     * @param pageSize
+     * @param pageNum
+     * @param newsModel
+     * @return
+     */
+    public RestRecord getNotTopList( Integer pageSize, Integer pageNum, NewsParamModel newsModel) {
+
+        return newsInfoDao.selectNotTopList(pageSize, pageNum,newsModel);
+    }
+
+    /**
      * 获取点击量排行列表
      * @param pageSize
      * @param pageNum

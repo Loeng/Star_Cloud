@@ -157,7 +157,7 @@ public class NewsController {
     @GetMapping( "/top-manage-list" )
     @ResponseBody
     public RestRecord selectTopNewsList() {
-        PageHelper.startPage( 1, 8 );// 取8条头条
+        PageHelper.startPage( 1, 99 );
         List<Map> list = newsDao.selectTopNewsList();
         PageInfo pageInfo = new PageInfo( list );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, pageInfo );
@@ -207,6 +207,23 @@ public class NewsController {
         List<NewsParamBean> list = newsDao.selectBackendNewsList(newsBean);
         PageInfo pageInfo = new PageInfo( list );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
+    }
+
+
+    /**
+     * 查找非头条列表（用于添加头条的列表页）
+     * @param pageSize
+     * @param pageNum
+     * @param newsBean
+     * @return
+     */
+    @PostMapping("/select-notTop-list")
+    @ResponseBody
+    public RestRecord getNotTopList( @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize,
+                                       @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
+                                       @RequestBody NewsParamBean newsBean){
+
+        return newsService.getNotTopList(pageSize,pageNum,newsBean);
     }
 
 
