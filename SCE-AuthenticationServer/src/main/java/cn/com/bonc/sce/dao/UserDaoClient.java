@@ -78,4 +78,14 @@ public interface UserDaoClient {
 
     @RequestMapping( value = "/user-info/password", method = RequestMethod.PUT )
     RestRecord updatePasswordById( @RequestParam( "userId" ) String userId, @RequestParam( "password" ) String password );
+
+    /**
+     * 获取用户审核状态信息
+     *
+     * @param id
+     * @param roleId
+     * @return auditStatus  0审核中 1已认证 2被驳回
+     */
+    @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{userId}", method = RequestMethod.GET )
+    RestRecord getAuditStatusByEntityId( @PathVariable( "userId" ) String userId);
 }

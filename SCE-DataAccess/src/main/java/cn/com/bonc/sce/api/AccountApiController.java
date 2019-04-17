@@ -40,6 +40,7 @@ public class AccountApiController {
             }
         }else{
             try {
+                //根据userId和旧密码 修改密码
                 return accountService.updatePasswordById( account.getUserId(), account.getPassword(), account.getNewPassword() );
             } catch ( Exception e ) {
                 return new RestRecord( 407, MessageConstants.SCE_MSG_407, e );

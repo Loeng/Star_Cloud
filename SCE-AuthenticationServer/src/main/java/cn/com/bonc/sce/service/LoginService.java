@@ -59,6 +59,8 @@ public class LoginService {
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
         claims.put( "userType", authenticatedUser.getUserType() );
+        claims.put( "isAdmin", authenticatedUser.getIsAdministrators() );
+        claims.put( "auditStatus", 0 );
         // 签发人
         claims.put( "iss", "SCE-SSO" );
         // 受众
@@ -71,7 +73,7 @@ public class LoginService {
 //        claims.put( "IPAdd", MD5Util.getMd5String( ip ) );
         // user-Agent
         String userAgent = request.getHeader( "User-Agent" );
-        if( userAgent == null ){
+        if ( userAgent == null ) {
             log.warn( "请求中缺少User-Agent" );
             throw new NullPointerException();
         }

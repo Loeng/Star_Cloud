@@ -1,5 +1,7 @@
 package cn.com.bonc.sce.tool;
 
+import org.springframework.util.DigestUtils;
+
 import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -33,7 +35,7 @@ public abstract class VaildSecurityUtils {
      * @param saveMaxTime   最大存储时间
      */
     private static void runTime( ScheduledExecutorService ses, final Map< String, Long > timeMap, int clearInterval, final long saveMaxTime ) {
-        ses.scheduleAtFixedRate( new Runnable(){
+        ses.scheduleAtFixedRate( new Runnable() {
             @Override
             public void run() {
                 clearCacheMap( timeMap );
@@ -47,14 +49,14 @@ public abstract class VaildSecurityUtils {
                     }
                 }
             }
-        }, 0, clearInterval, TimeUnit.SECONDS);
+        }, 0, clearInterval, TimeUnit.SECONDS );
     }
 
     /**
      * 定时清除
      */
     static {
-        ScheduledExecutorService ses = new ScheduledThreadPoolExecutor(1);
+        ScheduledExecutorService ses = new ScheduledThreadPoolExecutor( 1 );
         runTime( ses, validCacheMap, CACHE_CLEAR_INTERVAL, THIRTY_MINUTE );
         runTime( ses, codeCacheMap, CACHE_CLEAR_INTERVAL, THIRTY_MINUTE );
         runTime( ses, phoneMinTimeCacheMap, CACHE_CLEAR_INTERVAL, ONE_MINUTE );
@@ -92,7 +94,7 @@ public abstract class VaildSecurityUtils {
      */
     public static boolean checkValid( String str ) {
         Long time = validCacheMap.get( str );
-        if ( time != null && System.currentTimeMillis() - time < THIRTY_MINUTE ){
+        if ( time != null && System.currentTimeMillis() - time < THIRTY_MINUTE ) {
             return true;
         }
         return false;
@@ -143,6 +145,12 @@ public abstract class VaildSecurityUtils {
         }
         String random_str = new String( str );
         return random_str;
+    }
+
+    public static String getAccountEncryptionCode( String phone, String valid ) {
+        StringBuilder sb = new StringBuilder( phone );
+        sb.append( valid );
+        return DigestUtils.md5DigestAsHex( sb.toString().getBytes() );
     }
 
 }

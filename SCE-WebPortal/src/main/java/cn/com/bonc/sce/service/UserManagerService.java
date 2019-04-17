@@ -4,6 +4,10 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserManagerDao;
 import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.tool.VaildSecurityUtils;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,8 +53,16 @@ public class UserManagerService {
         return userManagerDao.getInstitutions(id,institutionName,loginPermissionStatus);
     }
 
-    public RestRecord register(String json) {
-        return userManagerDao.register(json);
+    public RestRecord register( String json ) {
+        JSONObject jsonObj = JSONUtil.parseObj( json );
+        String valid = ( String ) jsonObj.get( "valid" );
+        String phone = ( String ) jsonObj.get( "phoneNumber" );
+        String encryptionCode = VaildSecurityUtils.getAccountEncryptionCode( phone, valid );
+        if ( !VaildSecurityUtils.checkValid( encryptionCode ) ) {
+            return new RestRecord( 411, WebMessageConstants.SCE_PORTAL_MSG_411 );
+        }
+        VaildSecurityUtils.delValid( encryptionCode );
+        return userManagerDao.register( json );
     }
 
     public RestRecord getPhone(String loginName) {
@@ -61,8 +73,13 @@ public class UserManagerService {
         return userManagerDao.updatePwdByName(loginName,password);
     }
 
-    public RestRecord testCertificcate(String loginName, String certificate) {
-        return userManagerDao.testCertificate(loginName,certificate);
+    public RestRecord testCertificcate( String valid, String phoneNumber, String loginName, String certificate ) {
+        String encryptionCode = VaildSecurityUtils.getAccountEncryptionCode( phoneNumber, valid );
+        if ( !VaildSecurityUtils.checkValid( encryptionCode ) ) {
+            return new RestRecord( 411, WebMessageConstants.SCE_PORTAL_MSG_411 );
+        }
+        VaildSecurityUtils.delValid( encryptionCode );
+        return userManagerDao.testCertificate( loginName, certificate );
     }
 
     public RestRecord getTeachers(long organizationId, String userName, String loginName, String gender, String position, String accountStatus, Integer pageNum, Integer pageSize) {

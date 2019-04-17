@@ -138,12 +138,14 @@ public class UserManagerController {
         return userManagerService.updatePwdByName(loginName,password);
     }
 
-    @ApiOperation(value = "通过用户名和输入的身份证信息在后台验证", notes="验证身份证信息是否正确", httpMethod = "GET")
-    @GetMapping("/testCertificate")
+    @ApiOperation( value = "通过用户名和输入的身份证信息在后台验证", notes = "验证身份证信息是否正确", httpMethod = "GET" )
+    @GetMapping( "/testCertificate" )
     @ResponseBody
-    public RestRecord testCertificate(@RequestParam( "loginName" ) String loginName,
-                                      @RequestParam("certificate") String certificate){
-        return userManagerService.testCertificcate(loginName,certificate);
+    public RestRecord testCertificate( @RequestParam( "valid" ) String valid,
+                                       @RequestParam( "phoneNumber" ) String phoneNumber,
+                                       @RequestParam( "loginName" ) String loginName,
+                                       @RequestParam( "certificate" ) String certificate ) {
+        return userManagerService.testCertificcate( valid, phoneNumber, loginName, certificate );
     }
 
     @ApiOperation(value = "获取在职教师列表", notes="获取查询条件，返回在职教师列表", httpMethod = "GET")
