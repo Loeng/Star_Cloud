@@ -76,6 +76,23 @@ public class UserOperationController {
         return userOperationService.updateUserInfoById( userInfo, userId );
     }
 
+    @ApiOperation( value = "代理商用户信息更改接口", notes = "根据用户Id更改代理商用户信息", httpMethod = "PUT" )
+    @PutMapping( "/updateUserInfoAndAgent" )
+    @ResponseBody
+    public RestRecord updateUserInfoAndAgent(
+            @RequestBody Map< String, Object > userInfo,
+            @RequestParam( "userId" ) String userId ) {
+        return userOperationService.updateUserInfoAndAgent( userInfo, userId );
+    }
+
+    @ApiOperation( value = "通过用户id获取代理商用户信息接口", notes = "通过用户id获取代理商用户信息", httpMethod = "GET" )
+    @GetMapping( "/getUserAndAgentInfoByUserId/{userId}" )
+    @ResponseBody
+    public RestRecord getUserAndAgentInfoByUserId( @PathVariable( "userId" ) String userId ) {
+
+        return userOperationService.getUserAndAgentInfoByUserId( userId );
+    }
+
     /**
      * 用户信息删除接口
      *
@@ -123,10 +140,10 @@ public class UserOperationController {
     }
 
     @ApiOperation( value = "查询审核状态接口", notes = "查询审核状态", httpMethod = "GET" )
-    @GetMapping( "/getAuditStatusByEntityId/{id}/{roleId}" )
+    @GetMapping( "/getAuditStatusByEntityId/{userId}" )
     @ResponseBody
-    public RestRecord getAuditStatusByEntityId( @PathVariable( "id" ) String id,@PathVariable( "roleId" ) Integer roleId  ) {
+    public RestRecord getAuditStatusByEntityId( @PathVariable( "userId" ) String userId ) {
 
-        return userOperationService.getAuditStatusByEntityId( id ,roleId);
+        return userOperationService.getAuditStatusByEntityId( userId);
     }
 }
