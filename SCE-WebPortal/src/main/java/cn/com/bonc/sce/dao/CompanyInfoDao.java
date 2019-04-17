@@ -25,7 +25,7 @@ public interface CompanyInfoDao {
 
     @RequestMapping( value = "/company/{companyId}",method = RequestMethod.GET )
     RestRecord getCompanyByCompanyId(
-            @PathVariable( "companyId" ) String companyId );
+            @PathVariable( "companyId" ) Long companyId );
 
     @RequestMapping( value = "/company", method = RequestMethod.POST )
     public RestRecord addCompanyInfo(

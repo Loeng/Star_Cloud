@@ -62,7 +62,7 @@ public class CompanyInfoController {
     @GetMapping( "/{companyId}" )
     @ResponseBody
     public RestRecord getCompanyByCompanyId(
-            @PathVariable( value = "companyId" ) @ApiParam( value = "厂商Id" ) String companyId ) {
+            @PathVariable( value = "companyId" ) @ApiParam( value = "厂商Id" , required = true) Long companyId ) {
         return companyInfoService.getCompanyByCompanyId( companyId );
     }
 

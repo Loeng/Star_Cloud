@@ -31,7 +31,7 @@ public interface InstitutionDao {
     RestRecord updateInstitutionById(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution);
 
     @RequestMapping(value = "/institution/{id}", method = RequestMethod.GET)
-    RestRecord getInstitutionById(@PathVariable("id") String id);
+    RestRecord getInstitutionById(@PathVariable("id") Long id);
 
     @RequestMapping( value = "/institution/updateInstitutionInfo", method = RequestMethod.PUT )
     RestRecord updateInstitutionInfo(@RequestBody @ApiParam( "教育局信息对象" ) Institution institution);

@@ -2,14 +2,19 @@ package cn.com.bonc.sce.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.Date;
 
 /**
  * @author BTW
  */
+@Data
 @ApiModel( value = "Agent", description = "代理对象" )
 public class AgentModel {
+
+    @ApiModelProperty( name = "代理商ID", hidden = true )
+    private Long id;
 
     @ApiModelProperty( name = "代理名称" )
     private String agentName;
@@ -44,92 +49,24 @@ public class AgentModel {
     @ApiModelProperty( name = "代理简介" )
     private String agentIntroduction;
 
-    public String getAgentName() {
-        return agentName;
-    }
+    @ApiModelProperty( name = "邮编" )
+    private String postcode;
 
-    public void setAgentName( String agentName ) {
-        this.agentName = agentName;
-    }
+    @ApiModelProperty( name = "公司性质" )
+    private String property;
 
-    public String getGrade() {
-        return grade;
-    }
+    @ApiModelProperty( name = "组织机构码" )
+    private String institutionCode;
 
-    public void setGrade( String grade ) {
-        this.grade = grade;
-    }
+    @ApiModelProperty( name = "联系电话" )
+    private String phone;
 
-    public String getAgentArea() {
-        return agentArea;
-    }
+    @ApiModelProperty( name = "省" )
+    private String province;
 
-    public void setAgentArea( String agentArea ) {
-        this.agentArea = agentArea;
-    }
+    @ApiModelProperty( name = "市" )
+    private String city;
 
-    public String getAgentAddress() {
-        return agentAddress;
-    }
-
-    public void setAgentAddress( String agentAddress ) {
-        this.agentAddress = agentAddress;
-    }
-
-    public String getAgentTaxNum() {
-        return agentTaxNum;
-    }
-
-    public void setAgentTaxNum( String agentTaxNum ) {
-        this.agentTaxNum = agentTaxNum;
-    }
-
-    public String getJuridicalPerson() {
-        return juridicalPerson;
-    }
-
-    public void setJuridicalPerson( String juridicalPerson ) {
-        this.juridicalPerson = juridicalPerson;
-    }
-
-    public String getAgentWebsite() {
-        return agentWebsite;
-    }
-
-    public void setAgentWebsite( String agentWebsite ) {
-        this.agentWebsite = agentWebsite;
-    }
-
-    public String getAgentRegistationId() {
-        return agentRegistationId;
-    }
-
-    public void setAgentRegistationId( String agentRegistationId ) {
-        this.agentRegistationId = agentRegistationId;
-    }
-
-    public String getAgentEmail() {
-        return agentEmail;
-    }
-
-    public void setAgentEmail( String agentEmail ) {
-        this.agentEmail = agentEmail;
-    }
-
-    public Date getEstablishingTime() {
-        return establishingTime;
-    }
-
-    public void setEstablishingTime( Date establishingTime ) {
-        this.establishingTime = establishingTime;
-    }
-
-    public String getAgentIntroduction() {
-        return agentIntroduction;
-    }
-
-    public void setAgentIntroduction( String agentIntroduction ) {
-        this.agentIntroduction = agentIntroduction;
-    }
-
+    @ApiModelProperty( name = "区" )
+    private String area;
 }

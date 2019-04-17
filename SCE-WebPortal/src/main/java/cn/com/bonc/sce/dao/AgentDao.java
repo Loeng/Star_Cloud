@@ -2,6 +2,7 @@ package cn.com.bonc.sce.dao;
 
 import cn.com.bonc.sce.model.AgentModel;
 import cn.com.bonc.sce.rest.RestRecord;
+import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,18 @@ public interface AgentDao {
     @RequestMapping( value = "/agent", method = RequestMethod.POST )
     public RestRecord saveAgentInfo(
             @RequestBody AgentModel agentModel );
+
+    @RequestMapping( value = "/agent/addAgent/{roleId}", method = RequestMethod.POST )
+    RestRecord addAgent(@RequestBody AgentModel agent,@RequestParam( "userId" ) String userId,@PathVariable( "roleId" ) Integer roleId );
+
+    @RequestMapping( value = "/agent/updateAgentById", method = RequestMethod.PUT )
+    RestRecord updateAgentById(@RequestBody AgentModel agent );
+
+    @RequestMapping( value = "/agent/{id}",method = RequestMethod.GET )
+    RestRecord getAgentById(@PathVariable( "id" ) String id );
+
+    @RequestMapping( value = "/agent/updateAgent", method = RequestMethod.PUT )
+    RestRecord updateAgent(@RequestBody @ApiParam( "厂商信息对象" ) AgentModel agent);
 
     /**
      * 查询所有代理用户信息

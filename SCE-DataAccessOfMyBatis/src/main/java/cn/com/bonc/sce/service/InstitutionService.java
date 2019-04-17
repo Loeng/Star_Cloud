@@ -84,7 +84,7 @@ public class InstitutionService {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200,status);
     }
 
-    public Institution getInstitutionById(String id){
+    public Institution getInstitutionById(Long id){
         return institutionDao.getInstitutionById(id);
     }
 

@@ -29,7 +29,7 @@ public interface InstitutionMapper {
 
     int updateInstitutionById(Institution institution);
 
-    Institution getInstitutionById(@Param("id") String id);
+    Institution getInstitutionById(@Param("id") Long id);
 
     int updateInstitutionInfo(Institution institution);
 

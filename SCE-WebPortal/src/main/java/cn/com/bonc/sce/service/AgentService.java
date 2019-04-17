@@ -19,6 +19,22 @@ public class AgentService {
         return agentDao.saveAgentInfo( agentModel );
     }
 
+    public RestRecord addAgent( AgentModel agent,String userId,Integer roleId ) {
+        return agentDao.addAgent( agent,userId,roleId );
+    }
+
+    public RestRecord updateAgentById(AgentModel agent ) {
+        return agentDao.updateAgentById(agent );
+    }
+
+    public RestRecord getAgentById( String id ) {
+        return agentDao.getAgentById( id );
+    }
+
+    public RestRecord updateAgent(AgentModel agent){
+        return agentDao.updateAgent(agent);
+    }
+
     public RestRecord getAllAgentUserInfo( Integer pageNum, Integer pageSize ) {
         return agentDao.getAllAgentUserInfo( pageNum, pageSize );
     }

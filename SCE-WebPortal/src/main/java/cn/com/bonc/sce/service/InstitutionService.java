@@ -44,7 +44,7 @@ public class InstitutionService {
         return institutionDao.updateInstitutionById(institution);
     }
 
-    public RestRecord getInstitutionById(String id){
+    public RestRecord getInstitutionById(Long id){
         return institutionDao.getInstitutionById(id);
     }
 

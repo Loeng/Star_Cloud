@@ -165,11 +165,11 @@ public class CompanyInfoApiController {
         }
     }
 
-    @ApiOperation( value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST" )
+    @ApiOperation(value = "新增代理商信息接口", notes = "新增代理商信息", httpMethod = "POST" )
     @PostMapping("/addCompany/{roleId}")
     @ResponseBody
     public RestRecord addCompany(
-            @RequestBody @ApiParam( name = "company", value = "厂商信息对象", required = true )
+            @RequestBody @ApiParam( name = "company", value = "代理商信息对象", required = true )
                     CompanyInfo company,@RequestParam("userId") String userId, @PathVariable("roleId") Integer roleId ) {
         return companyService.addCompany(company, userId, roleId);
     }

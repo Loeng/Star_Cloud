@@ -9,8 +9,11 @@ import cn.com.bonc.sce.entity.UserPassword;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.repository.AgentRepository;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.AgentService;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -50,6 +53,9 @@ public class AgentApiController {
         this.agentRepository = agentRepository;
     }
 
+    @Autowired
+    private AgentService agentService;
+
     /**
      * 添加单个代理信息
      *
@@ -66,7 +72,7 @@ public class AgentApiController {
             //创建“管理员账号”
             String userId = UUID.getUUID();
             userInfoRepository.insertUser( userId, IDUtil.createID( "dl_" ), "", "", 6, "", 0, "", "",
-                    "", new Date(), saveAgentInfo.getAgentId(), "代理管理员", Secret.ES256GenerateSecret() );
+                    "", new Date(), saveAgentInfo.getId(), "代理管理员", Secret.ES256GenerateSecret() );
             //创建密码
             UserPassword password = new UserPassword();
             password.setIsDelete( 1 );
@@ -79,6 +85,45 @@ public class AgentApiController {
         } catch ( Exception e ) {
             return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_423 );
         }
+    }
+
+    @ApiOperation( value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST" )
+    @PostMapping("/addAgent/{roleId}")
+    @ResponseBody
+    public RestRecord addAgent(
+            @RequestBody @ApiParam( name = "company", value = "厂商信息对象", required = true )
+                    Agent agent,@RequestParam("userId") String userId, @PathVariable("roleId") Integer roleId ) {
+        return agentService.addAgent(agent, userId, roleId);
+    }
+
+    @ApiOperation( value = "通过代理商ID修改代理商信息接口", notes = "通过代理商ID修改代理商信息", httpMethod = "PUT" )
+    @PutMapping( "/updateAgentById" )
+    @ResponseBody
+    public RestRecord updateAgentById(
+            @RequestBody @ApiParam( name = "agent", value = "代理商信息对象", required = true )
+                    Agent agent ) {
+        return agentService.updateAgentById(agent);
+    }
+
+    @ApiOperation( value = "通过代理商ID获取代理商信息接口", notes = "通过代理商ID获取代理商信息", httpMethod = "GET" )
+    @GetMapping( "/{id}" )
+    @ResponseBody
+    public RestRecord getAgentById(
+            @PathVariable( value = "id" ) @ApiParam( value = "代理商Id" ) Long id ) {
+
+        Agent agent =  agentService.getAgentById( id );
+        if (agent == null) {
+            return new RestRecord(112, WebMessageConstants.SCE_PORTAL_MSG_112, id);
+        } else {
+            return new RestRecord(200, MessageConstants.SCE_MSG_0200, agent);
+        }
+    }
+
+    @ApiOperation(value = "变更或驳回提交代理商信息接口",notes = "变更或驳回提交代理商信息",httpMethod = "PUT")
+    @PutMapping( "/updateAgent" )
+    @ResponseBody
+    public RestRecord updateAgent(@RequestBody @ApiParam( "代理商信息对象" ) Agent agent) {
+        return agentService.updateAgent(agent);
     }
 
 

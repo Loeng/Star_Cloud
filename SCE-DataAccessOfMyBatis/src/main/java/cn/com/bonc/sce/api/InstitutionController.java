@@ -107,7 +107,7 @@ public class InstitutionController {
     @ApiOperation(value = "通过教育局ID获取教育局信息接口", notes = "通过教育局ID获取教育局信息", httpMethod = "GET")
     @GetMapping("/{id}")
     @ResponseBody
-    public RestRecord getInstitutionById(@PathVariable("id") String id) {
+    public RestRecord getInstitutionById(@PathVariable("id") Long id) {
         Institution user = institutionService.getInstitutionById(id);
         if (user == null) {
             return new RestRecord(1010, MessageConstants.SCE_MSG_1010, id);

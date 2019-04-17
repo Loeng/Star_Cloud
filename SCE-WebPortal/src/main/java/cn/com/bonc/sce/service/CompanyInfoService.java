@@ -25,7 +25,7 @@ public class CompanyInfoService {
         return companyInfoDao.queryOneCompanyInfo( companyId );
     }
 
-    public RestRecord getCompanyByCompanyId( String companyId ) {
+    public RestRecord getCompanyByCompanyId( Long companyId ) {
         return companyInfoDao.getCompanyByCompanyId( companyId );
     }
 
