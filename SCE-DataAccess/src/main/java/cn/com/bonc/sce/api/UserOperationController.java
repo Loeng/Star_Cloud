@@ -238,12 +238,12 @@ public class UserOperationController {
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
     }
 
-    @GetMapping("/getUserAndAgentInfoByUserId" )
+    @GetMapping("/getUserAndAgentInfoByUserId/{userId}" )
     @ResponseBody
     public RestRecord getUserAndAgentInfoByUserId(
             @PathVariable( "userId" ) String userId ) {
         Map<String,Object> map = userInfoRepository.getUserAndAgentInfoByUserId( userId );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,map );
     }
 
 

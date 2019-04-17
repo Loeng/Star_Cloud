@@ -209,9 +209,9 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_INFO_AGENT SET PROVINCE = ?2,CITY = ?3,AREA = ?4 WHERE USER_ID = ?1 ", nativeQuery = true)
     int updateAgentInfo( String userId,String province,String city,String area);
 
-    @Query( value = "SELECT u.HEAD_PORTRAIT as headPortrait,u.LOGIN_NAME as loginName,u.USER_TYPE as userType,u.USER_NAME as userName " +
-            "u.GENDER as gender,u.BIRTHDATE as birthDate,u.ADDRESS as address, " +
-            "FROM STARCLOUDPORTAL.SCE_COMMON_USER u LEFT JOIN   WHERE USER_ID = ?1", nativeQuery = true )
+    @Query( value = "SELECT u.HEAD_PORTRAIT as headPortrait,u.LOGIN_NAME as loginName,u.USER_TYPE as userType,u.USER_NAME as userName, " +
+            "u.GENDER as gender,u.BIRTHDATE as birthDate,u.ADDRESS as address,a.PROVINCE as province,a.CITY as city,a.AREA as area " +
+            "FROM STARCLOUDPORTAL.SCE_COMMON_USER u LEFT JOIN STARCLOUDPORTAL.SCE_INFO_AGENT a ON u.USER_ID = a.USER_ID WHERE u.USER_ID = ?1", nativeQuery = true )
     Map< String, Object > getUserAndAgentInfoByUserId( String userId );
 
 
