@@ -4,11 +4,11 @@
 
     <insert id="saveUser" parameterType="cn.com.bonc.sce.bean.UserBean">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
-            (USER_ID,SECRET,LOGIN_NAME,USER_TYPE,IS_DELETE,ORGANIZATION_ID,PHONE_NUMBER,USER_NAME,ACCOUNT_STATUS,SECRET)
+            (USER_ID,SECRET,LOGIN_NAME,USER_TYPE,IS_DELETE,ORGANIZATION_ID,PHONE_NUMBER,USER_NAME,ACCOUNT_STATUS)
         VALUES
             (#{userId,jdbcType=BIGINT},#{secret,jdbcType=VARCHAR},#{loginName,jdbcType=VARCHAR},
             #{userType,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{organizationId,jdbcType=INTEGER},
-            #{phoneNumber,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},#{accountStatus,jdbcType=INTEGER},#{secret,jdbcType=VARCHAR})
+            #{phoneNumber,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},#{accountStatus,jdbcType=INTEGER})
     </insert>
 
     <insert id="saveAccount" parameterType="cn.com.bonc.sce.bean.AccountBean">
