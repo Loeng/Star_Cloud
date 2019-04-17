@@ -223,7 +223,7 @@ public class UserDao {
     @Transactional( propagation = Propagation.REQUIRED )
     public void updateOrganizationIdByTransferId(String transferId){
         Map map = userMapper.selectUserIdAndOrganizationIdByTransferId(transferId);
-        userMapper.updateOrganizationId(map.get("ORGANIZATION_ID").toString(), map.get("USER_ID").toString());
+        userMapper.updateOrganizationId(Integer.parseInt(map.get("ORGANIZATION_ID").toString()), map.get("USER_ID").toString());
     }
 
     @Transactional( propagation = Propagation.REQUIRED )
@@ -248,7 +248,7 @@ public class UserDao {
         return userMapper.delPassword(id);
     }
 
-    public int updateOrganizationIdByUserId(String organizationId,String userId){
+    public int updateOrganizationIdByUserId(long organizationId,String userId){
         return userMapper.updateOrganizationId(organizationId,userId);
     }
 

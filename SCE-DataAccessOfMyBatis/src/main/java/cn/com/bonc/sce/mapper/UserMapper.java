@@ -176,7 +176,7 @@ public interface UserMapper {
 
     int delPassword(@Param("id") String id);
 
-    int updateOrganizationId(@Param("organizationId") String organizationId,@Param("userId") String userId);
+    int updateOrganizationId(@Param("organizationId") long organizationId,@Param("userId") String userId);
 
     int saveUserAudit(UserAuditBean userAudit);
 
