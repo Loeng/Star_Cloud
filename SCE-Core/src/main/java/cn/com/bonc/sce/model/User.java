@@ -45,6 +45,7 @@ public class User {
     private int isFirstLogin;
     private Integer isAdministrators;
     private Integer accountStatus;
+    private int auditStatus;
     private Map<String,String> userDetailedInfo;
 
     public String getUserId() {

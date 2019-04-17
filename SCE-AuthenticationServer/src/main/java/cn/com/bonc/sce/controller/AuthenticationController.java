@@ -121,7 +121,7 @@ public class AuthenticationController {
         }
 
         //获取用户的认证状态
-        int auditStatus = userService.getAuditStatus( authenticatedUser.getUserId() );
+        authenticatedUser.setAuditStatus( userService.getAuditStatus( authenticatedUser.getUserId() ) );
 
         /*
          * 3. 生成登录信息

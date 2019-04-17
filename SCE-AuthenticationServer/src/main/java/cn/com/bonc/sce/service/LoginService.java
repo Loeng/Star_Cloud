@@ -59,8 +59,8 @@ public class LoginService {
         claims.put( "userId", authenticatedUser.getUserId() );
         claims.put( "loginId", authenticatedUser.getLoginName() );
         claims.put( "userType", authenticatedUser.getUserType() );
-        claims.put( "isAdmin", authenticatedUser.getIsAdministrators() );
-        claims.put( "auditStatus", 0 );
+        claims.put( "isAdmin", authenticatedUser.getIsAdministrators() == null ? 0 : authenticatedUser.getIsAdministrators() );
+        claims.put( "auditStatus", authenticatedUser.getAuditStatus() );
         // 签发人
         claims.put( "iss", "SCE-SSO" );
         // 受众
