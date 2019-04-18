@@ -132,7 +132,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param certificateNumber
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
+    @Query( nativeQuery = true, value = "SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND CERTIFICATE_TYPE = 1")
     String selectUserIdByCertificateNumber(String certificateNumber);
 
     /**

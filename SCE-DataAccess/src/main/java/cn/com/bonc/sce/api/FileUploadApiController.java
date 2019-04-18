@@ -125,7 +125,10 @@ public class FileUploadApiController {
                     excelToUser = list.get(i);
                     if(excelToUser.getUserName() == null){
                         continue;
-                    }else if(excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null){
+                    }else if(excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null ||
+                            excelToUser.getNationLity() == null || excelToUser.getNationCode() == null || excelToUser.getTeachTime() == null ||
+                            excelToUser.getAcademicQualification() == null || excelToUser.getMailAddress() == null || excelToUser.getPosition() == null || excelToUser.getSchoolTime() == null ||
+                            excelToUser.getTeachRange() == null){
                         log.info("缺少必填项");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
@@ -137,7 +140,7 @@ public class FileUploadApiController {
                         log.info("教师手机号验证未通过");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( phonePrompt, "教师" ), i + EXCEL_NUMBER ));
                     }
-                    if( excelToUser.getMailAddress() != null && !UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
+                    if(!UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
                         log.info("教师邮箱验证未通过");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "教师" ), i + EXCEL_NUMBER ));
                     }
@@ -191,13 +194,9 @@ public class FileUploadApiController {
                     if(excelToUser.getUserName() == null){
                         continue;
                     }else if(excelToUser.getCertificateNumber() == null || excelToUser.getParentFamify() == null || excelToUser.getParentCertificationNumber() == null
-                    || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null || excelToUser.getParentTelephone() == null){
+                    || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null){
                         log.info("缺少必填项");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
-                    }
-                    if( excelToUser.getParentCertificationNumber() == null ){
-                        log.info("该学生没有家长身份证，无法关联家长信息");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "该学生没有家长身份证，无法关联家长信息", i + EXCEL_NUMBER ));
                     }
                     if(!UserPropertiesUtil.checkCertificateNumber(excelToUser.getCertificateNumber())){
                         log.info("学生身份证验证未通过");
@@ -258,6 +257,12 @@ public class FileUploadApiController {
                         parentPassword.setIsDelete( 1 );
                         parentPassword.setPassword( "star123!" );
                         parentPassword.setUserId( parentId );
+                        //新增家长时的必填项过滤
+                        if(excelToUser.getParentName() == null || excelToUser.getParentGender() == null || excelToUser.getParentNationLity() == null ||
+                            excelToUser.getParentNationCode() == null || excelToUser.getParentTelephone() == null || excelToUser.getParentEmail() == null){
+                            log.info("缺少必填项");
+                            throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
+                        }
                         fileResourceRepository.saveParent(parentId, excelToUser.getParentName(), excelToUser.getParentGender(), loginParentName, PARENT_CODE, excelToUser.getParentEmail(),
                                 CERTIFICATE_TYPE, excelToUser.getParentCertificationNumber(), excelToUser.getParentTelephone(),
                                 UserPropertiesUtil.getBirthDateByCer(excelToUser.getParentCertificationNumber()), secretParent, excelToUser.getParentNationLity(), excelToUser.getParentNationCode() );
