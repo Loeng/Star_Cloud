@@ -66,4 +66,11 @@ public class OrderDao {
                                               String ORDER_BY){
         return orderMapper.queryAllOrderByCondition(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY);
     }
+
+    public List<Map> queryOrderByUserId(String KEYWORD,
+                                        String ORDER_STATUS,
+                                        String ORDER_BY,
+                                        String USER_ID){
+        return orderMapper.queryOrderByUserId(KEYWORD, ORDER_STATUS, ORDER_BY, USER_ID);
+    }
 }
