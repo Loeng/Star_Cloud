@@ -69,6 +69,11 @@ public class UserManagerService {
         return restRecord;
     }
 
+    public RestRecord addUser( String json ) {
+        //登陆页的注册和后台用户管理的新增用户共用一个dao
+        return userManagerDao.register( json );
+    }
+
     public RestRecord getPhone( String loginName ) {
         return userManagerDao.getPhone( loginName );
     }
@@ -139,10 +144,10 @@ public class UserManagerService {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
         RestRecord restRecord = null;
-        if ( map.get( "studentUserName" ) == null || map.get( "studentBirthDate" ) == null || map.get( "studentNationality" ) == null || map.get( "studentVolk" ) == null) {
+        if ( map.get( "studentUserName" ) == null || map.get( "studentBirthDate" ) == null || map.get( "studentNationality" ) == null || map.get( "studentVolk" ) == null ) {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
-        if(map.get( "transferType" ).toString().equals("1")){
+        if ( map.get( "transferType" ).toString().equals( "1" ) ) {
             String bindType;
             try {
                 bindType = map.get( "bindType" ).toString();
@@ -151,7 +156,7 @@ public class UserManagerService {
             }
             if ( bindType.equals( "1" ) ) {
                 if ( map.get( "parentUserName" ) == null || map.get( "parentNationality" ) == null || map.get( "parentVolk" ) == null ||
-                        map.get( "parentPhoneNumber" ) == null || map.get( "parentCertificateType" ) == null || map.get( "parentCertificateNumber" ) == null || map.get( "relationship" ) == null) {
+                        map.get( "parentPhoneNumber" ) == null || map.get( "parentCertificateType" ) == null || map.get( "parentCertificateNumber" ) == null || map.get( "relationship" ) == null ) {
                     return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
                 }
             }
@@ -170,8 +175,8 @@ public class UserManagerService {
         return userManagerDao.getTransferStudent( userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId );
     }
 
-    public RestRecord repealApply(String userId, String transferId){
-        return userManagerDao.repealApply(userId, transferId);
+    public RestRecord repealApply( String userId, String transferId ) {
+        return userManagerDao.repealApply( userId, transferId );
     }
 
     public RestRecord reCall( String transferId ) {
@@ -214,10 +219,10 @@ public class UserManagerService {
         return userManagerDao.auditTeacher( userId, map );
     }
 
-    public RestRecord reCallTeacher(Map map){
-        if(map.get("transferId") == null){
-            return new RestRecord( 431, String.format(WebMessageConstants.SCE_PORTAL_MSG_431, "必需") );
+    public RestRecord reCallTeacher( Map map ) {
+        if ( map.get( "transferId" ) == null ) {
+            return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
-        return userManagerDao.reCallTeacher(map);
+        return userManagerDao.reCallTeacher( map );
     }
 }

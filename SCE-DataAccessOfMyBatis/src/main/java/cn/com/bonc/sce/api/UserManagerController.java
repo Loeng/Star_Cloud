@@ -45,8 +45,8 @@ public class UserManagerController {
 
     private static final String DEFAULT_PASSWORD = "star123!";
 
-    @ApiOperation(value = "删除用户", notes = "通过用户id，删除用户", httpMethod = "DELETE")
-    @DeleteMapping("/delUser")
+    @ApiOperation( value = "删除用户", notes = "通过用户id，删除用户", httpMethod = "DELETE" )
+    @DeleteMapping( "/delUser" )
     @ResponseBody
     public RestRecord delUser( @RequestParam( "id" ) String id ) {
         int count = userService.delUser( id );
@@ -137,7 +137,7 @@ public class UserManagerController {
     }
 
     @Transactional
-    @ApiOperation( value = "用户注册", notes = "用户注册", httpMethod = "POST" )
+    @ApiOperation( value = "用户注册（登陆页的注册和用户管理页的新增用户接口共用）", notes = "用户注册", httpMethod = "POST" )
     @PostMapping( "/register" )
     @ResponseBody
     public RestRecord register( @RequestBody @ApiParam( example = "{\"loginName\": \"测试张\",\"valid\": \"123456\",\"password\":\"password\",\"phoneNumber\": \"12345678901\",\"userType\": 1,\"userName\": \"测试张\"}" ) String json ) {
@@ -147,6 +147,9 @@ public class UserManagerController {
         String phoneNumber = ( String ) map.get( "phoneNumber" );
         Integer userType = Integer.parseInt( map.get( "userType" ).toString() );
         String userName = ( String ) map.get( "userName" );
+        Integer certificateType = Integer.parseInt( ( String ) map.get( "certificateType" ) );
+        String certificateNumber = ( String ) map.get( "certificateNumber" );
+
 
         UserBean user = new UserBean();
         Long userId = idWorker.nextId();
@@ -156,8 +159,16 @@ public class UserManagerController {
         user.setUserName( userName );
         user.setIsDelete( 1 );
         user.setUserId( userId );
-        user.setAccountStatus( 0 );
+
+        //如果没传身份证号，说明是登陆页注册，不用激活
+        if ( certificateNumber == null ) {
+            user.setAccountStatus( 1 );
+        } else {
+            user.setAccountStatus( 0 );
+        }
         user.setSecret( Secret.ES256GenerateSecret() );
+        user.setCertificateNumber( certificateNumber );
+        user.setCertificateType( certificateType );
 
         if ( userService.isExist( loginName ) > 0 ) {
             return new RestRecord( 1022, MessageConstants.SCE_MSG_1022 );
@@ -222,348 +233,350 @@ public class UserManagerController {
     @ApiOperation( value = "获取在职教师列表", notes = "获取查询条件，返回在职教师列表", httpMethod = "GET" )
     @GetMapping( "/getTeachers/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getTeachers(@RequestParam("organizationId") long organizationId,
-                                  @RequestParam(value = "userName", required = false) String userName,
-                                  @RequestParam(value = "loginName", required = false) String loginName,
-                                  @RequestParam(value = "gender", required = false) String gender,
-                                  @RequestParam(value = "position", required = false) String position,
-                                  @RequestParam(value = "accountStatus", required = false) String accountStatus,
-                                  @PathVariable(value = "pageNum") Integer pageNum,
-                                  @PathVariable(value = "pageSize") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Map> teachers = userService.getTeachers(organizationId, userName, loginName, gender, position, accountStatus);
-        PageInfo pageInfo = new PageInfo(teachers);
-        return new RestRecord(200, MessageConstants.SCE_MSG_0200, pageInfo);
+    public RestRecord getTeachers( @RequestParam( "organizationId" ) long organizationId,
+                                   @RequestParam( value = "userName", required = false ) String userName,
+                                   @RequestParam( value = "loginName", required = false ) String loginName,
+                                   @RequestParam( value = "gender", required = false ) String gender,
+                                   @RequestParam( value = "position", required = false ) String position,
+                                   @RequestParam( value = "accountStatus", required = false ) String accountStatus,
+                                   @PathVariable( value = "pageNum" ) Integer pageNum,
+                                   @PathVariable( value = "pageSize" ) Integer pageSize ) {
+        PageHelper.startPage( pageNum, pageSize );
+        List< Map > teachers = userService.getTeachers( organizationId, userName, loginName, gender, position, accountStatus );
+        PageInfo pageInfo = new PageInfo( teachers );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
 
-    @ApiOperation(value = "删除教师", notes = "通过用户id，删除用户", httpMethod = "DELETE")
-    @DeleteMapping("/delTeacher")
+    @ApiOperation( value = "删除教师", notes = "通过用户id，删除用户", httpMethod = "DELETE" )
+    @DeleteMapping( "/delTeacher" )
     @ResponseBody
     @Transactional
-    public RestRecord delTeacher(@RequestParam("id") String id) {
-        int count1 = userService.delUser(id);
-        int count2 = userService.delTeacher(id);
-        int count3 = userService.delPassword(id);
-        if (count1 == 1 && count2 == 1 && count3 == 1) {
-            return new RestRecord(200, MessageConstants.SCE_MSG_0200, 1);
+    public RestRecord delTeacher( @RequestParam( "id" ) String id ) {
+        int count1 = userService.delUser( id );
+        int count2 = userService.delTeacher( id );
+        int count3 = userService.delPassword( id );
+        if ( count1 == 1 && count2 == 1 && count3 == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, 1 );
         } else {
-            return new RestRecord(408, MessageConstants.SCE_MSG_408);
+            return new RestRecord( 408, MessageConstants.SCE_MSG_408 );
         }
     }
 
-    @ApiOperation(value = "通过教师id获取教师详细信息", notes = "通过教师id获取教师详细信息", httpMethod = "GET")
-    @GetMapping("/getTeacherInfo")
+    @ApiOperation( value = "通过教师id获取教师详细信息", notes = "通过教师id获取教师详细信息", httpMethod = "GET" )
+    @GetMapping( "/getTeacherInfo" )
     @ResponseBody
-    public RestRecord getTeacherInfo(@RequestParam("id") String id) {
-        return new RestRecord(200, MessageConstants.SCE_MSG_0200, userService.getTeacherInfo(id));
+    public RestRecord getTeacherInfo( @RequestParam( "id" ) String id ) {
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, userService.getTeacherInfo( id ) );
     }
 
-    @ApiOperation(value = "通过教师id修改教师详细信息", notes = "通过教师id修改教师详细信息", httpMethod = "PUT")
-    @PutMapping("/editTeacherInfo")
+    @ApiOperation( value = "通过教师id修改教师详细信息", notes = "通过教师id修改教师详细信息", httpMethod = "PUT" )
+    @PutMapping( "/editTeacherInfo" )
     @ResponseBody
     @Transactional
-    public RestRecord editTeacherInfo(@RequestBody String json) {
-        Map map = (Map) JSONUtils.parse(json);
-        String USER_ID = (String) map.get("USER_ID");
-        Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
-        String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
-        if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
-            log.info("教师身份证验证未通过");
-            return new RestRecord( 432, "身份证填写不正确");
+    public RestRecord editTeacherInfo( @RequestBody String json ) {
+        Map map = ( Map ) JSONUtils.parse( json );
+        String USER_ID = ( String ) map.get( "USER_ID" );
+        Integer CERTIFICATE_TYPE = ( Integer ) map.get( "CERTIFICATE_TYPE" );
+        String CERTIFICATE_NUMBER = ( String ) map.get( "CERTIFICATE_NUMBER" );
+        if ( CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber( CERTIFICATE_NUMBER ) ) {
+            log.info( "教师身份证验证未通过" );
+            return new RestRecord( 432, "身份证填写不正确" );
         }
-        String USER_NAME = (String) map.get("USER_NAME");
-        String GENDER = (String) map.get("GENDER");
-        String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
-        if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
-            log.info("教师身手机号验证未通过");
-            return new RestRecord( 432, "手机号填写不正确");
+        String USER_NAME = ( String ) map.get( "USER_NAME" );
+        String GENDER = ( String ) map.get( "GENDER" );
+        String PHONE_NUMBER = ( String ) map.get( "PHONE_NUMBER" );
+        if ( !UserPropertiesUtil.checkPhone( PHONE_NUMBER ) ) {
+            log.info( "教师身手机号验证未通过" );
+            return new RestRecord( 432, "手机号填写不正确" );
         }
-        String MAIL_ADDRESS = (String) map.get("MAIL_ADDRESS");
-        if(!UserPropertiesUtil.checkMail(MAIL_ADDRESS)){
-            log.info("教师身邮箱证未通过");
-            return new RestRecord( 432, "邮箱填写不正确");
+        String MAIL_ADDRESS = ( String ) map.get( "MAIL_ADDRESS" );
+        if ( !UserPropertiesUtil.checkMail( MAIL_ADDRESS ) ) {
+            log.info( "教师身邮箱证未通过" );
+            return new RestRecord( 432, "邮箱填写不正确" );
         }
-        String BIRTHDATE = (String) map.get("BIRTHDATE");
-        String NATION_CODE = (String) map.get("NATION_CODE");
-        String NATIONLITY = (String) map.get("NATIONLITY");
-        String ACADEMIC_QUALIFICATION = (String) map.get("ACADEMIC_QUALIFICATION");
-        String WORK_NUMBER = (String) map.get("WORK_NUMBER");
-        String SCHOOL_TIME = (String) map.get("SCHOOL_TIME");
-        String TEACH_TIME = (String) map.get("TEACH_TIME");
-        String POSITION = (String) map.get("POSITION");
-        Integer TEACH_RANGE = (Integer) map.get("TEACH_RANGE");
+        String BIRTHDATE = ( String ) map.get( "BIRTHDATE" );
+        String NATION_CODE = ( String ) map.get( "NATION_CODE" );
+        String NATIONLITY = ( String ) map.get( "NATIONLITY" );
+        String ACADEMIC_QUALIFICATION = ( String ) map.get( "ACADEMIC_QUALIFICATION" );
+        String WORK_NUMBER = ( String ) map.get( "WORK_NUMBER" );
+        String SCHOOL_TIME = ( String ) map.get( "SCHOOL_TIME" );
+        String TEACH_TIME = ( String ) map.get( "TEACH_TIME" );
+        String POSITION = ( String ) map.get( "POSITION" );
+        Integer TEACH_RANGE = ( Integer ) map.get( "TEACH_RANGE" );
 
-        int userEdit = userService.editUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, USER_NAME,
-                GENDER, PHONE_NUMBER, MAIL_ADDRESS, BIRTHDATE,NATION_CODE,NATIONLITY);
-        int teacherEdit = userService.editTeacher(USER_ID, ACADEMIC_QUALIFICATION,
-                WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE);
+        int userEdit = userService.editUser( USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, USER_NAME,
+                GENDER, PHONE_NUMBER, MAIL_ADDRESS, BIRTHDATE, NATION_CODE, NATIONLITY );
+        int teacherEdit = userService.editTeacher( USER_ID, ACADEMIC_QUALIFICATION,
+                WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE );
 
-        if (userEdit == 1 && teacherEdit == 1) {
-            return new RestRecord(200, MessageConstants.SCE_MSG_0200, 1);
+        if ( userEdit == 1 && teacherEdit == 1 ) {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, 1 );
         } else {
-            return new RestRecord(407, MessageConstants.SCE_MSG_407, 0);
+            return new RestRecord( 407, MessageConstants.SCE_MSG_407, 0 );
         }
     }
 
-    @ApiOperation(value = "添加教师", notes = "直接添加或者通过转入添加，通过前端传入的addType判断添加方式", httpMethod = "POST")
-    @PostMapping("/addTeacher")
+    @ApiOperation( value = "添加教师", notes = "直接添加或者通过转入添加，通过前端传入的addType判断添加方式", httpMethod = "POST" )
+    @PostMapping( "/addTeacher" )
     @ResponseBody
     @Transactional
-    public RestRecord addTeacher(@RequestBody String json, @CurrentUserId String userId) {
-        Map map = (Map) JSONUtils.parse(json);
-        Integer ADDTYPE = Integer.parseInt(map.get("ADDTYPE").toString());
-        if (ADDTYPE == 0) {//建新用户
+    public RestRecord addTeacher( @RequestBody String json, @CurrentUserId String userId ) {
+        Map map = ( Map ) JSONUtils.parse( json );
+        Integer ADDTYPE = Integer.parseInt( map.get( "ADDTYPE" ).toString() );
+        if ( ADDTYPE == 0 ) {//建新用户
             String USER_ID = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
-            String ORGANIZATION_ID = (String) map.get("ORGANIZATION_ID");
-            if(ORGANIZATION_ID == null){
+            String ORGANIZATION_ID = ( String ) map.get( "ORGANIZATION_ID" );
+            if ( ORGANIZATION_ID == null ) {
                 return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
             }
-            Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
-            String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
-            if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
-                log.info("教师身份证验证未通过");
-                return new RestRecord( 432, "身份证填写不正确");
+            Integer CERTIFICATE_TYPE = ( Integer ) map.get( "CERTIFICATE_TYPE" );
+            String CERTIFICATE_NUMBER = ( String ) map.get( "CERTIFICATE_NUMBER" );
+            if ( CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber( CERTIFICATE_NUMBER ) ) {
+                log.info( "教师身份证验证未通过" );
+                return new RestRecord( 432, "身份证填写不正确" );
             }
-            if(userService.selectCountByCertificateNumber(CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER) > 0){
-                return new RestRecord( 432, "身份证已被使用");
+            if ( userService.selectCountByCertificateNumber( CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER ) > 0 ) {
+                return new RestRecord( 432, "身份证已被使用" );
             }
-            String USER_NAME = (String) map.get("USER_NAME");
-            String GENDER = (String) map.get("GENDER");
-            String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
-            if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
-                log.info("教师身手机号验证未通过");
-                return new RestRecord( 432, "手机号填写不正确");
+            String USER_NAME = ( String ) map.get( "USER_NAME" );
+            String GENDER = ( String ) map.get( "GENDER" );
+            String PHONE_NUMBER = ( String ) map.get( "PHONE_NUMBER" );
+            if ( !UserPropertiesUtil.checkPhone( PHONE_NUMBER ) ) {
+                log.info( "教师身手机号验证未通过" );
+                return new RestRecord( 432, "手机号填写不正确" );
             }
-            if(userService.selectCountByPhoneNumber(PHONE_NUMBER) > 0){
-                return new RestRecord( 432, "手机号已被使用");
+            if ( userService.selectCountByPhoneNumber( PHONE_NUMBER ) > 0 ) {
+                return new RestRecord( 432, "手机号已被使用" );
             }
-            String MAIL_ADDRESS = (String) map.get("MAIL_ADDRESS");
-            if(!UserPropertiesUtil.checkMail(MAIL_ADDRESS)){
-                log.info("教师身邮箱证未通过");
-                return new RestRecord( 432, "邮箱填写不正确");
+            String MAIL_ADDRESS = ( String ) map.get( "MAIL_ADDRESS" );
+            if ( !UserPropertiesUtil.checkMail( MAIL_ADDRESS ) ) {
+                log.info( "教师身邮箱证未通过" );
+                return new RestRecord( 432, "邮箱填写不正确" );
             }
-            if(userService.selectCountByMailAddress(MAIL_ADDRESS) > 0){
-                return new RestRecord( 432, "邮箱已被使用");
+            if ( userService.selectCountByMailAddress( MAIL_ADDRESS ) > 0 ) {
+                return new RestRecord( 432, "邮箱已被使用" );
             }
-            String BIRTHDATE = (String) map.get("BIRTHDATE");
-            String NATION_CODE = (String) map.get("NATION_CODE");
-            String NATIONLITY = (String) map.get("NATIONLITY");
-            String ACADEMIC_QUALIFICATION = (String) map.get("ACADEMIC_QUALIFICATION");
-            String WORK_NUMBER = (String) map.get("WORK_NUMBER");
-            String SCHOOL_TIME = (String) map.get("SCHOOL_TIME");
-            String TEACH_TIME = (String) map.get("TEACH_TIME");
-            String POSITION = (String) map.get("POSITION");
-            Integer TEACH_RANGE = (Integer) map.get("TEACH_RANGE");
+            String BIRTHDATE = ( String ) map.get( "BIRTHDATE" );
+            String NATION_CODE = ( String ) map.get( "NATION_CODE" );
+            String NATIONLITY = ( String ) map.get( "NATIONLITY" );
+            String ACADEMIC_QUALIFICATION = ( String ) map.get( "ACADEMIC_QUALIFICATION" );
+            String WORK_NUMBER = ( String ) map.get( "WORK_NUMBER" );
+            String SCHOOL_TIME = ( String ) map.get( "SCHOOL_TIME" );
+            String TEACH_TIME = ( String ) map.get( "TEACH_TIME" );
+            String POSITION = ( String ) map.get( "POSITION" );
+            Integer TEACH_RANGE = ( Integer ) map.get( "TEACH_RANGE" );
             String secret = Secret.ES256GenerateSecret();
             String loginName = IDUtil.createID( "js_" );
-            int count1 = userService.addUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
-                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE,NATIONLITY,NATION_CODE, secret,"2", loginName);
-            int count2 = userService.addTeacher(USER_ID, ACADEMIC_QUALIFICATION,
-                    WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE);
-            userService.addPassword(idWorker.nextId(), USER_ID, DEFAULT_PASSWORD);
-            if (count1 == 1 && count2 == 1) {
-                return new RestRecord(200, MessageConstants.SCE_MSG_0200, 1);
+            int count1 = userService.addUser( USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
+                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE, NATIONLITY, NATION_CODE, secret, "2", loginName );
+            int count2 = userService.addTeacher( USER_ID, ACADEMIC_QUALIFICATION,
+                    WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE );
+            userService.addPassword( idWorker.nextId(), USER_ID, DEFAULT_PASSWORD );
+            if ( count1 == 1 && count2 == 1 ) {
+                return new RestRecord( 200, MessageConstants.SCE_MSG_0200, 1 );
             } else {
-                return new RestRecord(409, MessageConstants.SCE_MSG_409, 0);
+                return new RestRecord( 409, MessageConstants.SCE_MSG_409, 0 );
             }
         } else {//转入
-            Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
-            String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
-            String PHONE_NUMBER = (String) map.get("PHONE_NUMBER");
-            String APPLY_USER_ID = (String) map.get("APPLY_USER_ID");
-            String TEA_WORK_NUMBER = (String) map.get("WORK_NUMBER");
-            String TEA_ENTRANCE_YEAR = (String) map.get("SCHOOL_TIME");
-            if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
-                log.info("教师身份证验证未通过");
-                return new RestRecord( 432, "身份证填写不正确");
+            Integer CERTIFICATE_TYPE = ( Integer ) map.get( "CERTIFICATE_TYPE" );
+            String CERTIFICATE_NUMBER = ( String ) map.get( "CERTIFICATE_NUMBER" );
+            String PHONE_NUMBER = ( String ) map.get( "PHONE_NUMBER" );
+            String APPLY_USER_ID = ( String ) map.get( "APPLY_USER_ID" );
+            String TEA_WORK_NUMBER = ( String ) map.get( "WORK_NUMBER" );
+            String TEA_ENTRANCE_YEAR = ( String ) map.get( "SCHOOL_TIME" );
+            if ( CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber( CERTIFICATE_NUMBER ) ) {
+                log.info( "教师身份证验证未通过" );
+                return new RestRecord( 432, "身份证填写不正确" );
             }
-            Map userInfo = userService.selectUserIdAndOrganizationId(CERTIFICATE_NUMBER, CERTIFICATE_TYPE.toString(), "2");
-            if( userInfo == null ){
-                return new RestRecord( 432, "请输入已录入教师的证件号");
+            Map userInfo = userService.selectUserIdAndOrganizationId( CERTIFICATE_NUMBER, CERTIFICATE_TYPE.toString(), "2" );
+            if ( userInfo == null ) {
+                return new RestRecord( 432, "请输入已录入教师的证件号" );
             }
             Long ID = idWorker.nextId();
             //通过证件类型和证件号码查询用户ID
-            Map teacher = userService.getUserId(CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER);
-            String USER_ID = teacher.get("USER_ID").toString();
+            Map teacher = userService.getUserId( CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER );
+            String USER_ID = teacher.get( "USER_ID" ).toString();
             //检查该教师是否已是本校教师
-            String organizationId =  userService.getOrganizationIdByUserId(APPLY_USER_ID);
-            if(organizationId == null){
+            String organizationId = userService.getOrganizationIdByUserId( APPLY_USER_ID );
+            if ( organizationId == null ) {
                 return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
             }
-            if(userInfo.get("ORGANIZATION_ID").toString().equals(organizationId)){
+            if ( userInfo.get( "ORGANIZATION_ID" ).toString().equals( organizationId ) ) {
                 return new RestRecord( 434, "该教师已是本校教师，无需申请转入" );
             }
             //通过申请人查看组织id 并检查该教师是否已申请转入本学校
-            int count = userService.selectTransfer(USER_ID, organizationId);
-            if(count > 0){
-                return new RestRecord( 435, String.format(WebMessageConstants.SCE_PORTAL_MSG_435, "已提交转入申请"));
+            int count = userService.selectTransfer( USER_ID, organizationId );
+            if ( count > 0 ) {
+                return new RestRecord( 435, String.format( WebMessageConstants.SCE_PORTAL_MSG_435, "已提交转入申请" ) );
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+            SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM" );
             Date ENTRANCE_YEAR = null;
             try {
-                ENTRANCE_YEAR = format.parse(TEA_ENTRANCE_YEAR);
-            } catch (ParseException e) {
-                return new RestRecord(409, MessageConstants.SCE_MSG_409, 0);
+                ENTRANCE_YEAR = format.parse( TEA_ENTRANCE_YEAR );
+            } catch ( ParseException e ) {
+                return new RestRecord( 409, MessageConstants.SCE_MSG_409, 0 );
             }
-            String TEA_POSITION = (String) map.get("POSITION");
-            String TEACH_RANGE = map.get("TEACH_RANGE").toString();
-            String ORIGIN_SCHOOL_ID = teacher.get("ORGANIZATION_ID").toString();
-            String TARGET_SCHOOL_ID = (String) map.get("TARGET_SCHOOL_ID");
-            return new RestRecord(200, MessageConstants.SCE_MSG_0200,
-                    userService.transInto(ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE));
+            String TEA_POSITION = ( String ) map.get( "POSITION" );
+            String TEACH_RANGE = map.get( "TEACH_RANGE" ).toString();
+            String ORIGIN_SCHOOL_ID = teacher.get( "ORGANIZATION_ID" ).toString();
+            String TARGET_SCHOOL_ID = ( String ) map.get( "TARGET_SCHOOL_ID" );
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200,
+                    userService.transInto( ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE ) );
         }
 
     }
 
-    @ApiOperation(value = "获取转入转出教师列表", notes = "获取查询条件，返回教师列表", httpMethod = "GET")
-    @GetMapping("/getTransferTeachers/{pageNum}/{pageSize}")
+    @ApiOperation( value = "获取转入转出教师列表", notes = "获取查询条件，返回教师列表", httpMethod = "GET" )
+    @GetMapping( "/getTransferTeachers/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getTransferTeachers(@RequestParam(value = "getType") Integer getType, @RequestParam("organizationId") long organizationId,
-                                  @RequestParam(value = "userName", required = false) String userName,
-                                  @RequestParam(value = "loginName", required = false) String loginName,
-                                  @RequestParam(value = "gender", required = false) String gender,
-                                  @RequestParam(value = "position", required = false) String position,
-                                  @RequestParam(value = "accountStatus", required = false) Integer accountStatus,
-                                  @PathVariable(value = "pageNum") Integer pageNum,
-                                  @PathVariable(value = "pageSize") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Map> teachers = userService.getTransferTeachers(getType,organizationId, userName, loginName, gender, position, accountStatus);
-        PageInfo pageInfo = new PageInfo(teachers);
-        return new RestRecord(200, MessageConstants.SCE_MSG_0200, pageInfo);
+    public RestRecord getTransferTeachers( @RequestParam( value = "getType" ) Integer getType, @RequestParam( "organizationId" ) long organizationId,
+                                           @RequestParam( value = "userName", required = false ) String userName,
+                                           @RequestParam( value = "loginName", required = false ) String loginName,
+                                           @RequestParam( value = "gender", required = false ) String gender,
+                                           @RequestParam( value = "position", required = false ) String position,
+                                           @RequestParam( value = "accountStatus", required = false ) Integer accountStatus,
+                                           @PathVariable( value = "pageNum" ) Integer pageNum,
+                                           @PathVariable( value = "pageSize" ) Integer pageSize ) {
+        PageHelper.startPage( pageNum, pageSize );
+        List< Map > teachers = userService.getTransferTeachers( getType, organizationId, userName, loginName, gender, position, accountStatus );
+        PageInfo pageInfo = new PageInfo( teachers );
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
 
     @GetMapping( "/getStudents/{pageNum}/{pageSize}" )
-    public RestRecord getStudents(@RequestParam( value = "userName", required = false ) String userName,
-                                  @RequestParam( value = "loginName", required = false ) String loginName,
-                                  @RequestParam( value = "studentNumber", required = false ) String studentNumber,
-                                  @RequestParam( value = "gender", required = false ) String gender,
-                                  @RequestParam( value = "grade", required = false ) String grade,
-                                  @RequestParam( value = "accountStatus", required = false ) String accountStatus,
-                                  @PathVariable String pageNum,
-                                  @PathVariable String pageSize,
-                                  @CurrentUserId String userId){
-        return userService.getStudents(userName, loginName, studentNumber, gender, grade, accountStatus, userId, pageNum, pageSize);
+    public RestRecord getStudents( @RequestParam( value = "userName", required = false ) String userName,
+                                   @RequestParam( value = "loginName", required = false ) String loginName,
+                                   @RequestParam( value = "studentNumber", required = false ) String studentNumber,
+                                   @RequestParam( value = "gender", required = false ) String gender,
+                                   @RequestParam( value = "grade", required = false ) String grade,
+                                   @RequestParam( value = "accountStatus", required = false ) String accountStatus,
+                                   @PathVariable String pageNum,
+                                   @PathVariable String pageSize,
+                                   @CurrentUserId String userId ) {
+        return userService.getStudents( userName, loginName, studentNumber, gender, grade, accountStatus, userId, pageNum, pageSize );
     }
 
     @GetMapping( "/getStudentInfo/{userId}" )
-    public RestRecord getStudentInfo( @PathVariable("userId") String userId ){
-        return userService.getStudentInfo(userId);
+    public RestRecord getStudentInfo( @PathVariable( "userId" ) String userId ) {
+        return userService.getStudentInfo( userId );
     }
 
     @PutMapping( "/editStudent" )
-    public RestRecord editStudent(@RequestBody Map map){
-        return userService.editStudent(map);
+    public RestRecord editStudent( @RequestBody Map map ) {
+        return userService.editStudent( map );
     }
 
     @DeleteMapping( "delStudent" )
-    public RestRecord delStudent(@RequestParam String userId){
-        return userService.delStudent(userId);
+    public RestRecord delStudent( @RequestParam String userId ) {
+        return userService.delStudent( userId );
     }
 
     /**
-     *  根据参数添加学生
-     * @param map transferType 新建类型，1新建学生，2外校转入
-     *            bindType 绑定类型，1新建家长，2绑定现有家长
-     *            必须字段：studentCertificateType 学生证件类型，studentCertificateNumber 学生证件号，entranceYear 入学年月（格式YYYY-MM-dd）
-     *            grade 年级，classNumber 班级，seatNumber 座号，studentNumber 学号，studentUserName 学生姓名，studentBirthDate 学生生日
-     *            studentNationality 学生国籍，studentVolk 学生民族，parentCertificateType 家长证件类型，parentCertificateNumber 家长证件号
-     *            relationship 家长学生关系
-     *            新建家长的必需字段：parentUserName 家长姓名，parentNationality 家长国籍，parentVolk 家长民族，parentPhoneNumber 家长手机号
-     *            不必需字段：studentGender 学生性别，studentCode 学生学籍号，parentGender 家长性别，parentMailAddress 家长电子邮箱
+     * 根据参数添加学生
+     *
+     * @param map    transferType 新建类型，1新建学生，2外校转入
+     *               bindType 绑定类型，1新建家长，2绑定现有家长
+     *               必须字段：studentCertificateType 学生证件类型，studentCertificateNumber 学生证件号，entranceYear 入学年月（格式YYYY-MM-dd）
+     *               grade 年级，classNumber 班级，seatNumber 座号，studentNumber 学号，studentUserName 学生姓名，studentBirthDate 学生生日
+     *               studentNationality 学生国籍，studentVolk 学生民族，parentCertificateType 家长证件类型，parentCertificateNumber 家长证件号
+     *               relationship 家长学生关系
+     *               新建家长的必需字段：parentUserName 家长姓名，parentNationality 家长国籍，parentVolk 家长民族，parentPhoneNumber 家长手机号
+     *               不必需字段：studentGender 学生性别，studentCode 学生学籍号，parentGender 家长性别，parentMailAddress 家长电子邮箱
      * @param userId 当前用户id
      * @return RestRecord
      */
     @PostMapping( "/addStudent" )
     @Transactional( rollbackFor = Exception.class )
-    public RestRecord addStudent(@RequestBody Map map,
-                                 @CurrentUserId String userId){
-        String transferType = map.get("transferType").toString();
+    public RestRecord addStudent( @RequestBody Map map,
+                                  @CurrentUserId String userId ) {
+        String transferType = map.get( "transferType" ).toString();
         RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
-        if(transferType.equals("1")){
-            restRecord = userService.addStudent(map, userId);
-        }else if(transferType.equals("2")){
-            restRecord = userService.transferInStudent(map, userId);
+        if ( transferType.equals( "1" ) ) {
+            restRecord = userService.addStudent( map, userId );
+        } else if ( transferType.equals( "2" ) ) {
+            restRecord = userService.transferInStudent( map, userId );
         }
         return restRecord;
     }
 
-    @ApiOperation(value = "通过用户id修改教师从业信息", notes = "通过用户id修改教师从业信息", httpMethod = "PUT")
-    @PutMapping("/editTeacherPracticeInfo")
+    @ApiOperation( value = "通过用户id修改教师从业信息", notes = "通过用户id修改教师从业信息", httpMethod = "PUT" )
+    @PutMapping( "/editTeacherPracticeInfo" )
     @ResponseBody
-    public RestRecord editTeacherPracticeInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model) {
+    public RestRecord editTeacherPracticeInfo( @RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model ) {
 
         String USER_ID = model.getUserId(); //用户ID
         String TEACH_CERTIFICATION = model.getTeachCertification(); //教师资格证号
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
         Date TEACH_TIME;
         Date SCHOOL_TIME;
         try {
-            TEACH_TIME = sdf.parse(model.getSchoolAge());  //参加工作年月
-            SCHOOL_TIME = sdf.parse(model.getSchoolTime()); //来校年月
-        }catch (Exception e){
+            TEACH_TIME = sdf.parse( model.getSchoolAge() );  //参加工作年月
+            SCHOOL_TIME = sdf.parse( model.getSchoolTime() ); //来校年月
+        } catch ( Exception e ) {
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
         String JOB_PROFESSION = model.getJobProfession(); //岗位职业
-        Integer TEACH_RANGE = Integer.parseInt(model.getTeachRange()); //任课学段
+        Integer TEACH_RANGE = Integer.parseInt( model.getTeachRange() ); //任课学段
         String WORK_NUMBER = model.getWorkNumber(); //工号
 
-        int teacherEdit = userService.editTeacherPracticeInfo(USER_ID, TEACH_CERTIFICATION, TEACH_TIME, SCHOOL_TIME,
-                JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER);
+        int teacherEdit = userService.editTeacherPracticeInfo( USER_ID, TEACH_CERTIFICATION, TEACH_TIME, SCHOOL_TIME,
+                JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER );
 
-        return new RestRecord(200, MessageConstants.SCE_MSG_0200, teacherEdit);
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, teacherEdit );
     }
 
-    @GetMapping("/getParentInfo/{certificationType}/{certificationNumber}/{userType}")
-    public RestRecord getParentInfo(@PathVariable String certificationType, @PathVariable String certificationNumber, @PathVariable String userType){
-        return userService.getParentInfo(certificationType, certificationNumber, userType);
+    @GetMapping( "/getParentInfo/{certificationType}/{certificationNumber}/{userType}" )
+    public RestRecord getParentInfo( @PathVariable String certificationType, @PathVariable String certificationNumber, @PathVariable String userType ) {
+        return userService.getParentInfo( certificationType, certificationNumber, userType );
     }
 
     @GetMapping( "/getTransferStudent/{pageNum}/{pageSize}" )
-    public RestRecord getTransferStudent(@RequestParam( value = "userName", required = false ) String userName,
-                                         @RequestParam( value = "loginName", required = false ) String loginName,
-                                         @RequestParam( value = "studentNumber", required = false ) String studentNumber,
-                                         @RequestParam( value = "gender", required = false ) String gender,
-                                         @RequestParam( value = "grade", required = false ) String grade,
-                                         @RequestParam( value = "applyStatus", required = false ) String applyStatus,
-                                         @RequestParam( value = "transferType" ) String transferType,
-                                         @PathVariable String pageNum,
-                                         @PathVariable String pageSize,
-                                         @CurrentUserId String userId) {
-        return userService.getTransferStudent(userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId);
+    public RestRecord getTransferStudent( @RequestParam( value = "userName", required = false ) String userName,
+                                          @RequestParam( value = "loginName", required = false ) String loginName,
+                                          @RequestParam( value = "studentNumber", required = false ) String studentNumber,
+                                          @RequestParam( value = "gender", required = false ) String gender,
+                                          @RequestParam( value = "grade", required = false ) String grade,
+                                          @RequestParam( value = "applyStatus", required = false ) String applyStatus,
+                                          @RequestParam( value = "transferType" ) String transferType,
+                                          @PathVariable String pageNum,
+                                          @PathVariable String pageSize,
+                                          @CurrentUserId String userId ) {
+        return userService.getTransferStudent( userName, loginName, studentNumber, gender, grade, applyStatus, transferType, pageNum, pageSize, userId );
     }
 
-    @DeleteMapping("/repealApply/{transferId}")
-    public RestRecord repealApply(@CurrentUserId String userId,
-                                  @PathVariable String transferId){
-        return userService.repealApply(userId, transferId);
+    @DeleteMapping( "/repealApply/{transferId}" )
+    public RestRecord repealApply( @CurrentUserId String userId,
+                                   @PathVariable String transferId ) {
+        return userService.repealApply( userId, transferId );
     }
 
-    @PutMapping("/reCall/{transferId}")
-    public RestRecord reCall(@PathVariable String transferId){
-        return userService.reCall(transferId);
+    @PutMapping( "/reCall/{transferId}" )
+    public RestRecord reCall( @PathVariable String transferId ) {
+        return userService.reCall( transferId );
     }
 
-    @GetMapping("/getTransferOut/{transferId}")
-    public RestRecord getTransferOut(@PathVariable String transferId){
-        return userService.getTransferOut(transferId);
+    @GetMapping( "/getTransferOut/{transferId}" )
+    public RestRecord getTransferOut( @PathVariable String transferId ) {
+        return userService.getTransferOut( transferId );
     }
 
     /**
      * 学生转出申请的审核
+     *
      * @param userId 用户ID
-     * @param map 参数 applyStatus：1通过，2不通过；id：申请ID；rejectReason，不通过原因
+     * @param map    参数 applyStatus：1通过，2不通过；id：申请ID；rejectReason，不通过原因
      * @return RestRecord
      */
-    @PutMapping("/auditTransfer")
-    public RestRecord auditTransfer(@CurrentUserId String userId, @RequestBody Map map){
-        return userService.auditTransfer(userId, map);
+    @PutMapping( "/auditTransfer" )
+    public RestRecord auditTransfer( @CurrentUserId String userId, @RequestBody Map map ) {
+        return userService.auditTransfer( userId, map );
     }
 
-    @ApiOperation(value = "通过用户id获取教师从业信息接口", notes="通过用户id获取教师从业信息", httpMethod = "GET")
-    @GetMapping("/getTeacherInfoById/{userId}")
+    @ApiOperation( value = "通过用户id获取教师从业信息接口", notes = "通过用户id获取教师从业信息", httpMethod = "GET" )
+    @GetMapping( "/getTeacherInfoById/{userId}" )
     @ResponseBody
     public RestRecord getTeacherInfoById( @PathVariable( "userId" ) String userId ) {
-        TeacherInfoBean user = userService.getTeacherInfoById(userId);
+        TeacherInfoBean user = userService.getTeacherInfoById( userId );
         if ( user == null ) {
             return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
         } else {
@@ -571,37 +584,37 @@ public class UserManagerController {
         }
     }
 
-    @ApiOperation(value = "新增教师从业信息接口", notes = "新增教师从业信息", httpMethod = "POST")
-    @PostMapping("/addTeacherInfo")
+    @ApiOperation( value = "新增教师从业信息接口", notes = "新增教师从业信息", httpMethod = "POST" )
+    @PostMapping( "/addTeacherInfo" )
     @ResponseBody
-    public RestRecord addTeacherInfo(@RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model) {
+    public RestRecord addTeacherInfo( @RequestBody @ApiParam( "教师从业信息对象" ) InfoTeacherModel model ) {
 
         String USER_ID = model.getUserId(); //用户ID
         String TEACH_CERTIFICATION = model.getTeachCertification(); //教师资格证号
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
         Date TEACH_TIME;
         Date SCHOOL_TIME;
         try {
-            TEACH_TIME = sdf.parse(model.getSchoolAge());  //参加工作年月
-            SCHOOL_TIME = sdf.parse(model.getSchoolTime()); //来校年月
-        }catch (Exception e){
+            TEACH_TIME = sdf.parse( model.getSchoolAge() );  //参加工作年月
+            SCHOOL_TIME = sdf.parse( model.getSchoolTime() ); //来校年月
+        } catch ( Exception e ) {
             return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
         }
         String JOB_PROFESSION = model.getJobProfession(); //岗位职业
-        Integer TEACH_RANGE = Integer.parseInt(model.getTeachRange()); //任课学段
+        Integer TEACH_RANGE = Integer.parseInt( model.getTeachRange() ); //任课学段
         String WORK_NUMBER = model.getWorkNumber(); //工号
         Integer IS_DELETE = 1;
-        int teacherEdit = userService.addTeacherInfo(USER_ID, TEACH_CERTIFICATION, TEACH_TIME, SCHOOL_TIME,
-                JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER,IS_DELETE);
+        int teacherEdit = userService.addTeacherInfo( USER_ID, TEACH_CERTIFICATION, TEACH_TIME, SCHOOL_TIME,
+                JOB_PROFESSION, TEACH_RANGE, WORK_NUMBER, IS_DELETE );
 
-        return new RestRecord(200, MessageConstants.SCE_MSG_0200, teacherEdit);
+        return new RestRecord( 200, MessageConstants.SCE_MSG_0200, teacherEdit );
     }
 
-    @ApiOperation(value = "通过用户id获取用户信息接口", notes="通过用户id获取用户信息", httpMethod = "GET")
-    @GetMapping("/{userId}")
+    @ApiOperation( value = "通过用户id获取用户信息接口", notes = "通过用户id获取用户信息", httpMethod = "GET" )
+    @GetMapping( "/{userId}" )
     @ResponseBody
     public RestRecord getUserById( @PathVariable( "userId" ) String userId ) {
-        UserBean user = userService.getUserById(userId);
+        UserBean user = userService.getUserById( userId );
         if ( user == null ) {
             return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
         } else {
@@ -609,24 +622,25 @@ public class UserManagerController {
         }
     }
 
-    @GetMapping("/getTransferTeacherInfo/{transferId}")
-    public RestRecord getTransferTeacherInfo(@PathVariable String transferId){
-        return userService.getTransferTeacherInfo(transferId);
+    @GetMapping( "/getTransferTeacherInfo/{transferId}" )
+    public RestRecord getTransferTeacherInfo( @PathVariable String transferId ) {
+        return userService.getTransferTeacherInfo( transferId );
     }
 
     /**
      * 教师转出申请的审核
+     *
      * @param userId 用户ID
-     * @param map 参数 applyStatus：1通过，2不通过；id：申请ID；rejectReason，不通过原因
+     * @param map    参数 applyStatus：1通过，2不通过；id：申请ID；rejectReason，不通过原因
      * @return RestRecord
      */
-    @PutMapping("/auditTeacher")
-    public RestRecord auditTeacher(@CurrentUserId String userId, @RequestBody Map map){
-        return userService.auditTeacher(userId, map);
+    @PutMapping( "/auditTeacher" )
+    public RestRecord auditTeacher( @CurrentUserId String userId, @RequestBody Map map ) {
+        return userService.auditTeacher( userId, map );
     }
 
-    @PutMapping("/reCallTeacher")
-    public RestRecord reCallTeacher(@RequestBody Map map){
-        return userService.reCallTeacher(map);
+    @PutMapping( "/reCallTeacher" )
+    public RestRecord reCallTeacher( @RequestBody Map map ) {
+        return userService.reCallTeacher( map );
     }
 }

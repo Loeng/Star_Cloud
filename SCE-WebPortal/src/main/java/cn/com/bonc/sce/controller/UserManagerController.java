@@ -116,11 +116,18 @@ public class UserManagerController {
         }
     }
 
-    @ApiOperation(value = "用户注册", notes="用户注册", httpMethod = "POST")
+    @ApiOperation(value = "登陆页的用户注册", notes="登陆页的用户注册", httpMethod = "POST")
     @PostMapping("/register")
     @ResponseBody
-    public RestRecord register(@RequestBody @ApiParam( example = "{\"loginName\": \"测试张\",\"secret\": \"123456\",\"phoneNumber\": \"12345678901\",\"userType\": 1,\"userName\": \"测试张\"}" ) String json ){
+    public RestRecord register(@RequestBody @ApiParam( value = "{\"loginName\": \"测试张\",\"secret\": \"123456\",\"phoneNumber\": \"12345678901\",\"userType\": 1,\"userName\": \"测试张\"}" ) String json ){
         return userManagerService.register(json);
+    }
+
+    @ApiOperation(value = "后台-用户管理-新增", notes="后台-用户管理-新增", httpMethod = "POST")
+    @PostMapping("/addUser")
+    @ResponseBody
+    public RestRecord addUser(@RequestBody @ApiParam( value = "{\"loginName\": \"账号\",\"phoneNumber\": \"12345678901\",\"userType\": 1,\"certificateNumber\": \"511025199310191221\",\"certificateType\": 1,\"userName\": \"测试张\"}" ) String json ){
+        return userManagerService.addUser(json);
     }
 
     @ApiOperation(value = "通过用户名获取电话号码", notes="忘记密码时的身份认证", httpMethod = "GET")

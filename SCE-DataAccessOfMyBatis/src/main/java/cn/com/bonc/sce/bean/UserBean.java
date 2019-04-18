@@ -20,7 +20,7 @@ public class UserBean {
     private String gender;
     private Integer userType;
     private String mailAddress;
-    private String certificateType;
+    private Integer certificateType;
     private String certificateNumber;
     private String phoneNumber;
     private String address;
@@ -35,10 +35,10 @@ public class UserBean {
     private Account account;
     private String secret;
     private Secret secretKeyPair;
-    private Integer isFirstLogin=0;
+    private Integer isFirstLogin = 0;
     private String headPortrait;
     private String birthday;
-    private Map<String,String> userDetailedInfo;
+    private Map< String, String > userDetailedInfo;
     private Integer accountStatus;
     private Integer isAdministrators;
     private String nationality;

@@ -118,6 +118,10 @@ public class AuthenticationController {
             if ( authenticatedUser.getIsDelete() == 0 ) {
                 return new RestRecord( 104, WebMessageConstants.SCE_PORTAL_MSG_104 );
             }
+            //验证账号是否激活
+            if ( authenticatedUser.getAccountStatus() == 0 ) {
+                return new RestRecord( 105, WebMessageConstants.SCE_PORTAL_MSG_105 );
+            }
         }
 
         //获取用户的认证状态
