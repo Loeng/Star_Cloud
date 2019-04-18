@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping( "/agent" )
+@RequestMapping("/agent")
 public class AgentApiController {
 
     private AgentRepository agentRepository;
@@ -49,7 +50,7 @@ public class AgentApiController {
     private EntityManager entityManager;
 
     @Autowired
-    public AgentApiController( AgentRepository agentRepository ) {
+    public AgentApiController(AgentRepository agentRepository) {
         this.agentRepository = agentRepository;
     }
 
@@ -65,53 +66,53 @@ public class AgentApiController {
     @PostMapping
     @ResponseBody
     public RestRecord saveAgentInfo(
-            @RequestBody Agent agent ) {
-        log.trace( "add agent :{}", agent );
+            @RequestBody Agent agent) {
+        log.trace("add agent :{}", agent);
         try {
-            Agent saveAgentInfo = agentRepository.save( agent );
+            Agent saveAgentInfo = agentRepository.save(agent);
             //创建“管理员账号”
             String userId = UUID.getUUID();
-            userInfoRepository.insertUser( userId, IDUtil.createID( "dl_" ), "", "", 6, "", 0, "", "",
-                    "", new Date(), saveAgentInfo.getId(), "代理管理员", Secret.ES256GenerateSecret() );
+            userInfoRepository.insertUser(userId, IDUtil.createID("dl_"), "", "", 6, "", 0, "", "",
+                    "", new Date(), saveAgentInfo.getId(), "代理管理员", Secret.ES256GenerateSecret());
             //创建密码
             UserPassword password = new UserPassword();
-            password.setIsDelete( 1 );
-            password.setUserId( userId );
-            password.setPassword( "star123!" );
-            passwordDao.save( password );
-            RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
-            restRecord.setData( agent );
+            password.setIsDelete(1);
+            password.setUserId(userId);
+            password.setPassword("star123!");
+            passwordDao.save(password);
+            RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+            restRecord.setData(agent);
             return restRecord;
-        } catch ( Exception e ) {
-            return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_423 );
+        } catch (Exception e) {
+            return new RestRecord(409, WebMessageConstants.SCE_PORTAL_MSG_423);
         }
     }
 
-    @ApiOperation( value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST" )
+    @ApiOperation(value = "新增厂商信息接口", notes = "新增厂商信息", httpMethod = "POST")
     @PostMapping("/addAgent/{roleId}")
     @ResponseBody
     public RestRecord addAgent(
-            @RequestBody @ApiParam( name = "company", value = "厂商信息对象", required = true )
-                    Agent agent,@RequestParam("userId") String userId, @PathVariable("roleId") Integer roleId ) {
+            @RequestBody @ApiParam(name = "company", value = "厂商信息对象", required = true)
+                    Agent agent, @RequestParam("userId") String userId, @PathVariable("roleId") Integer roleId) {
         return agentService.addAgent(agent, userId, roleId);
     }
 
-    @ApiOperation( value = "通过代理商ID修改代理商信息接口", notes = "通过代理商ID修改代理商信息", httpMethod = "PUT" )
-    @PutMapping( "/updateAgentById" )
+    @ApiOperation(value = "通过代理商ID修改代理商信息接口", notes = "通过代理商ID修改代理商信息", httpMethod = "PUT")
+    @PutMapping("/updateAgentById")
     @ResponseBody
     public RestRecord updateAgentById(
-            @RequestBody @ApiParam( name = "agent", value = "代理商信息对象", required = true )
-                    Agent agent ) {
+            @RequestBody @ApiParam(name = "agent", value = "代理商信息对象", required = true)
+                    Agent agent) {
         return agentService.updateAgentById(agent);
     }
 
-    @ApiOperation( value = "通过代理商ID获取代理商信息接口", notes = "通过代理商ID获取代理商信息", httpMethod = "GET" )
-    @GetMapping( "/{id}" )
+    @ApiOperation(value = "通过代理商ID获取代理商信息接口", notes = "通过代理商ID获取代理商信息", httpMethod = "GET")
+    @GetMapping("/{id}")
     @ResponseBody
     public RestRecord getAgentById(
-            @PathVariable( value = "id" ) @ApiParam( value = "代理商Id" ) Long id ) {
+            @PathVariable(value = "id") @ApiParam(value = "代理商Id") Long id) {
 
-        Agent agent =  agentService.getAgentById( id );
+        Agent agent = agentService.getAgentById(id);
         if (agent == null) {
             return new RestRecord(112, WebMessageConstants.SCE_PORTAL_MSG_112, id);
         } else {
@@ -119,10 +120,10 @@ public class AgentApiController {
         }
     }
 
-    @ApiOperation(value = "变更或驳回提交代理商信息接口",notes = "变更或驳回提交代理商信息",httpMethod = "PUT")
-    @PutMapping( "/updateAgent" )
+    @ApiOperation(value = "变更或驳回提交代理商信息接口", notes = "变更或驳回提交代理商信息", httpMethod = "PUT")
+    @PutMapping("/updateAgent")
     @ResponseBody
-    public RestRecord updateAgent(@RequestBody @ApiParam( "代理商信息对象" ) Agent agent) {
+    public RestRecord updateAgent(@RequestBody @ApiParam("代理商信息对象") Agent agent) {
         return agentService.updateAgent(agent);
     }
 
@@ -134,34 +135,34 @@ public class AgentApiController {
      * @param pageSize
      * @return
      */
-    @GetMapping( "/all-user-info" )
+    @GetMapping("/all-user-info")
     @ResponseBody
     public RestRecord getAllAgentUserInfo(
-            @RequestParam( value = "pageNum", defaultValue = "1" ) Integer pageNum,
-            @RequestParam( value = "pageSize", defaultValue = "10" ) Integer pageSize ) {
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         try {
-            Pageable pageable = PageRequest.of( pageNum - 1, pageSize );
-            Page page = agentRepository.getAllAgentUserInfo( pageable );
-            Map< String, Object > temp = new HashMap<>( pageSize );
-            if ( null != page ) {
-                temp.put( "data", page.getContent() );
-                temp.put( "totalPage", page.getTotalPages() );
-                temp.put( "totalCount", page.getTotalElements() );
+            Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+            Page page = agentRepository.getAllAgentUserInfo(pageable);
+            Map<String, Object> temp = new HashMap<>(pageSize);
+            if (null != page) {
+                temp.put("data", page.getContent());
+                temp.put("totalPage", page.getTotalPages());
+                temp.put("totalCount", page.getTotalElements());
             }
-            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, temp );
-        } catch ( Exception e ) {
-            return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_423 );
+            return new RestRecord(200, MessageConstants.SCE_MSG_0200, temp);
+        } catch (Exception e) {
+            return new RestRecord(409, WebMessageConstants.SCE_PORTAL_MSG_423);
         }
     }
 
-    @GetMapping( "/getCompanyList/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @GetMapping("/getCompanyList/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getCompanyList(@PathVariable("AGENT_NAME") String AGENT_NAME,@PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+    public RestRecord getCompanyList(@PathVariable("AGENT_NAME") String AGENT_NAME, @PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;
-            StringBuilder sql = new StringBuilder( "SELECT\n" +
+            StringBuilder sql = new StringBuilder("SELECT\n" +
                     "\tsma.ID,\n" +
                     "\tsma.AGENT_NAME,\n" +
                     "\tsma.PROPERTY,\n" +
@@ -174,42 +175,135 @@ public class AgentApiController {
                     "\tLEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON sma.ID = to_char(sua.ENTITY_ID)\n" +
                     "\tLEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu ON sua.USER_ID = scu.USER_ID \n" +
                     "WHERE\n" +
-                    "\tsma.IS_DELETE = 1  " );
-            if(!StringUtils.isEmpty(AGENT_NAME) && !"null".equals(AGENT_NAME)){
-                sql.append("and sma.AGENT_NAME like '%"+AGENT_NAME+"%' ");
+                    "\tsma.IS_DELETE = 1  ");
+            if (!StringUtils.isEmpty(AGENT_NAME) && !"null".equals(AGENT_NAME)) {
+                sql.append("and sma.AGENT_NAME like '%" + AGENT_NAME + "%' ");
             }
-            if(!StringUtils.isEmpty(PROPERTY) && !"null".equals(PROPERTY)){
-                sql.append("and smc.PROPERTY = "+PROPERTY+" ");
+            if (!StringUtils.isEmpty(PROPERTY) && !"null".equals(PROPERTY)) {
+                sql.append("and smc.PROPERTY = " + PROPERTY + " ");
             }
-            if(StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS) ){
+            if (StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS)) {
                 sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
             }
-            if(!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS) ){
+            if (!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS)) {
                 sql.append("AND  sua.AUDIT_STATUS = 0 ");
             }
-            if(!StringUtils.isEmpty(AUDIT_STATUS) && "2".equals(AUDIT_STATUS) ){
+            if (!StringUtils.isEmpty(AUDIT_STATUS) && "2".equals(AUDIT_STATUS)) {
                 sql.append("AND  sua.AUDIT_STATUS = 2 ");
             }
 
-            Session session = entityManager.unwrap( org.hibernate.Session.class );
-            NativeQuery query = session.createNativeQuery( sql.toString() );
-            query.setResultTransformer( Transformers.ALIAS_TO_ENTITY_MAP );
-            int start = ( pageNum - 1 ) * pageSize;
+            Session session = entityManager.unwrap(org.hibernate.Session.class);
+            NativeQuery query = session.createNativeQuery(sql.toString());
+            query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+            int start = (pageNum - 1) * pageSize;
             int total = query.getResultList().size();
             //判断分页
-            if ( start < total && pageSize > 0 ) {
-                query.setFirstResult( start );
-                query.setMaxResults( pageSize );
+            if (start < total && pageSize > 0) {
+                query.setFirstResult(start);
+                query.setMaxResults(pageSize);
             }
-            Map< String, Object > temp = new HashMap<>( 16 );
-            temp.put( "data", query.getResultList() );
-            temp.put( "totalPage", ( total + pageSize - 1 ) / pageSize );
-            temp.put( "totalCount", total );
-            restRecord.setData( temp );
+            Map<String, Object> temp = new HashMap<>(16);
+            temp.put("data", query.getResultList());
+            temp.put("totalPage", (total + pageSize - 1) / pageSize);
+            temp.put("totalCount", total);
+            restRecord.setData(temp);
             return restRecord;
-        } catch ( Exception e ) {
-            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420, e );
+        } catch (Exception e) {
+            return new RestRecord(420, WebMessageConstants.SCE_PORTAL_MSG_420, e);
         }
+    }
+
+    @GetMapping("/getActingSchoolList/{school_name}")
+    @ResponseBody
+    public RestRecord getCompanyList(@PathVariable("school_name") String school_name) {
+        try {
+            RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+            Page<List<Map<String, Object>>> page;
+            StringBuilder sql = new StringBuilder("SELECT\n" +
+                    "\tses.ID,\n" +
+                    "\tses.SCHOOL_NAME,\n" +
+                    "\tses.SCHOOL_TYPE \n" +
+                    "FROM\n" +
+                    "\tSTARCLOUDPORTAL.SCE_ENTITY_SCHOOL ses\n" +
+                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON ses.USER_ID = sua.USER_ID \n" +
+                    "WHERE\n" +
+                    "\tses.IS_DELETE = 1 \n" +
+                    "\tAND sua.AUDIT_STATUS = 1 \n" +
+                    "\tAND NOT EXISTS ( SELECT 1 FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL WHERE SCHOOL_ID = ses.ID ) ");
+            if (!StringUtils.isEmpty(school_name) && !"null".equals(school_name)) {
+                sql.append("AND ses.school_name LIKE '%" + school_name + "%' ");
+            }
+
+            Session session = entityManager.unwrap(org.hibernate.Session.class);
+            NativeQuery query = session.createNativeQuery(sql.toString());
+            query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+
+            Map<String, Object> temp = new HashMap<>(16);
+            temp.put("data", query.getResultList());
+            restRecord.setData(temp);
+            return restRecord;
+        } catch (Exception e) {
+            return new RestRecord(420, WebMessageConstants.SCE_PORTAL_MSG_420, e);
+        }
+    }
+
+    @GetMapping("/getHasBeenActingSchoolList/{ID}")
+    @ResponseBody
+    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID) {
+        try {
+            RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+            Page<List<Map<String, Object>>> page;
+            StringBuilder sql = new StringBuilder("SELECT\n" +
+                    "\tses.ID,\n" +
+                    "\tses.SCHOOL_NAME,\n" +
+                    "\tses.SCHOOL_TYPE \n" +
+                    "FROM\n" +
+                    "\tSTARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL sesa\n" +
+                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ses ON sesa.SCHOOL_ID = ses.ID \n" +
+                    "WHERE\n" +
+                    "\tAGENT_ID = " + ID + "");
+
+            Session session = entityManager.unwrap(org.hibernate.Session.class);
+            NativeQuery query = session.createNativeQuery(sql.toString());
+            query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+
+            Map<String, Object> temp = new HashMap<>(16);
+            temp.put("data", query.getResultList());
+            restRecord.setData(temp);
+            return restRecord;
+        } catch (Exception e) {
+            return new RestRecord(420, WebMessageConstants.SCE_PORTAL_MSG_420, e);
+        }
+    }
+
+    @PostMapping("/addActingSchool")
+    @ResponseBody
+    @Transactional
+    public RestRecord addActingSchool(@RequestBody Map<String, String> info) {
+
+        String AGENT_ID = info.get("AGENT_ID").toString();
+        String[] SCHOOL_ID = info.get("SCHOOL_ID").toString().split(",");
+
+        for (int i = 0; i < SCHOOL_ID.length; i++) {
+            agentService.addActingSchool(AGENT_ID, SCHOOL_ID[i]);
+        }
+        RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+        return restRecord;
+    }
+
+    @DeleteMapping("/deleteActingSchool")
+    @ResponseBody
+    @Transactional
+    public RestRecord deleteActingSchool(@RequestBody Map<String, String> info) {
+
+        String AGENT_ID = info.get("AGENT_ID").toString();
+        String[] SCHOOL_ID = info.get("SCHOOL_ID").toString().split(",");
+
+        for (int i = 0; i < SCHOOL_ID.length; i++) {
+            agentService.deleteActingSchool(AGENT_ID, SCHOOL_ID[i]);
+        }
+        RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+        return restRecord;
     }
 
 }

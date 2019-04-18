@@ -7,6 +7,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @author BTW
  */
@@ -51,5 +53,17 @@ public interface AgentDao {
     @RequestMapping( value = "/agent/getAgentInfo/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}", method = RequestMethod.GET )
     public RestRecord getAgentInfo(@PathVariable("AGENT_NAME") String AGENT_NAME, @PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize );
+
+    @RequestMapping( value = "/agent/getActingSchoolList/{school_name}", method = RequestMethod.GET )
+    public RestRecord getActingSchoolList(@PathVariable("school_name") String school_name);
+
+    @RequestMapping( value = "/agent/getHasBeenActingSchoolList/{ID}", method = RequestMethod.GET )
+    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") Integer ID);
+
+    @RequestMapping( value = "/agent/addActingSchool", method = RequestMethod.POST )
+    public RestRecord addActingSchool(@RequestBody Map<String, String> info);
+
+    @RequestMapping( value = "/agent/deleteActingSchool", method = RequestMethod.DELETE )
+    public RestRecord deleteActingSchool(@RequestBody Map<String, String> info);
 
 }

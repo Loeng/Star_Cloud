@@ -16,4 +16,6 @@ public interface StudentMapper {
     int audit(@Param("id") String id, @Param("applyResult") Integer applyResult, @Param("rejectReason") String rejectReason);
 
     int addRelation(@Param("id") long id, @Param("applyUserId") String applyUserId, @Param("bindUserId") String bindUserId, @Param("relationship") String relationship);
+
+    Map getStudentBasicData(@Param("USER_ID") String USER_ID);
 }

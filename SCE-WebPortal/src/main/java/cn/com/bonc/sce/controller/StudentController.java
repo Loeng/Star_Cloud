@@ -14,36 +14,43 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping( "/student" )
+@RequestMapping("/student")
 public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @ApiOperation(value = "获取家长列表", notes="通过学生id获取家长列表", httpMethod = "GET")
+    @ApiOperation(value = "获取家长列表", notes = "通过学生id获取家长列表", httpMethod = "GET")
     @GetMapping("/getParents")
     @ResponseBody
-    public RestRecord getParents(@RequestParam( "id" ) String id){
+    public RestRecord getParents(@RequestParam("id") String id) {
         return studentService.getParents(id);
     }
 
-    @ApiOperation(value = "获取家长申请列表", notes="通过学生id获取家长申请列表", httpMethod = "GET")
+    @ApiOperation(value = "获取家长申请列表", notes = "通过学生id获取家长申请列表", httpMethod = "GET")
     @GetMapping("/getApplyList")
     @ResponseBody
-    public RestRecord getApplyList(@RequestParam( "id" ) String id){
+    public RestRecord getApplyList(@RequestParam("id") String id) {
         return studentService.getApplyList(id);
     }
 
-    @ApiOperation(value = "学生审核", notes="通过学生id获取家长申请列表", httpMethod = "POST")
+    @ApiOperation(value = "学生审核", notes = "通过学生id获取家长申请列表", httpMethod = "POST")
     @PostMapping("/audit")
     @ResponseBody
-    public RestRecord audit(@RequestBody @ApiParam( example = "{\n" +
+    public RestRecord audit(@RequestBody @ApiParam(example = "{\n" +
             "\t\"id\": \"c0190f3e1ae54dc890a4a2afee10f527\",\n" +
             "\t\"relationship\": \"父子\",\n" +
             "\t\"rejectReason\": \"55555555555\",\n" +
             "\t\"applyResult\": 0,\n" +
             "\t\"bindUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\"\n" +
             "\t\"applyUserId\": \"c0190f3e1ae54dc890a4a2afee10f527\"\n" +
-            "}" ) String json){
+            "}") String json) {
         return studentService.audit(json);
     }
+
+    @GetMapping("/getStudentBasicData/{USER_ID}")
+    @ResponseBody
+    public RestRecord getStudentBasicData(@PathVariable("USER_ID") String USER_ID) {
+        return studentService.getStudentBasicData(USER_ID);
+    }
+
 }

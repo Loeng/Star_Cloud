@@ -34,4 +34,9 @@ public class StudentService {
     public int addRelation(long id, String applyUserId, String bindUserId, String relationship) {
         return studentDao.addRelation(id,applyUserId,bindUserId,relationship);
     }
+
+    public Map getStudentBasicData(String USER_ID) {
+        return studentDao.getStudentBasicData(USER_ID);
+    }
+
 }
