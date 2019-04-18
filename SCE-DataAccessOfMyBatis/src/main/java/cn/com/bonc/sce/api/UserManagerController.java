@@ -11,6 +11,7 @@ import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.UserService;
+import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.tool.IdWorker;
 import cn.com.bonc.sce.tool.UserPropertiesUtil;
 import com.alibaba.druid.support.json.JSONUtils;
@@ -354,8 +355,9 @@ public class UserManagerController {
             String POSITION = (String) map.get("POSITION");
             Integer TEACH_RANGE = (Integer) map.get("TEACH_RANGE");
             String secret = Secret.ES256GenerateSecret();
+            String loginName = IDUtil.createID( "js_" );
             int count1 = userService.addUser(USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
-                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE,NATIONLITY,NATION_CODE, secret);
+                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE,NATIONLITY,NATION_CODE, secret,"2", loginName);
             int count2 = userService.addTeacher(USER_ID, ACADEMIC_QUALIFICATION,
                     WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE);
             userService.addPassword(idWorker.nextId(), USER_ID, DEFAULT_PASSWORD);

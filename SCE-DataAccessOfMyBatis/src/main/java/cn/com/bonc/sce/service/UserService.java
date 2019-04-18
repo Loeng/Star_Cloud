@@ -121,8 +121,11 @@ public class UserService {
         return userDao.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,position,teach_range);
     }
 
-    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate,String nationality, String nationCode, String secret) {
-        return userDao.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate, nationality, nationCode, secret);
+    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name,
+                       String gender, String phone_number, String organization_id, String mail_address, String birthdate,
+                       String nationality, String nationCode, String secret, String userType, String loginName) {
+        return userDao.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,
+                mail_address,birthdate, nationality, nationCode, secret, userType, loginName);
     }
 
     public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -202,31 +205,10 @@ public class UserService {
             log.info("学生证件已被使用");
             return new RestRecord( 432, String.format(STUDENT, "证件已被使用") );
         }
-        if(studentCertificateType.equals(parentCertificateType) && studentCertificateNumber.equals(parentCertificateNumber)){
-            log.info("学生和家长的证件类型、证件号不能相同");
-            return new RestRecord( 432, "学生和家长的证件类型、证件号不能相同" );
-        }
         String organizationId = userDao.getOrganizationIdByUserId(userId);
         if(organizationId == null){
             return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
         }
-        //1.存入学生密码
-        String studentSecret = Secret.ES256GenerateSecret();
-        String studentLoginName = IDUtil.createID( "xs_" );
-        String studentId = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
-        userDao.saveUserPassword(idWorker.nextId(), studentId, DEFAULT_PASSWORD);
-
-        //2.存入学生用户表
-        map.put("studentId", studentId);
-        map.put("studentLoginName", studentLoginName);
-        map.put("studentSecret", studentSecret);
-        map.put("organizationId", organizationId);
-        map.put("userType", 1);
-        userDao.saveUserOfStudent(map);
-
-        //3.存入学生表
-        userDao.saveStudent(map);
-
         String bindType = map.get("bindType").toString();
         String parentId = null;
         if(bindType.equals("1")){
@@ -236,10 +218,6 @@ public class UserService {
                     log.info("家长身份证验证未通过");
                     return new RestRecord( 432, String.format(PARENT, "身份证填写不正确") );
                 }
-            }
-            if(userDao.selectCountByCertificateNumber(parentCertificateType, parentCertificateNumber) > 0){
-                log.info("家长证件已被使用");
-                return new RestRecord( 432, String.format(PARENT, "证件已被使用") );
             }
             //验证手机号
             if(!UserPropertiesUtil.checkPhone(map.get("parentPhoneNumber").toString())){
@@ -268,7 +246,6 @@ public class UserService {
             map.put("userType", 5);
             userDao.saveUserOfParent(map);
 
-
         }else if(bindType.equals("2")){
             //绑定现有家长
             if(parentCertificateType.equals("1")){
@@ -283,6 +260,22 @@ public class UserService {
             }
             parentId = userDao.selectUserIdByCertification(map.get("parentCertificateNumber").toString(), map.get("parentCertificateType").toString(),"5");
         }
+        //1.存入学生密码
+        String studentSecret = Secret.ES256GenerateSecret();
+        String studentLoginName = IDUtil.createID( "xs_" );
+        String studentId = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
+        userDao.saveUserPassword(idWorker.nextId(), studentId, DEFAULT_PASSWORD);
+
+        //2.存入学生用户表
+        map.put("studentId", studentId);
+        map.put("studentLoginName", studentLoginName);
+        map.put("studentSecret", studentSecret);
+        map.put("organizationId", organizationId);
+        map.put("userType", 1);
+        userDao.saveUserOfStudent(map);
+
+        //3.存入学生表
+        userDao.saveStudent(map);
 
         //4.存入家长学生关系表
         userDao.saveParentStudentRel(idWorker.nextId(), parentId, studentId, 1, map.get("relationship").toString());
@@ -395,17 +388,22 @@ public class UserService {
     public RestRecord auditTransfer(String userId, Map map){
         String organizationId = userDao.getOrganizationIdByUserId(userId);
         map.put("organizationId", organizationId);
-        int count = userDao.auditTransfer(map);
-        if(count > 0){
+        List<String> ids = (List<String>)map.get("ids");
+        for( String id : ids){
+            map.put("id", id);
+            int count = userDao.auditTransfer(map);
+            if(count < 1){
+                return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
+            }
             if(map.get("applyStatus").toString().equals("1")){
                 //转移学生的学校
-                userDao.updateOrganizationIdByTransferId(map.get("id").toString());
+                userDao.updateOrganizationIdByTransferId(id);
                 //修改学生的学生表
-                userDao.updateStudent(map.get("id").toString());
+                userDao.updateStudent(id);
             }
-            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, count );
         }
-        return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+
     }
 
     public TeacherInfoBean getTeacherInfoById(String userId){
@@ -440,17 +438,22 @@ public class UserService {
     public RestRecord auditTeacher(String userId, Map map){
         String organizationId = userDao.getOrganizationIdByUserId(userId);
         map.put("organizationId", organizationId);
-        int count = userDao.auditTransfer(map);
-        if(count > 0){
+        List<String> ids = (List<String>) map.get("ids");
+        for(String id : ids){
+            map.put("id", id);
+            int count = userDao.auditTransfer(map);
+            if(count < 1){
+                return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
+            }
             if(map.get("applyStatus").toString().equals("1")){
                 //转移教师的学校
-                userDao.updateOrganizationIdByTransferId(map.get("id").toString());
+                userDao.updateOrganizationIdByTransferId(id);
                 //修改教师的教师表
                 userDao.updateTeacher(map.get("id").toString());
             }
-            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, count );
         }
-        return new RestRecord( 436, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+
     }
 
     public int selectCountByCertificateNumber(String certificateType, String certificateNumber){

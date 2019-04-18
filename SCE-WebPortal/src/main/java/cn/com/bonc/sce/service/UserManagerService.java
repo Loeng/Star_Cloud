@@ -183,7 +183,7 @@ public class UserManagerService {
     }
 
     public RestRecord auditTransfer( String userId, Map map ) {
-        if ( map.get( "applyStatus" ) == null || map.get( "id" ) == null ) {
+        if ( map.get( "applyStatus" ) == null || map.get( "ids" ) == null ) {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
         return userManagerDao.auditTransfer( userId, map );

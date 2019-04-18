@@ -74,7 +74,7 @@ public interface UserMapper {
                 @Param("gender")String gender, @Param("phone_number")String phone_number,
                 @Param("organization_id")String organization_id, @Param("mail_address") String mail_address,
                 @Param("birthdate")String birthdate, @Param("nationality")String nationality, @Param("nationCode")String nationCode,
-                @Param("secret") String secret);
+                @Param("secret") String secret, @Param("userType") String userType, @Param("loginName") String loginName);
 
     int addTeacher(@Param("user_id")String user_id, @Param("academic_qualification")String academic_qualification,
                    @Param("work_number")String work_number, @Param("school_time")String school_time,

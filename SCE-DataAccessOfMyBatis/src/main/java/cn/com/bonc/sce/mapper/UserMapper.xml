@@ -436,11 +436,11 @@
 
     <insert id="addUser">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
-        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE,NATIONALITY,VOLK,SECRET)
+        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE,NATIONALITY,VOLK,SECRET,user_type,login_name)
         VALUES
         (#{user_id,jdbcType=BIGINT},#{certificate_type,jdbcType=INTEGER},#{certificate_number,jdbcType=VARCHAR},
         #{user_name,jdbcType=VARCHAR},#{gender,jdbcType=VARCHAR},#{phone_number,jdbcType=VARCHAR},
-        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},TO_DATE(#{birthdate,jdbcType=VARCHAR},'YYYY-MM-dd'),1,#{nationality},#{nationCode},#{secret})
+        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},TO_DATE(#{birthdate,jdbcType=VARCHAR},'YYYY-MM-dd'),1,#{nationality},#{nationCode},#{secret},#{userType},#{loginName})
     </insert>
 
     <insert id="addTeacher">
@@ -497,6 +497,7 @@
         <if test="accountStatus != null and accountStatus!=''" >
             AND ACCOUNT_STATUS=#{accountStatus}
         </if>
+        order by A.CREATE_TIME DESC
     </select>
 
     <select id="getStudents" resultType="Map">

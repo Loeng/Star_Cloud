@@ -93,8 +93,11 @@ public class UserDao {
         return userMapper.editTeacher( user_id,academic_qualification,work_number,school_time,teach_time,position,teach_range);
     }
 
-    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number, String organization_id, String mail_address, String birthdate, String nationality, String nationCode, String secret) {
-        return userMapper.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,birthdate, nationality, nationCode, secret);
+    public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender,
+                       String phone_number, String organization_id, String mail_address, String birthdate, String nationality,
+                       String nationCode, String secret, String userType, String loginName) {
+        return userMapper.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,
+                birthdate, nationality, nationCode, secret, userType, loginName);
     }
 
     public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
