@@ -99,7 +99,7 @@ public class SchoolController {
     @ApiOperation(value = "通过学校id获取学校信息接口", notes="通过学校id获取学校信息", httpMethod = "GET")
     @GetMapping("/{id}")
     @ResponseBody
-    public RestRecord getSchoolById( @PathVariable( "id" ) Long id ) {
+    public RestRecord getSchoolById( @PathVariable( "id" ) @ApiParam( value = "学校id" , required = true) Long id ) {
         return schoolService.getSchoolById(id);
     }
 

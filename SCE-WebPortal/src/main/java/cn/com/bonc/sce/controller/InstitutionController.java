@@ -71,7 +71,7 @@ public class InstitutionController {
     @ApiOperation(value = "通过教育局ID获取教育局信息接口", notes="通过教育局ID获取教育局信息", httpMethod = "GET")
     @GetMapping("/{id}")
     @ResponseBody
-    public RestRecord getInstitutionById( @PathVariable( "id" ) String id ) {
+    public RestRecord getInstitutionById( @PathVariable( "id" ) Long id ) {
         return institutionService.getInstitutionById(id);
     }
 

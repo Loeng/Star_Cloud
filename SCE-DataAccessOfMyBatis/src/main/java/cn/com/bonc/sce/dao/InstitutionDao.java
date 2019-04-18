@@ -39,7 +39,7 @@ public class InstitutionDao {
         return institutionMapper.updateInstitutionById(institution);
     }
 
-    public Institution getInstitutionById(String id){
+    public Institution getInstitutionById(Long id){
         return institutionMapper.getInstitutionById(id);
     }
 

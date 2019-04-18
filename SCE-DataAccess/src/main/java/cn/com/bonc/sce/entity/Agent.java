@@ -21,9 +21,8 @@ import java.sql.Timestamp;
 public class Agent implements Serializable {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
     @Column( name = "ID" )
-    private long agentId;
+    private Long id;
 
     @Column( name = "AGENT_NAME" )
     private String agentName;
@@ -60,4 +59,26 @@ public class Agent implements Serializable {
 
     @Column( name = "IS_DELETE" )
     private long isDelete = 1L;
+
+    @Column( name = "POSTCODE" )
+    private String postcode;
+
+    @Column( name = "PROPERTY" )
+    private String property;
+
+    @Column( name = "INSTITUTION_CODE" )
+    private String institutionCode;
+
+    @Column( name = "PHONE" )
+    private String phone;
+
+    @Column( name = "PROVINCE" )
+    private String province;
+
+    @Column( name = "CITY" )
+    private String city;
+
+    @Column( name = "AREA" )
+    private String area;
+
 }

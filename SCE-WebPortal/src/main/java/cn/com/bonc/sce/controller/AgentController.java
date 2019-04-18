@@ -44,6 +44,39 @@ public class AgentController {
         return agentService.saveAgentInfo( agentModel );
     }
 
+    @ApiOperation( value = "新增代理商信息接口", notes = "新增代理商信息", httpMethod = "POST" )
+    @PostMapping("/addAgent/{roleId}")
+    @ResponseBody
+    public RestRecord addAgent(
+            @ApiParam( name = "company", value = "代理商信息对象", required = true )
+            @RequestBody AgentModel agent,@ApiParam(name = "userId", value = "用户ID", required = true) @RequestParam( "userId" ) String userId,@ApiParam(name = "roleId", value = "角色类型", required = true) @PathVariable( "roleId" ) Integer roleId ) {
+        return agentService.addAgent( agent ,userId,roleId);
+    }
+
+    @ApiOperation( value = "通过代理商ID修改代理商信息接口", notes = "通过代理商ID修改代理商信息", httpMethod = "PUT" )
+    @PutMapping( "/updateAgentById" )
+    @ResponseBody
+    public RestRecord updateAgentById(
+            @RequestBody @ApiParam( name = "agent", value = "代理商信息对象", required = true )
+                    AgentModel agent ) {
+        return agentService.updateAgentById(agent);
+    }
+
+    @ApiOperation( value = "通过代理商ID获取代理商信息接口", notes = "通过代理商ID获取代理商信息", httpMethod = "GET" )
+    @GetMapping( "/{id}" )
+    @ResponseBody
+    public RestRecord getAgentById(
+            @PathVariable( value = "id" ) @ApiParam( value = "代理商Id" , required = true) String id ) {
+        return agentService.getAgentById( id );
+    }
+
+    @ApiOperation(value = "变更或驳回提交代理商信息接口",notes = "变更或驳回提交代理商信息",httpMethod = "PUT")
+    @PutMapping( "/updateAgent" )
+    @ResponseBody
+    public RestRecord updateAgent(@RequestBody @ApiParam( "代理商信息对象" ) AgentModel agent) {
+        return agentService.updateAgent(agent);
+    }
+
     @ApiOperation( value = "查询所有代理用户信息", notes = "查询所有代理用户信息", httpMethod = "GET" )
     @ApiImplicitParams( {
             @ApiImplicitParam( name = "pageNum", value = "页数", paramType = "path", required = true ),
