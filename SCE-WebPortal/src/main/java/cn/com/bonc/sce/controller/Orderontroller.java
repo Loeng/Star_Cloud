@@ -46,8 +46,8 @@ public class Orderontroller {
             @ApiResponse( code = 743, message = WebMessageConstants.SCE_PORTAL_MSG_743, response = RestRecord.class ),
             @ApiResponse( code = 744, message = WebMessageConstants.SCE_PORTAL_MSG_744, response = RestRecord.class )
     } )
-    @PostMapping("/add-order/{userId}")
-    public RestRecord addNewOrder(@RequestBody Map param, @PathVariable String userId){
+    @PostMapping("/add-order")
+    public RestRecord addNewOrder(@RequestBody Map param, @CurrentUserId String userId){
         return orderService.addNewOrder(param, userId);
     }
 
@@ -58,8 +58,8 @@ public class Orderontroller {
             @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class ),
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
-    @PutMapping("/cancel-order/{userId}")
-    public RestRecord cancelOrder(@RequestBody Map param,@PathVariable String userId){
+    @PutMapping("/cancel-order")
+    public RestRecord cancelOrder(@RequestBody Map param,@CurrentUserId String userId){
         return orderService.cancelOrder(param);
     }
 
@@ -80,8 +80,8 @@ public class Orderontroller {
             @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class ),
             @ApiResponse( code = 431, message = WebMessageConstants.SCE_PORTAL_MSG_431, response = RestRecord.class )
     } )
-    @PostMapping("/upload-voucher/{userId}")
-    public RestRecord uploadVoucher(@RequestBody Map param,@PathVariable String userId){
+    @PostMapping("/upload-voucher")
+    public RestRecord uploadVoucher(@RequestBody Map param,@CurrentUserId String userId){
         return orderService.uploadVoucher(param,userId);
     }
 
@@ -92,8 +92,8 @@ public class Orderontroller {
             @ApiResponse( code = 421, message = WebMessageConstants.SCE_PORTAL_MSG_421, response = RestRecord.class ),
             @ApiResponse( code = 423, message = WebMessageConstants.SCE_PORTAL_MSG_423, response = RestRecord.class )
     } )
-    @PutMapping("/review-voucher/{userId}")
-    public RestRecord reviewVoucher(@RequestBody Map param,@PathVariable String userId){
+    @PutMapping("/review-voucher")
+    public RestRecord reviewVoucher(@RequestBody Map param,@CurrentUserId String userId){
         return orderService.reviewVoucher(param,userId);
     }
 
@@ -113,6 +113,22 @@ public class Orderontroller {
                                     @RequestParam(defaultValue = "1") int pageNum,
                                     @RequestParam(defaultValue = "10") int pageSize){
         return orderService.queryAllOrder(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY, pageNum, pageSize);
+    }
+
+
+
+    @ApiOperation( value = "订单列表查询（个人）", notes = "订单列表查询（个人）", httpMethod = "GET" )
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = WebMessageConstants.SCE_PORTAL_MSG_200, response = RestRecord.class )
+    } )
+    @GetMapping("/query-my-orders")
+    public RestRecord queryMyOrders(@RequestParam(required = false) String KEYWORD,
+                                    @RequestParam(required = false) String ORDER_STATUS,
+                                    @RequestParam(defaultValue = "1") String ORDER_BY,
+                                    @CurrentUserId String userId,
+                                    @RequestParam(defaultValue = "1") int pageNum,
+                                    @RequestParam(defaultValue = "10") int pageSize){
+        return orderService.queryOrderByUserId(KEYWORD, ORDER_STATUS, ORDER_BY, userId, pageNum, pageSize);
     }
 
 }

@@ -41,4 +41,9 @@ public interface OrderMapper {
                                         @Param("ORDER_STATUS") String ORDER_STATUS,
                                         @Param("ORDER_BY") String ORDER_BY);
 
+     List<Map> queryOrderByUserId(@Param("KEYWORD") String KEYWORD,
+                                  @Param("ORDER_STATUS") String ORDER_STATUS,
+                                  @Param("ORDER_BY") String ORDER_BY,
+                                  @Param("USER_ID") String USER_ID);
+
 }

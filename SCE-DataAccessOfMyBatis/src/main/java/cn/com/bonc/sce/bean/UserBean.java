@@ -45,4 +45,5 @@ public class UserBean {
     private String volk;
     private String educationalBackground;
     private Integer loginTimes;
+    private String fileStorePath;
 }

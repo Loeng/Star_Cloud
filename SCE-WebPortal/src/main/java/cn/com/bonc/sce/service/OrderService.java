@@ -60,4 +60,14 @@ public class OrderService {
                                      int pageSize){
         return orderDao.queryAllOrder(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY, pageNum, pageSize);
     }
+
+
+    public RestRecord queryOrderByUserId(String KEYWORD,
+                                         String ORDER_STATUS,
+                                         String ORDER_BY,
+                                         String USER_ID,
+                                         int pageNum,
+                                         int pageSize){
+        return orderDao.queryOrderByUserId(KEYWORD, ORDER_STATUS, ORDER_BY, USER_ID, pageNum, pageSize);
+    }
 }

@@ -72,4 +72,17 @@ public class OrderController {
                                     @RequestParam int pageSize){
         return orderService.queryAllOrderByCondition(ORDER_ID, START_TIME, END_TIME, PRODUCT_TYPE_CODE, PAYING_TYPE, ORDER_STATUS, ORDER_BY, pageNum, pageSize);
     }
+
+
+
+    @ApiOperation(value = "订单列表查询（个人）", notes="订单列表查询（个人）", httpMethod = "GET")
+    @GetMapping("/queryOrderByUserId")
+    public RestRecord queryOrderByUserId(@RequestParam(required = false) String KEYWORD,
+                                         @RequestParam(required = false) String ORDER_STATUS,
+                                         @RequestParam String ORDER_BY,
+                                         @RequestParam String USER_ID,
+                                         @RequestParam int pageNum,
+                                         @RequestParam int pageSize){
+        return orderService.queryOrderByUserId(KEYWORD, ORDER_STATUS, ORDER_BY, USER_ID, pageNum, pageSize);
+    }
 }

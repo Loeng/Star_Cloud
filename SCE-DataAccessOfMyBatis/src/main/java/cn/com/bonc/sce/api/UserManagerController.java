@@ -7,9 +7,11 @@ import cn.com.bonc.sce.bean.TeacherInfoBean;
 import cn.com.bonc.sce.bean.UserBean;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.dao.FileResourceDao;
 import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.FileResourceService;
 import cn.com.bonc.sce.service.UserService;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.tool.IdWorker;
@@ -42,6 +44,8 @@ public class UserManagerController {
     private UserService userService;
     @Autowired
     private IdWorker idWorker;
+    @Autowired
+    private FileResourceService fileResourceService;
 
     private static final String DEFAULT_PASSWORD = "star123!";
 
@@ -618,6 +622,11 @@ public class UserManagerController {
         if ( user == null ) {
             return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
         } else {
+            String fileStorePath = "";
+            if(user.getHeadPortrait()!=null){
+                fileStorePath = fileResourceService.getFileStorePath(Integer.parseInt(user.getHeadPortrait()));
+            }
+            user.setFileStorePath(fileStorePath);
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
     }

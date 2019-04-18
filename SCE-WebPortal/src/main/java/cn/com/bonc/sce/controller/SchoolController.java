@@ -121,11 +121,12 @@ public class SchoolController {
      * 获取学校认证列表
      * @return
      */
-    @GetMapping( "/getSchoolInfoList/{SCHOOL_NAME}/{SCHOOL_TYPE}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @ApiOperation(value = "获取学校认证审核列表接口",notes = "获取学校认证审核列表信息",httpMethod = "GET")
+    @GetMapping( "/getSchoolInfoList/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getSchoolInfoList(@PathVariable("SCHOOL_NAME") String SCHOOL_NAME,@PathVariable("SCHOOL_TYPE") String SCHOOL_TYPE,@PathVariable("AUDIT_STATUS") String AUDIT_STATUS
-            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize){
-        return schoolService.getSchoolInfoList(SCHOOL_NAME,SCHOOL_TYPE,AUDIT_STATUS,pageNum,pageSize);
+    public RestRecord getSchoolInfoList(@RequestParam(value = "schoolName",required = false) @ApiParam( name = "schoolName", value = "学校名称") String schoolName,@RequestParam(value = "schoolType",required = false) @ApiParam( name = "schoolType", value = "办学类型") String schoolType,@RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") String auditStatus
+            , @PathVariable("pageNum") @ApiParam( name = "pageNum", value = "当前页数") Integer pageNum, @PathVariable("pageSize") @ApiParam( name = "pageSize", value = "每页记录数") Integer pageSize){
+        return schoolService.getSchoolInfoList(schoolName,schoolType,auditStatus,pageNum,pageSize);
     }
 
 }

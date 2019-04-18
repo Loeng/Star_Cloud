@@ -354,4 +354,17 @@ public class OrderService {
 
 
 
+    public RestRecord queryOrderByUserId( String KEYWORD,
+                                          String ORDER_STATUS,
+                                          String ORDER_BY,
+                                          String USER_ID,
+                                          int pageNum,
+                                          int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<Map> pageInfo=new PageInfo<>(orderDao.queryOrderByUserId(KEYWORD, ORDER_STATUS, ORDER_BY, USER_ID));
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,pageInfo);
+    }
+
+
+
 }

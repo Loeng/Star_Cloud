@@ -48,4 +48,12 @@ public interface OrderDao {
                              @RequestParam("ORDER_BY") String ORDER_BY,
                              @RequestParam("pageNum") int pageNum,
                              @RequestParam("pageSize") int pageSize);
+
+    @RequestMapping(value = "/order-manage/queryOrderByUserId",method = RequestMethod.GET)
+    RestRecord queryOrderByUserId(@RequestParam("KEYWORD") String KEYWORD,
+                                  @RequestParam("ORDER_STATUS") String ORDER_STATUS,
+                                  @RequestParam("ORDER_BY") String ORDER_BY,
+                                  @RequestParam("USER_ID") String USER_ID,
+                                  @RequestParam("pageNum") int pageNum,
+                                  @RequestParam("pageSize") int pageSize);
 }

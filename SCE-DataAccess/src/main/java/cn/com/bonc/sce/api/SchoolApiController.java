@@ -126,18 +126,19 @@ public class SchoolApiController {
         return schoolService.updateSchoolInfo(school);
     }
 
-    @GetMapping("/getSchoolInfoList/{SCHOOL_NAME}/{SCHOOL_TYPE}/{AUDIT_STATUS}/{pageNum}/{pageSize}")
+    @GetMapping("/getSchoolInfoList/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getSchoolInfoList(@PathVariable("SCHOOL_NAME") String SCHOOL_NAME, @PathVariable("SCHOOL_TYPE") String SCHOOL_TYPE, @PathVariable("AUDIT_STATUS") String AUDIT_STATUS
+    public RestRecord getSchoolInfoList(@RequestParam(value = "schoolName",required = false) String schoolName, @RequestParam(value = "schoolType",required = false) String schoolType, @RequestParam(value = "auditStatus",required = false) String auditStatus
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;
             StringBuilder sql = new StringBuilder( "SELECT\n" +
                     "\tses.ID,\n" +
+                    "\tscu.USER_ID,\n" +
                     "\tses.SCHOOL_NAME,\n" +
                     "\tses.SCHOOL_TYPE,\n" +
-                    "\tses.REGION,\n" +
+                    "\tses.INSTITUTION_ID,\n" +
                     "\tses.SCHOOL_DISTRICT,\n" +
                     "\tscu.USER_NAME,\n" +
                     "\tscu.LOGIN_NAME,\n" +
@@ -149,19 +150,19 @@ public class SchoolApiController {
                     "\tLEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu ON sua.USER_ID = scu.USER_ID \n" +
                     "WHERE\n" +
                     "\tses.IS_DELETE = 1 " );
-            if(!StringUtils.isEmpty(SCHOOL_NAME) && !"null".equals(SCHOOL_NAME)){
-                sql.append("and ses.SCHOOL_NAME like '%"+SCHOOL_NAME+"%' ");
+            if(!StringUtils.isEmpty(schoolName) && !"null".equals(schoolName)){
+                sql.append("and ses.SCHOOL_NAME like '%"+schoolName+"%' ");
             }
-            if(!StringUtils.isEmpty(SCHOOL_TYPE) && !"null".equals(SCHOOL_TYPE)){
-                sql.append("and ses.SCHOOL_TYPE = "+SCHOOL_TYPE+" ");
+            if(!StringUtils.isEmpty(schoolType) && !"null".equals(schoolType)){
+                sql.append("and ses.SCHOOL_TYPE = '"+schoolType+"' ");
             }
-            if(StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS) ){
+            if(StringUtils.isEmpty(auditStatus) || "null".equals(auditStatus) ){
                 sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
             }
-            if(!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS) ){
+            if(!StringUtils.isEmpty(auditStatus) && "0".equals(auditStatus) ){
                 sql.append("AND  sua.AUDIT_STATUS = 0 ");
             }
-            if(!StringUtils.isEmpty(AUDIT_STATUS) && "2".equals(AUDIT_STATUS) ){
+            if(!StringUtils.isEmpty(auditStatus) && "2".equals(auditStatus) ){
                 sql.append("AND  sua.AUDIT_STATUS = 2 ");
             }
 
