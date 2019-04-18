@@ -12,9 +12,11 @@ import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.model.UserModel;
 import cn.com.bonc.sce.rest.RestRecord;
 
+import cn.com.bonc.sce.service.FileResourceService;
 import cn.com.bonc.sce.tool.IDUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +65,9 @@ public class UserOperationController {
 
     @Autowired
     private UserPasswordDao passwordDao;
+
+    @Autowired
+    private FileResourceService fileResourceService;
 
     /**
      * 添加用户信息
@@ -242,8 +247,32 @@ public class UserOperationController {
     @ResponseBody
     public RestRecord getUserAndAgentInfoByUserId(
             @PathVariable( "userId" ) String userId ) {
-        Map<String,Object> map = userInfoRepository.getUserAndAgentInfoByUserId( userId );
-        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,map );
+        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> map;
+        try {
+            map = userInfoRepository.getUserAndAgentInfoByUserId(userId);
+            String picUrl = "";
+            if(StringUtils.isNoneBlank(ObjectUtils.toString(map.get("headPortrait")))) {
+                Integer headPortrait = Integer.parseInt(map.get("headPortrait").toString());
+                Map<String, Object> url = fileResourceService.getFileStorePath(headPortrait);
+                picUrl = url == null ? "" : url.get("fileStorePath").toString();
+            }
+            result.put("headPortrait",map.get("headPortrait"));
+            result.put("fileStorePath",picUrl);
+            result.put("loginName",map.get("loginName"));
+            result.put("userType",map.get("userType"));
+            result.put("userName",map.get("userName"));
+            result.put("gender",map.get("gender"));
+            result.put("birthDate",map.get("birthDate"));
+            result.put("address",map.get("address"));
+            result.put("province",map.get("province"));
+            result.put("city",map.get("city"));
+            result.put("area",map.get("area"));
+        }catch (Exception e){
+            return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420);
+
+        }
+        return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200,result );
     }
 
 
