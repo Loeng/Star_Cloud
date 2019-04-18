@@ -379,7 +379,7 @@
         <if test="contentTitle != null  and contentTitle != ''">
             AND T.CONTENT_TITLE LIKE   '%'||#{contentTitle}||'%'
         </if>
-        ORDER BY T.TOP_ORDER DESC
+        ORDER BY T.TOP_ORDER DESC,T.CREATE_TIME DESC
 
     </select>
 
@@ -427,7 +427,7 @@
 	    AND CONTENT_STATUS = '1'
 	    AND IS_PUBLISH = 1
 	    AND IS_TOP =1
-        ORDER BY TOP_ORDER DESC
+        ORDER BY T.TOP_ORDER DESC,T.CREATE_TIME DESC
     </select>
 
     <update id="updateTopNewOrder" >

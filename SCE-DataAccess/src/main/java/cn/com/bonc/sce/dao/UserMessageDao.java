@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -38,6 +39,6 @@ public interface UserMessageDao extends JpaRepository< UserMessage, Integer > {
 
     UserMessage findByIdAndIsDelete( Integer id, Integer isDelete );
 
-    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER_INFO WHERE IS_READ=0 AND USER_ID=?1 AND IS_DELETE=1", nativeQuery = true )
-    Integer getIsNotReadCount( String userId );
+    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_COMMON_USER_INFO WHERE IS_READ=0 AND USER_ID=:userId AND IS_DELETE=1 AND CREATE_TIME > (SELECT CREATE_TIME FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID =:userId)", nativeQuery = true )
+    Integer getIsNotReadCount(@Param( "userId" ) String userId );
 }

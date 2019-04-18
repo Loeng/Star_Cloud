@@ -9,7 +9,7 @@
             (#{userId,jdbcType=BIGINT},#{secret,jdbcType=VARCHAR},#{loginName,jdbcType=VARCHAR},
             #{userType,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{organizationId,jdbcType=INTEGER},
             #{phoneNumber,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},#{accountStatus,jdbcType=INTEGER},
-            #{certificateType,jdbcType=INTEGER},#{certificateNumber,jdbcType=VARCHAR},
+            #{certificateType,jdbcType=INTEGER},#{certificateNumber,jdbcType=VARCHAR}
             )
     </insert>
 

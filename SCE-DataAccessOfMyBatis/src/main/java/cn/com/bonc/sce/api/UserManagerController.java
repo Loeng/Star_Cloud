@@ -151,7 +151,7 @@ public class UserManagerController {
         String phoneNumber = ( String ) map.get( "phoneNumber" );
         Integer userType = Integer.parseInt( map.get( "userType" ).toString() );
         String userName = ( String ) map.get( "userName" );
-        Integer certificateType = Integer.parseInt( ( String ) map.get( "certificateType" ) );
+        Integer certificateType = map.get( "certificateType" ) == null ? null : Integer.parseInt( ( map.get( "certificateType" ).toString() ) );
         String certificateNumber = ( String ) map.get( "certificateNumber" );
 
 

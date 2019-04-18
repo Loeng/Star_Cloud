@@ -1,8 +1,10 @@
 package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
+import cn.com.bonc.sce.dao.LoginDao;
 import cn.com.bonc.sce.dao.UserManagerDao;
 import cn.com.bonc.sce.model.InfoTeacherModel;
+import cn.com.bonc.sce.model.SSOAuthentication;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.VaildSecurityUtils;
 import cn.hutool.json.JSON;
@@ -24,6 +26,9 @@ public class UserManagerService {
 
     @Autowired
     private UserManagerDao userManagerDao;
+
+    @Autowired
+    private LoginDao loginDao;
 
     public RestRecord delUser( String id ) {
         return userManagerDao.delUser( id );
@@ -57,14 +62,25 @@ public class UserManagerService {
         JSONObject jsonObj = JSONUtil.parseObj( json );
         String valid = ( String ) jsonObj.get( "valid" );
         String phone = ( String ) jsonObj.get( "phoneNumber" );
+        String loginName = ( String ) jsonObj.get( "loginName" );
+        String password = ( String ) jsonObj.get( "password" );
+
         String encryptionCode = VaildSecurityUtils.getAccountEncryptionCode( phone, valid );
         if ( !VaildSecurityUtils.checkValid( encryptionCode ) ) {
             return new RestRecord( 411, WebMessageConstants.SCE_PORTAL_MSG_411 );
         }
         RestRecord restRecord = userManagerDao.register( json );
-        //注册成功删除验证码
+        //注册成功删除验证码,然后获取ticket返给前端
         if ( restRecord.getCode() == 200 ) {
             VaildSecurityUtils.delValid( encryptionCode );
+            //获取ticket信息
+            SSOAuthentication ssoAuthentication = new SSOAuthentication();
+            ssoAuthentication.setAuthType( 0 );
+            ssoAuthentication.setIdentifier( loginName );
+            ssoAuthentication.setPassword( password );
+            ssoAuthentication.setTicketReceiveUrl( "http://www.mysite.com/authentication/ticket" );
+            return loginDao.getTicket( ssoAuthentication );
+
         }
         return restRecord;
     }
