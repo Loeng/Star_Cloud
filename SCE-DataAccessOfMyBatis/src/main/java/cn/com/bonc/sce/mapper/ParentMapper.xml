@@ -33,21 +33,29 @@
     </select>
 
     <select id="getParentList" resultType="Map">
-        SELECT r.PARENT_USER_ID,r.IS_MAIN,r.RELATIONSHIP,u.USER_NAME,u.HEAD_PORTRAIT,A.APPLY_RESULT
+        SELECT r.PARENT_USER_ID,r.IS_MAIN,r.RELATIONSHIP,u.USER_NAME,u.HEAD_PORTRAIT
         FROM STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL r
         LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER u ON r.PARENT_USER_ID=u.USER_ID AND u.IS_DELETE=1
-        LEFT JOIN STARCLOUDPORTAL.SCE_BINDING_APPLY A
-        ON A.BINDING_USER_ID = R.STUDENT_USER_ID and A.APPLY_RESULT != 1
-        <if test="isMain == 1">
-            and A.TARGET_USER_ID = #{userId}
-            and A.APPLY_USER_ID = r.PARENT_USER_ID
-        </if>
-        <if test="isMain == 0">
-            and A.APPLY_USER_ID = #{userId}
-            and A.TARGET_USER_ID = r.PARENT_USER_ID
-        </if>
         WHERE r.STUDENT_USER_ID = #{id}
-        and A.APPLY_TYPE = 0
+    </select>
+
+    <select id="selectApplyResult" resultType="int">
+        SELECT APPLY_RESULT FROM STARCLOUDPORTAL.SCE_BINDING_APPLY
+        WHERE BINDING_USER_ID = #{studentId}
+        <if test="isMain == 1">
+            AND APPLY_USER_ID = #{currentUserId}
+            AND TARGET_USER_ID = #{parentId}
+        </if>
+        <if test="isMain == 0 and currentUserIdIsMain ==1">
+            AND TARGET_USER_ID = #{currentUserId}
+            AND APPLY_USER_ID = #{parentId}
+        </if>
+        <if test="isMain == 0 and currentUserIdIsMain ==0">
+            AND 1 != 1
+        </if>
+        AND IS_DELETE = 1
+        AND APPLY_TYPE =0
+        AND APPLY_RESULT != 1
     </select>
 
     <select id="getApplyList" resultType="Map">

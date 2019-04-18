@@ -19,9 +19,12 @@ public interface ParentMapper {
 
     int unbind(@Param("parentId") String parentId, @Param("studentId") String studentId);
 
-    List<Map> getParentList(@Param("userId") String userId, @Param("id") String id, @Param("isMain") int isMain);
+    List<Map> getParentList(@Param("id") String id);
 
     Integer selectIsMain(@Param("userId") String userId, @Param("id") String id);
+
+    Integer selectApplyResult(@Param("currentUserId") String currentUserId, @Param("studentId") String studentId,
+                              @Param("isMain") Integer isMain, @Param("parentId") String parentId, @Param("currentUserIdIsMain") Integer currentUserIdIsMain);
 
     List<Map> getApplyList(@Param("id") String id);
 

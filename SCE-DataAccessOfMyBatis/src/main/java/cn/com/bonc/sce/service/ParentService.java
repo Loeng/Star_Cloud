@@ -40,11 +40,14 @@ public class ParentService {
     }
 
     public List<Map> getParentList(String userId, String id) {
-        Integer isMain = parentDao.selectIsMain(userId, id);
-        if(isMain == null){
-            return null;
+        List<Map> list = parentDao.getParentList(id);
+        Integer currentUserIdIsMain = parentDao.selectIsMain(userId, id);
+        for(Map map : list){
+            String parentId = map.get("PARENT_USER_ID").toString();
+            Integer isMain = Integer.parseInt(map.get("IS_MAIN").toString());
+            map.put("APPLY_RESULT", parentDao.selectApplyResult(userId, id, isMain, parentId, currentUserIdIsMain));
         }
-        return parentDao.getParentList(userId, id, isMain);
+        return list;
     }
 
     public List<Map> getApplyList(String id) {

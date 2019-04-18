@@ -29,8 +29,12 @@ public class ParentDao {
         return parentMapper.unbind(parentId,studentId);
     }
 
-    public List<Map> getParentList(String userId, String id, int isMain) {
-        return parentMapper.getParentList(userId, id, isMain);
+    public List<Map> getParentList(String id) {
+        return parentMapper.getParentList(id);
+    }
+
+    public Integer selectApplyResult(String currentUserId, String studentId, Integer isMain, String parentId, Integer currentUserIdIsMain){
+        return parentMapper.selectApplyResult(currentUserId, studentId, isMain, parentId, currentUserIdIsMain);
     }
 
     public Integer selectIsMain(String userId, String id){
