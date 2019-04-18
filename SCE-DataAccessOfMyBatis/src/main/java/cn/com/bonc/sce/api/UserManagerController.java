@@ -314,6 +314,9 @@ public class UserManagerController {
         if (ADDTYPE == 0) {//建新用户
             String USER_ID = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
             String ORGANIZATION_ID = (String) map.get("ORGANIZATION_ID");
+            if(ORGANIZATION_ID == null){
+                return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
+            }
             Integer CERTIFICATE_TYPE = (Integer) map.get("CERTIFICATE_TYPE");
             String CERTIFICATE_NUMBER = (String) map.get("CERTIFICATE_NUMBER");
             if(CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber(CERTIFICATE_NUMBER)){
@@ -376,21 +379,15 @@ public class UserManagerController {
             if( userInfo == null ){
                 return new RestRecord( 432, "请输入已录入教师的证件号");
             }
-//            if(!UserPropertiesUtil.checkPhone(PHONE_NUMBER)){
-//                log.info("教师身手机号验证未通过");
-//                return new RestRecord( 432, "手机号填写不正确");
-//            }
-//            //通过身份证和手机号验证该教师的身份证在提交前是否被修改
-//            int count = userService.checkUser(CERTIFICATE_TYPE, CERTIFICATE_NUMBER, PHONE_NUMBER);
-//            if(count < 1){
-//                return new RestRecord( 432, "请检查录入信息是否正确");
-//            }
             Long ID = idWorker.nextId();
             //通过证件类型和证件号码查询用户ID
             Map teacher = userService.getUserId(CERTIFICATE_TYPE.toString(), CERTIFICATE_NUMBER);
             String USER_ID = teacher.get("USER_ID").toString();
             //检查该教师是否已是本校教师
             String organizationId =  userService.getOrganizationIdByUserId(APPLY_USER_ID);
+            if(organizationId == null){
+                return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
+            }
             if(userInfo.get("ORGANIZATION_ID").toString().equals(organizationId)){
                 return new RestRecord( 434, "该教师已是本校教师，无需申请转入" );
             }

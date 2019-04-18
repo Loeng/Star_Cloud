@@ -44,7 +44,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     int savaAllUserInfo(String id, String userName, String gender , String loginName
                         , String userType, String mailAddress, String certificateType
                         , String certificateNumber, String phoneNumber
-                        , BigDecimal organizationId, Date birthDate, String secret, String nationality, String volk, String isAdministrators);
+                        , String organizationId, Date birthDate, String secret, String nationality, String volk, String isAdministrators);
 
     /**
      * 插入用户啊
@@ -117,7 +117,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @return
      */
     @Query( nativeQuery = true, value = "SELECT ORGANIZATION_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID = ?1")
-    BigDecimal selectOrganizationId(String userId);
+    String selectOrganizationId(String userId);
 
     /**
      * 通过用户身份证作唯一判断

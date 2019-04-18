@@ -111,13 +111,15 @@ public class FileUploadApiController {
     public RestRecord uploadParseExcel(@RequestBody List< ExcelToUser > list, @RequestParam( "userType" ) String userType, @CurrentUserId String currentUserId) throws ImportUserFailedException{
 
         //通过用户id查询所属学校id
-        BigDecimal organizationId = fileResourceRepository.selectOrganizationId( currentUserId );
-
+        String organizationId = fileResourceRepository.selectOrganizationId( currentUserId );
         ExcelToUser excelToUser;
         int i = 0;
         int count = 0;
         try {
             if ( TEACHER_PRE.equals( userType ) ) {
+                if( organizationId == null ){
+                    throw new ImportUserFailedException( "当前账户任何学校相关信息，无法导入" );
+                }
                 String pre = "js_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
@@ -173,12 +175,15 @@ public class FileUploadApiController {
                     }
 
                     //插入数据到教师表
-                    fileResourceRepository.saveTeacher( userId, organizationId.toString(), excelToUser.getPosition(),
+                    fileResourceRepository.saveTeacher( userId, organizationId, excelToUser.getPosition(),
                             excelToUser.getWorkNumber(), schoolDate,
                             teachDate, excelToUser.getAcademicQualification(), excelToUser.getTeachRange() );
                     count++;
                 }
             } else if ( STUDENT_PRE.equals( userType ) ) {
+                if( organizationId == null ){
+                    throw new ImportUserFailedException( "当前学校无学校相关信息，无法导入" );
+                }
                 String pre = "xs_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);

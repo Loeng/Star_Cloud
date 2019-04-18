@@ -207,6 +207,9 @@ public class UserService {
             return new RestRecord( 432, "学生和家长的证件类型、证件号不能相同" );
         }
         String organizationId = userDao.getOrganizationIdByUserId(userId);
+        if(organizationId == null){
+            return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
+        }
         //1.存入学生密码
         String studentSecret = Secret.ES256GenerateSecret();
         String studentLoginName = IDUtil.createID( "xs_" );
@@ -300,6 +303,9 @@ public class UserService {
             return new RestRecord( 434, String.format(WebMessageConstants.SCE_PORTAL_MSG_434, "") );
         }
         String organizationId = userDao.getOrganizationIdByUserId(currentUserId);
+        if(organizationId == null){
+            return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
+        }
         if(organizationId.equals(userInfo.get("ORGANIZATION_ID").toString())){
             return new RestRecord( 434, "该学生已是本校学生，无需申请转入" );
         }
