@@ -155,15 +155,16 @@ public class AgentApiController {
         }
     }
 
-    @GetMapping("/getCompanyList/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}")
+    @GetMapping("/getAgentInfo/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getCompanyList(@PathVariable("AGENT_NAME") String AGENT_NAME, @PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+    public RestRecord getAgentInfo(@RequestParam(value = "agentName",required = false) @ApiParam( name = "agentName", value = "代理商名称") String agentName,@RequestParam(value = "property",required = false) @ApiParam( name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") Integer auditStatus
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;
             StringBuilder sql = new StringBuilder("SELECT\n" +
-                    "\tsma.ID,\n" +
+                    "\tto_char(sma.ID) AS ID,\n" +
+                    "\tscu.USER_ID,\n" +
                     "\tsma.AGENT_NAME,\n" +
                     "\tsma.PROPERTY,\n" +
                     "\tscu.USER_NAME,\n" +
@@ -176,21 +177,22 @@ public class AgentApiController {
                     "\tLEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu ON sua.USER_ID = scu.USER_ID \n" +
                     "WHERE\n" +
                     "\tsma.IS_DELETE = 1  ");
-            if (!StringUtils.isEmpty(AGENT_NAME) && !"null".equals(AGENT_NAME)) {
-                sql.append("and sma.AGENT_NAME like '%" + AGENT_NAME + "%' ");
+            if (!StringUtils.isEmpty(agentName) && !"null".equals(agentName)) {
+                sql.append("and sma.AGENT_NAME like '%" + agentName + "%' ");
             }
-            if (!StringUtils.isEmpty(PROPERTY) && !"null".equals(PROPERTY)) {
-                sql.append("and smc.PROPERTY = " + PROPERTY + " ");
+            if (!StringUtils.isEmpty(property) && !"null".equals(property)) {
+                sql.append("and smc.PROPERTY = '" + property + "' ");
             }
-            if (StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS)) {
+            if (StringUtils.isEmpty(auditStatus) || "null".equals(auditStatus)) {
                 sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
             }
-            if (!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS)) {
+            if (!StringUtils.isEmpty(auditStatus) && "0".equals(auditStatus)) {
                 sql.append("AND  sua.AUDIT_STATUS = 0 ");
             }
-            if (!StringUtils.isEmpty(AUDIT_STATUS) && "2".equals(AUDIT_STATUS)) {
+            if (!StringUtils.isEmpty(auditStatus) && "2".equals(auditStatus)) {
                 sql.append("AND  sua.AUDIT_STATUS = 2 ");
             }
+            sql.append("order by sua.AUDIT_TIME desc");
 
             Session session = entityManager.unwrap(org.hibernate.Session.class);
             NativeQuery query = session.createNativeQuery(sql.toString());

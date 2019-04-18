@@ -97,18 +97,19 @@ public class AgentController {
     /**
      * 代理商认证列表
      *
-     * @param AGENT_NAME
-     * @param PROPERTY
-     * @param AUDIT_STATUS
+     * @param agentName
+     * @param property
+     * @param auditStatus
      * @param pageNum
      * @param pageSize
      * @return
      */
-    @GetMapping("/getAgentInfo/{AGENT_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}")
+    @ApiOperation(value = "获取代理商认证审核列表接口",notes = "获取代理商认证审核列表信息",httpMethod = "GET")
+    @GetMapping("/getAgentInfo/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getAgentInfo(@PathVariable("AGENT_NAME") String AGENT_NAME, @PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
-            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
-        return agentService.getAgentInfo(AGENT_NAME, PROPERTY, AUDIT_STATUS, pageNum, pageSize);
+    public RestRecord getAgentInfo(@RequestParam(value = "agentName",required = false) @ApiParam( name = "agentName", value = "代理商名称") String agentName,@RequestParam(value = "property",required = false) @ApiParam( name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") Integer auditStatus
+            , @PathVariable("pageNum") @ApiParam( name = "pageNum", value = "当前页数", required = true) Integer pageNum,@PathVariable("pageSize") @ApiParam( name = "pageSize", value = "每页记录数",required = true) Integer pageSize) {
+        return agentService.getAgentInfo(agentName, property, auditStatus, pageNum, pageSize);
     }
 
     /**

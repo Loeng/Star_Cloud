@@ -58,9 +58,9 @@ public interface CompanyInfoDao {
     @RequestMapping( value = "/company/updateCompany", method = RequestMethod.PUT )
     RestRecord updateCompany(@RequestBody @ApiParam( "厂商信息对象" ) CompanyInfoModel companyInfo);
 
-    @RequestMapping( value = "/company/getCompanyList/{COMPANY_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}", method = RequestMethod.GET )
-    RestRecord getCompanyList(@PathVariable("COMPANY_NAME") String COMPANY_NAME,@PathVariable("PROPERTY") String PROPERTY,@PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
-            ,@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize);
+    @RequestMapping( value = "/company/getCompanyList/{pageNum}/{pageSize}", method = RequestMethod.GET )
+    RestRecord getCompanyList(@RequestParam(value = "companyName",required = false) @ApiParam( name = "companyName", value = "厂家名称") String companyName,@RequestParam(value = "property",required = false) @ApiParam( name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") Integer auditStatus
+            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize);
 
 
 }

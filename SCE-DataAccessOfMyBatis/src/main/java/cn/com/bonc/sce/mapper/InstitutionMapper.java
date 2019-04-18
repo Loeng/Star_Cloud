@@ -33,6 +33,6 @@ public interface InstitutionMapper {
 
     int updateInstitutionInfo(Institution institution);
 
-    List<Map> getInstitutionInfoList(@Param("INSTITUTION_NAME") String INSTITUTION_NAME, @Param("AUDIT_STATUS") String AUDIT_STATUS);
+    List<Map> getInstitutionInfoList(@Param("institutionName") String institutionName, @Param("auditStatus") String auditStatus);
 
 }

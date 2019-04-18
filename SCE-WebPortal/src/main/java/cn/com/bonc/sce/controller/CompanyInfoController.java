@@ -159,12 +159,12 @@ public class CompanyInfoController {
         return companyInfoService.updateCompany(companyInfo);
     }
 
-
-    @GetMapping( "/getCompanyList/{COMPANY_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @ApiOperation(value = "获取厂家认证审核列表接口",notes = "获取厂家认证审核列表信息",httpMethod = "GET")
+    @GetMapping( "/getCompanyList/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getCompanyList(@PathVariable("COMPANY_NAME") String COMPANY_NAME,@PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
-            , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize ) {
-        return companyInfoService.getCompanyList( COMPANY_NAME, PROPERTY, AUDIT_STATUS, pageNum, pageSize );
+    public RestRecord getCompanyList(@RequestParam(value = "companyName",required = false) @ApiParam( name = "companyName", value = "厂家名称") String companyName,@RequestParam(value = "property",required = false) @ApiParam( name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") Integer auditStatus
+            , @PathVariable("pageNum") @ApiParam( name = "pageNum", value = "当前页数", required = true) Integer pageNum,@PathVariable("pageSize") @ApiParam( name = "pageSize", value = "每页记录数",required = true) Integer pageSize ) {
+        return companyInfoService.getCompanyList( companyName, property, auditStatus, pageNum, pageSize );
     }
 
 }

@@ -123,12 +123,12 @@ public class InstitutionController {
         return institutionService.updateInstitutionInfo(institution);
     }
 
-    @GetMapping("/getInstitutionInfoList/{INSTITUTION_NAME}/{AUDIT_STATUS}/{pageNum}/{pageSize}")
+    @GetMapping("/getInstitutionInfoList/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getInstitutionInfoList(@PathVariable("INSTITUTION_NAME") String INSTITUTION_NAME, @PathVariable("AUDIT_STATUS") String AUDIT_STATUS
+    public RestRecord getInstitutionInfoList(@RequestParam(value = "institutionName",required = false) @ApiParam( name = "institutionName", value = "教育局名称") String institutionName, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") String auditStatus
             , @PathVariable(value = "pageNum") Integer pageNum, @PathVariable(value = "pageSize") Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List institutionList = institutionService.getInstitutionInfoList(INSTITUTION_NAME, AUDIT_STATUS);
+        List institutionList = institutionService.getInstitutionInfoList(institutionName, auditStatus);
         PageInfo pageInfo = new PageInfo(institutionList);
         RestRecord restRecord = new RestRecord(200, MessageConstants.SCE_MSG_0200, institutionList);
         restRecord.setTotal(pageInfo.getTotal());
