@@ -39,12 +39,12 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      */
     @Modifying
     @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
-            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ORGANIZATION_ID,BIRTHDATE,SECRET,NATIONALITY,VOLK,ISADMINISTRATORS) VALUES " +
-            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15)  " )
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ORGANIZATION_ID,BIRTHDATE,SECRET,NATIONALITY,VOLK) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14)  " )
     int savaAllUserInfo(String id, String userName, String gender , String loginName
-                        , String userType, String mailAddress, String certificateType
+                        , Integer userType, String mailAddress, Integer certificateType
                         , String certificateNumber, String phoneNumber
-                        , String organizationId, Date birthDate, String secret, String nationality, String volk, String isAdministrators);
+                        , Long organizationId, Date birthDate, String secret, String nationality, String volk);
 
     /**
      * 插入用户啊
@@ -151,8 +151,8 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     @Modifying
     @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_TEACHER(USER_ID,SCHOOL_ID,POSITION," +
             "WORK_NUMBER,SCHOOL_TIME,TEACH_TIME,ACADEMIC_QUALIFICATION,TEACH_RANGE) VALUES (?1,?2,?3,?4,?5,?6,?7,?8)")
-    int saveTeacher(String userID, String schoolId, String position, String workNumber,
-                    Date schoolTime, Date teachTime, String academicQualification, String teachRange);
+    int saveTeacher(String userID, Long schoolId, String position, String workNumber,
+                    Date schoolTime, Date teachTime, String academicQualification, Integer teachRange);
 
 
     /**

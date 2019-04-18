@@ -157,9 +157,9 @@ public class FileUploadApiController {
                     userPassword.setPassword( "star123!" );
                     userPassword.setUserId( userId );
                     fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
-                            loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(), organizationId,
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(), excelToUser.getIsAdministrators());
+                            loginName, Integer.parseInt(userType), excelToUser.getMailAddress(), Integer.parseInt(CERTIFICATE_TYPE), excelToUser.getCertificateNumber(),
+                            excelToUser.getPhoneNumber(), Long.parseLong(organizationId),
+                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode());
                     userPasswordDao.save( userPassword );
 
                     String schoolTime = excelToUser.getSchoolTime();
@@ -178,9 +178,9 @@ public class FileUploadApiController {
                     }
 
                     //插入数据到教师表
-                    fileResourceRepository.saveTeacher( userId, organizationId, excelToUser.getPosition(),
+                    fileResourceRepository.saveTeacher( userId, Long.parseLong(organizationId), excelToUser.getPosition(),
                             excelToUser.getWorkNumber(), schoolDate,
-                            teachDate, excelToUser.getAcademicQualification(), excelToUser.getTeachRange() );
+                            teachDate, excelToUser.getAcademicQualification(), Integer.parseInt(excelToUser.getTeachRange()) );
                     count++;
                 }
             } else if ( STUDENT_PRE.equals( userType ) ) {
@@ -190,6 +190,11 @@ public class FileUploadApiController {
                 String pre = "xs_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
+                    System.out.println("-------------------");
+                    System.out.println("-------------------");
+                    System.out.println(excelToUser.toString());
+                    System.out.println("-------------------");
+                    System.out.println("-------------------");
                     //必填项过滤
                     if(excelToUser.getUserName() == null){
                         continue;
@@ -226,11 +231,10 @@ public class FileUploadApiController {
                         log.info("家长邮箱验证未通过");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "家长" ), i + EXCEL_NUMBER ));
                     }
-                    if(excelToUser.getParentCertificationNumber().equals(excelToUser.getCertificateNumber())){
-                        log.info("家长和学生的身份证不能相同");
-                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ));
-                    }
-
+//                    if(excelToUser.getParentCertificationNumber().equals(excelToUser.getCertificateNumber())){
+//                        log.info("家长和学生的身份证不能相同");
+//                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ));
+//                    }
                     String parentId = fileResourceRepository.selectUserIdByCertificateNumber(excelToUser.getParentCertificationNumber());
 
                     //生成学生用户，并自动生成家长用户关联学生
@@ -242,9 +246,9 @@ public class FileUploadApiController {
                     userPassword.setPassword( "star123!" );
                     userPassword.setUserId( studentId );
                     fileResourceRepository.savaAllUserInfo( studentId, excelToUser.getUserName(), excelToUser.getGender(),
-                            loginName, userType, excelToUser.getMailAddress(), CERTIFICATE_TYPE, excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(),organizationId,
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),"0" );
+                            loginName, Integer.parseInt(userType), excelToUser.getMailAddress(), Integer.parseInt(CERTIFICATE_TYPE), excelToUser.getCertificateNumber(),
+                            excelToUser.getPhoneNumber(),Long.parseLong(organizationId),
+                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode());
                     userPasswordDao.save( userPassword );
 
                     String loginParentName;

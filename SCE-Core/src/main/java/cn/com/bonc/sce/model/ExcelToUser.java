@@ -45,7 +45,7 @@ public class ExcelToUser {
     @Excel( name = "民族", orderNum = "11")
     private String nationCode;
 
-    @Excel( name = "参加工作年月", orderNum = "12")
+    @Excel( name = "参加工作年月", orderNum = "17")
     private String teachTime;
 
     @Excel( name = "入学年月", orderNum = "13")
@@ -60,7 +60,7 @@ public class ExcelToUser {
     @Excel( name = "管理员", replace = { "是_1","否_0" }, orderNum = "16")
     private String isAdministrators;
 
-    @Excel( name = "任课学段", orderNum = "17")
+    @Excel( name = "任课学段", replace = { "学前教育_0", "小学_1", "普通初中_2", "普通高中_3", "职业初中_4", "职业高中_5", "成人中等专业学校_6", "成人中学_7", "特殊教育_8", "其他_9" }, orderNum = "1")
     private String teachRange;
 
     @Excel( name = "工号", orderNum = "18")
@@ -258,7 +258,29 @@ public class ExcelToUser {
     }
 
     public String getTeachRange() {
-        return teachRange;
+        switch (teachRange){
+            case "学前教育":
+                return "0";
+            case "小学":
+                return "1";
+            case "普通初中":
+                return "2";
+            case "普通高中":
+                return "3";
+            case "职业初中":
+                return "4";
+            case "职业高中":
+                return "5";
+            case "成人中等专业学校":
+                return "6";
+            case "成人中学":
+                return "7";
+            case "特殊教育":
+                return "8";
+            case "其他":
+                return "9";
+        }
+        return "";
     }
 
     public void setTeachRange(String teachRange) {
