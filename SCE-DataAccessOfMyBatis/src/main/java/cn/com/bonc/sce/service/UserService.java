@@ -211,6 +211,9 @@ public class UserService {
         }
         String bindType = map.get("bindType").toString();
         String parentId = null;
+        if(studentCertificateType.equals(parentCertificateType) && studentCertificateNumber.equals(parentCertificateNumber)){
+            return new RestRecord( 432, "学生和家长的证件不能相同" );
+        }
         if(bindType.equals("1")){
             //新建家长
             if(parentCertificateType.equals("1")){

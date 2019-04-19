@@ -190,11 +190,6 @@ public class FileUploadApiController {
                 String pre = "xs_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
-                    System.out.println("-------------------");
-                    System.out.println("-------------------");
-                    System.out.println(excelToUser.toString());
-                    System.out.println("-------------------");
-                    System.out.println("-------------------");
                     //必填项过滤
                     if(excelToUser.getUserName() == null){
                         continue;
@@ -231,10 +226,10 @@ public class FileUploadApiController {
                         log.info("家长邮箱验证未通过");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "家长" ), i + EXCEL_NUMBER ));
                     }
-//                    if(excelToUser.getParentCertificationNumber().equals(excelToUser.getCertificateNumber())){
-//                        log.info("家长和学生的身份证不能相同");
-//                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ));
-//                    }
+                    if(excelToUser.getParentCertificationNumber().equals(excelToUser.getCertificateNumber())){
+                        log.info("家长和学生的身份证不能相同");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ));
+                    }
                     String parentId = fileResourceRepository.selectUserIdByCertificateNumber(excelToUser.getParentCertificationNumber());
 
                     //生成学生用户，并自动生成家长用户关联学生
