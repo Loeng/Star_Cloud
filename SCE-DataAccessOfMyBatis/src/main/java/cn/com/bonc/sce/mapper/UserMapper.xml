@@ -17,7 +17,7 @@
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD
             (ID,PASSWORD,IS_DELETE,USER_ID)
         VALUES
-            (#{id},#{password},#{isDelete},#{userId})
+            (#{id},#{password,jdbcType=VARCHAR},#{isDelete},#{userId})
     </insert>
 
     <select id="isExist" resultType="java.lang.Integer">
