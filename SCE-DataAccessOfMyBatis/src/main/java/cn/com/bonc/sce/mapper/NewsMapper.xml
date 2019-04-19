@@ -102,11 +102,9 @@
                 CONTENT_TITLE = #{contentTitle},
             </if>
             <if test="content != null and content != ''">
-                CONTENT = #{content},
+                NEWS_CONTENT = #{content},
             </if>
-            <if test="picId != null ">
-                PIC_ID = #{picId},
-            </if>
+            PIC_ID = #{picId},
             <if test="fileId != null ">
                 FILE_ID = #{fileId},
             </if>
@@ -119,9 +117,7 @@
             <if test="isTop != null">
                 IS_TOP = #{isTop},
             </if>
-            <if test="picUrl != null and picUrl != ''">
-                PIC_URL = #{picUrl},
-            </if>
+            PIC_URL = #{picUrl},
             <if test="fileUrl != null and fileUrl != ''">
                 FILE_URL = #{fileUrl},
             </if>
