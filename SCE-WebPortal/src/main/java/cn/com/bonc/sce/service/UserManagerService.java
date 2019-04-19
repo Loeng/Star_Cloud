@@ -124,8 +124,8 @@ public class UserManagerService {
         return userManagerDao.getTeacherInfo( id );
     }
 
-    public RestRecord editTeacherInfo( String json ) {
-        return userManagerDao.editTeacherInfo( json );
+    public RestRecord editTeacherInfo( String json, String userId ) {
+        return userManagerDao.editTeacherInfo( json, userId );
     }
 
     public RestRecord addTeacher( String json, String userId ) {

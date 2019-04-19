@@ -44,7 +44,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     int savaAllUserInfo(String id, String userName, String gender , String loginName
                         , Integer userType, String mailAddress, Integer certificateType
                         , String certificateNumber, String phoneNumber
-                        , Long organizationId, Date birthDate, String secret, String nationality, String volk);
+                        , Long organizationId, Date birthDate, String secret, String nationality, String volk, Integer isAdministrators);
 
     /**
      * 插入用户啊

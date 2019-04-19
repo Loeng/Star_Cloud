@@ -277,9 +277,18 @@ public class UserManagerController {
     @PutMapping( "/editTeacherInfo" )
     @ResponseBody
     @Transactional
-    public RestRecord editTeacherInfo( @RequestBody String json ) {
+    public RestRecord editTeacherInfo( @RequestBody String json, @CurrentUserId String userId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         Map map = ( Map ) JSONUtils.parse( json );
+        Integer ISADMINISTRATORS = Integer.parseInt(map.get( "ISADMINISTRATORS" ).toString());
         String USER_ID = ( String ) map.get( "USER_ID" );
+        if(userId.equals(USER_ID) && ISADMINISTRATORS == 0 ){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         Integer CERTIFICATE_TYPE = ( Integer ) map.get( "CERTIFICATE_TYPE" );
         String CERTIFICATE_NUMBER = ( String ) map.get( "CERTIFICATE_NUMBER" );
         if ( CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber( CERTIFICATE_NUMBER ) ) {
@@ -308,8 +317,9 @@ public class UserManagerController {
         String POSITION = ( String ) map.get( "POSITION" );
         Integer TEACH_RANGE = ( Integer ) map.get( "TEACH_RANGE" );
 
+
         int userEdit = userService.editUser( USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER, USER_NAME,
-                GENDER, PHONE_NUMBER, MAIL_ADDRESS, BIRTHDATE, NATION_CODE, NATIONLITY );
+                GENDER, PHONE_NUMBER, MAIL_ADDRESS, BIRTHDATE, NATION_CODE, NATIONLITY, ISADMINISTRATORS );
         int teacherEdit = userService.editTeacher( USER_ID, ACADEMIC_QUALIFICATION,
                 WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE );
 
@@ -325,11 +335,17 @@ public class UserManagerController {
     @ResponseBody
     @Transactional
     public RestRecord addTeacher( @RequestBody String json, @CurrentUserId String userId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的添加
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         Map map = ( Map ) JSONUtils.parse( json );
         Integer ADDTYPE = Integer.parseInt( map.get( "ADDTYPE" ).toString() );
         if ( ADDTYPE == 0 ) {//建新用户
             String USER_ID = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
             String ORGANIZATION_ID = ( String ) map.get( "ORGANIZATION_ID" );
+            String ISADMINISTRATORS = ( String ) map.get( "ISADMINISTRATORS" );
             if ( ORGANIZATION_ID == null ) {
                 return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
             }
@@ -372,7 +388,7 @@ public class UserManagerController {
             String secret = Secret.ES256GenerateSecret();
             String loginName = IDUtil.createID( "js_" );
             int count1 = userService.addUser( USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
-                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE, NATIONLITY, NATION_CODE, secret, "2", loginName );
+                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE, NATIONLITY, NATION_CODE, secret, "2", loginName, Integer.parseInt(ISADMINISTRATORS) );
             int count2 = userService.addTeacher( USER_ID, ACADEMIC_QUALIFICATION,
                     WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE );
             userService.addPassword( idWorker.nextId(), USER_ID, DEFAULT_PASSWORD );
@@ -388,6 +404,7 @@ public class UserManagerController {
             String APPLY_USER_ID = ( String ) map.get( "APPLY_USER_ID" );
             String TEA_WORK_NUMBER = ( String ) map.get( "WORK_NUMBER" );
             String TEA_ENTRANCE_YEAR = ( String ) map.get( "SCHOOL_TIME" );
+            String ISADMINISTRATORS = ( String ) map.get( "ISADMINISTRATORS" );
             if ( CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber( CERTIFICATE_NUMBER ) ) {
                 log.info( "教师身份证验证未通过" );
                 return new RestRecord( 432, "身份证填写不正确" );
@@ -425,7 +442,7 @@ public class UserManagerController {
             String ORIGIN_SCHOOL_ID = teacher.get( "ORGANIZATION_ID" ).toString();
             String TARGET_SCHOOL_ID = ( String ) map.get( "TARGET_SCHOOL_ID" );
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200,
-                    userService.transInto( ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE ) );
+                    userService.transInto( ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE, Integer.parseInt(ISADMINISTRATORS) ) );
         }
 
     }

@@ -159,7 +159,8 @@ public class FileUploadApiController {
                     fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
                             loginName, Integer.parseInt(userType), excelToUser.getMailAddress(), Integer.parseInt(CERTIFICATE_TYPE), excelToUser.getCertificateNumber(),
                             excelToUser.getPhoneNumber(), Long.parseLong(organizationId),
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode());
+                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),
+                            Integer.parseInt(excelToUser.getIsAdministrators()));
                     userPasswordDao.save( userPassword );
 
                     String schoolTime = excelToUser.getSchoolTime();
@@ -243,7 +244,7 @@ public class FileUploadApiController {
                     fileResourceRepository.savaAllUserInfo( studentId, excelToUser.getUserName(), excelToUser.getGender(),
                             loginName, Integer.parseInt(userType), excelToUser.getMailAddress(), Integer.parseInt(CERTIFICATE_TYPE), excelToUser.getCertificateNumber(),
                             excelToUser.getPhoneNumber(),Long.parseLong(organizationId),
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode());
+                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),0);
                     userPasswordDao.save( userPassword );
 
                     String loginParentName;

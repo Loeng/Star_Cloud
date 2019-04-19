@@ -68,7 +68,7 @@ public interface UserManagerDao {
     RestRecord getTeacherInfo(@RequestParam("id") String id);
 
     @RequestMapping( value = "/userManager/editTeacherInfo", method = RequestMethod.PUT )
-    RestRecord editTeacherInfo(@RequestBody String json);
+    RestRecord editTeacherInfo(@RequestBody String json, @RequestParam("userId") String userId);
 
     @RequestMapping( value = "/userManager/addTeacher", method = RequestMethod.POST )
     RestRecord addTeacher(@RequestBody String json, @RequestParam("userId") String userId);

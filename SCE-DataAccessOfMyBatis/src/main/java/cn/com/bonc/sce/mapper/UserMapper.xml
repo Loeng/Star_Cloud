@@ -407,6 +407,9 @@
             <if test="nationality!=null">
                 NATIONALITY=#{nationality}
             </if>
+            <if test="ISADMINISTRATORS!=null">
+                ISADMINISTRATORS=#{ISADMINISTRATORS}
+            </if>
         </set>
         WHERE USER_ID=#{user_id}
     </update>
@@ -438,11 +441,11 @@
 
     <insert id="addUser">
         INSERT INTO STARCLOUDPORTAL.SCE_COMMON_USER
-        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE,NATIONALITY,VOLK,SECRET,user_type,login_name)
+        (USER_ID,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,USER_NAME,GENDER,PHONE_NUMBER,ORGANIZATION_ID,MAIL_ADDRESS,BIRTHDATE,IS_DELETE,NATIONALITY,VOLK,SECRET,user_type,login_name,ISADMINISTRATORS)
         VALUES
         (#{user_id,jdbcType=BIGINT},#{certificate_type,jdbcType=INTEGER},#{certificate_number,jdbcType=VARCHAR},
         #{user_name,jdbcType=VARCHAR},#{gender,jdbcType=VARCHAR},#{phone_number,jdbcType=VARCHAR},
-        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},TO_DATE(#{birthdate,jdbcType=VARCHAR},'YYYY-MM-dd'),1,#{nationality},#{nationCode},#{secret},#{userType},#{loginName})
+        #{organization_id,jdbcType=VARCHAR},#{mail_address,jdbcType=VARCHAR},TO_DATE(#{birthdate,jdbcType=VARCHAR},'YYYY-MM-dd'),1,#{nationality},#{nationCode},#{secret},#{userType},#{loginName},#{ISADMINISTRATORS})
     </insert>
 
     <insert id="addTeacher">
@@ -456,13 +459,17 @@
     <insert id="transInto">
         INSERT INTO STARCLOUDPORTAL.SCE_TRANSFER_APPLY
         (ID,USER_ID,USER_TYPE,ORIGIN_SCHOOL_ID,TARGET_SCHOOL_ID,APPLY_STATUS,APPLY_TIME,APPLY_USER_ID,IS_DELETE,
-        TEA_ENTRANCE_YEAR,TEA_WORK_NUMBER,TEA_POSITION,TEACH_RANGE)
+        TEA_ENTRANCE_YEAR,TEA_WORK_NUMBER,TEA_POSITION,TEACH_RANGE, ISADMINISTRATORS)
         VALUES
         (#{id,jdbcType=BIGINT},#{user_id,jdbcType=BIGINT},2,#{origin_school_id,jdbcType=VARCHAR},
         #{target_school_id,jdbcType=VARCHAR},0,SYSDATE,#{apply_user_id,jdbcType=VARCHAR},1,
         (#{entrance_year,jdbcType=DATE}),#{tea_work_number,jdbcType=VARCHAR},
-        #{tea_position,jdbcType=VARCHAR},#{tea_range,jdbcType=VARCHAR})
+        #{tea_position,jdbcType=VARCHAR},#{tea_range,jdbcType=VARCHAR}, #{ISADMINISTRATORS})
     </insert>
+
+    <select id="selectTransferInfoByTransferId" resultType="Map">
+
+    </select>
 
     <select id="getTransferTeachers" resultType="Map">
         SELECT u.USER_ID,USER_NAME,LOGIN_NAME,GENDER,PHONE_NUMBER,a.APPLY_STATUS,POSITION,S1.SCHOOL_NAME AS OLD_SCHOOL_NAME,A.REJECT_REASON,
@@ -919,6 +926,9 @@
     <update id="updateOrganizationId">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_USER
         SET ORGANIZATION_ID = #{organizationId}
+        <if test="TEA_ISADMINISTRATORS != null">
+            ISADMINISTRATORS = #{TEA_ISADMINISTRATORS}
+        </if>
         WHERE USER_ID = #{userId}
     </update>
 
@@ -1212,6 +1222,12 @@
         select count(1)
         from STARCLOUDPORTAL.SCE_COMMON_USER
         where MAIL_ADDRESS = #{mailAddress}
+    </select>
+
+    <select id="selectIsAdministortars" resultType="Integer">
+        SELECT ISADMINISTRATORS
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER
+        WHERE USER_ID = #{userId}
     </select>
 
 </mapper>

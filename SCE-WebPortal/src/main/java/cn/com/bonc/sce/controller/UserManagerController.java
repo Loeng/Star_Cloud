@@ -191,8 +191,8 @@ public class UserManagerController {
     @ApiOperation(value = "通过教师id修改教师详细信息", notes="通过教师id修改教师详细信息", httpMethod = "PUT")
     @PutMapping("/editTeacherInfo")
     @ResponseBody
-    public RestRecord editTeacherInfo(@RequestBody String json){
-        return userManagerService.editTeacherInfo(json);
+    public RestRecord editTeacherInfo(@RequestBody String json, @CurrentUserId String userId){
+        return userManagerService.editTeacherInfo(json, userId);
     }
 
     @ApiOperation(value = "添加教师", notes="直接添加或者通过转入添加，通过前端出入的addType判断添加方式", httpMethod = "POST")

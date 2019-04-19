@@ -85,8 +85,8 @@ public class UserDao {
     }
 
     public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender, String phone_number,
-                        String mail_address, String birthdate, String nationCode, String nationality) {
-        return userMapper.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate, nationCode, nationality);
+                        String mail_address, String birthdate, String nationCode, String nationality, Integer ISADMINISTRATORS) {
+        return userMapper.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate, nationCode, nationality, ISADMINISTRATORS);
     }
 
     public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -95,9 +95,9 @@ public class UserDao {
 
     public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender,
                        String phone_number, String organization_id, String mail_address, String birthdate, String nationality,
-                       String nationCode, String secret, String userType, String loginName) {
+                       String nationCode, String secret, String userType, String loginName, Integer ISADMINISTRATORS) {
         return userMapper.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,mail_address,
-                birthdate, nationality, nationCode, secret, userType, loginName);
+                birthdate, nationality, nationCode, secret, userType, loginName, ISADMINISTRATORS);
     }
 
     public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -105,8 +105,8 @@ public class UserDao {
     }
 
 
-    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, Date entrance_year, String tea_position,String tea_range) {
-        return userMapper.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range);
+    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, Date entrance_year, String tea_position,String tea_range, Integer ISADMINISTRATORS) {
+        return userMapper.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range, ISADMINISTRATORS);
     }
 
     public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus) {
@@ -225,8 +225,8 @@ public class UserDao {
 
     @Transactional( propagation = Propagation.REQUIRED )
     public void updateOrganizationIdByTransferId(String transferId){
-        Map map = userMapper.selectUserIdAndOrganizationIdByTransferId(transferId);
-        userMapper.updateOrganizationId(Integer.parseInt(map.get("ORGANIZATION_ID").toString()), map.get("USER_ID").toString());
+        Map map = userMapper.selectTransferInfoByTransferId(transferId);
+        userMapper.updateOrganizationId(Integer.parseInt(map.get("ORGANIZATION_ID").toString()), map.get("USER_ID").toString(), Integer.parseInt(map.get("TEA_ISADMINISTRATORS").toString()));
     }
 
     @Transactional( propagation = Propagation.REQUIRED )
@@ -252,7 +252,7 @@ public class UserDao {
     }
 
     public int updateOrganizationIdByUserId(long organizationId,String userId){
-        return userMapper.updateOrganizationId(organizationId,userId);
+        return userMapper.updateOrganizationId(organizationId,userId, null);
     }
 
     public int saveUserAudit(UserAuditBean userAudit) {
@@ -291,6 +291,10 @@ public class UserDao {
 
     public int selectCountByMailAddress(String mailAddress){
         return userMapper.selectCountByMailAddress(mailAddress);
+    }
+
+    public Integer selectIsAdministortars(String userId){
+        return userMapper.selectIsAdministortars(userId);
     }
 
 }
