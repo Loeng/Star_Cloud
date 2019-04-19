@@ -39,8 +39,8 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      */
     @Modifying
     @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
-            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ORGANIZATION_ID,BIRTHDATE,SECRET,NATIONALITY,VOLK) VALUES " +
-            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14)  " )
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ORGANIZATION_ID,BIRTHDATE,SECRET,NATIONALITY,VOLK,ISADMINISTRATORS) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15)  " )
     int savaAllUserInfo(String id, String userName, String gender , String loginName
                         , Integer userType, String mailAddress, Integer certificateType
                         , String certificateNumber, String phoneNumber

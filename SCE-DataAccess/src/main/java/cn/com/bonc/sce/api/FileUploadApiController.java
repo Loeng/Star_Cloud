@@ -290,7 +290,7 @@ public class FileUploadApiController {
                     String loginParentName;
                     if(parentId == null){
                         //生成家长用户，并关联学生
-                        if( fileResourceRepository.selectUserCount(excelToUser.getCertificateNumber()) > 0){
+                        if( fileResourceRepository.selectUserCount(excelToUser.getParentCertificationNumber()) > 0){
                             log.info("家长证件已被使用");
                             throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( "%s证件已被使用", "家长" ), i + EXCEL_NUMBER ));
                         }
