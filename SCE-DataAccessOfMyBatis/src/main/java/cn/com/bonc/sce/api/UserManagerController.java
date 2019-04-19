@@ -402,7 +402,10 @@ public class UserManagerController {
             String APPLY_USER_ID = ( String ) map.get( "APPLY_USER_ID" );
             String TEA_WORK_NUMBER = ( String ) map.get( "WORK_NUMBER" );
             String TEA_ENTRANCE_YEAR = ( String ) map.get( "SCHOOL_TIME" );
-            String ISADMINISTRATORS = ( String ) map.get( "ISADMINISTRATORS" );
+            Integer ISADMINISTRATORS = null;
+            try{
+                ISADMINISTRATORS = Integer.parseInt(map.get( "ISADMINISTRATORS" ).toString());
+            }catch (Exception e){}
             if ( CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber( CERTIFICATE_NUMBER ) ) {
                 log.info( "教师身份证验证未通过" );
                 return new RestRecord( 432, "身份证填写不正确" );
@@ -440,7 +443,7 @@ public class UserManagerController {
             String ORIGIN_SCHOOL_ID = teacher.get( "ORGANIZATION_ID" ).toString();
             String TARGET_SCHOOL_ID = ( String ) map.get( "TARGET_SCHOOL_ID" );
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200,
-                    userService.transInto( ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE, Integer.parseInt(ISADMINISTRATORS) ) );
+                    userService.transInto( ID, USER_ID, APPLY_USER_ID, ORIGIN_SCHOOL_ID, TARGET_SCHOOL_ID, TEA_WORK_NUMBER, ENTRANCE_YEAR, TEA_POSITION, TEACH_RANGE, ISADMINISTRATORS ) );
         }
 
     }

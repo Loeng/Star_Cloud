@@ -230,7 +230,15 @@ public class UserDao {
     @Transactional( propagation = Propagation.REQUIRED )
     public void updateOrganizationIdByTransferId(String transferId){
         Map map = userMapper.selectTransferInfoByTransferId(transferId);
-        userMapper.updateOrganizationId(Integer.parseInt(map.get("ORGANIZATION_ID").toString()), map.get("USER_ID").toString(), Integer.parseInt(map.get("TEA_ISADMINISTRATORS").toString()));
+        Integer TEA_ISADMINISTRATORS = null;
+        try{
+            TEA_ISADMINISTRATORS = Integer.parseInt(map.get("TEA_ISADMINISTRATORS").toString());
+        }catch (Exception e){}
+        Long ORGANIZATION_ID = null;
+        try{
+            ORGANIZATION_ID = Long.parseLong(map.get("ORGANIZATION_ID").toString());
+        }catch (NullPointerException e){}
+        userMapper.updateOrganizationId(ORGANIZATION_ID, map.get("USER_ID").toString(), TEA_ISADMINISTRATORS);
     }
 
     @Transactional( propagation = Propagation.REQUIRED )
@@ -255,7 +263,7 @@ public class UserDao {
         return userMapper.delPassword(id);
     }
 
-    public int updateOrganizationIdByUserId(long organizationId,String userId){
+    public int updateOrganizationIdByUserId(Long organizationId,String userId){
         return userMapper.updateOrganizationId(organizationId,userId, null);
     }
 

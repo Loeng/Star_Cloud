@@ -179,7 +179,7 @@ public interface UserMapper {
 
     int delPassword(@Param("id") String id);
 
-    int updateOrganizationId(@Param("organizationId") long organizationId,@Param("userId") String userId, @Param("TEA_ISADMINISTRATORS") Integer TEA_ISADMINISTRATORS);
+    int updateOrganizationId(@Param("organizationId") Long organizationId,@Param("userId") String userId, @Param("TEA_ISADMINISTRATORS") Integer TEA_ISADMINISTRATORS);
 
     int saveUserAudit(UserAuditBean userAudit);
 
