@@ -1300,6 +1300,13 @@
         WHERE ID = TO_NUMBER(#{transferId})
     </select>
 
+    <update id="updateIsadministrators">
+        UPDATE  STARCLOUDPORTAL.SCE_COMMON_USER
+        ISADMINISTRATORS = 1
+        WHERE USER_ID=#{userId}
+    </update>
+
+
     <select id="selectAuthStatus" resultType="int">
         SELECT COUNT(1)
         FROM STARCLOUDPORTAL.SCE_USER_AUDIT

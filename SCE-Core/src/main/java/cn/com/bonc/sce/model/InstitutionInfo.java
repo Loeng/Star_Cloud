@@ -20,5 +20,5 @@ public class InstitutionInfo {
     private String entryTime;
     private String jobProfession;
     private String workNumber;
-    
+    private String institutionName;
 }

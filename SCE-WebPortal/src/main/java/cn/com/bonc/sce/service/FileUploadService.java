@@ -2,8 +2,10 @@ package cn.com.bonc.sce.service;
 
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.FileUploadDao;
+import cn.com.bonc.sce.dao.UserDao;
 import cn.com.bonc.sce.exception.ImportUserFailedException;
 import cn.com.bonc.sce.model.ExcelToUser;
+import cn.com.bonc.sce.model.User;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.FileUploadUtil;
 import cn.hutool.core.lang.UUID;
@@ -54,10 +56,13 @@ public class FileUploadService {
 
     private FileUploadDao fileUploadDao;
 
+    private UserDao userDao;
+
 
     @Autowired
-    public FileUploadService( FileUploadDao fileUploadDao ) {
+    public FileUploadService( FileUploadDao fileUploadDao, UserDao userDao ) {
         this.fileUploadDao = fileUploadDao;
+        this.userDao = userDao;
     }
 
     public RestRecord uploadMultipart( MultipartFile multipartFile, String fileType ) {
@@ -115,8 +120,15 @@ public class FileUploadService {
     }
 
     public RestRecord uploadUserInfo( List< ExcelToUser > list, String userType, String currentUserId ) throws ImportUserFailedException {
+        //根据currentUserId判断是否是管理员
+        User user = userDao.getUserById( currentUserId );
+        //userType为0是后台管理员
+        if ( user.getUserType() == 0 ) {
+            return fileUploadDao.uploadUserInfoByAdmin( list, userType, currentUserId );
+        } else {
+            return fileUploadDao.uploadUserInfo( list, userType, currentUserId );
+        }
 
-        return fileUploadDao.uploadUserInfo( list, userType, currentUserId );
 
     }
 
