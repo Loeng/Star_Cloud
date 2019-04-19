@@ -63,7 +63,8 @@ public class InstitutionController {
     public RestRecord getInstitutionInfoByUserId(@PathVariable("userId") String userId) {
         InstitutionInfo user = institutionService.getInstitutionInfoByUserId(userId);
         if (user == null) {
-            return new RestRecord(1010, MessageConstants.SCE_MSG_1010, userId);
+            InstitutionInfo bean = new InstitutionInfo();
+            return new RestRecord(200, MessageConstants.SCE_MSG_0200, bean);
         } else {
             return new RestRecord(200, MessageConstants.SCE_MSG_0200, user);
         }
