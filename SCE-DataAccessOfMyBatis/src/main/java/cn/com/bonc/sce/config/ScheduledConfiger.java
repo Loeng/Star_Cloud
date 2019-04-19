@@ -29,7 +29,8 @@ public class ScheduledConfiger {
     private OrderService orderService;
 
 
-    @Scheduled(cron = "0 0 24 * * ?")  // 每天24：00执行一次
+//    @Scheduled(cron = "0 0 24 * * ?")  // 每天24：00执行一次
+    @Scheduled(cron = "0 0/2 * * * ?") // 每2分钟执行一次
     public void updateOrderStatus(){
         if (!isOpen){
             log.info("订单定时更新任务--------------已关闭");
