@@ -597,7 +597,8 @@ public class UserManagerController {
     public RestRecord getTeacherInfoById( @PathVariable( "userId" ) String userId ) {
         TeacherInfoBean user = userService.getTeacherInfoById( userId );
         if ( user == null ) {
-            return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
+            TeacherInfoBean bean = new TeacherInfoBean();
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, bean );
         } else {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
