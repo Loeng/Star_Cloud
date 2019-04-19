@@ -158,11 +158,47 @@ public class UserImportApiController {
                     } else {
                         teachDate = UserPropertiesUtil.getDateByExcelDate( teachTime );
                     }
-
+                    //插入数据到教师表
+                    Integer teachRange = null;
+                    switch ( excelToUser.getTeachRange() ) {
+                        case "学前教育":
+                            teachRange = 0;
+                            break;
+                        case "小学":
+                            teachRange = 1;
+                            break;
+                        case "普通初中":
+                            teachRange = 2;
+                            break;
+                        case "普通高中":
+                            teachRange = 3;
+                            break;
+                        case "职业初中":
+                            teachRange = 4;
+                            break;
+                        case "职业高中":
+                            teachRange = 5;
+                            break;
+                        case "成人中等专业学校":
+                            teachRange = 6;
+                            break;
+                        case "成人中学":
+                            teachRange = 7;
+                            break;
+                        case "特殊教育":
+                            teachRange = 8;
+                            break;
+                        case "其他":
+                            teachRange = 9;
+                            break;
+                        default:
+                            teachRange = null;
+                            break;
+                    }
                     //插入数据到教师表
                     fileResourceRepository.saveTeacher( userId, organizationId, excelToUser.getPosition(),
                             excelToUser.getWorkNumber(), schoolDate,
-                            teachDate, excelToUser.getAcademicQualification(), Integer.parseInt( excelToUser.getTeachRange() ) );
+                            teachDate, excelToUser.getAcademicQualification(), teachRange );
                     count++;
                 }
             } else if ( STUDENT_PRE.equals( userType ) ) {

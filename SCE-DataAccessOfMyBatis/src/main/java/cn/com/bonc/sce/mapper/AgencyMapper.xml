@@ -28,10 +28,9 @@
     </delete>
 
     <select id="getAgents" resultType="Map">
-        SELECT a.ID,a.AGENT_NAME,a.IS_ACTIVATE,u.LOGIN_NAME,GRADE,u.USER_ID,u.LOGIN_PERMISSION_STATUS,a.AGENT_AREA
-        FROM STARCLOUDPORTAL.SCE_COMMON_USER u,
-        STARCLOUDPORTAL.SCE_ENTITY_AGENT a,
-        STARCLOUDPORTAL.SCE_COMMON_USER_PASSWORD p
+        SELECT a.ID,a.AGENT_NAME,a.IS_ACTIVATE,u.LOGIN_NAME,GRADE,u.USER_ID,u.LOGIN_PERMISSION_STATUS,a.AGENT_AREA,u.ACCOUNT_STATUS
+        FROM STARCLOUDPORTAL.SCE_COMMON_USER u
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_AGENT a ON u.ORGANIZATION_ID=a.ID AND a.IS_DELETE=1
         WHERE 1=1
         <if test="agentName != null and agentName!= ''" >
             AND AGENT_NAME LIKE CONCAT(CONCAT('%',#{agentName}),'%')
@@ -43,10 +42,8 @@
             AND AGENT_AREA=#{agentArea}
         </if>
         AND u.USER_TYPE=6
-        AND a.ID=u.ORGANIZATION_ID
         AND u.IS_DELETE=1
-        AND a.IS_DELETE=1
-        AND p.USER_ID=u.USER_ID
+        ORDER BY u.CREATE_TIME desc
     </select>
 
     <insert id="saveAgent" parameterType="cn.com.bonc.sce.bean.AgentBean">

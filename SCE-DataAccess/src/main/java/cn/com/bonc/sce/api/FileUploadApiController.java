@@ -127,7 +127,6 @@ public class FileUploadApiController {
                 String pre = "js_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get(i);
-                    System.out.println(excelToUser.toString());
                     if(excelToUser.getUserName() == null){
                         continue;
                     }else if(excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null ||
