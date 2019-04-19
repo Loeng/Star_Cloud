@@ -190,6 +190,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     Map<String,Object> getFileStorePathById(Integer resourceId);
 
 
-
+    @Query(value = "SELECT ISADMINISTRATORS FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID = ?1", nativeQuery = true)
+    Integer selectAuth(String userId);
 
 }

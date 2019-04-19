@@ -112,6 +112,10 @@ public class FileUploadApiController {
 
         //通过用户id查询所属学校id
         String organizationId = fileResourceRepository.selectOrganizationId( currentUserId );
+        Integer auth = fileResourceRepository.selectAuth(currentUserId);
+        if(auth == null || auth == 0){
+            throw new ImportUserFailedException( WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         ExcelToUser excelToUser;
         int i = 0;
         int count = 0;
