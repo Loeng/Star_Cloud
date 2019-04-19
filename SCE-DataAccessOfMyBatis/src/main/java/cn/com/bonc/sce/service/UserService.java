@@ -114,8 +114,8 @@ public class UserService {
     }
 
     public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender,
-                        String phone_number, String mail_address, String birthdate, String nationCode, String nationality) {
-        return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate,nationCode, nationality);
+                        String phone_number, String mail_address, String birthdate, String nationCode, String nationality, Integer ISADMINISTRATORS) {
+        return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate,nationCode, nationality, ISADMINISTRATORS);
     }
 
     public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -124,9 +124,9 @@ public class UserService {
 
     public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name,
                        String gender, String phone_number, String organization_id, String mail_address, String birthdate,
-                       String nationality, String nationCode, String secret, String userType, String loginName) {
+                       String nationality, String nationCode, String secret, String userType, String loginName, Integer ISADMINISTRATORS) {
         return userDao.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,
-                mail_address,birthdate, nationality, nationCode, secret, userType, loginName);
+                mail_address,birthdate, nationality, nationCode, secret, userType, loginName, ISADMINISTRATORS);
     }
 
     public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -134,8 +134,8 @@ public class UserService {
     }
 
 
-    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, Date entrance_year, String tea_position,String tea_range) {
-        return userDao.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range);
+    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, Date entrance_year, String tea_position,String tea_range,Integer ISADMINISTRATORS) {
+        return userDao.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range, ISADMINISTRATORS);
     }
 
     public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus) {
