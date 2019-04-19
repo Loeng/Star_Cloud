@@ -755,7 +755,7 @@
         U.USER_NAME,
         U.LOGIN_NAME,
         U.GENDER,
-        TA.STU_GRADE,
+        TA.STU_GRADE AS GRADE,
         TA.STUDENT_NUMBER,
         ES.SCHOOL_NAME,
         TA.APPLY_STATUS,
