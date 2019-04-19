@@ -148,7 +148,7 @@ public class UserListController {
             cal.set( Calendar.SECOND, 0 );
 
             Date time = cal.getTime();
-            //已开通用户数(IS_FIRST_LOGIN =1)
+            //已开通用户数(ACCOUNT_STATUS =1)
             Integer userCount = userInfoRepository.getUserCount();
             List< Map< String, Object > > roleCount = userInfoRepository.getRoleCount();
             Integer activeCount = userInfoRepository.getActiveCount( time );
