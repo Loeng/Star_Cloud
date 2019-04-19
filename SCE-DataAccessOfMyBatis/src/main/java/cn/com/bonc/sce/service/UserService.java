@@ -499,15 +499,9 @@ public class UserService {
 
         if(map!=null) {
             String userId = map.get("userId").toString();
-            Integer userType = Integer.parseInt(map.get("userType").toString());
             Integer auditStatus = Integer.parseInt(map.get("auditStatus").toString());
-            Long entryid = Long.parseLong(map.get("entityId").toString());
-            if (userType == 2 && auditStatus == 1) {
-                userDao.updateInfoTeacher(userId, entryid);
-            } else if (userType == 7 && auditStatus == 1) {
-                userDao.updateInfoInstitution(userId, entryid);
-            } else if (userType == 6 && auditStatus == 1) {
-                userDao.updateInfoAgent(userId, entryid);
+            if(auditStatus == 1){
+                userDao.updateIsadministrators(userId);
             }
             String rejectOpinion = "";
             if(map.get("rejectOpinion")!=null){

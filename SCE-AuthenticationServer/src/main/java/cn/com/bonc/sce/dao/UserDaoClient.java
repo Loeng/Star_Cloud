@@ -83,7 +83,7 @@ public interface UserDaoClient {
      * 获取用户审核状态信息
      *
      * @param id
-     * @param roleId
+     * @param userId
      * @return auditStatus  0审核中 1已认证 2被驳回
      */
     @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{userId}", method = RequestMethod.GET )

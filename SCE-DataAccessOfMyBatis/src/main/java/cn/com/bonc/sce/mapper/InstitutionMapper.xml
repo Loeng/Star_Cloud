@@ -241,9 +241,13 @@
         T.WORK_TIME "workTime",
         T.ENTRY_TIME "entryTime",
         T.JOB_PROFESSION "jobProfession",
-        T.WORK_NUMBER "workNumber"
+        T.WORK_NUMBER "workNumber",
+        CASE WHEN A.AUDIT_STATUS = 1 THEN L.INSTITUTION_NAME  ELSE '' END AS "institutionName"
         FROM STARCLOUDPORTAL.SCE_INFO_INSTITUTION T
-        WHERE USER_ID = #{userId}
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U ON T.USER_ID = U.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION L ON L.ID = U.ORGANIZATION_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT A ON A.USER_ID = T.USER_ID
+        WHERE T.USER_ID = #{userId}
     </select>
 
     <select id="getInstitutionInfoList" resultType="Map">

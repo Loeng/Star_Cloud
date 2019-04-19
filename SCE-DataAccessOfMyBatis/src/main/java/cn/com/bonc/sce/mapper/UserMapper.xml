@@ -1088,9 +1088,13 @@
         T.ACADEMIC_QUALIFICATION "academicQualification",
         T.TEACH_RANGE "teachRange",
         T.TEACH_CERTIFICATION "teachCertification",
-        T.JOB_PROFESSION "jobProfession"
+        T.JOB_PROFESSION "jobProfession",
+        CASE WHEN A.AUDIT_STATUS = 1 THEN L.SCHOOL_NAME  ELSE '' END AS "schoolNamme"
         FROM STARCLOUDPORTAL.SCE_INFO_TEACHER T
-        WHERE USER_ID = #{userId}
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U ON T.USER_ID = U.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL L ON L.ID = U.ORGANIZATION_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT A ON A.USER_ID = T.USER_ID
+        WHERE T.USER_ID = #{userId}
     </select>
 
     <delete id="delPassword">
@@ -1298,4 +1302,11 @@
         FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
         WHERE ID = TO_NUMBER(#{transferId})
     </select>
+
+    <update id="updateIsadministrators">
+        UPDATE  STARCLOUDPORTAL.SCE_COMMON_USER
+        ISADMINISTRATORS = 1
+        WHERE USER_ID=#{userId}
+    </update>
+
 </mapper>
