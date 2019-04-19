@@ -11,7 +11,7 @@
             ,CONTENT_TITLE
         </if>
         <if test="content != null and content != ''">
-            ,CONTENT
+            ,NEWS_CONTENT
         </if>
         ,CONTENT_STATUS,CREATE_TIME,CREATE_USER_ID
         <if test="picId != null ">
@@ -195,7 +195,6 @@
         SELECT
           to_char(T.CONTENT_ID) "contentId",
           T.CONTENT_TITLE "contentTitle",
-          T.CONTENT "content",
           TO_CHAR(T.PUBLISH_DATE,'YYYY-MM-DD HH24:MI:SS') "publishDate",
           T.PIC_URL "picUrl",
           T.NEWS_ABSTRACT "newsAbstract",

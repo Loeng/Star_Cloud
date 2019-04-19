@@ -151,6 +151,8 @@ public class NewsController {
     @ResponseBody
     public RestRecord selectNewsById( @RequestParam( "contentId" ) Long contentId ) {
         Map newsInfo = newsDao.selectNewsDetailById( contentId );
+        String content = newsDao.selectNewsContent( contentId );
+        newsInfo.put("content",content);
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, newsInfo );
     }
 

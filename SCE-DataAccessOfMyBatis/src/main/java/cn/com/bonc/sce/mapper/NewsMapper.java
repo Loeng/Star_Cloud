@@ -178,4 +178,13 @@ public interface NewsMapper {
     List<NewsParamBean> selectNotTopList(NewsParamBean newsBean);
 
 
+    /**
+     * 查询头条新闻数量
+     *
+     * @return
+     */
+    @Select( "SELECT T.NEWS_CONTENT CONTENT FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T WHERE CONTENT_ID = #{contentId}" )
+    String selectNewsContent(@Param("contentId") String contentId);
+
+
 }
