@@ -177,8 +177,8 @@ public class UserManagerController {
     @ApiOperation(value = "删除教师", notes="通过用户id，删除用户", httpMethod = "DELETE")
     @DeleteMapping("/delTeacher")
     @ResponseBody
-    public RestRecord delTeacher(@RequestParam( "id" ) String id){
-        return userManagerService.delTeacher(id);
+    public RestRecord delTeacher(@RequestParam( "id" ) String id, @CurrentUserId String userId){
+        return userManagerService.delTeacher(id, userId);
     }
 
     @ApiOperation(value = "通过教师id获取教师详细信息", notes="通过教师id获取教师详细信息", httpMethod = "GET")
@@ -240,14 +240,14 @@ public class UserManagerController {
      */
     @ApiOperation( value = "编辑学生", notes = "根据学生id编辑学生", httpMethod = "PATCH")
     @PutMapping( "/editStudent" )
-    public RestRecord editStudent(@RequestBody Map map){
-        return userManagerService.editStudent(map);
+    public RestRecord editStudent(@RequestBody Map map, @CurrentUserId String userId){
+        return userManagerService.editStudent(map, userId);
     }
 
     @ApiOperation( value = "删除学生", notes = "根据学生ID逻辑删除学生", httpMethod = "DELETE" )
     @DeleteMapping( "/delStudent" )
-    public RestRecord delStudent(@RequestParam String userId){
-        return userManagerService.delStudent(userId);
+    public RestRecord delStudent(@RequestParam String userId, @CurrentUserId String currentUserId){
+        return userManagerService.delStudent(userId, currentUserId);
     }
 
     @ApiOperation( value = "添加学生", notes = "添加学生，同时添加或者绑定家长", httpMethod = "POST")
@@ -302,14 +302,13 @@ public class UserManagerController {
     @ApiOperation( value = "教师撤回学生转入的申请", notes = "通过id撤回", httpMethod = "DELETE" )
     @DeleteMapping("/repealApply/{transferId}")
     public RestRecord repealApply(@CurrentUserId String userId, @PathVariable String transferId){
-        System.out.println(transferId);
         return userManagerService.repealApply(userId, transferId);
     }
 
     @ApiOperation( value = "再次申请学生转入", notes = "通过转入申请ID发起再次申请", httpMethod = "PATCH" )
     @PatchMapping("/reCall/{transferId}")
-    public RestRecord reCall(@PathVariable String transferId){
-        return userManagerService.reCall(transferId);
+    public RestRecord reCall(@PathVariable String transferId, @CurrentUserId String userId){
+        return userManagerService.reCall(transferId, userId);
     }
 
     @ApiOperation( value = "获取转出申请详细信息", notes = "通过ID获取", httpMethod = "GET" )
@@ -374,8 +373,8 @@ public class UserManagerController {
 
     @ApiOperation( value = "教师再次申请转入", notes = "参数为transferId", httpMethod = "PATCH" )
     @PatchMapping("/reCallTeacher")
-    public RestRecord reCallTeacher(@RequestBody Map map){
-        return userManagerService.reCallTeacher(map);
+    public RestRecord reCallTeacher(@RequestBody Map map, @CurrentUserId String userId){
+        return userManagerService.reCallTeacher(map, userId);
     }
 
     @ApiOperation(value = "审核认证申请接口", notes="审核认证申请", httpMethod = "PUT")

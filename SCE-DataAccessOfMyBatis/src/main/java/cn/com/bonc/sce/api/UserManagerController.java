@@ -253,7 +253,12 @@ public class UserManagerController {
     @DeleteMapping( "/delTeacher" )
     @ResponseBody
     @Transactional
-    public RestRecord delTeacher( @RequestParam( "id" ) String id ) {
+    public RestRecord delTeacher( @RequestParam( "id" ) String id, @CurrentUserId String userId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         int count1 = userService.delUser( id );
         int count2 = userService.delTeacher( id );
         int count3 = userService.delPassword( id );
@@ -281,6 +286,7 @@ public class UserManagerController {
         if(isAdministrators == null || isAdministrators == 0){
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
+        int auth = userService.selectAuthStatus(userId);
         Map map = ( Map ) JSONUtils.parse( json );
         Integer ISADMINISTRATORS = Integer.parseInt(map.get( "ISADMINISTRATORS" ).toString());
         String USER_ID = ( String ) map.get( "USER_ID" );
@@ -484,12 +490,22 @@ public class UserManagerController {
     }
 
     @PutMapping( "/editStudent" )
-    public RestRecord editStudent( @RequestBody Map map ) {
+    public RestRecord editStudent( @RequestBody Map map, @CurrentUserId String userId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         return userService.editStudent( map );
     }
 
-    @DeleteMapping( "delStudent" )
-    public RestRecord delStudent( @RequestParam String userId ) {
+    @DeleteMapping( "/delStudent" )
+    public RestRecord delStudent( @RequestParam String userId, @CurrentUserId String currentUserId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(currentUserId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         return userService.delStudent( userId );
     }
 
@@ -511,6 +527,11 @@ public class UserManagerController {
     @Transactional( rollbackFor = Exception.class )
     public RestRecord addStudent( @RequestBody Map map,
                                   @CurrentUserId String userId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         String transferType = map.get( "transferType" ).toString();
         RestRecord restRecord = new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
         if ( transferType.equals( "1" ) ) {
@@ -569,11 +590,21 @@ public class UserManagerController {
     @DeleteMapping( "/repealApply/{transferId}" )
     public RestRecord repealApply( @CurrentUserId String userId,
                                    @PathVariable String transferId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         return userService.repealApply( userId, transferId );
     }
 
     @PutMapping( "/reCall/{transferId}" )
-    public RestRecord reCall( @PathVariable String transferId ) {
+    public RestRecord reCall( @PathVariable String transferId, @CurrentUserId String userId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         return userService.reCall( transferId );
     }
 
@@ -591,6 +622,11 @@ public class UserManagerController {
      */
     @PutMapping( "/auditTransfer" )
     public RestRecord auditTransfer( @CurrentUserId String userId, @RequestBody Map map ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         return userService.auditTransfer( userId, map );
     }
 
@@ -664,11 +700,21 @@ public class UserManagerController {
      */
     @PutMapping( "/auditTeacher" )
     public RestRecord auditTeacher( @CurrentUserId String userId, @RequestBody Map map ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         return userService.auditTeacher( userId, map );
     }
 
     @PutMapping( "/reCallTeacher" )
-    public RestRecord reCallTeacher( @RequestBody Map map ) {
+    public RestRecord reCallTeacher( @RequestBody Map map, @CurrentUserId String userId ) {
+        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        // 拒绝不是管理员的修改
+        if(isAdministrators == null || isAdministrators == 0){
+            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        }
         return userService.reCallTeacher( map );
     }
 

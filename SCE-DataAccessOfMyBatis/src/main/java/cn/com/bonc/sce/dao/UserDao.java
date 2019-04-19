@@ -328,4 +328,8 @@ public class UserDao {
     public UserAuditBean getAudit(String userId){
         return userMapper.getAudit(userId);
     }
+
+    public int selectAuthStatus(String userId){
+        return userMapper.selectAuthStatus(userId);
+    }
 }

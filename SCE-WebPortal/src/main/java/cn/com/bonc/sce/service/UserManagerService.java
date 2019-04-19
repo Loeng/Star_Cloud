@@ -116,8 +116,8 @@ public class UserManagerService {
         return userManagerDao.getTeachers( organizationId, userName, loginName, gender, position, accountStatus, pageNum, pageSize );
     }
 
-    public RestRecord delTeacher( String id ) {
-        return userManagerDao.delTeacher( id );
+    public RestRecord delTeacher( String id, String userId ) {
+        return userManagerDao.delTeacher( id, userId );
     }
 
     public RestRecord getTeacherInfo( String id ) {
@@ -145,12 +145,12 @@ public class UserManagerService {
         return userManagerDao.getStudentInfo( userId );
     }
 
-    public RestRecord editStudent( Map map ) {
-        return userManagerDao.editStudent( map );
+    public RestRecord editStudent( Map map, String userId ) {
+        return userManagerDao.editStudent( map, userId );
     }
 
-    public RestRecord delStudent( String userId ) {
-        return userManagerDao.delStudent( userId );
+    public RestRecord delStudent( String userId, String currentUserId ) {
+        return userManagerDao.delStudent( userId, currentUserId );
     }
 
     public RestRecord addStudent( Map map, String userId ) {
@@ -195,8 +195,8 @@ public class UserManagerService {
         return userManagerDao.repealApply( userId, transferId );
     }
 
-    public RestRecord reCall( String transferId ) {
-        return userManagerDao.reCall( transferId );
+    public RestRecord reCall( String transferId, String userId ) {
+        return userManagerDao.reCall( transferId, userId );
     }
 
     public RestRecord getTransferOut( String transferId ) {
@@ -235,11 +235,11 @@ public class UserManagerService {
         return userManagerDao.auditTeacher( userId, map );
     }
 
-    public RestRecord reCallTeacher( Map map ) {
+    public RestRecord reCallTeacher( Map map, String userId ) {
         if ( map.get( "transferId" ) == null ) {
             return new RestRecord( 431, String.format( WebMessageConstants.SCE_PORTAL_MSG_431, "必需" ) );
         }
-        return userManagerDao.reCallTeacher( map );
+        return userManagerDao.reCallTeacher( map, userId );
     }
 
     public RestRecord updateAudit( String auditUserId,Map map ) {

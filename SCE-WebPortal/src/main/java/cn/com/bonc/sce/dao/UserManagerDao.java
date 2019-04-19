@@ -62,7 +62,7 @@ public interface UserManagerDao {
                            @PathVariable("pageSize")Integer pageSize);
 
     @RequestMapping( value = "/userManager/delTeacher", method = RequestMethod.DELETE )
-    RestRecord delTeacher( @RequestParam("id")String id);
+    RestRecord delTeacher( @RequestParam("id")String id, @RequestParam("userId") String userId);
 
     @RequestMapping( value = "/userManager/getTeacherInfo", method = RequestMethod.GET )
     RestRecord getTeacherInfo(@RequestParam("id") String id);
@@ -95,10 +95,10 @@ public interface UserManagerDao {
     RestRecord getStudentInfo( @PathVariable("userId") String userId );
 
     @RequestMapping( value = "/userManager/editStudent", method = RequestMethod.PUT )
-    RestRecord editStudent(@RequestBody Map map);
+    RestRecord editStudent(@RequestBody Map map, @RequestParam("userId") String userId);
 
     @RequestMapping( value = "/userManager/delStudent", method = RequestMethod.DELETE )
-    RestRecord delStudent(@RequestParam( "userId" ) String userId);
+    RestRecord delStudent(@RequestParam( "userId" ) String userId, @RequestParam("currentUserId") String currentUserId);
 
     @RequestMapping( value = "/userManager/addStudent", method = RequestMethod.POST )
     RestRecord addStudent(@RequestBody Map map, @RequestParam( "userId" ) String userId);
@@ -128,7 +128,7 @@ public interface UserManagerDao {
                            @PathVariable("transferId") String transferId);
 
     @RequestMapping( value = "/userManager/reCall/{transferId}", method = RequestMethod.PUT )
-    RestRecord reCall(@PathVariable("transferId") String transferId);
+    RestRecord reCall(@PathVariable("transferId") String transferId, @RequestParam("userId") String userId);
 
     @RequestMapping( value = "/userManager/getTransferOut/{transferId}", method = RequestMethod.GET )
     RestRecord getTransferOut(@PathVariable("transferId") String transferId);
@@ -154,7 +154,7 @@ public interface UserManagerDao {
                             @RequestBody Map map);
 
     @RequestMapping( value = "/userManager/reCallTeacher", method = RequestMethod.PUT)
-    RestRecord reCallTeacher(@RequestBody Map map);
+    RestRecord reCallTeacher(@RequestBody Map map, @RequestParam("userId") String userId);
 
     @RequestMapping( value = "/userManager/updateAudit", method = RequestMethod.PUT)
     RestRecord updateAudit(@RequestParam("auditUserId") String auditUserId,@RequestBody Map map);

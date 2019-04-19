@@ -526,4 +526,8 @@ public class UserService {
     public UserAuditBean getAudit(String userId){
         return userDao.getAudit(userId);
     }
+
+    public int selectAuthStatus(String userId){
+        return userDao.selectAuthStatus(userId);
+    }
 }

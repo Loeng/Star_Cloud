@@ -216,4 +216,6 @@ public interface UserMapper {
     int updateInfoAgent(@Param("userId") String userId,@Param("entityId") Long entityId);
 
     UserAuditBean getAudit(@Param("userId") String userId);
+
+    int selectAuthStatus(@Param("userId") String userId);
 }

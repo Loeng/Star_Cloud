@@ -350,7 +350,8 @@
         T.WORK_NUMBER,
         TO_CHAR(T.TEACH_TIME,'YYYY-MM-dd') as TEACH_TIME,
         TO_CHAR(T.SCHOOL_TIME,'YYYY-MM-dd') as SCHOOL_TIME,
-        T.TEACH_RANGE
+        T.TEACH_RANGE,
+        U.ISADMINISTRATORS
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
         LEFT JOIN STARCLOUDPORTAL.SCE_INFO_TEACHER t ON u.USER_ID=t.USER_ID AND t.IS_DELETE=1
         WHERE u.USER_TYPE=2
@@ -1297,5 +1298,12 @@
         TEA_ISADMINISTRATORS
         FROM STARCLOUDPORTAL.SCE_TRANSFER_APPLY
         WHERE ID = TO_NUMBER(#{transferId})
+    </select>
+
+    <select id="selectAuthStatus" resultType="int">
+        SELECT COUNT(1)
+        FROM STARCLOUDPORTAL.SCE_USER_AUDIT
+        WHERE USER_ID = #{userId}
+        AND AUDIT_STATUS = 1
     </select>
 </mapper>
