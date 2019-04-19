@@ -378,4 +378,18 @@ public class UserManagerController {
         return userManagerService.reCallTeacher(map);
     }
 
+    @ApiOperation(value = "审核认证申请接口", notes="审核认证申请", httpMethod = "PUT")
+    @PutMapping("/updateAudit")
+    @ResponseBody
+    public RestRecord updateAudit(@CurrentUserId String auditUserId,@RequestBody Map map){
+        return userManagerService.updateAudit(auditUserId,map);
+    }
+
+    @ApiOperation(value = "审核认证详情接口", notes="审核认证详情", httpMethod = "GET")
+    @GetMapping("/getAudit/{userId}")
+    @ResponseBody
+    public RestRecord getAudit(@PathVariable(value = "userId") String userId){
+        return userManagerService.getAudit(userId);
+    }
+
 }

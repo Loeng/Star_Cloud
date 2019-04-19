@@ -76,6 +76,9 @@ public class NewsService {
         if( newsBean.getPicId() != null ) {
             String picUrl = fileResourceDao.getFileStorePath( newsBean.getPicId() );
             newsBean.setPicUrl( picUrl );
+        }else{
+            newsBean.setPicId(0);
+            newsBean.setPicUrl("");
         }
         return newsDao.updateNewsInfo( newsBean );
     }

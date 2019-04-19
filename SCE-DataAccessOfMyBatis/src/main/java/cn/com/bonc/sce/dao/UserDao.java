@@ -64,6 +64,10 @@ public class UserDao {
         return userMapper.updatePwdByName(loginName,password);
     }
 
+    public int updateAccountStatusByName(String loginName, int accountStatus) {
+        return userMapper.updateAccountStatusByName(loginName,accountStatus);
+    }
+
     public String testCertificate(String loginName) {
         return userMapper.testCertificate(loginName);
     }
@@ -297,4 +301,23 @@ public class UserDao {
         return userMapper.selectIsAdministortars(userId);
     }
 
+    public void updateAudit(String auditUserId,String userId,Integer auditStatus,String rejectOpinion){
+        userMapper.updateAudit(auditUserId,userId,auditStatus,rejectOpinion);
+    }
+
+    public void updateInfoTeacher(String userId,Long entityId){
+        userMapper.updateInfoTeacher(userId,entityId);
+    }
+
+    public void updateInfoInstitution(String userId,Long entityId){
+        userMapper.updateInfoInstitution(userId,entityId);
+    }
+
+    public void updateInfoAgent(String userId,Long entityId){
+        userMapper.updateInfoAgent(userId,entityId);
+    }
+
+    public UserAuditBean getAudit(String userId){
+        return userMapper.getAudit(userId);
+    }
 }

@@ -39,7 +39,7 @@ public class NewsParamBean {
     private Integer topOrder;
     private Integer showOrder;
     private String newsSource;
-    private Integer isPublish;
+    private String isPublish;
 
 
     public String getCreateDate() {
@@ -315,11 +315,11 @@ public class NewsParamBean {
         this.newsSource = newsSource;
     }
 
-    public Integer getIsPublish() {
+    public String getIsPublish() {
         return isPublish;
     }
 
-    public void setIsPublish(Integer isPublish) {
+    public void setIsPublish(String isPublish) {
         this.isPublish = isPublish;
     }
 

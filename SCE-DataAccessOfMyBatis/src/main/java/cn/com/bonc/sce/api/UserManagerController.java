@@ -1,10 +1,7 @@
 package cn.com.bonc.sce.api;
 
 import cn.com.bonc.sce.annotation.CurrentUserId;
-import cn.com.bonc.sce.bean.AccountBean;
-import cn.com.bonc.sce.bean.SchoolBean;
-import cn.com.bonc.sce.bean.TeacherInfoBean;
-import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.bean.*;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.FileResourceDao;
@@ -214,7 +211,8 @@ public class UserManagerController {
     public RestRecord updatePwdByName( @RequestParam( "loginName" ) String loginName,
                                        @RequestParam( "password" ) String password ) {
         int count = userService.updatePwdByName( loginName, password );
-        if ( count == 1 ) {
+        int count2 = userService.updateAccountStatusByName(loginName,1);
+        if ( count == 1 && count2 == 1) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, 1 );
         } else {
             return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
@@ -668,5 +666,24 @@ public class UserManagerController {
     @PutMapping( "/reCallTeacher" )
     public RestRecord reCallTeacher( @RequestBody Map map ) {
         return userService.reCallTeacher( map );
+    }
+
+    @ApiOperation(value = "审核认证申请接口", notes="审核认证申请", httpMethod = "PUT")
+    @PutMapping("/updateAudit")
+    @ResponseBody
+    public RestRecord updateAudit(@CurrentUserId String auditUserId,@RequestBody Map map){
+        return userService.updateAudit(auditUserId,map);
+    }
+
+    @ApiOperation(value = "审核认证详情接口", notes="审核认证详情", httpMethod = "GET")
+    @GetMapping("/getAudit/{userId}")
+    @ResponseBody
+    public RestRecord getAudit(@PathVariable(value = "userId") String userId){
+        UserAuditBean user = userService.getAudit( userId );
+        if ( user == null ) {
+            return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
+        } else {
+            return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
+        }
     }
 }

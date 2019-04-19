@@ -11,7 +11,7 @@
             ,CONTENT_TITLE
         </if>
         <if test="content != null and content != ''">
-            ,CONTENT
+            ,NEWS_CONTENT
         </if>
         ,CONTENT_STATUS,CREATE_TIME,CREATE_USER_ID
         <if test="picId != null ">
@@ -102,11 +102,9 @@
                 CONTENT_TITLE = #{contentTitle},
             </if>
             <if test="content != null and content != ''">
-                CONTENT = #{content},
+                NEWS_CONTENT = #{content},
             </if>
-            <if test="picId != null ">
-                PIC_ID = #{picId},
-            </if>
+            PIC_ID = #{picId},
             <if test="fileId != null ">
                 FILE_ID = #{fileId},
             </if>
@@ -119,9 +117,7 @@
             <if test="isTop != null">
                 IS_TOP = #{isTop},
             </if>
-            <if test="picUrl != null and picUrl != ''">
-                PIC_URL = #{picUrl},
-            </if>
+            PIC_URL = #{picUrl},
             <if test="fileUrl != null and fileUrl != ''">
                 FILE_URL = #{fileUrl},
             </if>
@@ -195,7 +191,6 @@
         SELECT
           to_char(T.CONTENT_ID) "contentId",
           T.CONTENT_TITLE "contentTitle",
-          T.CONTENT "content",
           TO_CHAR(T.PUBLISH_DATE,'YYYY-MM-DD HH24:MI:SS') "publishDate",
           T.PIC_URL "picUrl",
           T.NEWS_ABSTRACT "newsAbstract",
@@ -283,7 +278,7 @@
         <result column="TOP_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="topOrder"></result>
         <result column="SHOW_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="showOrder"></result>
         <result column="HIT_VOLUME" jdbcType="INTEGER" javaType="java.lang.Long" property="hitVolume"></result>
-        <result column="IS_PUBLISH" jdbcType="INTEGER" javaType="java.lang.Integer" property="isPublish"></result>
+        <result column="IS_PUBLISH" jdbcType="INTEGER" javaType="java.lang.String" property="isPublish"></result>
         <result column="PUBLISH_TIME" jdbcType="INTEGER" javaType="java.lang.String" property="publishTimestamp"></result>
     </resultMap>
 
@@ -396,6 +391,9 @@
             AND T.CONTENT_STATUS = #{contentStatus}
         </if>
 
+        <if test="isPublish != null  and isPublish != ''">
+            AND T.IS_PUBLISH = #{isPublish}
+        </if>
         <if test="contentType != null  and contentType != ''">
             AND T.CONTENT_TYPE = #{contentType}
         </if>

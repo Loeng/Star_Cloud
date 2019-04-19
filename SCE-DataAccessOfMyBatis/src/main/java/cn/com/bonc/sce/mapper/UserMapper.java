@@ -42,6 +42,8 @@ public interface UserMapper {
 
     int updatePwdByName(@Param("loginName") String loginName, @Param("password") String password);
 
+    int updateAccountStatusByName(@Param("loginName") String loginName, @Param("accountStatus") int accountStatus);
+
     String testCertificate(@Param("loginName") String loginName);
 
     String getIdByPhone(@Param("phone") String phone);
@@ -205,4 +207,13 @@ public interface UserMapper {
 
     Integer selectIsAdministortars(@Param("userId") String userId);
 
+    int updateAudit(@Param("auditUserId") String auditUserId,@Param("userId") String userId,@Param("auditStatus") Integer auditStatus,@Param("rejectOpinion") String rejectOpinion);
+
+    int updateInfoTeacher(@Param("userId") String userId,@Param("entityId") Long entityId);
+
+    int updateInfoInstitution(@Param("userId") String userId,@Param("entityId") Long entityId);
+
+    int updateInfoAgent(@Param("userId") String userId,@Param("entityId") Long entityId);
+
+    UserAuditBean getAudit(@Param("userId") String userId);
 }

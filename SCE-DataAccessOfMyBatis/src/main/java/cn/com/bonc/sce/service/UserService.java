@@ -1,9 +1,6 @@
 package cn.com.bonc.sce.service;
 
-import cn.com.bonc.sce.bean.AccountBean;
-import cn.com.bonc.sce.bean.SchoolBean;
-import cn.com.bonc.sce.bean.TeacherInfoBean;
-import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.bean.*;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserDao;
 import cn.com.bonc.sce.exception.ImportUserFailedException;
@@ -92,6 +89,10 @@ public class UserService {
         return userDao.updatePwdByName(loginName,password);
     }
 
+    public int updateAccountStatusByName(String loginName, int accountStatus) {
+        return userDao.updateAccountStatusByName(loginName,accountStatus);
+    }
+
     public String testCertificate(String loginName) {
         return userDao.testCertificate(loginName);
     }
@@ -113,8 +114,8 @@ public class UserService {
     }
 
     public int editUser(String user_id, Integer certificate_type, String certificate_number, String user_name, String gender,
-                        String phone_number, String mail_address, String birthdate, String nationCode, String nationality, Integer ISADMINISTRATORS) {
-        return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate,nationCode, nationality, ISADMINISTRATORS);
+                        String phone_number, String mail_address, String birthdate, String nationCode, String nationality) {
+        return userDao.editUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,mail_address,birthdate,nationCode, nationality);
     }
 
     public int editTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -123,9 +124,9 @@ public class UserService {
 
     public int addUser(String user_id, Integer certificate_type, String certificate_number, String user_name,
                        String gender, String phone_number, String organization_id, String mail_address, String birthdate,
-                       String nationality, String nationCode, String secret, String userType, String loginName, Integer ISADMINISTRATORS) {
+                       String nationality, String nationCode, String secret, String userType, String loginName) {
         return userDao.addUser(user_id,certificate_type,certificate_number,user_name,gender,phone_number,organization_id,
-                mail_address,birthdate, nationality, nationCode, secret, userType, loginName, ISADMINISTRATORS);
+                mail_address,birthdate, nationality, nationCode, secret, userType, loginName);
     }
 
     public int addTeacher(String user_id, String academic_qualification, String work_number, String school_time, String teach_time, String position, Integer teach_range) {
@@ -133,8 +134,8 @@ public class UserService {
     }
 
 
-    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, Date entrance_year, String tea_position,String tea_range,Integer ISADMINISTRATORS) {
-        return userDao.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range, ISADMINISTRATORS);
+    public int transInto(Long id, String user_id, String apply_user_id, String origin_school_id, String target_school_id, String tea_work_number, Date entrance_year, String tea_position,String tea_range) {
+        return userDao.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range);
     }
 
     public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus) {
@@ -491,5 +492,38 @@ public class UserService {
 
     public Integer selectIsAdministortars(String userId){
         return userDao.selectIsAdministortars(userId);
+    }
+
+    @Transactional( rollbackFor = Exception.class )
+    public RestRecord updateAudit(String auditUserId,Map map ){
+
+        if(map!=null) {
+            String userId = map.get("userId").toString();
+            Integer userType = Integer.parseInt(map.get("userType").toString());
+            Integer auditStatus = Integer.parseInt(map.get("auditStatus").toString());
+            Long entryid = Long.parseLong(map.get("entityId").toString());
+            if (userType == 2 && auditStatus == 1) {
+                userDao.updateInfoTeacher(userId, entryid);
+            } else if (userType == 7 && auditStatus == 1) {
+                userDao.updateInfoInstitution(userId, entryid);
+            } else if (userType == 6 && auditStatus == 1) {
+                userDao.updateInfoAgent(userId, entryid);
+            }
+            String rejectOpinion = "";
+            if(map.get("rejectOpinion")!=null){
+                rejectOpinion = map.get("rejectOpinion").toString();
+            }
+
+            userDao.updateAudit(auditUserId, userId, auditStatus, rejectOpinion);
+
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        }else {
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+
+    }
+
+    public UserAuditBean getAudit(String userId){
+        return userDao.getAudit(userId);
     }
 }
