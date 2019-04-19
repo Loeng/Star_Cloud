@@ -127,7 +127,7 @@ public class ExcelToUser {
     @Excel( name = "证件类型", replace = { "身份证_1", "护照_2" })
     private String certificateType;
 
-    @Excel( name = "家长证件类型")
+    @Excel( name = "家长证件类型", replace = { "身份证_1", "护照_2" })
     private String parentCertificateType;
 
     private String  secret;
