@@ -66,9 +66,9 @@
         end as ACCOUNT_STATUS,
         ROWNUM
         FROM STARCLOUDPORTAL.SCE_COMMON_USER u
-        INNER JOIN STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION i ON u.ORGANIZATION_ID=i.ID
-        WHERE u.IS_DELETE=1
-        AND i.IS_DELETE=1
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_INSTITUTION i ON u.ORGANIZATION_ID=i.ID  AND i.IS_DELETE=1
+        WHERE u.IS_DELETE=1 AND u.USER_TYPE=7
+
         <if test="institutionName != null and institutionName!= ''" >
             AND i.INSTITUTION_NAME LIKE CONCAT(CONCAT('%',#{institutionName}),'%')
         </if>

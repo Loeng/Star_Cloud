@@ -4,12 +4,14 @@ import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.entity.School;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.FileResourceService;
 import cn.com.bonc.sce.service.SchoolService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ObjectUtils;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
@@ -40,6 +42,8 @@ public class SchoolApiController {
     private SchoolService schoolService;
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private FileResourceService fileResourceService;
 //
 //    /**
 //     * 添加school
@@ -108,6 +112,13 @@ public class SchoolApiController {
         if (school == null) {
             return new RestRecord(1010, MessageConstants.SCE_MSG_1010, id);
         } else {
+            String picUrl = "";
+            if(org.apache.commons.lang3.StringUtils.isNoneBlank(school.get().getOrgCode())) {
+                Integer headPortrait = Integer.parseInt(school.get().getOrgCode());
+                Map<String, Object> url = fileResourceService.getFileStorePath(headPortrait);
+                picUrl = url == null ? "" : url.get("fileStorePath").toString();
+            }
+            school.get().setFileStorePath(picUrl);
             return new RestRecord(200, MessageConstants.SCE_MSG_0200, school);
         }
     }

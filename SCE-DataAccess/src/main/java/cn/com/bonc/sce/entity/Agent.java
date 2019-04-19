@@ -81,4 +81,6 @@ public class Agent implements Serializable {
     @Column( name = "AREA" )
     private String area;
 
+    @Transient
+    private String fileStorePath;
 }
