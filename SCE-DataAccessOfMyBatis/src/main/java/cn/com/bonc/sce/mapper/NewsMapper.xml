@@ -278,7 +278,7 @@
         <result column="TOP_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="topOrder"></result>
         <result column="SHOW_ORDER" jdbcType="INTEGER" javaType="java.lang.Integer" property="showOrder"></result>
         <result column="HIT_VOLUME" jdbcType="INTEGER" javaType="java.lang.Long" property="hitVolume"></result>
-        <result column="IS_PUBLISH" jdbcType="INTEGER" javaType="java.lang.Integer" property="isPublish"></result>
+        <result column="IS_PUBLISH" jdbcType="INTEGER" javaType="java.lang.String" property="isPublish"></result>
         <result column="PUBLISH_TIME" jdbcType="INTEGER" javaType="java.lang.String" property="publishTimestamp"></result>
     </resultMap>
 
