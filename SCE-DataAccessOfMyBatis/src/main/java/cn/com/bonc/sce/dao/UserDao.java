@@ -64,6 +64,10 @@ public class UserDao {
         return userMapper.updatePwdByName(loginName,password);
     }
 
+    public int updateAccountStatusByName(String loginName, int accountStatus) {
+        return userMapper.updateAccountStatusByName(loginName,accountStatus);
+    }
+
     public String testCertificate(String loginName) {
         return userMapper.testCertificate(loginName);
     }

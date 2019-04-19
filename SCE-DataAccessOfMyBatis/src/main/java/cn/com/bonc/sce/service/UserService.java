@@ -89,6 +89,10 @@ public class UserService {
         return userDao.updatePwdByName(loginName,password);
     }
 
+    public int updateAccountStatusByName(String loginName, int accountStatus) {
+        return userDao.updateAccountStatusByName(loginName,accountStatus);
+    }
+
     public String testCertificate(String loginName) {
         return userDao.testCertificate(loginName);
     }

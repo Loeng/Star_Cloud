@@ -211,7 +211,8 @@ public class UserManagerController {
     public RestRecord updatePwdByName( @RequestParam( "loginName" ) String loginName,
                                        @RequestParam( "password" ) String password ) {
         int count = userService.updatePwdByName( loginName, password );
-        if ( count == 1 ) {
+        int count2 = userService.updateAccountStatusByName(loginName,1);
+        if ( count == 1 && count2 == 1) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, 1 );
         } else {
             return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
