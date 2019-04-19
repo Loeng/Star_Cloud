@@ -210,7 +210,7 @@
     <!--获取点击排行-->
     <select id="getHitVolumeRank" resultType="Map">
         SELECT
-        T.CONTENT_ID "contentId",
+        to_char(T.CONTENT_ID) "contentId",
         T.CONTENT_TITLE "contentTitle",
         T.CONTENT "content",
         T.PUBLISH_DATE "publishDate",
@@ -230,7 +230,7 @@
     <!--获取最新发布排行-->
     <select id="getNewestNewsRank" resultType="Map">
         SELECT
-        T.CONTENT_ID "contentId",
+        to_char(T.CONTENT_ID) "contentId",
         T.CONTENT_TITLE "contentTitle",
         T.CONTENT "content",
         T.PUBLISH_DATE "publishDate",
@@ -417,7 +417,7 @@
 
     <select id="selectTopNewsList" resultType="Map">
         SELECT
-          T.CONTENT_ID "contentId",
+          to_char(T.CONTENT_ID) "contentId",
           T.CONTENT_TITLE "contentTitle",
           T.TOP_ORDER "topOrder"
         FROM STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
