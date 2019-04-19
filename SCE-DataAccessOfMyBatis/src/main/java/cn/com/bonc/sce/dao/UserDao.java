@@ -293,4 +293,23 @@ public class UserDao {
         return userMapper.selectCountByMailAddress(mailAddress);
     }
 
+    public void updateAudit(String auditUserId,String userId,Integer auditStatus,String rejectOpinion){
+        userMapper.updateAudit(auditUserId,userId,auditStatus,rejectOpinion);
+    }
+
+    public void updateInfoTeacher(String userId,Long entityId){
+        userMapper.updateInfoTeacher(userId,entityId);
+    }
+
+    public void updateInfoInstitution(String userId,Long entityId){
+        userMapper.updateInfoInstitution(userId,entityId);
+    }
+
+    public void updateInfoAgent(String userId,Long entityId){
+        userMapper.updateInfoAgent(userId,entityId);
+    }
+
+    public UserAuditBean getAudit(String userId){
+        return userMapper.getAudit(userId);
+    }
 }

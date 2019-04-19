@@ -1214,4 +1214,56 @@
         where MAIL_ADDRESS = #{mailAddress}
     </select>
 
+    <update id="updateAudit">
+        UPDATE  STARCLOUDPORTAL.SCE_USER_AUDIT
+        <set>
+            <if test="auditUserId!=null">
+                AUDIT_USER_ID=#{auditUserId},
+            </if>
+            <if test="auditStatus!=null">
+                AUDIT_STATUS=#{auditStatus},
+            </if>
+            REJECT_OPINION=#{rejectOpinion},
+            AUDIT_TIME = sysdate
+        </set>
+        WHERE USER_ID=#{userId}
+    </update>
+
+    <update id="updateInfoTeacher">
+        UPDATE  STARCLOUDPORTAL.SCE_INFO_TEACHER
+        <set>
+            <if test="entityId!=null">
+                SCHOOL_ID=#{entityId}
+            </if>
+        </set>
+        WHERE USER_ID=#{userId}
+    </update>
+
+    <update id="updateInfoInstitution">
+        UPDATE  STARCLOUDPORTAL.SCE_INFO_INSTITUTION
+        <set>
+            <if test="entityId!=null">
+                INSTITUTION_ID=#{entityId}
+            </if>
+        </set>
+        WHERE USER_ID=#{userId}
+    </update>
+
+    <update id="updateInfoAgent">
+        UPDATE  STARCLOUDPORTAL.SCE_INFO_AGENT
+        <set>
+            <if test="entityId!=null">
+                AGENT_ID=#{entityId}
+            </if>
+        </set>
+        WHERE USER_ID=#{userId}
+    </update>
+
+    <select id="getAudit" resultType="cn.com.bonc.sce.bean.UserAuditBean">
+        SELECT
+        T.AUDIT_STATUS "auditStatus",
+        T.REJECT_OPINION "rejectOpinion"
+        FROM STARCLOUDPORTAL.SCE_USER_AUDIT T
+        WHERE USER_ID = #{userId}
+    </select>
 </mapper>

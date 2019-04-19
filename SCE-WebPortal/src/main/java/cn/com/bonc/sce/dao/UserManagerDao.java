@@ -156,4 +156,10 @@ public interface UserManagerDao {
     @RequestMapping( value = "/userManager/reCallTeacher", method = RequestMethod.PUT)
     RestRecord reCallTeacher(@RequestBody Map map);
 
+    @RequestMapping( value = "/userManager/updateAudit", method = RequestMethod.PUT)
+    RestRecord updateAudit(@RequestParam("auditUserId") String auditUserId,@RequestBody Map map);
+
+    @RequestMapping(value = "/userManager/getAudit/{userId}", method = RequestMethod.GET)
+    RestRecord getAudit(@PathVariable("userId") String userId);
+
 }

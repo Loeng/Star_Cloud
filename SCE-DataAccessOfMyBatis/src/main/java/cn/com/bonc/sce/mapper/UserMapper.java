@@ -200,4 +200,13 @@ public interface UserMapper {
 
     int selectCountByMailAddress(@Param("mailAddress") String mailAddress);
 
+    int updateAudit(@Param("auditUserId") String auditUserId,@Param("userId") String userId,@Param("auditStatus") Integer auditStatus,@Param("rejectOpinion") String rejectOpinion);
+
+    int updateInfoTeacher(@Param("userId") String userId,@Param("entityId") Long entityId);
+
+    int updateInfoInstitution(@Param("userId") String userId,@Param("entityId") Long entityId);
+
+    int updateInfoAgent(@Param("userId") String userId,@Param("entityId") Long entityId);
+
+    UserAuditBean getAudit(@Param("userId") String userId);
 }

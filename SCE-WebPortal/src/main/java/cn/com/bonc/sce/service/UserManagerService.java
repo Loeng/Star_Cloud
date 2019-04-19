@@ -241,4 +241,13 @@ public class UserManagerService {
         }
         return userManagerDao.reCallTeacher( map );
     }
+
+    public RestRecord updateAudit( String auditUserId,Map map ) {
+        return userManagerDao.updateAudit( auditUserId,map);
+    }
+
+    public RestRecord getAudit( String userId ) {
+        return userManagerDao.getAudit(userId);
+    }
+
 }

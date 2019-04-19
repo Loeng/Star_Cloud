@@ -1,9 +1,6 @@
 package cn.com.bonc.sce.service;
 
-import cn.com.bonc.sce.bean.AccountBean;
-import cn.com.bonc.sce.bean.SchoolBean;
-import cn.com.bonc.sce.bean.TeacherInfoBean;
-import cn.com.bonc.sce.bean.UserBean;
+import cn.com.bonc.sce.bean.*;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.dao.UserDao;
 import cn.com.bonc.sce.exception.ImportUserFailedException;
@@ -487,5 +484,38 @@ public class UserService {
         String transferId = map.get("transferId").toString();
         userDao.reCall(transferId);
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+    }
+
+    @Transactional( rollbackFor = Exception.class )
+    public RestRecord updateAudit(String auditUserId,Map map ){
+
+        if(map!=null) {
+            String userId = map.get("userId").toString();
+            Integer userType = Integer.parseInt(map.get("userType").toString());
+            Integer auditStatus = Integer.parseInt(map.get("auditStatus").toString());
+            Long entryid = Long.parseLong(map.get("entityId").toString());
+            if (userType == 2 && auditStatus == 1) {
+                userDao.updateInfoTeacher(userId, entryid);
+            } else if (userType == 7 && auditStatus == 1) {
+                userDao.updateInfoInstitution(userId, entryid);
+            } else if (userType == 6 && auditStatus == 1) {
+                userDao.updateInfoAgent(userId, entryid);
+            }
+            String rejectOpinion = "";
+            if(map.get("rejectOpinion")!=null){
+                rejectOpinion = map.get("rejectOpinion").toString();
+            }
+
+            userDao.updateAudit(auditUserId, userId, auditStatus, rejectOpinion);
+
+            return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200 );
+        }else {
+            return new RestRecord( 421, WebMessageConstants.SCE_PORTAL_MSG_421 );
+        }
+
+    }
+
+    public UserAuditBean getAudit(String userId){
+        return userDao.getAudit(userId);
     }
 }
