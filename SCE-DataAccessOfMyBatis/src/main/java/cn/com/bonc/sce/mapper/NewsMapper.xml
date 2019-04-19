@@ -391,6 +391,9 @@
             AND T.CONTENT_STATUS = #{contentStatus}
         </if>
 
+        <if test="isPublish != null  and isPublish != ''">
+            AND T.IS_PUBLISH = #{isPublish}
+        </if>
         <if test="contentType != null  and contentType != ''">
             AND T.CONTENT_TYPE = #{contentType}
         </if>
