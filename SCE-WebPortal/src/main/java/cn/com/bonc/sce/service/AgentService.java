@@ -6,6 +6,8 @@ import cn.com.bonc.sce.rest.RestRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class AgentService {
     private AgentDao agentDao;
@@ -41,6 +43,22 @@ public class AgentService {
 
     public RestRecord getAgentInfo( String AGENT_NAME,String PROPERTY,Integer AUDIT_STATUS,Integer pageNum ,Integer pageSize ) {
         return agentDao.getAgentInfo(AGENT_NAME,PROPERTY,AUDIT_STATUS, pageNum, pageSize );
+    }
+
+    public RestRecord getActingSchoolList(String school_name) {
+        return agentDao.getActingSchoolList(school_name);
+    }
+
+    public RestRecord getHasBeenActingSchoolList(Integer ID) {
+        return agentDao.getHasBeenActingSchoolList(ID);
+    }
+
+    public RestRecord addActingSchool(Map<String, String> info) {
+        return agentDao.addActingSchool(info);
+    }
+
+    public RestRecord deleteActingSchool(Map<String, String> info) {
+        return agentDao.deleteActingSchool(info);
     }
 
 }

@@ -274,15 +274,16 @@ public class CompanyInfoApiController {
         return companyService.updateCompany(companyInfo);
     }
 
-    @GetMapping( "/getCompanyList/{COMPANY_NAME}/{PROPERTY}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @GetMapping( "/getCompanyList/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getCompanyList(@PathVariable("COMPANY_NAME") String COMPANY_NAME,@PathVariable("PROPERTY") String PROPERTY, @PathVariable("AUDIT_STATUS") Integer AUDIT_STATUS
+    public RestRecord getCompanyList(@RequestParam(value = "companyName",required = false) @ApiParam( name = "companyName", value = "厂家名称") String companyName,@RequestParam(value = "property",required = false) @ApiParam( name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") Integer auditStatus
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;
             StringBuilder sql = new StringBuilder( "SELECT\n" +
-                    "\tsmc.COMPANY_ID,\n" +
+                    "\tto_char(smc.COMPANY_ID) AS ID,\n" +
+                    "\tscu.USER_ID,\n" +
                     "\tsmc.COMPANY_NAME,\n" +
                     "\tsmc.PROPERTY,\n" +
                     "\tscu.USER_NAME,\n" +
@@ -291,25 +292,26 @@ public class CompanyInfoApiController {
                     "\tsua.AUDIT_TIME \n" +
                     "FROM\n" +
                     "\tSTARCLOUDMARKET.SCE_MARKET_COMPANY smc\n" +
-                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON smc.COMPANY_ID = to_char(sua.ENTITY_ID)\n" +
+                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON smc.COMPANY_ID = sua.ENTITY_ID\n" +
                     "\tLEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu ON sua.USER_ID = scu.USER_ID \n" +
                     "WHERE\n" +
                     "\tsmc.IS_DELETE = 1 " );
-            if(!StringUtils.isEmpty(COMPANY_NAME) && !"null".equals(COMPANY_NAME)){
-                sql.append("and smc.COMPANY_NAME like '%"+COMPANY_NAME+"%' ");
+            if(!StringUtils.isEmpty(companyName) && !"null".equals(companyName)){
+                sql.append("and smc.COMPANY_NAME like '%"+companyName+"%' ");
             }
-            if(!StringUtils.isEmpty(PROPERTY) && !"null".equals(PROPERTY)){
-                sql.append("and smc.PROPERTY = "+PROPERTY+" ");
+            if(!StringUtils.isEmpty(property) && !"null".equals(property)){
+                sql.append("and smc.PROPERTY = '"+property+"' ");
             }
-            if(StringUtils.isEmpty(AUDIT_STATUS) || "null".equals(AUDIT_STATUS) ){
+            if(StringUtils.isEmpty(auditStatus) || "null".equals(auditStatus) ){
                 sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
             }
-            if(!StringUtils.isEmpty(AUDIT_STATUS) && "0".equals(AUDIT_STATUS) ){
+            if(!StringUtils.isEmpty(auditStatus) && "0".equals(auditStatus) ){
                 sql.append("AND  sua.AUDIT_STATUS = 0 ");
             }
-            if(!StringUtils.isEmpty(AUDIT_STATUS) && "2".equals(AUDIT_STATUS) ){
+            if(!StringUtils.isEmpty(auditStatus) && "2".equals(auditStatus) ){
                 sql.append("AND  sua.AUDIT_STATUS = 2 ");
             }
+            sql.append("order by sua.AUDIT_TIME desc");
 
             Session session = entityManager.unwrap( org.hibernate.Session.class );
             NativeQuery query = session.createNativeQuery( sql.toString() );

@@ -134,7 +134,7 @@ public class SchoolApiController {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;
             StringBuilder sql = new StringBuilder( "SELECT\n" +
-                    "\tses.ID,\n" +
+                    "\tto_char(ses.ID) AS ID,\n" +
                     "\tscu.USER_ID,\n" +
                     "\tses.SCHOOL_NAME,\n" +
                     "\tses.SCHOOL_TYPE,\n" +
@@ -165,6 +165,7 @@ public class SchoolApiController {
             if(!StringUtils.isEmpty(auditStatus) && "2".equals(auditStatus) ){
                 sql.append("AND  sua.AUDIT_STATUS = 2 ");
             }
+            sql.append("order by sua.AUDIT_TIME desc");
 
             Session session = entityManager.unwrap( org.hibernate.Session.class );
             NativeQuery query = session.createNativeQuery( sql.toString() );

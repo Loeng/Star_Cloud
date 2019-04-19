@@ -248,7 +248,8 @@
 
     <select id="getInstitutionInfoList" resultType="Map">
         SELECT
-	      sei.ID,
+	      to_char(sei.ID) AS ID,
+          scu.USER_ID,
           sei.INSTITUTION_NAME,
 	      sei.PARENT_INSTITUTION,
       	  scu.USER_NAME,
@@ -261,16 +262,16 @@
 	      left join STARCLOUDPORTAL.SCE_COMMON_USER scu on sua.USER_ID = scu.USER_ID
         WHERE
 	      sei.IS_DELETE = 1
-         <if test="INSTITUTION_NAME != null and INSTITUTION_NAME != 'null' and  INSTITUTION_NAME !='' ">
-            and sei.INSTITUTION_NAME like CONCAT('%',CONCAT(#{INSTITUTION_NAME},'%'))
+         <if test="institutionName != null and institutionName != 'null' and  institutionName !='' ">
+            and sei.INSTITUTION_NAME like CONCAT('%',CONCAT(#{institutionName},'%'))
         </if>
-        <if test="AUDIT_STATUS != null and AUDIT_STATUS != 'null' and  AUDIT_STATUS == '0' ">
+        <if test="auditStatus != null and auditStatus != 'null' and  auditStatus == '0' ">
             and  sua.AUDIT_STATUS = 0
         </if>
-        <if test="AUDIT_STATUS != null and AUDIT_STATUS != 'null' and  AUDIT_STATUS == '2' ">
+        <if test="auditStatus != null and auditStatus != 'null' and  auditStatus == '2' ">
             and  sua.AUDIT_STATUS = 2
         </if>
-        <if test="AUDIT_STATUS == null or AUDIT_STATUS == 'null' ">
+        <if test="auditStatus == null or auditStatus == 'null' ">
             and (sua.AUDIT_STATUS = 0 or sua.AUDIT_STATUS = 2)
         </if>
 	    order by sua.AUDIT_TIME desc

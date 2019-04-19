@@ -125,7 +125,7 @@ public class SchoolController {
     @GetMapping( "/getSchoolInfoList/{pageNum}/{pageSize}" )
     @ResponseBody
     public RestRecord getSchoolInfoList(@RequestParam(value = "schoolName",required = false) @ApiParam( name = "schoolName", value = "学校名称") String schoolName,@RequestParam(value = "schoolType",required = false) @ApiParam( name = "schoolType", value = "办学类型") String schoolType,@RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") String auditStatus
-            , @PathVariable("pageNum") @ApiParam( name = "pageNum", value = "当前页数") Integer pageNum, @PathVariable("pageSize") @ApiParam( name = "pageSize", value = "每页记录数") Integer pageSize){
+            , @PathVariable("pageNum") @ApiParam( name = "pageNum", value = "当前页数", required = true) Integer pageNum, @PathVariable("pageSize") @ApiParam( name = "pageSize", value = "每页记录数",required = true) Integer pageSize){
         return schoolService.getSchoolInfoList(schoolName,schoolType,auditStatus,pageNum,pageSize);
     }
 

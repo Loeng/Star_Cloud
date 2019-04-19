@@ -225,6 +225,14 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
     @Query(value = "UPDATE STARCLOUDPORTAL.SCE_COMMON_USER SET ORGANIZATION_ID = ?1 WHERE USER_ID = ?2", nativeQuery = true)
     int updateOrganizationIdByUserId(Long organizationId,String userId);
 
+    @Modifying
+    @Query(value = "DELETE FROM  STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL WHERE AGENT_ID = ?1 AND SCHOOL_ID = ?2", nativeQuery = true)
+    int deleteActingSchool(String AGENT_ID, String SCHOOL_ID);
+
+    @Modifying
+    @Query(value = "INSERT Into STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL(ID,AGENT_ID,SCHOOL_ID) VALUES(?1,?2,?3)", nativeQuery = true)
+    int addActingSchool(long ID , String AGENT_ID, String SCHOOL_ID);
+
     @Override
     UserAudit save(UserAudit userAudit );
 

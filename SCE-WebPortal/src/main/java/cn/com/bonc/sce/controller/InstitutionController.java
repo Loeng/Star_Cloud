@@ -82,11 +82,12 @@ public class InstitutionController {
         return institutionService.updateInstitutionInfo(institution);
     }
 
-    @GetMapping( "/getInstitutionInfoList/{INSTITUTION_NAME}/{AUDIT_STATUS}/{pageNum}/{pageSize}" )
+    @ApiOperation(value = "获取教育局认证审核列表接口",notes = "获取教育局认证审核列表信息",httpMethod = "GET")
+    @GetMapping( "/getInstitutionInfoList/{pageNum}/{pageSize}" )
     @ResponseBody
-    public RestRecord getInstitutionInfoList(@PathVariable("INSTITUTION_NAME") String INSTITUTION_NAME,@PathVariable("AUDIT_STATUS") String AUDIT_STATUS
-    ,@PathVariable("pageNum") Integer pageNum,@PathVariable("pageSize") Integer pageSize) {
-        return institutionService.getInstitutionInfoList(INSTITUTION_NAME,AUDIT_STATUS,pageNum,pageSize);
+    public RestRecord getInstitutionInfoList(@RequestParam(value = "institutionName",required = false) @ApiParam( name = "institutionName", value = "教育局名称") String institutionName,@RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") String auditStatus
+    ,@PathVariable("pageNum") @ApiParam( name = "pageNum", value = "当前页数", required = true) Integer pageNum,@PathVariable("pageSize") @ApiParam( name = "pageSize", value = "每页记录数",required = true) Integer pageSize) {
+        return institutionService.getInstitutionInfoList(institutionName,auditStatus,pageNum,pageSize);
     }
 
 }

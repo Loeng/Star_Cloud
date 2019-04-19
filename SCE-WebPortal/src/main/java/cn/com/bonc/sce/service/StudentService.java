@@ -27,4 +27,8 @@ public class StudentService {
     public RestRecord audit(String json) {
         return studentDao.audit(json);
     }
+
+    public RestRecord getStudentBasicData(String USER_ID) {
+        return studentDao.getStudentBasicData(USER_ID);
+    }
 }

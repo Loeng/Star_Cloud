@@ -30,4 +30,8 @@ public class StudentDao {
     public int addRelation(long id, String applyUserId, String bindUserId, String relationship) {
         return studentMapper.addRelation(id,applyUserId,bindUserId,relationship);
     }
+
+    public Map getStudentBasicData(String USER_ID) {
+        return studentMapper.getStudentBasicData(USER_ID);
+    }
 }

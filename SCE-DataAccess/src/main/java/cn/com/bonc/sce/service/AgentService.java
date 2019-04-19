@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @Service
-@Transactional( rollbackFor = Exception.class )
+@Transactional(rollbackFor = Exception.class)
 public class AgentService {
 
     @Autowired
@@ -34,7 +34,7 @@ public class AgentService {
         Long id = idWorker.nextId();
         agent.setId(id);
         agentDao.save(agent);
-        userInfoRepository.updateOrganizationIdByUserId(agent.getId(),userId);
+        userInfoRepository.updateOrganizationIdByUserId(agent.getId(), userId);
         UserAudit userAudit = new UserAudit();
         userAudit.setUserId(userId);
         userAudit.setUserType(roleId);
@@ -44,19 +44,19 @@ public class AgentService {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
 
-    public RestRecord updateAgentById(Agent agent){
+    public RestRecord updateAgentById(Agent agent) {
         int status = 0;
-        Long agentId = agent.getId() == null ? 0:agent.getId();
-        String agentAddress = agent.getAgentAddress() == null ? "":agent.getAgentAddress();
+        Long agentId = agent.getId() == null ? 0 : agent.getId();
+        String agentAddress = agent.getAgentAddress() == null ? "" : agent.getAgentAddress();
         String postcode = agent.getPostcode() == null ? "" : agent.getPostcode();
         String phone = agent.getPhone() == null ? "" : agent.getPhone();
         String agentEmail = agent.getAgentEmail() == null ? "" : agent.getAgentEmail();
         String agentWebsite = agent.getAgentWebsite() == null ? "" : agent.getAgentWebsite();
-        status = agentDao.updateAgentById(agentId,agentAddress,postcode,phone,agentEmail,agentWebsite);
-        return new RestRecord(200, MessageConstants.SCE_MSG_0200,status);
+        status = agentDao.updateAgentById(agentId, agentAddress, postcode, phone, agentEmail, agentWebsite);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200, status);
     }
 
-    public Agent getAgentById(Long id){
+    public Agent getAgentById(Long id) {
         return agentDao.findById(id);
     }
 
@@ -71,6 +71,16 @@ public class AgentService {
         userAudit.setEntityId(agent.getId());
         userAudit.setAuditStatus(0);
         userInfoRepository.save(userAudit);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200);
+    }
+
+    public RestRecord addActingSchool(String AGENT_ID, String SCHOOL_ID) {
+        userInfoRepository.addActingSchool(idWorker.nextId(),AGENT_ID, SCHOOL_ID);
+        return new RestRecord(200, MessageConstants.SCE_MSG_0200);
+    }
+
+    public RestRecord deleteActingSchool(String AGENT_ID, String SCHOOL_ID) {
+        userInfoRepository.deleteActingSchool(AGENT_ID, SCHOOL_ID);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
 

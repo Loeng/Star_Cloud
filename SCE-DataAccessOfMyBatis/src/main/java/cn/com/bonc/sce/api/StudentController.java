@@ -72,4 +72,11 @@ public class StudentController {
         }
         return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);
     }
+
+    @GetMapping("/getStudentBasicData/{USER_ID}")
+    @ResponseBody
+    public RestRecord getStudentBasicData(@PathVariable("USER_ID") String USER_ID) {
+        return new RestRecord(200, studentService.getStudentBasicData(USER_ID));
+    }
+
 }
