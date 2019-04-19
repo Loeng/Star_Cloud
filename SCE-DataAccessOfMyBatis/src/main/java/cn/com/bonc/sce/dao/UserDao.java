@@ -113,8 +113,8 @@ public class UserDao {
         return userMapper.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range, ISADMINISTRATORS);
     }
 
-    public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus) {
-        return userMapper.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus);
+    public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus, String applyStatus) {
+        return userMapper.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus, applyStatus);
     }
 
     public List< Map > getStudents(String userName, String loginName, String studentNumber, String gender, String grade,

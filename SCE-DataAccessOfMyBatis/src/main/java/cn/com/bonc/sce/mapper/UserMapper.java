@@ -93,7 +93,7 @@ public interface UserMapper {
     List<Map> getTransferTeachers(@Param("getType")Integer getType,@Param("organizationId")long organizationId,
                                   @Param("userName")String userName, @Param("loginName")String loginName,
                                   @Param("gender")String gender, @Param("position")String position,
-                                  @Param("accountStatus")Integer accountStatus);
+                                  @Param("accountStatus")Integer accountStatus, @Param("applyStatus") String applyStatus);
 
     List< Map > getStudents( @Param("userName") String userName,
                              @Param("loginName") String loginName,

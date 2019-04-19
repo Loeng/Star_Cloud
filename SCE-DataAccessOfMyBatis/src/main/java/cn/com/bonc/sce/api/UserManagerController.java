@@ -374,7 +374,7 @@ public class UserManagerController {
         if ( ADDTYPE == 0 ) {//建新用户
             String USER_ID = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
             String ORGANIZATION_ID = ( String ) map.get( "ORGANIZATION_ID" );
-            String ISADMINISTRATORS = ( String ) map.get( "ISADMINISTRATORS" );
+            Integer ISADMINISTRATORS =  Integer.parseInt(map.get("ISADMINISTRATORS").toString());
             if ( ORGANIZATION_ID == null ) {
                 return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
             }
@@ -417,7 +417,7 @@ public class UserManagerController {
             String secret = Secret.ES256GenerateSecret();
             String loginName = IDUtil.createID( "js_" );
             int count1 = userService.addUser( USER_ID, CERTIFICATE_TYPE, CERTIFICATE_NUMBER,
-                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE, NATIONLITY, NATION_CODE, secret, "2", loginName, Integer.parseInt(ISADMINISTRATORS) );
+                    USER_NAME, GENDER, PHONE_NUMBER, ORGANIZATION_ID, MAIL_ADDRESS, BIRTHDATE, NATIONLITY, NATION_CODE, secret, "2", loginName, ISADMINISTRATORS );
             int count2 = userService.addTeacher( USER_ID, ACADEMIC_QUALIFICATION,
                     WORK_NUMBER, SCHOOL_TIME, TEACH_TIME, POSITION, TEACH_RANGE );
             userService.addPassword( idWorker.nextId(), USER_ID, DEFAULT_PASSWORD );
@@ -489,9 +489,10 @@ public class UserManagerController {
                                            @RequestParam( value = "position", required = false ) String position,
                                            @RequestParam( value = "accountStatus", required = false ) Integer accountStatus,
                                            @PathVariable( value = "pageNum" ) Integer pageNum,
-                                           @PathVariable( value = "pageSize" ) Integer pageSize ) {
+                                           @PathVariable( value = "pageSize" ) Integer pageSize,
+                                           @RequestParam( value = "applyStatus") String applyStatus) {
         PageHelper.startPage( pageNum, pageSize );
-        List< Map > teachers = userService.getTransferTeachers( getType, organizationId, userName, loginName, gender, position, accountStatus );
+        List< Map > teachers = userService.getTransferTeachers( getType, organizationId, userName, loginName, gender, position, accountStatus, applyStatus );
         PageInfo pageInfo = new PageInfo( teachers );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }

@@ -138,8 +138,8 @@ public class UserService {
         return userDao.transInto(id,user_id,apply_user_id,origin_school_id,target_school_id,tea_work_number,entrance_year,tea_position,tea_range, ISADMINISTRATORS);
     }
 
-    public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus) {
-        return userDao.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus);
+    public List<Map> getTransferTeachers(Integer getType, long organizationId, String userName, String loginName, String gender, String position, Integer accountStatus, String applyStatus) {
+        return userDao.getTransferTeachers(getType,organizationId,userName,loginName,gender,position,accountStatus, applyStatus);
     }
 
     public RestRecord getStudents(String userName, String loginName, String studentNumber, String gender, String grade, String accountStatus,
