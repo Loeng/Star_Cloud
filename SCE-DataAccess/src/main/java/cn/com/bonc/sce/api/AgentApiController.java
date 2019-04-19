@@ -121,7 +121,7 @@ public class AgentApiController {
             return new RestRecord(112, WebMessageConstants.SCE_PORTAL_MSG_112, id);
         } else {
             String picUrl = "";
-            if(org.apache.commons.lang3.StringUtils.isNoneBlank(agent.getInstitutionCode())) {
+            if (org.apache.commons.lang3.StringUtils.isNoneBlank(agent.getInstitutionCode())) {
                 Integer headPortrait = Integer.parseInt(agent.getInstitutionCode());
                 Map<String, Object> url = fileResourceService.getFileStorePath(headPortrait);
                 picUrl = url == null ? "" : url.get("fileStorePath").toString();
@@ -168,7 +168,7 @@ public class AgentApiController {
 
     @GetMapping("/getAgentInfo/{pageNum}/{pageSize}")
     @ResponseBody
-    public RestRecord getAgentInfo(@RequestParam(value = "agentName",required = false) @ApiParam( name = "agentName", value = "代理商名称") String agentName,@RequestParam(value = "property",required = false) @ApiParam( name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") Integer auditStatus
+    public RestRecord getAgentInfo(@RequestParam(value = "agentName", required = false) @ApiParam(name = "agentName", value = "代理商名称") String agentName, @RequestParam(value = "property", required = false) @ApiParam(name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus", required = false) @ApiParam(name = "auditStatus", value = "审核状态") Integer auditStatus
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
@@ -260,9 +260,9 @@ public class AgentApiController {
         }
     }
 
-    @GetMapping("/getHasBeenActingSchoolList/{ID}")
+    @GetMapping("/getHasBeenActingSchoolList/{ID}/{school_name}")
     @ResponseBody
-    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID) {
+    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID, @PathVariable("school_name") String school_name) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;
@@ -275,6 +275,9 @@ public class AgentApiController {
                     "\tLEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ses ON sesa.SCHOOL_ID = ses.ID \n" +
                     "WHERE\n" +
                     "\tAGENT_ID = " + ID + "");
+            if (!StringUtils.isEmpty(school_name) && !"null".equals(school_name)) {
+                sql.append("AND ses.school_name LIKE '%" + school_name + "%' ");
+            }
 
             Session session = entityManager.unwrap(org.hibernate.Session.class);
             NativeQuery query = session.createNativeQuery(sql.toString());
@@ -297,23 +300,13 @@ public class AgentApiController {
         String AGENT_ID = info.get("AGENT_ID").toString();
         String[] SCHOOL_ID = info.get("SCHOOL_ID").toString().split(",");
 
-        for (int i = 0; i < SCHOOL_ID.length; i++) {
-            agentService.addActingSchool(AGENT_ID, SCHOOL_ID[i]);
-        }
-        RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
-        return restRecord;
-    }
-
-    @DeleteMapping("/deleteActingSchool")
-    @ResponseBody
-    @Transactional
-    public RestRecord deleteActingSchool(@RequestBody Map<String, String> info) {
-
-        String AGENT_ID = info.get("AGENT_ID").toString();
-        String[] SCHOOL_ID = info.get("SCHOOL_ID").toString().split(",");
+        agentService.deleteActingSchool(AGENT_ID);
 
         for (int i = 0; i < SCHOOL_ID.length; i++) {
-            agentService.deleteActingSchool(AGENT_ID, SCHOOL_ID[i]);
+            if (agentService.queryActingSchool(SCHOOL_ID[i]) != 0) ;
+            {
+                agentService.addActingSchool(AGENT_ID, SCHOOL_ID[i]);
+            }
         }
         RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
         return restRecord;

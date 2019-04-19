@@ -57,13 +57,10 @@ public interface AgentDao {
     @RequestMapping( value = "/agent/getActingSchoolList/{school_name}", method = RequestMethod.GET )
     public RestRecord getActingSchoolList(@PathVariable("school_name") String school_name);
 
-    @RequestMapping( value = "/agent/getHasBeenActingSchoolList/{ID}", method = RequestMethod.GET )
-    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") Integer ID);
+    @RequestMapping( value = "/agent/getHasBeenActingSchoolList/{ID}/{school_name}", method = RequestMethod.GET )
+    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID,@PathVariable("school_name") String school_name);
 
     @RequestMapping( value = "/agent/addActingSchool", method = RequestMethod.POST )
     public RestRecord addActingSchool(@RequestBody Map<String, String> info);
-
-    @RequestMapping( value = "/agent/deleteActingSchool", method = RequestMethod.DELETE )
-    public RestRecord deleteActingSchool(@RequestBody Map<String, String> info);
 
 }
