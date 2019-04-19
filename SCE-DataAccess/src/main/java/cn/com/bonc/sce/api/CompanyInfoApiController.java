@@ -11,6 +11,7 @@ import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.repository.CompanyInfoRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.CompanyService;
+import cn.com.bonc.sce.service.FileResourceService;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
 import io.swagger.annotations.ApiOperation;
@@ -61,6 +62,9 @@ public class CompanyInfoApiController {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private FileResourceService fileResourceService;
 
     @GetMapping
     @ResponseBody
@@ -123,6 +127,13 @@ public class CompanyInfoApiController {
         if (info == null) {
             return new RestRecord(111, WebMessageConstants.SCE_PORTAL_MSG_111, companyId);
         } else {
+            String picUrl = "";
+            if(org.apache.commons.lang3.StringUtils.isNoneBlank(info.getInstitutionCode())) {
+                Integer headPortrait = Integer.parseInt(info.getInstitutionCode());
+                Map<String, Object> url = fileResourceService.getFileStorePath(headPortrait);
+                picUrl = url == null ? "" : url.get("fileStorePath").toString();
+            }
+            info.setFileStorePath(picUrl);
             return new RestRecord(200, MessageConstants.SCE_MSG_0200, info);
         }
     }

@@ -5,12 +5,14 @@ import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.Institution;
 import cn.com.bonc.sce.model.InstitutionInfo;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.FileResourceService;
 import cn.com.bonc.sce.service.InstitutionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,8 @@ public class InstitutionController {
 
     @Autowired
     InstitutionService institutionService;
+    @Autowired
+    private FileResourceService fileResourceService;
 
     @ApiOperation(value = "通过用户ID修改教育局人员从业信息接口", notes = "通过用户ID修改教育局人员从业信息", httpMethod = "PUT")
     @PutMapping("/editInstitutionInfo")
@@ -112,6 +116,12 @@ public class InstitutionController {
         if (user == null) {
             return new RestRecord(1010, MessageConstants.SCE_MSG_1010, id);
         } else {
+            String picUrl = "";
+            if(StringUtils.isNoneBlank(user.getInstitutionCode())) {
+                Integer headPortrait = Integer.parseInt(user.getInstitutionCode());
+                picUrl = fileResourceService.getFileStorePath(headPortrait);
+            }
+            user.setFileStorePath(picUrl);
             return new RestRecord(200, MessageConstants.SCE_MSG_0200, user);
         }
     }

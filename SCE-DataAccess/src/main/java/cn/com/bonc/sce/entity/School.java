@@ -83,6 +83,9 @@ public class School {
     @Column(name = "ORG_CODE")
     private String orgCode;  //组织机构代码
 
+    @Transient
+    private String fileStorePath; //文件地址
+
     @Column(name = "EMAIL")
     private String email;  //电子邮箱
 

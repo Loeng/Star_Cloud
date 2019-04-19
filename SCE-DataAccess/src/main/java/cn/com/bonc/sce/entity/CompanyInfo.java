@@ -33,6 +33,7 @@ public class CompanyInfo {
     private String property;
     private String institutionCode;
     private String phone;
+    private String fileStorePath; //文件地址
 
     @Id
     @Column( name = "COMPANY_ID", nullable = false )
@@ -192,6 +193,15 @@ public class CompanyInfo {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Transient
+    public String getFileStorePath() {
+        return fileStorePath;
+    }
+
+    public void setFileStorePath(String fileStorePath) {
+        this.fileStorePath = fileStorePath;
     }
 
     @Override

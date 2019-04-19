@@ -10,6 +10,7 @@ import cn.com.bonc.sce.model.Secret;
 import cn.com.bonc.sce.repository.AgentRepository;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.service.AgentService;
+import cn.com.bonc.sce.service.FileResourceService;
 import cn.com.bonc.sce.tool.IDUtil;
 import cn.com.bonc.sce.utils.UUID;
 import io.swagger.annotations.ApiOperation;
@@ -56,6 +57,9 @@ public class AgentApiController {
 
     @Autowired
     private AgentService agentService;
+
+    @Autowired
+    private FileResourceService fileResourceService;
 
     /**
      * 添加单个代理信息
@@ -116,6 +120,13 @@ public class AgentApiController {
         if (agent == null) {
             return new RestRecord(112, WebMessageConstants.SCE_PORTAL_MSG_112, id);
         } else {
+            String picUrl = "";
+            if(org.apache.commons.lang3.StringUtils.isNoneBlank(agent.getInstitutionCode())) {
+                Integer headPortrait = Integer.parseInt(agent.getInstitutionCode());
+                Map<String, Object> url = fileResourceService.getFileStorePath(headPortrait);
+                picUrl = url == null ? "" : url.get("fileStorePath").toString();
+            }
+            agent.setFileStorePath(picUrl);
             return new RestRecord(200, MessageConstants.SCE_MSG_0200, agent);
         }
     }
