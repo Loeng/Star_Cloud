@@ -259,6 +259,21 @@ public class UserManagerController {
         if(isAdministrators == null || isAdministrators == 0){
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
+        int auth = userService.selectAuthStatus(userId);
+        if(auth < 1){
+            if(userId.equals(id)){
+                return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+            }
+            Integer updateIsAdministrators = userService.selectIsAdministortars(id);
+            if(!userId.equals(id) && updateIsAdministrators ==1){
+                return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+            }
+        }else {
+            if(userId.equals(id)){
+                return new RestRecord( 432, "系统不允许该操作" );
+            }
+        }
+
         int count1 = userService.delUser( id );
         int count2 = userService.delTeacher( id );
         int count3 = userService.delPassword( id );
@@ -290,8 +305,18 @@ public class UserManagerController {
         Map map = ( Map ) JSONUtils.parse( json );
         Integer ISADMINISTRATORS = Integer.parseInt(map.get( "ISADMINISTRATORS" ).toString());
         String USER_ID = ( String ) map.get( "USER_ID" );
-        if(userId.equals(USER_ID) && ISADMINISTRATORS == 0 ){
-            return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+        if(auth < 1){
+            if(userId.equals(USER_ID) && ISADMINISTRATORS == 0 ){
+                return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+            }
+            Integer updateIsAdministrators = userService.selectIsAdministortars(USER_ID);
+            if(!userId.equals(USER_ID) && updateIsAdministrators ==1){
+                return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
+            }
+        }else {
+            if(userId.equals(USER_ID) && ISADMINISTRATORS == 0 ){
+                return new RestRecord( 432, "系统不允许该操作" );
+            }
         }
         Integer CERTIFICATE_TYPE = ( Integer ) map.get( "CERTIFICATE_TYPE" );
         String CERTIFICATE_NUMBER = ( String ) map.get( "CERTIFICATE_NUMBER" );
