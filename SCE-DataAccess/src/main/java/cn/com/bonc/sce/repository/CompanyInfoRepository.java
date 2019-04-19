@@ -31,7 +31,7 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "\tSCU.LOGIN_PERMISSION_STATUS AS LOGIN_PERMISSION_STATUS,\n" +
                     "\tSCU.ACCOUNT_STATUS\tAS ACCOUNT_STATUS,\n" +
                     "\tSCU.LOGIN_NAME AS LOGIN_NAME,\n" +
-                    "\tCOUNT_TEMP.APP_COUNT AS APP_COUNT \n" +
+                    "\tNVL(COUNT_TEMP.APP_COUNT,0) AS APP_COUNT \n" +
                     "FROM STARCLOUDPORTAL.SCE_COMMON_USER scu \n" +
                     "LEFT JOIN STARCLOUDPORTAL.SCE_INFO_COMPANY sic ON  sic.USER_ID =scu.USER_ID AND sic.IS_DELETE=1\n" +
                     "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY smc ON smc.COMPANY_ID =sic.COMPANY_ID AND smc.IS_DELETE=1\n" +
@@ -85,7 +85,7 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "\tSCU.LOGIN_PERMISSION_STATUS AS LOGIN_PERMISSION_STATUS,\n" +
                     "\tSCU.ACCOUNT_STATUS\tAS ACCOUNT_STATUS,\n" +
                     "\tSCU.LOGIN_NAME AS LOGIN_NAME,\n" +
-                    "\tCOUNT_TEMP.APP_COUNT AS APP_COUNT \n" +
+                    "\tNVL(COUNT_TEMP.APP_COUNT,0) AS APP_COUNT \n" +
                     "FROM STARCLOUDPORTAL.SCE_COMMON_USER scu \n" +
                     "LEFT JOIN STARCLOUDPORTAL.SCE_INFO_COMPANY sic ON  sic.USER_ID =scu.USER_ID AND sic.IS_DELETE=1\n" +
                     "LEFT JOIN STARCLOUDMARKET.SCE_MARKET_COMPANY smc ON smc.COMPANY_ID =sic.COMPANY_ID AND smc.IS_DELETE=1\n" +
