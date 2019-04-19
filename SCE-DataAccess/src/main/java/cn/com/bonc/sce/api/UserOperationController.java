@@ -263,8 +263,12 @@ public class UserOperationController {
             result.put("userType",map.get("userType"));
             result.put("userName",map.get("userName"));
             result.put("gender",map.get("gender"));
-            result.put("birthDate",map.get("birthDate"));
+            result.put("birthday",map.get("birthday"));
             result.put("address",map.get("address"));
+            result.put("phoneNumber",map.get("phoneNumber"));
+            result.put("mailAddress",map.get("mailAddress"));
+            result.put("certificateType",map.get("certificateType"));
+            result.put("certificateNumber",map.get("certificateNumber"));
             result.put("province",map.get("province"));
             result.put("city",map.get("city"));
             result.put("area",map.get("area"));
