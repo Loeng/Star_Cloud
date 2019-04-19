@@ -79,8 +79,12 @@ public class AgentService {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
 
-    public RestRecord deleteActingSchool(String AGENT_ID, String SCHOOL_ID) {
-        userInfoRepository.deleteActingSchool(AGENT_ID, SCHOOL_ID);
+    public int queryActingSchool( String SCHOOL_ID) {
+        return userInfoRepository.queryActingSchool(SCHOOL_ID);
+    }
+
+    public RestRecord deleteActingSchool(String AGENT_ID) {
+        userInfoRepository.deleteActingSchool(AGENT_ID);
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
 

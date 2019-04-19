@@ -124,13 +124,13 @@ public class AgentController {
     }
 
     /**
-     * 代理商配置学校，待选学校列表
+     * 代理商配置学校，已被选学校列表
      *
      * @return
      */
-    @GetMapping("/getHasBeenActingSchoolList/{ID}")
-    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") Integer ID) {
-        return agentService.getHasBeenActingSchoolList(ID);
+    @GetMapping("/getHasBeenActingSchoolList/{ID}/{school_name}")
+    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID,@PathVariable("school_name") String school_name) {
+        return agentService.getHasBeenActingSchoolList(ID,school_name);
     }
 
     /**
@@ -142,17 +142,6 @@ public class AgentController {
     @ResponseBody
     public RestRecord addActingSchool(@RequestBody Map<String, String> info) {
         return agentService.addActingSchool(info);
-    }
-
-    /**
-     * 代理商配置学校，删除学校
-     *
-     * @return
-     */
-    @DeleteMapping("/deleteActingSchool")
-    @ResponseBody
-    public RestRecord deleteActingSchool(@RequestBody Map<String, String> info) {
-        return agentService.deleteActingSchool(info);
     }
 
 }

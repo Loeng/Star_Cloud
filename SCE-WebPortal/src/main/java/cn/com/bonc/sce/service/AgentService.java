@@ -49,16 +49,12 @@ public class AgentService {
         return agentDao.getActingSchoolList(school_name);
     }
 
-    public RestRecord getHasBeenActingSchoolList(Integer ID) {
-        return agentDao.getHasBeenActingSchoolList(ID);
+    public RestRecord getHasBeenActingSchoolList(String ID,String school_name) {
+        return agentDao.getHasBeenActingSchoolList(ID,school_name);
     }
 
     public RestRecord addActingSchool(Map<String, String> info) {
         return agentDao.addActingSchool(info);
-    }
-
-    public RestRecord deleteActingSchool(Map<String, String> info) {
-        return agentDao.deleteActingSchool(info);
     }
 
 }
