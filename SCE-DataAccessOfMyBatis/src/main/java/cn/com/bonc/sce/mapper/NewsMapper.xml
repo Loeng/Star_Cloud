@@ -413,7 +413,7 @@
         </if>
 
 
-        ORDER BY T.SHOW_ORDER DESC ,T.CREATE_TIME DESC
+        ORDER BY T.CREATE_TIME DESC
 
     </select>
 
