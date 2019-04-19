@@ -49,5 +49,9 @@ OrderDeadline:
   OnLine: 24
   OffLine: 72
 
+# 订单定时更新  已支付 已取消定时更新为已取消
+TimeWork:
+  isOpen: true
+
 
 

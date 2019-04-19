@@ -366,5 +366,17 @@ public class OrderService {
     }
 
 
+    /* *
+     * @Description 已支付 已取消的订单变更为已关闭
+     * @Date 16:27 2019/4/19
+     * @param
+     * @return void
+     */
+    public void updateOrderStatus(){
+        //// TODO
+        System.out.println("定时启动没---------------------");
+    }
+
+
 
 }
