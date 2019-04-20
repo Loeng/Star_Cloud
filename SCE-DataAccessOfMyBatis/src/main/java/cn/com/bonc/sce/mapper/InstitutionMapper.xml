@@ -255,7 +255,7 @@
 	      to_char(sei.ID) AS ID,
           scu.USER_ID,
           sei.INSTITUTION_NAME,
-	      sei.PARENT_INSTITUTION,
+          to_number(sei.PARENT_INSTITUTION) AS PARENT_INSTITUTION,
       	  scu.USER_NAME,
 	      scu.LOGIN_NAME,
 	      sua.AUDIT_STATUS,
@@ -269,13 +269,13 @@
          <if test="institutionName != null and institutionName != 'null' and  institutionName !='' ">
             and sei.INSTITUTION_NAME like CONCAT('%',CONCAT(#{institutionName},'%'))
         </if>
-        <if test="auditStatus != null and auditStatus != 'null' and  auditStatus == '0' ">
+        <if test="auditStatus != null and auditStatus != 'null'.toString() and  auditStatus == '0'.toString() ">
             and  sua.AUDIT_STATUS = 0
         </if>
-        <if test="auditStatus != null and auditStatus != 'null' and  auditStatus == '2' ">
+        <if test="auditStatus != null and auditStatus != 'null'.toString() and  auditStatus == '2'.toString() ">
             and  sua.AUDIT_STATUS = 2
         </if>
-        <if test="auditStatus == null or auditStatus == 'null' ">
+        <if test="auditStatus == null or auditStatus == 'null'.toString() ">
             and (sua.AUDIT_STATUS = 0 or sua.AUDIT_STATUS = 2)
         </if>
 	    order by sua.AUDIT_TIME desc

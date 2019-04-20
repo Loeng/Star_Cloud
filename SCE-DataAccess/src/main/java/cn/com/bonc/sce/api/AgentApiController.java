@@ -197,10 +197,10 @@ public class AgentApiController {
             if (StringUtils.isEmpty(auditStatus) || "null".equals(auditStatus)) {
                 sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
             }
-            if (!StringUtils.isEmpty(auditStatus) && "0".equals(auditStatus)) {
+            if (!StringUtils.isEmpty(auditStatus) && auditStatus==0) {
                 sql.append("AND  sua.AUDIT_STATUS = 0 ");
             }
-            if (!StringUtils.isEmpty(auditStatus) && "2".equals(auditStatus)) {
+            if (!StringUtils.isEmpty(auditStatus) && auditStatus==2) {
                 sql.append("AND  sua.AUDIT_STATUS = 2 ");
             }
             sql.append("order by sua.AUDIT_TIME desc");
