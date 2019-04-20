@@ -65,6 +65,8 @@ public class UserImportApiController {
 
     private static final String certificateNumberExist = "%s身份证已被使用";
 
+    private static final String schoolIdNotExist = "学校id填写有误";
+
     private static final String phonePrompt = "%s手机号填写不正确";
 
     private static final String emailPrompt = "%s邮箱填写不正确";
@@ -91,8 +93,7 @@ public class UserImportApiController {
     @Transactional( isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class )
     public RestRecord uploadParseExcel( @RequestBody List< ExcelToUser > list, @RequestParam( "userType" ) String userType, @CurrentUserId String currentUserId ) throws ImportUserFailedException {
 
-        //通过用户id查询所属学校id
-//        String organizationId = fileResourceRepository.selectOrganizationId( currentUserId );
+
         ExcelToUser excelToUser;
         int i = 0;
         int count = 0;
@@ -128,6 +129,10 @@ public class UserImportApiController {
                     if ( excelToUser.getCertificateType().equals( "1" ) && fileResourceRepository.selectUserCount( excelToUser.getCertificateNumber() ) > 0 ) {
                         log.info( "教师身份证已被使用" );
                         throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberExist, "教师" ), i + EXCEL_NUMBER ) );
+                    }
+                    if ( fileResourceRepository.selectSchoolIdCount( Long.parseLong( excelToUser.getOrganizationId() ) ) == 0 ) {
+                        log.info( "学校id不存在" );
+                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, schoolIdNotExist, i + EXCEL_NUMBER ) );
                     }
                     Long organizationId = Long.parseLong( excelToUser.getOrganizationId() );
                     UserPassword userPassword = new UserPassword();
@@ -247,6 +252,10 @@ public class UserImportApiController {
                     if ( excelToUser.getParentCertificationNumber().equals( excelToUser.getCertificateNumber() ) ) {
                         log.info( "家长和学生的身份证不能相同" );
                         throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "家长和学生的身份证不能相同", i + EXCEL_NUMBER ) );
+                    }
+                    if ( fileResourceRepository.selectSchoolIdCount( Long.parseLong( excelToUser.getOrganizationId() ) ) == 0 ) {
+                        log.info( "学校id不存在" );
+                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, schoolIdNotExist, i + EXCEL_NUMBER ) );
                     }
                     String parentId = fileResourceRepository.selectUserIdByCertificateNumber( excelToUser.getParentCertificationNumber() );
                     Long organizationId = Long.parseLong( excelToUser.getOrganizationId() );
