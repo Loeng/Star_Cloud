@@ -88,4 +88,8 @@ public class AgentService {
         return new RestRecord(200, MessageConstants.SCE_MSG_0200);
     }
 
+    public int getAgentAuditCountById(String ID){
+        return agentDao.getAgentAuditCountById(ID);
+    }
+
 }

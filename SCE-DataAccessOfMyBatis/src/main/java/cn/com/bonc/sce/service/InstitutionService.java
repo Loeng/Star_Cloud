@@ -59,7 +59,7 @@ public class InstitutionService {
         String TELEPHONE = institution.getTelephone() == null ? "":institution.getTelephone();
         String EMAIL = institution.getEmail() == null ?"":institution.getEmail();
         String HOMEPAGE = institution.getHomepage() == null ? "":institution.getHomepage();
-        String PARENT_INSTITUTION = institution.getParentInstitution() == null ? "":institution.getParentInstitution();
+        String PARENT_INSTITUTION = institution.getParentInstitution() == null ? "":String.valueOf(institution.getParentInstitution());
         Integer IS_DELETE = 1;
         institutionDao.addInstitution(Id,INSTITUTION_NAME,ADDRESS,POSTCODE,PROVINCE,CITY,DISTRICT,INSTITUTION_CODE,TELEPHONE,EMAIL,HOMEPAGE,PARENT_INSTITUTION,IS_DELETE);
 

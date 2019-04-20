@@ -23,6 +23,6 @@ public class Institution {
     private String institutionCode; //组织机构码
     private String email; //电子邮箱
     private String homepage; //主页
-    private String parentInstitution; //所属主管单位
+    private Integer parentInstitution; //所属主管单位
     private String fileStorePath; //文件地址
 }

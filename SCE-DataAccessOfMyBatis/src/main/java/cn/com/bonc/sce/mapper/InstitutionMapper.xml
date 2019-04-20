@@ -266,18 +266,20 @@
 	      left join STARCLOUDPORTAL.SCE_COMMON_USER scu on sua.USER_ID = scu.USER_ID
         WHERE
 	      sei.IS_DELETE = 1
-         <if test="institutionName != null and institutionName != 'null' and  institutionName !='' ">
+         <if test="institutionName != null and institutionName != 'null'.toString() and  institutionName !='' ">
             and sei.INSTITUTION_NAME like CONCAT('%',CONCAT(#{institutionName},'%'))
         </if>
-        <if test="auditStatus != null and auditStatus != 'null'.toString() and  auditStatus == '0'.toString() ">
-            and  sua.AUDIT_STATUS = 0
-        </if>
-        <if test="auditStatus != null and auditStatus != 'null'.toString() and  auditStatus == '2'.toString() ">
-            and  sua.AUDIT_STATUS = 2
-        </if>
-        <if test="auditStatus == null or auditStatus == 'null'.toString() ">
-            and (sua.AUDIT_STATUS = 0 or sua.AUDIT_STATUS = 2)
-        </if>
+        <choose>
+            <when test="auditStatus != null and auditStatus != 'null'.toString() and  auditStatus == '0'.toString()">
+                and  sua.AUDIT_STATUS = 0
+            </when>
+            <when test="auditStatus != null and auditStatus != 'null'.toString() and  auditStatus == '2'.toString()">
+                and  sua.AUDIT_STATUS = 2
+            </when>
+            <otherwise>
+                and (sua.AUDIT_STATUS = 0 or sua.AUDIT_STATUS = 2)
+            </otherwise>
+        </choose>
 	    order by sua.AUDIT_TIME desc
     </select>
 </mapper>

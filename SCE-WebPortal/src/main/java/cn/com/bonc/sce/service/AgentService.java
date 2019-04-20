@@ -45,8 +45,8 @@ public class AgentService {
         return agentDao.getAgentInfo(AGENT_NAME,PROPERTY,AUDIT_STATUS, pageNum, pageSize );
     }
 
-    public RestRecord getActingSchoolList(String school_name) {
-        return agentDao.getActingSchoolList(school_name);
+    public RestRecord getActingSchoolList(String ID,String school_name) {
+        return agentDao.getActingSchoolList(ID,school_name);
     }
 
     public RestRecord getHasBeenActingSchoolList(String ID,String school_name) {

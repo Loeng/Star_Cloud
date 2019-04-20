@@ -54,8 +54,8 @@ public interface AgentDao {
     public RestRecord getAgentInfo(@RequestParam(value = "agentName",required = false) @ApiParam( name = "agentName", value = "代理商名称") String agentName,@RequestParam(value = "property",required = false) @ApiParam( name = "property", value = "公司性质") String property, @RequestParam(value = "auditStatus",required = false) @ApiParam( name = "auditStatus", value = "审核状态") Integer auditStatus
             , @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize );
 
-    @RequestMapping( value = "/agent/getActingSchoolList/{school_name}", method = RequestMethod.GET )
-    public RestRecord getActingSchoolList(@PathVariable("school_name") String school_name);
+    @RequestMapping( value = "/agent/getActingSchoolList/{ID}/{school_name}", method = RequestMethod.GET )
+    public RestRecord getActingSchoolList(@PathVariable("ID") String ID,@PathVariable("school_name") String school_name);
 
     @RequestMapping( value = "/agent/getHasBeenActingSchoolList/{ID}/{school_name}", method = RequestMethod.GET )
     public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID,@PathVariable("school_name") String school_name);

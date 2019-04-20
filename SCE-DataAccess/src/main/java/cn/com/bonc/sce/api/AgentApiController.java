@@ -192,7 +192,7 @@ public class AgentApiController {
                 sql.append("and sma.AGENT_NAME like '%" + agentName + "%' ");
             }
             if (!StringUtils.isEmpty(property) && !"null".equals(property)) {
-                sql.append("and smc.PROPERTY = '" + property + "' ");
+                sql.append("and sma.PROPERTY  = '" + property + "' ");
             }
             if (StringUtils.isEmpty(auditStatus) || "null".equals(auditStatus)) {
                 sql.append("AND ( sua.AUDIT_STATUS = 0  OR sua.AUDIT_STATUS = 2 ) ");
@@ -226,34 +226,48 @@ public class AgentApiController {
         }
     }
 
-    @GetMapping("/getActingSchoolList/{school_name}")
+    @GetMapping("/getActingSchoolList/{ID}/{school_name}")
     @ResponseBody
-    public RestRecord getCompanyList(@PathVariable("school_name") String school_name) {
+    public RestRecord getCompanyList(@PathVariable("ID") String ID,@PathVariable("school_name") String school_name) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
-            Page<List<Map<String, Object>>> page;
-            StringBuilder sql = new StringBuilder("SELECT\n" +
-                    "\tses.ID,\n" +
-                    "\tses.SCHOOL_NAME,\n" +
-                    "\tses.SCHOOL_TYPE \n" +
-                    "FROM\n" +
-                    "\tSTARCLOUDPORTAL.SCE_ENTITY_SCHOOL ses\n" +
-                    "\tLEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT sua ON ses.USER_ID = sua.USER_ID \n" +
-                    "WHERE\n" +
-                    "\tses.IS_DELETE = 1 \n" +
-                    "\tAND sua.AUDIT_STATUS = 1 \n" +
-                    "\tAND NOT EXISTS ( SELECT 1 FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL WHERE SCHOOL_ID = ses.ID ) ");
-            if (!StringUtils.isEmpty(school_name) && !"null".equals(school_name)) {
-                sql.append("AND ses.school_name LIKE '%" + school_name + "%' ");
-            }
-
-            Session session = entityManager.unwrap(org.hibernate.Session.class);
-            NativeQuery query = session.createNativeQuery(sql.toString());
-            query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-
             Map<String, Object> temp = new HashMap<>(16);
-            temp.put("data", query.getResultList());
-            restRecord.setData(temp);
+            int agentCount =  agentService.getAgentAuditCountById(ID);
+            if(agentCount>0){
+                Agent agent = agentService.getAgentById(Long.valueOf(ID));
+                String province = agent.getProvince();
+                String city = agent.getCity();
+                String area = agent.getArea();
+
+                Page<List<Map<String, Object>>> page;
+                StringBuilder sql = new StringBuilder("SELECT\n" +
+                        "\tses.ID,\n" +
+                        "\tses.SCHOOL_NAME,\n" +
+                        "\tses.SCHOOL_TYPE \n" +
+                        "FROM\n" +
+                        "\tSTARCLOUDPORTAL.SCE_USER_AUDIT sua\n" +
+                        "\tLEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ses ON ses.ID = sua.ENTITY_ID \n" +
+                        "WHERE\n" +
+                        "\tses.IS_DELETE = 1 \n" +
+                        "\tAND sua.AUDIT_STATUS = 1 \n" +
+                        "\tAND sua.USER_TYPE = 2 \n" +
+                        "\tAND ses.PROVINCE = '"+province+"' AND ses.CITY = '"+city+"' AND ses.AREA = '"+area+"' \n" +
+                        "\tAND NOT EXISTS ( SELECT 1 FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL_AGENT_REL WHERE SCHOOL_ID = ses.ID ) ");
+                if (!StringUtils.isEmpty(school_name) && !"null".equals(school_name)) {
+                    sql.append("AND ses.school_name LIKE '%" + school_name + "%' ");
+                }
+
+                Session session = entityManager.unwrap(org.hibernate.Session.class);
+                NativeQuery query = session.createNativeQuery(sql.toString());
+                query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+
+                temp.put("data", query.getResultList());
+                restRecord.setData(temp);
+            }else{
+
+                temp.put("data", "");
+                restRecord.setData(temp);
+            }
             return restRecord;
         } catch (Exception e) {
             return new RestRecord(420, WebMessageConstants.SCE_PORTAL_MSG_420, e);
@@ -262,7 +276,7 @@ public class AgentApiController {
 
     @GetMapping("/getHasBeenActingSchoolList/{ID}/{school_name}")
     @ResponseBody
-    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID, @PathVariable("school_name") String school_name) {
+    public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID, @PathVariable(value = "school_name",required = false) String school_name) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;

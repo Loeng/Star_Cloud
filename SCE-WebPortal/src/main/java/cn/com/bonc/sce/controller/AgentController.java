@@ -117,10 +117,10 @@ public class AgentController {
      *
      * @return
      */
-    @GetMapping("/getActingSchoolList/{school_name}")
+    @GetMapping("/getActingSchoolList/{ID}/{school_name}")
     @ResponseBody
-    public RestRecord getActingSchoolList(@PathVariable("school_name") String school_name) {
-        return agentService.getActingSchoolList(school_name);
+    public RestRecord getActingSchoolList(@PathVariable("ID") String ID,@PathVariable(value = "school_name",required = false) String school_name) {
+        return agentService.getActingSchoolList(ID,school_name);
     }
 
     /**

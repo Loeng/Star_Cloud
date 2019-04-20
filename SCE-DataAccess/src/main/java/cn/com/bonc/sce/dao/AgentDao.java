@@ -20,4 +20,8 @@ public interface AgentDao extends JpaRepository<Agent, Integer > {
     int updateAgentById(Long id,String agentAddress,String postcode,String phone,String agentEmail,String agentWebsite);
 
     Agent findById(Long id);
+
+    @Query( value = "SELECT COUNT(*) FROM STARCLOUDPORTAL.SCE_ENTITY_AGENT A LEFT JOIN  STARCLOUDPORTAL.SCE_USER_AUDIT T ON A.ID=T.ENTITY_ID" +
+            " WHERE T.AUDIT_STATUS = 1 AND A.ID=?1 ", nativeQuery = true )
+    Integer getAgentAuditCountById(String ID);
 }
