@@ -490,7 +490,7 @@ public class UserManagerController {
                                            @RequestParam( value = "accountStatus", required = false ) Integer accountStatus,
                                            @PathVariable( value = "pageNum" ) Integer pageNum,
                                            @PathVariable( value = "pageSize" ) Integer pageSize,
-                                           @RequestParam( value = "applyStatus") String applyStatus) {
+                                           @RequestParam( value = "applyStatus", required = false) String applyStatus) {
         PageHelper.startPage( pageNum, pageSize );
         List< Map > teachers = userService.getTransferTeachers( getType, organizationId, userName, loginName, gender, position, accountStatus, applyStatus );
         PageInfo pageInfo = new PageInfo( teachers );

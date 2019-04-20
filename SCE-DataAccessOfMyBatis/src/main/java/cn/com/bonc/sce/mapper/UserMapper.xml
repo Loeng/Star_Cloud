@@ -513,7 +513,7 @@
             AND ACCOUNT_STATUS=#{accountStatus}
         </if>
         <if test="applyStatus != null and applyStatus!=''" >
-            AND ACCOUNT_STATUS=#{applyStatus}
+            AND APPLY_STATUS=#{applyStatus}
         </if>
         order by A.APPLY_TIME DESC
     </select>
