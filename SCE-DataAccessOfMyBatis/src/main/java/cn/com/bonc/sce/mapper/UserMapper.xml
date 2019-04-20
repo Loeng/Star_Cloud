@@ -1305,7 +1305,7 @@
 
     <update id="updateIsadministrators">
         UPDATE  STARCLOUDPORTAL.SCE_COMMON_USER
-        ISADMINISTRATORS = 1
+        SET ISADMINISTRATORS = 1
         WHERE USER_ID=#{userId}
     </update>
 
