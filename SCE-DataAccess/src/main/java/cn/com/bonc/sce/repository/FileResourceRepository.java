@@ -120,6 +120,14 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     String selectOrganizationId(String userId);
 
     /**
+     * 查询学校id是否存在
+     * @param organizationId
+     * @return
+     */
+    @Query( nativeQuery = true, value = "SELECT COUNT(1) FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL WHERE ID =to_number(:organizationId)")
+    int selectSchoolIdCount(@Param( "organizationId" ) Long organizationId);
+
+    /**
      * 通过用户身份证作唯一判断
      * @param certificateNumber
      * @return
