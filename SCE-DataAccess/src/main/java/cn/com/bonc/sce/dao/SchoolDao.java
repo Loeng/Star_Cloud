@@ -32,7 +32,7 @@ public interface SchoolDao extends JpaRepository< School, Integer > {
     @Query(value = " select U.USER_ID,\n" +
             "U.LOGIN_NAME,\n" +
             "U.LOGIN_PERMISSION_STATUS,\n" +
-            "U.IS_FIRST_LOGIN,\n" +
+            "U.ACCOUNT_STATUS,\n" +
             "U.ORGANIZATION_ID,\n" +
             "U.CREATE_TIME ,\n" +
             "S.SCHOOL_NAME,\n" +
@@ -66,7 +66,7 @@ public interface SchoolDao extends JpaRepository< School, Integer > {
             "ON  u.ORGANIZATION_ID = s.ID   "
             ,nativeQuery = true,
     countQuery = " select count(*) FROM \n" +
-            " (SELECT USER_ID,LOGIN_NAME,LOGIN_PERMISSION_STATUS,IS_FIRST_LOGIN,ORGANIZATION_ID,CREATE_TIME FROM  STARCLOUDPORTAL.SCE_COMMON_USER  WHERE user_type= 3 AND IS_DELETE = 1 AND  ORGANIZATION_ID  IS NOT NULL ) u  \n" +
+            " (SELECT USER_ID,LOGIN_NAME,LOGIN_PERMISSION_STATUS,ACCOUNT_STATUS,ORGANIZATION_ID,CREATE_TIME FROM  STARCLOUDPORTAL.SCE_COMMON_USER  WHERE user_type= 3 AND IS_DELETE = 1 AND  ORGANIZATION_ID  IS NOT NULL ) u  \n" +
             "LEFT  JOIN \n" +
             "STARCLOUDPORTAL.SCE_ENTITY_SCHOOL s \n" +
             "ON  u.ORGANIZATION_ID = s.ID   ")
