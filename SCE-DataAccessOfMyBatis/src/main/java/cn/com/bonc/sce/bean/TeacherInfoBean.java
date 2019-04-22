@@ -38,5 +38,5 @@ public class TeacherInfoBean {
     private Integer teachRange;
     private String teachCertification;
     private String jobProfession;
-    private String schoolNamme;
+    private String schoolName;
 }
