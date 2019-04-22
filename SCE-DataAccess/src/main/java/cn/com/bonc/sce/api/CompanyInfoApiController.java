@@ -81,7 +81,7 @@ public class CompanyInfoApiController {
             Page< List< Map< String, Object > > > page;
 
             if ( companyId == null ) {
-                page = companyInfoRepository.findCompanyInfoByCompanyName( companyName, pageable );
+                page = companyInfoRepository.findCompanyInfoByCompanyName( companyName.replaceAll( "%","/%" ).replaceAll( "_","/_" ), pageable );
             } else {
                 page = companyInfoRepository.findCompanyInfoByCompanyId( companyId, pageable );
             }

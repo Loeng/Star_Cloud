@@ -103,7 +103,7 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "\t) COUNT_TEMP ON SMC.COMPANY_ID = COUNT_TEMP.COMPANY_ID \n" +
                     "WHERE \n" +
                     " scu.USER_TYPE='4' AND scu.IS_DELETE =1 \n" +
-                    " AND nvl(smc.COMPANY_NAME,0) LIKE CONCAT('%',CONCAT(:companyName, '%' ))\n" +
+                    " AND nvl(smc.COMPANY_NAME,0) LIKE CONCAT('%',CONCAT(:companyName, '%' )) escape '/' \n" +
                     "ORDER BY scu.CREATE_TIME desc",
             countQuery = "SELECT  \n" +
                     "\tCOUNT(*) \n" +
@@ -124,7 +124,7 @@ public interface CompanyInfoRepository extends JpaRepository< CompanyInfo, Long 
                     "\t) COUNT_TEMP ON SMC.COMPANY_ID = COUNT_TEMP.COMPANY_ID \n" +
                     "WHERE \n" +
                     " scu.USER_TYPE='4' AND scu.IS_DELETE =1 \n" +
-                    " AND nvl(smc.COMPANY_NAME,0) LIKE CONCAT('%',CONCAT( :companyName, '%' ))" )
+                    " AND nvl(smc.COMPANY_NAME,0) LIKE CONCAT('%',CONCAT( :companyName, '%' )) escape '/' " )
     Page< List< Map< String, Object > > > findCompanyInfoByCompanyName( @Param( "companyName" ) String companyName,
                                                                         Pageable pageable );
 
