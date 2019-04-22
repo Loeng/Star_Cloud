@@ -106,6 +106,12 @@ public class AuthenticationController {
         if ( authenticatedUser == null ) {
             return new RestRecord( 101, WebMessageConstants.SCE_PORTAL_MSG_101 );
         } else {
+
+            //验证账号是否激活
+            if ( authenticatedUser.getAccountStatus() == 0 ) {
+                return new RestRecord( 105, WebMessageConstants.SCE_PORTAL_MSG_105 );
+            }
+
             // 密码不匹配
             if ( !authentication.getPassword().equals( authenticatedUser.getAccount().getPassword() ) ) {
                 return new RestRecord( 101, WebMessageConstants.SCE_PORTAL_MSG_101 );
@@ -118,10 +124,7 @@ public class AuthenticationController {
             if ( authenticatedUser.getIsDelete() == 0 ) {
                 return new RestRecord( 104, WebMessageConstants.SCE_PORTAL_MSG_104 );
             }
-            //验证账号是否激活
-            if ( authenticatedUser.getAccountStatus() == 0 ) {
-                return new RestRecord( 105, WebMessageConstants.SCE_PORTAL_MSG_105 );
-            }
+
         }
 
         //获取用户的认证状态
