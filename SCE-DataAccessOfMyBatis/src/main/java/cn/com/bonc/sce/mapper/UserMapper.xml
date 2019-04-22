@@ -1095,9 +1095,13 @@
         T.ACADEMIC_QUALIFICATION "academicQualification",
         T.TEACH_RANGE "teachRange",
         T.TEACH_CERTIFICATION "teachCertification",
-        T.JOB_PROFESSION "jobProfession"
+        T.JOB_PROFESSION "jobProfession",
+        CASE WHEN (A.AUDIT_STATUS = 1 AND A.USER_TYPE=2) THEN S.SCHOOL_NAME ELSE '' END AS "schoolNamme"
         FROM STARCLOUDPORTAL.SCE_INFO_TEACHER T
-        WHERE USER_ID = #{userId}
+        LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER U ON U.USER_ID= T.USER_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL S ON S.ID=U.ORGANIZATION_ID
+        LEFT JOIN STARCLOUDPORTAL.SCE_USER_AUDIT A ON A.ENTITY_ID = S.ID
+        WHERE T.USER_ID = #{userId}
     </select>
 
     <delete id="delPassword">
