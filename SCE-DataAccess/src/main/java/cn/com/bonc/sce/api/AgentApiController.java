@@ -316,10 +316,12 @@ public class AgentApiController {
 
         agentService.deleteActingSchool(AGENT_ID);
 
-        for (int i = 0; i < SCHOOL_ID.length; i++) {
-            if (agentService.queryActingSchool(SCHOOL_ID[i]) != 0) ;
-            {
-                agentService.addActingSchool(AGENT_ID, SCHOOL_ID[i]);
+        if(!"".equals(info.get("SCHOOL_ID").toString())) {
+            for (int i = 0; i < SCHOOL_ID.length; i++) {
+                if (agentService.queryActingSchool(SCHOOL_ID[i]) != 0) ;
+                {
+                    agentService.addActingSchool(AGENT_ID, SCHOOL_ID[i]);
+                }
             }
         }
         RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
