@@ -418,7 +418,10 @@
                 VOLK=#{nationCode},
             </if>
             <if test="nationality!=null">
-                NATIONALITY=#{nationality}
+                NATIONALITY=#{nationality},
+            </if>
+            <if test="ISADMINISTRATORS!=null">
+                ISADMINISTRATORS=#{ISADMINISTRATORS}
             </if>
         </set>
         WHERE USER_ID=#{user_id}
