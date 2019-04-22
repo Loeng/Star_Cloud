@@ -18,14 +18,15 @@ public interface OrderMapper {
 
      int insertOrder(Map param) throws SQLException;
 
-     int insertOrderHistroy(@Param("ID") long ID,
-                                  @Param("ORDER_ID") long ORDER_ID,
-                                  @Param("STATUS_UPDATE_TIME") Date STATUS_UPDATE_TIME,
-                                  @Param("ORDER_STATUS") int ORDER_STATUS) throws SQLException;
+     int insertOrderHistroy(@Param("ORDER_ID") long ORDER_ID,
+                            @Param("STATUS_UPDATE_TIME") Date STATUS_UPDATE_TIME,
+                            @Param("ORDER_STATUS") int ORDER_STATUS) throws SQLException;
 
      Map queryOrderByOrderID(@Param("ORDER_ID") long ORDER_ID);
 
      int updateOrderByOrderID(Map param) throws SQLException;
+
+     int updateOrderScheduled() throws SQLException;
 
      int insertOrderVoucher(Map param) throws SQLException;
 

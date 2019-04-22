@@ -29,8 +29,8 @@ public class OrderDao {
 
 
     // 订单历史表插入数据
-    public int insertOrderHistroy(long ID, long ORDER_ID, Date STATUS_UPDATE_TIME,int ORDER_STATUS) throws SQLException{
-        return orderMapper.insertOrderHistroy(ID, ORDER_ID, STATUS_UPDATE_TIME, ORDER_STATUS);
+    public int insertOrderHistroy(long ORDER_ID, Date STATUS_UPDATE_TIME,int ORDER_STATUS) throws SQLException{
+        return orderMapper.insertOrderHistroy(ORDER_ID, STATUS_UPDATE_TIME, ORDER_STATUS);
     }
 
 
@@ -41,6 +41,10 @@ public class OrderDao {
 
     public int updateOrderByOrderID(Map param) throws SQLException {
         return orderMapper.updateOrderByOrderID(param);
+    }
+
+    public int updateOrderScheduled() throws SQLException {
+        return orderMapper.updateOrderScheduled();
     }
 
 

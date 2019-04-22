@@ -15,8 +15,8 @@
     </insert>
 
     <insert id="insertOrderHistroy">
-        INSERT INTO STARCLOUDPORTAL.SCE_ORDER_HISTORY(ID,ORDER_ID,STATUS_UPDATE_TIME,ORDER_STATUS)
-        VALUES (#{ID,jdbcType=NUMERIC},#{ORDER_ID,jdbcType=NUMERIC},#{STATUS_UPDATE_TIME,jdbcType=VARCHAR},#{ORDER_STATUS,jdbcType=NUMERIC})
+        INSERT INTO STARCLOUDPORTAL.SCE_ORDER_HISTORY(ORDER_ID,STATUS_UPDATE_TIME,ORDER_STATUS)
+        VALUES (#{ORDER_ID,jdbcType=NUMERIC},#{STATUS_UPDATE_TIME,jdbcType=VARCHAR},#{ORDER_STATUS,jdbcType=NUMERIC})
     </insert>
 
     <select id="queryOrderByOrderID" resultType="map">
@@ -138,6 +138,11 @@
             ,STATE_UPDATE_TIME = #{STATE_UPDATE_TIME}
         </if>
         where ORDER_ID = #{ORDER_ID}
+    </update>
+
+    <update id="updateOrderScheduled">
+        update STARCLOUDPORTAL.SCE_ORDER_INFO set ORDER_STATUS = 3 , ACCOUNT_ENTRY_TIME = sysdate
+        where ORDER_STATUS = 1 AND IS_DELETE = 1
     </update>
 
     <insert id="insertOrderVoucher" parameterType="map">

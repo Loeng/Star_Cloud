@@ -120,9 +120,8 @@ public class OrderService {
 
 
         // 插入订单历史表   方便以后查看整个订单的状态变化流程
-        long ID=idWorker.nextId(); // 订单历史表主键
         try {
-            int count2=orderDao.insertOrderHistroy(ID,ORDER_ID,NOW_TIME,0);
+            int count2=orderDao.insertOrderHistroy(ORDER_ID,NOW_TIME,0);
             if (count2<1){
                 return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
             }
@@ -192,20 +191,18 @@ public class OrderService {
             return new RestRecord(421,WebMessageConstants.SCE_PORTAL_MSG_421);
         }
 
-
-        //为该订单在历史表中增加一条数据
-
-        long ID=idWorker.nextId(); // 订单历史表主键
-        try {
-            //订单状态  0待支付1已经支付2取消3关闭
-            int count2=orderDao.insertOrderHistroy(ID,ORDER_ID,new Date(),2);
-            if (count2<1){
-                return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
-        }
+/*******改为数据库触发器执行********/
+//        //为该订单在历史表中增加一条数据
+//        try {
+//            //订单状态  0待支付1已经支付2取消3关闭
+//            int count2=orderDao.insertOrderHistroy(ORDER_ID,new Date(),2);
+//            if (count2<1){
+//                return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+//        }
 
         return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200);
     }
@@ -296,20 +293,19 @@ public class OrderService {
                 return new RestRecord(421,WebMessageConstants.SCE_PORTAL_MSG_421);
             }
 
-
-            // 订单的状态发生变化   往order_histroy 表里增加对应数据
-            long ID = idWorker.nextId(); // order_histroy 主键
-            try {
-                int count3 = orderDao.insertOrderHistroy(ID,
-                        Long.parseLong(param.get("ORDER_ID").toString()),
-                        new Date(), 1);
-                if (count3<1){
-                    return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
-            }
+/********改为由数据库触发器执行*********/
+//            // 订单的状态发生变化   往order_histroy 表里增加对应数据
+//            try {
+//                int count3 = orderDao.insertOrderHistroy(
+//                        Long.parseLong(param.get("ORDER_ID").toString()),
+//                        new Date(), 1);
+//                if (count3<1){
+//                    return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//                return new RestRecord(423,WebMessageConstants.SCE_PORTAL_MSG_423);
+//            }
 
         }
 
@@ -373,8 +369,13 @@ public class OrderService {
      * @return void
      */
     public void updateOrderStatus(){
-        //// TODO
-        System.out.println("定时启动没---------------------");
+
+        try {
+            orderDao.updateOrderScheduled();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("订单定时更新出错");
+        }
     }
 
 
