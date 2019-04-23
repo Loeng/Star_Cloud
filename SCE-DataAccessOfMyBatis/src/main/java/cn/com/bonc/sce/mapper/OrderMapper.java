@@ -28,6 +28,8 @@ public interface OrderMapper {
 
      int updateOrderScheduled() throws SQLException;
 
+     int updateOrderOverdue() throws SQLException;
+
      int insertOrderVoucher(Map param) throws SQLException;
 
      int updateOrderVoucher(Map param) throws SQLException;
