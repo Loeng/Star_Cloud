@@ -145,6 +145,11 @@
         where ORDER_STATUS = 1 AND IS_DELETE = 1
     </update>
 
+    <update id="updateOrderOverdue">
+        update STARCLOUDPORTAL.SCE_ORDER_INFO set ORDER_STATUS = 2
+        where ORDER_STATUS = 0 AND IS_DELETE = 1 and sysdate > ORDER_DEADLINE_TIME
+    </update>
+
     <insert id="insertOrderVoucher" parameterType="map">
         INSERT INTO STARCLOUDPORTAL.SCE_ORDER_VOUCHER (ID,ORDER_ID,PAYING_VOUCHER,AUDITING_STATUS,UPLOAD_TIME,UPLOAD_USER_ID,IS_DELETE)
         VALUES (#{ID,jdbcType=NUMERIC},#{ORDER_ID,jdbcType=NUMERIC},#{PAYING_VOUCHER,jdbcType=NUMERIC},0,

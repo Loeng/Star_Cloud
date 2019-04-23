@@ -47,6 +47,10 @@ public class OrderDao {
         return orderMapper.updateOrderScheduled();
     }
 
+    public int updateOrderOverdue() throws SQLException {
+        return orderMapper.updateOrderOverdue();
+    }
+
 
     public int insertOrderVoucher(Map param) throws SQLException {
         return orderMapper.insertOrderVoucher(param);

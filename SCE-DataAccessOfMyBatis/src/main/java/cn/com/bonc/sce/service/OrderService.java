@@ -363,7 +363,7 @@ public class OrderService {
 
 
     /* *
-     * @Description 已支付 已取消的订单变更为已关闭
+     * @Description 已支付订单变更为已关闭    待支付订单超时变更为已取消
      * @Date 16:27 2019/4/19
      * @param
      * @return void
@@ -371,7 +371,10 @@ public class OrderService {
     public void updateOrderStatus(){
 
         try {
+            //已支付订单变更为已关闭
             orderDao.updateOrderScheduled();
+            //待支付订单超时变更为已取消
+            orderDao.updateOrderOverdue();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("订单定时更新出错");
