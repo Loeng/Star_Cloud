@@ -357,10 +357,16 @@
         WHERE u.USER_TYPE=2
         AND u.IS_DELETE=1
         AND u.ORGANIZATION_ID=#{organizationId}
-        <if test="userName != null and userName!= ''" >
+        <if test=" userName!= '' and userName.indexOf('%') != -1 or userName.indexOf('_') != -1">
+            AND USER_NAME LIKE CONCAT(CONCAT('%#',#{userName}),'%') escape '#'
+        </if>
+        <if test=" userName!= '' and userName.indexOf('%') == -1 and userName.indexOf('_') == -1">
             AND USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
         </if>
-        <if test="loginName != null and loginName!= ''" >
+        <if test=" loginName!= '' and loginName.indexOf('%') != -1 or loginName.indexOf('_') != -1">
+            AND LOGIN_NAME LIKE CONCAT(CONCAT('%#',#{loginName}),'%') escape '#'
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') == -1 and loginName.indexOf('_') == -1">
             AND LOGIN_NAME LIKE CONCAT(CONCAT('%',#{loginName}),'%')
         </if>
         <if test="gender != null and gender!=''" >
@@ -500,10 +506,16 @@
             AND ORIGIN_SCHOOL_ID = #{organizationId}
             AND A.APPLY_STATUS = 0
         </if>
-        <if test="userName != null and userName!= ''" >
+        <if test=" userName!= '' and userName.indexOf('%') != -1 or userName.indexOf('_') != -1">
+            AND USER_NAME LIKE CONCAT(CONCAT('%#',#{userName}),'%') escape '#'
+        </if>
+        <if test=" userName!= '' and userName.indexOf('%') == -1 and userName.indexOf('_') == -1">
             AND USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
         </if>
-        <if test="loginName != null and loginName!= ''" >
+        <if test=" loginName!= '' and loginName.indexOf('%') != -1 or loginName.indexOf('_') != -1">
+            AND LOGIN_NAME LIKE CONCAT(CONCAT('%#',#{loginName}),'%') escape '#'
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') == -1 and loginName.indexOf('_') == -1">
             AND LOGIN_NAME LIKE CONCAT(CONCAT('%',#{loginName}),'%')
         </if>
         <if test="gender != null and gender!=''" >
@@ -544,11 +556,17 @@
         where U.ORGANIZATION_ID = #{organizationId}
         AND U.USER_TYPE = 1
         AND U.IS_DELETE = 1 AND T.IS_DELETE = 1
-        <if test="userName != null and userName != ''">
-          and U.USER_NAME like '%'||#{userName}||'%'
+        <if test=" userName!= '' and userName.indexOf('%') != -1 or userName.indexOf('_') != -1">
+            AND U.USER_NAME LIKE CONCAT(CONCAT('%#',#{userName}),'%') escape '#'
         </if>
-        <if test="loginName != null and loginName != ''">
-          and U.LOGIN_NAME like '%'||#{loginName}||'%'
+        <if test=" userName!= '' and userName.indexOf('%') == -1 and userName.indexOf('_') == -1">
+            AND U.USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') != -1 or loginName.indexOf('_') != -1">
+            AND U.LOGIN_NAME LIKE CONCAT(CONCAT('%#',#{loginName}),'%') escape '#'
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') == -1 and loginName.indexOf('_') == -1">
+            AND U.LOGIN_NAME LIKE CONCAT(CONCAT('%',#{loginName}),'%')
         </if>
         <if test="studentNumber != null and studentNumber != ''">
           and T.STUDENT_NUMBER = #{studentNumber}
@@ -794,11 +812,17 @@
         AND ES.IS_DELETE = 1
         AND ES2.IS_DELETE = 1
         AND TA.TARGET_SCHOOL_ID = #{organizationId}
-        <if test="userName != null and userName != ''">
-            AND U.USER_NAME like '%'||#{userName}||'%'
+        <if test=" userName!= '' and userName.indexOf('%') != -1 or userName.indexOf('_') != -1">
+            AND U.USER_NAME LIKE CONCAT(CONCAT('%#',#{userName}),'%') escape '#'
         </if>
-        <if test="loginName != null and loginName != ''">
-            AND U.LOGIN_NAME like '%'||#{loginName}||'%'
+        <if test=" userName!= '' and userName.indexOf('%') == -1 and userName.indexOf('_') == -1">
+            AND U.USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') != -1 or loginName.indexOf('_') != -1">
+            AND U.LOGIN_NAME LIKE CONCAT(CONCAT('%#',#{loginName}),'%') escape '#'
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') == -1 and loginName.indexOf('_') == -1">
+            AND U.LOGIN_NAME LIKE CONCAT(CONCAT('%',#{loginName}),'%')
         </if>
         <if test="gender != null and gender != ''">
             AND U.GENDER = #{gender}
@@ -849,11 +873,17 @@
         AND S.IS_DELETE = 1
         AND TA.USER_TYPE = 1
         AND TA.ORIGIN_SCHOOL_ID = #{organizationId}
-        <if test="userName != null and userName != ''">
-            AND U.USER_NAME like '%'||#{userName}||'%'
+        <if test=" userName!= '' and userName.indexOf('%') != -1 or userName.indexOf('_') != -1">
+            AND U.USER_NAME LIKE CONCAT(CONCAT('%#',#{userName}),'%') escape '#'
         </if>
-        <if test="loginName != null and loginName != ''">
-            AND U.LOGIN_NAME like '%'||#{loginName}||'%'
+        <if test=" userName!= '' and userName.indexOf('%') == -1 and userName.indexOf('_') == -1">
+            AND U.USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') != -1 or loginName.indexOf('_') != -1">
+            AND U.LOGIN_NAME LIKE CONCAT(CONCAT('%#',#{loginName}),'%') escape '#'
+        </if>
+        <if test=" loginName!= '' and loginName.indexOf('%') == -1 and loginName.indexOf('_') == -1">
+            AND U.LOGIN_NAME LIKE CONCAT(CONCAT('%',#{loginName}),'%')
         </if>
         <if test="gender != null and gender != ''">
             AND U.GENDER = #{gender}

@@ -201,4 +201,10 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     @Query(value = "SELECT ISADMINISTRATORS FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID = ?1", nativeQuery = true)
     Integer selectAuth(String userId);
 
+    @Query( value = "SELECT COUNT(1) as count FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE PHONE_NUMBER = ?1", nativeQuery = true)
+    Integer selectPhoneNumber(String phoneNumber);
+
+    @Query( value = "SELECT COUNT(1) as count FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE MAIL_ADDRESS = ?1", nativeQuery = true)
+    Integer selectMailAddress(String mailAddress);
+
 }

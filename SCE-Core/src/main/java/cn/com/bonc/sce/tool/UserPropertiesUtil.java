@@ -84,6 +84,33 @@ public class UserPropertiesUtil {
         return date;
     }
 
+    public static Integer changeTeachRange(String teachRange){
+        switch (teachRange){
+            case "学前教育":
+                return 0;
+            case "小学":
+                return 1;
+            case "普通初中":
+                return 2;
+            case "普通高中":
+                return 3;
+            case "职业初中":
+                return 4;
+            case "职业高中":
+                return 5;
+            case "成人中等专业学校":
+                return 6;
+            case "成人中学":
+                return 7;
+            case "特殊教育":
+                return 8;
+            case "其他":
+                return 9;
+            default:
+                return -1;
+        }
+    }
+
     /**
      * 验证身份证的最后一位校验位是否正确
      * @param masterNumber 身份证前17位
