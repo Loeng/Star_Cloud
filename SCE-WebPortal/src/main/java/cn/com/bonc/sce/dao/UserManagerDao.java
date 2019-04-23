@@ -162,4 +162,8 @@ public interface UserManagerDao {
     @RequestMapping(value = "/userManager/getAudit/{userId}", method = RequestMethod.GET)
     RestRecord getAudit(@PathVariable("userId") String userId);
 
+    @RequestMapping(value = "/userManager/checkLoginNameOrPhone", method = RequestMethod.GET)
+    RestRecord checkLoginNameOrPhone(@RequestParam(value = "loginName",required = false) String loginName,
+                                     @RequestParam(value = "phone",required = false) String phone);
+
 }

@@ -762,4 +762,32 @@ public class UserManagerController {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
     }
+
+
+    @ApiOperation(value = "校验登录名或者手机号是否已注册", notes="校验登录名或者手机号是否已注册", httpMethod = "GET")
+    @GetMapping("/checkLoginNameOrPhone")
+    public RestRecord checkLoginNameOrPhone(@RequestParam(value = "loginName",required = false) String loginName,
+                                            @RequestParam(value = "phone",required = false) String phone){
+
+        // 判断用户名是否已注册
+        if (loginName !=null && !"".equals(loginName)){
+            if ( userService.isExist( loginName ) > 0 ) {
+                return new RestRecord( 1022, MessageConstants.SCE_MSG_1022 );
+            }else {
+                return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+            }
+        }
+
+        //判断手机号是否已被注册
+        if (phone !=null && !"".equals(phone)){
+            if ( !StringUtils.isEmpty( userService.getIdByPhone( phone) ) ) {
+                return new RestRecord( 1023, MessageConstants.SCE_MSG_1023 );
+            }else {
+                return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
+            }
+        }
+
+
+        return new RestRecord( 1025, MessageConstants.SCE_MSG_1025 );
+    }
 }

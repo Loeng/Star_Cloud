@@ -391,4 +391,12 @@ public class UserManagerController {
         return userManagerService.getAudit(userId);
     }
 
+
+    @ApiOperation(value = "校验登录名或者手机号是否已注册", notes="校验登录名或者手机号是否已注册", httpMethod = "GET")
+    @GetMapping("/checkLoginNameOrPhone")
+    public RestRecord checkLoginNameOrPhone(@RequestParam(value = "loginName",required = false) String loginName,
+                                            @RequestParam(value = "phone",required = false) String phone){
+        return userManagerService.checkLoginNameOrPhone(loginName, phone);
+    }
+
 }

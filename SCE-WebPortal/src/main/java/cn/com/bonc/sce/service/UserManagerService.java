@@ -250,4 +250,9 @@ public class UserManagerService {
         return userManagerDao.getAudit(userId);
     }
 
+
+    public RestRecord checkLoginNameOrPhone(String loginName, String phone){
+        return userManagerDao.checkLoginNameOrPhone(loginName, phone);
+    }
+
 }

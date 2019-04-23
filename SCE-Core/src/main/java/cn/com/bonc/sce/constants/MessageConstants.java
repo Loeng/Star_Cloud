@@ -58,6 +58,7 @@ public interface MessageConstants {
     String SCE_MSG_1022 = "登录名已存在";
     String SCE_MSG_1023 = "手机号已被注册";
     String SCE_MSG_1024 = "用户名不存在";
+    String SCE_MSG_1025 = "缺少参数";
 
     /**
      * 加密错误
