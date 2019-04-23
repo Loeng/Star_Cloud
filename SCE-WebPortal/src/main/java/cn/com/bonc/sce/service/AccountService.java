@@ -13,6 +13,8 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * 账号安全信息相关
@@ -39,16 +41,36 @@ public class AccountService {
      * @return 验证码
      */
     public RestRecord sendSecurityPhoneValid( String phone ) {
-        String valid;
+        String valid = "123456";
+        StringBuffer sb = new StringBuffer();
         try {
             //valid = VaildSecurityUtils.randomStr();
-            valid = "123456";
             VaildSecurityUtils.addValid( getAccountEncryptionCode( phone, valid ) );
             SendMessage.postMsgToPhone( valid, phone );
         } catch ( UnsupportedEncodingException e ) {
             return new RestRecord( 409, WebMessageConstants.SCE_PORTAL_MSG_409 );
         }
-        return new RestRecord( 200, valid );
+
+        try {
+            // 加密对象，指定加密方式
+            MessageDigest md5 = MessageDigest.getInstance("md5");
+            // 准备要加密的数据
+            byte[] b = valid.getBytes();
+            // 加密
+            byte[] digest = md5.digest(b);
+            // 十六进制的字符
+            char[] chars = new char[] { '0', '1', '2', '3', '4', '5',
+                    '6', '7' , '8', '9', 'A', 'B', 'C', 'D', 'E','F' };
+            // 处理成十六进制的字符串(通常)
+            for (byte bb : digest) {
+                sb.append(chars[(bb >> 4) & 15]);
+                sb.append(chars[bb & 15]);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return new RestRecord( 200, sb );
     }
 
     /**
