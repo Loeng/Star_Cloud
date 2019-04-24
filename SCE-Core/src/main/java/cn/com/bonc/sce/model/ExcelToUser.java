@@ -81,7 +81,10 @@ public class ExcelToUser {
     @Excel( name = "学生当前状态", orderNum = "21")
     private String currentStatus;
 
-    @Excel( name = "学生身份证", orderNum = "22")
+    @Excel( name = "学生证件类型", orderNum = "22")
+    private String studentCertificationType;
+
+    @Excel( name = "学生证件号")
     private String studentCertificationNumber;
 
     @Excel( name = "座号", orderNum = "23")
