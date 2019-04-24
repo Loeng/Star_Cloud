@@ -34,7 +34,7 @@ public class AgencyDao {
         return agencyMapper.delSchoolRel(agentId,schoolId);
     }
 
-    public List<AgentBean> getAgents(String agentName, String grade,String agentArea) {
+    public List<Map> getAgents(String agentName, String grade,String agentArea) {
         return agencyMapper.getAgents(agentName,grade,agentArea);
     }
 

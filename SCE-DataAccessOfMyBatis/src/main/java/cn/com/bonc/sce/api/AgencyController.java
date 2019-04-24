@@ -106,7 +106,7 @@ public class AgencyController {
                                  @PathVariable( value = "pageSize" ) Integer pageSize ) {
 
         PageHelper.startPage( pageNum, pageSize );
-        List< AgentBean > agentList = agencyService.getAgents( agentName, grade, agentArea );
+        List< Map > agentList = agencyService.getAgents( agentName, grade, agentArea );
         PageInfo pageInfo = new PageInfo( agentList );
         return new RestRecord( 200, MessageConstants.SCE_MSG_0200, pageInfo );
     }
