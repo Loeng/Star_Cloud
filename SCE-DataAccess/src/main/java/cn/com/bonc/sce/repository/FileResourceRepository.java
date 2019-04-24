@@ -136,6 +136,14 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     int selectUserCount(String certificateNumber);
 
     /**
+     * 通过用户身份证和证件类型作唯一判断
+     * @param certificateNumber
+     * @return
+     */
+    @Query( nativeQuery = true, value = "SELECT count(1) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND USER_TYPE = ?2")
+    int selectUserCountByCertificate(String certificateNumber, String userType);
+
+    /**
      * 通过用户身份证作唯一判断
      * @param certificateNumber
      * @return

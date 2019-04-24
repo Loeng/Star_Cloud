@@ -109,14 +109,18 @@ public class UserImportApiController {
                 String pre = "js_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get( i );
-                    if ( excelToUser.getUserName() == null ) {
+                    if(excelToUser.getUserName() == null && excelToUser.getGender() == null && excelToUser.getWorkNumber() == null && excelToUser.getCertificateNumber() == null && excelToUser.getPhoneNumber() == null &&
+                            excelToUser.getNationLity() == null && excelToUser.getNationCode() == null && excelToUser.getTeachTime() == null &&
+                            excelToUser.getAcademicQualification() == null && excelToUser.getMailAddress() == null && excelToUser.getPosition() == null && excelToUser.getSchoolTime() == null &&
+                            excelToUser.getTeachRange() == null && excelToUser.getCertificateType() == null && excelToUser.getIsAdministrators() == null){
                         continue;
-                    } else if ( excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null ||
+                    }
+                    if(excelToUser.getUserName() == null || excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null ||
                             excelToUser.getNationLity() == null || excelToUser.getNationCode() == null || excelToUser.getTeachTime() == null ||
                             excelToUser.getAcademicQualification() == null || excelToUser.getMailAddress() == null || excelToUser.getPosition() == null || excelToUser.getSchoolTime() == null ||
-                            excelToUser.getTeachRange() == null || excelToUser.getCertificateType() == null || excelToUser.getOrganizationId() == null ) {
-                        log.info( "缺少必填项" );
-                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ) );
+                            excelToUser.getTeachRange() == null || excelToUser.getCertificateType() == null || excelToUser.getIsAdministrators() == null){
+                        log.info("缺少必填项");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
                     if ( excelToUser.getCertificateType().equals( "1" ) && !UserPropertiesUtil.checkCertificateNumber( excelToUser.getCertificateNumber() ) ) {
                         log.info( "教师身份证验证未通过" );
@@ -191,14 +195,20 @@ public class UserImportApiController {
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get( i );
                     //必填项过滤
-                    if ( excelToUser.getUserName() == null ) {
+                    if(excelToUser.getUserName() == null && excelToUser.getCertificateNumber() == null && excelToUser.getParentFamify() == null && excelToUser.getParentCertificationNumber() == null
+                            && excelToUser.getGrade() == null && excelToUser.getClassNumber() == null && excelToUser.getCertificateType() == null && excelToUser.getParentCertificateType() == null &&
+                            excelToUser.getGender() == null && excelToUser.getStudentNumber() == null && excelToUser.getNationLity() == null && excelToUser.getNationCode() == null &&
+                            excelToUser.getEntranceYear() == null && excelToUser.getPhoneNumber() == null && excelToUser.getParentName() == null && excelToUser.getParentGender() == null &&
+                            excelToUser.getParentNationLity() == null && excelToUser.getParentNationCode() == null && excelToUser.getParentTelephone() == null &&
+                            excelToUser.getParentEmail() == null){
                         continue;
-                    } else if (excelToUser.getCertificateNumber() == null || excelToUser.getParentFamify() == null || excelToUser.getParentCertificationNumber() == null
+                    }
+                    if(excelToUser.getUserName() == null || excelToUser.getCertificateNumber() == null || excelToUser.getParentFamify() == null || excelToUser.getParentCertificationNumber() == null
                             || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null || excelToUser.getCertificateType() == null || excelToUser.getParentCertificateType() == null ||
                             excelToUser.getGender() == null || excelToUser.getStudentNumber() == null || excelToUser.getNationLity() == null || excelToUser.getNationCode() == null ||
-                            excelToUser.getEntranceYear() == null) {
-                        log.info( "缺少必填项" );
-                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ) );
+                            excelToUser.getEntranceYear() == null){
+                        log.info("缺少必填项");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
                     if ( excelToUser.getCertificateType().equals( "1" ) && !UserPropertiesUtil.checkCertificateNumber( excelToUser.getCertificateNumber() ) ) {
                         log.info( "学生身份证验证未通过" );
@@ -295,6 +305,9 @@ public class UserImportApiController {
                         message.setSourceId( "0" );
                         message.setTargetId( studentId );
                         messageService.insertMessage( message );
+                    }else if(fileResourceRepository.selectUserCountByCertificate(excelToUser.getStudentCertificationNumber(), "5") < 1){
+                        log.info("填写的家长证件为非家长角色，不能绑定家长");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "填写的家长证件为非家长角色，不能绑定家长", i + EXCEL_NUMBER ));
                     }
 
                     //建立学生家长关系
@@ -325,11 +338,14 @@ public class UserImportApiController {
                 String pre = "jz_";
                 for ( ; i < list.size(); i++ ) {
                     excelToUser = list.get( i );
-                    if ( excelToUser.getUserName() == null ) {
+                    if(excelToUser.getUserName() == null && excelToUser.getGender() == null && excelToUser.getCertificateNumber() == null && excelToUser.getPhoneNumber() == null && excelToUser.getCertificateType() == null &&
+                            excelToUser.getNationLity() == null && excelToUser.getNationCode() == null && excelToUser.getMailAddress() == null && excelToUser.getParentFamify() == null && excelToUser.getStudentCertificationNumber() == null &&
+                            excelToUser.getStudentCertificationType() == null){
                         continue;
-                    } else if ( excelToUser.getGender() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null || excelToUser.getCertificateType() == null ) {
-                        log.info( "缺少必填项" );
-                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ) );
+                    }
+                    if(excelToUser.getUserName() == null || excelToUser.getGender() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null || excelToUser.getCertificateType() == null){
+                        log.info("缺少必填项");
+                        throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
                     if ( excelToUser.getCertificateType().equals( "1" ) && !UserPropertiesUtil.checkCertificateNumber( excelToUser.getCertificateNumber() ) ) {
                         log.info( "家长身份证验证未通过" );
@@ -356,7 +372,7 @@ public class UserImportApiController {
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPromptExit, "家长" ), i + EXCEL_NUMBER ));
                     }
 
-                    //插入家长用户
+                    //创建家长数据，准备添加数据
                     UserPassword userPassword = new UserPassword();
                     String secret = Secret.ES256GenerateSecret();
                     String loginName = IDUtil.createID( pre );
@@ -364,18 +380,21 @@ public class UserImportApiController {
                     userPassword.setIsDelete( 1 );
                     userPassword.setPassword( "star123!" );
                     userPassword.setUserId( parentId );
-                    fileResourceRepository.saveParent( parentId, excelToUser.getUserName(), excelToUser.getGender(), loginName, PARENT_CODE,
-                            excelToUser.getMailAddress(), excelToUser.getCertificateType(), excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber(),
-                            UserPropertiesUtil.getBirthDateByCer( excelToUser.getCertificateNumber() ), secret, excelToUser.getNationLity(), excelToUser.getNationCode() );
-                    userPasswordDao.save( userPassword );
 
                     //查询学生id 并生成家长对应的  家长-学生关系
-                    if ( excelToUser.getStudentCertificationNumber() != null ) {
+                    if ( excelToUser.getStudentCertificationNumber() != null && excelToUser.getStudentCertificationType() != null) {
                         if ( excelToUser.getParentFamify() == null ) {
                             log.info( "缺少家长学生关系" );
                             throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少家长学生关系", i + EXCEL_NUMBER ) );
                         }
                         String studentId = fileResourceRepository.selectUserIdByCertificateNumber( excelToUser.getStudentCertificationNumber() );
+                        if(studentId == null){
+                            log.info( "暂无该学生信息，无法绑定" );
+                            throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "暂无该学生信息，无法绑定", i + EXCEL_NUMBER ) );
+                        }else if(fileResourceRepository.selectUserCountByCertificate(excelToUser.getStudentCertificationNumber(), "1") < 1){
+                            log.info("填写的学生证件为非学生角色，不能绑定学生");
+                            throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "填写的学生证件为非学生角色，不能绑定学生", i + EXCEL_NUMBER ));
+                        }
                         StudentParentRel studentParentRel = new StudentParentRel();
                         studentParentRel.setRelationShip( excelToUser.getParentFamify() );
                         studentParentRel.setIsMain( 0 );
@@ -383,6 +402,13 @@ public class UserImportApiController {
                         studentParentRel.setStudentUserId( studentId );
                         exportUserRepository.save( studentParentRel );
                     }
+
+                    //插入家长用户
+                    fileResourceRepository.saveParent( parentId, excelToUser.getUserName(), excelToUser.getGender(), loginName, PARENT_CODE,
+                            excelToUser.getMailAddress(), excelToUser.getCertificateType(), excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber(),
+                            UserPropertiesUtil.getBirthDateByCer( excelToUser.getCertificateNumber() ), secret, excelToUser.getNationLity(), excelToUser.getNationCode() );
+                    userPasswordDao.save( userPassword );
+
                     count++;
                 }
             }
