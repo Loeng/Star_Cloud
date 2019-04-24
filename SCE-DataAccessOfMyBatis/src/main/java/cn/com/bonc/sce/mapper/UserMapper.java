@@ -199,7 +199,8 @@ public interface UserMapper {
 
     Map selectTransferInfoByTransferId(@Param("transferId") String transferId);
 
-    int selectCountByCertificateNumber(@Param("certificateType") String certificateType, @Param("certificateNumber") String certificateNumber);
+    int selectCountByCertificateNumber(@Param("certificateType") String certificateType, @Param("certificateNumber") String certificateNumber,
+                                       @Param("userType") String userType);
 
     int selectCountByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 

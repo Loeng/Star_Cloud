@@ -293,8 +293,8 @@ public class UserDao {
         userMapper.updateTeacher(map);
     }
 
-    public int selectCountByCertificateNumber(String certificateType, String certificateNumber){
-        return userMapper.selectCountByCertificateNumber(certificateType, certificateNumber);
+    public int selectCountByCertificateNumber(String certificateType, String certificateNumber, String userType){
+        return userMapper.selectCountByCertificateNumber(certificateType, certificateNumber, userType);
     }
 
     public int selectCountByPhoneNumber(String phoneNumber){

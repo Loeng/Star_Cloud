@@ -202,7 +202,7 @@ public class UserService {
                 return new RestRecord( 432, String.format(STUDENT, "身份证填写不正确") );
             }
         }
-        if(userDao.selectCountByCertificateNumber(studentCertificateType, studentCertificateNumber) > 0){
+        if(userDao.selectCountByCertificateNumber(studentCertificateType, studentCertificateNumber, null) > 0){
             log.info("学生证件已被使用");
             return new RestRecord( 432, String.format(STUDENT, "证件已被使用") );
         }
@@ -257,9 +257,13 @@ public class UserService {
                     log.info("家长身份证验证未通过");
                     return new RestRecord( 432, String.format(PARENT, "身份证填写不正确") );
                 }
-                if(userDao.selectCountByCertificateNumber(parentCertificateType, parentCertificateNumber) < 1){
+                if(userDao.selectCountByCertificateNumber(parentCertificateType, parentCertificateNumber, null) < 1){
                     log.info("家长证件不存在");
                     return new RestRecord( 432, "暂无该家长信息" );
+                }
+                if(userDao.selectCountByCertificateNumber(parentCertificateType, parentCertificateNumber, "5") < 1){
+                    log.info("该家长身份证为非家长角色，不能绑定");
+                    return new RestRecord( 432, "该家长身份证为非家长角色，不能绑定" );
                 }
             }
             parentId = userDao.selectUserIdByCertification(map.get("parentCertificateNumber").toString(), map.get("parentCertificateType").toString(),"5");
@@ -461,7 +465,7 @@ public class UserService {
     }
 
     public int selectCountByCertificateNumber(String certificateType, String certificateNumber){
-        return userDao.selectCountByCertificateNumber(certificateType, certificateNumber);
+        return userDao.selectCountByCertificateNumber(certificateType, certificateNumber, null);
     }
 
     public int selectCountByPhoneNumber(String phoneNumber){

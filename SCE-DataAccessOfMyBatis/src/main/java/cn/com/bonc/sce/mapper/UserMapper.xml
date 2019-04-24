@@ -1259,6 +1259,9 @@
         from STARCLOUDPORTAL.SCE_COMMON_USER
         where CERTIFICATE_TYPE = #{certificateType}
         and CERTIFICATE_NUMBER = #{certificateNumber}
+        <if test="userType != null">
+            AND USER_TYPE = #{userType}
+        </if>
     </select>
 
     <select id="selectCountByPhoneNumber" resultType="int">
