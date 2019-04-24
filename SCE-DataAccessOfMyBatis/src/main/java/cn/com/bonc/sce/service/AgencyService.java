@@ -36,7 +36,7 @@ public class AgencyService {
         return agencyDao.delSchoolRel(agentId,schoolId);
     }
 
-    public List<AgentBean> getAgents(String agentName,String grade,String agentArea){
+    public List<Map> getAgents(String agentName,String grade,String agentArea){
         return agencyDao.getAgents(agentName,grade,agentArea);
     }
 

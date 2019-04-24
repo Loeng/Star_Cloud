@@ -241,7 +241,7 @@ public class AgentApiController {
 
                 Page<List<Map<String, Object>>> page;
                 StringBuilder sql = new StringBuilder("SELECT\n" +
-                        "\tses.ID,\n" +
+                        "\tto_char(ses.ID) AS ID,\n" +
                         "\tses.SCHOOL_NAME,\n" +
                         "\tses.SCHOOL_TYPE \n" +
                         "FROM\n" +
@@ -281,7 +281,7 @@ public class AgentApiController {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Page<List<Map<String, Object>>> page;
             StringBuilder sql = new StringBuilder("SELECT\n" +
-                    "\tses.ID,\n" +
+                    "\tto_char(ses.ID) AS ID,\n" +
                     "\tses.SCHOOL_NAME,\n" +
                     "\tses.SCHOOL_TYPE \n" +
                     "FROM\n" +
