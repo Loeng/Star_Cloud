@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<body>
+		<auth_mode>30</auth_mode>
+		<name>{0}</name>
+		<id_card_no>{1}</id_card_no>
+		<mobile>{2}</mobile>
+	</body>
+</root>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<body>
+		<auth_mode>13</auth_mode>
+		<group_no>{0}</group_no>
+		<id_card_no>{1}</id_card_no>
+		<ctid_index>{2}</ctid_index>
+		<ctid_info>{3}</ctid_info>
+	</body>
+</root>

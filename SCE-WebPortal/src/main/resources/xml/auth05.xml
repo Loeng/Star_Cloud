@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<body>
+		<auth_mode>05</auth_mode>
+		<name>{0}</name>
+		<id_card_no>{1}</id_card_no>
+		<picture>{2}</picture>
+		<picture_encrypted>{3}</picture_encrypted>
+		<return_raw_picture>{4}</return_raw_picture>
+		<mobile>{5}</mobile>
+	</body>
+</root>

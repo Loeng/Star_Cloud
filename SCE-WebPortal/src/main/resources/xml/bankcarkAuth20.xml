@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<body>
+		<auth_mode>20</auth_mode>
+		<name>{0}</name>
+		<bank_card_no>{1}</bank_card_no>
+	</body>
+</root>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<body>
+		<auth_mode>10</auth_mode>
+		<name>{0}</name>
+		<id_card_no>{1}</id_card_no>
+		<valid_begin>{2}</valid_begin>
+		<valid_end>{3}</valid_end>
+	</body>
+</root>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<body>
+		<name>{0}</name>
+		<id_card_no>{1}</id_card_no>
+		<valid_begin>{2}</valid_begin>
+		<valid_end>{3}</valid_end>
+		<verify_code_data>{4}</verify_code_data>
+		<stream_number>{5}</stream_number>
+	</body>
+</root>

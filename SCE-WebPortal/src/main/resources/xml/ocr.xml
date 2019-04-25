@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<body>
+		<front_img>{0}</front_img>
+		<back_img>{1}</back_img>
+	</body>
+</root>
