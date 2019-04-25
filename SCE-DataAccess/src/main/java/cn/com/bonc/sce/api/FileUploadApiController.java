@@ -176,11 +176,20 @@ public class FileUploadApiController {
                     userPassword.setIsDelete( 1 );
                     userPassword.setPassword( "star123!" );
                     userPassword.setUserId( userId );
-                    fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
-                            loginName, Integer.parseInt(userType), excelToUser.getMailAddress(), Integer.parseInt(excelToUser.getCertificateType()), excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(), Long.parseLong(organizationId),
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),
-                            Integer.parseInt(excelToUser.getIsAdministrators()));
+                    if(excelToUser.getCertificateType().equals("1")){
+                        fileResourceRepository.savaAllUserInfo( userId, excelToUser.getUserName(), excelToUser.getGender(),
+                                loginName, Integer.parseInt(userType), excelToUser.getMailAddress(), Integer.parseInt(excelToUser.getCertificateType()), excelToUser.getCertificateNumber(),
+                                excelToUser.getPhoneNumber(), Long.parseLong(organizationId),
+                                UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),
+                                Integer.parseInt(excelToUser.getIsAdministrators()));
+                    }else {
+                        fileResourceRepository.savaAllUserInfoWithNotBirthDate( userId, excelToUser.getUserName(), excelToUser.getGender(),
+                                loginName, Integer.parseInt(userType), excelToUser.getMailAddress(), Integer.parseInt(excelToUser.getCertificateType()), excelToUser.getCertificateNumber(),
+                                excelToUser.getPhoneNumber(), Long.parseLong(organizationId),
+                                secret, excelToUser.getNationLity(), excelToUser.getNationCode(),
+                                Integer.parseInt(excelToUser.getIsAdministrators()));
+                    }
+
                     userPasswordDao.save( userPassword );
 
                     String schoolTime = excelToUser.getSchoolTime();
@@ -282,10 +291,18 @@ public class FileUploadApiController {
                     userPassword.setIsDelete( 1 );
                     userPassword.setPassword( "star123!" );
                     userPassword.setUserId( studentId );
-                    fileResourceRepository.savaAllUserInfo( studentId, excelToUser.getUserName(), excelToUser.getGender(),
-                            loginName, Integer.parseInt(userType), excelToUser.getMailAddress(),Integer.parseInt(excelToUser.getCertificateType()) , excelToUser.getCertificateNumber(),
-                            excelToUser.getPhoneNumber(),Long.parseLong(organizationId),
-                            UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),0);
+                    if(excelToUser.getCertificateType().equals("1")){
+                        fileResourceRepository.savaAllUserInfo( studentId, excelToUser.getUserName(), excelToUser.getGender(),
+                                loginName, Integer.parseInt(userType), excelToUser.getMailAddress(),Integer.parseInt(excelToUser.getCertificateType()) , excelToUser.getCertificateNumber(),
+                                excelToUser.getPhoneNumber(),Long.parseLong(organizationId),
+                                UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode(),0);
+                    }else {
+                        fileResourceRepository.savaAllUserInfoWithNotBirthDate( studentId, excelToUser.getUserName(), excelToUser.getGender(),
+                                loginName, Integer.parseInt(userType), excelToUser.getMailAddress(),Integer.parseInt(excelToUser.getCertificateType()) , excelToUser.getCertificateNumber(),
+                                excelToUser.getPhoneNumber(),Long.parseLong(organizationId),
+                                secret, excelToUser.getNationLity(), excelToUser.getNationCode(),0);
+                    }
+
                     userPasswordDao.save( userPassword );
 
                     String loginParentName;
@@ -304,9 +321,16 @@ public class FileUploadApiController {
                             log.info("缺少必填项");
                             throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                         }
-                        fileResourceRepository.saveParent(parentId, excelToUser.getParentName(), excelToUser.getParentGender(), loginParentName, PARENT_CODE, excelToUser.getParentEmail(),
-                                excelToUser.getParentCertificateType(), excelToUser.getParentCertificationNumber(), excelToUser.getParentTelephone(),
-                                UserPropertiesUtil.getBirthDateByCer(excelToUser.getParentCertificationNumber()), secretParent, excelToUser.getParentNationLity(), excelToUser.getParentNationCode() );
+                        if(excelToUser.getParentCertificateType().equals("1")){
+                            fileResourceRepository.saveParent(parentId, excelToUser.getParentName(), excelToUser.getParentGender(), loginParentName, PARENT_CODE, excelToUser.getParentEmail(),
+                                    excelToUser.getParentCertificateType(), excelToUser.getParentCertificationNumber(), excelToUser.getParentTelephone(),
+                                    UserPropertiesUtil.getBirthDateByCer(excelToUser.getParentCertificationNumber()), secretParent, excelToUser.getParentNationLity(), excelToUser.getParentNationCode() );
+                        }else {
+                            fileResourceRepository.saveParentWithoutBirthDate(parentId, excelToUser.getParentName(), excelToUser.getParentGender(), loginParentName, PARENT_CODE, excelToUser.getParentEmail(),
+                                    excelToUser.getParentCertificateType(), excelToUser.getParentCertificationNumber(), excelToUser.getParentTelephone(),
+                                    secretParent, excelToUser.getParentNationLity(), excelToUser.getParentNationCode() );
+                        }
+
                         userPasswordDao.save( parentPassword );
 
                         //向学生账号发送一条消息告知家长账号
@@ -391,7 +415,6 @@ public class FileUploadApiController {
                     userPassword.setIsDelete( 1 );
                     userPassword.setPassword( "star123!" );
                     userPassword.setUserId( parentId );
-
                     //查询学生id 并生成家长对应的  家长-学生关系
                     if ( excelToUser.getStudentCertificationNumber() != null && excelToUser.getStudentCertificationType() != null) {
                         if ( excelToUser.getParentFamify() == null ) {
@@ -415,9 +438,16 @@ public class FileUploadApiController {
                     }
 
                     //插入家长用户
-                    fileResourceRepository.saveParent( parentId, excelToUser.getUserName(), excelToUser.getGender(), loginName, PARENT_CODE,
-                            excelToUser.getMailAddress(), excelToUser.getCertificateType(), excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber(),
-                            UserPropertiesUtil.getBirthDateByCer( excelToUser.getCertificateNumber() ), secret, excelToUser.getNationLity(), excelToUser.getNationCode() );
+                    if(excelToUser.getCertificateType().equals("1")){
+                        fileResourceRepository.saveParent( parentId, excelToUser.getUserName(), excelToUser.getGender(), loginName, PARENT_CODE,
+                                excelToUser.getMailAddress(), excelToUser.getCertificateType(), excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber(),
+                                UserPropertiesUtil.getBirthDateByCer(excelToUser.getCertificateNumber()), secret, excelToUser.getNationLity(), excelToUser.getNationCode() );
+                    }else {
+                        fileResourceRepository.saveParentWithoutBirthDate( parentId, excelToUser.getUserName(), excelToUser.getGender(), loginName, PARENT_CODE,
+                                excelToUser.getMailAddress(), excelToUser.getCertificateType(), excelToUser.getCertificateNumber(), excelToUser.getPhoneNumber(),
+                                secret, excelToUser.getNationLity(), excelToUser.getNationCode() );
+                    }
+
                     userPasswordDao.save( userPassword );
                     count++;
                 }

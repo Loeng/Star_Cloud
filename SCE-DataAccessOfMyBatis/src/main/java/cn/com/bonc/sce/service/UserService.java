@@ -262,8 +262,8 @@ public class UserService {
                     return new RestRecord( 432, "暂无该家长信息" );
                 }
                 if(userDao.selectCountByCertificateNumber(parentCertificateType, parentCertificateNumber, "5") < 1){
-                    log.info("该家长身份证为非家长角色，不能绑定");
-                    return new RestRecord( 432, "该家长身份证为非家长角色，不能绑定" );
+                    log.info("该家长证件为非家长角色，不能绑定");
+                    return new RestRecord( 432, "该家长证件为非家长角色，不能绑定" );
                 }
             }
             parentId = userDao.selectUserIdByCertification(map.get("parentCertificateNumber").toString(), map.get("parentCertificateType").toString(),"5");

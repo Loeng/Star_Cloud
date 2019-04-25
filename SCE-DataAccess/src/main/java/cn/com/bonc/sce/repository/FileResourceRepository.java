@@ -52,6 +52,20 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @return
      */
     @Modifying
+    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,ORGANIZATION_ID,SECRET,NATIONALITY,VOLK,ISADMINISTRATORS) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14)  " )
+    int savaAllUserInfoWithNotBirthDate(String id, String userName, String gender , String loginName
+                        , Integer userType, String mailAddress, Integer certificateType
+                        , String certificateNumber, String phoneNumber
+                        , Long organizationId, String secret, String nationality, String volk, Integer isAdministrators);
+
+    /**
+     * 插入用户啊
+     * @param
+     * @return
+     */
+    @Modifying
     @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,LOGIN_NAME,USER_TYPE,ORGANIZATION_ID,SECRET) VALUES " +
             "(?1,?2,?3,?4,?5)  " )
     int savaAllUserInfo(String id, String loginName, String userType, String organizationId, String secret);
@@ -77,6 +91,19 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     int saveParent(String id, String userName, String gender , String loginName
             , String userType, String mailAddress, String certificateType
             , String certificateNumber, String phoneNumber, Date birthDate, String secret, String nationality, String volk);
+
+    /**
+     * 插入家长数据
+     * @param
+     * @return
+     */
+    @Modifying
+    @Query( nativeQuery = true, value = "insert  into  STARCLOUDPORTAL.SCE_COMMON_USER(USER_ID,USER_NAME,GENDER,LOGIN_NAME,USER_TYPE," +
+            "MAIL_ADDRESS,CERTIFICATE_TYPE,CERTIFICATE_NUMBER,PHONE_NUMBER,SECRET,NATIONALITY,VOLK) VALUES " +
+            "(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12)  " )
+    int saveParentWithoutBirthDate(String id, String userName, String gender , String loginName
+            , String userType, String mailAddress, String certificateType
+            , String certificateNumber, String phoneNumber, String secret, String nationality, String volk);
 
     /**
      *  插入数据到学生表
