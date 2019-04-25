@@ -166,6 +166,15 @@ public class UserManagerController {
             user.setAccountStatus( 1 );
         } else {
             user.setAccountStatus( 0 );
+            //如果是身份证，校验身份证格式及是否重复
+            if ( certificateType == 1 && !UserPropertiesUtil.checkCertificateNumber( certificateNumber ) ) {
+                log.info( "身份证号：{}格式有误", certificateNumber );
+                return new RestRecord( 414, WebMessageConstants.SCE_PORTAL_MSG_414 );
+            }
+            if ( userService.selectCountByCertificateNumber( "1", certificateNumber ) > 0 ) {
+                log.info( "身份证号：{}已被使用", certificateNumber );
+                return new RestRecord( 415, WebMessageConstants.SCE_PORTAL_MSG_415 );
+            }
         }
         user.setSecret( Secret.ES256GenerateSecret() );
         user.setCertificateNumber( certificateNumber );
@@ -211,8 +220,8 @@ public class UserManagerController {
     public RestRecord updatePwdByName( @RequestParam( "loginName" ) String loginName,
                                        @RequestParam( "password" ) String password ) {
         int count = userService.updatePwdByName( loginName, password );
-        int count2 = userService.updateAccountStatusByName(loginName,1);
-        if ( count == 1 && count2 == 1) {
+        int count2 = userService.updateAccountStatusByName( loginName, 1 );
+        if ( count == 1 && count2 == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, 1 );
         } else {
             return new RestRecord( 407, MessageConstants.SCE_MSG_407 );
@@ -254,22 +263,22 @@ public class UserManagerController {
     @ResponseBody
     @Transactional
     public RestRecord delTeacher( @RequestParam( "id" ) String id, @CurrentUserId String userId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
-        int auth = userService.selectAuthStatus(userId);
-        if(auth < 1){
-            if(userId.equals(id)){
+        int auth = userService.selectAuthStatus( userId );
+        if ( auth < 1 ) {
+            if ( userId.equals( id ) ) {
                 return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
             }
-            Integer updateIsAdministrators = userService.selectIsAdministortars(id);
-            if(!userId.equals(id) && updateIsAdministrators ==1){
+            Integer updateIsAdministrators = userService.selectIsAdministortars( id );
+            if ( !userId.equals( id ) && updateIsAdministrators == 1 ) {
                 return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
             }
-        }else {
-            if(userId.equals(id)){
+        } else {
+            if ( userId.equals( id ) ) {
                 return new RestRecord( 432, "系统不允许该操作" );
             }
         }
@@ -296,25 +305,25 @@ public class UserManagerController {
     @ResponseBody
     @Transactional
     public RestRecord editTeacherInfo( @RequestBody String json, @CurrentUserId String userId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
-        int auth = userService.selectAuthStatus(userId);
+        int auth = userService.selectAuthStatus( userId );
         Map map = ( Map ) JSONUtils.parse( json );
-        Integer ISADMINISTRATORS = Integer.parseInt(map.get( "ISADMINISTRATORS" ).toString());
+        Integer ISADMINISTRATORS = Integer.parseInt( map.get( "ISADMINISTRATORS" ).toString() );
         String USER_ID = ( String ) map.get( "USER_ID" );
-        if(auth < 1){
-            if(userId.equals(USER_ID) && ISADMINISTRATORS == 0 ){
+        if ( auth < 1 ) {
+            if ( userId.equals( USER_ID ) && ISADMINISTRATORS == 0 ) {
                 return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
             }
-            Integer updateIsAdministrators = userService.selectIsAdministortars(USER_ID);
-            if(!userId.equals(USER_ID) && updateIsAdministrators ==1){
+            Integer updateIsAdministrators = userService.selectIsAdministortars( USER_ID );
+            if ( !userId.equals( USER_ID ) && updateIsAdministrators == 1 ) {
                 return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
             }
-        }else {
-            if(userId.equals(USER_ID) && ISADMINISTRATORS == 0 ){
+        } else {
+            if ( userId.equals( USER_ID ) && ISADMINISTRATORS == 0 ) {
                 return new RestRecord( 432, "系统不允许该操作" );
             }
         }
@@ -364,9 +373,9 @@ public class UserManagerController {
     @ResponseBody
     @Transactional
     public RestRecord addTeacher( @RequestBody String json, @CurrentUserId String userId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的添加
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         Map map = ( Map ) JSONUtils.parse( json );
@@ -374,7 +383,7 @@ public class UserManagerController {
         if ( ADDTYPE == 0 ) {//建新用户
             String USER_ID = UUID.randomUUID().toString().replace( "-", "" ).toLowerCase();
             String ORGANIZATION_ID = ( String ) map.get( "ORGANIZATION_ID" );
-            Integer ISADMINISTRATORS =  Integer.parseInt(map.get("ISADMINISTRATORS").toString());
+            Integer ISADMINISTRATORS = Integer.parseInt( map.get( "ISADMINISTRATORS" ).toString() );
             if ( ORGANIZATION_ID == null ) {
                 return new RestRecord( 432, "当前账户任何学校相关信息，无法添加" );
             }
@@ -441,9 +450,10 @@ public class UserManagerController {
             String TEA_WORK_NUMBER = ( String ) map.get( "WORK_NUMBER" );
             String TEA_ENTRANCE_YEAR = ( String ) map.get( "SCHOOL_TIME" );
             Integer ISADMINISTRATORS = null;
-            try{
-                ISADMINISTRATORS = Integer.parseInt(map.get( "ISADMINISTRATORS" ).toString());
-            }catch (Exception e){}
+            try {
+                ISADMINISTRATORS = Integer.parseInt( map.get( "ISADMINISTRATORS" ).toString() );
+            } catch ( Exception e ) {
+            }
             if ( CERTIFICATE_TYPE == 1 && !UserPropertiesUtil.checkCertificateNumber( CERTIFICATE_NUMBER ) ) {
                 log.info( "教师身份证验证未通过" );
                 return new RestRecord( 432, "身份证填写不正确" );
@@ -497,7 +507,7 @@ public class UserManagerController {
                                            @RequestParam( value = "accountStatus", required = false ) Integer accountStatus,
                                            @PathVariable( value = "pageNum" ) Integer pageNum,
                                            @PathVariable( value = "pageSize" ) Integer pageSize,
-                                           @RequestParam( value = "applyStatus", required = false) String applyStatus) {
+                                           @RequestParam( value = "applyStatus", required = false ) String applyStatus ) {
         PageHelper.startPage( pageNum, pageSize );
         List< Map > teachers = userService.getTransferTeachers( getType, organizationId, userName, loginName, gender, position, accountStatus, applyStatus );
         PageInfo pageInfo = new PageInfo( teachers );
@@ -524,9 +534,9 @@ public class UserManagerController {
 
     @PutMapping( "/editStudent" )
     public RestRecord editStudent( @RequestBody Map map, @CurrentUserId String userId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         return userService.editStudent( map );
@@ -534,9 +544,9 @@ public class UserManagerController {
 
     @DeleteMapping( "/delStudent" )
     public RestRecord delStudent( @RequestParam String userId, @CurrentUserId String currentUserId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(currentUserId);
+        Integer isAdministrators = userService.selectIsAdministortars( currentUserId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         return userService.delStudent( userId );
@@ -560,9 +570,9 @@ public class UserManagerController {
     @Transactional( rollbackFor = Exception.class )
     public RestRecord addStudent( @RequestBody Map map,
                                   @CurrentUserId String userId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         String transferType = map.get( "transferType" ).toString();
@@ -623,9 +633,9 @@ public class UserManagerController {
     @DeleteMapping( "/repealApply/{transferId}" )
     public RestRecord repealApply( @CurrentUserId String userId,
                                    @PathVariable String transferId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         return userService.repealApply( userId, transferId );
@@ -633,9 +643,9 @@ public class UserManagerController {
 
     @PutMapping( "/reCall/{transferId}" )
     public RestRecord reCall( @PathVariable String transferId, @CurrentUserId String userId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         return userService.reCall( transferId );
@@ -655,9 +665,9 @@ public class UserManagerController {
      */
     @PutMapping( "/auditTransfer" )
     public RestRecord auditTransfer( @CurrentUserId String userId, @RequestBody Map map ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         return userService.auditTransfer( userId, map );
@@ -711,10 +721,10 @@ public class UserManagerController {
             return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
         } else {
             String fileStorePath = "";
-            if(user.getHeadPortrait()!=null){
-                fileStorePath = fileResourceService.getFileStorePath(Integer.parseInt(user.getHeadPortrait()));
+            if ( user.getHeadPortrait() != null ) {
+                fileStorePath = fileResourceService.getFileStorePath( Integer.parseInt( user.getHeadPortrait() ) );
             }
-            user.setFileStorePath(fileStorePath);
+            user.setFileStorePath( fileStorePath );
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
     }
@@ -733,9 +743,9 @@ public class UserManagerController {
      */
     @PutMapping( "/auditTeacher" )
     public RestRecord auditTeacher( @CurrentUserId String userId, @RequestBody Map map ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         return userService.auditTeacher( userId, map );
@@ -743,25 +753,25 @@ public class UserManagerController {
 
     @PutMapping( "/reCallTeacher" )
     public RestRecord reCallTeacher( @RequestBody Map map, @CurrentUserId String userId ) {
-        Integer isAdministrators = userService.selectIsAdministortars(userId);
+        Integer isAdministrators = userService.selectIsAdministortars( userId );
         // 拒绝不是管理员的修改
-        if(isAdministrators == null || isAdministrators == 0){
+        if ( isAdministrators == null || isAdministrators == 0 ) {
             return new RestRecord( 432, WebMessageConstants.SCE_PORTAL_MSG_436 );
         }
         return userService.reCallTeacher( map );
     }
 
-    @ApiOperation(value = "审核认证申请接口", notes="审核认证申请", httpMethod = "PUT")
-    @PutMapping("/updateAudit")
+    @ApiOperation( value = "审核认证申请接口", notes = "审核认证申请", httpMethod = "PUT" )
+    @PutMapping( "/updateAudit" )
     @ResponseBody
-    public RestRecord updateAudit(@CurrentUserId String auditUserId,@RequestBody Map map){
-        return userService.updateAudit(auditUserId,map);
+    public RestRecord updateAudit( @CurrentUserId String auditUserId, @RequestBody Map map ) {
+        return userService.updateAudit( auditUserId, map );
     }
 
-    @ApiOperation(value = "审核认证详情接口", notes="审核认证详情", httpMethod = "GET")
-    @GetMapping("/getAudit/{userId}")
+    @ApiOperation( value = "审核认证详情接口", notes = "审核认证详情", httpMethod = "GET" )
+    @GetMapping( "/getAudit/{userId}" )
     @ResponseBody
-    public RestRecord getAudit(@PathVariable(value = "userId") String userId){
+    public RestRecord getAudit( @PathVariable( value = "userId" ) String userId ) {
         UserAuditBean user = userService.getAudit( userId );
         if ( user == null ) {
             return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
@@ -771,25 +781,25 @@ public class UserManagerController {
     }
 
 
-    @ApiOperation(value = "校验登录名或者手机号是否已注册", notes="校验登录名或者手机号是否已注册", httpMethod = "GET")
-    @GetMapping("/checkLoginNameOrPhone")
-    public RestRecord checkLoginNameOrPhone(@RequestParam(value = "loginName",required = false) String loginName,
-                                            @RequestParam(value = "phone",required = false) String phone){
+    @ApiOperation( value = "校验登录名或者手机号是否已注册", notes = "校验登录名或者手机号是否已注册", httpMethod = "GET" )
+    @GetMapping( "/checkLoginNameOrPhone" )
+    public RestRecord checkLoginNameOrPhone( @RequestParam( value = "loginName", required = false ) String loginName,
+                                             @RequestParam( value = "phone", required = false ) String phone ) {
 
         // 判断用户名是否已注册
-        if (loginName !=null && !"".equals(loginName)){
+        if ( loginName != null && !"".equals( loginName ) ) {
             if ( userService.isExist( loginName ) > 0 ) {
                 return new RestRecord( 1022, MessageConstants.SCE_MSG_1022 );
-            }else {
+            } else {
                 return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
             }
         }
 
         //判断手机号是否已被注册
-        if (phone !=null && !"".equals(phone)){
-            if ( !StringUtils.isEmpty( userService.getIdByPhone( phone) ) ) {
+        if ( phone != null && !"".equals( phone ) ) {
+            if ( !StringUtils.isEmpty( userService.getIdByPhone( phone ) ) ) {
                 return new RestRecord( 1023, MessageConstants.SCE_MSG_1023 );
-            }else {
+            } else {
                 return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
             }
         }

@@ -96,7 +96,7 @@ public class UserManagerController {
             entity.add( new ExcelExportEntity( "机构名称", "INSTITUTION_NAME" ) );
             entity.add( new ExcelExportEntity( "账号", "LOGIN_NAME" ) );
             entity.add( new ExcelExportEntity( "组织编号", "ID" ) );
-            entity.add( new ExcelExportEntity( "状态", "ACCOUNT_STATUS" ) );
+            entity.add( new ExcelExportEntity( "状态", "ACCOUNT_STATUS_DEF" ) );
             entity.add( new ExcelExportEntity( "允许登录","LOGIN_PERMISSION_STATUS"));
 
             Workbook workbook = null;

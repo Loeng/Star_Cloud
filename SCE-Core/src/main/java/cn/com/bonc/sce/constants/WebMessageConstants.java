@@ -68,6 +68,8 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_411 = "手机短信验证失败";
     String SCE_PORTAL_MSG_412 = "安全码验证失败";
     String SCE_PORTAL_MSG_413 = "家长验证失败";
+    String SCE_PORTAL_MSG_414 = "身份证号格式有误";
+    String SCE_PORTAL_MSG_415 = "身份证号已被使用";
 
     String SCE_PORTAL_MSG_420 = "数据读取失败";
     String SCE_PORTAL_MSG_421 = "数据修改失败";
