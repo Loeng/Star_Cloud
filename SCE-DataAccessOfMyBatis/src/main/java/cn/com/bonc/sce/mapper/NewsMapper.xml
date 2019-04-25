@@ -217,6 +217,9 @@
         WHERE
             T.CONTENT_TITLE = #{contentTitle}
             AND T.IS_DELETE = 1
+        <if test="contentId != null  and contentId != ''">
+            AND T.CONTENT_ID != #{contentId}
+        </if>
      </select>
 
     <!--获取点击排行-->

@@ -44,7 +44,7 @@ public class NewsController {
         try {
 
             if(newsBean.getContentTitle() != null ){
-                Map newsInfo = newsDao.getNumByTitle( newsBean.getContentTitle() );
+                Map newsInfo = newsDao.getNumByTitle( newsBean.getContentTitle(),null );
                 String num = newsInfo.get("NUM").toString();
                 if(!"0".equals(num)){
                     return new RestRecord( 409, "该新闻标题已存在，请更换" );
@@ -74,7 +74,7 @@ public class NewsController {
     public RestRecord updateNewsInfo( @RequestBody NewsBean newsBean ) {
 
         if(newsBean.getContentTitle() != null ){
-            Map newsInfo = newsDao.getNumByTitle( newsBean.getContentTitle() );
+            Map newsInfo = newsDao.getNumByTitle( newsBean.getContentTitle(),newsBean.getContentId().toString() );
             String num = newsInfo.get("NUM").toString();
             if(!"0".equals(num)){
                 return new RestRecord( 409, "该新闻标题已存在，请更换" );

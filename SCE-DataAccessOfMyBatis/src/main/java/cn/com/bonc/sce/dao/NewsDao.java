@@ -76,8 +76,8 @@ public class NewsDao {
      * @param contentTitle
      * @return
      */
-    public Map getNumByTitle( String contentTitle ) {
-        return newsMapper.getNumByTitle( contentTitle );
+    public Map getNumByTitle( String contentTitle,String contentId ) {
+        return newsMapper.getNumByTitle( contentTitle,contentId );
     }
 
     public List selectTopNewsList(){

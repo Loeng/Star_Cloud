@@ -102,7 +102,7 @@ public interface NewsMapper {
      * @param contentTitle
      * @return
      */
-    Map< String, Object > getNumByTitle( @Param( "contentTitle" ) String contentTitle );
+    Map< String, Object > getNumByTitle( @Param( "contentTitle" ) String contentTitle,@Param( "contentId" ) String contentId );
 
     /**
      * 获取点击排行
