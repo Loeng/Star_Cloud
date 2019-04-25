@@ -149,7 +149,7 @@
         WHERE APPLY_USER_ID = #{applyUserId}
         AND BINDING_USER_ID = #{bindUserId}
         <if test="applyResult != null">
-            APPLY_RESULT = #{applyResult}
+            AND APPLY_RESULT = #{applyResult}
         </if>
         AND APPLY_TYPE = 1
     </select>
