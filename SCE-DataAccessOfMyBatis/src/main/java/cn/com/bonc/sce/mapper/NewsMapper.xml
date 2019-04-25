@@ -139,6 +139,7 @@
             <if test="contentId != null and contentId != ''">
                 UPDATE_TIME = sysdate,
             </if>
+            CONTENT_STATUS = 0
         </set>
         WHERE CONTENT_ID = #{contentId}
     </update>
