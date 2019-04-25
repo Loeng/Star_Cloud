@@ -4,11 +4,13 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import cn.com.bonc.sce.annotation.CurrentUserId;
+import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.rest.RestRecord;
 
 import cn.com.bonc.sce.service.UserManagerService;
 import cn.com.bonc.sce.tool.ParseExcel;
+import cn.com.bonc.sce.utils.Run;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -397,6 +400,15 @@ public class UserManagerController {
     public RestRecord checkLoginNameOrPhone(@RequestParam(value = "loginName",required = false) String loginName,
                                             @RequestParam(value = "phone",required = false) String phone){
         return userManagerService.checkLoginNameOrPhone(loginName, phone);
+    }
+
+
+    @ApiOperation(value = "实名认证", notes="实名认证", httpMethod = "GET")
+    @GetMapping("/authentication")
+    public RestRecord authentication(@RequestParam( value = "realName",required = true) String realName,
+                                     @RequestParam( value = "idCard" ,required = true) String idCard,
+                                     @CurrentUserId String userId){
+        return userManagerService.authentication(realName, idCard,userId);
     }
 
 }

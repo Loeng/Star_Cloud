@@ -19,10 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Charles on 2019/3/6.
@@ -527,5 +524,18 @@ public class UserService {
 
     public int selectAuthStatus(String userId){
         return userDao.selectAuthStatus(userId);
+    }
+
+
+    public RestRecord authentication(String USER_NAME,
+                                     String CERTIFICATE_NUMBER,
+                                     String IS_IDCARD_VALID,
+                                     String USER_ID ){
+        int count = userDao.authentication(USER_NAME,CERTIFICATE_NUMBER,IS_IDCARD_VALID, USER_ID);
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,count);
+    }
+
+    public RestRecord idCardIsExit(String CERTIFICATE_NUMBER){
+        return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,userDao.idCardIsExit(CERTIFICATE_NUMBER));
     }
 }

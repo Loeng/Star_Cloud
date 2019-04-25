@@ -215,4 +215,11 @@ public interface UserMapper {
     int updateIsadministrators(@Param("userId") String userId);
 
     int selectAuthStatus(@Param("userId") String userId);
+
+    int authentication(@Param("USER_NAME")String USER_NAME,
+                       @Param("CERTIFICATE_NUMBER")String CERTIFICATE_NUMBER,
+                       @Param("IS_IDCARD_VALID") String IS_IDCARD_VALID,
+                       @Param("USER_ID") String USER_ID);
+
+    Map idCardIsExit(@Param("CERTIFICATE_NUMBER") String CERTIFICATE_NUMBER);
 }

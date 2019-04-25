@@ -324,4 +324,15 @@ public class UserDao {
     public int selectAuthStatus(String userId){
         return userMapper.selectAuthStatus(userId);
     }
+
+    public int authentication(String USER_NAME,
+                              String CERTIFICATE_NUMBER,
+                              String IS_IDCARD_VALID,
+                              String USER_ID){
+        return userMapper.authentication(USER_NAME,CERTIFICATE_NUMBER,IS_IDCARD_VALID, USER_ID);
+    }
+
+    public Map idCardIsExit(String CERTIFICATE_NUMBER){
+        return userMapper.idCardIsExit(CERTIFICATE_NUMBER);
+    }
 }

@@ -7,6 +7,7 @@ import cn.com.bonc.sce.model.InfoTeacherModel;
 import cn.com.bonc.sce.model.SSOAuthentication;
 import cn.com.bonc.sce.rest.RestRecord;
 import cn.com.bonc.sce.tool.VaildSecurityUtils;
+import cn.com.bonc.sce.utils.Run;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -253,6 +255,29 @@ public class UserManagerService {
 
     public RestRecord checkLoginNameOrPhone(String loginName, String phone){
         return userManagerDao.checkLoginNameOrPhone(loginName, phone);
+    }
+
+    public RestRecord authentication(String realName,String idCard,String userId){
+
+        Map map = (Map) userManagerDao.idCardIsExit(idCard).getData();
+        int count = Integer.parseInt(map.get("NUM").toString());
+        if (count>0){
+            return new RestRecord(781,WebMessageConstants.SCE_PORTAL_MSG_781);
+        }
+
+        try {
+            com.alibaba.fastjson.JSONObject jsonObject = new Run().idCardValt(realName,idCard);
+            String auth_result = jsonObject.getJSONObject("body").get("auth_result").toString();
+            String IS_IDCARD_VALID = "0";
+            if ("1".equals(auth_result)){
+                IS_IDCARD_VALID = "1";
+            }
+            userManagerDao.authentication(realName,idCard,auth_result,userId);
+            return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,IS_IDCARD_VALID);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new RestRecord(780,WebMessageConstants.SCE_PORTAL_MSG_780);
+        }
     }
 
 }

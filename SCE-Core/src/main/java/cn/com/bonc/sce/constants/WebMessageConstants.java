@@ -130,4 +130,12 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_742 = "该优惠码已过期";
     String SCE_PORTAL_MSG_743 = "已超过该优惠码的使用次数";
     String SCE_PORTAL_MSG_744 = "该优惠码不适用此类商品";
+
+
+    /* *
+     * 实名认证相关
+     * 780-800
+     */
+    String SCE_PORTAL_MSG_780 = "实名认证失败";
+    String SCE_PORTAL_MSG_781 = "该身份证已被认证";
 }

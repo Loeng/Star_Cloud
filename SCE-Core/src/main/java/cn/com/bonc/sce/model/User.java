@@ -29,6 +29,15 @@ public class User {
     private String mailAddress;
     private String certificateType;
     private String certificateNumber;
+
+    public String getCertificateType() {
+        return certificateType;
+    }
+
+    public void setCertificateType(String certificateType) {
+        this.certificateType = certificateType;
+    }
+
     private String phoneNumber;
     private String address;
     private Date createTime;
@@ -47,6 +56,23 @@ public class User {
     private Integer accountStatus;
     private int auditStatus;
     private Map<String,String> userDetailedInfo;
+    private int idcardStatus;
+
+    public String getCertificateNumber() {
+        return certificateNumber;
+    }
+
+    public void setCertificateNumber(String certificateNumber) {
+        this.certificateNumber = certificateNumber;
+    }
+
+    public int getIdcardStatus() {
+        return idcardStatus;
+    }
+
+    public void setIdcardStatus(int idcardStatus) {
+        this.idcardStatus = idcardStatus;
+    }
 
     public String getUserId() {
         return userId;
@@ -62,14 +88,6 @@ public class User {
 
     public void setUserName( String userName ) {
         this.userName = userName;
-    }
-
-    public String getCertificateNumber() {
-        return certificateNumber;
-    }
-
-    public void setCertificateNumber( String certificateNumber ) {
-        this.certificateNumber = certificateNumber;
     }
 
     public String getAddress() {

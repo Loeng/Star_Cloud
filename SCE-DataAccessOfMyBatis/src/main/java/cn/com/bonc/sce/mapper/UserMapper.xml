@@ -1107,7 +1107,8 @@
         T.ACCOUNT_STATUS "accountStatus",
         T.NATIONALITY "nationality",
         T.VOLK "volk",
-        T.EDUCATIONAL_BACKGROUND "educationalBackground"
+        T.EDUCATIONAL_BACKGROUND "educationalBackground",
+        nvl(T.IS_IDCARD_VALID,0) "isIdCardValid"
         FROM STARCLOUDPORTAL.SCE_COMMON_USER T
         WHERE USER_ID = #{userId}
     </select>
@@ -1372,5 +1373,18 @@
         FROM STARCLOUDPORTAL.SCE_USER_AUDIT
         WHERE USER_ID = #{userId}
         AND AUDIT_STATUS = 1
+    </select>
+
+    <update id="authentication">
+        update STARCLOUDPORTAL.SCE_COMMON_USER
+        SET USER_NAME = #{USER_NAME},
+            CERTIFICATE_NUMBER = #{CERTIFICATE_NUMBER},
+            IS_IDCARD_VALID = #{IS_IDCARD_VALID}
+        WHERE USER_ID=#{USER_ID}
+    </update>
+
+    <select id="idCardIsExit" resultType="map">
+        SELECT count(*) as NUM FROM STARCLOUDPORTAL.SCE_COMMON_USER
+        WHERE CERTIFICATE_NUMBER = #{CERTIFICATE_NUMBER} AND IS_IDCARD_VALID = 1
     </select>
 </mapper>

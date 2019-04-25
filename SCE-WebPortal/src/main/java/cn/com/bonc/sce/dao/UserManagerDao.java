@@ -166,4 +166,14 @@ public interface UserManagerDao {
     RestRecord checkLoginNameOrPhone(@RequestParam(value = "loginName",required = false) String loginName,
                                      @RequestParam(value = "phone",required = false) String phone);
 
+    @RequestMapping(value = "/userManager/authentication", method = RequestMethod.PUT)
+    RestRecord authentication(@RequestParam(value = "USER_NAME")String USER_NAME,
+                              @RequestParam(value = "CERTIFICATE_NUMBER")String CERTIFICATE_NUMBER,
+                              @RequestParam(value = "IS_IDCARD_VALID") String IS_IDCARD_VALID,
+                              @RequestParam(value = "USER_ID") String USER_ID);
+
+
+    @RequestMapping(value = "/userManager/idCardIsExit", method = RequestMethod.GET)
+    RestRecord idCardIsExit(@RequestParam(value = "CERTIFICATE_NUMBER") String CERTIFICATE_NUMBER);
+
 }

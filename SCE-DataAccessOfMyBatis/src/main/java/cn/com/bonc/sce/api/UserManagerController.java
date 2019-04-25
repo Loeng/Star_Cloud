@@ -808,4 +808,21 @@ public class UserManagerController {
 
         return new RestRecord( 1025, MessageConstants.SCE_MSG_1025 );
     }
+
+
+    @ApiOperation( value = "实名认证修改对应状态", notes = "实名认证修改对应状态", httpMethod = "PUT" )
+    @PutMapping( "/authentication" )
+    public RestRecord authentication(@RequestParam(value = "USER_NAME")String USER_NAME,
+                                     @RequestParam(value = "CERTIFICATE_NUMBER")String CERTIFICATE_NUMBER,
+                                     @RequestParam(value = "IS_IDCARD_VALID") String IS_IDCARD_VALID,
+                                     @RequestParam(value = "USER_ID") String USER_ID){
+        return userService.authentication(USER_NAME,CERTIFICATE_NUMBER,IS_IDCARD_VALID, USER_ID);
+    }
+
+
+    @ApiOperation( value = "实名认证修改对应状态", notes = "实名认证修改对应状态", httpMethod = "GET" )
+    @GetMapping( "/idCardIsExit" )
+    public RestRecord idCardIsExit(@RequestParam(value = "CERTIFICATE_NUMBER") String CERTIFICATE_NUMBER){
+        return userService.idCardIsExit(CERTIFICATE_NUMBER);
+    }
 }

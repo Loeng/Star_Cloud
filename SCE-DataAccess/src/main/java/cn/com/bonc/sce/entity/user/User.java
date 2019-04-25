@@ -48,10 +48,6 @@ public class User {
     private Integer userType;
     @Column( name = "MAIL_ADDRESS" )
     private String mailAddress;
-    @Column( name = "CERTIFICATE_TYPE" )
-    private String certificateType;
-    @Column( name = "CERTIFICATE_NUMBER" )
-    private String certificateNumber;
     @Column( name = "PHONE_NUMBER" )
     private String phoneNumber;
     @Transient
@@ -85,6 +81,12 @@ public class User {
     private Integer isAdministrators;
     @Column( name = "ACCOUNT_STATUS" )
     private Integer accountStatus;
+    @Column( name = "IS_IDCARD_VALID" )
+    private Integer idcardStatus;
+    @Column( name = "CERTIFICATE_TYPE" )
+    private String certificateType;
+    @Column( name = "CERTIFICATE_NUMBER" )
+    private String certificateNumber;
     @Transient
     private Object userDetailedInfo;
     @Transient

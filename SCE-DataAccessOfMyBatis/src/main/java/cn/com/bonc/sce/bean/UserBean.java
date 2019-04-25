@@ -46,4 +46,5 @@ public class UserBean {
     private String educationalBackground;
     private Integer loginTimes;
     private String fileStorePath;
+    private Integer isIdCardValid;
 }
