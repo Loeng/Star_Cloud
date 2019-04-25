@@ -29,10 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author BTW
@@ -232,6 +229,11 @@ public class AgentApiController {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Map<String, Object> temp = new HashMap<>(16);
+            if(StringUtils.isEmpty(ID)){
+                temp.put("data", new ArrayList());
+                restRecord.setData(temp);
+                return restRecord;
+            }
             int agentCount =  agentService.getAgentAuditCountById(ID);
             if(agentCount>0){
                 Agent agent = agentService.getAgentById(Long.valueOf(ID));
@@ -265,7 +267,7 @@ public class AgentApiController {
                 restRecord.setData(temp);
             }else{
 
-                temp.put("data", "");
+                temp.put("data", new ArrayList());
                 restRecord.setData(temp);
             }
             return restRecord;
@@ -279,6 +281,12 @@ public class AgentApiController {
     public RestRecord getHasBeenActingSchoolList(@PathVariable("ID") String ID, @PathVariable(value = "school_name",required = false) String school_name) {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
+            Map<String, Object> temp = new HashMap<>(16);
+            if(StringUtils.isEmpty(ID)){
+                temp.put("data", new ArrayList());
+                restRecord.setData(temp);
+                return restRecord;
+            }
             Page<List<Map<String, Object>>> page;
             StringBuilder sql = new StringBuilder("SELECT\n" +
                     "\tto_char(ses.ID) AS ID,\n" +
@@ -297,7 +305,7 @@ public class AgentApiController {
             NativeQuery query = session.createNativeQuery(sql.toString());
             query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 
-            Map<String, Object> temp = new HashMap<>(16);
+
             temp.put("data", query.getResultList());
             restRecord.setData(temp);
             return restRecord;
