@@ -161,6 +161,14 @@ public class UserManagerController {
         user.setIsDelete( 1 );
         user.setUserId( userId );
 
+        if ( userService.isExist( loginName ) > 0 ) {
+            return new RestRecord( 1022, MessageConstants.SCE_MSG_1022 );
+        }
+        //判断手机号是否已被注册
+        if ( !StringUtils.isEmpty( userService.getIdByPhone( ( String ) map.get( "phoneNumber" ) ) ) ) {
+            return new RestRecord( 1023, MessageConstants.SCE_MSG_1023 );
+        }
+
         //如果没传身份证号，说明是登陆页注册，不用激活
         if ( certificateNumber == null ) {
             user.setAccountStatus( 1 );
@@ -180,13 +188,6 @@ public class UserManagerController {
         user.setCertificateNumber( certificateNumber );
         user.setCertificateType( certificateType );
 
-        if ( userService.isExist( loginName ) > 0 ) {
-            return new RestRecord( 1022, MessageConstants.SCE_MSG_1022 );
-        }
-        //判断手机号是否已被注册
-        if ( !StringUtils.isEmpty( userService.getIdByPhone( ( String ) map.get( "phoneNumber" ) ) ) ) {
-            return new RestRecord( 1023, MessageConstants.SCE_MSG_1023 );
-        }
 
         AccountBean account = new AccountBean();
         long accountId = idWorker.nextId();
