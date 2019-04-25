@@ -233,7 +233,7 @@ public class UserService {
                 parentMailAddress = map.get("parentMailAddress").toString();
             }catch (NullPointerException e){}
 
-            if( parentMailAddress != null && !UserPropertiesUtil.checkMail(parentMailAddress)){
+            if( parentMailAddress != null && !parentMailAddress.equals("") && !UserPropertiesUtil.checkMail(parentMailAddress)){
                 log.info("家长邮箱验证未通过");
                 return new RestRecord( 432, String.format(PARENT, "邮箱填写不正确") );
             }

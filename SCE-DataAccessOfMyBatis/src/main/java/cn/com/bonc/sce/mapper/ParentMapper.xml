@@ -142,4 +142,28 @@
         where APPLY_USER_ID = #{applyUserId}
 		and BINDING_USER_ID = #{targetUserId}
     </delete>
+
+    <select id="selectApplyId" resultType="Long">
+        SELECT ID
+        FROM STARCLOUDPORTAL.SCE_BINDING_APPLY
+        WHERE APPLY_USER_ID = #{applyUserId}
+        AND BINDING_USER_ID = #{bindUserId}
+        <if test="applyResult != null">
+            APPLY_RESULT = #{applyResult}
+        </if>
+        AND APPLY_TYPE = 1
+    </select>
+
+    <update id="updateApplyById">
+        UPDATE STARCLOUDPORTAL.SCE_BINDING_APPLY
+        SET APPLY_RESULT=0
+        WHERE ID = #{id}
+    </update>
+
+    <select id="isBind" resultType="int">
+        SELECT COUNT(1)
+        FROM STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL
+        WHERE PARENT_USER_ID = #{applyUserId}
+        AND STUDENT_USER_ID = #{studentUserId}
+    </select>
 </mapper>

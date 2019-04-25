@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -31,8 +32,14 @@ public class ParentService {
         return parentDao.getStudentList(id);
     }
 
-    public int bindStudent(Long id, String applyUserId, String targetUserId, Integer applyType, String bindUserId, String relationship) {
-        return parentDao.bindStudent(id,applyUserId,targetUserId,applyType,bindUserId,relationship);
+    @Transactional( propagation = Propagation.REQUIRED )
+    public void bindStudent(Long id, String applyUserId, String targetUserId, Integer applyType, String bindUserId, String relationship) {
+        Long ID = parentDao.selectApplyId(applyUserId, bindUserId, null);
+        if(ID == null){
+            parentDao.bindStudent(id,applyUserId,targetUserId,applyType,bindUserId,relationship);
+        }else {
+            parentDao.updateApplyById(ID);
+        }
     }
 
     public int unbind(String parentId, String studentId) {
@@ -102,6 +109,14 @@ public class ParentService {
 
     public void delAudit(String applyUserId, String targetUserId){
         parentDao.delAudit(applyUserId, targetUserId);
+    }
+
+    public int isBind(String applyUserId, String studentUserId){
+        return parentDao.isBind(applyUserId, studentUserId);
+    }
+
+    public Long selectApplyId(String applyUserId, String studentUserId, String applyResult){
+        return parentDao.selectApplyId(applyUserId, studentUserId, applyResult);
     }
 
 }

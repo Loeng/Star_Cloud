@@ -61,11 +61,11 @@ public class UserImportApiController {
 
     private static final int EXCEL_NUMBER = 4;
 
+    private static final String schoolIdNotExist = "学校id填写有误";
+
     private static final String certificateNumberPrompt = "请检查%s身份证信息填写是否正确";
 
-    private static final String certificateNumberExist = "%s身份证已被使用";
-
-    private static final String schoolIdNotExist = "学校id填写有误";
+    private static final String certificateNumberExist = "%s证件号已被使用";
 
     private static final String phonePrompt = "%s手机号填写不正确";
 
@@ -112,13 +112,15 @@ public class UserImportApiController {
                     if(excelToUser.getUserName() == null && excelToUser.getGender() == null && excelToUser.getWorkNumber() == null && excelToUser.getCertificateNumber() == null && excelToUser.getPhoneNumber() == null &&
                             excelToUser.getNationLity() == null && excelToUser.getNationCode() == null && excelToUser.getTeachTime() == null &&
                             excelToUser.getAcademicQualification() == null && excelToUser.getMailAddress() == null && excelToUser.getPosition() == null && excelToUser.getSchoolTime() == null &&
-                            excelToUser.getTeachRange() == null && excelToUser.getCertificateType() == null && excelToUser.getIsAdministrators() == null){
+                            excelToUser.getTeachRange() == null && excelToUser.getCertificateType() == null && excelToUser.getIsAdministrators() == null&&
+                            excelToUser.getOrganizationId() == null){
                         continue;
                     }
                     if(excelToUser.getUserName() == null || excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null ||
                             excelToUser.getNationLity() == null || excelToUser.getNationCode() == null || excelToUser.getTeachTime() == null ||
                             excelToUser.getAcademicQualification() == null || excelToUser.getMailAddress() == null || excelToUser.getPosition() == null || excelToUser.getSchoolTime() == null ||
-                            excelToUser.getTeachRange() == null || excelToUser.getCertificateType() == null || excelToUser.getIsAdministrators() == null){
+                            excelToUser.getTeachRange() == null || excelToUser.getCertificateType() == null || excelToUser.getIsAdministrators() == null ||
+                            excelToUser.getOrganizationId() == null){
                         log.info("缺少必填项");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
@@ -209,13 +211,13 @@ public class UserImportApiController {
                             excelToUser.getGender() == null && excelToUser.getStudentNumber() == null && excelToUser.getNationLity() == null && excelToUser.getNationCode() == null &&
                             excelToUser.getEntranceYear() == null && excelToUser.getPhoneNumber() == null && excelToUser.getParentName() == null && excelToUser.getParentGender() == null &&
                             excelToUser.getParentNationLity() == null && excelToUser.getParentNationCode() == null && excelToUser.getParentTelephone() == null &&
-                            excelToUser.getParentEmail() == null){
+                            excelToUser.getParentEmail() == null && excelToUser.getOrganizationId() == null){
                         continue;
                     }
                     if(excelToUser.getUserName() == null || excelToUser.getCertificateNumber() == null || excelToUser.getParentFamify() == null || excelToUser.getParentCertificationNumber() == null
                             || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null || excelToUser.getCertificateType() == null || excelToUser.getParentCertificateType() == null ||
                             excelToUser.getGender() == null || excelToUser.getStudentNumber() == null || excelToUser.getNationLity() == null || excelToUser.getNationCode() == null ||
-                            excelToUser.getEntranceYear() == null){
+                            excelToUser.getEntranceYear() == null || excelToUser.getOrganizationId() == null){
                         log.info("缺少必填项");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
