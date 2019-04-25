@@ -461,8 +461,8 @@ public class UserOperationController {
     @ApiOperation( value = "查询审核状态接口", notes = "查询审核状态", httpMethod = "GET" )
     @GetMapping( "/getAuditStatusByEntityId/{userId}" )
     @ResponseBody
-    public RestRecord getAuditStatusByEntityId(@PathVariable( "userId" ) String userId) {
-        UserAudit audit = userInfoRepository.findByUserId( userId);
+    public RestRecord getAuditStatusByEntityId(@PathVariable( "entityId" ) Long entityId) {
+        UserAudit audit = userInfoRepository.findByEntityId( entityId);
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, audit );
     }
 

@@ -61,8 +61,8 @@ public class UserOperationService {
         return userOperationDao.insertUser( userModel );
     }
 
-    public RestRecord getAuditStatusByEntityId( String userId) {
-        return userOperationDao.getAuditStatusByEntityId(userId);
+    public RestRecord getAuditStatusByEntityId( Long entityId) {
+        return userOperationDao.getAuditStatusByEntityId(entityId);
 
     }
 

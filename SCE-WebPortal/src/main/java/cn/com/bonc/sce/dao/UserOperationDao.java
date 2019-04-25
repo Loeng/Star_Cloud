@@ -68,7 +68,7 @@ public interface UserOperationDao {
     @RequestMapping( value = "/user-info/insert", method = RequestMethod.POST )
     RestRecord insertUser( @RequestBody UserModel userModel );
 
-    @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{userId}", method = RequestMethod.GET )
-    RestRecord getAuditStatusByEntityId( @PathVariable( "userId" ) String userId);
+    @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{entityId}", method = RequestMethod.GET )
+    RestRecord getAuditStatusByEntityId( @PathVariable( "entityId" ) Long entityId);
 
 }

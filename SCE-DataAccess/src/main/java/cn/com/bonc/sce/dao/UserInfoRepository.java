@@ -247,5 +247,4 @@ public interface UserInfoRepository extends JpaRepository< UserAudit, Long >, Jp
 
     UserAudit findByEntityId(Long id);
 
-    UserAudit findByUserId(String userId);
 }
