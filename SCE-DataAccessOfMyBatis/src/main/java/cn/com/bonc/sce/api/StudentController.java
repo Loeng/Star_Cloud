@@ -3,6 +3,7 @@ package cn.com.bonc.sce.api;
 import cn.com.bonc.sce.constants.MessageConstants;
 import cn.com.bonc.sce.constants.WebMessageConstants;
 import cn.com.bonc.sce.rest.RestRecord;
+import cn.com.bonc.sce.service.ParentService;
 import cn.com.bonc.sce.service.StudentService;
 import cn.com.bonc.sce.tool.IdWorker;
 import com.alibaba.druid.support.json.JSONUtils;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private ParentService parentService;
     @Autowired
     private IdWorker idWorker;
 
@@ -65,9 +68,10 @@ public class StudentController {
         }catch (NumberFormatException e){
             return new RestRecord( 431, "applyResult参数不正确");
         }
-
-        studentService.audit(id,applyResult,rejectReason);
-        if(applyResult == 1){
+        if(applyResult == 2){
+            studentService.audit(id,applyResult,rejectReason);
+        }else if(applyResult == 1){
+            parentService.delAudit(applyUserId, bindUserId);
            studentService.addRelation(idWorker.nextId(),applyUserId,bindUserId,relationship);
         }
         return new RestRecord(200,MessageConstants.SCE_MSG_0200,1);

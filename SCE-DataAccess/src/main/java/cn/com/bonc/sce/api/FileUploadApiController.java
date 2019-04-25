@@ -137,9 +137,9 @@ public class FileUploadApiController {
                             excelToUser.getTeachRange() == null && excelToUser.getCertificateType() == null && excelToUser.getIsAdministrators() == null){
                         continue;
                     }
-                    if(excelToUser.getUserName() == null || excelToUser.getGender() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null ||
+                    if(excelToUser.getUserName() == null || excelToUser.getWorkNumber() == null || excelToUser.getCertificateNumber() == null || excelToUser.getPhoneNumber() == null ||
                             excelToUser.getNationLity() == null || excelToUser.getNationCode() == null || excelToUser.getTeachTime() == null ||
-                            excelToUser.getAcademicQualification() == null || excelToUser.getMailAddress() == null || excelToUser.getPosition() == null || excelToUser.getSchoolTime() == null ||
+                            excelToUser.getAcademicQualification() == null || excelToUser.getPosition() == null || excelToUser.getSchoolTime() == null ||
                             excelToUser.getTeachRange() == null || excelToUser.getCertificateType() == null || excelToUser.getIsAdministrators() == null){
                         log.info("缺少必填项");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
@@ -152,7 +152,7 @@ public class FileUploadApiController {
                         log.info("教师手机号验证未通过");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( phonePrompt, "教师" ), i + EXCEL_NUMBER ));
                     }
-                    if(!UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
+                    if(excelToUser.getMailAddress() != null && !UserPropertiesUtil.checkMail(excelToUser.getMailAddress())){
                         log.info("教师邮箱验证未通过");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "教师" ), i + EXCEL_NUMBER ));
                     }
@@ -164,7 +164,7 @@ public class FileUploadApiController {
                         log.info("教师手机号已被使用");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( phonePromptExist, "教师" ), i + EXCEL_NUMBER ));
                     }
-                    if( fileResourceRepository.selectMailAddress(excelToUser.getMailAddress()) > 0){
+                    if( excelToUser.getMailAddress() != null && fileResourceRepository.selectMailAddress(excelToUser.getMailAddress()) > 0){
                         log.info("教师邮箱已被使用");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPromptExit, "教师" ), i + EXCEL_NUMBER ));
                     }
@@ -250,7 +250,7 @@ public class FileUploadApiController {
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( emailPrompt, "学生" ), i + EXCEL_NUMBER ));
                     }
                     if( fileResourceRepository.selectUserCount(excelToUser.getCertificateNumber()) > 0){
-                        log.info("学生身份证已被使用");
+                        log.info("学生证件已被使用");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( certificateNumberExist, "学生" ), i + EXCEL_NUMBER ));
                     }
                     if( excelToUser.getParentCertificateType().equals("1") && !UserPropertiesUtil.checkCertificateNumber(excelToUser.getParentCertificationNumber())){
@@ -317,7 +317,7 @@ public class FileUploadApiController {
                         parentPassword.setUserId( parentId );
                         //新增家长时的必填项过滤
                         if(excelToUser.getParentName() == null || excelToUser.getParentGender() == null || excelToUser.getParentNationLity() == null ||
-                            excelToUser.getParentNationCode() == null || excelToUser.getParentTelephone() == null || excelToUser.getParentEmail() == null){
+                            excelToUser.getParentNationCode() == null || excelToUser.getParentTelephone() == null){
                             log.info("缺少必填项");
                             throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                         }

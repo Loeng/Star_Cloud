@@ -88,4 +88,16 @@ public class ParentDao {
     public void delAudit(String applyUserId, String targetUserId){
         parentMapper.delAudit(applyUserId, targetUserId);
     }
+
+    public Long selectApplyId(String applyUserId, String bindUserId, String applyResult){
+        return parentMapper.selectApplyId(applyUserId, bindUserId, applyResult);
+    }
+
+    public void updateApplyById(Long id){
+        parentMapper.updateApplyById(id);
+    }
+
+    public int isBind(String applyUserId, String studentUserId){
+        return parentMapper.isBind(applyUserId, studentUserId);
+    }
 }

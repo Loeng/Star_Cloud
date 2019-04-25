@@ -20,7 +20,8 @@ import java.sql.Timestamp;
 public class FileResourceEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_SCE_FILE_RESOURCE" )
+    @SequenceGenerator( name = "SEQ_SCE_FILE_RESOURCE", allocationSize = 1, initialValue = 10200, sequenceName = "SCQ_FILE_RESOURCE" )
     @Column( name = "RESOURCE_ID" )
     private Integer resourceId;
 

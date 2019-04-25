@@ -388,7 +388,10 @@ public class UserManagerController {
                 return new RestRecord( 432, "身份证已被使用" );
             }
             String USER_NAME = ( String ) map.get( "USER_NAME" );
-            String GENDER = ( String ) map.get( "GENDER" );
+            String GENDER = null;
+            try {
+                GENDER = map.get( "GENDER" ).toString() ;
+            }catch (Exception e){}
             String PHONE_NUMBER = ( String ) map.get( "PHONE_NUMBER" );
             if ( !UserPropertiesUtil.checkPhone( PHONE_NUMBER ) ) {
                 log.info( "教师身手机号验证未通过" );
@@ -397,8 +400,12 @@ public class UserManagerController {
             if ( userService.selectCountByPhoneNumber( PHONE_NUMBER ) > 0 ) {
                 return new RestRecord( 432, "手机号已被使用" );
             }
-            String MAIL_ADDRESS = ( String ) map.get( "MAIL_ADDRESS" );
-            if ( !UserPropertiesUtil.checkMail( MAIL_ADDRESS ) ) {
+            String MAIL_ADDRESS = null;
+            try {
+                MAIL_ADDRESS = map.get( "MAIL_ADDRESS" ).toString();
+            }catch (Exception e){}
+
+            if ( MAIL_ADDRESS != null && !UserPropertiesUtil.checkMail( MAIL_ADDRESS ) ) {
                 log.info( "教师身邮箱证未通过" );
                 return new RestRecord( 432, "邮箱填写不正确" );
             }

@@ -50,4 +50,10 @@ public interface ParentMapper {
                              @Param("studentUserId") String studentUserId,@Param("isMain") Integer isMain,@Param("relationship") String relationship);
 
     void delAudit(@Param("applyUserId") String applyUserId, @Param("targetUserId") String targetUserId );
+
+    Long selectApplyId(@Param("applyUserId")String applyUserId, @Param("bindUserId")String bindUserId, @Param("applyResult") String applyResult);
+
+    void updateApplyById(@Param("id") Long id);
+
+    int isBind(@Param("applyUserId") String applyUserId,@Param("studentUserId") String studentUserId);
 }

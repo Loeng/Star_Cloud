@@ -71,9 +71,23 @@ public class ParentController {
 
         if ( applyType == 1 ){
             targetUserId = bindUserId;
+            //查询是否已经提交申请 或者 已经绑定该学生
+            //查询是否已经提交申请
+           int count =  parentService.isBind(applyUserId, bindUserId);
+            if(count > 0){
+                return new RestRecord( 434, "您已经绑定该学生，不能重复绑定" );
+            }
+            Long applyID = parentService.selectApplyId(applyUserId, bindUserId, "0");
+            if(applyID != null ){
+                return new RestRecord( 434, "您提交的申请正在审核中，请勿重复提交" );
+            }
             parentService.bindStudent(id,applyUserId,targetUserId,applyType,bindUserId,relationship);
         } else {
-            //直接绑定该家长和学生的亲属关系，并删掉绑定审核表中的审核数据。
+            //查询是否已经绑定该学生
+            int count =  parentService.isBind(applyUserId, bindUserId);
+            if(count > 0){
+                return new RestRecord( 434, "您已经绑定该学生，不能重复绑定" );
+            }
             parentService.addStudentParentRel(idWorker.nextId(), applyUserId, bindUserId, 0, relationship);
             parentService.delAudit(applyUserId, bindUserId);
         }
