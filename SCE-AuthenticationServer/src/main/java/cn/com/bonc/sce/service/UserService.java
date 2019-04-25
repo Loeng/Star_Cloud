@@ -92,11 +92,14 @@ public class UserService {
     /**
      * 获取认证状态
      *
-     * @param userId
-     * @return 1为已认证
+     * @param organizationId @return 1为已认证
      */
-    public int getAuditStatus( String userId ) {
-        RestRecord restRecord = userDao.getAuditStatusByEntityId( userId );
+    public int getAuditStatus( Long organizationId ) {
+        if(organizationId==null){
+            return 0;
+        }
+        RestRecord restRecord = userDao.getAuditStatusByEntityId( organizationId );
+
         if ( restRecord.getCode() == 200 && restRecord.getData() != null ) {
             JSONObject json = JSONUtil.parseObj( restRecord.getData() );
             Integer auditStatus = Integer.parseInt( json.get( "auditStatus" ).toString() );

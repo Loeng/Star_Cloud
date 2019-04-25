@@ -82,10 +82,9 @@ public interface UserDaoClient {
     /**
      * 获取用户审核状态信息
      *
-     * @param id
-     * @param userId
+     * @param entityId
      * @return auditStatus  0审核中 1已认证 2被驳回
      */
-    @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{userId}", method = RequestMethod.GET )
-    RestRecord getAuditStatusByEntityId( @PathVariable( "userId" ) String userId);
+    @RequestMapping( value = "/user-info/getAuditStatusByEntityId/{entityId}", method = RequestMethod.GET )
+    RestRecord getAuditStatusByEntityId( @PathVariable( "entityId" ) Long entityId);
 }

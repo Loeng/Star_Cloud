@@ -128,7 +128,8 @@ public class AuthenticationController {
         }
 
         //获取用户的认证状态
-        authenticatedUser.setAuditStatus( userService.getAuditStatus( authenticatedUser.getUserId() ) );
+        Long organizationId=authenticatedUser.getOrganizationId()==null?null:Long.parseLong( authenticatedUser.getOrganizationId() );
+        authenticatedUser.setAuditStatus( userService.getAuditStatus( organizationId) );
 
         /*
          * 3. 生成登录信息
