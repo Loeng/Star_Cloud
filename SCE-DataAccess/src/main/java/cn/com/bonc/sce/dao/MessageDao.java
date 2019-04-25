@@ -29,7 +29,7 @@ public interface MessageDao extends JpaRepository< Message, Integer > {
     Timestamp getNewestTimeByUserId( String userId );
 
 
-    @Query( value = "SELECT CREATE_TIME FROM SCE_COMMON_USER WHERE USER_ID=?1", nativeQuery = true )
+    @Query( value = "SELECT CREATE_TIME FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID=?1", nativeQuery = true )
     Timestamp getCreateTimeByUserId( String userId );
 
     List< Message > findByTypeInAndCreateTimeAfterAndIsDeleteOrTargetIdAndCreateTimeAfterAndIsDelete( List type, Timestamp createTime, Integer isDelete, String targetId, Timestamp createTime2, Integer isDelete2 );
