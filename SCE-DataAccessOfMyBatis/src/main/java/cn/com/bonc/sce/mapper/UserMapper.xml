@@ -309,10 +309,10 @@
                                   FROM STARCLOUDPORTAL.SCE_COMMON_USER USERINFO
                                   LEFT JOIN STARCLOUDPORTAL.SCE_INFO_STUDENT_PARENT_REL REL ON USERINFO.USER_ID = REL.STUDENT_USER_ID AND REL.IS_MAIN = 1
                                   LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER USERINFO2 ON USERINFO2.USER_ID = REL.PARENT_USER_ID
-                                  WHERE USERINFO.USER_TYPE = 1 AND USERINFO.LOGIN_NAME = #{loginName} )
+                                  WHERE USERINFO.USER_TYPE = 1 and USERINFO.IS_DELETE = 1 AND USERINFO.LOGIN_NAME = #{loginName} )
                   ) AS PHONE_NUMBER,ACCOUNT_STATUS
         FROM STARCLOUDPORTAL.SCE_COMMON_USER
-        WHERE LOGIN_NAME=#{loginName}
+        WHERE IS_DELETE = 1 AND LOGIN_NAME=#{loginName}
     </select>
 
     <update id="updatePwdByName">
