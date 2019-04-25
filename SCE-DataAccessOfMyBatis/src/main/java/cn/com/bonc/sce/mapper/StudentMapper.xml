@@ -34,6 +34,7 @@
 
     <select id="getStudentBasicData" resultType="Map">
         SELECT
+          SCU.USER_ID,
 	      sis.STUDENT_CODE,
 	      ses.SCHOOL_NAME,
 	      to_char( sis.ENTRANCE_YEAR, 'YYYY-MM-DD' ) AS ENTRANCE_YEAR,
@@ -41,10 +42,9 @@
 	      sis.CLASS_NUMBER,
 	      sis.SEAT_NUMBER,
 	      sis.STUDENT_NUMBER
-	    from
-	       STARCLOUDPORTAL.SCE_INFO_STUDENT sis
-	    LEFT JOIN STARCLOUDPORTAL.SCE_COMMON_USER scu on sis.USER_ID = scu.USER_ID
+	    from STARCLOUDPORTAL.SCE_COMMON_USER scu
+	    LEFT JOIN  STARCLOUDPORTAL.SCE_INFO_STUDENT sis on scu.USER_ID = sis.USER_ID
 	    LEFT JOIN STARCLOUDPORTAL.SCE_ENTITY_SCHOOL ses on scu.ORGANIZATION_ID = ses.ID
-	    where sis.USER_ID = #{USER_ID}
+	    where SCU.USER_ID = #{USER_ID}
     </select>
 </mapper>
