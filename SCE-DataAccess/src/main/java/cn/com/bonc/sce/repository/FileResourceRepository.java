@@ -111,9 +111,9 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @return
      */
     @Modifying
-    @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_STUDENT(USER_ID,CLASS_NUMBER,GRADE,STUDENT_NUMBER,ENTRANCE_YEAR) " +
-            "VALUES (?1,?2,?3,?4,?5) ")
-    int saveStudent(String userId, String classNumber, String grade, String studentNumber, Date entranceYear);
+    @Query( nativeQuery = true, value = "insert into STARCLOUDPORTAL.SCE_INFO_STUDENT(USER_ID,CLASS_NUMBER,GRADE,STUDENT_NUMBER,ENTRANCE_YEAR,SEAT_NUMBER,STUDENT_CODE) " +
+            "VALUES (?1,?2,?3,?4,?5,?6,?7) ")
+    int saveStudent(String userId, String classNumber, String grade, String studentNumber, Date entranceYear, String seatNumber, String studentCode);
 
     /**
      * 插入家长信息
@@ -171,11 +171,11 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     int selectUserCountByCertificate(String certificateNumber, String userType);
 
     /**
-     * 通过用户身份证作唯一判断
+     * 通过用户证件号作唯一判断
      * @param certificateNumber
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND CERTIFICATE_TYPE = 1")
+    @Query( nativeQuery = true, value = "SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
     String selectUserIdByCertificateNumber(String certificateNumber);
 
     /**

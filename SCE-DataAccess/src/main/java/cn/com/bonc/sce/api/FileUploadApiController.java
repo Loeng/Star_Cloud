@@ -227,13 +227,13 @@ public class FileUploadApiController {
                             excelToUser.getGender() == null && excelToUser.getStudentNumber() == null && excelToUser.getNationLity() == null && excelToUser.getNationCode() == null &&
                             excelToUser.getEntranceYear() == null && excelToUser.getPhoneNumber() == null && excelToUser.getParentName() == null && excelToUser.getParentGender() == null &&
                             excelToUser.getParentNationLity() == null && excelToUser.getParentNationCode() == null && excelToUser.getParentTelephone() == null &&
-                            excelToUser.getParentEmail() == null){
+                            excelToUser.getParentEmail() == null && excelToUser.getSeatNumber() == null && excelToUser.getStudentCode() == null){
                         continue;
                     }
                     if(excelToUser.getUserName() == null || excelToUser.getCertificateNumber() == null || excelToUser.getParentFamify() == null || excelToUser.getParentCertificationNumber() == null
                     || excelToUser.getGrade() == null || excelToUser.getClassNumber() == null || excelToUser.getCertificateType() == null || excelToUser.getParentCertificateType() == null ||
                     excelToUser.getGender() == null || excelToUser.getStudentNumber() == null || excelToUser.getNationLity() == null || excelToUser.getNationCode() == null ||
-                    excelToUser.getEntranceYear() == null){
+                    excelToUser.getEntranceYear() == null || excelToUser.getSeatNumber() == null){
                         log.info("缺少必填项");
                         throw new ImportUserFailedException(String.format( WebMessageConstants.SCE_PORTAL_MSG_432, "缺少必填项", i + EXCEL_NUMBER ));
                     }
@@ -365,7 +365,8 @@ public class FileUploadApiController {
                     }
 
                     //将学生数据插入到学生表中
-                    fileResourceRepository.saveStudent(studentId, excelToUser.getClassNumber(), excelToUser.getGrade(), excelToUser.getStudentNumber(),entranceYear);
+                    fileResourceRepository.saveStudent(studentId, excelToUser.getClassNumber(), excelToUser.getGrade(), excelToUser.getStudentNumber(),entranceYear,
+                            excelToUser.getSeatNumber(), excelToUser.getStudentCode());
 
                     count++;
                 }
@@ -396,7 +397,7 @@ public class FileUploadApiController {
                     }
                     if ( fileResourceRepository.selectUserCount( excelToUser.getCertificateNumber() ) > 0) {
                         log.info( "家长证件已被使用" );
-                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( "%s证件已被使用", "家长" ), i + EXCEL_NUMBER ) );
+                        throw new ImportUserFailedException( String.format( WebMessageConstants.SCE_PORTAL_MSG_432, String.format( "%s证件号已被使用", "家长" ), i + EXCEL_NUMBER ) );
                     }
                     if( fileResourceRepository.selectPhoneNumber(excelToUser.getPhoneNumber()) > 0){
                         log.info("家长手机号已被使用");
