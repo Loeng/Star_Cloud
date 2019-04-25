@@ -143,7 +143,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param userId
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT ORGANIZATION_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID = ?1")
+    @Query( nativeQuery = true, value = "SELECT ORGANIZATION_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID = ?1 AND IS_DELETE = 1")
     String selectOrganizationId(String userId);
 
     /**
@@ -151,7 +151,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param organizationId
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT COUNT(1) FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL WHERE ID =to_number(:organizationId)")
+    @Query( nativeQuery = true, value = "SELECT COUNT(1) FROM STARCLOUDPORTAL.SCE_ENTITY_SCHOOL WHERE ID =to_number(:organizationId) AND IS_DELETE = 1")
     int selectSchoolIdCount(@Param( "organizationId" ) Long organizationId);
 
     /**
@@ -159,7 +159,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param certificateNumber
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT count(1) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
+    @Query( nativeQuery = true, value = "SELECT count(1) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND IS_DELETE = 1 ")
     int selectUserCount(String certificateNumber);
 
     /**
@@ -167,7 +167,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param certificateNumber
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT count(1) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND USER_TYPE = ?2")
+    @Query( nativeQuery = true, value = "SELECT count(1) FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND USER_TYPE = ?2 AND IS_DELETE = 1")
     int selectUserCountByCertificate(String certificateNumber, String userType);
 
     /**
@@ -175,7 +175,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param certificateNumber
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
+    @Query( nativeQuery = true, value = "SELECT USER_ID FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND IS_DELETE = 1")
     String selectUserIdByCertificateNumber(String certificateNumber);
 
     /**
@@ -183,7 +183,7 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
      * @param certificateNumber
      * @return
      */
-    @Query( nativeQuery = true, value = "SELECT LOGIN_NAME FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1")
+    @Query( nativeQuery = true, value = "SELECT LOGIN_NAME FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE CERTIFICATE_NUMBER = ?1 AND IS_DELETE = 1")
     String selectUserLoginName(String certificateNumber);
 
     /**
@@ -233,13 +233,13 @@ public interface FileResourceRepository extends JpaRepository< FileResourceEntit
     Map<String,Object> getFileStorePathById(Integer resourceId);
 
 
-    @Query(value = "SELECT ISADMINISTRATORS FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID = ?1", nativeQuery = true)
+    @Query(value = "SELECT ISADMINISTRATORS FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE USER_ID = ?1 AND IS_DELETE = 1", nativeQuery = true)
     Integer selectAuth(String userId);
 
-    @Query( value = "SELECT COUNT(1) as count FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE PHONE_NUMBER = ?1", nativeQuery = true)
+    @Query( value = "SELECT COUNT(1) as count FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE PHONE_NUMBER = ?1 AND IS_DELETE = 1", nativeQuery = true)
     Integer selectPhoneNumber(String phoneNumber);
 
-    @Query( value = "SELECT COUNT(1) as count FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE MAIL_ADDRESS = ?1", nativeQuery = true)
+    @Query( value = "SELECT COUNT(1) as count FROM STARCLOUDPORTAL.SCE_COMMON_USER WHERE MAIL_ADDRESS = ?1 AND IS_DELETE = 1", nativeQuery = true)
     Integer selectMailAddress(String mailAddress);
 
 }

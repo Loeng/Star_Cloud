@@ -602,6 +602,7 @@
         SELECT ORGANIZATION_ID
         FROM STARCLOUDPORTAL.SCE_COMMON_USER
         WHERE USER_ID = #{userId}
+        AND IS_DELETE = 1
     </select>
 
     <select id="getStudentInfo" resultType="Map">
@@ -1295,6 +1296,7 @@
         SELECT ISADMINISTRATORS
         FROM STARCLOUDPORTAL.SCE_COMMON_USER
         WHERE USER_ID = #{userId}
+        AND IS_DELETE = 1
     </select>
 
     <update id="updateAudit">
