@@ -95,6 +95,15 @@ public interface NewsMapper {
      */
     Map< String, Object > selectNewsDetailById( @Param( "contentId" ) Long contentId );
 
+
+    /**
+     * 查询title是否重复
+     *
+     * @param contentTitle
+     * @return
+     */
+    Map< String, Object > getNumByTitle( @Param( "contentTitle" ) String contentTitle );
+
     /**
      * 获取点击排行
      *

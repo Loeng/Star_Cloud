@@ -71,6 +71,15 @@ public class NewsDao {
         return newsMapper.selectNotTopList(newsBean);
     }
 
+    /**
+     * 查询title是否重复
+     * @param contentTitle
+     * @return
+     */
+    public Map getNumByTitle( String contentTitle ) {
+        return newsMapper.getNumByTitle( contentTitle );
+    }
+
     public List selectTopNewsList(){
         return newsMapper.selectTopNewsList();
     }

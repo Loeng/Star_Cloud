@@ -211,6 +211,16 @@
         WHERE CONTENT_ID = #{contentId}
     </select>
 
+    <!--查询title是否重复-->
+    <select id="getNumByTitle" resultType="Map">
+        SELECT
+            COUNT( T.CONTENT_ID ) NUM
+        FROM
+            STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
+        WHERE
+            T.CONTENT_TITLE = #{contentTitle}
+            </select>
+
     <!--获取点击排行-->
     <select id="getHitVolumeRank" resultType="Map">
         SELECT

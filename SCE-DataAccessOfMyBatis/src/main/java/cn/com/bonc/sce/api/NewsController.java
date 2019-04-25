@@ -42,6 +42,15 @@ public class NewsController {
     @ResponseBody
     public RestRecord insertNewsInfo( @RequestBody NewsBean newsBean ) {
         try {
+
+            if(newsBean.getContentTitle() != null ){
+                Map newsInfo = newsDao.getNumByTitle( newsBean.getContentTitle() );
+                String num = newsInfo.get("NUM").toString();
+                if(!"0".equals(num)){
+                    return new RestRecord( 409, "标题已存在" );
+                }
+            }
+
             int count = newsService.insertNewsInfo( newsBean );
             if ( count == 1 ) {
                 return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
@@ -63,6 +72,15 @@ public class NewsController {
     @PostMapping( "/updated-info" )
     @ResponseBody
     public RestRecord updateNewsInfo( @RequestBody NewsBean newsBean ) {
+
+        if(newsBean.getContentTitle() != null ){
+            Map newsInfo = newsDao.getNumByTitle( newsBean.getContentTitle() );
+            String num = newsInfo.get("NUM").toString();
+            if(!"0".equals(num)){
+                return new RestRecord( 409, "标题已存在" );
+            }
+        }
+
         int count = newsService.updateNewsInfo(newsBean);
         if ( count == 1 ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
@@ -248,4 +266,5 @@ public class NewsController {
         PageInfo pageInfo = new PageInfo( list );
         return new RestRecord( 200, WebMessageConstants.SCE_PORTAL_MSG_200, pageInfo );
     }
+
 }
