@@ -184,9 +184,6 @@
     <update id="updateNewsPublishStatus">
         UPDATE STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT
         SET IS_PUBLISH = #{isPublish}, UPDATE_TIME = sysdate, UPDATE_USER_ID = #{userId},
-        <if test="isPublish == '2' or isPublish == 2">
-            CONTENT_STATUS = 0,
-        </if>
         PUBLISH_DATE = NVL(PUBLISH_DATE,sysdate)
         WHERE CONTENT_ID = #{contentId}
     </update>
@@ -219,7 +216,8 @@
             STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT T
         WHERE
             T.CONTENT_TITLE = #{contentTitle}
-            </select>
+            AND T.IS_DELETE = 1
+     </select>
 
     <!--获取点击排行-->
     <select id="getHitVolumeRank" resultType="Map">

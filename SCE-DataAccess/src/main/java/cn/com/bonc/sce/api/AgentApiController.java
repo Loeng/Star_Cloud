@@ -229,7 +229,7 @@ public class AgentApiController {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Map<String, Object> temp = new HashMap<>(16);
-            if(StringUtils.isEmpty(ID)){
+            if(org.apache.commons.lang3.StringUtils.isBlank(ID)||"null".equals(ID)){
                 temp.put("data", new ArrayList());
                 restRecord.setData(temp);
                 return restRecord;
@@ -282,7 +282,7 @@ public class AgentApiController {
         try {
             RestRecord restRecord = new RestRecord(200, WebMessageConstants.SCE_PORTAL_MSG_200);
             Map<String, Object> temp = new HashMap<>(16);
-            if(StringUtils.isEmpty(ID)){
+            if(org.apache.commons.lang3.StringUtils.isBlank(ID)||"null".equals(ID)){
                 temp.put("data", new ArrayList());
                 restRecord.setData(temp);
                 return restRecord;
