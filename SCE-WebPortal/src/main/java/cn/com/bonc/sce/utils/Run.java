@@ -108,8 +108,6 @@ public class Run {
 
 
 		try {
-//			String name = "杨强";//真实的姓名
-//			String idcardno = "511602199310186911";//真实的身份证号
 			String authmode = "00";
 			
 			SortedMap<String, String> signParamMap = new TreeMap<>();
