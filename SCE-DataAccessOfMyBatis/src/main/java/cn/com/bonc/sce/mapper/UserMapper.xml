@@ -79,6 +79,7 @@
             AND u.LOGIN_PERMISSION_STATUS=#{loginPermissionStatus}
         </if>
         AND u.USER_TYPE=7
+        ORDER BY u.CREATE_TIME desc
     </select>
 
     <select id="selectUserIdByLoginName" resultType="String">
