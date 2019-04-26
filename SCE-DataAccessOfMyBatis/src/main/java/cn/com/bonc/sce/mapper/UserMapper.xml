@@ -1099,7 +1099,6 @@
         T.ORGANIZATION_ID "organizationId",
         T.LOGIN_PERMISSION_STATUS "loginPermissionStatus",
         T.IS_DELETE "isDelete",
-        T.SECRET "secret",
         T.LOGINTIMES "loginTimes",
         T.IS_FIRST_LOGIN "isFirstLogin",
         T.HEAD_PORTRAIT "headPortrait",
