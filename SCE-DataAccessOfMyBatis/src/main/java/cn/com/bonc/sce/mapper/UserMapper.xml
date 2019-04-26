@@ -330,7 +330,7 @@
 
     <select id="testCertificate" resultType="java.lang.String">
         SELECT CERTIFICATE_NUMBER FROM STARCLOUDPORTAL.SCE_COMMON_USER
-        WHERE LOGIN_NAME=#{loginName}
+        WHERE LOGIN_NAME=#{loginName} AND CERTIFICATE_TYPE=#{certificateType,jdbcType=INTEGER}
     </select>
 
     <select id="getIdByPhone" resultType="java.lang.String">

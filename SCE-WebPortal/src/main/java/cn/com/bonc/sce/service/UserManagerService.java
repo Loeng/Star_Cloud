@@ -100,12 +100,12 @@ public class UserManagerService {
         return userManagerDao.updatePwdByName( loginName, password );
     }
 
-    public RestRecord testCertificcate( String valid, String phoneNumber, String loginName, String certificate ) {
+    public RestRecord testCertificcate( String valid, String phoneNumber, String loginName,Integer certificateType, String certificate ) {
         String encryptionCode = VaildSecurityUtils.getAccountEncryptionCode( phoneNumber, valid );
         if ( !VaildSecurityUtils.checkValid( encryptionCode ) ) {
             return new RestRecord( 411, WebMessageConstants.SCE_PORTAL_MSG_411 );
         }
-        RestRecord restRecord = userManagerDao.testCertificate( loginName, certificate );
+        RestRecord restRecord = userManagerDao.testCertificate( loginName,certificateType ,certificate );
         //身份认证成功删除验证码
         if ( restRecord.getCode() == 200 ) {
             VaildSecurityUtils.delValid( encryptionCode );

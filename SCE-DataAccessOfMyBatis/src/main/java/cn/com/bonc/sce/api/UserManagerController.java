@@ -229,12 +229,13 @@ public class UserManagerController {
         }
     }
 
-    @ApiOperation( value = "通过用户名和输入的身份证信息在后台验证", notes = "验证身份证信息是否正确", httpMethod = "GET" )
+    @ApiOperation( value = "通过用户名和输入证件信息在后台验证", notes = "验证证件信息是否正确", httpMethod = "GET" )
     @GetMapping( "/testCertificate" )
     @ResponseBody
     public RestRecord testCertificate( @RequestParam( "loginName" ) String loginName,
+                                       @RequestParam( "certificateType" ) Integer certificateType,
                                        @RequestParam( "certificate" ) String certificate ) {
-        String tempCer = userService.testCertificate( loginName );
+        String tempCer = userService.testCertificate( loginName,certificateType );
         if ( certificate.equals( tempCer ) ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {
@@ -400,8 +401,9 @@ public class UserManagerController {
             String USER_NAME = ( String ) map.get( "USER_NAME" );
             String GENDER = null;
             try {
-                GENDER = map.get( "GENDER" ).toString() ;
-            }catch (Exception e){}
+                GENDER = map.get( "GENDER" ).toString();
+            } catch ( Exception e ) {
+            }
             String PHONE_NUMBER = ( String ) map.get( "PHONE_NUMBER" );
             if ( !UserPropertiesUtil.checkPhone( PHONE_NUMBER ) ) {
                 log.info( "教师身手机号验证未通过" );
@@ -413,7 +415,8 @@ public class UserManagerController {
             String MAIL_ADDRESS = null;
             try {
                 MAIL_ADDRESS = map.get( "MAIL_ADDRESS" ).toString();
-            }catch (Exception e){}
+            } catch ( Exception e ) {
+            }
 
             if ( MAIL_ADDRESS != null && !UserPropertiesUtil.checkMail( MAIL_ADDRESS ) ) {
                 log.info( "教师身邮箱证未通过" );
@@ -812,17 +815,17 @@ public class UserManagerController {
 
     @ApiOperation( value = "实名认证修改对应状态", notes = "实名认证修改对应状态", httpMethod = "PUT" )
     @PutMapping( "/authentication" )
-    public RestRecord authentication(@RequestParam(value = "USER_NAME")String USER_NAME,
-                                     @RequestParam(value = "CERTIFICATE_NUMBER")String CERTIFICATE_NUMBER,
-                                     @RequestParam(value = "IS_IDCARD_VALID") String IS_IDCARD_VALID,
-                                     @RequestParam(value = "USER_ID") String USER_ID){
-        return userService.authentication(USER_NAME,CERTIFICATE_NUMBER,IS_IDCARD_VALID, USER_ID);
+    public RestRecord authentication( @RequestParam( value = "USER_NAME" ) String USER_NAME,
+                                      @RequestParam( value = "CERTIFICATE_NUMBER" ) String CERTIFICATE_NUMBER,
+                                      @RequestParam( value = "IS_IDCARD_VALID" ) String IS_IDCARD_VALID,
+                                      @RequestParam( value = "USER_ID" ) String USER_ID ) {
+        return userService.authentication( USER_NAME, CERTIFICATE_NUMBER, IS_IDCARD_VALID, USER_ID );
     }
 
 
     @ApiOperation( value = "实名认证修改对应状态", notes = "实名认证修改对应状态", httpMethod = "GET" )
     @GetMapping( "/idCardIsExit" )
-    public RestRecord idCardIsExit(@RequestParam(value = "CERTIFICATE_NUMBER") String CERTIFICATE_NUMBER){
-        return userService.idCardIsExit(CERTIFICATE_NUMBER);
+    public RestRecord idCardIsExit( @RequestParam( value = "CERTIFICATE_NUMBER" ) String CERTIFICATE_NUMBER ) {
+        return userService.idCardIsExit( CERTIFICATE_NUMBER );
     }
 }

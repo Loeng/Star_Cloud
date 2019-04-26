@@ -44,7 +44,7 @@ public interface UserMapper {
 
     int updateAccountStatusByName(@Param("loginName") String loginName, @Param("accountStatus") int accountStatus);
 
-    String testCertificate(@Param("loginName") String loginName);
+    String testCertificate(@Param("loginName") String loginName,@Param( "certificateType" )Integer certificateType);
 
     String getIdByPhone(@Param("phone") String phone);
 

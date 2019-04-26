@@ -68,8 +68,8 @@ public class UserDao {
         return userMapper.updateAccountStatusByName(loginName,accountStatus);
     }
 
-    public String testCertificate(String loginName) {
-        return userMapper.testCertificate(loginName);
+    public String testCertificate(String loginName,Integer certificateType) {
+        return userMapper.testCertificate(loginName,certificateType);
     }
 
     public String getIdByPhone(String phone) {

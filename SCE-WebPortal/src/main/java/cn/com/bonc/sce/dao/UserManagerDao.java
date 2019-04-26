@@ -49,7 +49,10 @@ public interface UserManagerDao {
     RestRecord updatePwdByName(@RequestParam("loginName") String loginName, @RequestParam("password") String password);
 
     @RequestMapping( value = "/userManager/testCertificate", method = RequestMethod.GET )
-    RestRecord testCertificate(@RequestParam("loginName") String loginName, @RequestParam("certificate") String certificate);
+    RestRecord testCertificate(@RequestParam("loginName") String loginName,
+                               @RequestParam("certificateType") Integer certificateType,
+                               @RequestParam("certificate") String certificate
+    );
 
     @RequestMapping( value = "/userManager/getTeachers/{pageNum}/{pageSize}", method = RequestMethod.GET )
     RestRecord getTeachers(@RequestParam("organizationId")long organizationId,

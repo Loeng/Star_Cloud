@@ -11,6 +11,7 @@ import cn.com.bonc.sce.tool.IdWorker;
 import cn.com.bonc.sce.tool.UserPropertiesUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,8 +91,8 @@ public class UserService {
         return userDao.updateAccountStatusByName(loginName,accountStatus);
     }
 
-    public String testCertificate(String loginName) {
-        return userDao.testCertificate(loginName);
+    public String testCertificate( String loginName, Integer certificateType ) {
+        return userDao.testCertificate(loginName,certificateType);
     }
 
     public String getIdByPhone(String phone){
