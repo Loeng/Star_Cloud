@@ -239,7 +239,7 @@ public class UserManagerController {
         if ( certificate.equals( tempCer ) ) {
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200 );
         } else {
-            return new RestRecord( 1010, "身份证验证失败" );
+            return new RestRecord( 1010, "证件验证失败" );
         }
     }
 
