@@ -724,11 +724,19 @@ public class UserManagerController {
         if ( user == null ) {
             return new RestRecord( 1010, MessageConstants.SCE_MSG_1010, userId );
         } else {
-            String fileStorePath = "";
+            String fileStorePath = "",idCardPicLeftPath = "",idCardPicRightPath = "";
             if ( user.getHeadPortrait() != null ) {
                 fileStorePath = fileResourceService.getFileStorePath( Integer.parseInt( user.getHeadPortrait() ) );
             }
+            if ( user.getIdCardPicLeft() != null ) {
+                idCardPicLeftPath = fileResourceService.getFileStorePath( user.getIdCardPicLeft() );
+            }
+            if ( user.getIdCardPicRight() != null ) {
+                idCardPicRightPath = fileResourceService.getFileStorePath( user.getIdCardPicRight() );
+            }
             user.setFileStorePath( fileStorePath );
+            user.setIdCardPicLeftPath(idCardPicLeftPath);
+            user.setIdCardPicRightPath(idCardPicRightPath);
             return new RestRecord( 200, MessageConstants.SCE_MSG_0200, user );
         }
     }
@@ -818,8 +826,10 @@ public class UserManagerController {
     public RestRecord authentication( @RequestParam( value = "USER_NAME" ) String USER_NAME,
                                       @RequestParam( value = "CERTIFICATE_NUMBER" ) String CERTIFICATE_NUMBER,
                                       @RequestParam( value = "IS_IDCARD_VALID" ) String IS_IDCARD_VALID,
+                                      @RequestParam(value = "ID_CARD_PIC_LEFT") Integer ID_CARD_PIC_LEFT,
+                                      @RequestParam(value = "ID_CARD_PIC_RIGHT") Integer ID_CARD_PIC_RIGHT,
                                       @RequestParam( value = "USER_ID" ) String USER_ID ) {
-        return userService.authentication( USER_NAME, CERTIFICATE_NUMBER, IS_IDCARD_VALID, USER_ID );
+        return userService.authentication( USER_NAME, CERTIFICATE_NUMBER, IS_IDCARD_VALID, ID_CARD_PIC_LEFT,ID_CARD_PIC_RIGHT,USER_ID );
     }
 
 

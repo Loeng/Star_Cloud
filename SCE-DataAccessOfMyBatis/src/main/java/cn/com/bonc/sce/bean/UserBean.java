@@ -47,4 +47,8 @@ public class UserBean {
     private Integer loginTimes;
     private String fileStorePath;
     private Integer isIdCardValid;
+    private Integer idCardPicLeft;
+    private Integer idCardPicRight;
+    private String idCardPicLeftPath;
+    private String idCardPicRightPath;
 }

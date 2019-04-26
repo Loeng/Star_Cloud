@@ -173,6 +173,8 @@ public interface UserManagerDao {
     RestRecord authentication(@RequestParam(value = "USER_NAME")String USER_NAME,
                               @RequestParam(value = "CERTIFICATE_NUMBER")String CERTIFICATE_NUMBER,
                               @RequestParam(value = "IS_IDCARD_VALID") String IS_IDCARD_VALID,
+                              @RequestParam(value = "ID_CARD_PIC_LEFT") Integer ID_CARD_PIC_LEFT,
+                              @RequestParam(value = "ID_CARD_PIC_RIGHT") Integer ID_CARD_PIC_RIGHT,
                               @RequestParam(value = "USER_ID") String USER_ID);
 
 

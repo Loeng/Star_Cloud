@@ -257,7 +257,8 @@ public class UserManagerService {
         return userManagerDao.checkLoginNameOrPhone(loginName, phone);
     }
 
-    public RestRecord authentication(String realName,String idCard,String userId){
+    public RestRecord authentication(String realName,String idCard,Integer ID_CARD_PIC_LEFT,
+                                     Integer ID_CARD_PIC_RIGHT,String userId){
 
         Map map = (Map) userManagerDao.idCardIsExit(idCard).getData();
         int count = Integer.parseInt(map.get("NUM").toString());
@@ -272,7 +273,7 @@ public class UserManagerService {
             if ("1".equals(auth_result)){
                 IS_IDCARD_VALID = "1";
             }
-            userManagerDao.authentication(realName,idCard,auth_result,userId);
+            userManagerDao.authentication(realName,idCard,auth_result,ID_CARD_PIC_LEFT,ID_CARD_PIC_RIGHT,userId);
             return new RestRecord(200,WebMessageConstants.SCE_PORTAL_MSG_200,IS_IDCARD_VALID);
         } catch (IOException e) {
             e.printStackTrace();

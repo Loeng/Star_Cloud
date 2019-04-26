@@ -219,6 +219,8 @@ public interface UserMapper {
     int authentication(@Param("USER_NAME")String USER_NAME,
                        @Param("CERTIFICATE_NUMBER")String CERTIFICATE_NUMBER,
                        @Param("IS_IDCARD_VALID") String IS_IDCARD_VALID,
+                       @Param("ID_CARD_PIC_LEFT") Integer ID_CARD_PIC_LEFT,
+                       @Param("ID_CARD_PIC_RIGHT") Integer ID_CARD_PIC_RIGHT,
                        @Param("USER_ID") String USER_ID);
 
     Map idCardIsExit(@Param("CERTIFICATE_NUMBER") String CERTIFICATE_NUMBER);

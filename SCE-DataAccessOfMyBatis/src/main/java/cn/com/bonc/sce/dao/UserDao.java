@@ -328,8 +328,10 @@ public class UserDao {
     public int authentication(String USER_NAME,
                               String CERTIFICATE_NUMBER,
                               String IS_IDCARD_VALID,
+                              Integer ID_CARD_PIC_LEFT,
+                              Integer ID_CARD_PIC_RIGHT,
                               String USER_ID){
-        return userMapper.authentication(USER_NAME,CERTIFICATE_NUMBER,IS_IDCARD_VALID, USER_ID);
+        return userMapper.authentication(USER_NAME,CERTIFICATE_NUMBER,IS_IDCARD_VALID,ID_CARD_PIC_LEFT,ID_CARD_PIC_RIGHT, USER_ID);
     }
 
     public Map idCardIsExit(String CERTIFICATE_NUMBER){

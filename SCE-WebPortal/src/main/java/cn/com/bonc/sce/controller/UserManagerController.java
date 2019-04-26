@@ -408,8 +408,10 @@ public class UserManagerController {
     @GetMapping("/authentication")
     public RestRecord authentication(@RequestParam( value = "realName",required = true) String realName,
                                      @RequestParam( value = "idCard" ,required = true) String idCard,
+                                     @RequestParam( value = "idCardPicLeft" ,required = true) Integer idCardPicLeft,
+                                     @RequestParam( value = "idCardPicRight" ,required = true) Integer idCardPicRight,
                                      @CurrentUserId String userId){
-        return userManagerService.authentication(realName, idCard,userId);
+        return userManagerService.authentication(realName, idCard,idCardPicLeft,idCardPicRight,userId);
     }
 
 }
