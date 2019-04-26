@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.bonc.sce.mapper.NewsReportMapper">
+
+    <insert id="insertReportInfo" parameterType="cn.com.bonc.sce.bean.NewsReportBean">
+        INSERT INTO STARCLOUDPORTAL.SCE_COMMON_NEWS_REPORT (REPORT_ID,CONTENT_ID,REPORT_TYPE
+        <if test="reportDesc != null and reportDesc != ''">
+            ,REPORT_DESC
+        </if>
+        <if test="picId1 != null and picId1 != ''">
+            ,PIC_ID1
+        </if>
+        <if test="picId2 != null and picId2 != ''">
+            ,PIC_ID2
+        </if>
+        <if test="picId3 != null and picId3 != ''">
+            ,PIC_ID3
+        </if>
+        <if test="picUrl1 != null and picUrl1 != ''">
+            ,PIC_URL1
+        </if>
+        <if test="picUrl2 != null and picUrl2 != ''">
+            ,PIC_URL2
+        </if>
+        <if test="picUrl3 != null and picUrl3 != ''">
+            ,PIC_URL3
+        </if>
+        <if test="reportUserId != null and reportUserId != ''">
+            ,REPORT_USER_ID
+        </if>
+        ,REPORT_DATE,CREATE_TIME
+        <if test="reportIpAddr != null and reportIpAddr != ''">
+            ,REPORT_IP_ADDR
+        </if>
+        <if test="reportBrower != null and reportBrower != ''">
+            ,REPORT_BROWER
+        </if>
+        <if test="createUserId != null and createUserId != ''">
+            ,CREATE_USER_ID
+        </if>
+
+        )
+        VALUES
+        (
+        #{reportId},#{contentId},#{reportType}
+        <if test="reportDesc != null and reportDesc != ''">
+            ,#{reportDesc}
+        </if>
+        <if test="picId1 != null and picId1 != ''">
+            ,#{picId1}
+        </if>
+        <if test="picId2 != null and picId2 != ''">
+            ,#{picId2}
+        </if>
+        <if test="picId3 != null and picId3 != ''">
+            ,#{picId3}
+        </if>
+        <if test="picUrl1 != null and picUrl1 != ''">
+            ,#{picUrl1}
+        </if>
+        <if test="picUrl2 != null and picUrl2 != ''">
+            ,#{picUrl3}
+        </if>
+        <if test="picUrl3 != null and picUrl3 != ''">
+            ,#{picUrl3}
+        </if>
+        <if test="reportUserId != null and reportUserId != ''">
+            ,#{reportUserId}
+        </if>
+        ,sysdate,sysdate
+        <if test="reportIpAddr != null and reportIpAddr != ''">
+            ,#{reportIpAddr}
+        </if>
+        <if test="reportBrower != null and reportBrower != ''">
+            ,#{reportBrower}
+        </if>
+        <if test="createUserId != null and createUserId != ''">
+            ,#{createUserId}
+        </if>
+
+        )
+    </insert>
+
+
+    <resultMap id="NewsReportMap" type="cn.com.bonc.sce.bean.NewsReportDTO">
+
+        <result column="REPORT_ID" jdbcType="INTEGER" javaType="java.lang.String" property="reportId"></result>
+        <result column="CONTENT_ID" jdbcType="INTEGER" javaType="java.lang.String" property="contentId"></result>
+        <result column="REPORT_TYPE" jdbcType="INTEGER" javaType="java.lang.String" property="reportType"></result>
+        <result column="REPORT_DESC" jdbcType="VARCHAR" javaType="java.lang.String" property="reportDesc"></result>
+        <result column="PIC_ID1" jdbcType="INTEGER" javaType="java.lang.Integer" property="picId1"></result>
+        <result column="PIC_ID2" jdbcType="INTEGER" javaType="java.lang.Integer" property="picId2"></result>
+        <result column="PIC_ID3" jdbcType="INTEGER" javaType="java.lang.Integer" property="picId3"></result>
+        <result column="PIC_URL1" jdbcType="VARCHAR" javaType="java.lang.String" property="picUrl1"></result>
+        <result column="PIC_URL2" jdbcType="VARCHAR" javaType="java.lang.String" property="picUrl2"></result>
+        <result column="PIC_URL3" jdbcType="VARCHAR" javaType="java.lang.String" property="picUrl3"></result>
+        <result column="REPORT_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="reportUserId"></result>
+        <result column="REPORT_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="reportDate"></result>
+        <result column="REPORT_IP_ADDR" jdbcType="VARCHAR" javaType="java.lang.String" property="reportIpAddr"></result>
+        <result column="REPORT_BROWER" jdbcType="VARCHAR" javaType="java.lang.String" property="reportBrower"></result>
+        <result column="CREATE_TIME" jdbcType="VARCHAR" javaType="java.lang.String" property="createDate"></result>
+        <result column="UPDATE_TIME" jdbcType="VARCHAR" javaType="java.lang.String" property="updateTime"></result>
+        <result column="CREATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="createUserId"></result>
+        <result column="UPDATE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="updateUserId"></result>
+        <result column="REPORT_STATUS" jdbcType="INTEGER" javaType="java.lang.Integer" property="reportStatus"></result>
+        <result column="APPROVE_STATUS" jdbcType="INTEGER" javaType="java.lang.Integer" property="approveStatus"></result>
+        <result column="APPROVE_REMARK" jdbcType="VARCHAR" javaType="java.lang.String" property="approveRemark"></result>
+        <result column="APPROVE_DATE" jdbcType="VARCHAR" javaType="java.lang.String" property="approveDate"></result>
+        <result column="APPROVE_USER_ID" jdbcType="VARCHAR" javaType="java.lang.String" property="approveUserId"></result>
+
+    </resultMap>
+
+    <sql id="Report_Column_List">
+        T.REPORT_ID,
+        T.CONTENT_ID,
+        T.REPORT_TYPE,
+        T.REPORT_DESC,
+        T.PIC_ID1,
+        T.PIC_ID2,
+        T.PIC_ID3,
+        T.PIC_URL1,
+        T.PIC_URL2,
+        T.PIC_URL3,
+        T.REPORT_USER_ID,
+        TO_CHAR(T.REPORT_DATE,'YYYY-MM-DD HH24:MI:SS') REPORT_DATE,
+        T.REPORT_IP_ADDR,
+        T.REPORT_BROWER,
+        TO_CHAR(T.CREATE_TIME,'YYYY-MM-DD HH24:MI:SS') CREATE_TIME,
+        TO_CHAR(T.UPDATE_TIME,'YYYY-MM-DD HH24:MI:SS') UPDATE_TIME,
+        T.CREATE_USER_ID,
+        T.UPDATE_USER_ID,
+        T.REPORT_STATUS,
+        T.APPROVE_STATUS,
+        T.APPROVE_REMARK,
+        TO_CHAR(T.APPROVE_DATE,'YYYY-MM-DD HH24:MI:SS') APPROVE_DATE,
+        T.APPROVE_USER_ID
+    </sql>
+
+
+    <select id="selectNewsReportList" resultType="Map" parameterType="cn.com.bonc.sce.bean.NewsReportDTO">
+        SELECT
+
+        <include refid="Report_Column_List"/>
+
+        FROM STARCLOUDPORTAL.SCE_COMMON_NEWS_REPORT  T,STARCLOUDPORTAL.SCE_COMMON_COLUMN_CONTENT  N
+
+        WHERE 1=1
+        AND T.CONTENT_ID = N.CONTENT_ID
+        <if test="reportStatus != null  and reportStatus != ''">
+            AND T.REPORT_STATUS = #{reportStatus}
+        </if>
+
+        <if test="reportType != null  and reportType != ''">
+            AND T.REPORT_TYPE = #{reportType}
+        </if>
+
+        <if test="contentTitle != null  and contentTitle != ''">
+            AND N.CONTENT_TITLE  LIKE   '%'||#{contentTitle}||'%'
+        </if>
+
+        <if test="startDate != null and startDate != '' and startDate != 'null' ">
+            and T.REPORT_DATE <![CDATA[>=]]>  TO_DATE(#{startDate}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+
+        <if test="endDate != null and endDate != '' and endDate != 'null' ">
+            and T.REPORT_DATE <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD HH24-MI-SS')
+        </if>
+
+        <if test="reportId != null  and reportId != ''">
+            AND T.REPORT_ID  = #{reportId}
+        </if>
+
+        ORDER BY T.REPORT_DATE DESC
+
+    </select>
+
+
+
+    <update id="approveReport" parameterType="cn.com.bonc.sce.bean.NewsReportDTO">
+        UPDATE STARCLOUDPORTAL.SCE_COMMON_NEWS_REPORT
+        <set>
+            REPORT_STATUS = 1,
+            APPROVE_STATUS = #{approveStatus},
+            APPROVE_DATE = sysdate,
+            APPROVE_USER_ID = #{approveUserId}
+            <if test="approveRemark != null and approveRemark != ''">
+                ,APPROVE_REMARK = #{approveRemark},
+            </if>
+
+        </set>
+        WHERE REPORT_ID  = #{reportId}
+    </update>
+
+
+
+</mapper>
