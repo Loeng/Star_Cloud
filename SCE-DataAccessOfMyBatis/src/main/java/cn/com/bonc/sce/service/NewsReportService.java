@@ -35,6 +35,9 @@ public class NewsReportService {
     @Autowired
     private IdWorker idWorker;
 
+    @Autowired
+    private FileResourceDao fileResourceDao;
+
     /**
      * 举报新闻
      * @param newsBean
@@ -43,6 +46,22 @@ public class NewsReportService {
     public int insertNewsInfo(NewsReportBean newsBean){
         Long contentId = idWorker.nextId();
         newsBean.setReportId( contentId );
+
+        if( newsBean.getPicId1() != null ) {
+            String picUrl = fileResourceDao.getFileStorePath( newsBean.getPicId1() );
+            picUrl = (picUrl == null) ? "" : picUrl;
+            newsBean.setPicUrl1( picUrl );
+        }
+        if( newsBean.getPicId2() != null ) {
+            String picUrl = fileResourceDao.getFileStorePath( newsBean.getPicId2() );
+            picUrl = (picUrl == null) ? "" : picUrl;
+            newsBean.setPicUrl2( picUrl );
+        }
+        if( newsBean.getPicId3() != null ) {
+            String picUrl = fileResourceDao.getFileStorePath( newsBean.getPicId3() );
+            picUrl = (picUrl == null) ? "" : picUrl;
+            newsBean.setPicUrl3( picUrl );
+        }
 
         return newsDao.insertReportInfo( newsBean );
     }

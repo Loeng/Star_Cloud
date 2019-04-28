@@ -10,9 +10,9 @@ public class NewsReportBean {
     private Long contentId;
     private Long reportType;
     private String reportDesc;
-    private Long picId1;
-    private Long picId2;
-    private Long picId3;
+    private Integer picId1;
+    private Integer picId2;
+    private Integer picId3;
     private String picUrl1;
     private String picUrl2;
     private String picUrl3;
@@ -94,27 +94,27 @@ public class NewsReportBean {
         this.reportDesc = reportDesc;
     }
 
-    public Long getPicId1() {
+    public Integer getPicId1() {
         return picId1;
     }
 
-    public void setPicId1(Long picId1) {
+    public void setPicId1(Integer picId1) {
         this.picId1 = picId1;
     }
 
-    public Long getPicId2() {
+    public Integer getPicId2() {
         return picId2;
     }
 
-    public void setPicId2(Long picId2) {
+    public void setPicId2(Integer picId2) {
         this.picId2 = picId2;
     }
 
-    public Long getPicId3() {
+    public Integer getPicId3() {
         return picId3;
     }
 
-    public void setPicId3(Long picId3) {
+    public void setPicId3(Integer picId3) {
         this.picId3 = picId3;
     }
 
