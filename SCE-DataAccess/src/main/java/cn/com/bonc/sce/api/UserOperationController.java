@@ -273,6 +273,7 @@ public class UserOperationController {
             result.put("city",map.get("city"));
             result.put("area",map.get("area"));
         }catch (Exception e){
+            e.printStackTrace();
             return new RestRecord( 420, WebMessageConstants.SCE_PORTAL_MSG_420);
 
         }

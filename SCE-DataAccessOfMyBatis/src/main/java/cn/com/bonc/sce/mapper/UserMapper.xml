@@ -73,7 +73,7 @@
             AND i.INSTITUTION_NAME LIKE CONCAT(CONCAT('%',#{institutionName}),'%')
         </if>
         <if test="id != null and id!=''">
-            AND i.ID=#{id}
+            AND i.ID LIKE CONCAT(CONCAT('%',#{id}),'%')
         </if>
         <if test="loginPermissionStatus != null and loginPermissionStatus!=''" >
             AND u.LOGIN_PERMISSION_STATUS=#{loginPermissionStatus}
