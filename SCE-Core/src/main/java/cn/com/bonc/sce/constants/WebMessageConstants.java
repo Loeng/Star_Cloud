@@ -25,6 +25,8 @@ public interface WebMessageConstants {
     String SCE_PORTAL_MSG_103 = "账户已停用";
     String SCE_PORTAL_MSG_104 = "账户已注销";
     String SCE_PORTAL_MSG_105 = "账户未激活";
+    String SCE_PORTAL_MSG_106 = "用户名或手机号并不存在";
+    String SCE_PORTAL_MSG_107 = "账号被注销，请重新注册";
 
     String SCE_WEB_MSG_120 = "用户 ticket 过期或无效";
 

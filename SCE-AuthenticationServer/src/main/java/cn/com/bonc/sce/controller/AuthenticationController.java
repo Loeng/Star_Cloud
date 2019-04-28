@@ -107,6 +107,18 @@ public class AuthenticationController {
             return new RestRecord( 101, WebMessageConstants.SCE_PORTAL_MSG_101 );
         } else {
 
+            // 验证账户是否已注销
+            if ( authenticatedUser.getIsDelete() == 0 ) {
+
+                //验证账号是否激活   0 未激活   1 已激活
+                if ( authenticatedUser.getAccountStatus() == 0 ) {
+                    return new RestRecord( 106, WebMessageConstants.SCE_PORTAL_MSG_106 );
+                }else {
+                    return new RestRecord( 107, WebMessageConstants.SCE_PORTAL_MSG_107 );
+                }
+
+            }
+
             //验证账号是否激活
             if ( authenticatedUser.getAccountStatus() == 0 ) {
                 return new RestRecord( 105, WebMessageConstants.SCE_PORTAL_MSG_105 );
@@ -119,10 +131,6 @@ public class AuthenticationController {
             // 验证账户是否停用
             if ( authenticatedUser.getLoginPermissionStatus() == 0 ) {
                 return new RestRecord( 103, WebMessageConstants.SCE_PORTAL_MSG_103 );
-            }
-            // 验证账户是否已注销
-            if ( authenticatedUser.getIsDelete() == 0 ) {
-                return new RestRecord( 104, WebMessageConstants.SCE_PORTAL_MSG_104 );
             }
 
         }
