@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.filter;
 
+import cn.com.bonc.sce.annotation.CurrentUser;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.controller.AuthenticationController;
@@ -33,14 +34,21 @@ public class TicketAdvice implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter( MethodParameter parameter ) {
-        return ( parameter.hasParameterAnnotation( Payloads.class ) || parameter.hasParameterAnnotation( CurrentUserId.class ));
+        return ( parameter.hasParameterAnnotation( Payloads.class ) || parameter.hasParameterAnnotation( CurrentUserId.class ) ||
+                parameter.hasParameterAnnotation(CurrentUser.class));
     }
 
     @Override
     public Object resolveArgument( MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory ) throws Exception {
         //验证JWT
-        Claims claims = service.validateJWT( webRequest );
-
+        Claims claims = null;
+        try {
+            claims = service.validateJWT( webRequest );
+        }catch (InvalidTokenException e){
+            if(!e.getMessage().equals("JWT认证失败 -> 参数authentication缺失")){
+                throw new InvalidTokenException(e.getMessage());
+            }
+        }
         return JWTUtil.getDataOfTicket( claims, parameter );
     }
 

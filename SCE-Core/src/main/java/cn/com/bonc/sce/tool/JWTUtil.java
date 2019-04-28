@@ -1,5 +1,6 @@
 package cn.com.bonc.sce.tool;
 
+import cn.com.bonc.sce.annotation.CurrentUser;
 import cn.com.bonc.sce.annotation.CurrentUserId;
 import cn.com.bonc.sce.annotation.Payloads;
 import cn.com.bonc.sce.exception.InvalidTokenException;
@@ -110,10 +111,24 @@ public class JWTUtil {
 
         result.add(claims);
         if( parameter.hasParameterAnnotation( Payloads.class )){
+            if(claims == null){
+                throw new InvalidTokenException("JWT认证失败 -> 参数authentication缺失");
+            }
             return result;
         }else  if (parameter.hasParameterAnnotation( CurrentUserId.class ) ){
+            if(claims == null){
+                throw new InvalidTokenException("JWT认证失败 -> 参数authentication缺失");
+            }
             if( !claims.get( "sub" ).equals( "login" ) ){
-                throw new InvalidTokenException( "JWT验证失败 -> 应用想要使用ticket访问平台接口窃取数据" );
+                throw new InvalidTokenException( "JWT验证失败 -> 应用想要使用ticket访问平台接口获取数据" );
+            }
+            return claims.get( "userId" );
+        }else if(parameter.hasParameterAnnotation( CurrentUser.class )){
+            if(claims == null){
+                return "";
+            }
+            if( !claims.get( "sub" ).equals( "login" ) ){
+                throw new InvalidTokenException( "JWT验证失败 -> 应用想要使用ticket访问平台接口获取数据" );
             }
             return claims.get( "userId" );
         }
